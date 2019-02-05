@@ -1,0 +1,14 @@
+#AddDefaultCharset WINDOWS-1251
+php_value default_charset "WINDOWS-1251"
+
+RewriteEngine off
+
+#AddType text/cache-manifest .appcache
+#<IfModule mod_expires.c>
+#	ExpiresActive On
+#	ExpiresByType text/cache-manifest "access plus 0 seconds"
+#</IfModule>
+
+#<FilesMatch ".(mp3)$">
+#  Header set Cache-Control "max-age=2592000"
+#</FilesMatch>

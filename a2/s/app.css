@@ -1,0 +1,105 @@
+a {
+	text-decoration:underline;
+}
+.u-mainhead {
+	height:100%;
+}
+#log {
+	background-color:green;
+}
+
+
+/** Article default style (desk) */
+article {
+	background-color:rgb(236, 237, 192);
+	border: 4px rgb(92,64,56) solid;
+	border-radius: 10px;
+	padding:1rem 0rem 0rem 0.1rem;
+}
+article h1 {
+	font-size:16px;
+	font-weight:bold;
+}
+article a,
+article a:hover
+{
+	color:#aa0000;
+}
+article a:active {
+	color:red;
+}
+/** /Article default style (desk) */
+
+/** right side */
+.u-right-side img{
+   max-height:145px;
+   border: 1px solid #000; 
+}
+
+
+/** anons */
+.u-anons {
+    border: 0.35rem solid #AA0000;
+    padding: 10px;
+    text-align: center;
+    color: #ff0000;
+    margin: 0rem 1rem 2.5rem 0.5rem;
+    font-size: 0.65rem;
+}
+.u-anons a{
+	color:#ff0000;
+	font-weight:bold;
+}
+/** /anons */
+
+/** responsive-text */
+h1 {
+  font-size: 1rem;
+}
+div.container {
+  font-size: 0.8rem;
+}
+/* тут пока вместо  @include media-breakpoint-up(md) */
+@media (min-width: 768px) {
+   h1 {
+	  font-size: 3rem;
+   }
+   .u-anons {    
+		font-size: 1rem;
+    }
+    article {
+ 	    padding : 1rem 1rem 0rem;
+	}
+	div.container {
+	  font-size: 1rem;
+	}
+}
+/** /responsive-text */
+
+
+/** patch padding on xs */
+.u-full-width {
+	padding-left:0px;
+	padding-right:0px;
+}
+.u-full-width .row {
+	margin-right:0px;
+	margin-left:0px;
+}
+.u-full-width .col,  .u-full-width .col-12{
+	padding-right:0px;
+	padding-left:0px;
+}
+/* тут пока вместо  @include media-breakpoint-up(md) */
+@media (min-width: 768px) {
+    /** patch padding on xs  - тут вернули бутстраповские стили по умолчанию*/
+	.u-full-width .row {
+		margin-right:-15px;
+		margin-left:-15px;
+	}
+	.u-full-width .col,  .u-full-width .col-12{
+		padding-right:15px;
+		padding-left:15px;
+	}
+}
+/** / patch padding on xs */

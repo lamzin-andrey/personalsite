@@ -1,0 +1,15 @@
+CACHE MANIFEST
+
+#version 3
+
+index.html
+
+s/app.css
+s/bootstrap4.2.1.min.css
+
+j/app.js
+i/favicon.ico
+
+j/bootstrap4.2.1.min.js
+j/popper1.14.6.min.js
+j/jquery-3.3.1.slim.min.js
