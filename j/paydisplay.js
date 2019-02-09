@@ -3,10 +3,16 @@ window.PayDisplay = {
 	 * @property {jQuery HtmlInput} iEmail поле ввода email
 	*/
 	iEmail : $('#email'),
+	
 	/**
 	 * @property {jQuery HtmlInput} iEmail поле ввода суммы
 	*/
 	iSum : $('#sum'),
+	
+	/**
+	 * @property {jQuery HtmlInput} iSumval Скрытое поле со значением суммы
+	*/
+	iSumval : $('#sumVal'),
 	
 	/**
 	 * @property {jQuery HtmlInput} iHour значение часов работы
@@ -37,12 +43,31 @@ window.PayDisplay = {
 		o.iSum.on('keyup', function(evt){ o.onChangeSumValue(evt); })
 		o.iEmail.on('input', function(evt){ o.onChangeEmailValue(evt); })
 		o.iEmail.on('keyup', function(evt){ o.onChangeEmailValue(evt); })
+		if (o.iSum.val().trim()) {
+			o.validateSum();
+		}
+		if (o.iEmail.val().trim()) {
+			o.validateEmail();
+		}
 	},
 	/**
 	 * @description Обработка ввода в поле email
 	*/
 	onChangeEmailValue:function(evt){
-		
+		this.validateEmail();
+	},
+	/**
+	 * @description Обработка ввода в поле email
+	*/
+	validateEmail:function(evt){
+		var o = this, s = o.iEmail.val().trim();
+		if (!Validator.isValidEmail(s)) {//TODO
+			B4Lib.setErrorById(o.iEmail.attr('id'), 'Некорректный email');
+			o._bIsValidEmail = 0;
+		} else {
+			B4Lib.setSuccessInputViewById(o.iEmail.attr('id'));
+			o._bIsValidEmail = 1;
+		}
 	},
 	/**
 	 * TODO сбрасывать отображение суммы при ошибке ввода
@@ -54,34 +79,49 @@ window.PayDisplay = {
 			return;
 		}
 		o.isChangeSumProcess = true;
+		o.validateSum();
+		setTimeout(function(){
+			o.isChangeSumProcess = false;
+			if (o._bIsValidSum) {
+				o.setSuccessSumField(o._nSum);
+			}
+		}, 100);
+	},
+	/**
+	 * @description Валидация введенной суммы. 
+	 * Устанавливает _nSum, _bIsValidSum
+	*/
+	validateSum:function(){
+		var o = this, s, nSum, success = 1;
+		o._bIsValidSum = 1;
 		s = o.iSum.val();
 		o.iSum.val( TextFormat.money(s) );
 		s = TextFormat.nums(s);
-		nSum = parseInt(s, 10);
-		console.log(nSum);
+		o._nSum = nSum = parseInt(s, 10);
 		if (isNaN(nSum) || !nSum) {
-			o.setEmailError();
+			o.setSumError();
 			success = 0;
 		}
 		if (nSum > o.iSum.attr('data-max') || nSum < o.iSum.attr('data-min')) {
-			o.setEmailError();
-			success = 0;
+			o.setSumError();
+			o._bIsValidSum = success = 0;
 		}
 		if (s.trim().charAt(0) == '0') {
-			o.setEmailError();
-			success = 0;
+			o.setSumError();
+			o._bIsValidSum = success = 0;
 		}
-		if (success) {
-			B4Lib.setSuccessInputViewById(o.iSum.attr('id'));
-			o.setDisplayValues(nSum);
+		if (o._bIsValidSum) {
+			o.setSuccessSumField(nSum);
 		}
-		setTimeout(function(){
-			o.isChangeSumProcess = false;
-			if (success) {
-				B4Lib.setSuccessInputViewById(o.iSum.attr('id'));
-				o.setDisplayValues(nSum);
-			}
-		}, 200);
+	},
+	/**
+	 * @description Установить отображаемые значения часов и минут и заполнить скрытые поля ввода
+	*/
+	setSuccessSumField:function(nSum){
+		var o = this;
+		B4Lib.setSuccessInputViewById(o.iSum.attr('id'));
+		o.setDisplayValues(nSum);
+		o.iSumval.val(nSum);
 	},
 	/**
 	 * @description Установить отображение часов и минут в поле ввода
@@ -93,14 +133,20 @@ window.PayDisplay = {
 			h = Math.floor(nSum / hourPay),
 			sumTail = nSum - h * hourPay,	//остаток суммы после определения часов
 			m = Math.floor(sumTail / (minPay));
+		h = isNaN(h) ? 0 : h;
+		m = isNaN(m) ? 0 : m;
 		o.iHourDisplay.text(h + ' ' + TextFormat.pluralize(h, 'час', 'часа', 'часов'));
 		o.iMinDisplay.text(m + ' ' + TextFormat.pluralize(m, 'минута', 'минуты', 'минут'));
+		o.iHour.val(h);
+		o.iMin.val(m);
 	},
 	/**
 	 * @description Обработка ввода в поле суммы 
 	*/
-	setEmailError:function(evt){
-		B4Lib.setErrorById(PayDisplay.iSum.attr('id'), 'Введите значение от 20 до 60 000');
+	setSumError:function(evt){
+		var o = PayDisplay;
+		B4Lib.setErrorById(o.iSum.attr('id'), 'Введите значение от 20 до 60 000');
+		o.setDisplayValues(0);
 	}
 	
 }
