@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no">
+		<title>Персональная страница Ламзина Андрея</title>
+		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
+		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body>
+		<div class="container u-full-width">
+			<header>
+				<div class="row">
+					<div class="col">
+						<div class="text-left u-mainhead">
+							<h1>Персональная страница Ламзина Андрея</h1>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div>&nbsp;</div>
+			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+			  <a class="navbar-brand" href="/">Начало</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item">
+					<a class="nav-link" href="/portfolio">Портфолио</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/articles">Блог</a>
+				  </li>
+				  <li class="nav-item active">
+					<a class="nav-link" href="/clients">Клиентам</a>
+				  </li>
+				</ul>
+			  </div>
+			</nav>
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-12 text-center">
+					<div class="alert alert-primary" role="alert">
+					  <p>Здесь вы можете оплатить ранее выполненную мной работу используя банковскую карту или Яндекс-кошелёк</p>
+					  <p></p>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 text-left mx-auto border  border-info mb-5 p-3">
+							<form>
+								<div class="form-group" id="hEmailGroup">
+									<label for="email">Email адрес <span class="text-danger">*</span></label>
+									<input id="email" aria-describedby="emailHelp" placeholder="asd@gmail.com"  type="email" class="form-control required" name="email">
+									<small id="emailHelp" class="form-text text-muted">Это обязательное поле, на email приидёт чек об оплате</small>
+									<div id="emailError" class="invalid-feedback"></div>
+								</div>
+								
+								<div class="form-group" id="hSumGroup">
+									<label for="sum">Сумма к оплате <span class="text-danger">*</span></label>
+									<input id="sum" data-min="20" data-max="60000"  aria-describedby="sumHelp" placeholder="1000"  type="text" class="form-control required" name="sum">
+									<small id="sumHelp" class="form-text text-muted">Это обязательное поле, введите сумму, которую хотите оплатить от 20 до 60 000 рублей, без копеек</small>
+									<div id="sumError"class="invalid-feedback"></div>
+								</div>
+								
+								
+								<div class="text-right alert-success p-2 m-1">
+									<span class="font-weight-bold" id="hourDisplay">0 часов</span> <span class="font-weight-bold" id="minDisplay">0 минут</span> 
+									<input id="hour" type="hidden" name="hour">
+									<input id="min" type="hidden" name="min">
+								</div>
+								
+								<div class="text-right">
+									<button type="submit" class="btn btn-primary ">Submit</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+			<div class="footer bg-dark text-light">
+				
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								&copy; ИП Ламзин Андрей
+							</div>
+						</div>
+					</div>
+				
+			</div>
+		
+        <script src="/j/jquery-3.3.1.slim.min.js"></script>
+        <script src="/j/bootstrap4.2.1.min.js"></script>
+        <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/lib/nodom/textformat.js"></script>
+        <script src="/j/lib/b4helper.js"></script>
+        <script src="/j/paydisplay.js"></script>
+        <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+	</body>
+</html>
