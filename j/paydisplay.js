@@ -59,7 +59,7 @@ window.PayDisplay = {
 	/**
 	 * @description Обработка ввода в поле email
 	*/
-	validateEmail:function(evt){
+	validateEmail:function() {
 		var o = this, s = o.iEmail.val().trim();
 		if (!Validator.isValidEmail(s)) {//TODO
 			B4Lib.setErrorById(o.iEmail.attr('id'), 'Некорректный email');
@@ -122,23 +122,45 @@ window.PayDisplay = {
 		B4Lib.setSuccessInputViewById(o.iSum.attr('id'));
 		o.setDisplayValues(nSum);
 		o.iSumval.val(nSum);
+		Payform.iSum.val(nSum);
 	},
 	/**
 	 * @description Установить отображение часов и минут в поле ввода
 	*/
 	setDisplayValues:function(nSum) {
 		var o = this,
+			p = Payform,
 			hourPay = 400,
 			minPay = 20 / 3,
 			h = Math.floor(nSum / hourPay),
 			sumTail = nSum - h * hourPay,	//остаток суммы после определения часов
-			m = Math.floor(sumTail / (minPay));
+			m = Math.floor(sumTail / (minPay)),
+			sTplHMComment = 'Оплата услуг: Программирование 1 час, {N} шт., Программирование 3 минуты, {M} шт.',
+			sTplHComment = 'Оплата услуги: Программирование 1 час, {N} шт',
+			sTplMComment = 'Оплата услуги: Программирование 3 минуты, {M} шт',
+			s = '';
+			
 		h = isNaN(h) ? 0 : h;
 		m = isNaN(m) ? 0 : m;
+		
 		o.iHourDisplay.text(h + ' ' + TextFormat.pluralize(h, 'час', 'часа', 'часов'));
 		o.iMinDisplay.text(m + ' ' + TextFormat.pluralize(m, 'минута', 'минуты', 'минут'));
 		o.iHour.val(h);
 		o.iMin.val(m);
+		
+		//Установка значений формы yamoney
+		m = Math.ceil(m / 3);
+		if (h && m) {
+			s = sTplHMComment;
+		} else if (h) {
+			s = sTplHComment;
+		} else if (m) {
+			s = sTplMComment;
+		}
+		s = s.replace('{N}', h);
+		s = s.replace('{M}', m);
+		p.iComment1.val(s);
+		p.iComment2.val(s);
 	},
 	/**
 	 * @description Обработка ввода в поле суммы 
@@ -150,6 +172,4 @@ window.PayDisplay = {
 	}
 	
 }
-PayDisplay.init();
-
 
