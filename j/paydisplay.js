@@ -1,36 +1,36 @@
 window.PayDisplay = {
 	/**
-	 * @property {jQuery HtmlInput} iEmail поле ввода email
+	 * @property {jQuery HtmlInput} iEmail РїРѕР»Рµ РІРІРѕРґР° email
 	*/
 	iEmail : $('#email'),
 	
 	/**
-	 * @property {jQuery HtmlInput} iEmail поле ввода суммы
+	 * @property {jQuery HtmlInput} iEmail РїРѕР»Рµ РІРІРѕРґР° СЃСѓРјРјС‹
 	*/
 	iSum : $('#sum'),
 	
 	/**
-	 * @property {jQuery HtmlInput} iSumval Скрытое поле со значением суммы
+	 * @property {jQuery HtmlInput} iSumval РЎРєСЂС‹С‚РѕРµ РїРѕР»Рµ СЃРѕ Р·РЅР°С‡РµРЅРёРµРј СЃСѓРјРјС‹
 	*/
 	iSumval : $('#sumVal'),
 	
 	/**
-	 * @property {jQuery HtmlInput} iHour значение часов работы
+	 * @property {jQuery HtmlInput} iHour Р·РЅР°С‡РµРЅРёРµ С‡Р°СЃРѕРІ СЂР°Р±РѕС‚С‹
 	*/
 	iHour : $('#hour'),
 	
 	/**
-	 * @property {jQuery HtmlInput} iHourDisplay Отображаемое значение часов работы
+	 * @property {jQuery HtmlInput} iHourDisplay РћС‚РѕР±СЂР°Р¶Р°РµРјРѕРµ Р·РЅР°С‡РµРЅРёРµ С‡Р°СЃРѕРІ СЂР°Р±РѕС‚С‹
 	*/
 	iHourDisplay : $('#hourDisplay'),
 	
 	/**
-	 * @property {jQuery HtmlInput} iMin значение часов работы
+	 * @property {jQuery HtmlInput} iMin Р·РЅР°С‡РµРЅРёРµ С‡Р°СЃРѕРІ СЂР°Р±РѕС‚С‹
 	*/
 	iMin : $('#min'),
 	
 	/**
-	 * @property {jQuery HtmlInput} iMinDisplay Отображаемое значение часов работы
+	 * @property {jQuery HtmlInput} iMinDisplay РћС‚РѕР±СЂР°Р¶Р°РµРјРѕРµ Р·РЅР°С‡РµРЅРёРµ С‡Р°СЃРѕРІ СЂР°Р±РѕС‚С‹
 	*/
 	iMinDisplay : $('#minDisplay'),
 	
@@ -51,18 +51,18 @@ window.PayDisplay = {
 		}
 	},
 	/**
-	 * @description Обработка ввода в поле email
+	 * @description РћР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР° РІ РїРѕР»Рµ email
 	*/
 	onChangeEmailValue:function(evt){
 		this.validateEmail();
 	},
 	/**
-	 * @description Обработка ввода в поле email
+	 * @description РћР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР° РІ РїРѕР»Рµ email
 	*/
 	validateEmail:function() {
 		var o = this, s = o.iEmail.val().trim();
 		if (!Validator.isValidEmail(s)) {//TODO
-			B4Lib.setErrorById(o.iEmail.attr('id'), 'Некорректный email');
+			B4Lib.setErrorById(o.iEmail.attr('id'), 'РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ email');
 			o._bIsValidEmail = 0;
 		} else {
 			B4Lib.setSuccessInputViewById(o.iEmail.attr('id'));
@@ -70,8 +70,8 @@ window.PayDisplay = {
 		}
 	},
 	/**
-	 * TODO сбрасывать отображение суммы при ошибке ввода
-	 * @description Обработка ввода в поле суммы 
+	 * TODO СЃР±СЂР°СЃС‹РІР°С‚СЊ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ СЃСѓРјРјС‹ РїСЂРё РѕС€РёР±РєРµ РІРІРѕРґР°
+	 * @description РћР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР° РІ РїРѕР»Рµ СЃСѓРјРјС‹ 
 	*/
 	onChangeSumValue:function(evt){
 		var o = this, nSum, success = 1, s;
@@ -88,8 +88,8 @@ window.PayDisplay = {
 		}, 100);
 	},
 	/**
-	 * @description Валидация введенной суммы. 
-	 * Устанавливает _nSum, _bIsValidSum
+	 * @description Р’Р°Р»РёРґР°С†РёСЏ РІРІРµРґРµРЅРЅРѕР№ СЃСѓРјРјС‹. 
+	 * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ _nSum, _bIsValidSum
 	*/
 	validateSum:function(){
 		var o = this, s, nSum, success = 1;
@@ -115,7 +115,7 @@ window.PayDisplay = {
 		}
 	},
 	/**
-	 * @description Установить отображаемые значения часов и минут и заполнить скрытые поля ввода
+	 * @description РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Рµ Р·РЅР°С‡РµРЅРёСЏ С‡Р°СЃРѕРІ Рё РјРёРЅСѓС‚ Рё Р·Р°РїРѕР»РЅРёС‚СЊ СЃРєСЂС‹С‚С‹Рµ РїРѕР»СЏ РІРІРѕРґР°
 	*/
 	setSuccessSumField:function(nSum){
 		var o = this;
@@ -125,7 +125,7 @@ window.PayDisplay = {
 		Payform.iSum.val(nSum);
 	},
 	/**
-	 * @description Установить отображение часов и минут в поле ввода
+	 * @description РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ С‡Р°СЃРѕРІ Рё РјРёРЅСѓС‚ РІ РїРѕР»Рµ РІРІРѕРґР°
 	*/
 	setDisplayValues:function(nSum) {
 		var o = this,
@@ -133,22 +133,22 @@ window.PayDisplay = {
 			hourPay = 400,
 			minPay = 20 / 3,
 			h = Math.floor(nSum / hourPay),
-			sumTail = nSum - h * hourPay,	//остаток суммы после определения часов
+			sumTail = nSum - h * hourPay,	//РѕСЃС‚Р°С‚РѕРє СЃСѓРјРјС‹ РїРѕСЃР»Рµ РѕРїСЂРµРґРµР»РµРЅРёСЏ С‡Р°СЃРѕРІ
 			m = Math.floor(sumTail / (minPay)),
-			sTplHMComment = 'Оплата услуг: Программирование 1 час, {N} шт., Программирование 3 минуты, {M} шт.',
-			sTplHComment = 'Оплата услуги: Программирование 1 час, {N} шт',
-			sTplMComment = 'Оплата услуги: Программирование 3 минуты, {M} шт',
+			sTplHMComment = 'РћРїР»Р°С‚Р° СѓСЃР»СѓРі: РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ 1 С‡Р°СЃ, {N} С€С‚., РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ 3 РјРёРЅСѓС‚С‹, {M} С€С‚.',
+			sTplHComment = 'РћРїР»Р°С‚Р° СѓСЃР»СѓРіРё: РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ 1 С‡Р°СЃ, {N} С€С‚',
+			sTplMComment = 'РћРїР»Р°С‚Р° СѓСЃР»СѓРіРё: РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ 3 РјРёРЅСѓС‚С‹, {M} С€С‚',
 			s = '';
 			
 		h = isNaN(h) ? 0 : h;
 		m = isNaN(m) ? 0 : m;
 		
-		o.iHourDisplay.text(h + ' ' + TextFormat.pluralize(h, 'час', 'часа', 'часов'));
-		o.iMinDisplay.text(m + ' ' + TextFormat.pluralize(m, 'минута', 'минуты', 'минут'));
+		o.iHourDisplay.text(h + ' ' + TextFormat.pluralize(h, 'С‡Р°СЃ', 'С‡Р°СЃР°', 'С‡Р°СЃРѕРІ'));
+		o.iMinDisplay.text(m + ' ' + TextFormat.pluralize(m, 'РјРёРЅСѓС‚Р°', 'РјРёРЅСѓС‚С‹', 'РјРёРЅСѓС‚'));
 		o.iHour.val(h);
 		o.iMin.val(m);
 		
-		//Установка значений формы yamoney
+		//РЈСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёР№ С„РѕСЂРјС‹ yamoney
 		m = Math.ceil(m / 3);
 		if (h && m) {
 			s = sTplHMComment;
@@ -163,11 +163,11 @@ window.PayDisplay = {
 		p.iComment2.val(s);
 	},
 	/**
-	 * @description Обработка ввода в поле суммы 
+	 * @description РћР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР° РІ РїРѕР»Рµ СЃСѓРјРјС‹ 
 	*/
 	setSumError:function(evt){
 		var o = PayDisplay;
-		B4Lib.setErrorById(o.iSum.attr('id'), 'Введите значение от 20 до 60 000');
+		B4Lib.setErrorById(o.iSum.attr('id'), 'Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ РѕС‚ 20 РґРѕ 60 000');
 		o.setDisplayValues(0);
 	}
 	
