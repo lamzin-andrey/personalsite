@@ -1,16 +1,16 @@
 window.Clients = {
 	/**
-	 * @property {jQuery Submit input} iSubmit Отображаемая кнопка
+	 * @property {jQuery Submit input} iSubmit РћС‚РѕР±СЂР°Р¶Р°РµРјР°СЏ РєРЅРѕРїРєР°
 	*/
 	iSubmit:$('#subm'),
 
 	/**
-	 * @property {jQuery Text input} iEmail инпут ввода email
+	 * @property {jQuery Text input} iEmail РёРЅРїСѓС‚ РІРІРѕРґР° email
 	*/
 	iEmail:$('#email'),
 
 	/**
-	 * @property {jQuery Password input} iPassword инпут ввода пароля
+	 * @property {jQuery Password input} iPassword РёРЅРїСѓС‚ РІРІРѕРґР° РїР°СЂРѕР»СЏ
 	*/
 	iPassword:$('#password'),
 	
@@ -33,26 +33,26 @@ window.Clients = {
 		setTimeout(function(){
 			o.iSubmit.prop('disabled', false);
 			o.iPassword.val('');
-			B4Lib.setErrorById(o.iEmail, 'Пользователь с таким логином и паролем не найден');
+			B4Lib.setErrorById(o.iEmail, 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј Р»РѕРіРёРЅРѕРј Рё РїР°СЂРѕР»РµРј РЅРµ РЅР°Р№РґРµРЅ');
 		}, 500);
 		return false;
 	},
 	/**
-	 * @description Проверяет, введен ли валидный email  и заполнен ли пароль
+	 * @description РџСЂРѕРІРµСЂСЏРµС‚, РІРІРµРґРµРЅ Р»Рё РІР°Р»РёРґРЅС‹Р№ email  Рё Р·Р°РїРѕР»РЅРµРЅ Р»Рё РїР°СЂРѕР»СЊ
 	 * @return {Boolean} bSuccess
 	*/
 	validate:function(){
 		var o = this, bSuccess = true;
 		if (!o.iEmail.val().trim()) {
-			B4Lib.setErrorById(o.iEmail, 'Поле "Email" обязательно для заполнения');
+			B4Lib.setErrorById(o.iEmail, 'РџРѕР»Рµ "Email" РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ');
 			bSuccess = false;
 		}
 		if (!o.iPassword.val().trim()) {
-			B4Lib.setErrorById(o.iPassword, 'Поле "Пароль" обязательно для заполнения');
+			B4Lib.setErrorById(o.iPassword, 'РџРѕР»Рµ "РџР°СЂРѕР»СЊ" РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ');
 			bSuccess = false;
 		}
 		if (!Validator.isValidEmail(o.iEmail.val())) {
-			B4Lib.setErrorById(o.iEmail, 'Введён некорректный email');
+			B4Lib.setErrorById(o.iEmail, 'Р’РІРµРґС‘РЅ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ email');
 			bSuccess = false;
 		}
 		if (bSuccess) {
@@ -70,7 +70,7 @@ window.Clients = {
 			return o.onDataFail(data);
 		}
 		o.iRec.val(data.num);
-		//Добавить в комментарий id транзакции
+		//Р”РѕР±Р°РІРёС‚СЊ РІ РєРѕРјРјРµРЅС‚Р°СЂРёР№ id С‚СЂР°РЅР·Р°РєС†РёРё
 		o.iComment1.val( o.iComment1.val() + ' ;' + data.itr);
 		o.iComment2.val( o.iComment2.val() + ' ;' + data.itr);
 		$('#paytype').val( $('#bs').prop('checked') ? $('#bs').val() : $('#ps').val());
@@ -94,7 +94,7 @@ window.Clients = {
 		} else if (data.oneError) {
 			alert(data.oneError);
 		} else {
-			alert('Что-то пошло не так, обновите страницу и попробуйте ещё раз');
+			alert('Р§С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє, РѕР±РЅРѕРІРёС‚Рµ СЃС‚СЂР°РЅРёС†Сѓ Рё РїРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰С‘ СЂР°Р·');
 		}
 	}
 }
