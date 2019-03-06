@@ -13,6 +13,9 @@ window.B4Lib = {
 	*/
 	setErrorById:function(id, text, bHideHelp){
 		var a = '#';
+		if (id instanceof jQuery) {
+			id = id.attr('id');
+		}
 		$(a + id).addClass('is-invalid');
 		$(a + id + 'Error').text(text);
 		if (bHideHelp) {
@@ -24,6 +27,9 @@ window.B4Lib = {
 	*/
 	unsetErrorById:function(id){
 		var a = '#';
+		if (id instanceof jQuery) {
+			id = id.attr('id');
+		}
 		$(a + id).removeClass('is-invalid');
 		$(a + id).removeClass('is-valid');
 		$(a + id + 'Error').text('');
@@ -37,6 +43,9 @@ window.B4Lib = {
 	*/
 	setSuccessInputViewById:function(id){
 		var o = this, a = '#';
+		if (id instanceof jQuery) {
+			id = id.attr('id');
+		}
 		o.unsetErrorById(id);
 		$(a + id).addClass('is-valid');
 	},
