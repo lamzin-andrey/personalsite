@@ -81,51 +81,82 @@ self.addEventListener( "fetch", onFetch);/**/
 
 function onFetch(event) {
 	console.log( "I onFetch!");
+	console.log(self.excludeUrl);
+	if ( (self.excludeUrl && self.excludeUrl[event.request.url]) || (self.updateUrls && self.updateUrls[event.request.url]) ) {
+		console.log( "Skip respondWith " + event.request.url + ' from cache');
+		delete self.excludeUrl[event.request.url];
+		delete self.updateUrls[event.request.url];
+		return;
+	}
 	console.log('event.request.url', event.request.url);
      // Как и в предыдущем примере, сначала `respondWith()` потом `waitUntil()`
     event.respondWith(
-		fromCache(event.request)
-			/** Если в кэше пусто, надо перезагрузить страницу. Но только в том случае, когда все не найденные в кеше ресурсы удалось успешно получить с сервера */
-			.catch(/* если не нашли */ (e) => {
-				console.log(event.request);
-				console.log('inner catch', e);
-				if (e == 'no-match') {
-					console.log('Here I can call update');
-					//Это работает в хроме 71, но не так как хоталось бы
-					event.waitUntil(
-					  update(event.request)
-					  // (тут по идее не надо) В конце, после получения "свежих" данных от сервера уведомляем всех клиентов.
-					  .then(
-						//Попробуем так
-						(response) =>{
-							console.log('after fail search in cache found Response ', response);
-							//TODO if 200
-							//event.respondWith(response);
-						}
-					  )
-					);
-				}
-				
-			})
-		
+		fromCacheOrNetwork(event.request)
 	);
 			
-			/**/;
+	/**/;
 	
-	/*console.log('before call update ');
-    event.waitUntil(
-      update(event.request)
-      // В конце, после получения "свежих" данных от сервера уведомляем всех клиентов.
-      .then(refresh)
-    );/**/
+	
+	//Здесь таймаут просто для наглядности при отладке, клонировать request понадобилось потому что событие уже может не существовать
+	let request = event.request.clone();
+	setTimeout(() => {
+		console.log('before call regular update', request);
+		//Это обязательно, иначе не обновимся!
+		/** @var updateUrls работает также как и excludeUrl но в случае обновления */
+		if (!self.updateUrls) {
+			self.updateUrls = {};
+		}
+		self.updateUrls[request.url] = 1;
+		
+		//Обновляемся
+		
+		update(request)
+		  // В конце, после получения "свежих" данных от сервера уведомляем всех клиентов. (Не факт, что работает)
+		  .then( (response) => {
+				delete self.updateUrls[request.url];
+				refresh(response);
+		  });
+		
+	}, 1000);
+	
 }
 
-
+//Эту функцию не использую, заменил её вызов на fromCacheOrNetwork
 function fromCache(request) {
     return caches.open(CACHE).then((cache) =>
         cache.match(request).then((matching) =>
             matching || Promise.reject( "no-match")
         ));
+}
+
+function fromCacheOrNetwork(request) {
+	return caches.open(CACHE)
+		.then((cache) =>
+        cache.match(request).then((matching) => {
+			if (matching) {
+				//нашли - тут всё как в fromCache
+				matching.addStat = 304;
+				console.log('matching aft set sytatus', matching);
+				return matching;
+			}
+            return Promise.reject( "no-match");
+        }))
+		.catch(/* если не нашли, запросим в сети */ (e) => {
+			if (e == 'no-match') {
+				console.log('No match', request.url);
+				console.log('Before call update, becouse in cache not found');
+				/**@property {Object} self.excludeUrl содержит в качестве имён полей объекта url которые не надо искать в кэше */
+				if (!self.excludeUrl) {
+					self.excludeUrl = {};
+				}
+				//После вызова update снова будет вызван наш onFetch.
+				//Укажем ему, что не надо за этим url лезть в кэш
+				self.excludeUrl[request.url] = 1;
+				update(request);
+			} else {
+				console.log('e:', e);
+			}
+		});
 }
 
 function update(request) {
