@@ -8,6 +8,8 @@ if (navigator.serviceWorker) {
 			console.log('Before register syncdata');
 			worker.sync.register('syncdata');
 		} 
+		
+		window.cacheWorker  = worker.active;
       }))
       .catch((err) => console.log(err));
 } else {

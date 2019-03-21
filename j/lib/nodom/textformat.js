@@ -27,7 +27,12 @@ window.TextFormat = {
 		return s;
 	},
 	/**
-	 * @description Обработка ввода в поле суммы 
+	 * @description Склоняет лексему (eд. измерения) в зависимости от значения k
+	 * На примере "день"
+	 * pluralize(n, 'день', 'дня', 'дней');
+	 * потому что 'один день' (one),
+	 * 			  'три дня'(less4, 3 <= 4),
+	 *			  '20 дней' (more19, 20 > 19)
 	*/
 	pluralize: function(n, one, less4, more19) {
 		var m, lex, r, i;

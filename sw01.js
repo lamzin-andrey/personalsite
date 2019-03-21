@@ -14,6 +14,7 @@ function onInstall(event) {
 	addActivateEventListener();
 	//буквально "подожди пока откроется кэш с именем CACHE, а когда он откроется вызови onOpenCache"
 	//Кто такой caches мне ещё предстоит выяснить
+	//TODO а это по факту мне не надо скорее всего, выяснить
     event.waitUntil(caches.open(CACHE).then(onOpenCache) );
 }
 
@@ -33,15 +34,32 @@ function onOpenCache(cache) {
  * @return {Promise}
 */
 function addResourcesToCache(cache) {
-	console.log( "Start caching");
-	var promise = cache.addAll([
-	 "/s/bootstrap4.2.1.min.css"
-	]).then(
+	if (!self.cachingResources) {
+		console.log( "addResourcesToCache: Resources is empty, return");
+		return;
+	}
+	self.cachingResources.push("/s/bootstrap4.2.1.min.css");
+	console.log( "Start first caching", self.cachingResources);
+	
+	var promise = cache.addAll(self.cachingResources).then(
 		//так можно узнать, что при добавлении ресурса в кэш не произошло ошибки
 		() => {//Да, здесь были a,b,c я просто хотел узнать, принимает ли обработчик события успешного сохранения в кэше 
 			   // какие-то аргументы (как оказалось, не принимает).
 			   //я использовал их, потомучто попытка использовать arguments привела  к ошибке.
 			console.log( "then!");
+			self.clients.matchAll().then((clients) => {
+				clients.forEach((client) => {
+					console.log('founded client: ', client);
+					var message = {
+						type:  "firstCacheSuccess",
+						resources : self.cachingResources,
+						url:client.url
+					};
+					// Уведомляем клиент об обновлении данных.
+					client.postMessage(message);
+				});
+			});
+			self.cachingResources = null;
 		}
 	).catch(
 		(e) => {
@@ -73,6 +91,7 @@ function onActivate(event) {
 			//А так вы можете узнать, что помешало активации...
 			console.log(e);
 		});
+	self.addEventListener('message', onPostMessage);
 	return o;
 }
 
@@ -136,7 +155,7 @@ function fromCacheOrNetwork(request) {
 			if (matching) {
 				//нашли - тут всё как в fromCache
 				matching.addStat = 304;
-				console.log('matching aft set sytatus', matching);
+				console.log('matching aft set status', matching);
 				return matching;
 			}
             return Promise.reject( "no-match");
@@ -188,4 +207,14 @@ function refresh(response) {
             client.postMessage(JSON.stringify(message));
         });
     });
+}
+
+/**
+ * @description TODO тут нужна очередь
+*/
+function onPostMessage(info) {
+	console.log('get info', info);
+	self.cachingResources = info.data;
+	self.cachingUrl = info.origin;
+	caches.open(CACHE).then(onOpenCache);
 }
