@@ -5,81 +5,16 @@ const CACHE = "cache-update-and-refresh-v1";
 //Добавляем обработчик события "Как только ServiceWorker установлен"
 self.addEventListener( "install", onInstall);
 
-/**
- * Обработчик события "Как только ServiceWorker установлен"
-*/
-function onInstall(event) {
-	console.log( "I install");
-	//Добавим слушателя событий активации
-	addActivateEventListener();
-	//буквально "подожди пока откроется кэш с именем CACHE, а когда он откроется вызови onOpenCache"
-	//Кто такой caches мне ещё предстоит выяснить
-	//TODO а это по факту мне не надо скорее всего, выяснить
-    event.waitUntil(caches.open(CACHE).then(onOpenCache) );
-}
+//Проверка, можно ли всё-таки устанавливать этот слушатель вне обработчика onInstall
+console.log('Установка события активации');
+self.addEventListener( "activate", onActivate);
+
+// При запросе на сервер мы используем данные из кэша и только после идем на сервер.
+self.addEventListener( "fetch", onFetch);/**/
 
 /**
- * Обработчик события "Как только Кэш открыт"
- * @param {Object} cache - пока знаю только что  него есть метод addAll
+ * Обработчик события Активации
 */
-function onOpenCache(cache) {
-	//Добавим ресурсы в кэш
-	//И вернем Promise через который мы при необходимости сможем узнать, как прошло добавление в кэш
-	return addResourcesToCache(cache);
-}
-
-/**
- * Добавляю ресурсы в кэш
- * @param {Object} cache - пока знаю только что у него есть метод addAll
- * @return {Promise}
-*/
-function addResourcesToCache(cache) {
-	if (!self.cachingResources) {
-		console.log( "addResourcesToCache: Resources is empty, return");
-		return;
-	}
-	self.cachingResources.push("/s/bootstrap4.2.1.min.css");
-	console.log( "Start first caching", self.cachingResources);
-	
-	var promise = cache.addAll(self.cachingResources).then(
-		//так можно узнать, что при добавлении ресурса в кэш не произошло ошибки
-		() => {//Да, здесь были a,b,c я просто хотел узнать, принимает ли обработчик события успешного сохранения в кэше 
-			   // какие-то аргументы (как оказалось, не принимает).
-			   //я использовал их, потомучто попытка использовать arguments привела  к ошибке.
-			console.log( "then!");
-			self.clients.matchAll().then((clients) => {
-				clients.forEach((client) => {
-					console.log('founded client: ', client);
-					var message = {
-						type:  "firstCacheSuccess",
-						resources : self.cachingResources,
-						url:client.url
-					};
-					// Уведомляем клиент об обновлении данных.
-					client.postMessage(message);
-				});
-			});
-			self.cachingResources = null;
-		}
-	).catch(
-		(e) => {
-			//а если произошла, то посмотреть, какая
-			console.log( "catch!");
-			console.log(e);
-		}
-	 );
-	return promise;
-}
-/**
- * Добавляю слушатель
-*/
-function addActivateEventListener() {
-	console.log( "add activate event listener");
-	//Осторожно, это наверное грабли, будет ли доступен self ?
-	//console.log(self);//Доступен! :)
-	self.addEventListener( "activate", onActivate);/**/
-}
-
 function onActivate(event) {
 	console.log( "activate event!");
 	var o = self.clients.claim(). //claim - Запрос, заявление. Объявили всем нашим клиентам, что мы активированы
@@ -94,9 +29,27 @@ function onActivate(event) {
 	self.addEventListener('message', onPostMessage);
 	return o;
 }
+/**
+ * Обработчик события "Как только ServiceWorker установлен"
+*/
+function onInstall(event) {
+	console.log( "I install");
+	//буквально "подожди пока откроется кэш с именем CACHE, а когда он откроется вызови onOpenCache"
+	//Кто такой caches мне ещё предстоит выяснить
+	//TODO а это по факту мне не надо скорее всего, выяснить
+    //event.waitUntil(caches.open(CACHE).then(onOpenCache) );
+}
 
-// При запросе на сервер мы используем данные из кэша и только после идем на сервер.
-self.addEventListener( "fetch", onFetch);/**/
+/**
+ * Обработчик события "Как только Кэш открыт"
+ * @param {Object} cache - пока знаю только что  него есть метод addAll
+*/
+function onOpenCache(cache) {
+	//Добавим ресурсы в кэш
+	//И вернем Promise через который мы при необходимости сможем узнать, как прошло добавление в кэш
+	return addResourcesToCache(cache);
+}
+
 
 function onFetch(event) {
 	console.log( "I onFetch!");
@@ -218,3 +171,49 @@ function onPostMessage(info) {
 	self.cachingUrl = info.origin;
 	caches.open(CACHE).then(onOpenCache);
 }
+
+
+
+/**
+ * Добавляю ресурсы в кэш
+ * @param {Object} cache - пока знаю только что у него есть метод addAll
+ * @return {Promise}
+*/
+function addResourcesToCache(cache) {
+	if (!self.cachingResources) {
+		console.log( "addResourcesToCache: Resources is empty, return");
+		return;
+	}
+	self.cachingResources.push("/s/bootstrap4.2.1.min.css");
+	console.log( "Start first caching", self.cachingResources);
+	
+	var promise = cache.addAll(self.cachingResources).then(
+		//так можно узнать, что при добавлении ресурса в кэш не произошло ошибки
+		() => {//Да, здесь были a,b,c я просто хотел узнать, принимает ли обработчик события успешного сохранения в кэше 
+			   // какие-то аргументы (как оказалось, не принимает).
+			   //я использовал их, потомучто попытка использовать arguments привела  к ошибке.
+			console.log( "then!");
+			self.clients.matchAll().then((clients) => {
+				clients.forEach((client) => {
+					console.log('founded client: ', client);
+					var message = {
+						type:  "firstCacheSuccess",
+						resources : self.cachingResources,
+						url:client.url
+					};
+					// Уведомляем клиент об обновлении данных.
+					client.postMessage(message);
+				});
+			});
+			self.cachingResources = null;
+		}
+	).catch(
+		(e) => {
+			//а если произошла, то посмотреть, какая
+			console.log( "catch!");
+			console.log(e);
+		}
+	 );
+	return promise;
+}
+
