@@ -50,23 +50,28 @@ function onOpenCache(cache) {
 	return addResourcesToCache(cache);
 }
 
-
+/**
+ * @description Вызывается перед тем, как запрос уйдёт на сервер. Запрос может быть совершен браузером 
+ * (в HTML коде например есть такое <img src="...">)
+ * Или кодом service worker (скорее всего не только этим!)
+ * @param {Object} event
+*/
 function onFetch(event) {
-	console.log( "I onFetch!");
+	console.log( "Call onFetch!");
+	//self.excludeUrl Список url, которые уже пытались найти в кэше и их там нет
 	console.log(self.excludeUrl);
 	if ( (self.excludeUrl && self.excludeUrl[event.request.url]) || (self.updateUrls && self.updateUrls[event.request.url]) ) {
-		console.log( "Skip respondWith " + event.request.url + ' from cache');
+		console.log( "Skip seacrh url '" + event.request.url + '\' in cache');
 		delete self.excludeUrl[event.request.url];
 		delete self.updateUrls[event.request.url];
 		return;
 	}
-	console.log('event.request.url', event.request.url);
      // Как и в предыдущем примере, сначала `respondWith()` потом `waitUntil()`
     event.respondWith(
 		fromCacheOrNetwork(event.request)
 	);
 			
-	/**/;
+	/* "плановое" обновление пока не разбираем*/;
 	
 	
 	//Здесь таймаут просто для наглядности при отладке, клонировать request понадобилось потому что событие уже может не существовать
@@ -92,54 +97,107 @@ function onFetch(event) {
 	}, 1000);
 	
 }
+/**
+ * @description Откроем кеш для поиска в нем ответа на запрос  вернем ответ из кэша или из сети
+ * @param {Request} request
+ * @return {Response}
+*/
+function fromCacheOrNetwork(request) {
+	console.log('arg request:', request);
+	return caches.open(CACHE)
+		.then( (cache) => { return onOpenCacheForRead(cache, request); });
+}
+/**
+ * @description Ищем результат запроса request в кэше cache
+*/
+function onOpenCacheForRead(cache, request) {
+	//Ищем результат запроса в кэше
+	return cache.match(request)
+			//когда нашли - вернули его в onMatchResponseInCache
+			.then(onMatchResponseInCache)
+			//когда не нашли, запросили его с севрера в onFailMatchResponseInCache
+			.catch( (e) => {
+				/* если не нашли, запросим в сети */
+				onFailMatchResponseInCache(e, request);
+			});
+}
+/**
+ * @description Проверяем есть ли в кэше результат и возвращаем соответствующий Promise если его нет
+ * @param {Object Response} matching
+*/
+function onMatchResponseInCache(matching) {
+	//тут на самом деле вполне достаточно, как у автора 
+	//return matching || Promise.reject('no-match');
+	
+	//Но для понимания процесса, я хочу видеть в консоли статус 304 (кэшировано)
+	//Изменить поле status у объекта matching не удалось, поэтому использую  addStat
+	
+	//если нашли
+	if (matching) {
+		matching.addStat = 304;//позволяет видеть в консоли, что это результат из кэша
+		console.log('matching after set pseudo status', matching);
+		//вернули
+		return matching;
+	}
+	//не нашли
+	return Promise.reject('no-match');
+}
+/**
+ * @description Запрашиваем не найденный в кэше Response с сервера
+ * @param {Object} e - данные об ошибке
+ * @param {Object Request} request
+*/
+function onFailMatchResponseInCache(e, request) {
+	//Если не найдено в кэше...
+	if (e == 'no-match') {
+		console.log('No match', request.url);
+		console.log('Before call update, becouse in cache not found');
+		/**@property {Object} self.excludeUrl содержит в качестве имён полей объекта url которые не надо искать в кэше */
+		if (!self.excludeUrl) {
+			self.excludeUrl = {};
+		}
+		//После вызова update снова будет вызван наш onFetch.
+		//Укажем ему, что не надо за этим url лезть в кэш
+		self.excludeUrl[request.url] = 1;
+		//
+		update(request);
+	} else {
+		//Мало ли что ещё может произойти, так я это увижу в консоли. Но пока не происходило )
+		console.log('e:', e);
+	}
+}
+/**
+ * @description Запросить сервер и обновить связанное значение в кеше
+ * @param {Object Request} request
+ * @return Promise
+*/
+function update(request) {
+	console.log('call update for ' + request.url);
+    return caches.open(CACHE).then((cache) =>
+		//Когда кеш открыт, делаем запрос
+        fetch(request)
+        //Когда пришел ответ onResponse(response)
+        .then( (response) => {
+				console.log( "response", response);
+				//Записываем в кэш клон ответа, это видимо важно!
+				cache.put(request, response.clone())
+					//Когда записали, делаем что-то пока неясное
+					//почему не  .then(response) ?
+					//почему-то предполагаю, что это аналог .then( function() {return response;})
+					.then(() => response) 
+			}
+        )
+    );
+}
 
 //Эту функцию не использую, заменил её вызов на fromCacheOrNetwork
+//Не выбрасываю, так как лаконизм такой всё же нравится
+//и всё это моё развёртывание в итоге ради того, чтобы писать вот так
 function fromCache(request) {
     return caches.open(CACHE).then((cache) =>
         cache.match(request).then((matching) =>
             matching || Promise.reject( "no-match")
         ));
-}
-
-function fromCacheOrNetwork(request) {
-	return caches.open(CACHE)
-		.then((cache) =>
-        cache.match(request).then((matching) => {
-			if (matching) {
-				//нашли - тут всё как в fromCache
-				matching.addStat = 304;
-				console.log('matching aft set status', matching);
-				return matching;
-			}
-            return Promise.reject( "no-match");
-        }))
-		.catch(/* если не нашли, запросим в сети */ (e) => {
-			if (e == 'no-match') {
-				console.log('No match', request.url);
-				console.log('Before call update, becouse in cache not found');
-				/**@property {Object} self.excludeUrl содержит в качестве имён полей объекта url которые не надо искать в кэше */
-				if (!self.excludeUrl) {
-					self.excludeUrl = {};
-				}
-				//После вызова update снова будет вызван наш onFetch.
-				//Укажем ему, что не надо за этим url лезть в кэш
-				self.excludeUrl[request.url] = 1;
-				update(request);
-			} else {
-				console.log('e:', e);
-			}
-		});
-}
-
-function update(request) {
-	console.log('call update for ' + request.url);
-    return caches.open(CACHE).then((cache) =>
-        fetch(request).then( (response) => {
-				console.log( "response", response);
-				cache.put(request, response.clone()).then(() => response)
-			}
-        )
-    );
 }
 
 // Шлём сообщения об обновлении данных всем клиентам.
