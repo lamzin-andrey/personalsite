@@ -69,7 +69,8 @@ function onFetch(event) {
 	/**/;
 	
 	
-	//Здесь таймаут просто для наглядности при отладке, клонировать request понадобилось потому что событие уже может не существовать
+	//Здесь таймаут просто для наглядности при отладке, клонировать request понадобилось потому что событие 
+	//уже может не существовать
 	let request = event.request.clone();
 	setTimeout(() => {
 		console.log('before call regular update', request);
@@ -107,7 +108,7 @@ function fromCacheOrNetwork(request) {
         cache.match(request).then((matching) => {
 			if (matching) {
 				//нашли - тут всё как в fromCache
-				matching.addStat = 304;
+				matching.addStat = 304;//Просто для наглядности при отладке
 				console.log('matching aft set status', matching);
 				return matching;
 			}
