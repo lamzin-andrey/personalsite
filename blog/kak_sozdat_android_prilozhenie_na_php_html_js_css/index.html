@@ -49,7 +49,7 @@
 						<p>Прежде всего хочется обратиться к профессиональным разработчикам android-приложений и к людям не занимающимся вообще никакой разработкой.</p>
 						<p>Это <strong>НЕ</strong> статья о том как профессионально разрабатывать android приложения. Если вы не профессионал и ничего не знаете о профессиональной разработке android приложений, но хотите им стать, <strong>вам не надо это читать</strong>.</p>
 						<p>Если вы профессиональный разработчик android приложений, вы не найдёте здесь ничего интересного.</p>
-						<p>Приложение может стать вполне рабочим, например моё в Google Play опубликовано без проблем.</p>
+						<p>Приложение может стать вполне рабочим, например <a href="https://play.google.com/store/apps/details?id=land.learn.hw19" target="_blank">вот это в Google Play</a> опубликовано без проблем. (Скачиваний маловато, но я не задавался целью раскрутить приложение, я создал его для своих нужд, а ссылка на маркете позволяет легко им делиться с друзьями).</p>
 						<p>Наверное, невозможно найти разработчика на PHP, который категорически не смог бы сверстать в HTML требуемый ему интерфейс, оживить его с помощью javascript и придать нужный ему вид с помощью css. </p>
 						<p>Не все из нас смогут сделать то же самое работая на заказ, требования к фронтенду современных продакшен сайтов могут оказаться трудновыполнимыми, а порой и вообще непонятными.</p>
 						<p>С другой стороны, когда нам нужен какой-то web-интерфейс для личного пользования, мы с лёгкостью его реализуем используя весь этот html/js/css так, как будто мы всю жизнь только фронтендом и занимались.</p>
@@ -57,9 +57,93 @@
 						<p>Взаимодействие с устройством осуществляется добавлением программного интерфейса в виде объекта javascript. Вызывая методы этого объекта программист может из webView взаимодействовать например с файловой системой устройства, делать в принципе всё, что позволяют методы этого объекта, реализованные на языке Java.</p>
 						<p>Мне, как человеку много лет кодившим на php  и иногда на javascript показалось очень удобным иметь в своём js коде объект с именем PHP и обеспечивающим как можно большее количество php функций, вызывая которые я мог бы например работать с файлами устройства, оперировать функцией date и другими. </p>
 						<p>Конечно, реализовать все PHP функции маловероятно, но мне это и не надо, буду добавлять по мере необходимости.</p>
-						<p>Тут будет ссылка на гитхаб - код PHPInterface.</p>
-						<p>Тут будет ссылка на гитхаб - полный код приложения.</p>
-						<p></p>
+						<p>Сейчас реализованы вот такие функции <a href="https://github.com/lamzin-andrey/phpforjava/blob/master/PHPInterface.java" target="_blank">ссылка на исходный код PHPInterface</a></p>
+						<p><a href="https://github.com/lamzin-andrey/phpforjava" target="_blank">Репозиторий на гитхаб</a> в котором этот класс будет время от времени обновляться и совершенствоваться.</p>
+						<p>Как подтверждение, что это вполне жизнеспособная библиотека вот <a href="https://github.com/lamzin-andrey/CleverBrightness" target="_blank">исходный код android приложения опубликованного на маркете</a>.</p>
+						<p>Ниже описаны особенности реализованых методов (если метод работает полностью совместимо с стандартной функцийе php его нет в этой таблице).</p>
+											
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Метод</th>
+									<th>Особенности</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>file_get_contents</code></td>
+									<td>На данным момент принимает только короткие имена файлов (например <code>"file.txt"</code>). Созданный файл будет доступен только тому приложению, которое его создало. 
+									Планируется в дальнейшем поддержка полных имён файлов, например <code>"/mnt/sdcard/app/data/file.txt"</code>.
+									</td>
+								</tr>
+								<tr>
+									<td><code>file_exists</code></td>
+									<td>См. <code>file_get_contents</code></td>
+								</tr>
+								<tr>
+									<td><code>file_put_contents</code></td>
+									<td>См. <code>file_get_contents</code>. Также, надо иметь ввиду, что при использовании констант, например <code>FILE_APPEND</code>, нужно использовать <code>PHPInterface.FILE_APPEND</code>;
+									</td>
+								</tr>
+								<tr>
+									<td><code>str_replace( String search, String replace, String subject, boolean getCount)</code></td>
+									<td>В отличии от оргигнальной php функции, если нам нужно количество замен, мы не передаём переменную по ссылке, а указываем вместо неё true. Тогда <code>PHPInterface.STR_REPLACE_COUNT</code> будет содержать количество замен после вызова метода.</td>
+								</tr>
+								<tr>
+									<td><code>in_array(needle, haystack)</code></td>
+									<td>Пока работает только с массивами строк и целых чисел (<code>long</code> и <code>int</code>)</td>
+								</tr>
+								<tr>
+									<td><code>strval</code></td>
+									<td>Пока работает только с аргументами типа <code>long</code> и <code>int</code></td>
+								</tr>
+								<tr>
+									<td><code>count</code></td>
+									<td>Не работает с простыми типами java (такими как <code>long</code> и <code>int</code>), только с теми, которые наследуются от <code>Object</code></td>
+								</tr>
+							</tbody>
+						</table>
+						<p>Список методов, реализванных на <date>2019-05-30</date></p>
+						<ul class="list-group">
+							<li class="list-group-item active">Методы PHPInterface</li>
+							<li class="list-group-item">count</li>
+							<li class="list-group-item">date</li>
+							<li class="list-group-item">file_get_contents</li>
+							<li class="list-group-item">file_exists</li>
+							<li class="list-group-item">file_put_contents</li>
+							<li class="list-group-item">in_array</li>
+							<li class="list-group-item">intval</li>
+							<li class="list-group-item">str_replace</li>
+							<li class="list-group-item">strlen</li>
+							<li class="list-group-item">strval</li>
+							<li class="list-group-item">time</li>
+						</ul>
+						
+						<p>Примеры использования:</p>
+						<pre class="border pl-2"><code>
+pubic class MainActivity extends Activity{
+	
+	public PHPInterface PHP;
+	
+	public void foo() {
+		PHP = new PHPInterface(this.getApplicationContext());
+		long currentTimestamp = PHP.time();
+	}
+}
+						</code></pre>
+<p>или, если нужен при работе приложения в фоне:</p>
+<pre class="border pl-2"><code>
+pubic class ServiceDM extends Service{
+	
+	public PHPInterface PHP;
+	
+	public void foo() {
+		PHP = new PHPInterface(this);
+		long currentTimestamp = PHP.time();
+	}
+}
+						</code></pre>
+						
 					</article>
 				</div>
 				<div class="col-12 col-lg-4  u-right-side">
