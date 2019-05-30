@@ -6,6 +6,7 @@
 		<title>Сайт Андрея</title>
 		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
 		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
 		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
 	</head>
 	<body>
@@ -120,8 +121,8 @@
 						</ul>
 						
 						<p>Примеры использования в java коде:</p>
-						<pre class="border pl-2"><code>
-pubic class MainActivity extends Activity{
+						<pre class="border pl-2"><code class="language-java">
+public class MainActivity extends Activity{
 	
 	public PHPInterface PHP;
 	
@@ -132,8 +133,8 @@ pubic class MainActivity extends Activity{
 }
 						</code></pre>
 <p>или, если нужен при работе приложения в фоне:</p>
-<pre class="border pl-2"><code>
-pubic class ServiceDM extends Service{
+<pre class="border pl-2"><code class="language-java">
+public class ServiceDM extends Service{
 	
 	public PHPInterface PHP;
 	
@@ -144,7 +145,7 @@ pubic class ServiceDM extends Service{
 }
 						</code></pre>
 <p>Пример использования в javascript коде:</p>
-<pre class="border pl-2"><code class="code-javascript">
+<pre class="border pl-2"><code class="language-javascript">
 //Практически в любом месте js загруженного в webView
 var currentTimestamp = PHP.time();
 PHP.file_put_contents('time_of_start.txt', currentTimestamp);
@@ -203,6 +204,7 @@ PHP.file_put_contents('time_of_start.txt', currentTimestamp);
         <script src="/j/jquery-3.3.1.slim.min.js"></script>
         <script src="/j/bootstrap4.2.1.min.js"></script>
         <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/prism/0.js"></script>
         <script src="/j/app.js"></script> 
         <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
 	</body>
