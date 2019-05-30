@@ -1,3 +1,10 @@
+Всё, что связанно с CleverBrightness
+надо после тестирования всюду обновить apk на 
+/home/andrey/hdata/vdis/bridge/no-ant/SmartBrightnesst26v+.apk
+и
+/home/andrey/hdata/vdis/bridge/no-ant/CleverBrightness-android2.3.6+.apk
+
+
 Это очень простой сайт обо мне и с формой оплаты
 
 Далее учимся только здесь (особенно по sw).
