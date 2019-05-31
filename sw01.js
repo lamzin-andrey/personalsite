@@ -1,39 +1,42 @@
 // "Имя" нашего кэша
 const CACHE = "cache-update-and-refresh-v1";
 
+self.verbose = false;
+
 // При установке воркера мы должны закешировать часть данных (статику).
 //Добавляем обработчик события "Как только ServiceWorker установлен"
 self.addEventListener( "install", onInstall);
 
 //Проверка, можно ли всё-таки устанавливать этот слушатель вне обработчика onInstall
-console.log('Установка события активации');
+if (self.verbose) console.log('Установка события активации');
 self.addEventListener( "activate", onActivate);
 
 // При запросе на сервер мы используем данные из кэша и только после идем на сервер.
 self.addEventListener( "fetch", onFetch);/**/
 
+self.addEventListener('message', onPostMessage);
+
 /**
  * Обработчик события Активации
 */
 function onActivate(event) {
-	console.log( "activate event!");
+	if (self.verbose) console.log( "activate event!");
 	var o = self.clients.claim(). //claim - Запрос, заявление. Объявили всем нашим клиентам, что мы активированы
 		then(() => {
 			//увидав эту строку вы можете быть уверены, что активация произошла успешно
-			console.log( "activate event success");
+			if (self.verbose) console.log( "activate event success");
 		}).
 		catch( (e)  => {
 			//А так вы можете узнать, что помешало активации...
-			console.log(e);
+			if (self.verbose) console.log(e);
 		});
-	self.addEventListener('message', onPostMessage);
 	return o;
 }
 /**
  * Обработчик события "Как только ServiceWorker установлен"
 */
 function onInstall(event) {
-	console.log( "I install");
+	if (self.verbose)	console.log( "I install");
 	//буквально "подожди пока откроется кэш с именем CACHE, а когда он откроется вызови onOpenCache"
 	//Кто такой caches мне ещё предстоит выяснить
 	//TODO а это по факту мне не надо скорее всего, выяснить
@@ -56,28 +59,31 @@ function onOpenCache(cache) {
  * Или кодом service worker (скорее всего не только этим!)
  * @param {Object} event
 */
-function onFetch(event) {
-	console.log( "Call onFetch!");
+function onFetch(event) { 
+	if (self.verbose) console.log( "Call onFetch url " + event.request.url);
 	//self.excludeUrl Список url, которые уже пытались найти в кэше и их там нет
-	console.log(self.excludeUrl);
 	if ( (self.excludeUrl && self.excludeUrl[event.request.url]) || (self.updateUrls && self.updateUrls[event.request.url]) ) {
-		console.log( "Skip seacrh url '" + event.request.url + '\' in cache');
-		delete self.excludeUrl[event.request.url];
-		delete self.updateUrls[event.request.url];
+		if (self.verbose)console.log( "Skip seacrh url '" + event.request.url + '\' in cache');
+		if (self.excludeUrl) {
+			delete self.excludeUrl[event.request.url];
+		}
+		if (self.updateUrls) {
+			delete self.updateUrls[event.request.url];
+		}
 		return;
 	}
      // Как и в предыдущем примере, сначала `respondWith()` потом `waitUntil()`
-    event.respondWith(
-		fromCacheOrNetwork(event.request)
-	);
-			
+	event.respondWith(fromCacheOrNetwork(event.request));
+	
+	//if (self.verbose) console.log('"плановое" обновление пока  OFF');
+	//return;
 	/* "плановое" обновление пока не разбираем*/;
 	
 	
 	//Здесь таймаут просто для наглядности при отладке, клонировать request понадобилось потому что событие уже может не существовать
 	let request = event.request.clone();
 	setTimeout(() => {
-		console.log('before call regular update', request);
+		if (self.verbose) console.log('before call regular update', request);
 		//Это обязательно, иначе не обновимся!
 		/** @var updateUrls работает также как и excludeUrl но в случае обновления */
 		if (!self.updateUrls) {
@@ -103,7 +109,7 @@ function onFetch(event) {
  * @return {Response}
 */
 function fromCacheOrNetwork(request) {
-	console.log('arg request:', request);
+	if (self.verbose) console.log('arg request:', request);
 	return caches.open(CACHE)
 		.then( (cache) => { return onOpenCacheForRead(cache, request); });
 }
@@ -118,7 +124,7 @@ function onOpenCacheForRead(cache, request) {
 			//когда не нашли, запросили его с севрера в onFailMatchResponseInCache
 			.catch( (e) => {
 				/* если не нашли, запросим в сети */
-				onFailMatchResponseInCache(e, request);
+				return onFailMatchResponseInCache(e, request);
 			});
 }
 /**
@@ -135,7 +141,7 @@ function onMatchResponseInCache(matching) {
 	//если нашли
 	if (matching) {
 		matching.addStat = 304;//позволяет видеть в консоли, что это результат из кэша
-		console.log('matching after set pseudo status', matching);
+		if (self.verbose) console.log('matching after set pseudo status', matching);
 		//вернули
 		return matching;
 	}
@@ -150,8 +156,8 @@ function onMatchResponseInCache(matching) {
 function onFailMatchResponseInCache(e, request) {
 	//Если не найдено в кэше...
 	if (e == 'no-match') {
-		console.log('No match', request.url);
-		console.log('Before call update, becouse in cache not found');
+		if (self.verbose) console.log('No match', request.url);
+		if (self.verbose) console.log('Before call update, becouse in cache not found');
 		/**@property {Object} self.excludeUrl содержит в качестве имён полей объекта url которые не надо искать в кэше */
 		if (!self.excludeUrl) {
 			self.excludeUrl = {};
@@ -160,10 +166,11 @@ function onFailMatchResponseInCache(e, request) {
 		//Укажем ему, что не надо за этим url лезть в кэш
 		self.excludeUrl[request.url] = 1;
 		//
-		update(request);
+		return update(request);
 	} else {
 		//Мало ли что ещё может произойти, так я это увижу в консоли. Но пока не происходило )
-		console.log('e:', e);
+		if (self.verbose) console.log('e:', e);
+		return "e = " + e;
 	}
 }
 /**
@@ -172,19 +179,22 @@ function onFailMatchResponseInCache(e, request) {
  * @return Promise
 */
 function update(request) {
-	console.log('call update for ' + request.url);
+	if (self.verbose) console.log('call update for ' + request.url);
     return caches.open(CACHE).then((cache) =>
 		//Когда кеш открыт, делаем запрос
         fetch(request)
         //Когда пришел ответ onResponse(response)
         .then( (response) => {
-				console.log( "response", response);
-				//Записываем в кэш клон ответа, это видимо важно!
-				cache.put(request, response.clone())
-					//Когда записали, делаем что-то пока неясное
-					//почему не  .then(response) ?
-					//почему-то предполагаю, что это аналог .then( function() {return response;})
-					.then(() => response) 
+				if (self.verbose) console.log( "response", response);
+				if (response.status == 200) {
+					//Записываем в кэш клон ответа, это видимо важно (что именно клон записываем)!
+					return cache.put(request, response.clone())
+						//Когда записали, делаем что-то пока неясное
+						//почему не  .then(response) ?
+						//почему-то предполагаю, что это аналог .then( function() {return response;})
+						.then(() => { return response} );
+				}
+				return response;
 			}
         )
     );
@@ -224,7 +234,7 @@ function refresh(response) {
  * @description TODO тут нужна очередь
 */
 function onPostMessage(info) {
-	console.log('get info', info);
+	if (self.verbose) console.log('get info', info);
 	self.cachingResources = info.data;
 	self.cachingUrl = info.origin;
 	caches.open(CACHE).then(onOpenCache);
@@ -239,39 +249,43 @@ function onPostMessage(info) {
 */
 function addResourcesToCache(cache) {
 	if (!self.cachingResources) {
-		console.log( "addResourcesToCache: Resources is empty, return");
+		if (self.verbose) console.log( "addResourcesToCache: Resources is empty, return");
 		return;
 	}
-	self.cachingResources.push("/s/bootstrap4.2.1.min.css");
-	console.log( "Start first caching", self.cachingResources);
+	//self.cachingResources.push("/s/bootstrap4.2.1.min.css");
+	if (self.verbose) console.log( "Start first caching", self.cachingResources);
 	
 	var promise = cache.addAll(self.cachingResources).then(
 		//так можно узнать, что при добавлении ресурса в кэш не произошло ошибки
 		() => {//Да, здесь были a,b,c я просто хотел узнать, принимает ли обработчик события успешного сохранения в кэше 
 			   // какие-то аргументы (как оказалось, не принимает).
 			   //я использовал их, потомучто попытка использовать arguments привела  к ошибке.
-			console.log( "then!");
-			self.clients.matchAll().then((clients) => {
-				clients.forEach((client) => {
-					console.log('founded client: ', client);
-					var message = {
-						type:  "firstCacheSuccess",
-						resources : self.cachingResources,
-						url:client.url
-					};
-					// Уведомляем клиент об обновлении данных.
-					client.postMessage(message);
-				});
-			});
+			if (self.verbose) console.log( "then!");
+			sendMessageAllClients("firstCacheSuccess");
 			self.cachingResources = null;
 		}
 	).catch(
 		(e) => {
+			sendMessageAllClients("firstCacheFail");
 			//а если произошла, то посмотреть, какая
-			console.log( "catch!");
-			console.log(e);
+			if (self.verbose) console.log( "catch!");
+			if (self.verbose) console.log(e);
 		}
 	 );
 	return promise;
-}
+} 
 
+function sendMessageAllClients(sType) {
+	self.clients.matchAll().then((clients) => {
+		clients.forEach((client) => {
+			if (self.verbose) console.log('founded client: ', client);
+			var message = {
+				type:  sType,
+				resources : self.cachingResources,
+				url:client.url
+			};
+			// Уведомляем клиент об обновлении данных.
+			client.postMessage(message);
+		});
+	});
+}
