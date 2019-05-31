@@ -1,7 +1,7 @@
 // "Имя" нашего кэша
 const CACHE = "cache-update-and-refresh-v1";
 
-self.verbose = false;
+self.verbose = true;
 
 // При установке воркера мы должны закешировать часть данных (статику).
 //Добавляем обработчик события "Как только ServiceWorker установлен"

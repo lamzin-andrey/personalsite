@@ -14,6 +14,11 @@
  * Главное, надо основную страницу закэшировать, а всё остальное можно раз в 5 - 10 секунд отправлять, благо update в sw
  * работает.
  * 
+ * То есть, главное закешить url страницы
+ * После успешного кэша главной кешим стили.
+ * //вариант - в sw вызывать в цикле addAll для каждого элемента массива
+ * А изображения пусть update кеширует
+ * 
  * Необходимо вместе с этим скриптом также подключить скрипт регистрации serviceWorker swinstall, 
  * который после успешной регистрации создает ссылку на объект воркера window.cacheWorker
 **/
@@ -26,7 +31,7 @@ function CacheClient(){
 */
 CacheClient.prototype.init = function() {
 	var o = this;
-	o.verbose = false;
+	o.verbose = true;
 	o.isCacheSendToWorker = false;
 	if (navigator.onLine) {
 		var o = this;
