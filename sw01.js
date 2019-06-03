@@ -1,280 +1,150 @@
 // "Имя" нашего кэша
-const CACHE = "cache-update-and-refresh-v1";
+const CACHE = "if-cache-else-network->update-cache";
+//То есть сначала ищем всё в кэше, если там нет в сети, а потом обновляем кэш
 
-self.verbose = true;
-
-// При установке воркера мы должны закешировать часть данных (статику).
-//Добавляем обработчик события "Как только ServiceWorker установлен"
-self.addEventListener( "install", onInstall);
-
-//Проверка, можно ли всё-таки устанавливать этот слушатель вне обработчика onInstall
-if (self.verbose) console.log('Установка события активации');
-self.addEventListener( "activate", onActivate);
-
-// При запросе на сервер мы используем данные из кэша и только после идем на сервер.
-self.addEventListener( "fetch", onFetch);/**/
-
-self.addEventListener('message', onPostMessage);
 
 /**
- * Обработчик события Активации
+ * @description Подписываемся на событиие активации
 */
-function onActivate(event) {
-	if (self.verbose) console.log( "activate event!");
-	var o = self.clients.claim(). //claim - Запрос, заявление. Объявили всем нашим клиентам, что мы активированы
-		then(() => {
-			//увидав эту строку вы можете быть уверены, что активация произошла успешно
-			if (self.verbose) console.log( "activate event success");
-		}).
-		catch( (e)  => {
-			//А так вы можете узнать, что помешало активации...
-			if (self.verbose) console.log(e);
-		});
-	return o;
-}
-/**
- * Обработчик события "Как только ServiceWorker установлен"
-*/
-function onInstall(event) {
-	if (self.verbose)	console.log( "I install");
-	//буквально "подожди пока откроется кэш с именем CACHE, а когда он откроется вызови onOpenCache"
-	//Кто такой caches мне ещё предстоит выяснить
-	//TODO а это по факту мне не надо скорее всего, выяснить
-    //event.waitUntil(caches.open(CACHE).then(onOpenCache) );
-}
+self.addEventListener('activate', onActivate);
 
 /**
- * Обработчик события "Как только Кэш открыт"
- * @param {Object} cache - пока знаю только что  него есть метод addAll
+ * @description Подписываемся на событиие отправки браузером запроса к серверу
 */
-function onOpenCache(cache) {
-	//Добавим ресурсы в кэш
-	//И вернем Promise через который мы при необходимости сможем узнать, как прошло добавление в кэш
-	return addResourcesToCache(cache);
-}
+self.addEventListener('fetch', onFetch);
 
 /**
- * @description Вызывается перед тем, как запрос уйдёт на сервер. Запрос может быть совершен браузером 
- * (в HTML коде например есть такое <img src="...">)
- * Или кодом service worker (скорее всего не только этим!)
- * @param {Object} event
+ * В общем-то нам это не надо.
 */
-function onFetch(event) { 
-	if (self.verbose) console.log( "Call onFetch url " + event.request.url);
-	//self.excludeUrl Список url, которые уже пытались найти в кэше и их там нет
-	if ( (self.excludeUrl && self.excludeUrl[event.request.url]) || (self.updateUrls && self.updateUrls[event.request.url]) ) {
-		if (self.verbose)console.log( "Skip seacrh url '" + event.request.url + '\' in cache');
-		if (self.excludeUrl) {
-			delete self.excludeUrl[event.request.url];
-		}
-		if (self.updateUrls) {
-			delete self.updateUrls[event.request.url];
-		}
+self.addEventListener('install', onInstall);
+
+/**
+ * В общем-то нам это тоже не надо, но оставлю для наглядности.
+*/
+self.addEventListener('message', onPostMessage); 
+
+/**
+ * @description Здесь будем хранить url которые не надо искать в кэше (это бывает нужно, когда в кэше уже искали, но его там нет)
+ * То есть, сюда помещаем те url, которые не надо искать в кэше
+*/
+self.excludeUrlList = {};
+
+self.verbose = false;
+
+
+/**
+ * @description Перехватываем запрос
+*/
+function onFetch(event) {
+	//Если его не нашли в кэше, значит надо отправить запрос на сервер, то есть кормить собак и ничего не трогать
+	if (self.excludeUrlList[event.request.url]) {
+		if (self.verbose) console.log('Skip search in cache ' + event.request.url);
 		return;
 	}
-     // Как и в предыдущем примере, сначала `respondWith()` потом `waitUntil()`
-	event.respondWith(fromCacheOrNetwork(event.request));
+	//Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+	event.respondWith(getResponseFromCacheOrNetwork(event.request) );
 	
-	//if (self.verbose) console.log('"плановое" обновление пока  OFF');
-	//return;
-	/* "плановое" обновление пока не разбираем*/;
-	
-	
-	//Здесь таймаут просто для наглядности при отладке, клонировать request понадобилось потому что событие уже может не существовать
-	let request = event.request.clone();
+	//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком, сделаем секундную паузу перед тем как одновить данные в кэше
+	//Клонируем запрос, потому что его на момент вызова лямбды может и не существовать
+	let req = event.request.clone();
 	setTimeout(() => {
-		if (self.verbose) console.log('before call regular update', request);
-		//Это обязательно, иначе не обновимся!
-		/** @var updateUrls работает также как и excludeUrl но в случае обновления */
-		if (!self.updateUrls) {
-			self.updateUrls = {};
-		}
-		self.updateUrls[request.url] = 1;
-		
-		//Обновляемся
-		
-		update(request)
-		  // В конце, после получения "свежих" данных от сервера уведомляем всех клиентов. (Не факт, что работает)
-		  .then( (response) => {
-				delete self.updateUrls[request.url];
-				refresh(response);
-		  });
-		
+		//Откроем кэш и вызовем нашу функцию update
+		caches.open(CACHE).then((cache) => {
+			if (self.verbose)  console.log('Schedule update  ' + req.url);
+			update(cache, req);
+		});
 	}, 1000);
-	
 }
 /**
- * @description Откроем кеш для поиска в нем ответа на запрос  вернем ответ из кэша или из сети
- * @param {Request} request
- * @return {Response}
-*/
-function fromCacheOrNetwork(request) {
-	if (self.verbose) console.log('arg request:', request);
-	return caches.open(CACHE)
-		.then( (cache) => { return onOpenCacheForRead(cache, request); });
+ * @description Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+ * @param {HttpRequest} request
+ */
+function getResponseFromCacheOrNetwork(request) {
+	return caches.open(CACHE).then((cache) => { return onOpenCacheForSearchRequest(cache, request); });
 }
 /**
- * @description Ищем результат запроса request в кэше cache
-*/
-function onOpenCacheForRead(cache, request) {
-	//Ищем результат запроса в кэше
-	return cache.match(request)
-			//когда нашли - вернули его в onMatchResponseInCache
-			.then(onMatchResponseInCache)
-			//когда не нашли, запросили его с севрера в onFailMatchResponseInCache
-			.catch( (e) => {
-				/* если не нашли, запросим в сети */
-				return onFailMatchResponseInCache(e, request);
-			});
+ * @description Обработка события "Когда кэш открыт для поиска результата"
+ * @param {Cache} cache Объект открытого кэша
+ * @param {HttpRequest} request запрос, котоый будем искать
+ */
+function onOpenCacheForSearchRequest(cache, request) {
+	//Ищем, если найдено, вернем результат onFoundResInCache
+	return cache.match(request).then(onFoundResInCache)
+	//Если не найдено, запросим методом update и вернем результат, который вернет update
+								.catch(() => { 
+									if (self.verbose) console.log('No match, will run update');
+									return update(cache, request); 
+								});
 }
+
 /**
- * @description Проверяем есть ли в кэше результат и возвращаем соответствующий Promise если его нет
- * @param {Object Response} matching
+ * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... , когда доступен объект открытого кэша cache
+ * @param {Cache} cache - кеш, в котором ищем
+ * @param {HttpRequest} request
+ * @return Promise -> HttpResponse данные с сервера
 */
-function onMatchResponseInCache(matching) {
-	//тут на самом деле вполне достаточно, как у автора 
-	//return matching || Promise.reject('no-match');
-	
-	//Но для понимания процесса, я хочу видеть в консоли статус 304 (кэшировано)
-	//Изменить поле status у объекта matching не удалось, поэтому использую  addStat
-	
-	//если нашли
-	if (matching) {
-		matching.addStat = 304;//позволяет видеть в консоли, что это результат из кэша
-		if (self.verbose) console.log('matching after set pseudo status', matching);
-		//вернули
-		return matching;
-	}
-	//не нашли
-	return Promise.reject('no-match');
-}
-/**
- * @description Запрашиваем не найденный в кэше Response с сервера
- * @param {Object} e - данные об ошибке
- * @param {Object Request} request
-*/
-function onFailMatchResponseInCache(e, request) {
-	//Если не найдено в кэше...
-	if (e == 'no-match') {
-		if (self.verbose) console.log('No match', request.url);
-		if (self.verbose) console.log('Before call update, becouse in cache not found');
-		/**@property {Object} self.excludeUrl содержит в качестве имён полей объекта url которые не надо искать в кэше */
-		if (!self.excludeUrl) {
-			self.excludeUrl = {};
+function update(cache, request) {
+	if (self.verbose) console.log('Call update 2 ' + request.url);
+	//Помечаем, что в onFetch не надо лезть в кэш за данным запросом
+	self.excludeUrlList[request.url] = 1;
+	//Собственно, запрос
+	return fetch(request)
+	//когда пришли данные
+	.then((response) => {
+		if (self.verbose) console.log('Got response ');
+		//если статус ответа 200, сохраним ответ в кэше
+		if (response.status == 200) {
+			cache.put(request, response.clone() );
+			//Помечаем, что эти данные уже есть в кэше
+			self.excludeUrlList[request.url] = 0;
 		}
-		//После вызова update снова будет вызван наш onFetch.
-		//Укажем ему, что не надо за этим url лезть в кэш
-		self.excludeUrl[request.url] = 1;
-		//
-		return update(request);
-	} else {
-		//Мало ли что ещё может произойти, так я это увижу в консоли. Но пока не происходило )
-		if (self.verbose) console.log('e:', e);
-		return "e = " + e;
-	}
+		//вернем ответ сервера
+		return response;
+	})
+	//Сервер не ответил, например связь оборавалсь
+	.catch((err) => {
+		//Если с сервера ничего полезного не пришло, а в кэше у нас тоже ничео нет, всё печально, но тут уже ничего не поделать
+		// а если в кэше есть, то всё отлично, пусть при следующем входе на страницу пользователь пока смотрит на то, что в кеше
+		//Помечаем, что эти данные  есть в кэше 
+		self.excludeUrlList[request.url] = 0;
+	}); 
 }
 /**
- * @description Запросить сервер и обновить связанное значение в кеше
- * @param {Object Request} request
- * @return Promise
-*/
-function update(request) {
-	if (self.verbose) console.log('call update for ' + request.url);
-    return caches.open(CACHE).then((cache) =>
-		//Когда кеш открыт, делаем запрос
-        fetch(request)
-        //Когда пришел ответ onResponse(response)
-        .then( (response) => {
-				if (self.verbose) console.log( "response", response);
-				if (response.status == 200) {
-					//Записываем в кэш клон ответа, это видимо важно (что именно клон записываем)!
-					return cache.put(request, response.clone())
-						//Когда записали, делаем что-то пока неясное
-						//почему не  .then(response) ?
-						//почему-то предполагаю, что это аналог .then( function() {return response;})
-						.then(() => { return response} );
-				}
-				return response;
-			}
-        )
-    );
-}
-
-//Эту функцию не использую, заменил её вызов на fromCacheOrNetwork
-//Не выбрасываю, так как лаконизм такой всё же нравится
-//и всё это моё развёртывание в итоге ради того, чтобы писать вот так
-function fromCache(request) {
-    return caches.open(CACHE).then((cache) =>
-        cache.match(request).then((matching) =>
-            matching || Promise.reject( "no-match")
-        ));
-}
-
-// Шлём сообщения об обновлении данных всем клиентам.
-function refresh(response) {
-	if (!(response && response.url)) {
-		return false;
+ * @description Обработка события "Найднено в кэше"
+ * @param {HttpResponse} result
+ */
+function onFoundResInCache(result) {
+	if (self.verbose) console.log('found in cache!3..', result);
+	//если не найдено, вернем Promise.reject - благодаря этому в onOpenCacheForSearchRequest вызовется catch
+	if (!result || String(result) == 'undefined') {
+		if (self.verbose) console.log('will return no-match Promise');
+		return Promise.reject('no-match');
 	}
-    return self.clients.matchAll().then((clients) => {
-        clients.forEach((client) => {
-            // Подробнее про ETag можно прочитать тут
-            // https: //en.wikipedia.org/wiki/HTTP_ETag
-            const message = {
-                type:  "refresh",
-                url:  response.url,
-                eTag:  response.headers.get( "ETag")
-            };
-            // Уведомляем клиент об обновлении данных.
-            client.postMessage(JSON.stringify(message));
-        });
-    });
+	if (self.verbose) console.log('will return result OR no-match Promise');/**/
+	//Вобщем-то можно сократить до этой строчки, как и было у автора
+	return (result || Promise.reject('no-match'));
 }
+/**
+ * @description Обработка события активации
+ */
+function onActivate(){
+	//Сообщим всем клиентам (клиенты - это например открытые вкладки с разными страницами вашего сайта в браузере)
+	// сообщим, что мы тут и работаем.
+	self.clients.claim();
+}
+/**
+ * @description Обработка события установки воркера. Он мне не понадобился.
+*/
+function onInstall(){} //
+
+//Это всё.
+//Далее просто для информации, чтобы проще было связыватсья с браузером при необходимости
 
 /**
- * @description TODO тут нужна очередь
+ * TODO разобраться с этим, до полного понимания
+ * @description Удобная отправкиа сообщений клиентам (Кто такие клиенты см. onActivate)
+ * @param {String} sType
 */
-function onPostMessage(info) {
-	if (self.verbose) console.log('get info', info);
-	self.cachingResources = info.data;
-	self.cachingUrl = info.origin;
-	caches.open(CACHE).then(onOpenCache);
-}
-
-
-
-/**
- * Добавляю ресурсы в кэш
- * @param {Object} cache - пока знаю только что у него есть метод addAll
- * @return {Promise}
-*/
-function addResourcesToCache(cache) {
-	if (!self.cachingResources) {
-		if (self.verbose) console.log( "addResourcesToCache: Resources is empty, return");
-		return;
-	}
-	//self.cachingResources.push("/s/bootstrap4.2.1.min.css");
-	if (self.verbose) console.log( "Start first caching", self.cachingResources);
-	
-	var promise = cache.addAll(self.cachingResources).then(
-		//так можно узнать, что при добавлении ресурса в кэш не произошло ошибки
-		() => {//Да, здесь были a,b,c я просто хотел узнать, принимает ли обработчик события успешного сохранения в кэше 
-			   // какие-то аргументы (как оказалось, не принимает).
-			   //я использовал их, потомучто попытка использовать arguments привела  к ошибке.
-			if (self.verbose) console.log( "then!");
-			sendMessageAllClients("firstCacheSuccess");
-			self.cachingResources = null;
-		}
-	).catch(
-		(e) => {
-			sendMessageAllClients("firstCacheFail");
-			//а если произошла, то посмотреть, какая
-			if (self.verbose) console.log( "catch!");
-			if (self.verbose) console.log(e);
-		}
-	 );
-	return promise;
-} 
-
 function sendMessageAllClients(sType) {
 	self.clients.matchAll().then((clients) => {
 		clients.forEach((client) => {
@@ -288,4 +158,13 @@ function sendMessageAllClients(sType) {
 			client.postMessage(message);
 		});
 	});
+}
+/**
+ * @description Приём сообщений от клиента (Кто такие клиенты см. onActivate)
+ * @param {Object} {data, origin} info
+*/
+function onPostMessage(info) {
+	//if (self.verbose) console.log('get info', info);
+	self.cachingResources = info.data; //Ранее передавал список url чтобы кэшировать их addAll - это скорее вредно чем полезно, так как достаточно одного url, для которого сервер вернет не 200 - и всё зря, в кэше ничего не будет
+	self.cachingUrl = info.origin;//С какого url был запрос, вдруг всё-таки понадобится... - 
 }
