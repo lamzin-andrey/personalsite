@@ -79,7 +79,7 @@ function onOpenCacheForSearchRequest(cache, request) {
 
 /**
  * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... , когда доступен объект открытого кэша cache
- * @param {Cache} cache - кеш, в котором ищем
+ * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
  * @param {HttpRequest} request
  * @return Promise -> HttpResponse данные с сервера
 */
