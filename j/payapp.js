@@ -1,6 +1,6 @@
 function initPayApp() {
 	PayDisplay.init();
 	Payform.init();
-	new CacheClient();
+	//new CacheClient();
 }
 $(initPayApp);
