@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no">
+		<title>Сайт Андрея</title>
+		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
+		<!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous"-->
+		<link rel="stylesheet" href="/s/fontawesome5/all.css" >
+		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
+		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body>
+		<div class="container u-full-width">
+			<header>
+				<div class="row">
+					<div class="col">
+						<div class="text-left u-mainhead">
+							<h1>Блог Андрея</h1>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div>&nbsp;</div>
+			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+			  <a class="navbar-brand" href="/">Начало</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item">
+					<a class="nav-link" href="/portfolio">Портфолио</a>
+				  </li>
+				  <li class="nav-item active">
+					<a class="nav-link" href="javascript:;">Блог</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/clients">Клиентам</a>
+				  </li>
+				</ul>
+			  </div>
+			</nav>
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-12 col-lg-8">
+					<article>
+						<h1>Кэширование с помощью service worker - ещё один мануал. Если вы до сих пор не разобрались - вам сюда.</h1>
+						<time datetime="2019-06-04" class="d-block text-right text-muted small">04.06.2019</time>
+						
+						<p>Статья адресована всем фронтендерам пишущим на javascript, кто всё ещё неуверенно чувствует себя, когда дело касается кэширования через service worker, хочет уметь писать этот функционал с чистого листа без шпаргалки, 
+						тем кто уже читал например <a href="https://habr.com/ru/company/2gis/blog/345552/" target="_blank">вот эту статью</a> и MDN, но пока не может с чистой совестью сказать, что он досконально разобрался.</p>
+						<p>Не подумайте, что я критикую упомянутую статью (не говоря уже о MDN) - без неё мне было бы много тяжелее. Можете сначала прочесть её - возможно вам этого хватит.</p>
+						<p>Однако, после прочтения я ещё довольно долго разбирался - мне хотелось научиться писать реализацию кэширования через service worker так же легко, как я могу написать код, который заменит текст в первом параграфе этой статьи на &laquo;Hello world&raquo; по нажатию на кнопку.</p>
+						<p>Мне было трудно оттого, что я очень мало работал ранее с js воркерами вообще и с service worker-ами в частности, а также с Promise.</p>
+						<p>Но в итоге я достиг поставленной цели, а в процессе мне захотелось написать эту статью, в которой я запишу по возможности кратко, что надо помнить, когда вам приходится писать service worker для кэширования и чего делать не стоит ни в коем случае.</p>
+						
+						<h2>Что я хочу получить</h2>
+						<p>Хочу получить кэширование вида &laquo;Если есть в кэше - вернуть данные из кэша, иначе вернуть с сервера. Когда запрос обработан таким образом, в фоне обновить данные в кэше&raquo;.</p>
+						<p>Такое поведение кажется мне наиболее похожим на обычное поведение браузера и кажется мне подходящим для блога.</p>
+						<p>Эту стратегию я назову if-cache-else-network-pause-update-cache.</p>
+						<p><strong>Я понимаю, что пользователи будут видеть обновления на странице после того, как они обновили страницу дважды, но не вижу в этом большой беды.</strong></p>
+						<p>Реализация описанная в этой статье будет иметь один явный недостаток - при самом первом посещении страницы ничего кэшироваться не будет, это будет исправлено позже.
+						Дело в том, что объём информации показался мне настолько большим, что его лучше разбить на две статьи, для более простого усвоения.</p>
+						
+						<h2>Требования для работы</h2>
+						<ul>
+							<li>Сервер с нормальным "зелёным" SSL сертификатом. Если у вас на хостинг и  ssl сертификат нет денег или желания, используйте бесплатный хостинг на heroku или github, он вполне годится. На бесплатных сайтах от 000webhost ssl сертификат плохой, лучше бы его там не было.</li>
+							<li>Файл с кодом service worker должен быть в корне сайта (особенно если вы собираетесь кэшировать с его помощью все страницы сайта.</li>
+							<li>Код регистрации сервис-воркера не должен отрабатывать по DOMReady или window.onload. 
+	Он должен отработать как можно раньше, пусть он даже будет инлайновым в коде страницы - это не тот случай когда это страшно плохо.
+	Иначе может не работать кэширование первого запроса (обычно это html страницы которую вы загружаете), что совсем не годится например для progressive web applications.
+	 </li>
+	</ul>
+						
+<h2>Общие сведения о service worker</h2>
+<p>Service worker - это javascript который работает в фоне. Он продолжает работать даже когда вы закрыли все вкладки с страницами сайта (но не браузер).</p>
+<p>Для подключения service worker вы должны зарегистрировать его, для этого существует отдельный скрипт, он может быть инлайновым, в этом нет ничего страшного.</p>
+<p>Скрипт с Service Worker имеет свойство кэшироваться и его код обновляется по немного непредсказуемым правилам (заявлено, что раз в 24 часа, но бывает и иначе, сам видел). Поэтому писать и отлаживать код стоит в отдельном профиле Firefox или Chrome, очищая данные с помощью Shift+Ctrl+Delete (а вот жать F5 после этого не стоит, лучше предварительно скопировать url в новую вкладку, предварительно закрыв старую вкладку и нажать Enter после Shift+Ctrl+Delete).</p>
+<p>Скрипт с Service Worker может сообщаться с обычными скриптами javascript на страницах сайта путем отправки и получения postMessage.</p>
+<p>Для реализации кэширования вам понадобиться в коде service worker определить слушатели событий installl, activate, fetch, 
+message (для описанной в этой статье реализации мне понадобились только activate и fetch).</p>
+<p>&laquo;Перехватывать&raquo; запросы к серверу вы может в слушателе fetch (я традиционно назвал его onFetch).</p>
+<p><a href="https://developer.mozilla.org/ru/docs/Web/API/Service_Worker_API" target="_blank">Более подробно о Service Worker</a></p>
+<h2>Общие сведения о Promise</h2>
+<p>Promise - это стандартный объект в javascript (то есть такой же как String или Array) версии es5 и выше.</p>
+<p>Код с Promise немного напоминает код отслеживания события, которое может завершитсья успешно или неуспешно, но это не одно и то же. Тем не менее, 
+мы можем передать аналог слушателя onSuccess в метод Promise.then() и аналог слушателя onFail 
+в метод Promise.catch() и работать почти также, как с событийным кодом.</p>
+<p>Promise после того, как отработали  &laquo;аналог слушателя onSuccess в методе Promise.then()&raquo;
+ или &laquo;аналог слушателя onFail в методе Promise.catch()&raquo; &laquo;разрешается&raquo; тем значением, которое вернул &laquo;аналог слушателя&raquo;.
+  Это значит, что вам может показаться, что ваша функция, возвращающая Promise вернула то значение, которое вернул onFoundResInCache  или анонимная функция в catch из примера ниже.</p>
+<pre><code class="language-javascript">
+//cache.match возвращает экземпляр Promise
+return cache.match(request)
+	//"Обработчик успеха" onFoundResInCache
+	.then(onFoundResInCache)
+	//"Обработчик неуспеха"  - анонимная функция
+	//Если не найдено, запросим методом update и вернем результат, который вернет update
+	.catch(() => { 
+		if (self.verbose) console.log('No match, will run update');
+		//а вот тут отличие от событийного кода!
+		//update что-то возвращает и если отработает данная анонимная функция,
+		// то cache.match в итоге "разрешится" именно им!
+		return update(cache, request); 
+	});
+</code></pre>
+<p>Из функции, передаваемой в Promise.then() можно вернуть Promise.reject(String s), тогда отработает и функция, передаваемая в Promise.catch().</p>
+<pre><code class="language-javascript">
+/**
+ * @description Обработка "события" "Найдено в кэше"
+ * @param {HttpResponse} result
+ */
+function onFoundResInCache(result) {
+	if (self.verbose) console.log('found in cache!3..', result);
+	//если не найдено, вернем Promise.reject - благодаря этому в onOpenCacheForSearchRequest вызовется catch
+	if (!result || String(result) == 'undefined') {
+		if (self.verbose) console.log('will return no-match Promise');
+		return Promise.reject('no-match');
+	}
+	if (self.verbose) console.log('will return result OR no-match Promise');/**/
+	//Вобщем-то можно сократить до этой строчки, как и было у автора
+	return (result || Promise.reject('no-match'));
+}
+</code></pre>
+<p><p><a href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Более подробно о Promise</a></p></p>
+<h2>Верхний уровень реализации</h2>
+<pre><code class="language-javascript">
+self.addEventListener('install', onInstall);
+self.addEventListener('activate', onActivate);
+self.addEventListener('fetch', onFetch);
+self.addEventListener('message', onPostMessage);
+
+
+function onInstall() {
+	consoloe.log('I install');//Просто, чтобы вы могли видеть, что sw установился
+}
+
+function onPostMessage(objMessage) {
+	//Тут например можно сменить интервал планового обновления (его проще конфигурировать во внешнем файле чем в коде sw)
+}
+
+/**
+ * @description Обработка события активации
+ */
+function onActivate(){
+	//Сообщим всем клиентам (клиенты - это например открытые вкладки с разными страницами вашего сайта в браузере)
+	// сообщим, что мы тут и работаем.
+	self.clients.claim();
+}
+
+/**
+ * @description Перехватываем запрос
+*/
+function onFetch(event) {
+	
+	//Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+	//Всю логику, которая ищет данные сначала в кэше, а потом на сервере опишем в  функции getResponseFromCacheOrNetwork
+	event.respondWith(getResponseFromCacheOrNetwork(event.request) );
+	
+	//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком при первом открытии страницы, сделаем секундную паузу перед тем как обновить данные в кэше
+	//Клонируем запрос, потому что его на момент вызова лямбды может и не существовать
+	let req = event.request.clone();
+	setTimeout(() => {
+		//Откроем кэш и вызовем нашу функцию update
+		caches.open(CACHE).then((cache) => {
+			if (self.verbose)  console.log('Schedule update  ' + req.url);
+			update(cache, req);//Здесь будет логика отправки запроса на сервер
+		});
+	}, 1000);
+}
+</code></pre>
+<div class="alert alert-info">Скрипт должен открываться по адресу https://your.site/sw01.js. Не надо запихивать его во внутренние папки, добавлять в сборку через webpack и так далее. </div>
+<p>Разберём верхний уровень реализации. Обработку onInstall я оставил только для того, чтобы убедиться что установка воркера
+ прошла успешно (в следующей статье я задействую его более основательно). Если вы впервые занимаетесь с этим видом javascript,
+ вам это тоже может оказаться не лишним. Следует иметь ввиду, что событие наступает один раз.
+ То есть вы увидите в консоли эту строку только при самой первой загрузке страницы сайта.
+Именно поэтому я советовал работать в отдельном профиле Firefox или Chrome - сбросьте данные профиля полностью через Shift+Ctrl+Delete - тогда вы по этому сообщению сможете отследить, что воркер переустановился.</p>
+<p>onPostMessage я пока на самом деле не использую, но планирую. Так как файл с кодом service worker кешируется по своим не совсем понятным правилам, его удобно конфигурировать из обычного javascript скрипта, кэшированием котрого мы этим самым service worker можем управлять.
+На продакшене мы сможем например передавать из него время паузы перед началом обновления данных в кэше или даже периодичность такого обновления. Также, мы сможем принимать список url, которые необходимо добавить в кэш при самом первом посещении страницы пользователем.</p>
+<p>onActivate. Цитата из MDN: &laquo;...cуществующие страницы могут быть переведены под контроль активного воркера с помощью Clients.claim().&raquo; То есть, сообщили всем открытым во вкладках и окнах браузера страницам сайта, что они теперь под нашим контролем.</p>
+<p>Ну а далее самый интересный для данной статьи обработчик - onFetch. Первое, что про него надо понять - <strong>он будет вызываться всегда:
+ и когда браузер запросит какой-то ресурс с сайта, и когда вы в коде service worker будете получать данные с сервера вызывая
+ self.fetch(request);</strong></p>
+<p>В коде onFetch сейчас описано два действия, вот первое (пытаемся взять данные из кэша, если их там нет получаем с сервера и
+ возвращаем): </p>
+<pre><code class="language-javascript">
+//Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+//Всю логику, которая ищет данные сначала в кэше, а потом на сервере опишем
+// в функции getResponseFromCacheOrNetwork
+event.respondWith(getResponseFromCacheOrNetwork(event.request) );
+</code></pre>	
+
+<p>Вот второе (обновляем данные в кэше): </p>
+<pre><code class="language-javascript">
+//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком при первом открытии
+// страницы, сделаем секундную паузу перед тем как обновить данные в кэше
+//Клонируем запрос, потому что его на момент вызова лямбды может и не существовать
+let req = event.request.clone();
+setTimeout(() => {
+	//Откроем кэш и вызовем нашу функцию update
+	caches.open(CACHE).then((cache) => {
+		if (self.verbose)  console.log('Schedule update  ' + req.url);
+		update(cache, req);//Здесь будет логика отправки запроса на сервер
+	});
+}, 1000);
+</code></pre>
+<p>Очевидно, что если оставить этот код без изменения, перехват запросов будет глючить: не найдя в кэше результата, метод getResponseFromCacheOrNetwork будет запрашивать его на сервере, при этом снова будет вызываться onFetch и так до бесконечности (браузеры это дело обычно пресекают, но всё равно, так делать не надо). </p>
+<p>Поэтому немного дополним наш верхний уровень реализации:</p>
+<pre><code class="language-javascript">
+self.addEventListener('install', onInstall);
+self.addEventListener('activate', onActivate);
+self.addEventListener('fetch', onFetch);
+self.addEventListener('message', onPostMessage);
+
+/**
+ * @description Здесь будем хранить url которые не надо искать в кэше (
+ * это бывает нужно, когда в кэше уже искали, но его там нет)
+ * То есть, сюда помещаем те url, которые не надо искать в кэше
+*/
+self.excludeUrlList = {};
+
+self.verbose = false;
+
+function onInstall() {
+	consoloe.log('I install');//Просто, чтобы вы могли видеть, что sw установился
+}
+
+function onPostMessage(objMessage) {
+	//Тут например можно сменить интервал планового обновления (его проще конфигурировать во внешнем файле чем в коде sw)
+}
+
+/**
+ * @description Обработка события активации
+ */
+function onActivate(){
+	//Сообщим всем клиентам (клиенты - это например открытые вкладки с разными страницами вашего сайта в браузере)
+	// сообщим, что мы тут и работаем.
+	self.clients.claim();
+}
+
+/**
+ * @description Перехватываем запрос
+*/
+function onFetch(event) {
+	//Если его не нашли в кэше, значит надо отправить запрос на сервер, то есть кормить собак и ничего не трогать
+	if (self.excludeUrlList[event.request.url]) {
+			if (self.verbose) console.log('Skip search in cache ' + event.request.url);
+			return;
+	}
+	
+	//Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+	//Всю логику, которая ищет данные сначала в кэше, а потом на сервере опишем в  функции getResponseFromCacheOrNetwork
+	event.respondWith(getResponseFromCacheOrNetwork(event.request) );
+	
+	//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком при первом открытии страницы, сделаем секундную паузу перед тем как обновить данные в кэше
+	//Клонируем запрос, потому что его на момент вызова лямбды может и не существовать
+	let req = event.request.clone();
+	setTimeout(() => {
+		//Откроем кэш и вызовем нашу функцию update
+		caches.open(CACHE).then((cache) => {
+			if (self.verbose)  console.log('Schedule update  ' + req.url);
+			update(cache, req);//Здесь будет логика отправки запроса на сервер
+		});
+	}, 1000);
+}
+</code></pre>
+<p>Объект excludeUrlList буду заполнять непосредственно перед отправкой запроса на сервер и обнулять, когда получен или не
+ получен ответ. Всё это будет происходить в функции update, которая будет использоваться не только в коде onFetch, но и в коде getResponseFromCacheOrNetwork.</p>
+<p>Рассмотрим &laquo;второе действие&raquo; в onFetch (обновление кэша). 
+В принципе, можно было бы не использовать setTimeout, но при изучении более наглядно видеть в консоли вывод лога
+обновления после того, как уже выведен лог работы &laquo;первого действия&raquo; getResponseFromCacheOrNetwork.</p>
+<p class="text-secondary">К тому же, если мы не используем setTimeout, то при первом запросе страницы пользователем,
+когда в кэше ещё ничего нет, будут отправлены почти одновремено одинаковые запросы (первый из getResponseFromCacheOrNetwork, второй из update). Это неестественное поведение клиента, 
+а вот обновление страницы через секунду - в этом ничего необычного нет. Значит, меньше шанс попасть под какие-нибудь фильтры.</p>
+<p>Что у меня внутри setTimeout. Я открываю свой кэш, а когда он открыт, &laquo;что-то делаю&raquo; (вызываю функцию update). <strong>Перед тем, как начать как-то работать с кэшем, его надо открыть.</strong></p>
+<p>Нам осталось рассмотреть реализацию getResponseFromCacheOrNetwork и update.
+Перед этим хочется сформулировать алгоритм этих действий.</p>
+
+<h2>Алгоритм получения данных из кэша</h2>
+<div class="bg-info d-inline-block p-2 text-light">1 Мы  должны открыть кэш</div>
+<div class="u-rel-vertical u-ml-1">&nbsp;</div>
+<div class="bg-info d-inline-block p-2 text-light u-ml-1">2 Когда кэш открыт, должны начать в нем поиск <span class="badge badge-danger">(тут в catch запрос обновления)</span></div>
+<div class="u-rel-vertical u-ml-2">&nbsp;</div>
+<div class="bg-info d-inline-block p-2 text-light u-ml-2">3 Когда поиск завершен, должны проверить валидность результата</div>
+<div class="u-rel-vertical u-ml-3">&nbsp;</div>
+<div class="bg-info d-inline-block p-2 text-light u-ml-3">4 Если результат невалиден, вернуть Promise.reject, это запустит код в catch из пункта 2 (если валиден, вернуть результат)</div>
+<div>&nbsp;</div>
+<p>
+	В соответствии с алгоритмом, код getResponseFromCacheOrNetwork выглядит так:
+</p>
+
+<pre><code class="language-javascript">
+/**
+ * @description Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+ * @param {HttpRequest} request
+ */
+function getResponseFromCacheOrNetwork(request) {
+	return caches.open(CACHE).then((cache) => {
+		return onOpenCacheForSearchRequest(cache, request);
+	});
+}
+</pre></code>
+<p>В методе мы открываем кэш и назначаем ему обработчик &laquo;Когда кэш открыт для поиска в нем результатов&raquo; onOpenCacheForSearchRequest. Этот метод по сути реализует шаг 2 алгоритма.</p>
+<pre><code class="language-javascript">
+/**
+ * @description Обработка события "Когда кэш открыт для поиска результата"
+ * @param {Cache} cache Объект открытого кэша
+ * @param {HttpRequest} request запрос, который будем искать
+ */
+function onOpenCacheForSearchRequest(cache, request) {
+	//Ищем, если найдено, вернем результат onFoundResInCache
+	return cache.match(request).then(onFoundResInCache)
+	//Если не найдено, запросим методом update и вернем результат, который вернет update
+		.catch(() => { 
+			if (self.verbose) console.log('No match, will run update');
+			return update(cache, request); 
+		});
+}
+</pre></code>
+<p>Тут всё	просто, ищем, если не находим запускаем update(cache, request) и возвращаем результат его работы. update сделает запрос на сервер, запишет результат запроса в кэш и вернет результат.</p>
+<p>Строка кода cache.match(request).then(onFoundResInCache) реализует &laquo;запуск&raquo; поиска и заодно назначает функцию контроля результата поиска onFoundResInCache.</p>
+<p>onFoundResInCache реализует третий и четвертый пункты &laquo;Когда поиск завершен, должны проверить валидность результата&raquo;.</p>
+
+<pre><code class="language-javascript">
+/**
+ * @description Обработка события "Найдено в кэше"
+ * @param {HttpResponse} result
+ */
+function onFoundResInCache(result) {
+	if (self.verbose) console.log('found in cache!3..', result);
+	//если не найдено, вернем Promise.reject - благодаря этому в onOpenCacheForSearchRequest вызовется catch
+	if (!result || String(result) == 'undefined') {
+		if (self.verbose) console.log('will return no-match Promise');
+		return Promise.reject('no-match');
+	}
+	if (self.verbose) console.log('will return result OR no-match Promise');/**/
+	//Вобщем-то можно сократить до этой строчки, как и было у автора
+	return (result || Promise.reject('no-match'));
+}
+</pre></code>
+<p>Остаётся разобрать только метод update.</p>
+
+<h2>Алгоритм отправки запроса</h2>
+
+<p> </p>
+<p>  </p>
+<p>   </p>
+<div class="bg-info d-inline-block p-2 text-light">Отправить запрос методом self.fetch</div>
+<div class="u-rel-vertical u-ml-1">&nbsp;</div>
+<div class="bg-info d-inline-block p-2 text-light u-ml-1">Когда получены валидные данные, клонировать response и записать в кэш методом put</div>
+<div class="u-rel-vertical u-ml-2">&nbsp;</div>
+<div class="bg-info d-inline-block p-2 text-light u-ml-2">Вернуть response</div>
+<div>&nbsp;</div>
+
+<pre><code class="language-javascript">
+/**
+ * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... ,
+ * когда доступен объект открытого кэша cache
+ * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
+ * @param {HttpRequest} request
+ * @return Promise -> HttpResponse данные с сервера
+*/
+function update(cache, request) {
+	if (self.verbose) console.log('Call update 2 ' + request.url);
+	//Помечаем, что в onFetch не надо лезть в кэш за данным запросом
+	self.excludeUrlList[request.url] = 1;
+	//Собственно, запрос
+	return fetch(request)
+	//когда пришли данные
+	.then((response) => {
+		if (self.verbose) console.log('Got response ');
+		//если статус ответа 200, сохраним ответ в кэше
+		if (response.status == 200) {
+			cache.put(request, response.clone() );
+			//Помечаем, что эти данные уже есть в кэше
+			self.excludeUrlList[request.url] = 0;
+		}
+		//вернем ответ сервера
+		return response;
+	})
+	//Сервер не ответил, например связь оборвалась
+	.catch((err) => {
+		//Если с сервера ничего полезного не пришло, а в кэше у нас тоже ничего нет,
+		//  всё печально, но тут уже ничего не поделать
+		// а если в кэше есть, то всё отлично, пусть при следующем входе
+		// на страницу пользователь пока смотрит на то, что в кеше
+		//Помечаем, что эти данные  есть в кэше 
+		self.excludeUrlList[request.url] = 0;
+	}); 
+}
+</pre></code>
+
+<p>В общем-то вот и всё. Осталось подключить service worker. Для этого можно использовать на странице такой скрипт:</p>
+<pre><code class="language-javascript">
+// Проверка того, что наш браузер поддерживает Service Worker API.
+if (navigator.serviceWorker) {
+    // Весь код регистрации у нас асинхронный.
+    navigator.serviceWorker.register('/sw01.js')
+      .then(() => navigator.serviceWorker.ready.then((worker) => {
+		if (worker.sync) {
+			//Это выполняется в Хроме, но не выполняется в Firefox, пока не разбирался...
+			console.log('Before register syncdata');
+			worker.sync.register('syncdata');
+		} 
+		//Эта переменная понадобится нам для установки связи из браузерного скрипта с воркером
+		window.cacheWorker  = worker.active;
+      }))
+      .catch((err) => console.log(err));
+} else {
+	console.log('...');
+}
+</pre></code>
+
+<p>Скачать полный код можно <a href="https://github.com/lamzin-andrey/personalsite/blob/master/sw01.js" target="_blank">отсюда</a>. Однако, хочется упомянуть ещё о паре граблей, с которыми столкнулся.</p>
+						
+						
+<h2>Грабли, или как делать не надо</h2>
+
+<h3>Грабли #1 - хочется открыть кэш один раз и работать с ним</h3>
+<p>Как вы могли заметить, в коде моего service worker кэш открывается дважды. Первый раз в getResponseFromCacheOrNetwork, а второй раз - после его вызова.</p>
+<p>Естественно, хотелось делать эту операцию лишь один раз, написав код onFetch вот так:</p>
+<div class="alert alert-danger">Внимание, следующие фрагменты кода не работают!</div>
+<pre><code class="language-javascript">
+/**
+ * @description Перехватываем запрос
+*/
+function onFetch(event) {
+	//Если его не нашли в кэше, значит надо отправить запрос на сервер, то есть кормить собак и ничего не трогать
+	if (self.excludeUrlList[event.request.url]) {
+		if (self.verbose) console.log('Skip search in cache ' + event.request.url);
+		return;
+	}
+	//Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+	caches.open(CACHE).then((cache) => {
+		event.respondWith(getResponseFromCacheOrNetwork(cache, event.request) );
+	});
+	
+	
+	//Код обновления через секунду перенесён в getResponseFromCacheOrNetwork
+}
+</pre></code>
+<p>Код getResponseFromCacheOrNetwork соответственно дополним аругментом и запуском фонового обновления:</p>
+
+<pre><code class="language-javascript">
+/**
+ * @description Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+ * @param {Cache} cache - уже "открытый" кэш
+ * @param {HttpRequest} request
+ */
+function getResponseFromCacheOrNetwork(cache, request) {
+	//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком,
+	// сделаем секундную паузу перед тем как обновить данные в кэше
+	//Клонируем запрос, потому что его на момент
+	// вызова лямбды может и не существовать
+	let req = request.clone();
+	setTimeout(() => {
+		//Кэш уже открыт, вызовем нашу функцию update
+		if (self.verbose)  console.log('Schedule update  ' + req.url);
+		update(cache, req);
+	}, 1000);
+
+	//Кэш открыт,проверим, есть ли там результат, если нет возьмём в сети
+	return onOpenCacheForSearchRequest(cache, request);
+}
+</pre></code>
+
+<p>Но, это привело к неприятному багу, всё как-бы работало, результаты записывались в кэш, считывались из кэша,
+но вот только в браузер выводился не результат, считанный из кэша, а результат, полученный с сервера.
+Возможно, поможет event.waitUntil, но пока что я открываю кэш для обновления отдельно, а для получения результатов отдельно.</p>
+
+<p>При фоновом обновлении кэш надо открывать отдельно. Не надо использовать экземпляр кэша, открытого для поиска в нем ответа на запрос для фонового обновления ресурса.
+Коварно тем, что например в Firefox 67.0 никаких ошибок не выдаёт, но результаты на странице выводятся не из кэша.</p>
+
+<h3>Грабли #2 - хочется использовать addAll в одном service worker, подключенному к разным страницам сайта</h3>
+<p>Метод Cache.addAll(Array aUrlList) позволяет закэшировать сразу много ресурсов. Однако у него есть особенность, если хотя
+ бы один из переданных в массиве url вернет в ответ код не 200, вообще ничего не закэшируется.</p>
+<p>Когда сайт оказывается под нагрузкой, не так уж редки случаи, когда тот или иной ресурс оказывается временно недоступен, что и приводит к тому, что в кэше оказывается пусто.</p>
+
+ 
+<p>В следующей статье я опишу, как этот скрипт был доработан таким образом, чтобы при первом же посещении страницы пользователем её содержимое кэшировалось.</p>
+						
+						
+						
+						<p></p>
+					</article>
+				</div>
+				<div class="col-12 col-lg-4  u-right-side">
+					<ul class="list-group text-center">
+						<li class="list-group-item">
+							<div><img src="/i/fx.jpg" alt="Fastxampp"></div>
+							<div> <!-- style="border-top-width: 0px;" -->
+								<a href="//fastxampp.org" target="_blank">Утилита для удобного добавления сайтов на localhost</a>
+							</div>
+						</li> 
+						<li class="list-group-item">
+							<div><img src="/i/L.jpg"  alt="cordova online"></div>
+							<div><a target="_blank" href="http://fastxampp.org/compile_android_online_apache_cordova/">Компиляция html5 приложений cordova для android онлайн</a><br>
+								<p>
+									<small>
+									</small>
+								</p>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div>
+								<img src="/i/php2js.jpg" title="" alt="">
+							</div>
+							<div>
+								<a href="http://php2js.ru/" target="_blank">Транслятор php кода в код javascript</a><br>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div><img src="/i/rc.jpg" alt="RedCafe"></div>
+							<div><a href="http://redcafe.ru/">Программа для создания выкроек стильной одежды</a></div>
+							<p>
+								<small>Мой вклад - оффлайн-версия программы для экспорта выкроек в pdf и dxf</small></div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+			<div class="footer bg-dark text-light">
+				
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								&copy; Андрей Ламзин
+							</div>
+						</div>
+					</div>
+				
+			</div>
+		
+        <script src="/j/jquery-3.3.1.slim.min.js"></script>
+        <script src="/j/bootstrap4.2.1.min.js"></script>
+        <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/prism/0.js"></script>
+        <script src="/j/app.js"></script> 
+        <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+	</body>
+</html>
