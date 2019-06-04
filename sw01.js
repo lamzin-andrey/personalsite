@@ -130,19 +130,28 @@ function onFoundResInCache(result) {
 function onActivate(){
 	//Сообщим всем клиентам (клиенты - это например открытые вкладки с разными страницами вашего сайта в браузере)
 	// сообщим, что мы тут и работаем.
+	if (self.verbose) console.log('Activation event!');
 	self.clients.claim();
+	
+	//Если это первый запуск, надо сообщить страницам, чтобы прислали списки url которые надо кэшировать
+	setTimeout(() => {
+		if (self.verbose) console.log('Worker: send First Run!');
+		sendMessageAllClients('isFirstRun');
+	}, 1000);
 }
 /**
- * @description Обработка события установки воркера. Он мне не понадобился.
+ * @description Обработка события установки воркера. 
 */
-function onInstall(){} //
+function onInstall(){
+	if (self.verbose) console.log('Installation event!');
+}
 
 //Это всё.
 //Далее просто для информации, чтобы проще было связыватсья с браузером при необходимости
 
 /**
  * TODO разобраться с этим, до полного понимания
- * @description Удобная отправкиа сообщений клиентам (Кто такие клиенты см. onActivate)
+ * @description Удобная отправка сообщений клиентам (Кто такие клиенты см. onActivate)
  * @param {String} sType
 */
 function sendMessageAllClients(sType) {
@@ -164,7 +173,11 @@ function sendMessageAllClients(sType) {
  * @param {Object} {data, origin} info
 */
 function onPostMessage(info) {
-	//if (self.verbose) console.log('get info', info);
-	self.cachingResources = info.data; //Ранее передавал список url чтобы кэшировать их addAll - это скорее вредно чем полезно, так как достаточно одного url, для которого сервер вернет не 200 - и всё зря, в кэше ничего не будет
-	self.cachingUrl = info.origin;//С какого url был запрос, вдруг всё-таки понадобится... - 
+	//Кэшируем переданные ресурсы
+	caches.open(CACHE).then((cache) => {
+		for (let i = 0; i < info.data.length; i++) {
+			if (self.verbose) console.log('First run caching resource ' + info.data[i]);
+			update(cache, info.data[i]);
+		}
+	});
 }
