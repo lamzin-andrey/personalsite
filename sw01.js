@@ -14,12 +14,12 @@ self.addEventListener('activate', onActivate);
 self.addEventListener('fetch', onFetch);
 
 /**
- * В общем-то нам это не надо.
+ * В общем-то нам это пока не надо.
 */
 self.addEventListener('install', onInstall);
 
 /**
- * В общем-то нам это тоже не надо, но оставлю для наглядности.
+ * В общем-то нам это тоже пока не надо, но оставлю для наглядности.
 */
 self.addEventListener('message', onPostMessage); 
 
@@ -65,18 +65,18 @@ function getResponseFromCacheOrNetwork(request) {
 /**
  * @description Обработка события "Когда кэш открыт для поиска результата"
  * @param {Cache} cache Объект открытого кэша
- * @param {HttpRequest} request запрос, котоый будем искать
+ * @param {HttpRequest} request запрос, который будем искать
  */
 function onOpenCacheForSearchRequest(cache, request) {
 	//Ищем, если найдено, вернем результат onFoundResInCache
-	return cache.match(request).then(onFoundResInCache)
-	//Если не найдено, запросим методом update и вернем результат, который вернет update
-								.catch(() => { 
-									if (self.verbose) console.log('No match, will run update');
-									return update(cache, request); 
-								});
+	return cache.match(request)
+		.then(onFoundResInCache)
+		//Если не найдено, запросим методом update и вернем результат, который вернет update
+		.catch(() => { 
+			if (self.verbose) console.log('No match, will run update');
+			return update(cache, request); 
+		});
 }
-
 /**
  * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... , когда доступен объект открытого кэша cache
  * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
@@ -110,7 +110,7 @@ function update(cache, request) {
 	}); 
 }
 /**
- * @description Обработка события "Найднено в кэше"
+ * @description Обработка события "Найдено в кэше"
  * @param {HttpResponse} result
  */
 function onFoundResInCache(result) {
