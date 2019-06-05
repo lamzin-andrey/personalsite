@@ -5,6 +5,11 @@
 /home/andrey/hdata/vdis/bridge/no-ant/CleverBrightness-android2.3.6+.apk
 
 
+Что осталось по service worker-ам
+Что такое syncdata?
+Как проверить, что ресурс обновился?
+
+
 Это очень простой сайт обо мне и с формой оплаты
 Используем только готовые решения!
 

@@ -22,6 +22,8 @@ CacheClient.prototype.init = function() {
 	var o = this;
 	o.verbose = false;
 	o.isCacheSendToWorker = false;
+	//Заполняется url которые есть на странице и указывают на данный сайт. Заполнение происходит в getAllResources
+	o._aUrlMap = {};
 	if (navigator.onLine) {
 		var o = this;
 		//Ждём, пока не зарегистрируется service worker
@@ -52,6 +54,22 @@ CacheClient.prototype.checkWorker = function() {
 	}
 }
 /**
+ * @description Проверит, не пусто ли _aUrlMap если пуста, вызовет getAllResources
+ * @return Object this._aUrlMap
+*/
+CacheClient.prototype.getAllResourcesHash = function() {
+	var i, n = 0, o = this;
+	for (i in o._aUrlMap) {
+		n++;
+		break;
+	}
+	if (!n) {
+		o.getAllResources();
+	}
+	return o._aUrlMap;
+}
+	
+/**
  * @description Собирает на странице список всех ресурсов загруженных с данного домена
  * @return array
 */
@@ -73,8 +91,10 @@ CacheClient.prototype.getAllResources = function() {
 	aSources = $('source');
 	
 	aResources.push(s);
+	o._aUrlMap[s] = 1;
 	if (s != baseLink) {
 		aResources.push(baseLink);
+		o._aUrlMap[baseLink] = 1;
 	}
 	
 	nSzImg = aImg.length;
@@ -165,5 +185,20 @@ CacheClient.prototype.onMessage = function(info) {
 		o.isCacheSendToWorker = true;
 		window.cacheWorker.postMessage(o.getAllResources());
 	}
-	
+	if (info.data.type == 'hasUpdate') {
+		var sUpdUrl = info.data.updUrl,
+			oHashResources = o.getAllResourcesHash();
+		if (!o.updateMessageIsShowed && oHashResources[info.data.updUrl]) {
+			//Чтобы не показывать его для каждого ресурса
+			o.updateMessageIsShowed = true;
+			o.showUpdateMessage();
+		}
+	}
+}
+/**
+ * @description Вот это можно перегрузить в наследнике
+ * @return array
+*/ 
+CacheClient.prototype.showUpdateMessage = function() {
+	alert('Доступна новая версия этой страницы.');
 }

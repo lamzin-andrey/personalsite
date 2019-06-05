@@ -111,7 +111,7 @@ return cache.match(request)
 <pre><code class="language-javascript">
 /**
  * @description Обработка "события" "Найдено в кэше"
- * @param {HttpResponse} result
+ * @param {Response} result
  */
 function onFoundResInCache(result) {
 	if (self.verbose) console.log('found in cache!3..', result);
@@ -295,7 +295,7 @@ function onFetch(event) {
 <pre><code class="language-javascript">
 /**
  * @description Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
- * @param {HttpRequest} request
+ * @param {Request} request
  */
 function getResponseFromCacheOrNetwork(request) {
 	return caches.open(CACHE).then((cache) => {
@@ -308,7 +308,7 @@ function getResponseFromCacheOrNetwork(request) {
 /**
  * @description Обработка события "Когда кэш открыт для поиска результата"
  * @param {Cache} cache Объект открытого кэша
- * @param {HttpRequest} request запрос, который будем искать
+ * @param {Request} request запрос, который будем искать
  */
 function onOpenCacheForSearchRequest(cache, request) {
 	//Ищем, если найдено, вернем результат onFoundResInCache
@@ -327,7 +327,7 @@ function onOpenCacheForSearchRequest(cache, request) {
 <pre><code class="language-javascript">
 /**
  * @description Обработка события "Найдено в кэше"
- * @param {HttpResponse} result
+ * @param {Response} result
  */
 function onFoundResInCache(result) {
 	if (self.verbose) console.log('found in cache!3..', result);
@@ -360,7 +360,7 @@ function onFoundResInCache(result) {
  * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... ,
  * когда доступен объект открытого кэша cache
  * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
- * @param {HttpRequest} request
+ * @param {Request} request
  * @return Promise -> HttpResponse данные с сервера
 */
 function update(cache, request) {
@@ -448,7 +448,7 @@ function onFetch(event) {
 /**
  * @description Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
  * @param {Cache} cache - уже "открытый" кэш
- * @param {HttpRequest} request
+ * @param {Request} request
  */
 function getResponseFromCacheOrNetwork(cache, request) {
 	//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком,

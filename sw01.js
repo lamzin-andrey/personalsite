@@ -19,7 +19,7 @@ self.addEventListener('fetch', onFetch);
 self.addEventListener('install', onInstall);
 
 /**
- * В общем-то нам это тоже пока не надо, но оставлю для наглядности.
+ * Будем получать в onPostMessage список ресурсов, которые надо кэшировать при первом посещении страницы
 */
 self.addEventListener('message', onPostMessage); 
 
@@ -28,6 +28,19 @@ self.addEventListener('message', onPostMessage);
  * То есть, сюда помещаем те url, которые не надо искать в кэше
 */
 self.excludeUrlList = {};
+
+/**
+ * @description Здесь будем хранить last-modified каждого найденного в кэше url
+ * Чтобы иметь возможность вывести уведомление типа "контент изменился"
+*/
+self.lastModUrlList = {};
+
+
+/**
+ * @description Здесь будем хранить длину контента страниц, не имеющих last-modified для каждого найденного в кэше url
+ * Чтобы иметь возможность вывести уведомление типа "контент изменился"
+*/
+self.contentLengthUrlList = {};
 
 self.verbose = false;
 
@@ -51,13 +64,13 @@ function onFetch(event) {
 		//Откроем кэш и вызовем нашу функцию update
 		caches.open(CACHE).then((cache) => {
 			if (self.verbose)  console.log('Schedule update  ' + req.url);
-			update(cache, req);
+			update(cache, req, true);
 		});
 	}, 1000);
 }
 /**
  * @description Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
- * @param {HttpRequest} request
+ * @param {Request} request
  */
 function getResponseFromCacheOrNetwork(request) {
 	return caches.open(CACHE).then((cache) => { return onOpenCacheForSearchRequest(cache, request); });
@@ -65,13 +78,15 @@ function getResponseFromCacheOrNetwork(request) {
 /**
  * @description Обработка события "Когда кэш открыт для поиска результата"
  * @param {Cache} cache Объект открытого кэша
- * @param {HttpRequest} request запрос, который будем искать
+ * @param {Request} request запрос, который будем искать
  */
 function onOpenCacheForSearchRequest(cache, request) {
-	//Ищем, если найдено, вернем результат onFoundResInCache
+			//Ищем
+	if (self.verbose) console.log('Will search in cache ' + request.url);
 	return cache.match(request)
+			//Если найдено, проверим что нашли и вернем только хороший результат из onFoundResInCache
 		.then(onFoundResInCache)
-		//Если не найдено, запросим методом update и вернем результат, который вернет update
+			//Если не найдено или найдено не то, запросим методом update и вернем результат, который вернет update
 		.catch(() => { 
 			if (self.verbose) console.log('No match, will run update');
 			return update(cache, request); 
@@ -80,10 +95,11 @@ function onOpenCacheForSearchRequest(cache, request) {
 /**
  * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... , когда доступен объект открытого кэша cache
  * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
- * @param {HttpRequest} request
+ * @param {Request} request
+ * @param {Boolean} isUpdateCacheAction true когда обновление порисходит не потому,что в кэше не найдено, а потому, что это обновление данных в кэше, хотя они там есть
  * @return Promise -> HttpResponse данные с сервера
 */
-function update(cache, request) {
+function update(cache, request, isUpdateCacheAction) {
 	if (self.verbose) console.log('Call update 2 ' + request.url);
 	//Помечаем, что в onFetch не надо лезть в кэш за данным запросом
 	self.excludeUrlList[request.url] = 1;
@@ -95,6 +111,11 @@ function update(cache, request) {
 		//если статус ответа 200, сохраним ответ в кэше
 		if (response.status == 200) {
 			cache.put(request, response.clone() );
+			//Уведомим страницу, что на ней есть новые данные (если они есть)
+			if (isUpdateCacheAction) {
+				if (self.verbose) console.log('Will try send message about upd');
+				checkResponseForUpdate(response);
+			}
 			//Помечаем, что эти данные уже есть в кэше
 			self.excludeUrlList[request.url] = 0;
 		}
@@ -110,18 +131,75 @@ function update(cache, request) {
 	}); 
 }
 /**
+ * @description Уведомим страницу, что на ней есть новые данные (если они есть)
+ * @param {Response} result
+ */
+function checkResponseForUpdate(response) {
+	if (response.status == 200 && response.url) {
+		if (self.verbose) console.log('checkResponseForUpdate: first if ok, url = ' + response.url);
+		
+		//Ищем по last-modified
+		if (self.lastModUrlList[response.url] && response.headers && response.headers.has('last-modified')) {
+			if (self.verbose) console.log('checkResponseForUpdate: second if ok, url = ' + response.url);
+			if (self.lastModUrlList[response.url] != response.headers.get('last-modified')) {
+				if (self.verbose) console.log('Send msg hashUpdate becouse in cache "' + self.lastModUrlList[response.url] + '", but from server got "' + response.headers.get('last-modified') + '"');
+				sendMessageAllClients('hasUpdate', response.url);
+			} else {
+				if (self.verbose) {
+					console.log("self.lastModUrlList[response.url]  == response.headers.get('last-modified') , url = " + response.url);
+				}
+			}
+		}
+		
+		//Ищем по изменению длины контента
+		if (self.contentLengthUrlList[response.url]) {
+			if (self.verbose) console.log('checkResponseForUpdate: found "' + response.url + '" in self.contentLengthUrlList');
+			response.clone().text().then((str) => {
+				if (self.contentLengthUrlList[response.url] != str.length) {
+					if (self.verbose) console.log('will send hasUpdate');
+					sendMessageAllClients('hasUpdate', response.url);
+				}
+				if (self.verbose) console.log('checkResponseForUpdate: new content length = "' + str.length + '"');
+				if (self.verbose) console.log('checkResponseForUpdate: safe length = "' + self.contentLengthUrlList[response.url] + '"');
+			});
+		}
+		
+	}
+}
+/**
  * @description Обработка события "Найдено в кэше"
- * @param {HttpResponse} result
+ * @param {Response} result
  */
 function onFoundResInCache(result) {
-	if (self.verbose) console.log('found in cache!3..', result);
+	if (self.verbose) console.log('found in cache!3..', result + ', result.url = ' + (result.url ? result.url : 'undefined') );
 	//если не найдено, вернем Promise.reject - благодаря этому в onOpenCacheForSearchRequest вызовется catch
 	if (!result || String(result) == 'undefined') {
 		if (self.verbose) console.log('will return no-match Promise');
 		return Promise.reject('no-match');
+	} else {
+		if (result.headers && result.url) {
+			let sContentType = result.headers.has('content-type') ? result.headers.get('content-type') : '';
+			//Выводим сообщения только в том случае, если обновились текст или картинки
+			if (sContentType.indexOf('text/html') != -1 
+				|| sContentType.indexOf('image/') != -1
+				//|| sContentType.indexOf('application/json') != -1
+				) {
+					if (result.headers.has('last-modified')) {
+						if (self.verbose) console.log('Will save lastmtime "' + result.headers.get('last-modified') + '"');
+						self.lastModUrlList[result.url] = result.headers.get('last-modified');
+					} else {
+						if (self.verbose) console.log('has no lastmtime for url "' + result.url + '"');
+						//если нет такого заголовка сохраняем длину контента
+						result.clone().text().then((str) => {
+							if (self.verbose) console.log('Will save length "' + str.length + '" for "' + result.url + '"');
+							self.contentLengthUrlList[result.url] = str.length;
+						});
+					}
+			}
+		}
 	}
 	if (self.verbose) console.log('will return result OR no-match Promise');/**/
-	//Вобщем-то можно сократить до этой строчки, как и было у автора
+	//Если не нужны уведомления вида "Есть новый еконтент на странице" вобщем-то можно сократить до этой строчки, как и было у автора
 	return (result || Promise.reject('no-match'));
 }
 /**
@@ -153,15 +231,17 @@ function onInstall(){
  * TODO разобраться с этим, до полного понимания
  * @description Удобная отправка сообщений клиентам (Кто такие клиенты см. onActivate)
  * @param {String} sType
+ * @param {String} sUpdUrl используется для сообщения hasUpdate чтобы клиент мог проверить, есть ли ресурс с таким url на странице и если есть, обновить
 */
-function sendMessageAllClients(sType) {
+function sendMessageAllClients(sType, sUpdUrl) {
 	self.clients.matchAll().then((clients) => {
 		clients.forEach((client) => {
 			if (self.verbose) console.log('founded client: ', client);
 			var message = {
 				type:  sType,
 				resources : self.cachingResources,
-				url:client.url
+				updUrl:sUpdUrl,
+				clientUrl:client.url
 			};
 			// Уведомляем клиент об обновлении данных.
 			client.postMessage(message);
