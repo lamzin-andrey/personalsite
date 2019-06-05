@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no">
+		<title>Сайт Андрея</title>
+		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
+		<!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous"-->
+		<link rel="stylesheet" href="/s/fontawesome5/all.css" >
+		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
+		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body>
+		<div class="container u-full-width">
+			<header>
+				<div class="row">
+					<div class="col">
+						<div class="text-left u-mainhead">
+							<h1>Блог Андрея</h1>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div>&nbsp;</div>
+			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+			  <a class="navbar-brand" href="/">Начало</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item">
+					<a class="nav-link" href="/portfolio">Портфолио</a>
+				  </li>
+				  <li class="nav-item active">
+					<a class="nav-link" href="javascript:;">Блог</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/clients">Клиентам</a>
+				  </li>
+				</ul>
+			  </div>
+			</nav>
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-12 col-lg-8">
+					<article>
+						<h1>Кэширование с помощью service worker - Продолжение. Кэшируем ресурсы при первой загрузке страницы и отслеживаем изменения контента для показа уведомлений.</h1>
+						<time datetime="2019-06-04" class="d-block text-right text-muted small">05.06.2019</time>
+						
+						<p>Продолжение статьи ... . Напомню, что я реализовал стратегию &laquo;Если ресурс есть в кэше, берём его из кэша, если нет, берём с сервера. Через секунду обновляем кэш в фоне&raquo;.</p>
+						<p>Реализованый в прошлой статье service worker имеет один существенный недостаток и одну существенную недоработку.</p>
+						<p>Недостаток заключается в том, что при первой загрузке страницы service worker устанавливается, но ничего не кэширует. Кэширование происходит при повторной и последующих загрузках страницы.</p>
+						<p>В этой статье мы избавимся от перечисленных недостатков, научимся устанавливать двустороннюю связь между нашей страницей и service worker, а главное напишем очень удачный скрипт, который можно будет использовать на разных сайтах или progressive web apps без каких-либо модификаций.</p>
+						
+<h2>Кэширование ресурсов страницы сразу после установки и активации service worker</h2>
+						<p>Во многих статьях описан подход, когда после установки service worker используется метод <code>Cache.addAll(aUrlList)</code>, например:</p>
+<pre><code class="language-javascript">
+const CACHE = 'cache-update-and-refresh-v1';
+
+// При установке воркера мы должны закешировать часть данных (статику).
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches
+            .open(CACHE)
+            .then((cache) => cache.addAll(['/img/background']))
+    );
+});
+</pre></code>
+<p>Мне этот подход сразу не понравился. Во-первых, у конечных пользователей файл с кодом service worker будет обновляться в лучшем случае раз в 24 часа.</p>
+<p>Во-вторых я хочу использовать один service worker для всех страниц и даже разделов сайта, причем в некоторых разделах список css js и прочего может быть полностью другим - я хочу пробовать разные технологии.</p>
+<p>Эти мысли пришли мне в голову ещё до того, как я узнал об очень неприятной особенности метода addAll. Оказалось, что если в
+ списке url передать ему всего один url, который вернёт код отличный от 200, провалится кэширование всего списка.</p>
+<p>Поэтому, я вообще отказался от использования метода addAll и от использования кэширования чего-либо в onInstall. Вместо этого я решил, что было бы неплохо, чтобы страница собирала из своего содержимого все url, ссылающиеся на тот сайт, на котором она находится и передавала этот список в service worker.</p>
+<p>Причём, делать это надо только при первом запуске, так как иначе все ресурсы страницы будут обновляться дважды: через секунду после вызова onFetch и в момент получения сообщения со списком url от клиента.</p>
+<p>Значит, при событии onInstall или onActivate надо уведомить стрнаицу, что это самая первая загрузка страницы, 
+подключенный к странице скрипт передаст список url которые запрашивала страница.</p>
+<p>В итоге я написал <a href="https://github.com/lamzin-andrey/personalsite/blob/master/j/cacheclient.js" target="_blank">скрипт cacheclient.js</a>, 
+который осуществляет сбор всех url со страницы, которая открыта в браузере и отправляет их service worker.
+Это сделало мой скрипт универсальным для многих сайтов.</p>
+<p>Рассмотрим установку слушателя сообщений от service worker</p>
+<pre><code class="language-javascript">
+//Конструктор, извините за es5
+function CacheClient(){
+	this.init();
+}
+/**
+ * @description Необходимо вызвать по событию DOMContentLoaded
+*/
+CacheClient.prototype.init = function() {
+	var o = this;
+	o.verbose = true;
+	//Заполняется url которые есть на странице и указывают 
+	// на данный сайт. Заполнение происходит в getAllResources
+	o._aUrlMap = {};
+	
+	navigator.serviceWorker.addEventListener('message', info => {
+	  o.onMessage(info);
+	});
+}
+</pre></code>
+<p class="text-secondary">Извините за es5 - но так зато проще отличать, о каком скрипте идёт речь - если функции определены явно в стиле es6 значит это код из service worker, если нет, значит из cacheclient.js.</p>
+<p>В onMessage принимаем уведомление от service worker:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Обработка сообщения от ServiceWorker
+ * @return array
+*/ 
+CacheClient.prototype.onMessage = function(info) {
+	var o = this;
+	if (o.verbose) console.log('CacheClient OnMessage:', info);
+	
+	if (info.data.type == 'isFirstRun') {
+		if (o.verbose) console.log('CacheClient OnMessage: got event FirstRun! ');
+		if (window.cacheWorker) {
+			//getAllResources вернёт список url
+			window.cacheWorker.postMessage(o.getAllResources());
+		}
+	}
+	if (info.data.type == 'hasUpdate') {
+		//это мы рассмотрим ниже
+	}
+}
+</pre></code>
+<p>Сам сбор url на странице малоинтересен в контексте данной статьи, поэтому я не буду на нем останавливаться.
+Желающие могут посмотреть <a href="https://github.com/lamzin-andrey/personalsite/blob/master/j/cacheclient.js" target="_blank">код getAllResources() на гитхаб</a>.</p>
+<p>Однако замечу, что все url в <code>getAllResources()</code> полные, то есть начинаются с https. <span class="text-secondary">Мне показалось, что в какой-то момент Хром перестал обрабатывать url начинающиеся с <code>'/'</code></span>.</p>
+<p>Куда важнее объяснить, откуда взялся <code>window.cacheWorker</code>. Если вы внимательно смотрели предыдущую статью, вы это знаете, но если это прошло мимо вас, приведу ещё раз код регистрации service worker:</p>
+<pre><code class="language-javascript">
+// Проверка того, что наш браузер поддерживает Service Worker API.
+if (navigator.serviceWorker) {
+    // Весь код регистрации у нас асинхронный.
+    navigator.serviceWorker.register('/sw01.js')
+      .then(() => navigator.serviceWorker.ready.then((worker) => {
+		if (worker.sync) {
+			console.log('Before register syncdata');
+			worker.sync.register('syncdata');
+		} 
+		//Вот он, наш service worker которому будем отправлять сообщения
+		window.cacheWorker  = worker.active;
+      }))
+      .catch((err) => console.log(err));
+} else {
+	console.log('...');
+}
+</pre></code>
+<p>Мы сделали всё, чтобы получить сообщение от service worker, нам осталось написать код его отправки.</p>
+<p>Добавим в код нашего service worker функцию, отправляющую сообщение всем клиентам 
+(напомню, что в контексте service worker клиентами можно считать все открытые в браузере страницы сайта, которыми управляет service worker.
+ То есть это окна и вкладки браузера с открытыми страницами сайта).</p>
+<pre><code class="language-javascript">
+/**
+ * @description Удобная отправка сообщений клиентам (Кто такие клиенты см. onActivate)
+ * @param {String} sType
+ * @param {String} sUpdUrl используется для сообщения hasUpdate 
+ *	чтобы клиент мог проверить, есть ли ресурс с таким url на странице и если
+ *  есть, обновить
+*/
+function sendMessageAllClients(sType, sUpdUrl) { 
+	//Найти всех клиентов
+	self.clients.matchAll()
+		//Когда нашли
+		.then((clients) => {
+			//Перебрать всех и отправить им сообщение в виде объекта
+			clients.forEach((client) => {
+				if (self.verbose) console.log('founded client: ', client);
+				let message = {
+					type: sType,
+					resources: self.cachingResources,
+					updUrl: sUpdUrl,
+					clientUrl: client.url
+				};
+				// Уведомляем клиент об обновлении данных.
+				client.postMessage(message);
+			});
+		});
+}
+</pre></code>
+<p>А в обработку события активации добавим отправку сообщения isFirstRun:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Обработка события активации
+ */
+function onActivate(){
+	//Сообщим всем клиентам (клиенты - это например открытые вкладки с разными страницами вашего сайта в браузере)
+	// сообщим, что мы тут и работаем.
+	if (self.verbose) console.log('Activation event!');
+	self.clients.claim();
+	
+	//Если это первый запуск, надо сообщить страницам,
+	// чтобы прислали списки url которые надо кэшировать
+	setTimeout(() => {
+		if (self.verbose) console.log('Worker: send First Run!');
+		sendMessageAllClients('isFirstRun');
+	}, 1000);
+}
+</pre></code>
+<p>Отлично, теперь мы отправляем сообщения из service worker и отвечаем из скрипта, который подключен к странице, осталось принять сообщенине со списком ресурсов в service worker:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Приём сообщений от клиента (Кто такие клиенты см. onActivate)
+ * @param {Object} {data, origin} info
+*/
+function onPostMessage(info) {
+	//Кэшируем все переданные ресурсы
+	caches.open(CACHE).then((cache) => {
+		for (let i = 0; i < info.data.length; i++) {
+			if (self.verbose) console.log('First run caching resource ' + info.data[i]);
+			update(cache, info.data[i]);
+		}
+	});
+}
+</pre></code>
+<p>Вместо adAll я использую уже написаную нами в предыдущей статье фуннкцию update(). 
+Как оказалось, она отлично работает и в том случае, если ей передать url типа String вместо объекта Request.</p>
+
+<h2>Дорабатываем скрипт для показа уведомлений вида &laquo;Есть новый контент&raquo;.</h2>
+<p>Хочется, чтобы service worker после обновления кэша как-то прjверял, не обновился ли загруженный в фоне ресурс 
+и уведомлял об этом пользователя, открывшего страницу.</p>
+<p>Выяснить это можно, сравнив заголовок ответа сервера, полученного только что с заголовком ответа сервера,
+	полученного ранее и сохранённого в кэше.</p>
+<p>Но как оказалось, не во всех ответах сервера может присутствовать заголовок <code>last-modified</code>, содержащий время 
+последней модификации ресурса, 
+да и <code>content-length</code> мне вообще ни в одном из ответов сервера, на котором находится этот сайт в 2019 году
+ обнаружить не удалось.</p>
+<div class="alert alert-info">Кстати, можно было попробовать связаться с админом хостинга и попросить его настроить сервер так, чтобы упомянутые заголовки всегда отправлялись.</div>
+<p>Поэтому, я решил определять длину контента непосредственно при его получении, но только в том случае, 
+если нет заголовка last-modified.</p>
+<p>У нас уже есть написанная нами в предыдущей статье функция <code>onFoundResInCache(result)</code>, добавим 
+в неё вызов функции <code>saveResultHeadersData(result)</code>: </p>
+<pre><code class="language-javascript">
+/**
+ * @description Обработка события "Найдено в кэше"
+ * @param {Response} result
+ */
+function onFoundResInCache(result) {
+	if (self.verbose) console.log('found in cache!3..', result + ', result.url = ' + (result.url ? result.url : 'undefined') );
+	//если не найдено, вернем Promise.reject - благодаря этому в onOpenCacheForSearchRequest вызовется catch
+	if (!result || String(result) == 'undefined') {
+		if (self.verbose) console.log('will return no-match Promise');
+		return Promise.reject('no-match');
+	}
+	//Сохраним данные из заголовков о ресурсе, которые помогут нам определить, изменился ли ресурс
+	saveResultHeadersData(result);
+	if (self.verbose) console.log('will return result OR no-match Promise');/**/
+	//Если не нужны уведомления вида "Есть новый еконтент на странице" вобщем-то можно сократить до этой строчки, как и было у автора
+	return (result || Promise.reject('no-match'));
+}
+</pre></code>
+<p>И напишем функцию <code>saveResultHeadersData</code>:</p>
+<pre><code class="language-javascript">	
+/**
+ * @description Сохраним время последней модификации ресурса,
+ *  а если это невозможно, его размер.
+ * Данная функция вызывается из onFoundResInCache
+ * @param {Response} result - найденный в кэше ответ на запрос
+ */
+function saveResultHeadersData(result) {
+	if (result.headers && result.url) {
+		let sContentType = result.headers.has('content-type') ? 
+			result.headers.get('content-type') :
+			'';
+		//Выводим сообщения только в том случае, если обновились текст или картинки
+		if (sContentType.indexOf('text/html') != -1 
+			|| sContentType.indexOf('image/') != -1
+			//|| sContentType.indexOf('application/json') != -1
+			) {
+				//если сервер передал время последнего изменения ресурса, нам повезло, можно не мудрить
+				if (result.headers.has('last-modified')) {
+					if (self.verbose) console.log('Will save lastmtime "' + result.headers.get('last-modified') + '"');
+					//Просто запомним, что у нас в кэше лежит ресурс, изменённый тогда-то
+					self.lastModUrlList[result.url] = result.headers.get('last-modified');
+				} else {
+					//если сервер не передал время последнего изменения ресурса, будем мудрить
+					if (self.verbose) console.log('has no lastmtime for url "' + result.url + '"');
+					//если нет такого заголовка сохраняем длину контента
+					//Так здесь text() возвращает Promise, пришлось клонировать, иначе была ошибка искажения содержимого
+					result.clone().text().then((str) => {
+						if (self.verbose) console.log('Will save length "' + str.length + '" for "' + result.url + '"');
+						//Просто запомним длину контента ресурса в кэше
+						self.contentLengthUrlList[result.url] = str.length;
+					});
+				}
+		}
+	}
+}
+</pre></code>
+<p>Разберу эту функцию подробно.</p>
+<p>Мне показалось, что изменения javascript и css на сайте могут быть довольно частыми, при этом пользователь может даже не 
+понять, что именно изменилось и увидит лишь непонятное назойливое сообщение, что вот мол есть новая версия страницы.
+Поэтому я решил, что буду контролировать изменения только html сайта и изображений. Делаю я это, анализируя заголовок 
+<code>content-type</code>. В случае с html текстом и например png изображениями он будет содержать в значении 
+<code>'text/html'</code> и <code>'image/png'</code> соответственно.</p>
+<p>Поначалу я хотел включить туда и результаты ajaх запросов, но потом мне это показалось излишним,
+поэтому поиск подстроки <code>'application/json'</code> закомментирован.
+В самом деле, такие запросы если и выводят новый контент,
+ они обычно делают это без перезагрузки страницы.</p>
+<p>Далее, я проверяю существование загловка <code>last-modified</code> и если он есть, сохраняю в объекте 
+<code>self.lastModUrlList</code> время модификации хранимого в кэше ресурса.</p>
+<p>Напомню, что в реализованном service worker обновление ресурса в кэше всегда происходит после того, как ресурс считан из кэша. 
+Таким образом, если ресурс в кэше был, на момент обновления в объекте <code>self.lastModUrlList</code>
+будет хранится необходимая для проверки изменения ресурса информация. </p>
+<p>Но, так как заголовок <code>last-modified</code> может не передаваться для <code>content-type="text/html"</code>, 
+я перестраховываюсь, получая для таких ресурсов их размер.</p>
+<p>Логика в этом случае по сути аналогична логике с  <code>last-modified</code>, 
+но мне приходится использовать другой объект, <code>self.contentLengthUrlList</code>
+и вдобавок дожидаться "разрешения" <code>Promise</code>, который возвращает метод <code>Request.text()</code>.
+</p>
+<p>Поначалу я не клонировал <code>result</code>, но получил ошибку искажения содержимого (это когда вместо страницы сайта ваш
+ Firefox показывает сообщение "Ошибка искажения содержимого").</p>
+<p>И конечно, надо не забыть добавить инициализацию новых объектов в начале кода нашего service worker:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Здесь будем хранить last-modified каждого найденного в кэше url
+ * Чтобы иметь возможность вывести уведомление типа "контент изменился"
+*/
+self.lastModUrlList = {};
+
+/**
+ * @description Здесь будем хранить длину контента страниц, не имеющих last-modified для каждого найденного в кэше url
+ * Чтобы иметь возможность вывести уведомление типа "контент изменился"
+*/
+self.contentLengthUrlList = {};
+</pre></code>
+<p>С получением данных о ресурсах хранимых в кэше покончили,
+осталось сравнить эти данные с вновь загруженными и передать сообщение клиентам, что что-то изменилось.</p>
+<p>Напомню, что обновление кэша запускается у нас в обработчике события fetch onFetch:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Перехватываем запрос
+*/
+function onFetch(event) {
+	//Если его не нашли в кэше, значит надо отправить запрос 
+	// на сервер, то есть кормить собак и ничего не трогать
+	if (self.excludeUrlList[event.request.url]) {
+		if (self.verbose) console.log('Skip search in cache ' + event.request.url);
+		return;
+	}
+	//Обратимся за ответом на запрос в кэш, а если него там нет, то на сервер
+	event.respondWith(getResponseFromCacheOrNetwork(event.request) );
+	
+	//Чтобы не DDOS-ить сервер одинаковыми запросами с малым промежутком,
+	//сделаем секундную паузу перед тем как обновить данные в кэше
+	//Клонируем запрос, потому что его на момент вызова лямбды может и не существовать
+	let req = event.request.clone();
+	setTimeout(() => {
+		//Откроем кэш и вызовем нашу функцию update
+		caches.open(CACHE).then((cache) => {
+			if (self.verbose)  console.log('Schedule update  ' + req.url);
+			update(cache, req, true);
+		});
+	}, 1000);
+}
+</pre></code>
+<p>Мне понадобилось внести минимальное изменение в этот код. Я добавил передачу 
+третьего агрумента true в update, таким образом она будет знать, что необходимо сравнить данные обновлённых ресурсов с данными ресурсов их кэша. Естественно, пришлось подредактировать и update:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... , когда доступен объект открытого кэша cache
+ * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
+ * @param {Request} request
+ * @param {Boolean} isUpdateCacheAction true когда обновление происходит не потому, 
+ *		что в кэше не найдено, а потому, что это обновление данных в кэше,
+ *       хотя они там есть
+ * @return Promise -> HttpResponse данные с сервера
+*/
+function update(cache, request, isUpdateCacheAction) {
+	if (self.verbose) console.log('Call update 2 ' + request.url);
+	//Помечаем, что в onFetch не надо лезть в кэш за данным запросом
+	self.excludeUrlList[request.url] = 1;
+	//Собственно, запрос
+	return fetch(request)
+	//когда пришли данные
+	.then((response) => {
+		if (self.verbose) console.log('Got response ');
+		//если статус ответа 200, сохраним ответ в кэше
+		if (response.status == 200) {
+			cache.put(request, response.clone() );
+			//Уведомим страницу, что на ней есть новые данные (если они есть)
+			if (isUpdateCacheAction) {
+				if (self.verbose) console.log('Will try send message about upd');
+				checkResponseForUpdate(response);
+			}
+			//Помечаем, что эти данные уже есть в кэше
+			self.excludeUrlList[request.url] = 0;
+		}
+		//вернем ответ сервера
+		return response;
+	})
+	//Сервер не ответил, например связь оборавалсь
+	.catch((err) => {
+		//Если с сервера ничего полезного не пришло, а в кэше у нас
+		// тоже ничео нет, всё печально, но тут уже ничего не поделать
+		// а если в кэше есть, то всё отлично, пусть при следующем
+		// входе на страницу пользователь пока смотрит на то,
+		// что уже есть в кеше
+		//Помечаем, что эти данные  есть в кэше 
+		self.excludeUrlList[request.url] = 0;
+	}); 
+}
+</pre></code>
+<p>В обработку получения успешного ответа от сервера добавился блок:</p>
+<pre><code class="language-javascript">
+//Уведомим страницу, что на ней есть новые данные (если они есть)
+if (isUpdateCacheAction) {
+	if (self.verbose) console.log('Will try send message about upd');
+	checkResponseForUpdate(response);
+}
+</pre></code>
+<p>Сама проверка и отправка уведомления на страницу происходит в checkResponseForUpdate(response):</p>
+<pre><code class="language-javascript">
+/**
+ * @description Уведомим страницу, что на ней есть новые данные (если они есть)
+ * @param {Response} result
+ */
+function checkResponseForUpdate(response) {
+	if (response.status == 200 && response.url) {
+		//Ищем по last-modified
+		if (self.lastModUrlList[response.url] && response.headers && response.headers.has('last-modified')) {
+			if (self.lastModUrlList[response.url] != response.headers.get('last-modified')) {
+				//Отправим всем открытым страницам уведомление, что ресурсс с response.url изменился
+				sendMessageAllClients('hasUpdate', response.url);
+			}
+		}
+		
+		//Ищем по изменению длины контента
+		if (self.contentLengthUrlList[response.url]) {
+			response.clone().text().then((str) => {
+				if (self.contentLengthUrlList[response.url] != str.length) {
+					//Отправим всем открытым страницам уведомление, что ресурсс с response.url изменился
+					sendMessageAllClients('hasUpdate', response.url);
+				}
+			});
+		}
+	}
+}
+</pre></code>
+<p>Тут я думаю всё понятно. Заголовки ответа сервера анализируются аналогично заголовкам ответов
+ ранее сохранённых в кэше. Единственное, на что стоит обратить внимание, анализ начинается только в том случае,
+ если соответствующий url есть в наших объектах <code>lastModUrlList</code> или <code>contentLengthUrlList</code>.</p>
+<p>Ну что же, нам осталось только принять сообщение в скрипте страницы и вывести сообщение для пользователя, если ресурс
+имеет к ней отношение. То есть, у вас может быть открыто две страницы сайта в браузере, текст одной из них изменился,
+но наш service worker отправляет уведомление всем открытым страницам.
+А текстовое сообщение для пользователя должно быть выведено только на той странице, на которой контент реально изменился.
+Но в нашем клиентском скрипте уже есть метод, собирающий все url на странице,
+он просто проверит, входит ли изменившийся в их список.</p>
+<p>Снова посмотрим на наш метод <code>onMessage</code> из cacheclient.js:</p>
+<pre><code class="language-javascript">
+/**
+ * @description Обработка сообщения от ServiceWorker
+ * @return array
+*/ 
+CacheClient.prototype.onMessage = function(info) {
+	var o = this;
+	if (o.verbose) console.log('CacheClient OnMessage:', info);
+	
+	if (info.data.type == 'isFirstRun') {
+		//Это мы уже разобрали
+	}
+	if (info.data.type == 'hasUpdate') {
+		var sUpdUrl = info.data.updUrl,
+			oHashResources = o.getAllResourcesHash();
+		if (!o.updateMessageIsShowed && oHashResources[info.data.updUrl]) {
+			//Чтобы не показывать сообщение 10 раз если 
+			// обновлены все 10 картинок на странице
+			o.updateMessageIsShowed = true;
+			o.showUpdateMessage();
+		}
+	}
+}
+</pre></code>
+<p>Если пришло сообщение с типом hasUpdate, проверяем, имеет ли изменившийся url какое-то отношение к нам (то есть содержится ли на странице ресурс с таким url) и если да, показываем сообщение.</p>
+<p>Так как могут измениться несколько ресурсов, запоминаем, что уже показывали сообщение, чтобы не выводить его более одного раза.</p>
+<p><code>showUpdateMessage()</code> реализован в коде cacheclient.js аскетично просто - в виде стандартного alert-а. Если вы захотите его изменить, вам следует наследоваться от CacheClient и перегрузить в нём этот метод.</p>
+<p>Использовать то, что у нас получилось можно по ссылкам:</p>
+<p><a href="https://github.com/lamzin-andrey/personalsite/blob/master/sw01.js" target="_blank">Код service worker на github</a> <span class="badge-warning">он должен открыватсья по адресу <a href="/sw01.js" target="_blank">https://your.site/sw01.js</a></span></p>
+<p><a href="https://github.com/lamzin-andrey/personalsite/blob/master/j/swinstall.js" target="_blank">Код скрипта регистрации
+ service worker на github</a> <span class="badge-warning">не включайте его в один большой яваскрипт, который генерируется вашим webpack или gulp - он лучше всего работает, когда он подключен в начале страницы!</span></p>
+<p><a href="https://github.com/lamzin-andrey/personalsite/blob/master/j/cacheclient.js" target="_blank">Код cacheclient.js на github</a> <span class="badge-success">его можно и нужно включить в один большой яваскрипт, который генерируется вашим webpack или gulp</span></p>
+<p></p>
+					</article>
+				</div>
+				<div class="col-12 col-lg-4  u-right-side">
+					<ul class="list-group text-center">
+						<li class="list-group-item">
+							<div><img src="/i/fx.jpg" alt="Fastxampp"></div>
+							<div> <!-- style="border-top-width: 0px;" -->
+								<a href="//fastxampp.org" target="_blank">Утилита для удобного добавления сайтов на localhost</a>
+							</div>
+						</li> 
+						<li class="list-group-item">
+							<div><img src="/i/L.jpg"  alt="cordova online"></div>
+							<div><a target="_blank" href="http://fastxampp.org/compile_android_online_apache_cordova/">Компиляция html5 приложений cordova для android онлайн</a><br>
+								<p>
+									<small>
+									</small>
+								</p>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div>
+								<img src="/i/php2js.jpg" title="" alt="">
+							</div>
+							<div>
+								<a href="http://php2js.ru/" target="_blank">Транслятор php кода в код javascript</a><br>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div><img src="/i/rc.jpg" alt="RedCafe"></div>
+							<div><a href="http://redcafe.ru/">Программа для создания выкроек стильной одежды</a></div>
+							<p>
+								<small>Мой вклад - оффлайн-версия программы для экспорта выкроек в pdf и dxf</small></div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+			<div class="footer bg-dark text-light">
+				
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								&copy; Андрей Ламзин
+							</div>
+						</div>
+					</div>
+				
+			</div>
+		
+        <script src="/j/jquery-3.3.1.slim.min.js"></script>
+        <script src="/j/bootstrap4.2.1.min.js"></script>
+        <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/prism/0.js"></script>
+        <script src="/j/app.js"></script> 
+        <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+	</body>
+</html>

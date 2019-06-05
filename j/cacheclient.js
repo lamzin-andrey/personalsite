@@ -2,11 +2,15 @@
  * @class Главное назначение этого класса в том, чтобы взаимодействовать с serviceWorker-ом (sw) кэширующим ресурсы.
  * Это часть модуля КэшСкрипт19
  * Особенность модуля в том, что он не использует статический перечень arg в коде service worker cache.addAll(arg).
- * После того, как наступило DOMContentLoaded, экземпляр класса каждые 100 милиисекунд проверяет, не зарегистрирован ли уже sw.
- * Когда sw зарегистрирован, собирает url всех ресурсов на странице,
+ * Экземпляр класса слушает сообщения от service worker
+ * Когда sw активирован, собирает url всех ресурсов на странице,
  * полученных с того же домена что и загруженная страница. 
  * и передаёт их post сообщением в serviceWorker
- * После того, как serviceWorker сообщил, что данные получены и сохранены, цикл setInterval прекращается
+ * 
+ * Также он принимает сообщения о том, что тот или иной ресурс, кэшированный service worker изменён.
+ * Если этот ресурс находится на открытой в браузере странице, выводится сообщение об этом.
+ * Вид и прочие особенности сообщения можно перегрузить, создав класс, наследующийся от CacheClient
+ * и перегрузив метод showUpdateMessage.
  * 
  * Необходимо вместе с этим скриптом также подключить скрипт регистрации serviceWorker swinstall, 
  * который после успешной регистрации создает ссылку на объект воркера window.cacheWorker
@@ -21,37 +25,12 @@ function CacheClient(){
 CacheClient.prototype.init = function() {
 	var o = this;
 	o.verbose = false;
-	o.isCacheSendToWorker = false;
 	//Заполняется url которые есть на странице и указывают на данный сайт. Заполнение происходит в getAllResources
 	o._aUrlMap = {};
-	if (navigator.onLine) {
-		var o = this;
-		//Ждём, пока не зарегистрируется service worker
-		o.ival = setInterval(function() {
-			o.checkWorker();
-		},
-		//После получения информации о том, что воркер зарегистрирован этот интервал будет очищен
-		0.1 * 1000
-		);
-	}
-}
-/**
- * @description Проверяет, существует ли объект window.cacheWorker и если да, оправляет ему сообщение с массивом ссылок на ресурсы
- * Как только window.cacheWorker существует это значит что он зарегистрирован и ему можно отправить массив url, который тот добавит методом 
- * cache.addAll
-*/
-CacheClient.prototype.checkWorker = function() {
-	var o = this;
-	if (window.cacheWorker && !o.isCacheSendToWorker && navigator.onLine) {//зарегистрировался
-		if (!o.listenerIsSet) { //установим слушатель сообщений от него
-			navigator.serviceWorker.addEventListener('message', info => {
-			  o.onMessage(info);
-			});
-			o.listenerIsSet = true;
-			//и очистим интервал, он нам больше не нужен
-			clearInterval(o.ival);
-		}
-	}
+	
+	navigator.serviceWorker.addEventListener('message', info => {
+	  o.onMessage(info);
+	});
 }
 /**
  * @description Проверит, не пусто ли _aUrlMap если пуста, вызовет getAllResources
@@ -153,7 +132,7 @@ CacheClient.prototype._addResource = function(aResources, oItem, sAttrName, sHos
 	}
 }
 /**
- * @description Вернет если значение src содержит тот же хост, что и sHost или начинается с /
+ * @description Вернет true если значение src содержит тот же хост, что и sHost или начинается с /
  * @param {String} src
  * @param {String} sHost
  * @return Boolean
@@ -177,19 +156,19 @@ CacheClient.prototype._isOurHost = function(src, sHost) {
 */ 
 CacheClient.prototype.onMessage = function(info) {
 	var o = this;
-	this.isCacheSendToWorker = false;
 	if (o.verbose) console.log('CacheClient OnMessage:', info);
 	
 	if (info.data.type == 'isFirstRun') {
 		if (o.verbose) console.log('CacheClient OnMessage: got event FirstRun! ');
-		o.isCacheSendToWorker = true;
-		window.cacheWorker.postMessage(o.getAllResources());
+		if (window.cacheWorker) {
+			window.cacheWorker.postMessage(o.getAllResources());
+		}
 	}
 	if (info.data.type == 'hasUpdate') {
 		var sUpdUrl = info.data.updUrl,
 			oHashResources = o.getAllResourcesHash();
 		if (!o.updateMessageIsShowed && oHashResources[info.data.updUrl]) {
-			//Чтобы не показывать его для каждого ресурса
+			//Чтобы не показывать сообщение 10 раз если обновлены все 10 картинок на странице
 			o.updateMessageIsShowed = true;
 			o.showUpdateMessage();
 		}

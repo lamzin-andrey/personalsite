@@ -96,7 +96,7 @@ function onOpenCacheForSearchRequest(cache, request) {
  * @description Запрос данных с сервера. Этот метод вызывать в onOpenCache... , когда доступен объект открытого кэша cache
  * @param {Cache} cache - кеш, в котором ищем, на момент вызова должен уже быть открыт
  * @param {Request} request
- * @param {Boolean} isUpdateCacheAction true когда обновление порисходит не потому,что в кэше не найдено, а потому, что это обновление данных в кэше, хотя они там есть
+ * @param {Boolean} isUpdateCacheAction true когда обновление происходит не потому,что в кэше не найдено, а потому, что это обновление данных в кэше, хотя они там есть
  * @return Promise -> HttpResponse данные с сервера
 */
 function update(cache, request, isUpdateCacheAction) {
@@ -129,7 +129,7 @@ function update(cache, request, isUpdateCacheAction) {
 		//Помечаем, что эти данные  есть в кэше 
 		self.excludeUrlList[request.url] = 0;
 	}); 
-}
+} 
 /**
  * @description Уведомим страницу, что на ней есть новые данные (если они есть)
  * @param {Response} result
@@ -176,31 +176,44 @@ function onFoundResInCache(result) {
 	if (!result || String(result) == 'undefined') {
 		if (self.verbose) console.log('will return no-match Promise');
 		return Promise.reject('no-match');
-	} else {
-		if (result.headers && result.url) {
-			let sContentType = result.headers.has('content-type') ? result.headers.get('content-type') : '';
-			//Выводим сообщения только в том случае, если обновились текст или картинки
-			if (sContentType.indexOf('text/html') != -1 
-				|| sContentType.indexOf('image/') != -1
-				//|| sContentType.indexOf('application/json') != -1
-				) {
-					if (result.headers.has('last-modified')) {
-						if (self.verbose) console.log('Will save lastmtime "' + result.headers.get('last-modified') + '"');
-						self.lastModUrlList[result.url] = result.headers.get('last-modified');
-					} else {
-						if (self.verbose) console.log('has no lastmtime for url "' + result.url + '"');
-						//если нет такого заголовка сохраняем длину контента
-						result.clone().text().then((str) => {
-							if (self.verbose) console.log('Will save length "' + str.length + '" for "' + result.url + '"');
-							self.contentLengthUrlList[result.url] = str.length;
-						});
-					}
-			}
-		}
 	}
+	//Сохраним данные из заголовков о ресурсе, которые помогут нам определить, изменился ли ресурс
+	saveResultHeadersData(result);
 	if (self.verbose) console.log('will return result OR no-match Promise');/**/
 	//Если не нужны уведомления вида "Есть новый еконтент на странице" вобщем-то можно сократить до этой строчки, как и было у автора
 	return (result || Promise.reject('no-match'));
+}
+/**
+ * @description Сохраним время последней модификации ресурса, а если это невозможно, его размер.
+ * Данная функция вызывается из onFoundResInCache
+ * @param {Response} result - найденный в кэше ответ на запрос
+ */
+function saveResultHeadersData(result) {
+	if (result.headers && result.url) {
+		let sContentType = result.headers.has('content-type') ? result.headers.get('content-type') : '';
+		//Выводим сообщения только в том случае, если обновились текст или картинки
+		if (sContentType.indexOf('text/html') != -1 
+			|| sContentType.indexOf('image/') != -1
+			//|| sContentType.indexOf('application/json') != -1
+			) {
+				//если сервер передал время последнего изменения ресурса, нам повезло, можно не мудрить
+				if (result.headers.has('last-modified')) {
+					if (self.verbose) console.log('Will save lastmtime "' + result.headers.get('last-modified') + '"');
+					//Просто запомним, что у нас в кэше лежит ресурс, изменённый тогда-то
+					self.lastModUrlList[result.url] = result.headers.get('last-modified');
+				} else {
+					//если сервер не передал время последнего изменения ресурса, будем мудрить
+					if (self.verbose) console.log('has no lastmtime for url "' + result.url + '"');
+					//если нет такого заголовка сохраняем длину контента
+					//Так здесь text() возвращает Promise, пришлось клонировать, иначе была ошибка искажения содержимого
+					result.clone().text().then((str) => {
+						if (self.verbose) console.log('Will save length "' + str.length + '" for "' + result.url + '"');
+						//Просто запомним длину контента
+						self.contentLengthUrlList[result.url] = str.length;
+					});
+				}
+		}
+	}
 }
 /**
  * @description Обработка события активации
@@ -228,16 +241,15 @@ function onInstall(){
 //Далее просто для информации, чтобы проще было связыватсья с браузером при необходимости
 
 /**
- * TODO разобраться с этим, до полного понимания
  * @description Удобная отправка сообщений клиентам (Кто такие клиенты см. onActivate)
  * @param {String} sType
  * @param {String} sUpdUrl используется для сообщения hasUpdate чтобы клиент мог проверить, есть ли ресурс с таким url на странице и если есть, обновить
 */
-function sendMessageAllClients(sType, sUpdUrl) {
+function sendMessageAllClients(sType, sUpdUrl) { 
 	self.clients.matchAll().then((clients) => {
 		clients.forEach((client) => {
 			if (self.verbose) console.log('founded client: ', client);
-			var message = {
+			let message = {
 				type:  sType,
 				resources : self.cachingResources,
 				updUrl:sUpdUrl,
