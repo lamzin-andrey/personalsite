@@ -50,7 +50,7 @@
 						<h1>Кэширование с помощью service worker - Продолжение. Кэшируем ресурсы при первой загрузке страницы и отслеживаем изменения контента для показа уведомлений.</h1>
 						<time datetime="2019-06-04" class="d-block text-right text-muted small">05.06.2019</time>
 						
-						<p>Продолжение статьи ... . Напомню, что я реализовал стратегию &laquo;Если ресурс есть в кэше, берём его из кэша, если нет, берём с сервера. Через секунду обновляем кэш в фоне&raquo;.</p>
+						<p>Продолжение <a href="https://andryuxa.ru/blog/keshirovanie_s_pomoshyu_service_worker/">статьи</a>. Напомню, что я реализовал стратегию &laquo;Если ресурс есть в кэше, берём его из кэша, если нет, берём с сервера. Через секунду обновляем кэш в фоне&raquo;.</p>
 						<p>Реализованый в прошлой статье service worker имеет один существенный недостаток и одну существенную недоработку.</p>
 						<p>Недостаток заключается в том, что при первой загрузке страницы service worker устанавливается, но ничего не кэширует. Кэширование происходит при повторной и последующих загрузках страницы.</p>
 						<p>В этой статье мы избавимся от перечисленных недостатков, научимся устанавливать двустороннюю связь между нашей страницей и service worker, а главное напишем очень удачный скрипт, который можно будет использовать на разных сайтах или progressive web apps без каких-либо модификаций.</p>
@@ -479,7 +479,7 @@ CacheClient.prototype.onMessage = function(info) {
 <p><a href="https://github.com/lamzin-andrey/personalsite/blob/master/j/swinstall.js" target="_blank">Код скрипта регистрации
  service worker на github</a> <span class="badge-warning">не включайте его в один большой яваскрипт, который генерируется вашим webpack или gulp - он лучше всего работает, когда он подключен в начале страницы!</span></p>
 <p><a href="https://github.com/lamzin-andrey/personalsite/blob/master/j/cacheclient.js" target="_blank">Код cacheclient.js на github</a> <span class="badge-success">его можно и нужно включить в один большой яваскрипт, который генерируется вашим webpack или gulp</span></p>
-<p></p>
+<p><a href="https://andryuxa.ru/blog/keshirovanie_s_pomoshyu_service_worker/">Ссылка на первую часть этой статьи</a></p>
 					</article>
 				</div>
 				<div class="col-12 col-lg-4  u-right-side">
