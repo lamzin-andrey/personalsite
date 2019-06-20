@@ -65,14 +65,18 @@ ServiceWorker отправляет запрос на сервер.
 
 Вы можете скопировать код скрипта как встроенный, это обеспечит лучшую работу кэширования.
 
+
 3 Создайте класс javascript, наследующийся от LandCacheClient 
 (пример вы можете видеть в классе, определенном в concrete_cache_client_example.js)
+
 
 4 Используйте webpack или gulp или «просто babel» для компиляции 
 land_cache_client.js и your_concrete_cache_client.js 
 и добавьте его в свой bundle.js или output.js.
 
+
 5 В начальной точке вашего js-приложения добавьте инициализацию LandCacheClient как
+
 
 let cacheClient = new YourCacheClient ();
 
