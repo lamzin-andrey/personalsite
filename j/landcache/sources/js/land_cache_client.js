@@ -1,6 +1,7 @@
+import $  from 'jquery';
 /**
  * @class Главное назначение этого класса в том, чтобы взаимодействовать с serviceWorker-ом (sw) кэширующим ресурсы.
- * Это часть модуля КэшСкрипт19
+ * Это часть модуля LandCacheServiceWorker
  * Особенность модуля в том, что он не использует статический перечень arg в коде service worker cache.addAll(arg).
  * Экземпляр класса слушает сообщения от service worker
  * Когда sw активирован, собирает url всех ресурсов на странице,
@@ -152,7 +153,7 @@ class LandCacheClient {
 	 * @description Обработка сообщения от ServiceWorker
 	 * @return array
 	*/ 
-	onMessage(info) {
+	onMessage(info) { 
 		var o = this;
 		if (o.verbose) console.log('LandCacheClient OnMessage:', info);
 		
@@ -171,12 +172,23 @@ class LandCacheClient {
 				o.showUpdateMessage();
 			}
 		}
+		if (info.data.type == 'firstRunResourcesComplete' && info.data.updUrl == location.href) {
+			o.showFirstCachingCompleteMessage();
+		}
 	}
 	/**
-	 * @description Вот это можно перегрузить в наследнике. Override it!
-	 * @return array
+	 * @description Override it Вот это можно перегрузить в наследнике. 
 	*/ 
 	showUpdateMessage() {
 		alert('New version this page available!');
 	}
+	/**
+	 * @description Сообщение о том, что все ресурсы закэшированы (вызывается при первом входе на страницу после кэширования, полезно для pwa)
+	 * For progressive web
+	*/
+	showFirstCachingCompleteMessage() {
+		alert('All resources loaded, add us page on main screen and use it offline.');
+	}
 }
+
+export default LandCacheClient;

@@ -24,6 +24,26 @@ self.addEventListener('install', onInstall);
 self.addEventListener('message', onPostMessage); 
 
 /**
+ * Примет 1 в случае, если происходит добавление в кэш при первом входе на страницу
+*/
+self.isFirstRunMode = 0;
+
+/**
+ * Примет значение url страницы в случае, если происходит добавление в кэш при первом входе на страницу
+*/
+self.firstRunPageUrl = '';
+
+/**
+ * Примет значение последнего url из списка в случае, если происходит добавление последнего переданного ресурса в кэш при первом входе на страницу
+*/
+self.lastResourceUrl = '';
+
+/**
+ * Примет 1 в случае, если начато добавление последнего в списке переданных ресурсов  при первом входе на страницу
+*/
+self.isLastResource = 0;
+
+/**
  * @description Здесь будем хранить url которые не надо искать в кэше (это бывает нужно, когда в кэше уже искали, но его там нет)
  * То есть, сюда помещаем те url, которые не надо искать в кэше
 */
@@ -116,6 +136,8 @@ function update(cache, request, isUpdateCacheAction) {
 				if (self.verbose) console.log('Will try send message about upd');
 				checkResponseForUpdate(response);
 			}
+			//Проверим, не загружены ли все ресурсы при первом входе на страницу и в случае успеха отправим сообщение клиентам
+			checkFirstRunAllResourcesLoaded(response.url);
 			//Помечаем, что эти данные уже есть в кэше
 			self.excludeUrlList[request.url] = 0;
 		}
@@ -164,6 +186,20 @@ function checkResponseForUpdate(response) {
 			});
 		}
 		
+	}
+}
+/**
+ * @description Вызывается в update. Если это загрузка ресурсов в кэш при первом входе на страницу и все они загружены успешно, отправит клиентам сообщение
+ * @param {String } sUrl
+ */
+function checkFirstRunAllResourcesLoaded(sUrl) {
+	if (self.isFirstRunMode) {
+		if (self.isLastResource && sUrl == self.lastResourceUrl) {
+			self.isFirstRunMode = 0;
+			self.isLastResource = 0;
+			self.lastResourceUrl = '';
+			sendMessageAllClients('firstRunResourcesComplete', self.firstRunPageUrl);
+		}
 	}
 }
 /**
@@ -267,8 +303,15 @@ function sendMessageAllClients(sType, sUpdUrl) {
 function onPostMessage(info) {
 	//Кэшируем переданные ресурсы
 	caches.open(CACHE).then((cache) => {
+		self.isFirstRunMode = 1;//Чтобы в update было можно понять, что происходит первое кэширование (чтобы иметь возможность сообщить об его успехе)
+		self.firstRunPageUrl = info.data[0];
 		for (let i = 0; i < info.data.length; i++) {
 			if (self.verbose) console.log('First run caching resource ' + info.data[i]);
+
+			if (i == info.data.length - 1) {
+				self.isLastResource = 1;
+				self.lastResourceUrl = info.data[i];
+			}
 			update(cache, info.data[i]);
 		}
 	});
