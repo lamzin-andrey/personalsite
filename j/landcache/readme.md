@@ -1,6 +1,6 @@
-LandCacheServiceWorker
+# LandCacheServiceWorker
 
-#About
+## About
 It caching like to standart browser behavior.
 It release the strategy "If resource exists in cache, get it from cache, else get it from server. After pause  will  update resource in cache".
 
@@ -16,7 +16,7 @@ You can extends class LandCacheClient for customize or disable "alert" about fir
 It alert helpfull for progressive web applications, but for site, like as blog it not need.
 (Override method showFirstCachingCompleteMessage)
 
-#Installation
+## Installation
 
 1 Place script landcachersw.js in the root directory your site.
 It must be available for link https://yoursite.com/landcachersw.js, it important!
