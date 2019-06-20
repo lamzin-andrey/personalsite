@@ -61,7 +61,7 @@ ServiceWorker отправляет запрос на сервер.
 Он должен быть доступен по ссылке https://yoursite.com/landcachersw.js, это важно!
 
 2 Добавьте в начало HTML-код всех страниц кода вашего сайта:
-<script src = "/js/landcacherswinstaller.js"></ script>
+<script src = "/js/landcacherswinstaller.js"></script>
 
 Вы можете скопировать код скрипта как встроенный, это обеспечит лучшую работу кэширования.
 
