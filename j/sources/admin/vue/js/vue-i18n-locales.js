@@ -7,11 +7,13 @@ var locales = {
             "EnterPasssword": "Enter passsword",
         },
     },
-    ru: {
-        a: {
-            example: "Пример"/*,
+    'ru': {
+        'app': {
+            'SigninFormLabel' : "Авторизация",
+            'example' : "Пример",
             "email": "Email",
-            "EnterPasssword": "Введите пароль",
+            "EnterPassword": "Введите пароль",
+            "EnterEmail": "Введите email",
             "LoginFormButtonText": "Войти",
             "Passsword": "Пароль"/**/
         }

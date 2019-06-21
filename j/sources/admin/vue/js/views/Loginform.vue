@@ -1,21 +1,19 @@
 <template>
     <form id="signinform">
-
-    <div class="form-group "><!-- class+="has-danger" -->
-        <label for="email">Email</label><span class="required">*</span>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" name="email">
-        <!--div class="form-control-feedback">Has error!</div-->
-        <small id="emailHelp" class="form-text text-muted"></small>
-    </div>
-
-    
-    <div class="form-group "><!-- class+="has-danger" -->
-        <label for="passwordL">Password</label><span class="required">*</span>
-        <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="" name="password">
-        <!--div class="form-control-feedback">Has error!</div-->
-        <small id="passwordHelp" class="form-text text-muted"></small>
-    </div>
-    <button id="bin" type="submit" class="btn btn-primary" ></button>
+        <h1 class="h3 mb-4 text-gray-800">{{ $t('app.SigninFormLabel') }}</h1>
+        <div class="form-group "><!-- class+="has-danger" -->
+            <label for="email">Email</label><span class="required">*</span>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" v-bind:placeholder="$t('app.EnterEmail')" name="email">
+            <!--div class="form-control-feedback">Has error!</div-->
+            <small id="emailHelp" class="form-text text-muted"></small>
+        </div>
+        <div class="form-group "><!-- class+="has-danger" -->
+            <label for="passwordL">Password</label><span class="required">*</span>
+            <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" v-bind:placeholder="$t('app.EnterPassword')" name="password">
+            <!--div class="form-control-feedback">Has error!</div-->
+            <small id="passwordHelp" class="form-text text-muted"></small>
+        </div>
+        <button id="bin" type="submit" class="btn btn-primary" >{{ $t('app.LoginFormButtonText') }}</button>
     </form>
 </template>
 <script>

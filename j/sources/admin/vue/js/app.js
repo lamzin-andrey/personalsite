@@ -2,29 +2,14 @@ window.Vue = require('vue');
 
 //Интернациализация
 
-//Пришлось пока забить малый костыль
-Vue.utils = {
-    warn: function(s) {
 
-    }
-};
-//Vue.locale = function(a, b) {};
+import VueI18n  from 'vue-i18n';
+import locales  from './vue-i18n-locales';
 
-//import VueInternalization from 'vue-i18n';
-var i18n = require('vue-i18n');
-import locales  from './vue-i18n-locales.js';
-
-Vue.use(i18n, {lang:'ru', locales:locales});
-
-// Get current localization from URI. Returns string like 'en' or 'ru'.
-//Vue.config.lang = window.location.pathname.split('/')[1];
-Vue.config.lang = 'ru';
-
-
-/*Object.keys(locales).forEach(function (lang) {
-  Vue.locale(lang, locales[lang])
-});/**/
-
+const i18n = new VueI18n({
+    locale: 'ru', // set locale
+    messages:locales, // set locale messages
+});
 
 
 //end Интернациализация
@@ -32,11 +17,9 @@ Vue.config.lang = 'ru';
 Vue.component('login-form', require('./views/Loginform'));
 
 window.app = new Vue({
-
+    i18n : i18n,
     el: '#wrapper',
-
    // router,
-   
    /**
     * @property Данные приложения
    */
@@ -100,4 +83,4 @@ window.app = new Vue({
     }
    }//end methods
 
-});
+}).$mount('#wrapper');

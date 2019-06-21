@@ -3,7 +3,7 @@
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="Windows-1251">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -39,7 +39,6 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800"><?=l('Signin')?></h1>
           <?php include $route->view;?>
         </div>
         <!-- /.container-fluid -->
@@ -49,7 +48,7 @@
 
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
+        <div class="container my-auto message">
           <div class="copyright text-center my-auto">
             <span>Copyright &copy; andryuxa.ru 2019. Admin panel free template from <a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a></span>
           </div>
@@ -94,6 +93,6 @@
   <!-- Custom scripts for all pages-->
   <script src="/p/sbadmin2/js/sb-admin-2.min.js"></script>
   <!-- TODO add cacheclient and simply vue app for login-->
-  <script src="/j/a.js"></script>
+  <script charset="UTF-8" src="/j/a.js"></script>
 </body>
 </html>
