@@ -5,7 +5,6 @@ require_once __DIR__ . '/utils.php';
 class Auth {
 	static public $table = 'users';
 	
-	
 	static public function createUid() {
 		$uid = md5(time() . uniqid('dslanhfdkjf', true) . rand(1000,9999) );
 		$now = now();
@@ -28,7 +27,8 @@ class Auth {
 		return $id;
 	}
 	
-	static public function getUid() {
+	static public function getUid() : int
+	{
 		$id = 0;
 		if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
 			$t = self::$table;

@@ -1,0 +1,13 @@
+DirectoryIndex index.php
+RewriteEngine On 
+RewriteBase /p/
+
+# директории, для которых не нужна переадресация (например папка с картинками)
+RewriteCond %{REQUEST_URI} ^/(img|js|css)/.*|^(.*\.css|/robots\.txt|/click\.php|.*\.xls|.*\.doc|.*\.jpg|.*\.swf|.*\.js|.*\.png|.*\.gif|.*\.ttf|.*\.htm|.*\.js|/123\.php|/db_framework/classes/captcha/index\.php|/db_framework/classes/captcha/e\.php|/db_framework/classes/captcha/f\.php|/engine/cron/subscribe\.php|/simple_mailer/sender\.php)
+RewriteRule . - [L]
+
+RewriteRule (^.*)  index.php [L]
+
+<FilesMatch ".(flv|gif|jpg|jpeg|png|ico|swf|js|css|pdf)$">
+  Header set Cache-Control "max-age=2592000"
+</FilesMatch>

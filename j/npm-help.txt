@@ -1,0 +1,5 @@
+Понадобилось установить дополнительно 
+
+npm install --save-dev jest @vue/test-utils
+
+ради работы vue-i18n

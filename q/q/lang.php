@@ -9,7 +9,8 @@ function l($s) {
 		setcookie('flang', $lang, time() + 365*24*3600, '/');
 	}
 	
-	$target = __DIR__ . '/../lang/' . $lang . '.php';
+	//$target = __DIR__ . '/../lang/' . $lang . '.php';
+	$target = $GLOBALS['sLangDir'] . '/' . $lang . '.php';
 	if (file_exists($target)) {
 		include($target);
 	}
