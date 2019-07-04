@@ -28,7 +28,7 @@ window.app = new Vue({
     * @property Данные приложения
    */
    data: {
-     //Только после оюъявления здесь удалось в компоненте обратиться к нему как this.$root.validator
+     //Только после объявления здесь удалось в компоненте обратиться к нему как this.$root.validator
      validator:Validator
    },
    /**

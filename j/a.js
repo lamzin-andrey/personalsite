@@ -105,7 +105,7 @@ module.exports = __webpack_require__(2);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__ = __webpack_require__(10);
 window.Vue = __webpack_require__(3);
 
 //Интернациализация
@@ -124,7 +124,7 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
 
 //end Пробуем включить нашу либу из внешней папки
 
-Vue.component('login-form', __webpack_require__(10));
+Vue.component('login-form', __webpack_require__(11));
 
 window.app = new Vue({
     i18n: i18n,
@@ -135,7 +135,7 @@ window.app = new Vue({
      * @property Данные приложения
     */
     data: {
-        //Только после оюъявления здесь удалось в компоненте обратиться к нему как this.$root.validator
+        //Только после объявления здесь удалось в компоненте обратиться к нему как this.$root.validator
         validator: __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__["a" /* default */]
     },
     /**
@@ -14259,14 +14259,38 @@ var locales = {
 
 /***/ }),
 /* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * @object Validator - валидируем всё что можем
+*/
+var Validator = {
+	/**
+  * @description не требуется
+  * @param {String} s
+  * @return Boolean
+ */
+	isValidEmail: function isValidEmail(s) {
+		var re = /^[\w+\-.]+@[a-z\d\-.]+\.[a-z]+$/i;
+		if (!re.test(s)) {
+			return false;
+		}
+		return true;
+	}
+};
+/* harmony default export */ __webpack_exports__["a"] = (Validator);
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(12)
 /* script */
-var __vue_script__ = __webpack_require__(12)
+var __vue_script__ = __webpack_require__(13)
 /* template */
-var __vue_template__ = __webpack_require__(13)
+var __vue_template__ = __webpack_require__(14)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -14305,7 +14329,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -14414,7 +14438,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14570,7 +14594,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -14706,30 +14730,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-f19faa58", module.exports)
   }
 }
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- * @object Validator - валидируем всё что можем
-*/
-var Validator = {
-	/**
-  * @description не требуется
-  * @param {String} s
-  * @return Boolean
- */
-	isValidEmail: function isValidEmail(s) {
-		var re = /^[\w+\-.]+@[a-z\d\-.]+\.[a-z]+$/i;
-		if (!re.test(s)) {
-			return false;
-		}
-		return true;
-	}
-};
-/* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ })
 /******/ ]);
