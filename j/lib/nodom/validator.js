@@ -1,7 +1,7 @@
 /**
  * @object Validator - валидируем всё что можем
 */
-window.Validator = {
+var Validator = {
 	/**
 	 * @description не требуется
 	 * @param {String} s
@@ -15,3 +15,4 @@ window.Validator = {
 		return true;
 	}
 }
+export default Validator;

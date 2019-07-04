@@ -10,21 +10,26 @@ const i18n = new VueI18n({
     locale: 'ru', // set locale
     messages:locales, // set locale messages
 });
-
-
 //end Интернациализация
+
+//Пробуем включить нашу либу из внешней папки
+import Validator  from '../../../../lib/nodom/validator';
+//end Пробуем включить нашу либу из внешней папки
 
 Vue.component('login-form', require('./views/Loginform'));
 
 window.app = new Vue({
     i18n : i18n,
     el: '#wrapper',
+    
+
    // router,
    /**
     * @property Данные приложения
    */
    data: {
-
+     //Только после оюъявления здесь удалось в компоненте обратиться к нему как this.$root.validator
+     validator:Validator
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой

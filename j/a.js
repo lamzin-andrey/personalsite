@@ -105,6 +105,7 @@ module.exports = __webpack_require__(2);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__ = __webpack_require__(14);
 window.Vue = __webpack_require__(3);
 
 //Интернациализация
@@ -117,19 +118,26 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
     locale: 'ru', // set locale
     messages: __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__["a" /* default */] // set locale messages
 });
-
 //end Интернациализация
+
+//Пробуем включить нашу либу из внешней папки
+
+//end Пробуем включить нашу либу из внешней папки
 
 Vue.component('login-form', __webpack_require__(10));
 
 window.app = new Vue({
     i18n: i18n,
     el: '#wrapper',
+
     // router,
     /**
      * @property Данные приложения
     */
-    data: {},
+    data: {
+        //Только после оюъявления здесь удалось в компоненте обратиться к нему как this.$root.validator
+        validator: __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__["a" /* default */]
+    },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
     */
@@ -14227,6 +14235,8 @@ var locales = {
             "example": "Example",
             "email": "Email",
             "LoginFormButtonText": "Login",
+            "FormFieldRequired": "Field is required",
+            "IncorrectEmail": "Incorrect Email",
             "EnterPasssword": "Enter passsword"
         }
     },
@@ -14238,6 +14248,8 @@ var locales = {
             "EnterPassword": "Введите пароль",
             "EnterEmail": "Введите email",
             "LoginFormButtonText": "Войти",
+            "FormFieldRequired": "Поле обязательно для заполнения",
+            "IncorrectEmail": "Неверный Email",
             "Passsword": "Пароль" /**/
         }
     }
@@ -14425,25 +14437,121 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'Loginform',
     //вызывается раньше чем mounted
     data: function data() {
         return {
-            //видимость всей страницы меню.
-            //menuBlockVisible : 'block',
+            //Ошибка валидации email
+            emailError: '',
+            //Ошибка валидации passsword
+            passwordError: '',
+            //Значение email
+            email: null,
+            //Значение password
+            password: null,
+            //Для установки класса ошибки
+            emailIsInvalid: 'form-control',
+            passwordIsInvalid: 'form-control',
+            //Если в каком-то новом бутстрапе изменится, чтобы не переписывать повсюду
+            isInvalid: 'is-invalid',
+            isValid: 'is-valid',
+            //Для более простого доступа
+            validator: this.$root.validator
         };
     },
     //
     methods: {
         /** 
-         * @description Обработка клика на сохранении настроек прокрутки
+         * TODO localize
+         * @description Пробуем отправить форму
         */
-        onClickSaveScrollData: function onClickSaveScrollData(evt) {
-            //Обращение к методу приложения
-            //this.$root.saveScrollData();
+        onSubmitLoginForm: function onSubmitLoginForm(evt) {
 
+            var isHasErrors = false;
+            if (!this.email || !String(this.email).length) {
+                this.emailError = this.$root.$t('app.FormFieldRequired');
+                this._setFieldAsInvalid('email');
+                isHasErrors = true;
+            }
+            if (!this.password || !String(this.password).length) {
+                this.passwordError = this.$root.$t('app.FormFieldRequired');
+                this._setFieldAsInvalid('password');
+                isHasErrors = true;
+            }
+
+            //if (!this.$root.validator.isValidEmail(this.email)) {
+            if (!this.validator.isValidEmail(this.email)) {
+                console.log('ok...');
+                this.emailError = this.$root.$t('app.IncorrectEmail');
+                this._setFieldAsInvalid('email');
+                isHasErrors = true;
+            }
+
+            if (isHasErrors) {
+                evt.preventDefault();
+            }
+        },
+
+        /** 
+         * @description Установить полю ввода вид "Содержит ошибку"
+         * @param {String} modelName - имя модели, с которой связано значение поля
+         * @param {Boolean} isInvalid  = true говорит о том, что надо установить вид "содержит ошибку", а не вид "всё нормально"
+        */
+        _setFieldAsInvalid: function _setFieldAsInvalid(modelName) {
+            var isInvalid = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            if (isInvalid) {
+                this[modelName + 'IsInvalid'] += ' ' + this.isInvalid;
+            } else {
+                this[modelName + 'IsInvalid'] = this[modelName + 'IsInvalid'].replace(this.isInvalid, '').trim();
+            }
+        },
+
+        /** 
+         * @description Установить полю ввода вид "Заполнено верно"
+         * @param {String} modelName - имя модели, с которой связано значение поля
+         * @param {Boolean} isValid  = true говорит о том, что надо установить вид "Заполнено верно", а не вид "всё нормально"
+        */
+        _setFieldAsValid: function _setFieldAsValid(modelName) {
+            var isValid = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            this._setFieldAsInvalid(modelName, false);
+            if (isValid) {
+                this[modelName + 'IsInvalid'] += ' ' + this.isValid;
+            } else {
+                this[modelName + 'IsInvalid'] = this[modelName + 'IsInvalid'].replace(this.isValid, '').trim();
+            }
+        },
+
+        /**
+         * @description
+        */
+        emailClearErrorView: function emailClearErrorView() {
+            this._setFieldAsInvalid('email', false);
+            if (this.validator.isValidEmail(this.email)) {
+                this._setFieldAsValid('email');
+            }
+        },
+
+        /**
+         * @description
+        */
+        passwordClearErrorView: function passwordClearErrorView() {
+            this._setFieldAsInvalid('password', false);
         }
     }, //end methods
     //вызывается после data, поля из data видны "напрямую" как this.fieldName
@@ -14469,59 +14577,125 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", { attrs: { id: "signinform" } }, [
-    _c("h1", { staticClass: "h3 mb-4 text-gray-800" }, [
-      _vm._v(_vm._s(_vm.$t("app.SigninFormLabel")))
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group " }, [
-      _c("label", { attrs: { for: "email" } }, [_vm._v("Email")]),
-      _c("span", { staticClass: "required" }, [_vm._v("*")]),
+  return _c(
+    "form",
+    {
+      attrs: {
+        id: "signinform",
+        method: "POST",
+        action: "/p/signin.jn",
+        novalidate: ""
+      },
+      on: { submit: _vm.onSubmitLoginForm }
+    },
+    [
+      _c("h1", { staticClass: "h3 mb-4 text-gray-800" }, [
+        _vm._v(_vm._s(_vm.$t("app.SigninFormLabel")))
+      ]),
       _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "email",
-          id: "email",
-          "aria-describedby": "emailHelp",
-          placeholder: _vm.$t("app.EnterEmail"),
-          name: "email"
-        }
-      }),
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "email" } }, [_vm._v("Email")]),
+        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.email,
+              expression: "email"
+            }
+          ],
+          class: _vm.emailIsInvalid,
+          attrs: {
+            placeholder: _vm.$t("app.EnterEmail"),
+            type: "email",
+            "aria-describedby": "emailHelp",
+            name: "email"
+          },
+          domProps: { value: _vm.email },
+          on: {
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.email = $event.target.value
+              },
+              _vm.emailClearErrorView
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _vm.emailError.length
+          ? _c("div", { staticClass: "invalid-feedback" }, [
+              _vm._v(_vm._s(_vm.emailError))
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("small", {
+          staticClass: "form-text text-muted",
+          attrs: { id: "emailHelp" }
+        })
+      ]),
       _vm._v(" "),
-      _c("small", {
-        staticClass: "form-text text-muted",
-        attrs: { id: "emailHelp" }
-      })
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group " }, [
-      _c("label", { attrs: { for: "passwordL" } }, [_vm._v("Password")]),
-      _c("span", { staticClass: "required" }, [_vm._v("*")]),
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "passwordL" } }, [_vm._v("Password")]),
+        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.password,
+              expression: "password"
+            }
+          ],
+          staticClass: "form-control",
+          class: _vm.passwordIsInvalid,
+          attrs: {
+            placeholder: _vm.$t("app.EnterPassword"),
+            type: "password",
+            "aria-describedby": "passwordHelp",
+            name: "password"
+          },
+          domProps: { value: _vm.password },
+          on: {
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.password = $event.target.value
+              },
+              _vm.passwordClearErrorView
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _vm.passwordError.length
+          ? _c("div", { staticClass: "invalid-feedback" }, [
+              _vm._v(_vm._s(_vm.passwordError))
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("small", {
+          staticClass: "form-text text-muted",
+          attrs: { id: "passwordHelp" }
+        })
+      ]),
       _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "password",
-          id: "password",
-          "aria-describedby": "passwordHelp",
-          placeholder: _vm.$t("app.EnterPassword"),
-          name: "password"
-        }
-      }),
-      _vm._v(" "),
-      _c("small", {
-        staticClass: "form-text text-muted",
-        attrs: { id: "passwordHelp" }
-      })
-    ]),
-    _vm._v(" "),
-    _c(
-      "button",
-      { staticClass: "btn btn-primary", attrs: { id: "bin", type: "submit" } },
-      [_vm._v(_vm._s(_vm.$t("app.LoginFormButtonText")))]
-    )
-  ])
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { id: "bin", type: "submit" }
+        },
+        [_vm._v(_vm._s(_vm.$t("app.LoginFormButtonText")))]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -14532,6 +14706,30 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-f19faa58", module.exports)
   }
 }
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * @object Validator - валидируем всё что можем
+*/
+var Validator = {
+	/**
+  * @description не требуется
+  * @param {String} s
+  * @return Boolean
+ */
+	isValidEmail: function isValidEmail(s) {
+		var re = /^[\w+\-.]+@[a-z\d\-.]+\.[a-z]+$/i;
+		if (!re.test(s)) {
+			return false;
+		}
+		return true;
+	}
+};
+/* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ })
 /******/ ]);

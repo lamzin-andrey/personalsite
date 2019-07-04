@@ -4,6 +4,8 @@ var locales = {
             "example": "Example",
             "email": "Email",
             "LoginFormButtonText": "Login",
+            "FormFieldRequired": "Field is required",
+            "IncorrectEmail": "Incorrect Email",
             "EnterPasssword": "Enter passsword",
         },
     },
@@ -15,6 +17,8 @@ var locales = {
             "EnterPassword": "Введите пароль",
             "EnterEmail": "Введите email",
             "LoginFormButtonText": "Войти",
+            "FormFieldRequired": "Поле обязательно для заполнения",
+            "IncorrectEmail": "Неверный Email",
             "Passsword": "Пароль"/**/
         }
     }
