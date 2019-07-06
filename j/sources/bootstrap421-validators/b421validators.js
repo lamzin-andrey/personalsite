@@ -16,7 +16,7 @@ class B421Validators {
         return this._captureInput(event, jInp, eventType, t, 'isValidEmail', 'app.IncorrectEmail');
     }
     /**
-     * @description Валидация поля формы типа email
+     * @description Общая логика для всех валидаций
      * Метод вызывается при отправке формы и при вводе в форму значения (события form.submit и input.input)
      * @param {Event} event
      * @param {jQueryInput} inp

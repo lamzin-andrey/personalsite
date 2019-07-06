@@ -134,8 +134,9 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
 __webpack_require__(10);
 
 //класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
-//(или если поля ввода вашей формы будет иметь иную верстку чем в документиации бутстрап 4.2.1)
+//(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
 //надо наследоваться от этого класса и перегружать view* - методы (методы, начинающиеся со слова view)
+//импортировать в этом случае конечно надо наследник, а не родитель
 
 //Обрати внимание на передачу B421Validators в app.data 
 // / "Стандартная" валидация полей формы
@@ -14310,7 +14311,6 @@ Vue.directive('b421validators', {
                 }
             }
             if (validator && validator[func] instanceof Function && bLengthCond) {
-                console.log('set listener ' + func + ' for  field "' + el.name + '"');
                 //Так нельзя, ибо js всё развивается, а древние грабли по-прежнему с нами
                 //$el.on('input', (event) => { console.log(func + '!'); return validator[func](event, $el, 'input', vnode.context.$root.$t); });
                 //вместо этого вот так: (иначе последний листенер два раза назначится)
@@ -14356,7 +14356,7 @@ var B421Validators = function () {
             return this._captureInput(event, jInp, eventType, t, 'isValidEmail', 'app.IncorrectEmail');
         }
         /**
-         * @description Валидация поля формы типа email
+         * @description Общая логика для всех валидаций
          * Метод вызывается при отправке формы и при вводе в форму значения (события form.submit и input.input)
          * @param {Event} event
          * @param {jQueryInput} inp

@@ -33,7 +33,6 @@ Vue.directive('b421validators', {
                 }
             }
             if (validator && validator[func] instanceof Function && bLengthCond) {
-                console.log('set listener ' + func + ' for  field "' + el.name + '"');
                 //Так нельзя, ибо js всё развивается, а древние грабли по-прежнему с нами
                 //$el.on('input', (event) => { console.log(func + '!'); return validator[func](event, $el, 'input', vnode.context.$root.$t); });
                 //вместо этого вот так: (иначе последний листенер два раза назначится)
