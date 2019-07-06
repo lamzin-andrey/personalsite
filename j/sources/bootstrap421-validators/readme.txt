@@ -45,7 +45,7 @@ const i18n = new VueI18n({
     locale: 'ru', // set locale
     messages:locales, // set locale messages
 });
-//end Интернациолизация
+//end Интернационализация
 
 //"Стандартная" валидация полей формы
 //Включить директиву, определённую во внешнем файле 
