@@ -17,7 +17,7 @@
 
 
 Для указанного примера программист может добавить 
-атрибут v-b421validators="'password,required'" полю input[type=password].
+атрибут v-b421validators="'password,required'" полю input[type=password]. (кавычки внутри кавычек важны).
 
 
 Директива перехватывает событие submit формы, в которой содержится поле ввода и если введенное значение не валидно,
@@ -87,6 +87,13 @@ window.app = new Vue({
    }//end methods
 
 }).$mount('#wrapper');
+
+
+Реализованные значения атрибута v-b421validators:
+email
+password
+required
+lengthMIN_MAX
 
 
 -------------------------------------------------------
