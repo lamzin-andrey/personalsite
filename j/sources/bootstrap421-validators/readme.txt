@@ -1,5 +1,5 @@
 Назначение
- Сделать поддержку атрибута v-validators для полей ввода
+ Сделать поддержку атрибута v-b421validators для полей ввода
  input[type=text]
  input[type=number]
  input[type=password]
