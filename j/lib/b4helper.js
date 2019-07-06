@@ -1,5 +1,5 @@
 /**
- * @object B4H - специальный объект, облегчает манипуляции с версткой сайта на bootstrap.
+ * @object B4H - специальный объект, облегчает манипуляции с версткой сайта на bootstrap 4.2.1.
  * @depends lib/textformat.js
 */
 window.B4Lib = {

@@ -14,15 +14,14 @@
         <div class="form-group">
             <label for="passwordL">Password</label><span class="required">*</span>
             <input v-model="password"
-                v-bind:class="passwordIsInvalid"
                 v-bind:placeholder="$t('app.EnterPassword')"
-                @input="passwordClearErrorView"
+                v-b421validators="'password,required'"
                 type="password"
                 class="form-control"
                 aria-describedby="passwordHelp"
                  name="password"
                 >
-            <div v-if="passwordError.length" class="invalid-feedback">{{passwordError}}</div>
+            <div class="invalid-feedback"></div>
             <small id="passwordHelp" class="form-text text-muted"></small>
         </div>
         <button id="bin" type="submit" class="btn btn-primary" >{{ $t('app.LoginFormButtonText') }}</button>
@@ -35,15 +34,12 @@
         data: function(){return {
             //Ошибка валидации email
             emailError : '',
-            //Ошибка валидации passsword
-            passwordError : '',
             //Значение email
             email:null,
             //Значение password
             password:null,
             //Для установки класса ошибки
             emailIsInvalid:'form-control',
-            passwordIsInvalid:'form-control',
             //Если в каком-то новом бутстрапе изменится, чтобы не переписывать повсюду
             isInvalid : 'is-invalid',
             isValid : 'is-valid',
@@ -64,11 +60,11 @@
                     this._setFieldAsInvalid('email');
                     isHasErrors = true;
                 }
-                if (!this.password || !String(this.password).length) {
+                /*if (!this.password || !String(this.password).length) {
                     this.passwordError = this.$root.$t('app.FormFieldRequired');
                     this._setFieldAsInvalid('password');
                     isHasErrors = true;
-                }
+                }/**/
 
                 //if (!this.$root.validator.isValidEmail(this.email)) {
                 if (!this.validator.isValidEmail(this.email)) {

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -94,11 +94,22 @@ module.exports = g;
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(2);
+if (false) {
+  module.exports = require('./vue.common.prod.js')
+} else {
+  module.exports = __webpack_require__(4)
+}
 
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(3);
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -106,7 +117,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__ = __webpack_require__(10);
-window.Vue = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bootstrap421_validators_b421validatorsdirective__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__bootstrap421_validators_b421validators__ = __webpack_require__(11);
+window.Vue = __webpack_require__(1);
 
 //Интернациализация
 
@@ -120,11 +133,22 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
 });
 //end Интернациализация
 
-//Пробуем включить нашу либу из внешней папки
+//"Стандартная" валидация полей формы
+
+//Пробуем включить нашу либу из внешней папки //TODO это уйдёт скорее всего в  b421validators
 
 //end Пробуем включить нашу либу из внешней папки
 
-Vue.component('login-form', __webpack_require__(11));
+//Пробуем включить директиву, определённую во внешнем файле (в файле директива b421validators определяется глобально)
+
+//класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
+//(или если поля ввода вашей формы будет иметь иную верстку чем в документиации бутстрап 4.2.1)
+//надо наследоваться от этого класса и перегружать view* - методы (методы, начинающиеся со слова view)
+
+
+// / "Стандартная" валидация полей формы
+
+Vue.component('login-form', __webpack_require__(12));
 
 window.app = new Vue({
     i18n: i18n,
@@ -136,7 +160,9 @@ window.app = new Vue({
     */
     data: {
         //Только после объявления здесь удалось в компоненте обратиться к нему как this.$root.validator
-        validator: __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__["a" /* default */]
+        validator: __WEBPACK_IMPORTED_MODULE_2__lib_nodom_validator__["a" /* default */],
+        //Его будем использовать
+        formInputValidator: __WEBPACK_IMPORTED_MODULE_4__bootstrap421_validators_b421validators__["a" /* default */]
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
@@ -199,17 +225,6 @@ window.app = new Vue({
     } //end methods
 
 }).$mount('#wrapper');
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-if (false) {
-  module.exports = require('./vue.common.prod.js')
-} else {
-  module.exports = __webpack_require__(4)
-}
-
 
 /***/ }),
 /* 4 */
@@ -14283,14 +14298,104 @@ var Validator = {
 
 /***/ }),
 /* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var B421Validators = function () {
+    function B421Validators() {
+        _classCallCheck(this, B421Validators);
+    }
+
+    _createClass(B421Validators, null, [{
+        key: 'required',
+
+        /**
+         * @description Валидация поля формы типа password
+         * Метод вызывается при отправке формы и при вводе в форму значения (события form.submit и input.input)
+         * @param {Event} event
+         * @param {jQueryInput} inp
+         * @param {jQueryInput} jInp
+         * @param {String} eventType
+         * 
+        */
+        /*static password(event, jInp, eventType) {
+            console.log('Call validation password!');
+            
+        }*/
+
+        /**
+         * @description Валидация поля формы типа password
+         * Метод вызывается при отправке формы и при вводе в форму значения (события form.submit и input.input)
+         * @param {Event} event
+         * @param {jQueryInput} inp
+         * @param {jQueryInput} jInp
+         * @param {String} eventType
+         * @param {Function} $t
+         * 
+        */
+        value: function required(event, jInp, eventType, $t) {
+            console.log('Call validation password!');
+            var val = jInp.val(),
+                errorText = void 0;
+            if (!val || !String(val).length) {
+                errorText = $t('app.FormFieldRequired');
+                this.viewSetError(jInp, errorText);
+                if (eventType == 'submit') {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+            if (eventType == 'input') {
+                //delete error view
+                this.viewClearError(jInp);
+            }
+            return true;
+        }
+        /**
+         * @description Установить вид "Ошибка" и текст ошибки
+         * @param {jQiery input} jInp 
+         * @param {String} errorText 
+         */
+
+    }, {
+        key: 'viewSetError',
+        value: function viewSetError(jInp, errorText) {
+            jInp.addClass('is-invalid');
+            jInp.parent().find('.invalid-feedback').text(errorText);
+        }
+        /**
+         * @description Удалить вид "Ошибка" и очистить текст ошибки
+         * @param {jQiery input} jInp 
+         * @param {String} errorText 
+         */
+
+    }, {
+        key: 'viewClearError',
+        value: function viewClearError(jInp) {
+            jInp.removeClass('is-invalid');
+            jInp.parent().find('.invalid-feedback').text('');
+        }
+    }]);
+
+    return B421Validators;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (B421Validators);
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(12)
+var normalizeComponent = __webpack_require__(13)
 /* script */
-var __vue_script__ = __webpack_require__(13)
+var __vue_script__ = __webpack_require__(14)
 /* template */
-var __vue_template__ = __webpack_require__(14)
+var __vue_template__ = __webpack_require__(15)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -14329,7 +14434,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -14438,12 +14543,11 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
 //
 //
 //
@@ -14481,15 +14585,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             //Ошибка валидации email
             emailError: '',
-            //Ошибка валидации passsword
-            passwordError: '',
             //Значение email
             email: null,
             //Значение password
             password: null,
             //Для установки класса ошибки
             emailIsInvalid: 'form-control',
-            passwordIsInvalid: 'form-control',
             //Если в каком-то новом бутстрапе изменится, чтобы не переписывать повсюду
             isInvalid: 'is-invalid',
             isValid: 'is-valid',
@@ -14511,11 +14612,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this._setFieldAsInvalid('email');
                 isHasErrors = true;
             }
-            if (!this.password || !String(this.password).length) {
+            /*if (!this.password || !String(this.password).length) {
                 this.passwordError = this.$root.$t('app.FormFieldRequired');
                 this._setFieldAsInvalid('password');
                 isHasErrors = true;
-            }
+            }/**/
 
             //if (!this.$root.validator.isValidEmail(this.email)) {
             if (!this.validator.isValidEmail(this.email)) {
@@ -14594,7 +14695,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -14674,10 +14775,15 @@ var render = function() {
               rawName: "v-model",
               value: _vm.password,
               expression: "password"
+            },
+            {
+              name: "b421validators",
+              rawName: "v-b421validators",
+              value: "password,required",
+              expression: "'password,required'"
             }
           ],
           staticClass: "form-control",
-          class: _vm.passwordIsInvalid,
           attrs: {
             placeholder: _vm.$t("app.EnterPassword"),
             type: "password",
@@ -14686,23 +14792,16 @@ var render = function() {
           },
           domProps: { value: _vm.password },
           on: {
-            input: [
-              function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.password = $event.target.value
-              },
-              _vm.passwordClearErrorView
-            ]
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.password = $event.target.value
+            }
           }
         }),
         _vm._v(" "),
-        _vm.passwordError.length
-          ? _c("div", { staticClass: "invalid-feedback" }, [
-              _vm._v(_vm._s(_vm.passwordError))
-            ])
-          : _vm._e(),
+        _c("div", { staticClass: "invalid-feedback" }),
         _vm._v(" "),
         _c("small", {
           staticClass: "form-text text-muted",
@@ -14730,6 +14829,39 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-f19faa58", module.exports)
   }
 }
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+window.Vue = __webpack_require__(1);
+
+Vue.directive('b421validators', {
+    inserted: function inserted(el, binding, vnode) {
+        var $el = $(el),
+            $form = $el.parents('form').first(),
+            args = String(binding.expression).split(','),
+            i = void 0,
+            func = void 0,
+            validator = vnode.context.$root.formInputValidator;
+        for (i = 0; i < args.length; i++) {
+            func = args[i].trim().replace(/"/g, '').replace(/'/, "");
+            if (validator && validator[func] instanceof Function) {
+                console.log('Add listener for func "' + func + '"');
+                $el.on('input', function (event) {
+                    validator[func](event, $el, 'input', vnode.context.$root.$t);
+                });
+                $form.on('submit', function (event) {
+                    return validator[func](event, $el, 'submit', vnode.context.$root.$t);
+                });
+            }
+        }
+    }
+});
+//Просто чтобы было, что импортировать в app.js. На самом деле здесь важно было создать глобальную директиву
+var B421ValidatorsDirective = 'B421ValidatorsDirective';
+/* unused harmony default export */ var _unused_webpack_default_export = (B421ValidatorsDirective);
 
 /***/ })
 /******/ ]);

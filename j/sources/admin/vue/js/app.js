@@ -12,9 +12,20 @@ const i18n = new VueI18n({
 });
 //end Интернациализация
 
-//Пробуем включить нашу либу из внешней папки
+//"Стандартная" валидация полей формы
+
+//Пробуем включить нашу либу из внешней папки //TODO это уйдёт скорее всего в  b421validators
 import Validator  from '../../../../lib/nodom/validator';
 //end Пробуем включить нашу либу из внешней папки
+
+//Пробуем включить директиву, определённую во внешнем файле (в файле директива b421validators определяется глобально)
+import B421ValidatorsDirective  from '../../../bootstrap421-validators/b421validatorsdirective';
+//класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
+//(или если поля ввода вашей формы будет иметь иную верстку чем в документиации бутстрап 4.2.1)
+//надо наследоваться от этого класса и перегружать view* - методы (методы, начинающиеся со слова view)
+import B421Validators  from '../../../bootstrap421-validators/b421validators';
+
+// / "Стандартная" валидация полей формы
 
 Vue.component('login-form', require('./views/Loginform'));
 
@@ -29,7 +40,9 @@ window.app = new Vue({
    */
    data: {
      //Только после объявления здесь удалось в компоненте обратиться к нему как this.$root.validator
-     validator:Validator
+     validator:Validator,
+     //Его будем использовать
+     formInputValidator: B421Validators
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
