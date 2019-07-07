@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -25440,21 +25440,29 @@ var Validator = {
 /* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ }),
-/* 11 */
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(12);
+module.exports = __webpack_require__(20);
 
 
 /***/ }),
-/* 12 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__b34validators__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_vue_js_vue_i18n_locales__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__b421validators__ = __webpack_require__(9);
 window.Vue = __webpack_require__(1);
 window.$ = window.jQuery = __webpack_require__(6);
 
@@ -25464,7 +25472,7 @@ window.$ = window.jQuery = __webpack_require__(6);
 
 var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
   locale: 'ru', // set locale
-  messages: __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__["a" /* default */] // set locale messages
+  messages: __WEBPACK_IMPORTED_MODULE_1__admin_vue_js_vue_i18n_locales__["a" /* default */] // set locale messages
 });
 //end Интернациализация
 
@@ -25481,18 +25489,18 @@ __webpack_require__(8);
 //Обрати внимание на передачу B421Validators в app.data 
 // / "Стандартная" валидация полей формы
 
-Vue.component('login-form-b34', __webpack_require__(15));
-
 window.app = new Vue({
   i18n: i18n,
-  el: '#appB34',
+  el: '#appB4',
 
   /**
    * @property Данные приложения
   */
   data: {
     //Его будем использовать
-    formInputValidator: __WEBPACK_IMPORTED_MODULE_2__b34validators__["a" /* default */]
+    formInputValidator: __WEBPACK_IMPORTED_MODULE_2__b421validators__["a" /* default */],
+    email: null,
+    password: null
   },
   /**
    * @description Событие, наступающее после связывания el с этой логикой
@@ -25503,6 +25511,10 @@ window.app = new Vue({
    * @property methods эти методы можно указывать непосредственно в @ - атрибутах
   */
   methods: {
+    onSubmitLoginForm: function onSubmitLoginForm(e) {
+      e.preventDefault();
+    },
+
     /**
      * @return String title
     */
@@ -25511,10 +25523,10 @@ window.app = new Vue({
     }
   } //end methods
 
-}).$mount('#appB34');
+}).$mount('#appB4');
 
 /***/ }),
-/* 13 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25528,7 +25540,6 @@ var locales = {
             "IncorrectEmail": "Incorrect Email",
             "EnterPasssword": "Enter passsword",
             "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
-            "app.FormWillSended": "Form complete and can be send, but this is demo.",
             "InvalidPasswordLength": "Password length must be from 6 to 1285 chars"
         }
     },
@@ -25544,521 +25555,12 @@ var locales = {
             "IncorrectEmail": "Неверный Email",
             "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
             "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
-            "app.FormWillSended": "Форма заполнена правильно и могла ь\бы быть отправлена, но это демо...",
             "Passsword": "Пароль" /**/
         }
     }
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (locales);
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__b421validators__ = __webpack_require__(9);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-//включить пользовательскую библиотеку из внешней папки
-//import Validator  from '../../lib/nodom/validator';
-
-
-
-var B34Validators = function (_B421Validators) {
-    _inherits(B34Validators, _B421Validators);
-
-    function B34Validators() {
-        _classCallCheck(this, B34Validators);
-
-        return _possibleConstructorReturn(this, (B34Validators.__proto__ || Object.getPrototypeOf(B34Validators)).apply(this, arguments));
-    }
-
-    _createClass(B34Validators, null, [{
-        key: 'viewSetError',
-
-        /**
-         * @description Установить вид "Ошибка" и текст ошибки
-         * @param {jQueryInput} jInp 
-         * @param {String} errorText 
-         */
-        value: function viewSetError(jInp, errorText) {
-            var obj = this._getElements(jInp);
-            if (obj.jFormGroup[0]) {
-                obj.jFormGroup.addClass('has-error').addClass('has-danger').addClass('has-feedback');
-            }
-            if (obj.jErrorPlace[0]) {
-                obj.jErrorPlace.text(errorText);
-            }
-            if (obj.jCross[0]) {
-                obj.jCross.removeClass('hide');
-            }
-        }
-        /**
-         * @description Установить вид "Ошибка" и текст ошибки
-         * @param {jQueryInput} jInp 
-         * @param {String} errorText 
-         */
-
-    }, {
-        key: 'viewSetSuccess',
-        value: function viewSetSuccess(jInp) {
-            this.viewClearError(jInp);
-            var obj = this._getElements(jInp);
-            if (obj.jFormGroup[0]) {
-                obj.jFormGroup.addClass('has-success');
-            }
-        }
-        /**
-         * @description Удалить вид "Ошибка" и очистить текст ошибки
-         * @param {jQueryInput} jInp 
-         */
-
-    }, {
-        key: 'viewClearError',
-        value: function viewClearError(jInp) {
-            var obj = this._getElements(jInp);
-            if (obj.jFormGroup[0]) {
-                obj.jFormGroup.removeClass('has-error').removeClass('has-danger').removeClass('has-feedback');
-            }
-            if (obj.jErrorPlace[0]) {
-                obj.jErrorPlace.text('');
-            }
-            if (obj.jCross[0]) {
-                obj.jCross.addClass('hide');
-            }
-        }
-        /**
-         * @description Удалить вид "Отличное значение"
-         * @param {jQueryInput} jInp 
-         */
-
-    }, {
-        key: 'viewClearSuccess',
-        value: function viewClearSuccess(jInp) {
-            var obj = this._getElements(jInp);
-            if (obj.jFormGroup[0]) {
-                obj.jFormGroup.removeClass('has-success');
-            }
-        }
-        /**
-         * @description Получить элементы, вид которых надо изменить
-         * @param {jQueryInput} jInp 
-         * @return {jFormGroup, jCross, jErrorP{lace}}
-         */
-
-    }, {
-        key: '_getElements',
-        value: function _getElements(jInp) {
-            var jFormGroup = jInp.parents('.form-group').first(),
-                jCross = void 0,
-                jErrorPlace = void 0;
-            if (jFormGroup[0]) {
-                jFormGroup.removeClass('has-error').removeClass('has-danger').removeClass('has-deedback');
-                jErrorPlace = jFormGroup.find('.list-unstyled li').first();
-                jCross = jFormGroup.find('.form-control-feedback').first();
-            }
-            return { jFormGroup: jFormGroup, jCross: jCross, jErrorPlace: jErrorPlace };
-        }
-    }]);
-
-    return B34Validators;
-}(__WEBPACK_IMPORTED_MODULE_0__b421validators__["a" /* default */]);
-
-/* harmony default export */ __webpack_exports__["a"] = (B34Validators);
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(16)
-/* script */
-var __vue_script__ = __webpack_require__(17)
-/* template */
-var __vue_template__ = __webpack_require__(18)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "bootstrap-3.4.0/js/views/Loginform34.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-fd219f30", Component.options)
-  } else {
-    hotAPI.reload("data-v-fd219f30", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'Loginform34',
-    //вызывается раньше чем mounted
-    data: function data() {
-        return {
-            //Значение email
-            email: null,
-            //Значение password
-            password: null
-        };
-    },
-    //
-    methods: {
-        /** 
-         * TODO localize
-         * @description Пробуем отправить форму
-        */
-        onSubmitLoginForm: function onSubmitLoginForm(evt) {
-            //it patch, because this is demo
-            evt.preventDefault();
-        }
-    }, //end methods
-    //вызывается после data, поля из data видны "напрямую" как this.fieldName
-    mounted: function mounted() {
-        var self = this;
-        /*this.$root.$on('showMenuEvent', function(evt) {
-            self.menuBlockVisible   = 'block';
-            self.isMainMenuVisible  = true;
-            self.isScrollWndVisible = false;
-            self.isColorWndVisible  = false;
-            self.isHelpWndVisible   = false;
-            self.nStep = self.$root.nStep;
-        })/**/
-        console.log('I mounted!');
-    }
-});
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "form",
-    {
-      attrs: { action: "", method: "POST", novalidate: "novalidate" },
-      on: { submit: _vm.onSubmitLoginForm }
-    },
-    [
-      _c("div", { staticClass: "form-group " }, [
-        _c(
-          "label",
-          { staticClass: "control-label", attrs: { for: "inputEmail" } },
-          [_vm._v(_vm._s(_vm.$t("app.email")))]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.email,
-              expression: "email"
-            },
-            {
-              name: "b421validators",
-              rawName: "v-b421validators",
-              value: "required,email",
-              expression: "'required,email'"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            placeholder: _vm.$t("app.EnterEmail"),
-            type: "email",
-            id: "inputEmail",
-            required: ""
-          },
-          domProps: { value: _vm.email },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.email = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("span", {
-          staticClass: "hide glyphicon form-control-feedback glyphicon-remove",
-          attrs: { "aria-hidden": "true" }
-        }),
-        _vm._v(" "),
-        _vm._m(0)
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group " }, [
-        _c(
-          "label",
-          { staticClass: "control-label", attrs: { for: "inputPassword" } },
-          [_vm._v(_vm._s(_vm.$t("app.Passsword")))]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.password,
-              expression: "password"
-            },
-            {
-              name: "b421validators",
-              rawName: "v-b421validators",
-              value: "required,password,length3_16",
-              expression: "'required,password,length3_16'"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            placeholder: _vm.$t("app.EnterPassword"),
-            type: "password",
-            id: "inputPassword",
-            required: ""
-          },
-          domProps: { value: _vm.password },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.password = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("span", {
-          staticClass: "hide glyphicon form-control-feedback glyphicon-remove",
-          attrs: { "aria-hidden": "true" }
-        }),
-        _vm._v(" "),
-        _vm._m(1)
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "text-right" }, [
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v(_vm._s(_vm.$t("app.LoginFormButtonText")))]
-        )
-      ])
-    ]
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "help-block with-errors" }, [
-      _c("ul", { staticClass: "list-unstyled" }, [_c("li")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "help-block with-errors" }, [
-      _c("ul", { staticClass: "list-unstyled" }, [_c("li")])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-fd219f30", module.exports)
-  }
-}
 
 /***/ })
 /******/ ]);

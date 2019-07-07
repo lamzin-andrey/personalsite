@@ -12,3 +12,4 @@ let mix = require('laravel-mix');
  */
 
 mix.js('bootstrap-3.4.0/js/app.js', 'bootstrap-3.4.0/outputforb3.4.js');
+mix.js('bootstrap-4.0.0/js/app.js', 'bootstrap-4.0.0/outputforb4.x.js');

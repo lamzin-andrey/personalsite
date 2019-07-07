@@ -1,7 +1,6 @@
 //включить пользовательскую библиотеку из внешней папки
 import Validator  from '../../lib/nodom/validator';
 
-
 class B421Validators {
     /**
      * @description Валидация поля формы типа email
@@ -28,7 +27,7 @@ class B421Validators {
      * @param {Array}  args аргументы для метода валидации длины
     */
     static _captureInput(event, jInp, eventType, t, method, message, args) {
-        console.log('Call validation ' + method + '!');
+        //console.log('Call validation ' + method + '!');
         let val = jInp.val(),
             errorText;
         if (!Validator[method](val, args) ) {
