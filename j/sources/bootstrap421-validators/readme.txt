@@ -110,7 +110,7 @@ npm-help.txt
 https://github.com/lamzin-andrey/personalsite/tree/master/j/sources/bootstrap421-validators
 
 используется файл 
-https://github.com/lamzin-andrey/personalsite/blob/master/j/lib/nodom/validator.js
+https://github.com/lamzin-andrey/personalsite/blob/master/j/sources/landlib/nodom/validator.js
 
 Позже вынесу в отдельный репозиторий, чтобы было проще.
 Ещё позднее экспортирую npm пакет.
