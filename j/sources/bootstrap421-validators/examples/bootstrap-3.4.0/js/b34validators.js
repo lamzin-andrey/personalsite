@@ -1,6 +1,4 @@
 //включить пользовательскую библиотеку из внешней папки
-//import Validator  from '../../lib/nodom/validator';
-
 import B421Validators  from '../../../b421validators';
 
 
