@@ -4,7 +4,7 @@
 */
 window.TextFormat = {
 	/**
-	 * @description Обработка ввода в поле email
+	 * @description Splits a long number of three characters. For example argument 1000000 return '1 000 000'
 	*/
 	money:function(s){
 		var o = this, i, a = [], j = 0;
@@ -19,7 +19,7 @@ window.TextFormat = {
 		return s;
 	},
 	/**
-	 * @description Обработка ввода в поле суммы 
+	 * @description Remove all no numbers chars  
 	*/
 	nums:function(s){
 		var o = this;
@@ -27,7 +27,20 @@ window.TextFormat = {
 		return s;
 	},
 	/**
-	 * @description Склоняет лексему (eд. измерения) в зависимости от значения k
+	 * @description 
+	 * 
+	 * Change word from value of argument n
+	 * For example "day"
+	 * 
+	 * pluralize(n, 'day', 'days', 'days');
+	 * becouse 'one day' (one),
+	 * 			  'three days'(less4, 3 <= 4),
+	 *			  'twenty days' (more19, 20 > 19)
+
+     * (less4 and more19 is actual for russian language)
+	 * 
+	 *  
+	 * Склоняет лексему (eд. измерения) в зависимости от значения n
 	 * На примере "день"
 	 * pluralize(n, 'день', 'дня', 'дней');
 	 * потому что 'один день' (one),

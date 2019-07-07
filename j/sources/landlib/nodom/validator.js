@@ -4,7 +4,7 @@
 */
 var Validator = {
 	/**
-	 * @description не требуется
+	 * @description Obviously.
 	 * @param {String} s
 	 * @return Boolean
 	*/

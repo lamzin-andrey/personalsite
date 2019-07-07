@@ -1,12 +1,21 @@
-Назначение
- Сделать поддержку атрибута v-b421validators для полей ввода
+# Назначение
+
+
+ Сделать поддержку директивы (атрибута) v-b421validators в проектах использующих vue 2.5.17 и bootstrap 4.2.1
+ 
+ для полей ввода
+ 
  input[type=text]
+ 
  input[type=number]
+ 
  input[type=password]
+ 
  input[type=email]
  
 Работает со стандартной версткой полей ввода bootstrap 4.2.1 вида
 
+```html
 <div class="col-md-6 mb-3">
   <label for="iPassword">Password</label>
   <input type="password" class="form-control is-invalid" id="iPassword" placeholder="Enter password" required>
@@ -14,7 +23,7 @@
 	Password must containts numbers and letters different case: upper and lower.
   </div>
 </div>
-
+```
 
 Для указанного примера программист может добавить 
 атрибут v-b421validators="'password,required,length3_16'" полю input[type=password]. (кавычки внутри кавычек важны).
@@ -31,8 +40,11 @@
 и переопределить методы, начинающиеся с view*
 
 
-Использование (файл app.js):
+# Использование 
 
+## (файл app.js):
+
+```javascript
 window.Vue = require('vue');
 
 //Интернациализация (Это важно, так как сейчас валидатор фактически зависит от функции $t которую предоставляет vue-i18n v7.0.0)
@@ -93,33 +105,44 @@ window.app = new Vue({
    }//end methods
 
 }).$mount('#wrapper');
+```
 
+## Вёрстка
 
-Реализованные значения атрибута v-b421validators:
-email
-password
-required
-lengthMIN_MAX (например length3_16)
+Надо добавить директиву вида v-b421validators="'password,required,length3_16'" полю ввода.
 
-Зависимости:
+## Реализованные значения атрибута v-b421validators:
+
+`email`
+
+`password`
+
+`required`
+
+`lengthMIN_MAX` (например `length3_16`)
+
+## Зависимости:
 
 Помимо указанных в 
+
 examples/package.json,
+
 npm-help.txt
-и подключаемых в app.js файлов из 
-https://github.com/lamzin-andrey/personalsite/tree/master/j/sources/bootstrap421-validators
+
+и подключаемых в app.js файлов из данного репозитория
+https://github.com/lamzin-andrey/vue2-bootstrap4.2.1-validator
 
 используется файл 
-https://github.com/lamzin-andrey/personalsite/blob/master/j/sources/landlib/nodom/validator.js
+https://github.com/lamzin-andrey/landlib/blob/master/nodom/validator.js
 
-Позже вынесу в отдельный репозиторий, чтобы было проще.
-Ещё позднее экспортирую npm пакет.
-
+Позже экспортирую npm пакет.
 
 
-Гибкость:
 
-Изменения логики. 
+
+## Гибкость:
+
+### Изменения логики. 
 
 Добавление новых валидаторов (или изменение старых, например для пароля у вас могут быть более 
 мягкие или более жёсткие требования):
@@ -133,14 +156,14 @@ https://github.com/lamzin-andrey/personalsite/blob/master/j/sources/landlib/nodo
 В атрибуте v-b421validators добавляем min_length7_1 (Второе число на данный момент обязательно, но ваш новый метод его может просто игнорировать).
 
 
-Изменения вёрстки.
+### Изменения вёрстки.
 
 В наследнике перегружаем view* методы (имена которых начинаются с view*)
 
 Если верстка содержит много разных вариантов верстки поля, совмещаем изменения логики и верстки:
- определяем новые методы валидации, которые вызывают новые методы view*. Прописываеим в атрибут, где надо.
+ определяем новые методы валидации, которые вызывают новые методы view*. Прописываем в атрибут, где надо.
  
-Смена фреймвёрка.
+### Смена фреймвёрка.
 
 Судьба забросила вас из vue в angular или ещё куда-то.
 
