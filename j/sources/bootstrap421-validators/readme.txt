@@ -101,6 +101,21 @@ password
 required
 lengthMIN_MAX (например length3_16)
 
+Зависимости:
+
+Помимо указанных в 
+examples/package.json,
+npm-help.txt
+и подключаемых в app.js файлов из 
+https://github.com/lamzin-andrey/personalsite/tree/master/j/sources/bootstrap421-validators
+
+используется файл 
+https://github.com/lamzin-andrey/personalsite/blob/master/j/lib/nodom/validator.js
+
+Позже вынесу в отдельный репозиторий, чтобы было проще.
+Ещё позднее экспортирую npm пакет.
+
+
 
 Гибкость:
 
