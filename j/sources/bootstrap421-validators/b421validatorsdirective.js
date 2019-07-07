@@ -1,7 +1,6 @@
-window.Vue = require('vue');
-
 Vue.directive('b421validators', {
     inserted:function(el, binding, vnode) {
+        console.log('Hello! b421validators!');
         /**
          * @description Set event listener on form input and form
          * Установить обработчик события на поле ввода и форме
