@@ -55,6 +55,12 @@ Return true if value no empty.
 Return true if length s between args[0] and args[1].
 args - array of numbers.
 
+
+### isEquiv(s1, a)
+
+Return true if s1 === a[0]
+
+
 ### isValidEmail(s)
 
 return true if email is valid. It deprecated, use browser validation.
@@ -111,6 +117,13 @@ pluralize(n, 'день', 'дня', 'дней');
 Вернёт true если длина s между args[0] and args[1].
 где args - массив из двух целых чисел.
 
+
+### isEquiv(s1, a)
+
+Вернёт true если s1 === a[0]
+
+
 ### isValidEmail(s)
 
 Вернёт true если email валиден. Это устарело, используйте встроенную валидацию браузера.
+
