@@ -109,7 +109,7 @@ window.app = new Vue({
 
 ## Вёрстка
 
-Надо добавить директиву вида `v-b421validators="'password,required,length3_16'"` полю ввода. Кавычки внутри кавыяек важны.
+Надо добавить директиву вида `v-b421validators="'password,required,length3_16'"` полю ввода. Кавычки внутри кавычек важны.
 
 ## Реализованные значения атрибута v-b421validators:
 
@@ -134,6 +134,8 @@ https://github.com/lamzin-andrey/vue2-bootstrap4.2.1-validator
 
 используется файл 
 https://github.com/lamzin-andrey/landlib/blob/master/nodom/validator.js
+из репозитория 
+https://github.com/lamzin-andrey/landlib/
 
 Позже экспортирую npm пакет.
 

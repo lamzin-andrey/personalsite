@@ -2,10 +2,11 @@
 
 class Signin extends BaseApp {
 	public function __construct() {
-		$this->table = 'users';
+		
+		$this->table = 'ausers';
 		parent::__construct();
 		$url = $_SERVER['REQUEST_URI'];
-		if ($url == '/p/signin.jn' && count($_POST)) {
+		if ($url == '/p/signin.jn/' && count($_POST)) {
 			$this->signinJson();
 		}
 	}
@@ -23,6 +24,7 @@ class Signin extends BaseApp {
 		
 		if(!utils_isJs()) {
 			$pwdData = dbrow("SELECT password, guest_id FROM {$this->table} WHERE email = '{$this->email}' LIMIT 1", $nR);
+			
 			if($nR && Auth::hash($this->password) != $pwdData['password']) {
 				json_error_arr(['errors' => ['passwordL' => l('user-wrong-password')]] );
 			} elseif(!$nR) {
@@ -31,6 +33,6 @@ class Signin extends BaseApp {
 				Auth::setCookie($pwdData['guest_id']);
 			}
 		}
-		json_ok();
+		json_error_arr(['errors' => ['passwordL' => l('user-wrong-password')]] );
 	}
 }

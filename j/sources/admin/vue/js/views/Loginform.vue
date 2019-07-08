@@ -45,6 +45,25 @@
              * @description Пробуем отправить форму
             */
             onSubmitLoginForm(evt) {
+                evt.preventDefault();
+                this.$root._post(
+                    {email:this.email, passwordL:this.password}, 
+                    (data) => { this.onSuccessLogin(data);},
+                    '/p/signin.jn/',
+                    (a, b, c) => { this.onFailLogin(a, b, c);}
+                );
+            },
+            /**
+             * {Object} data
+            */
+            onSuccessLogin(data) {
+                console.log('success login req');
+            },
+            /**
+             * {Object} data
+            */
+            onFailLogin(data) {
+                console.log('fail login req');
             },
            
         }, //end methods

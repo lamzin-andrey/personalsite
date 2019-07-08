@@ -1,4 +1,5 @@
 window.Vue = require('vue');
+window.axios = require('axios');
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';
@@ -47,6 +48,59 @@ window.app = new Vue({
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
    methods:{
+    /**
+     * @description Используем jQuery, так как бэкенд ждёт данные как formData
+     * @param {Object} data 
+     * @param {Funcction} onSuccess 
+     * @param {String} url 
+     * @param {Function} onFail 
+     */
+    _post(data, onSuccess, url, onFail) {
+        let t = this._getToken();//TODO
+        if (t) {
+            data._token = t;
+            this._restreq('post', data, onSuccess, url, onFail)
+        }
+    },
+    _get(onSuccess, url, onFail) {
+        this._restreq('get', {}, onSuccess, url, onFail)
+    },
+    _getToken() {
+        let ls = document.getElementsByTagName('meta'), i;
+        for (i = 0; i < ls.length; i++) {
+            if (ls[i].getAttribute('name') == 'apptoken') {
+                return ls[i].getAttribute('content');
+            }
+        }
+        return '';
+    },
+    _restreq(method, data, onSuccess, url, onFail) {
+        let W = window;
+        W.root = '';
+        if (!url) {
+            url = window.location.href;
+        } else {
+            url = W.root + url;
+        }
+        if (!onFail) {
+            onFail = defaultFail;
+        }
+        switch (method) {
+            case 'put':
+            case 'patch':
+            case 'delete':
+                break;
+        }
+        $.ajax({
+            method: method,
+            data:data,
+            url:url,
+            dataType:'json',
+            success:onSuccess,
+            error:onFail
+        });
+        
+    },
     /**
      * @description Извлекает clientX из 0 элемента changedTouches события TouchStartEvent
      * @param {TouchStartEvent} evt

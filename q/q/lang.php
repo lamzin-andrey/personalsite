@@ -14,7 +14,7 @@ function l($s) {
 	if (file_exists($target)) {
 		include($target);
 	}
-	if (isset($aLang[$s])) {
+	if (isset($aLang) && isset($aLang[$s])) {
 		$s = $aLang[$s];
 		$sz = func_num_args();
 		for ($i = 1; $i < $sz; $i++) {
@@ -23,8 +23,12 @@ function l($s) {
 			$s = array_shift($aS);
 			$s .= $v . join('%', $aS);
 		}
+		$s = mb_convert_encoding($s, 'UTF-8', 'Windows-1251');
+		header('Content-Type: text/html; charset=UTF-8');
+		//$s = utils_cyrcompress($s);
 		return $s;
 	}
+	$s = utils_cyrcompress($s);
 	return $s;
 }
 

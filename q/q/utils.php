@@ -64,7 +64,7 @@ function json_error() {
  			$data[func_get_arg($i)] = func_get_arg($i + 1);
  			$i++;
  		}
- 	}//mysql_close();
+ 	}
 	die(json_encode($data));
 }
 
@@ -893,4 +893,36 @@ function utils_checkPassword($s) {
 		$eSign  = $eSign === 0 ? 1 : $eSign;
 	}
 	return $isValid;
+}
+
+/**
+ * Если символ не найден в $aPairs и это десятичная цифра или латинский символ, возвращает xN где N - число
+ * Если символ не найден в $aPairs но его нижний регистр найден, возвращает yN где N - код в aPairs
+ * Если символ не найден в $aPairs возвращает его в utf8
+*/
+function utils_cyrcompress(string $s) : string
+{
+	$pairs = '{"pairs":{"0":"\u0430","1":"\u0431","2":"\u0432","3":"\u0433","4":"\u0434","5":"\u0435","6":"\u0451","7":"\u0436","8":"\u0437","9":"\u0438","a":"\u0439","b":"\u043a","c":"\u043b","d":"\u043c","e":"\u043d","f":"\u043e","g":"\u043f","h":"\u0440","i":"\u0441","j":"\u0442","k":"\u0443","l":"\u0444","m":"\u0445","n":"\u0446","o":"\u0447","p":"\u0448","q":"\u0449","r":"\u044a","s":"\u044b","t":"\u044c","u":"\u044d","v":"\u044e","w":"\u044f"}}';
+	$aPairs = json_decode($pairs, true);
+	//$s = mb_convert_encoding($s, 'UTF-8', 'Windows-1251');
+	$sz = sz($s, 'UTF-8');
+	$r = '';
+	for ($i = 0; $i < $sz; $i++) {
+		$ch = mb_substr($s, $i, 1, 'UTF-8');
+		if (isset($aPairs[$ch])) {
+			$r .= $aPairs[$ch];
+		} else {
+			if (strpos('0123456789abcdefghijklmnopqrstuvwxyz', $ch) !== false) {
+				$r .= 'x' . $ch;
+			} else {
+				$lch = mb_strtolower($ch, 'UTF-8');
+				if (isset($aPairs[$lch])) {
+					$r .= 'y' . $aPairs[$lch];
+				} else {
+					$r .= $ch;
+				}
+			}
+		}
+	}
+	return $r;
 }

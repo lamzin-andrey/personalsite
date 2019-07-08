@@ -22,7 +22,7 @@ class Route {
 			$this->view    = __dir__ . '/view/signinform.tpl.php';
 			$this->app = new Signin();
 		}
-		if ($baseUrl == '/p/signin.jn') {
+		if ($baseUrl == '/p/signin.jn/') {
 			$handler = __dir__ . '/ctrl/signin.php';
 			require_once $handler;
 			$this->view    = __dir__ . '/view/signinform.tpl.php';
