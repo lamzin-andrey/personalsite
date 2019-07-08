@@ -1,14 +1,19 @@
 <?php
-require_once __DIR__ . '/../q/baseapp.php';
-require_once __DIR__ . '/../q/auth.php';
-//require_once __DIR__ . '/cross/signupvalidator.php';
-
 class Signup extends BaseApp {
+	
+	public $formHeading = '';
+	
+	public $sFormBgImageCss = 'bg-register-image';
+	
+	public $isAuthform = false;
+	
 	public function __construct() {
-		$this->table = 'users';
+		
+		$this->table = 'ausers';
+		$this->formHeading = 'Register_now';
 		parent::__construct();
 		$url = $_SERVER['REQUEST_URI'];
-		if ($url == '/signup.jn' && count($_POST)) {
+		if ($url == '/p/signup.jn/' && count($_POST)) {
 			$this->signupJson();
 		}
 	}
@@ -34,6 +39,7 @@ class Signup extends BaseApp {
 			json_error_arr($report);
 		}
 		if(!utils_isJs()) {
+			
 			//TODO get id by guest_id from auth.js
 			$userId = Auth::getUid();
 			if(!$userId) {
@@ -58,7 +64,7 @@ class Signup extends BaseApp {
 		if(!checkMail($this->email)) {
 			$errors['email'] = l('invalid-email');
 		} elseif(!utils_isJs()){
-			$id = dbvalue('SELECT id FROM users WHERE email = \'' . $this->email . '\' LIMIT 1');
+			$id = dbvalue('SELECT id FROM ' . $this->table . ' WHERE email = \'' . $this->email . '\' LIMIT 1');
 			if ($id) {
 				$errors['email'] = l('user-already-exists', l('Email'));
 			}

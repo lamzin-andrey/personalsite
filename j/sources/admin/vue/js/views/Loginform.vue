@@ -1,31 +1,39 @@
 <template>
-    <form id="signinform" method="POST" action="/p/signin.jn" @submit="onSubmitLoginForm" novalidate>
-        <h1 class="h3 mb-4 text-gray-800">{{ $t('app.SigninFormLabel') }}</h1>
+    <form class="user" id="signinform" method="POST" action="/p/signin.jn/" @submit="onSubmitLoginForm" novalidate>
         <div class="form-group">
-            <label for="email">Email</label><span class="required">*</span>
-            <input v-model="email" 
+            <input 
+                v-model="email" 
                 v-bind:placeholder="$t('app.EnterEmail')"
                 v-b421validators="'required,email'"
-                class="form-control"
-                type="email"  aria-describedby="emailHelp"  name="email">
+                type="email" class="form-control form-control-user"  aria-describedby="emailHelp"  id="email" name="email">
             <div class="invalid-feedback"></div>
             <small id="emailHelp" class="form-text text-muted"></small>
         </div>
         <div class="form-group">
-            <label for="passwordL">Password</label><span class="required">*</span>
-            <input v-model="password"
-                v-bind:placeholder="$t('app.EnterPassword')"
-                v-b421validators="'required,password,length6_128'"
-                type="password"
-                class="form-control"
-                aria-describedby="passwordHelp"
-                 name="password"
-                 id="password"
-                >
+            <input 
+            v-model="password"
+            v-bind:placeholder="$t('app.EnterPassword')"
+            v-b421validators="'required,password,length6_128'"
+            type="password" class="form-control form-control-user" id="password">
             <div class="invalid-feedback"></div>
             <small id="passwordHelp" class="form-text text-muted"></small>
         </div>
-        <button id="bin" type="submit" class="btn btn-primary" >{{ $t('app.LoginFormButtonText') }}</button>
+        <div class="form-group">
+            <div class="custom-control custom-checkbox small">
+                <input type="checkbox" class="custom-control-input" id="customCheck">
+                <label class="custom-control-label" for="customCheck">TODO {{ $t('app.RememberMe') }}</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-user btn-block">
+            {{ $t('app.LoginFormButtonText') }}
+        </button>
+        <!--hr>
+        <a href="index.html" class="btn btn-google btn-user btn-block">
+            <i class="fab fa-google fa-fw"></i> Login with Google
+        </a>
+        <a href="index.html" class="btn btn-facebook btn-user btn-block">
+            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+        </a-->
     </form>
 </template>
 <script>
@@ -46,24 +54,49 @@
             */
             onSubmitLoginForm(evt) {
                 evt.preventDefault();
-                this.$root._post(
-                    {email:this.email, passwordL:this.password}, 
-                    (data) => { this.onSuccessLogin(data);},
-                    '/p/signin.jn/',
-                    (a, b, c) => { this.onFailLogin(a, b, c);}
-                );
+
+                let formInputValidator = this.$root.formInputValidator,
+                    /** @var {Validator} validator */
+                    validator = formInputValidator.getValidator();
+                if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+                    this.$root._post(
+                        {email:this.email, passwordL:this.password}, 
+                        (data) => { this.onSuccessLogin(data, formInputValidator);},
+                        '/p/signin.jn/',
+                        (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
+                    );
+                }
             },
             /**
-             * {Object} data
+             * @param {Object} data
+             * @param {B421Validators} formInputValidator
             */
-            onSuccessLogin(data) {
+            onSuccessLogin(data, formInputValidator) {
                 console.log('success login req');
+                if (data.status == 'error') {
+                    return this.onFailLogin(data, null, null, formInputValidator);
+                }
+                //TODO 
+                alert('You are login!');
             },
             /**
-             * {Object} data
+             * @param {Object} a
+             * @param {Object} b
+             * @param {Object} c
+             * @param {B421Validators} formInputValidator
             */
-            onFailLogin(data) {
+            onFailLogin(a, b, c, formInputValidator) {
                 console.log('fail login req');
+                if (a.status == 'error' && a.errors) {
+                    let i, jEl, s;
+                    for (i in a.errors) {
+                        s = (i == 'password' ? (i + 'L') : i);
+                        jEl = $('#' + s);
+                        if (jEl[0]) {
+                            formInputValidator.viewSetError(jEl, a.errors[i]);
+                        }
+                    }
+                }
             },
            
         }, //end methods

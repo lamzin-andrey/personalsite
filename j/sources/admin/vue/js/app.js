@@ -1,5 +1,4 @@
 window.Vue = require('vue');
-window.axios = require('axios');
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';
@@ -24,10 +23,11 @@ import B421Validators  from '../../../bootstrap421-validators/b421validators';
 // / "Стандартная" валидация полей формы
 
 Vue.component('login-form', require('./views/Loginform'));
+Vue.component('reg-form', require('./views/Regform'));
 
 window.app = new Vue({
     i18n : i18n,
-    el: '#wrapper',
+    el: '#wrapperapp',
     
 
    // router,
@@ -148,4 +148,4 @@ window.app = new Vue({
     }
    }//end methods
 
-}).$mount('#wrapper');
+}).$mount('#wrapperapp');

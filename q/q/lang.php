@@ -28,7 +28,7 @@ function l($s) {
 		//$s = utils_cyrcompress($s);
 		return $s;
 	}
-	$s = utils_cyrcompress($s);
+	//$s = utils_cyrcompress($s);
 	return $s;
 }
 

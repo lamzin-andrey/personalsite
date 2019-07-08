@@ -68,6 +68,15 @@ var Validator = {
 			return false;
 		}
 		return true;
+	},
+	/**
+	 * @description compare strings s1 and s2  
+	 * @param {String} s1
+	 * @param {Array} a
+	 * @return Boolean
+	 */
+	isEquiv(s1, a) {
+		return (s1 === a[0]);
 	}
 }
 export default Validator;

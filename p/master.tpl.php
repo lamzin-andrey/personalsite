@@ -19,7 +19,7 @@
 </head>
 <body id="page-top">
   <!-- Page Wrapper -->
-  <div id="wrapper">
+  <div id="wrapperapp">
    <?php  
 	if (Auth::getUid()) {
 		include __DIR__ . '/view/master/sidebar.php';

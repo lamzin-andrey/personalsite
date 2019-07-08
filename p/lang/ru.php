@@ -1,6 +1,6 @@
 <?php
 $aLang = [
-	'Register_now'         => 'Регистрироваться',
+	'Register_now'         => 'Регистрация',
 	'Signin'         => 'Войдите',
 	'profile-save-success'         => 'Данные успешно сохранены',
 	'enter-current-password'       => 'Введите ваш действующий пароль', 
@@ -12,6 +12,7 @@ $aLang = [
 	
 	
 	'or-signup'         => 'Или зарегистрируйтесь',
+	'signup'         => 'Зарегистрируйтесь',
 	'enter-password-again' => 'Введите пароль повторно',
 	'enter-password'       => 'Введите пароль',
 	'enter-email'          => 'Введите email',
@@ -45,5 +46,6 @@ $aLang = [
 	'user-wrong-password'        => 'Неверный пароль',
 	'user-not-found'        => 'Пользователь с таким email не найден',
 	'file_is_executing_upload_denied'        => 'Файл может содержать вредоносный программный код, загрузка этого файла невозможна.',
+	'SigninFormLabel'        => 'Авторизация',
 	'Change-password'        => 'Настройки авторизации'
 ];

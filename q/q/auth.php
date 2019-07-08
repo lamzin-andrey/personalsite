@@ -3,7 +3,7 @@ require_once __DIR__ . '/mysql.php';
 require_once __DIR__ . '/utils.php';
 
 class Auth {
-	static public $table = 'users';
+	static public $table = 'ausers';
 	
 	static public function createUid() {
 		$uid = md5(time() . uniqid('dslanhfdkjf', true) . rand(1000,9999) );

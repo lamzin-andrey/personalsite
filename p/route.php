@@ -20,6 +20,7 @@ class Route {
 			$handler = __dir__ . '/ctrl/signin.php';
 			require_once $handler;
 			$this->view    = __dir__ . '/view/signinform.tpl.php';
+			$this->master    = __dir__ . '/view/masters/loginmaster.tpl.php';
 			$this->app = new Signin();
 		}
 		if ($baseUrl == '/p/signin.jn/') {
@@ -28,13 +29,14 @@ class Route {
 			$this->view    = __dir__ . '/view/signinform.tpl.php';
 			$this->app = new Signin();
 		}
-		if ($baseUrl == '/signup') {
+		if ($baseUrl == '/p/signup/') {
 			$handler = __dir__ . '/ctrl/signup.php';
 			require_once $handler;
 			$this->view    = __dir__ . '/view/signupform.tpl.php';
+			$this->master    = __dir__ . '/view/masters/loginmaster.tpl.php';
 			$this->app = new Signup();
 		}
-		if ($baseUrl == '/signup.jn') {
+		if ($baseUrl == '/p/signup.jn/') {
 			$handler = __dir__ . '/ctrl/signup.php';
 			require_once $handler;
 			$this->view    = __dir__ . '/view/signupform.tpl.php';
