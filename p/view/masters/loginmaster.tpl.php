@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="Windows-1251">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,18 +37,24 @@
                 <div class="p-5">
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4"><?php echo l($route->app->formHeading)?></h1>
-                    
+                    <?php if ($route->app->isResetform): ?>
+						<p class="mb-4"><?php echo l('forgotPasswordSmallText'); ?></p>
+					<?php endif ?>
                   </div>
                   <?php include $route->view;?>
                   <hr>
-                  <div class="text-center">
-                    <a class="small" href="forgot-password.html">Forgot Password?</a>
-                  </div>
-					<?php if ($route->app->isAuthform):?>
+                  <?php if (!$route->app->isResetform):?>
+					  <div class="text-center">
+						<a class="small" href="/p/reset/"><?php echo l('Forgot Password'); ?>?</a>
+					  </div>
+                  <?php endif ?>
+					<?php if ($route->app->isAuthform || $route->app->isResetform):?>
 					  <div class="text-center">
 						<a class="small" href="/p/signup/"><?php echo l('signup'); ?></a>
 					  </div>
-					<?php else:?>
+					<?php endif ?>
+					
+					<?php if (!$route->app->isAuthform):?>
 					  <div class="text-center">
 						<a class="small" href="/p/signin/"><?php echo l('gotoLoginPageLink'); ?></a>
 					  </div>

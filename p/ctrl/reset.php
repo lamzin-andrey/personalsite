@@ -1,29 +1,30 @@
 <?php
-require_once __DIR__ . '/../q/baseapp.php';
-require_once __DIR__ . '/../q/auth.php';
-require_once __DIR__ . '/../q/SampleMail.php';
-require_once __DIR__ . '/../q/Request.php';
+require_once __DIR__ . '/../../q/q/SampleMail.php';
+require_once __DIR__ . '/../../q/q/Request.php';
 
 class Reset extends BaseApp {
+	
+	public $isAuthform = false;
+	
+	public $isResetform = true;
+	
+	public $sFormBgImageCss = 'bg-password-image';
+	
+	
 	public function __construct() {
-		$this->table = 'users';
+		$this->formHeading = 'Reset-Password';
+		$this->table = 'ausers';
 		parent::__construct();
 		$url = $_SERVER['REQUEST_URI'];
-		if ($url == '/reset.jn' && count($_POST)) {
+		if ($url == '/p/reset.jn/' && count($_POST)) {
 			$this->resetJson();
 		}
 	}
-	
-	//die будет работать таким образом:
-	//если window.pseudoRequest
-	// то пытается декодировать данные в объект обратно, 
-	// если получилось, то ок
-	// далее вызывает текущий callback pseudoRequest, который по особенностям js может быть в один момент времени только один
-	
 	/**
 	 * @description 
 	*/
-	public function resetJson() {
+	public function resetJson()
+	{
 		$this->tsreq('email');
 		
 		if(!utils_isJs()) {
@@ -33,7 +34,7 @@ class Reset extends BaseApp {
 			} else {
 				$pwd = Auth::generatePassword();
 				$hPwd = Auth::hash($pwd);
-				query("UPDATE users SET password = '{$hPwd}' WHERE id = '{$pwdData['id']}'");
+				query("UPDATE {$this->table} SET password = '{$hPwd}' WHERE id = '{$pwdData['id']}'");
 				$req = new Request();
 				//$resp = $req->execute('http://gazel.me/egate', ['pwd' => 'rfk6pAnIuR', 'body' => 'Ваш пароль в нашем чате ' . $pwd . ', и не теряйте его больше!', 'email' => $this->email, 'subject' => l('reset-password')]);
 				$resp = $req->execute('http://fastxampp.org/b/egate.php', ['pwd' => 'rfk6pAnIuR', 'body' => 'Ваш пароль в нашем чате ' . $pwd . ', и не теряйте его больше!', 'email' => $this->email, 'subject' => l('reset-password')]);
@@ -44,12 +45,6 @@ class Reset extends BaseApp {
 						$r = true;
 					}
 				}
-				/*$mail = new SampleMail();
-				$mail->setAddressFrom(['admin' => ADMIN_EMAIL]);
-				$mail->setSubject(l('reset-password'));
-				$mail->setAddressTo([$this->email => $this->email]);
-				$mail->setPlainText('Ваш пароль в нашем чате ' . $pwd . ', и не теряйте его больше!');
-				$r = $mail->send();*/
 				if ($r) {
 					json_ok('msg', l('send-reset-success'));
 				} else {

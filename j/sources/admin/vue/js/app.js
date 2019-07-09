@@ -24,6 +24,7 @@ import B421Validators  from '../../../bootstrap421-validators/b421validators';
 
 Vue.component('login-form', require('./views/Loginform'));
 Vue.component('reg-form', require('./views/Regform'));
+Vue.component('reset-form', require('./views/Resetpassform'));
 
 window.app = new Vue({
     i18n : i18n,

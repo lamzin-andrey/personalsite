@@ -1,10 +1,10 @@
 <?php
 
-//TODO с паролем Pantal123 проверить ещё раз!
 
 class Signin extends BaseApp {
 	
 	public $isAuthform = true;
+	public $isResetform = false;
 	public $sFormBgImageCss = 'bg-login-image';
 	
 	public function __construct() {

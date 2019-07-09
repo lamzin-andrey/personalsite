@@ -16,6 +16,8 @@ var locales = {
             "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
             "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
             "IHavePolicy": "I agree to the ",
+            'sendResetSuccess' :'New password sent your',
+            'ResetPassword' : 'Reset Password',
             "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
             "LoginNow": "login page",
             "Policystr": "Privacy Policy"
@@ -26,6 +28,7 @@ var locales = {
             'example' : "Пример",
             "YourName": "Ваше имя",
             "YourSurname": "Ваша фамилия",
+            'sendResetSuccess' :'Новый пароль отправлен вам на',
             "RememberMe": "Запомнить меня",
             "RegisterNow": "Зарегистрироваться",
             "email": "Email",
@@ -40,6 +43,7 @@ var locales = {
             "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
             "IHavePolicy": "Я согласен с ",
             "Policystr": "Политикой конфендициальности",
+            'ResetPassword' : 'Сбросить пароль',
             "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
             "LoginNow": "странице авторизации",
             "Passsword": "Пароль"/**/

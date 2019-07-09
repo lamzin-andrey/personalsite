@@ -241,6 +241,7 @@ __webpack_require__(11);
 
 Vue.component('login-form', __webpack_require__(14));
 Vue.component('reg-form', __webpack_require__(17));
+Vue.component('reset-form', __webpack_require__(20));
 
 window.app = new Vue({
     i18n: i18n,
@@ -14417,6 +14418,8 @@ var locales = {
             "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
             "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
             "IHavePolicy": "I agree to the ",
+            'sendResetSuccess': 'New password sent your',
+            'ResetPassword': 'Reset Password',
             "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
             "LoginNow": "login page",
             "Policystr": "Privacy Policy"
@@ -14427,6 +14430,7 @@ var locales = {
             'example': "Пример",
             "YourName": "Ваше имя",
             "YourSurname": "Ваша фамилия",
+            'sendResetSuccess': 'Новый пароль отправлен вам на',
             "RememberMe": "Запомнить меня",
             "RegisterNow": "Зарегистрироваться",
             "email": "Email",
@@ -14441,6 +14445,7 @@ var locales = {
             "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
             "IHavePolicy": "Я согласен с ",
             "Policystr": "Политикой конфендициальности",
+            'ResetPassword': 'Сбросить пароль',
             "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
             "LoginNow": "странице авторизации",
             "Passsword": "Пароль" /**/
@@ -15755,6 +15760,234 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-535bde82", module.exports)
+  }
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(21)
+/* template */
+var __vue_template__ = __webpack_require__(22)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/admin/vue/js/views/Resetpassform.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-04d6126a", Component.options)
+  } else {
+    hotAPI.reload("data-v-04d6126a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'Resetpassform',
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {
+            //Значение email
+            email: null,
+            //Если true то будет показан алерт с сообщением что можно идти на почту за новым логином
+            alertIsVisible: false,
+            //Ссылка на сайт с мейлами
+            emailHostLink: ''
+        };
+    },
+    //
+    methods: {
+        /** 
+         * @description Пробуем отправить форму
+        */
+        onSubmit: function onSubmit(evt) {
+            var _this = this;
+
+            evt.preventDefault();
+
+            var formInputValidator = this.$root.formInputValidator,
+
+            /** @var {Validator} validator */
+            validator = formInputValidator.getValidator();
+            if (validator.isValidEmail(this.email)) {
+                this.$root._post({
+                    email: this.email
+                }, function (data) {
+                    _this.onSuccess(data, formInputValidator);
+                }, '/p/reset.jn/', function (a, b, c) {
+                    _this.onFail(a, b, c, formInputValidator);
+                });
+            }
+        },
+
+        /**
+         * @param {Object} data
+         * @param {B421Validators} formInputValidator
+        */
+        onSuccess: function onSuccess(data, formInputValidator) {
+            if (data.status == 'error') {
+                return this.onFail(data, null, null, formInputValidator);
+            }
+            //show alert You success register! Click and login
+            this.emailHostLink = 'https://' + this.email.split('@')[1];
+            this.email = '';
+            this.alertIsVisible = true;
+        },
+
+        /**
+         * @param {Object} a
+         * @param {Object} b
+         * @param {Object} c
+         * @param {B421Validators} formInputValidator
+        */
+        onFail: function onFail(a, b, c, formInputValidator) {
+            if (a.status == 'error' && a.errors) {
+                var i = void 0,
+                    jEl = void 0,
+                    s = void 0;
+                for (i in a.errors) {
+                    s = i == 'password' ? i + 'L' : i;
+                    s = i == 'passwordL' ? 'password' : i;
+                    jEl = $('#' + s);
+                    if (jEl[0]) {
+                        formInputValidator.viewSetError(jEl, a.errors[i]);
+                    }
+                }
+            }
+        }
+    }, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        //console.log('Regform: I mounted to!');
+    }
+});
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("form", { staticClass: "user", on: { submit: _vm.onSubmit } }, [
+    _c("div", { staticClass: "form-group" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.email,
+            expression: "email"
+          },
+          {
+            name: "b421validators",
+            rawName: "v-b421validators",
+            value: "required,email",
+            expression: "'required,email'"
+          }
+        ],
+        staticClass: "form-control form-control-user",
+        attrs: {
+          placeholder: _vm.$t("app.EnterEmail"),
+          type: "email",
+          id: "email",
+          "aria-describedby": "emailHelp"
+        },
+        domProps: { value: _vm.email },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.email = $event.target.value
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "invalid-feedback" })
+    ]),
+    _vm._v(" "),
+    _c("button", { staticClass: "btn btn-primary btn-user btn-block" }, [
+      _vm._v("\n        " + _vm._s(_vm.$t("app.ResetPassword")) + "\n    ")
+    ]),
+    _vm._v(" "),
+    _vm.alertIsVisible
+      ? _c("div", { staticClass: "alert alert-success mt-3" }, [
+          _c("p", [
+            _vm._v(
+              "\n            " + _vm._s(_vm.$t("app.sendResetSuccess")) + " "
+            ),
+            _c("a", { attrs: { href: _vm.emailHostLink, target: "_blank" } }, [
+              _vm._v(_vm._s(_vm.$t("app.email")) + " ")
+            ])
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-04d6126a", module.exports)
   }
 }
 

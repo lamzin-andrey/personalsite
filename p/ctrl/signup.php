@@ -7,6 +7,8 @@ class Signup extends BaseApp {
 	
 	public $isAuthform = false;
 	
+	public $isResetform = false;
+	
 	public function __construct() {
 		
 		$this->table = 'ausers';
@@ -40,12 +42,12 @@ class Signup extends BaseApp {
 		}
 		if(!utils_isJs()) {
 			
-			//TODO get id by guest_id from auth.js
+			//get id by guest_id from auth.js
 			$userId = Auth::getUid();
 			if(!$userId) {
 				$userId = Auth::createUid();
 			}
-			//TODO UPDATE record by id
+			//record by id
 			$this->request['password'] = Auth::hash($this->password);
 			$cmd = $this->updateQuery('id = ' . $userId);
 			/*$report['info'] = 'validate';

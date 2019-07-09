@@ -42,13 +42,14 @@ class Route {
 			$this->view    = __dir__ . '/view/signupform.tpl.php';
 			$this->app = new Signup();
 		}
-		if ($baseUrl == '/reset') {
+		if ($baseUrl == '/p/reset/') {
 			$handler = __dir__ . '/ctrl/reset.php';
 			require_once $handler;
 			$this->view    = __dir__ . '/view/resetform.tpl.php';
+			$this->master    = __dir__ . '/view/masters/loginmaster.tpl.php';
 			$this->app = new Reset();
 		}
-		if ($baseUrl == '/reset.jn') {
+		if ($baseUrl == '/p/reset.jn/') {
 			$handler = __dir__ . '/ctrl/reset.php';
 			require_once $handler;
 			$this->view    = __dir__ . '/view/resetform.tpl.php';
