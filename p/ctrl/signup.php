@@ -88,7 +88,9 @@ class Signup extends BaseApp {
 			$eUpper = $eUpper === 0 ? 1 : $eUpper;
 			$eSign  = $eSign ? $eSign : strpos('0123456789', charAt($this->password, $i));
 			$eSign  = $eSign === 0 ? 1 : $eSign;
-			
+			if ($eLower && $eUpper && $eSign) {
+				$isValid = 1;
+			}
 		}
 		if (!$isValid) {
 			$errors['passwordL'] = l('password-very-easy');

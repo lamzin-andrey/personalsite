@@ -11,6 +11,7 @@ $aLang = [
 	'getting-info-about-your-app' => 'Getting info about your application',
 	'request-will-throught' => 'Request will send after',
 	'sec' => 'sec',
+	'gotoLoginPageLink'      => 'Already have an account? Login!',
 	'changes-parameters' => 'Change parameters',
 	'upload-source-code-amd-get-app' => 'Upload source code and get your appk',
 	'zip' => 'zip with source code',

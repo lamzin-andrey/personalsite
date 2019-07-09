@@ -17,6 +17,7 @@ $aLang = [
 	'enter-password'       => 'Введите пароль',
 	'enter-email'          => 'Введите email',
 	'Password_repeat'      => 'Пароль повторно',
+	'gotoLoginPageLink'      => 'Зарегистрирован? Welcome!',
 	'Password'             => 'Пароль',
 	'First_name'           => 'Имя',
 	'Last_name'            => 'Фамилия',

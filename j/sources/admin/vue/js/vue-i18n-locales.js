@@ -15,6 +15,10 @@ var locales = {
             "PasswordsIsDifferent": "Passwords is different",
             "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
             "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
+            "IHavePolicy": "I agree to the ",
+            "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
+            "LoginNow": "login page",
+            "Policystr": "Privacy Policy"
         },
     },
     'ru': {
@@ -34,6 +38,10 @@ var locales = {
             "IncorrectEmail": "Неверный Email",
             "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
             "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
+            "IHavePolicy": "Я согласен с ",
+            "Policystr": "Политикой конфендициальности",
+            "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
+            "LoginNow": "странице авторизации",
             "Passsword": "Пароль"/**/
         }
     }

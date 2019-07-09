@@ -1,12 +1,17 @@
 <?php
 
+//TODO с паролем Pantal123 проверить ещё раз!
+
 class Signin extends BaseApp {
 	
 	public $isAuthform = true;
 	public $sFormBgImageCss = 'bg-login-image';
 	
 	public function __construct() {
-		
+		if (Auth::getUid()) {
+			utils_302('/p/');
+			return;
+		}
 		$this->table = 'ausers';
 		$this->isAuthform = true;
 		$this->formHeading = 'SigninFormLabel';
@@ -27,6 +32,7 @@ class Signin extends BaseApp {
 	public function signinJson() {
 		$this->tsreq('email');
 		$this->tsreq('passwordL', 'password');
+		$this->breq('rememberMe');
 		
 		if(!utils_isJs()) {
 			$pwdData = dbrow("SELECT password, guest_id FROM {$this->table} WHERE email = '{$this->email}' LIMIT 1", $nR);
@@ -35,7 +41,11 @@ class Signin extends BaseApp {
 			} elseif(!$nR) {
 				json_error_arr(['errors' => ['email' => l('user-not-found')]]);
 			} else {
-				Auth::setCookie($pwdData['guest_id']);
+				if ($this->rememberMe) {
+					Auth::setCookie($pwdData['guest_id']);
+				} else {
+					Auth::setCookieShort($pwdData['guest_id']);
+				}
 				json_ok();
 			}
 		}

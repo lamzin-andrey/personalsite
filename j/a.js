@@ -14415,7 +14415,11 @@ var locales = {
             "EnterPasswordTwo": "Enter passsword again",
             "PasswordsIsDifferent": "Passwords is different",
             "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
-            "InvalidPasswordLength": "Password length must be from 6 to 1285 chars"
+            "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
+            "IHavePolicy": "I agree to the ",
+            "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
+            "LoginNow": "login page",
+            "Policystr": "Privacy Policy"
         }
     },
     'ru': {
@@ -14435,6 +14439,10 @@ var locales = {
             "IncorrectEmail": "Неверный Email",
             "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
             "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
+            "IHavePolicy": "Я согласен с ",
+            "Policystr": "Политикой конфендициальности",
+            "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
+            "LoginNow": "странице авторизации",
             "Passsword": "Пароль" /**/
         }
     }
@@ -14558,22 +14566,68 @@ var B421Validators = function () {
     }, {
         key: '_captureInput',
         value: function _captureInput(event, jInp, eventType, t, method, message, args) {
-            //console.log('Call validation ' + method + '!');
+            //console.log('Call validation ' + method + ' for ', jInp);
             var val = jInp.val(),
                 errorText = void 0;
+
+            if (jInp.attr('type') == 'checkbox') {
+                val = '';
+                if (jInp.prop('checked')) {
+                    val = jInp.val();
+                }
+            }
+
+            jInp.viewVoices = jInp.viewVoices || {};
+            jInp.viewVoices[method] = jInp.viewVoices[method] || { neutral: 0, error: 0, success: 0 };
             if (!__WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__["a" /* default */][method](val, args)) {
                 if (eventType == 'submit') {
                     errorText = t(message);
+                    jInp.viewVoices[method].neutral = 0;
+                    jInp.viewVoices[method].success = 0;
+                    jInp.viewVoices[method].error = 1;
                     this.viewSetError(jInp, errorText);
                     event.preventDefault();
                     return false;
                 } else {
+                    jInp.viewVoices[method].error = 0;
                     this.viewClearError(jInp);
+                    jInp.viewVoices[method].neutral = 1;
+                    jInp.viewVoices[method].success = 0;
                     this.viewClearSuccess(jInp);
                 }
             } else {
                 if (eventType == 'input') {
-                    this.viewSetSuccess(jInp);
+                    //console.log(method + ` mean than ${val} is valid!`);
+                    jInp.viewVoices[method].success = 1;
+                    jInp.viewVoices[method].neutral = 0;
+
+                    //set success view only if all validators return true
+                    if (this._isAllValidatorsSuccess(jInp)) {
+                        //console.log(`All validators  mean, than value is valid, set success view`);
+                        this.viewSetSuccess(jInp);
+                    }
+                }
+            }
+            return true;
+        }
+        /**
+         * @description Проверка, все ли назначенные полю ввода валидаторы вернули true
+         * @param {jQueryInput} jInp
+         * @param Boolean true if all field validators return true
+        */
+
+    }, {
+        key: '_isAllValidatorsSuccess',
+        value: function _isAllValidatorsSuccess(jInp) {
+            if (jInp.viewVoices) {
+                var i = void 0,
+                    v = void 0;
+                for (i in jInp.viewVoices) {
+                    v = parseInt(jInp.viewVoices[i].success);
+                    if (!isNaN(v) && v == 0) {
+                        //console.log(`method ${i} mean, than value is invalid, set success view cancel`);
+                        return false;
+                    }
                 }
             }
             return true;
@@ -14909,13 +14963,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //Значение email
             email: null,
             //Значение password
-            password: null
+            password: null,
+            //Значение rememberMe
+            rememberMe: null
         };
     },
     //
     methods: {
         /** 
-         * TODO localize
          * @description Пробуем отправить форму
         */
         onSubmitLoginForm: function onSubmitLoginForm(evt) {
@@ -14928,7 +14983,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             /** @var {Validator} validator */
             validator = formInputValidator.getValidator();
             if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
-                this.$root._post({ email: this.email, passwordL: this.password }, function (data) {
+                this.$root._post({
+                    email: this.email,
+                    rememberMe: this.rememberMe,
+                    passwordL: this.password
+                }, function (data) {
                     _this.onSuccessLogin(data, formInputValidator);
                 }, '/p/signin.jn/', function (a, b, c) {
                     _this.onFailLogin(a, b, c, formInputValidator);
@@ -14941,12 +15000,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          * @param {B421Validators} formInputValidator
         */
         onSuccessLogin: function onSuccessLogin(data, formInputValidator) {
-            console.log('success login req');
             if (data.status == 'error') {
                 return this.onFailLogin(data, null, null, formInputValidator);
             }
-            //TODO 
-            alert('You are login!');
+            window.location.href = '/p/';
         },
 
         /**
@@ -14956,7 +15013,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          * @param {B421Validators} formInputValidator
         */
         onFailLogin: function onFailLogin(a, b, c, formInputValidator) {
-            console.log('fail login req');
             if (a.status == 'error' && a.errors) {
                 var i = void 0,
                     jEl = void 0,
@@ -14982,7 +15038,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             self.isHelpWndVisible   = false;
             self.nStep = self.$root.nStep;
         })/**/
-        console.log('I mounted!');
+        //console.log('I mounted!');
     }
 });
 
@@ -15094,17 +15150,51 @@ var render = function() {
       _c("div", { staticClass: "form-group" }, [
         _c("div", { staticClass: "custom-control custom-checkbox small" }, [
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.rememberMe,
+                expression: "rememberMe"
+              }
+            ],
             staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheck" }
+            attrs: { type: "checkbox", id: "rememberMe", value: "true" },
+            domProps: {
+              checked: Array.isArray(_vm.rememberMe)
+                ? _vm._i(_vm.rememberMe, "true") > -1
+                : _vm.rememberMe
+            },
+            on: {
+              change: function($event) {
+                var $$a = _vm.rememberMe,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = "true",
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.rememberMe = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.rememberMe = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.rememberMe = $$c
+                }
+              }
+            }
           }),
           _vm._v(" "),
           _c(
             "label",
             {
               staticClass: "custom-control-label",
-              attrs: { for: "customCheck" }
+              attrs: { for: "rememberMe" }
             },
-            [_vm._v("TODO " + _vm._s(_vm.$t("app.RememberMe")))]
+            [_vm._v(_vm._s(_vm.$t("app.RememberMe")))]
           )
         ])
       ]),
@@ -15248,6 +15338,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'Regform',
@@ -15264,12 +15371,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             password: null,
             //Значение email
             email: null
-        }, _defineProperty(_ref, 'password', null), _defineProperty(_ref, 'passwordConfirm', null), _ref;
+        }, _defineProperty(_ref, 'password', null), _defineProperty(_ref, 'passwordConfirm', null), _defineProperty(_ref, 'agree', null), _defineProperty(_ref, 'alertIsVisible', false), _ref;
     },
     //
     methods: {
         /** 
-         * TODO localize
          * @description Пробуем отправить форму
         */
         onSubmit: function onSubmit(evt) {
@@ -15281,11 +15387,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             /** @var {Validator} validator */
             validator = formInputValidator.getValidator();
-            console.log('E', this.email);
-            console.log('P', this.password);
-            console.log('C', this.passwordConfirm);
-            console.log('N', this.displayName);
-            console.log('Sn', this.displaySurname);
             if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password) && validator.isRequired(this.displayName) && validator.isRequired(this.displaySurname) && validator.isEquiv(this.password, [this.passwordConfirm])) {
                 this.$root._post({
                     email: this.email,
@@ -15293,21 +15394,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     passwordLC: this.passwordConfirm,
                     name: this.displayName,
                     surname: this.displaySurname,
-                    agree: 'true' //TODO add field
+                    agree: this.agree
                 }, function (data) {
                     _this.onSuccess(data, formInputValidator);
                 }, '/p/signup.jn/', function (a, b, c) {
                     _this.onFail(a, b, c, formInputValidator);
                 });
-            } else {
-                console.log('TipaOpa');
-
-                console.log(validator.isValidEmail(this.email));
-                console.log(validator.isValidPassword(this.password));
-                console.log(validator.isRequired(this.displayName));
-                console.log(validator.isRequired(this.displaySurname));
-                console.log(validator.isEquiv(this.password, [this.passwordConfirm]));
-                console.log('Sten');
             }
         },
 
@@ -15316,12 +15408,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
          * @param {B421Validators} formInputValidator
         */
         onSuccess: function onSuccess(data, formInputValidator) {
-            console.log('success login req');
             if (data.status == 'error') {
-                return this.onFailLogin(data, null, null, formInputValidator);
+                return this.onFail(data, null, null, formInputValidator);
             }
-            //TODO 
-            alert('You are login!');
+            //show alert You success register! Click and login
+            this.password = this.passwordConfirm = this.displayName = this.displaySurname = this.agree = this.email = '';
+            $('#regForm')[0].reset();
+            this.alertIsVisible = true;
         },
 
         /**
@@ -15331,13 +15424,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
          * @param {B421Validators} formInputValidator
         */
         onFail: function onFail(a, b, c, formInputValidator) {
-            console.log('fail login req');
             if (a.status == 'error' && a.errors) {
                 var i = void 0,
                     jEl = void 0,
                     s = void 0;
                 for (i in a.errors) {
                     s = i == 'password' ? i + 'L' : i;
+                    s = i == 'passwordL' ? 'password' : i;
                     jEl = $('#' + s);
                     if (jEl[0]) {
                         formInputValidator.viewSetError(jEl, a.errors[i]);
@@ -15348,7 +15441,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, //end methods
     //вызывается после data, поля из data видны "напрямую" как this.fieldName
     mounted: function mounted() {
-        console.log('Regform: I mounted to!');
+        //console.log('Regform: I mounted to!');
     }
 });
 
@@ -15360,37 +15453,117 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", { staticClass: "user", on: { submit: _vm.onSubmit } }, [
-    _c("div", { staticClass: "form-group row" }, [
-      _c("div", { staticClass: "col-sm-6 mb-3 mb-sm-0" }, [
+  return _c(
+    "form",
+    {
+      staticClass: "user",
+      attrs: { id: "regForm" },
+      on: { submit: _vm.onSubmit }
+    },
+    [
+      _c("div", { staticClass: "form-group row" }, [
+        _c("div", { staticClass: "col-sm-6 mb-3 mb-sm-0" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.displayName,
+                expression: "displayName"
+              },
+              {
+                name: "b421validators",
+                rawName: "v-b421validators",
+                value: "required",
+                expression: "'required'"
+              }
+            ],
+            staticClass: "form-control form-control-user",
+            attrs: {
+              placeholder: _vm.$t("app.YourName"),
+              type: "text",
+              id: "displayName"
+            },
+            domProps: { value: _vm.displayName },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.displayName = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "invalid-feedback" })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-sm-6" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.displaySurname,
+                expression: "displaySurname"
+              },
+              {
+                name: "b421validators",
+                rawName: "v-b421validators",
+                value: "required",
+                expression: "'required'"
+              }
+            ],
+            staticClass: "form-control form-control-user",
+            attrs: {
+              placeholder: _vm.$t("app.YourSurname"),
+              type: "text",
+              id: "displaySurname"
+            },
+            domProps: { value: _vm.displaySurname },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.displaySurname = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "invalid-feedback" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
         _c("input", {
           directives: [
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.displayName,
-              expression: "displayName"
+              value: _vm.email,
+              expression: "email"
             },
             {
               name: "b421validators",
               rawName: "v-b421validators",
-              value: "required",
-              expression: "'required'"
+              value: "required,email",
+              expression: "'required,email'"
             }
           ],
           staticClass: "form-control form-control-user",
           attrs: {
-            placeholder: _vm.$t("app.YourName"),
-            type: "text",
-            id: "displayName"
+            placeholder: _vm.$t("app.EnterEmail"),
+            type: "email",
+            id: "email"
           },
-          domProps: { value: _vm.displayName },
+          domProps: { value: _vm.email },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.displayName = $event.target.value
+              _vm.email = $event.target.value
             }
           }
         }),
@@ -15398,162 +15571,182 @@ var render = function() {
         _c("div", { staticClass: "invalid-feedback" })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-6" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.displaySurname,
-              expression: "displaySurname"
-            },
-            {
-              name: "b421validators",
-              rawName: "v-b421validators",
-              value: "required",
-              expression: "'required'"
-            }
-          ],
-          staticClass: "form-control form-control-user",
-          attrs: {
-            placeholder: _vm.$t("app.YourSurname"),
-            type: "text",
-            id: "displaySurname"
-          },
-          domProps: { value: _vm.displaySurname },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+      _c("div", { staticClass: "form-group row" }, [
+        _c("div", { staticClass: "col-sm-6 mb-3 mb-sm-0" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.password,
+                expression: "password"
+              },
+              {
+                name: "b421validators",
+                rawName: "v-b421validators",
+                value: "required,password,length6_128",
+                expression: "'required,password,length6_128'"
               }
-              _vm.displaySurname = $event.target.value
+            ],
+            staticClass: "form-control form-control-user",
+            attrs: {
+              type: "password",
+              placeholder: _vm.$t("app.EnterPassword"),
+              id: "password"
+            },
+            domProps: { value: _vm.password },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.password = $event.target.value
+              }
             }
-          }
-        }),
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "invalid-feedback" })
+        ]),
         _vm._v(" "),
-        _c("div", { staticClass: "invalid-feedback" })
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.email,
-            expression: "email"
-          },
-          {
-            name: "b421validators",
-            rawName: "v-b421validators",
-            value: "required,email",
-            expression: "'required,email'"
-          }
-        ],
-        staticClass: "form-control form-control-user",
-        attrs: {
-          placeholder: _vm.$t("app.EnterEmail"),
-          type: "email",
-          id: "email"
+        _c("div", { staticClass: "col-sm-6" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.passwordConfirm,
+                expression: "passwordConfirm"
+              },
+              {
+                name: "b421validators",
+                rawName: "v-b421validators",
+                value: "equiv_password",
+                expression: "'equiv_password'"
+              }
+            ],
+            staticClass: "form-control form-control-user",
+            attrs: {
+              placeholder: _vm.$t("app.EnterPasswordTwo"),
+              type: "password",
+              id: "passwordC"
+            },
+            domProps: { value: _vm.passwordConfirm },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.passwordConfirm = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "invalid-feedback" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c("div", { staticClass: "custom-control custom-checkbox small" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.agree,
+                expression: "agree"
+              },
+              {
+                name: "b421validators",
+                rawName: "v-b421validators",
+                value: "required",
+                expression: "'required'"
+              }
+            ],
+            staticClass: "custom-control-input",
+            attrs: { type: "checkbox", id: "agree", value: "true" },
+            domProps: {
+              checked: Array.isArray(_vm.agree)
+                ? _vm._i(_vm.agree, "true") > -1
+                : _vm.agree
+            },
+            on: {
+              change: function($event) {
+                var $$a = _vm.agree,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = "true",
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.agree = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.agree = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.agree = $$c
+                }
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass: "custom-control-label ml-1",
+              attrs: { for: "agree" }
+            },
+            [
+              _vm._v(
+                "\n                  " + _vm._s(_vm.$t("app.IHavePolicy")) + " "
+              ),
+              _c(
+                "a",
+                {
+                  attrs: {
+                    target: "_blank",
+                    href:
+                      "/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"
+                  }
+                },
+                [_vm._v(_vm._s(_vm.$t("app.Policystr")))]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "invalid-feedback" })
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-user btn-block",
+          attrs: { type: "submit" }
         },
-        domProps: { value: _vm.email },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.email = $event.target.value
-          }
-        }
-      }),
+        [
+          _vm._v(
+            "\n          " + _vm._s(_vm.$t("app.RegisterNow")) + "\n      "
+          )
+        ]
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "invalid-feedback" })
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group row" }, [
-      _c("div", { staticClass: "col-sm-6 mb-3 mb-sm-0" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.password,
-              expression: "password"
-            },
-            {
-              name: "b421validators",
-              rawName: "v-b421validators",
-              value: "required,password,length6_128",
-              expression: "'required,password,length6_128'"
-            }
-          ],
-          staticClass: "form-control form-control-user",
-          attrs: {
-            type: "password",
-            placeholder: _vm.$t("app.EnterPassword"),
-            id: "password"
-          },
-          domProps: { value: _vm.password },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.password = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "invalid-feedback" })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-6" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.passwordConfirm,
-              expression: "passwordConfirm"
-            },
-            {
-              name: "b421validators",
-              rawName: "v-b421validators",
-              value: "equiv_password",
-              expression: "'equiv_password'"
-            }
-          ],
-          staticClass: "form-control form-control-user",
-          attrs: {
-            placeholder: _vm.$t("app.EnterPasswordTwo"),
-            type: "password",
-            id: "passwordC"
-          },
-          domProps: { value: _vm.passwordConfirm },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.passwordConfirm = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "invalid-feedback" })
-      ])
-    ]),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary btn-user btn-block",
-        attrs: { type: "submit" }
-      },
-      [_vm._v("\n          " + _vm._s(_vm.$t("app.RegisterNow")) + "\n      ")]
-    )
-  ])
+      _vm.alertIsVisible
+        ? _c("div", { staticClass: "alert alert-success mt-3" }, [
+            _c("p", [
+              _vm._v(
+                "\n              " +
+                  _vm._s(_vm.$t("app.YouSuccessLoginClickAndLoginNow")) +
+                  "\n              "
+              ),
+              _c("a", { attrs: { href: "/p/" } }, [
+                _vm._v(_vm._s(_vm.$t("app.LoginNow")))
+              ])
+            ])
+          ])
+        : _vm._e()
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -20,8 +20,8 @@
         </div>
         <div class="form-group">
             <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck">
-                <label class="custom-control-label" for="customCheck">TODO {{ $t('app.RememberMe') }}</label>
+                <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="rememberMe" value="true">
+                <label class="custom-control-label" for="rememberMe">{{ $t('app.RememberMe') }}</label>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-user btn-block">
@@ -44,12 +44,13 @@
             //Значение email
             email:null,
             //Значение password
-            password:null
+            password:null,
+            //Значение rememberMe
+            rememberMe:null
         }; },
         //
         methods:{
             /** 
-             * TODO localize
              * @description Пробуем отправить форму
             */
             onSubmitLoginForm(evt) {
@@ -60,7 +61,11 @@
                     validator = formInputValidator.getValidator();
                 if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
                     this.$root._post(
-                        {email:this.email, passwordL:this.password}, 
+                        {
+                            email:      this.email,
+                            rememberMe: this.rememberMe,
+                            passwordL:  this.password
+                        },
                         (data) => { this.onSuccessLogin(data, formInputValidator);},
                         '/p/signin.jn/',
                         (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
@@ -72,12 +77,10 @@
              * @param {B421Validators} formInputValidator
             */
             onSuccessLogin(data, formInputValidator) {
-                console.log('success login req');
                 if (data.status == 'error') {
                     return this.onFailLogin(data, null, null, formInputValidator);
                 }
-                //TODO 
-                alert('You are login!');
+                window.location.href = '/p/';
             },
             /**
              * @param {Object} a
@@ -86,7 +89,6 @@
              * @param {B421Validators} formInputValidator
             */
             onFailLogin(a, b, c, formInputValidator) {
-                console.log('fail login req');
                 if (a.status == 'error' && a.errors) {
                     let i, jEl, s;
                     for (i in a.errors) {
@@ -111,7 +113,7 @@
                 self.isHelpWndVisible   = false;
                 self.nStep = self.$root.nStep;
             })/**/
-            console.log('I mounted!');
+            //console.log('I mounted!');
         }
     }
 </script>

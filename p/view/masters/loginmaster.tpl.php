@@ -50,7 +50,7 @@
 					  </div>
 					<?php else:?>
 					  <div class="text-center">
-						<a class="small" href="/p/signin/">Already have an account? Login!</a>
+						<a class="small" href="/p/signin/"><?php echo l('gotoLoginPageLink'); ?></a>
 					  </div>
 					<?php endif ?>
                 </div>
@@ -58,13 +58,9 @@
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
-
   </div>
-  
   
   <div class="footer bg-dark text-light">
 			<div class="container">

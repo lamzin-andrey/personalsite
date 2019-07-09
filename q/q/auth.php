@@ -90,7 +90,20 @@ class Auth {
 	static public function hash($s) {
 		return md5($s);
 	}
-	static public function setCookie($cookie) {
+	/**
+	 * @description Установить куку на год
+	 * @param string $cookie
+	*/
+	static public function setCookie(string $cookie)
+	{
 		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 365 * 24 * 3600, '/');
+	}
+	/**
+	 * @description Установить куку на час
+	 * @param string $cookie
+	*/
+	static public function setCookieShort(string $cookie)
+	{
+		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 3600, '/');
 	}
 }
