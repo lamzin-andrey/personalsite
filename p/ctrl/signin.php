@@ -9,7 +9,11 @@ class Signin extends BaseApp {
 	
 	public function __construct() {
 		if (Auth::getUid()) {
-			utils_302('/p/');
+			$url = '/';
+			if (Auth::isAdmin()) {
+				$url = '/p/';
+			}
+			utils_302($url);
 			return;
 		}
 		$this->table = 'ausers';

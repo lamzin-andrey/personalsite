@@ -33,11 +33,25 @@ class Auth {
 		if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
 			$t = self::$table;
 			$cname = $_COOKIE[AUTH_COOKIE_NAME];
-			
 			$id = (int)dbvalue("SELECT id FROM {$t} WHERE guest_id = '{$cname}'");
 		}
 		return $id;
 	}
+	
+	static public function isAdmin() : bool
+	{
+		$id = 0;
+		if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
+			$t = self::$table;
+			$cname = $_COOKIE[AUTH_COOKIE_NAME];
+			$id = (int)dbvalue("SELECT role FROM {$t} WHERE guest_id = '{$cname}'");
+			if ($id === 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	static public function getToken() {
 		@session_start();
 		$token = sess('auth_token');
