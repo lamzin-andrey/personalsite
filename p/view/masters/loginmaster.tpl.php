@@ -38,7 +38,7 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4"><?php echo l($route->app->formHeading)?></h1>
                     <?php if ($route->app->isResetform): ?>
-						<p class="mb-4"><?php echo l('forgotPasswordSmallText'); ?></p>
+						<p class="mb-4 d-none d-sm-block"><?php echo l('forgotPasswordSmallText'); ?></p>
 					<?php endif ?>
                   </div>
                   <?php include $route->view;?>

@@ -37,7 +37,7 @@ class Reset extends BaseApp {
 				query("UPDATE {$this->table} SET password = '{$hPwd}' WHERE id = '{$pwdData['id']}'");
 				$req = new Request();
 				//$resp = $req->execute('http://gazel.me/egate', ['pwd' => 'rfk6pAnIuR', 'body' => 'Ваш пароль в нашем чате ' . $pwd . ', и не теряйте его больше!', 'email' => $this->email, 'subject' => l('reset-password')]);
-				$resp = $req->execute('http://fastxampp.org/b/egate.php', ['pwd' => 'rfk6pAnIuR', 'body' => 'Ваш пароль в нашем чате ' . $pwd . ', и не теряйте его больше!', 'email' => $this->email, 'subject' => l('reset-password')]);
+				$resp = $req->execute('http://fastxampp.org/b/egate.php', ['pwd' => 'rfk6pAnIuR', 'body' => 'Ваш забытый пароль ' . $pwd . '. И не теряйте его больше!', 'email' => $this->email, 'subject' => l('reset-password')]);
 				$r = false;
 				if ($resp->responseStatus == 200) {
 					$data = json_decode($resp->responseText);
