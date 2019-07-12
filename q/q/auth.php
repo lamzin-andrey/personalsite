@@ -38,6 +38,12 @@ class Auth {
 		return $id;
 	}
 	
+	static public function logout()
+	{
+		unset($_COOKIE[AUTH_COOKIE_NAME]);
+		setcookie(AUTH_COOKIE_NAME, null, -1, '/');
+	}
+	
 	static public function isAdmin() : bool
 	{
 		$id = 0;
@@ -51,6 +57,32 @@ class Auth {
 		}
 		return false;
 	}
+	static public function getAuthUserDisplayName() : string
+	{
+		if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
+			$t = self::$table;
+			$cname = $_COOKIE[AUTH_COOKIE_NAME];
+			$row = dbrow("SELECT name, surname FROM {$t} WHERE guest_id = '{$cname}'", $nR);
+			
+			if ($nR) {
+				$sName = trim($row['name']);
+				$surname = trim($row['surname']);
+				
+				if ($sName && $surname) {
+					return ($sName . ' ' . $surname);
+				}
+				
+				if ($sName) {
+					return $sName;
+				}
+				if ($surname) {
+					return $surname;
+				}
+			}
+		}
+		return '';
+	}
+	
 	
 	static public function getToken() {
 		@session_start();

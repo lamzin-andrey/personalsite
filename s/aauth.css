@@ -1,0 +1,7 @@
+.fade-enter-active, .fade-leave-active {
+  transition: all .5s cubic-bezier(.51, .16, .99, 1.01);
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+	transform: translateY(-1000px);
+	opacity: 0;
+}

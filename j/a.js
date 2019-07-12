@@ -253,7 +253,9 @@ window.app = new Vue({
     */
     data: {
         //Его будем использовать
-        formInputValidator: __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__["a" /* default */]
+        formInputValidator: __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__["a" /* default */],
+        //
+        show: true
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой

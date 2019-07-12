@@ -10,5 +10,7 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
+//Для неавторизованных пользователей
 mix.js('sources/admin/vue/js/app.js', 'a.js');
+//Для авторизованных админов
+mix.js('sources/adminauth/app.js', 'b.js');

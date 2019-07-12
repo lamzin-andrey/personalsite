@@ -1,25 +1,28 @@
 <?php
 //Created from blank.html
 ?><!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="Windows-1251">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <meta name="apptoken" content="<?php echo $app->token?>">
   <title>SB Admin 2 - Blank</title>
   <!-- Custom fonts for this template-->
   <link href="/p/sbadmin2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
   <!-- Custom styles for this template-->
   <link href="/p/sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
-  <script src="/j/swinstall.js"></script>
+	<script src="/j/swinstall.js"></script>
 </head>
+
 <body id="page-top">
+
   <!-- Page Wrapper -->
-  <div id="wrapperapp">
+  <div id="wrapper">
+
    <?php  
 	if (Auth::getUid()) {
 		include __DIR__ . '/view/master/sidebar.php';
@@ -31,16 +34,20 @@
 
       <!-- Main Content -->
       <div id="content">
+
 		<?php  
-		if (Auth::getUid()) {
-			include __DIR__ . '/view/master/topbar.php';
-		}
-	   ?>
+			if (Auth::getUid()) {
+				include __DIR__ . '/view/master/topbar.php';
+			}
+		?>
+
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
           <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
           <?php include $route->view;?>
+
         </div>
         <!-- /.container-fluid -->
 
@@ -49,7 +56,7 @@
 
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
-        <div class="container my-auto message">
+        <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright &copy; andryuxa.ru 2019. Admin panel free template from <a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a></span>
           </div>
@@ -86,6 +93,7 @@
       </div>
     </div>
   </div>
+
   <!-- Bootstrap core JavaScript-->
   <script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
   <script src="/p/sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -94,6 +102,8 @@
   <!-- Custom scripts for all pages-->
   <script src="/p/sbadmin2/js/sb-admin-2.min.js"></script>
   <!-- TODO add cacheclient and simply vue app for login-->
-  <script charset="UTF-8" src="/j/a.js"></script>
+  <script charset="UTF-8" src="/j/b.js"></script>
+
 </body>
+
 </html>

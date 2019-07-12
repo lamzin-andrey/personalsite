@@ -1,4 +1,5 @@
 <?php
+
 function l($s) {
 	$lang = 'ru';
 	if (isset($_COOKIE['flang'])) {
@@ -23,8 +24,11 @@ function l($s) {
 			$s = array_shift($aS);
 			$s .= $v . join('%', $aS);
 		}
-		$s = mb_convert_encoding($s, 'UTF-8', 'Windows-1251');
-		header('Content-Type: text/html; charset=UTF-8');
+		
+		if (isset($_POST['xhr']) || isset($_GET['xhr'])) {
+			$s = mb_convert_encoding($s, 'UTF-8', 'Windows-1251');
+			header('Content-Type: text/html; charset=UTF-8');
+		}
 		//$s = utils_cyrcompress($s);
 		return $s;
 	}

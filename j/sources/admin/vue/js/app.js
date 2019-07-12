@@ -37,7 +37,9 @@ window.app = new Vue({
    */
    data: {
      //Его будем использовать
-     formInputValidator: B421Validators
+     formInputValidator: B421Validators,
+     //
+     show:true
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой

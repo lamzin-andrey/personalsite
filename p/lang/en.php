@@ -9,6 +9,7 @@ $aLang = [
 	'step-4' => 'Upload zip archive on the our site, enter application name, wait something minutes,  and download apk',
 	'step-5' => 'Compile my code in apk',
 	'forgotPasswordSmallText' => 'We get it, stuff happens. Just enter your email address below and we\'ll send you a link to reset your password!',
+	'Logout'         => 'Logout',
 	'getting-info-about-your-app' => 'Getting info about your application',
 	'request-will-throught' => 'Request will send after',
 	'sec' => 'sec',

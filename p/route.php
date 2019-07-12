@@ -10,11 +10,11 @@ class Route {
 		$this->view    = __dir__ . '/view/home.tpl.php';
 		
 		if ($baseUrl == '/p/') {
-			$this->master = __dir__ . '/index.tpl.php';
+			$this->master = __dir__ . '/master.tpl.php';
 			$handler = __dir__ . '/ctrl/main.php';
 			$this->view    = __dir__ . '/view/home.tpl.php';
 			require_once $handler;
-			$this->app = new Chat();
+			$this->app = new ArticleEditor();
 		}
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -54,6 +54,11 @@ class Route {
 			require_once $handler;
 			$this->view    = __dir__ . '/view/resetform.tpl.php';
 			$this->app = new Reset();
+		}
+		if ($baseUrl == '/p/logout/') {
+			$handler = __dir__ . '/ctrl/logout.php';
+			require_once $handler;
+			$this->app = new Logout();
 		}
 	}
 }

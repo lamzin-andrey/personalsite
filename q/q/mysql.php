@@ -1,10 +1,23 @@
 <?php
+global $SQLCACHE;
+$SQLCACHE = [];
 /**
  * @require php 7.0.4 +
 */
-function query($cmd, &$numRows = 0, &$affectedRows = 0) {
+function query($cmd, &$numRows = 0, &$affectedRows = 0, $skipSqlCache = false) {
+	global $SQLCACHE;
+	$lCmd = trim(strtolower($cmd));
+	$isSelect = false;
+	if (strpos($lCmd, 'select') === 0) {
+		$isSelect = true;
+		if (!$skipSqlCache && isset($SQLCACHE[$cmd])) {
+			$numRows = $SQLCACHE[$cmd]['n'];
+			return $SQLCACHE[$cmd]['data'];
+		}
+	}
+
 	$link = setConnection();
-	$lCmd = strtolower($cmd);
+	
 	$insert = 0;
 	if (strpos($lCmd, 'insert') === 0) {
 		$insert = 1;
@@ -44,6 +57,11 @@ function query($cmd, &$numRows = 0, &$affectedRows = 0) {
 			$data[] = $rec;
 		}
 	}
+	if ($isSelect) {
+		$SQLCACHE[$cmd] = [];
+		$SQLCACHE[$cmd]['n'] = $numRows;
+		$SQLCACHE[$cmd]['data'] = $data;
+	}
 	$affectedRows = $dbaffectedrows = mysqli_affected_rows($link);
 	if ($insert) {
 		$id = mysqli_insert_id($link);
@@ -78,7 +96,7 @@ function setConnection() {
 	$link = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD) or die('Error connect to mysql');
 	mysqli_select_db($link, DB_NAME) or die('Error select db ' . DB_NAME);
 	mysqli_query($link, 'SET NAMES UTF8');
-	//mysql_query('SET NAMES CP1251');
+	//mysqli_query($link, 'SET NAMES CP1251');
 	return $link;
 }
 function db_escape(&$s) {
