@@ -1,13 +1,90 @@
-<div class="alert alert-success" role="alert">
-		<strong>Well done!</strong> You successfully read this important alert message.
+<ul class="nav nav-tabs" role="tablist">
+	<li class="nav-item">
+		<a class="nav-link active" 
+			id="alist-tab"
+			data-toggle="tab"
+			href="#alist"
+			role="tab"
+			aria-controls="home"
+			aria-selected="true"><?php echo l('List') ?></a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link"
+			id="edit-tab"
+			data-toggle="tab"
+			href="#edit"
+			role="tab"
+			aria-controls="profile"
+			aria-selected="false"><?php echo l('NewEdit') ?></a>
+	</li>
+	<li v-if="isSeotabVisible" class="nav-item">
+		<a class="nav-link"
+			id="seo-tab"
+			data-toggle="tab"
+			href="#seo"
+			role="tab"
+			aria-controls="contact"
+			aria-selected="false"><?php echo l('SEO') ?></a>
+	</li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane fade show active" id="alist" role="tabpanel" aria-labelledby="list-tab">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Список статей</h5>
+				<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+				<a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Новая/редактируемая статья</h5>
+				<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+				<a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">SEO</h5>
+				<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+				<a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+			</div>
+		</div>
+	</div>
 </div>
-<p>Тут будем думать, как должно быть.</p>
-<p>Очевидно, список статей.</p>
-<p>Список разделов - тоже.</p>
-<p>Таблицу для статей тащим с сл, сео-теги из дэцэ. Объединить поля в одну таблицу.</p>
-<p>При нажатии на редактировать - не хочется модал, пусть лучше открывается типа таба с формой.
-Посмотреть, реально ли это сделать с помощью бутстрап, ничего более не подключая. Если это отдельный плагин - значит пилить на вью и сравнить выходной размер с вью и с бут-плагином</p>
-<p>В случае с бутстрап три таба - Статьи, Новая, Сео-теги. В идеале Статьи и Новая, а Сео-теги появляются при выборе Новая</p>
 
-<p></p>
-<p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
