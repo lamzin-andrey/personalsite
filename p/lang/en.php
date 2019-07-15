@@ -44,6 +44,8 @@ Now we working create personal cabinet, it will decide similar provlems. Now you
 	'В корне архива не найден файл index.html' => 'In arcive root not found the file index.html',
 	'not-found-images-for-google-play' =>  'In arcive not found images for Google Play',
 	'File' => 'File',
+	'Sections'         => 'Sections',
+	'Articles'         => 'Articles',
 	'must-have-size' => 'required size',
 	'pixels' => 'pixels',
 ];

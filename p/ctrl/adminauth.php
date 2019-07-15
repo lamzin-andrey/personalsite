@@ -4,6 +4,8 @@
 */
 class AdminAuth extends BaseApp {	
 	
+	public $pageHeading = 'Blank Page';
+	
 	public $uid = 0;
 	
 	//Переменные связанные с алертом новостей

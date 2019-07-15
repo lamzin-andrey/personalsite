@@ -2,6 +2,8 @@
 $aLang = [
 	'Register_now'         => 'Регистрация',
 	'Signin'         => 'Войдите',
+	'Sections'         => 'Разделы',
+	'Articles'         => 'Статьи',
 	'profile-save-success'         => 'Данные успешно сохранены',
 	'enter-current-password'       => 'Введите ваш действующий пароль', 
 	'Password_Current'       => 'Действующий пароль',
