@@ -62,6 +62,19 @@ window.app = new Vue({
             ev.preventDefault();
             this.isSeotabVisible = false;
         });
+
+        $('#sidebarToggleTop').click((ev) => {
+            ev.preventDefault();
+            ev.stopImmediatePropagation();
+            let jSidebar = $('#accordionSidebar'), t = 'toggled';
+            if (!jSidebar.hasClass(t)) {
+                jSidebar.addClass(t);
+            } else {
+                jSidebar.removeClass(t);
+            }
+            
+        });
+        
     },
     /**
      * @description Используем jQuery, так как бэкенд ждёт данные как formData

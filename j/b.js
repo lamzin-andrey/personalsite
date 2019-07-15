@@ -14682,6 +14682,18 @@ window.app = new Vue({
                 ev.preventDefault();
                 _this.isSeotabVisible = false;
             });
+
+            $('#sidebarToggleTop').click(function (ev) {
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+                var jSidebar = $('#accordionSidebar'),
+                    t = 'toggled';
+                if (!jSidebar.hasClass(t)) {
+                    jSidebar.addClass(t);
+                } else {
+                    jSidebar.removeClass(t);
+                }
+            });
         },
 
         /**
