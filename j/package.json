@@ -18,7 +18,6 @@
 		"vue-router": "^3.0.1"
 	},
 	"dependencies": {
-		"datatables.net-bs4": "^1.10.19",
-		"datatables.net-dt": "^1.10.19"
+		"datatables.net-bs4": "^1.10.19"
 	}
 }

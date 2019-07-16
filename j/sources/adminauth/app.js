@@ -28,6 +28,8 @@ import B421Validators  from '../bootstrap421-validators/b421validators';
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
 require( 'datatables.net-bs4'); 
+//my patch pagination for extra small view
+import './css/patchdatatablepaginationview.css';
 // /DataTables
 
 
