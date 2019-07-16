@@ -33,7 +33,7 @@ import './css/patchdatatablepaginationview.css';
 // /DataTables
 
 
-//Vue.component('login-form', require('./views/Articleform'));
+//Vue.component('articles-table-ctrls', require('./views/Articleslistconreols'));
 
 window.app = new Vue({
     i18n : i18n,
@@ -49,23 +49,100 @@ window.app = new Vue({
 
      //Видимость таба "SEO"
      isSeotabVisible: false,
+
+     isArticlesDataTableInitalized : false
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
    */
    mounted() {
         this.initSeotab();
-        //this.initDataTables();
-        //$(document).ready(function() {
-            $('#example').DataTable();
-        //} );
+        this.initDataTables();
    },
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
    methods:{
     /**
-     * @description Добавляем поведение для таба SEO - он должен показываться толкьо когда активна не первая вкладка
+     * @description инициализация DataTables с данными статей
+    */
+    initDataTables() {
+        if (this.isArticlesDataTableInitalized) {
+            return;
+        }
+        this.isArticlesDataTableInitalized = true;
+        $('#articles').DataTable( {
+            'processing': true,
+            'serverSide': true,
+            'ajax': "/p/articleslist.jn/",
+            "columns": [
+                { 
+                    "data": "heading",
+                    'render' : function(data, type, row) {
+                        return  `<a href="${row.url}" target="_blank">${data}</a>`;
+                    }
+                },
+                {
+                     "data": "id",
+                     'render' : function(data, type, row) {
+                        return  `
+                            <div class="form-group d-md-inline d-block ">
+                                <button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
+                                    <i data-id="${data}" class="fas fa-edit fa-sm"></i>
+                                </button>
+                            </div>
+                            <div class="form-group d-md-inline d-block ">
+                                <button data-id="${data}" type="button" class="btn btn-danger j-rm-btn">
+                                    <i data-id="${data}" class="fas fa-trash fa-sm"></i>
+                                </button>
+                            </div>
+                            `;
+                    }
+                },
+                
+            ]
+        } ).on('draw', () => {
+            //Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
+            $('#articles .j-edit-btn').click((evt) => {
+                //TODO show edit form
+            });
+            $('#articles .j-rm-btn').click((evt) => {
+                let args = {i:$(evt.target).attr('data-id')};
+                if (confirm('Are you sure?')) {
+                    this._post(args, (data) => {this.onSuccessRemove(data);}, '/p/removearticle.jn/', (data) => {this.onFailRemove(data);})
+                }
+            });
+        });
+        
+    },
+    /**
+     * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+     * @param data - Данные с сервера
+     */
+    onSuccessRemove(data) {
+        if (data.status == 'ok') {
+            if (data.id) {
+                let tr = $(`#articles button[data-id=${data.id}]`).first().parents('tr').first();
+                console.log(tr);
+                tr.remove();
+            }
+        } else {
+            this.onFailRemove(data);
+        }
+    },
+    /**
+     * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+     * @param data - Данные с сервера
+     */
+    onFailRemove(data) {
+        if (data.status == 'error' && data.msg) {
+            alert(data.msg);
+            return;
+        }
+        alert('DefaultFail');//TODO themize
+    },
+    /**
+     * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
      */
     initSeotab() {
         $('#edit-tab').on('shown.bs.tab', (ev) => {

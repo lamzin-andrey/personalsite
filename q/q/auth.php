@@ -51,7 +51,7 @@ class Auth {
 			$t = self::$table;
 			$cname = $_COOKIE[AUTH_COOKIE_NAME];
 			$id = (int)dbvalue("SELECT role FROM {$t} WHERE guest_id = '{$cname}'");
-			if ($id === 1) {
+			if ($id === 2) {
 				return true;
 			}
 		}

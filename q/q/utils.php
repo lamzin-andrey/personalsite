@@ -926,3 +926,10 @@ function utils_cyrcompress(string $s) : string
 	}
 	return $r;
 }
+/**
+ * @description Отправляет заголовок о том, что ответ в кодировке utf8
+*/
+function utils_header_utf8()
+{
+	header('Content-Type: text/html; charset=UTF-8');
+}

@@ -135,30 +135,58 @@ class BaseApp {
 	/**
 	 * @description Возвращает страницу запрошенную в request в аргументе $getvarname
 	 * Если _GET пуст, то пытается получить номер страницы из /$getvarname/n в основном url
-	 * 
 	 * Игнорирует is_deleted = 1
+	 * @param string $getvarname = 'page'
+	 * @param int $perpage = 10
+	 * @param string $sFields = '*'
+	 * @param int $forceOffset = -1 - если передано значение отличное от -1, вычисление offset от $page не происходит (page offset взаимозаменяемые)
+	 * @return array
 	*/
-	public function getPage($getvarname = 'page', $perpage = 10) {
+	public function getPage(string $getvarname = 'page', int $perpage = 10, string $sFields = '*', int $forceOffset = -1) : array
+	{
 		if ($this->table) {
-			$page = ireq($getvarname, 'GET');
-			if (!$page) {
-				$aUrl = explode('/', $_SERVER['REQUEST_URI']);
-				if ($s = a($aUrl, count($aUrl) - 2) ) {
-					if ($s == $getvarname) {
-						$page = intval( a($aUrl, count($aUrl) - 1) );
+			if ($forceOffset == -1) {
+				$page = ireq($getvarname, 'GET');
+				if (!$page) {
+					$aUrl = explode('/', $_SERVER['REQUEST_URI']);
+					if ($s = a($aUrl, count($aUrl) - 2) ) {
+						if ($s == $getvarname) {
+							$page = intval( a($aUrl, count($aUrl) - 1) );
+						}
 					}
 				}
+				if (!$page) {
+					$page = 1;
+				}
+				$offset = ($page - 1) * $perpage;
+			} else {
+				$offset = $forceOffset;
 			}
-			if (!$page) {
-				$page = 1;
-			}
-			$offset = ($page - 1) * $perpage;
-			$command = "SELECT * FROM {$this->table} WHERE is_deleted != 1 {$this->condition} ORDER BY id {$this->orderDirection} LIMIT {$offset}, {$perpage}";
+			$command = "SELECT {$sFields} FROM {$this->table} WHERE is_deleted != 1 {$this->condition} ORDER BY id {$this->orderDirection} LIMIT {$offset}, {$perpage}";
 			//var_dump($command);	die(__file__ . __line__);
 			$rows = query($command);
 			return $rows;
 		}
 		return [];
+	}
+	/**
+	 * @description Возвращает количество страниц в таблице соотв. $this->condition
+	 * @return array
+	*/
+	public function getTotal() : int
+	{
+		$command = "SELECT COUNT(id) FROM {$this->table} WHERE is_deleted != 1 {$this->condition}";
+		return intval(dbvalue($command));
+	}
+	/**
+	 * @description Удалить запись из таблицы БД
+	 * @return true if record was removed
+	*/
+	public function deleteHard() : bool
+	{
+		$nA = 0;
+		query("DELETE FROM {$this->table} WHERE id = {$this->id};", $nR, $nA);
+		return ($nA > 0);
 	}
 	/**
 	 * @description formView Может обращатсья к этому объекту для того чтобы считывать значения для форм

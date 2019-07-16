@@ -16,6 +16,16 @@ class Route {
 			require_once $handler;
 			$this->app = new ArticleEditor();
 		}
+		if ($baseUrl == '/p/articleslist.jn/') {
+			$handler = __dir__ . '/ctrl/articlespage.php';
+			require_once $handler;
+			$this->app = new ArticlesPage();
+		}
+		if ($baseUrl == '/p/removearticle.jn/') {
+			$handler = __dir__ . '/ctrl/removearticle.php';
+			require_once $handler;
+			$this->app = new RemoveArticle();
+		}
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
 			require_once $handler;

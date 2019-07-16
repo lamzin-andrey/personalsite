@@ -10696,18 +10696,19 @@ return jQuery;
 
 
 /***/ }),
-/* 2 */
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false) {
   module.exports = require('./vue.common.prod.js')
 } else {
-  module.exports = __webpack_require__(3)
+  module.exports = __webpack_require__(4)
 }
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22650,10 +22651,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(4).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(5).setImmediate))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -22709,7 +22710,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(5);
+__webpack_require__(6);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -22723,7 +22724,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -22913,10 +22914,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(7)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -23106,7 +23107,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24720,7 +24721,7 @@ VueI18n.version = '7.8.1';
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24780,7 +24781,7 @@ var locales = {
 /* harmony default export */ __webpack_exports__["a"] = (locales);
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 Vue.directive('b421validators', {
@@ -24847,11 +24848,11 @@ Vue.directive('b421validators', {
 });
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(12);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25095,7 +25096,7 @@ var B421Validators = function () {
 /* harmony default export */ __webpack_exports__["a"] = (B421Validators);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25193,7 +25194,6 @@ var Validator = {
 /* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ }),
-/* 12 */,
 /* 13 */,
 /* 14 */,
 /* 15 */,
@@ -25217,13 +25217,13 @@ module.exports = __webpack_require__(25);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_vue_js_vue_i18n_locales__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_vue_js_vue_i18n_locales__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
 window.jQuery = window.$ = window.jquery = __webpack_require__(1);
-window.Vue = __webpack_require__(2);
+window.Vue = __webpack_require__(3);
 
 //Интернациализация
 
@@ -25237,7 +25237,7 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
 
 //"Стандартная" валидация полей формы
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
-__webpack_require__(9);
+__webpack_require__(10);
 
 //класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
 //(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
@@ -25256,7 +25256,7 @@ __webpack_require__(26);
 // /DataTables
 
 
-//Vue.component('login-form', require('./views/Articleform'));
+//Vue.component('articles-table-ctrls', require('./views/Articleslistconreols'));
 
 window.app = new Vue({
     i18n: i18n,
@@ -25271,17 +25271,16 @@ window.app = new Vue({
         formInputValidator: __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__["a" /* default */],
 
         //Видимость таба "SEO"
-        isSeotabVisible: false
+        isSeotabVisible: false,
+
+        isArticlesDataTableInitalized: false
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
     */
     mounted: function mounted() {
         this.initSeotab();
-        //this.initDataTables();
-        //$(document).ready(function() {
-        $('#example').DataTable();
-        //} );
+        this.initDataTables();
     },
 
     /**
@@ -25289,18 +25288,89 @@ window.app = new Vue({
     */
     methods: {
         /**
-         * @description Добавляем поведение для таба SEO - он должен показываться толкьо когда активна не первая вкладка
+         * @description инициализация DataTables с данными статей
+        */
+        initDataTables: function initDataTables() {
+            var _this = this;
+
+            if (this.isArticlesDataTableInitalized) {
+                return;
+            }
+            this.isArticlesDataTableInitalized = true;
+            $('#articles').DataTable({
+                'processing': true,
+                'serverSide': true,
+                'ajax': "/p/articleslist.jn/",
+                "columns": [{
+                    "data": "heading",
+                    'render': function render(data, type, row) {
+                        return '<a href="' + row.url + '" target="_blank">' + data + '</a>';
+                    }
+                }, {
+                    "data": "id",
+                    'render': function render(data, type, row) {
+                        return '\n                            <div class="form-group d-md-inline d-block ">\n                                <button data-id="' + data + '" type="button" class="btn btn-primary j-edit-btn">\n                                    <i data-id="' + data + '" class="fas fa-edit fa-sm"></i>\n                                </button>\n                            </div>\n                            <div class="form-group d-md-inline d-block ">\n                                <button data-id="' + data + '" type="button" class="btn btn-danger j-rm-btn">\n                                    <i data-id="' + data + '" class="fas fa-trash fa-sm"></i>\n                                </button>\n                            </div>\n                            ';
+                    }
+                }]
+            }).on('draw', function () {
+                //Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
+                $('#articles .j-edit-btn').click(function (evt) {
+                    //TODO show edit form
+                });
+                $('#articles .j-rm-btn').click(function (evt) {
+                    var args = { i: $(evt.target).attr('data-id') };
+                    if (confirm('Are you sure?')) {
+                        _this._post(args, function (data) {
+                            _this.onSuccessRemove(data);
+                        }, '/p/removearticle.jn/', function (data) {
+                            _this.onFailRemove(data);
+                        });
+                    }
+                });
+            });
+        },
+
+        /**
+         * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+         * @param data - Данные с сервера
+         */
+        onSuccessRemove: function onSuccessRemove(data) {
+            if (data.status == 'ok') {
+                if (data.id) {
+                    var tr = $('#articles button[data-id=' + data.id + ']').first().parents('tr').first();
+                    console.log(tr);
+                    tr.remove();
+                }
+            } else {
+                this.onFailRemove(data);
+            }
+        },
+
+        /**
+         * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+         * @param data - Данные с сервера
+         */
+        onFailRemove: function onFailRemove(data) {
+            if (data.status == 'error' && data.msg) {
+                alert(data.msg);
+                return;
+            }
+            alert('DefaultFail'); //TODO themize
+        },
+
+        /**
+         * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
          */
         initSeotab: function initSeotab() {
-            var _this = this;
+            var _this2 = this;
 
             $('#edit-tab').on('shown.bs.tab', function (ev) {
                 ev.preventDefault();
-                _this.isSeotabVisible = true;
+                _this2.isSeotabVisible = true;
             });
             $('#alist-tab').on('shown.bs.tab', function (ev) {
                 ev.preventDefault();
-                _this.isSeotabVisible = false;
+                _this2.isSeotabVisible = false;
             });
 
             $('#sidebarToggleTop').click(function (ev) {
