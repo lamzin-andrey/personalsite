@@ -1,4 +1,6 @@
+window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
+
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';
@@ -21,6 +23,18 @@ require('../bootstrap421-validators/b421validatorsdirective');
 import B421Validators  from '../bootstrap421-validators/b421validators';
 //Обрати внимание на передачу B421Validators в app.data 
 // / "Стандартная" валидация полей формы
+
+//DataTables
+//Тут выбирай, или или, потому что пагинация страдает при олдновременном применении
+//import '../../DataTables/datatables.css';
+import '../../DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.css';
+//require('../../DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js'); - нужен только при импорте dataTables.bootstrap4.css, но тремя строчками ниже
+
+require('../../DataTables/datatables.min.js');
+require('../../DataTables/DataTables-1.10.18/js/jquery.dataTables.js');
+require('../../DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js');
+
+// /DataTables
 
 
 //Vue.component('login-form', require('./views/Articleform'));
@@ -45,6 +59,10 @@ window.app = new Vue({
    */
    mounted() {
         this.initSeotab();
+        //this.initDataTables();
+        //$(document).ready(function() {
+            $('#example').DataTable();
+        //} );
    },
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах

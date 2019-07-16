@@ -1,3 +1,4 @@
+window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 
 //Интернациализация

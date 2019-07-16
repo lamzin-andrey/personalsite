@@ -86,7 +86,7 @@
 	</div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
+  <script charset="UTF-8" src="/j/a.js"></script>
   <script src="/p/sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
@@ -95,7 +95,7 @@
   <!-- Custom scripts for all pages-->
   <script src="/p/sbadmin2/js/sb-admin-2.min.js"></script>
   
-  <script charset="UTF-8" src="/j/a.js"></script>
+  
 <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
 </body>
 
