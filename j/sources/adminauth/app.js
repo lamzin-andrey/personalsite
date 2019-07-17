@@ -33,7 +33,7 @@ import './css/patchdatatablepaginationview.css';
 // /DataTables
 
 //Центровка прелоадера DataTables по центру (самоделка, но надо оформить как плагин)
-//import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.js';
+import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.js';
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 
@@ -57,7 +57,14 @@ window.app = new Vue({
      isArticlesDataTableInitalized : false,
 
      //Центрируем прелоадер DataTables и добавляем в него спиннер
-     //TODO dataTablesPreloader: new B4DataTablesPreloader(),
+     /** @property  {B4DataTablesPreloader} dataTablesPreloader */
+     dataTablesPreloader: new B4DataTablesPreloader(),
+
+     /** @property {DataTables}  dataTable Объект DataTables таблицы со статьями */
+     dataTable : null,
+
+     /** @property {Boolean} preloaderIsInitalize true when dataTablesPreloader initalized and watch */
+     preloaderIsInitalize : false
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -79,7 +86,7 @@ window.app = new Vue({
         }
         let id = '#articles';
         this.isArticlesDataTableInitalized = true;
-        $(id).DataTable( {
+        this.dataTable =  $(id).DataTable( {
             'processing': true,
             'serverSide': true,
             'ajax': "/p/articleslist.jn/",
@@ -123,10 +130,14 @@ window.app = new Vue({
                     this._post(args, (data) => {this.onSuccessRemove(data);}, '/p/removearticle.jn/', (data) => {this.onFailRemove(data);})
                 }
             });
+        }).on('processing', () => {
+            if (!this.preloaderIsInitalize) {
+                //Делаем прелоадер по центру
+                this.dataTablesPreloader.setIdentifiers('#articles', '#articles_processing', this.dataTable);
+                this.dataTablesPreloader.watch();
+                this.preloaderIsInitalize = true;
+            }
         });
-
-        //Делаем прелоадер по центру
-        
     },
     /**
      * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка

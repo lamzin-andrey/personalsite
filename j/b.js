@@ -25222,6 +25222,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(33);
 window.jQuery = window.$ = window.jquery = __webpack_require__(1);
 window.Vue = __webpack_require__(2);
 
@@ -25256,7 +25257,7 @@ __webpack_require__(26);
 // /DataTables
 
 //Центровка прелоадера DataTables по центру (самоделка, но надо оформить как плагин)
-//import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.js';
+
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 
@@ -25277,10 +25278,17 @@ window.app = new Vue({
         //Видимость таба "SEO"
         isSeotabVisible: false,
 
-        isArticlesDataTableInitalized: false
+        isArticlesDataTableInitalized: false,
 
         //Центрируем прелоадер DataTables и добавляем в него спиннер
-        //TODO dataTablesPreloader: new B4DataTablesPreloader(),
+        /** @property  {B4DataTablesPreloader} dataTablesPreloader */
+        dataTablesPreloader: new __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__["a" /* default */](),
+
+        /** @property {DataTables}  dataTable Объект DataTables таблицы со статьями */
+        dataTable: null,
+
+        /** @property {Boolean} preloaderIsInitalize true when dataTablesPreloader initalized and watch */
+        preloaderIsInitalize: false
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
@@ -25305,7 +25313,7 @@ window.app = new Vue({
             }
             var id = '#articles';
             this.isArticlesDataTableInitalized = true;
-            $(id).DataTable({
+            this.dataTable = $(id).DataTable({
                 'processing': true,
                 'serverSide': true,
                 'ajax': "/p/articleslist.jn/",
@@ -25339,9 +25347,14 @@ window.app = new Vue({
                         });
                     }
                 });
+            }).on('processing', function () {
+                if (!_this.preloaderIsInitalize) {
+                    //Делаем прелоадер по центру
+                    _this.dataTablesPreloader.setIdentifiers('#articles', '#articles_processing', _this.dataTable);
+                    _this.dataTablesPreloader.watch();
+                    _this.preloaderIsInitalize = true;
+                }
             });
-
-            //Делаем прелоадер по центру
         },
 
         /**
@@ -41581,6 +41594,191 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class
+ * En:
+ * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
+ * into center of the table and add bootstrap 4 spinner into preloader
+ * Ru:
+ * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
+ * bootstrap 4 спиннер в блок прелоадера
+ * 
+*/
+var B4DataTablesPreloader = function () {
+    /**
+     * @description 
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
+        _classCallCheck(this, B4DataTablesPreloader);
+
+        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
+        /** @property {Number} zIndex Default preloader z-index */
+        this.zIndex = 100;
+
+        /** @property {String} loaderText Default preloader text */
+        this.loaderText = '';
+
+        /** @property {Array} b4Classes Bootstrap 4 standart colors */
+        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+
+        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
+        this.b4ClassesIterator = 0;
+    }
+    /**
+     * @description
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+
+
+    _createClass(B4DataTablesPreloader, [{
+        key: 'setIdentifiers',
+        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
+            this.tableId = tableId;
+            this.jTable = $(tableId);
+            this.jPreloader = $(preloaderBlockId);
+            this.oDataTables = oDataTables;
+        }
+        /**
+         * @description
+         * En: Watch window resizing and adjust spinner position
+         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
+         * 
+        */
+
+    }, {
+        key: 'watch',
+        value: function watch() {
+            var _this = this;
+
+            window.addEventListener('resize', function () {
+                _this.setSpinnerPosition();
+            }, true);
+            if (this.oDataTables) {
+                this.oDataTables.on('processing', function () {
+                    _this.setSpinnerPosition();
+                });
+                this.oDataTables.on('draw', function () {
+                    _this.removeSpinnerBlock();
+                });
+            }
+            setInterval(function () {
+                _this.onTick();
+            }, 1 * 1000);
+            this.setSpinnerPosition();
+        }
+        /**
+         * @description
+         * En: Watch window resizing and adjust spinner position
+         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
+         * 
+        */
+
+    }, {
+        key: 'setSpinnerPosition',
+        value: function setSpinnerPosition() {
+            this.setSpinner();
+            this.setPosition();
+        }
+        /**
+         * @description Добавляет спиннер в блок
+        */
+
+    }, {
+        key: 'setSpinner',
+        value: function setSpinner() {
+            if (!this.jPreloader[0]) {
+                return;
+            }
+            var text = this.jPreloader.text().trim(),
+                s = this.tableId.replace('#', ''),
+                spinnerBlockId = this.tableId + 'Spinner';
+            if (!this.loaderText) {
+                this.loaderText = text;
+            }
+            text = text ? text : this.loaderText;
+            if (!$(spinnerBlockId)[0]) {
+                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
+                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
+            }
+        }
+    }, {
+        key: 'removeSpinnerBlock',
+        value: function removeSpinnerBlock() {
+            var spinnerBlockId = this.tableId + 'Spinner';
+            if ($(spinnerBlockId)[0]) {
+                $(spinnerBlockId).remove();
+            }
+        }
+        /**
+         * @description Установить прелоадер по центру таблицы
+        */
+
+    }, {
+        key: 'setPosition',
+        value: function setPosition() {
+            var t = this.jTable[0],
+                p = this.jPreloader[0],
+                x = void 0,
+                y = void 0;
+            if (!p || !t) {
+                return;
+            }
+            x = (t.offsetWidth - p.offsetWidth) / 2;
+            y = (t.offsetHeight - p.offsetHeight) / 2;
+            this.jPreloader.css('position', 'absolute');
+            this.jPreloader.css('z-index', '100');
+            this.jPreloader.css('left', x + 'px');
+            this.jPreloader.css('top', y + 'px');
+        }
+        /**
+         * @description En: Spinner color animation
+         * Ru: Анимация классов цвета спиннера
+        */
+
+    }, {
+        key: 'onTick',
+        value: function onTick() {
+            var prevClass = this.b4ClassesIterator;
+            this.b4ClassesIterator++;
+            if (this.b4ClassesIterator >= this.b4Classes.length) {
+                this.b4ClassesIterator = 0;
+            }
+            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
+                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
+                p = 'text-' + this.b4Classes[prevClass];
+            jSpinner.removeClass(p);
+            jSpinner.addClass(s);
+        }
+        //TODO Добавить 
+        //установку zIndex
+        //Configure onlyAddSpinner
+        //Configure onlySetPos
+
+    }]);
+
+    return B4DataTablesPreloader;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
 
 /***/ })
 /******/ ]);
