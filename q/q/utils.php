@@ -482,6 +482,9 @@ function req($v, $varname = 'REQUEST') {
 			break;
 	}
 	if (isset($data[$v])) {
+		if ( defined('DB_ENC_IS_1251') && utils_isXhr() ) {
+			$data[$v] = utils_cp1251($data[$v]);
+		}
 		return $data[$v];
 	}
 	return null;
@@ -932,4 +935,19 @@ function utils_cyrcompress(string $s) : string
 function utils_header_utf8()
 {
 	header('Content-Type: text/html; charset=UTF-8');
+}
+/**
+ * @description 
+*/
+function utils_isXhr() : bool
+{
+	if (isset($_REQUEST['xhr']) || isset($_REQUEST['xhr']) ) {
+		return true;
+	}
+	$aHeaders = getallheaders();
+	$sXHR = a($aHeaders, 'X-Requested-With');
+	if ($sXHR && $sXHR == 'XMLHttpRequest') {
+		return true;
+	}
+	return false;
 }

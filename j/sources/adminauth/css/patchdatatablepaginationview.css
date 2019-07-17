@@ -1,8 +1,8 @@
 @media (width < 720px ) {
-	#example_paginate .paginate_button.page-item {
+	#articles_paginate .paginate_button.page-item {
 		display:none;
 	}
-	#example_paginate .paginate_button.page-item.previous, #example_paginate .paginate_button.page-item.next {
+	#articles_paginate .paginate_button.page-item.previous, #articles_paginate .paginate_button.page-item.next {
 		display:block;
 	}
 }

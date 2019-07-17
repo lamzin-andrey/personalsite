@@ -63,7 +63,6 @@ class Auth {
 			$t = self::$table;
 			$cname = $_COOKIE[AUTH_COOKIE_NAME];
 			$row = dbrow("SELECT name, surname FROM {$t} WHERE guest_id = '{$cname}'", $nR);
-			
 			if ($nR) {
 				$sName = trim($row['name']);
 				$surname = trim($row['surname']);
@@ -73,10 +72,10 @@ class Auth {
 				}
 				
 				if ($sName) {
-					return $sName;
+					return ($sName);
 				}
 				if ($surname) {
-					return $surname;
+					return ($surname);
 				}
 			}
 		}

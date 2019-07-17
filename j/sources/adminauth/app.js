@@ -32,6 +32,10 @@ require( 'datatables.net-bs4');
 import './css/patchdatatablepaginationview.css';
 // /DataTables
 
+//Центровка прелоадера DataTables по центру (самоделка, но надо оформить как плагин)
+//import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.js';
+//Конец Центровка прелоадера DataTables по центру (самоделка)
+
 
 //Vue.component('articles-table-ctrls', require('./views/Articleslistconreols'));
 
@@ -50,7 +54,10 @@ window.app = new Vue({
      //Видимость таба "SEO"
      isSeotabVisible: false,
 
-     isArticlesDataTableInitalized : false
+     isArticlesDataTableInitalized : false,
+
+     //Центрируем прелоадер DataTables и добавляем в него спиннер
+     //TODO dataTablesPreloader: new B4DataTablesPreloader(),
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -70,8 +77,9 @@ window.app = new Vue({
         if (this.isArticlesDataTableInitalized) {
             return;
         }
+        let id = '#articles';
         this.isArticlesDataTableInitalized = true;
-        $('#articles').DataTable( {
+        $(id).DataTable( {
             'processing': true,
             'serverSide': true,
             'ajax': "/p/articleslist.jn/",
@@ -100,19 +108,24 @@ window.app = new Vue({
                     }
                 },
                 
-            ]
+            ],
+            language: {
+                url: '/p/datatablelang.jn/'
+            }
         } ).on('draw', () => {
             //Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
-            $('#articles .j-edit-btn').click((evt) => {
+            $(id + ' .j-edit-btn').click((evt) => {
                 //TODO show edit form
             });
-            $('#articles .j-rm-btn').click((evt) => {
+            $(id + ' .j-rm-btn').click((evt) => {
                 let args = {i:$(evt.target).attr('data-id')};
-                if (confirm('Are you sure?')) {
+                if (confirm('Are you sure?')) {//TODO localize
                     this._post(args, (data) => {this.onSuccessRemove(data);}, '/p/removearticle.jn/', (data) => {this.onFailRemove(data);})
                 }
             });
         });
+
+        //Делаем прелоадер по центру
         
     },
     /**

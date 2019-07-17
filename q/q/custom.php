@@ -8,5 +8,6 @@ define('YAKEY', '5P7mCI1Fwqw45YGOQhlK8QeU');
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASSWORD', '123456');
-define('DB_NAME', 'a');
+define('DB_NAME', 'b');
+define('DB_ENC_IS_1251', true);
 /*define('ADMIN_EMAIL', 'lamzin.an@gmail.com');/**/

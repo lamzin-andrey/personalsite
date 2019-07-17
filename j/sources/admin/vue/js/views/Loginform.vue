@@ -92,7 +92,7 @@
                 if (a.status == 'error' && a.errors) {
                     let i, jEl, s;
                     for (i in a.errors) {
-                        s = (i == 'password' ? (i + 'L') : i);
+                        s = (i == 'passwordL' ? ('password') : i);
                         jEl = $('#' + s);
                         if (jEl[0]) {
                             formInputValidator.viewSetError(jEl, a.errors[i]);

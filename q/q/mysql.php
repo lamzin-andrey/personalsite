@@ -52,6 +52,11 @@ function query($cmd, &$numRows = 0, &$affectedRows = 0, $skipSqlCache = false) {
 					//$rec[$k] = str_replace('`', '\'', $rec[$k]);
 					//$rec[$k] = str_replace('_QUICK_ENGIN__APOSTROF__', '`', $rec[$k]);
 					$rec[$k] = db_unsafeString($i);
+					
+					//Если это xhr и существует константа DB_ENC_IS_1251
+					if ( defined('DB_ENC_IS_1251') && utils_isXhr() ) {
+						$rec[$k] = utils_utf8($rec[$k]);
+					}
 				}
 			}
 			$data[] = $rec;
@@ -95,8 +100,8 @@ function dbvalue($cmd) {
 function setConnection() {
 	$link = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD) or die('Error connect to mysql');
 	mysqli_select_db($link, DB_NAME) or die('Error select db ' . DB_NAME);
-	mysqli_query($link, 'SET NAMES UTF8');
-	//mysqli_query($link, 'SET NAMES CP1251');
+	//mysqli_query($link, 'SET NAMES UTF8');
+	mysqli_query($link, 'SET NAMES CP1251');
 	return $link;
 }
 function db_escape(&$s) {

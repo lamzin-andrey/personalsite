@@ -45,6 +45,9 @@ class BaseApp {
 	public function req($key, $field = '', $varname = 'REQUEST') {
 		$field = $field ? $field : $key;
 		$this->$field = req($key, $varname);
+		if ( defined('DB_ENC_IS_1251') && utils_isXhr() ) {
+			$this->$field = utils_utf8($this->$field);
+		}
 		$this->request[$field] = $this->$field;
 		return $this->$field;
 	}

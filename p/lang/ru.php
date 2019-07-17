@@ -3,6 +3,9 @@ $aLang = [
 	'Register_now'         => 'Регистрация',
 	'Signin'         => 'Войдите',
 	'List'         	 => 'Список',
+	'Search for...'	=> 'Поиск',
+	'Alerts Center'	=> 'Уведомления',
+	'Message Center'	=> 'Сообщения',
 	'Operations'         	 => 'Операции',
 	'Heading'         	 => 'Заголовок',
 	'NewEdit'         	 => 'Новая/Редактировать',
@@ -57,5 +60,13 @@ $aLang = [
 	'user-not-found'        => 'Пользователь с таким email не найден',
 	'file_is_executing_upload_denied'        => 'Файл может содержать вредоносный программный код, загрузка этого файла невозможна.',
 	'SigninFormLabel'        => 'Авторизация',
-	'Change-password'        => 'Настройки авторизации'
+	'Change-password'        => 'Настройки авторизации',
+	
+	//DataTables
+	'Show _MENU_ entries'  =>  'Показывать по _MENU_',
+	'Showing _START_ to _END_ of _TOTAL_ entries'  =>  'Показано с _START_ по _END_ из _TOTAL_ записей',
+	'Next'  =>  'Следующая',
+	'Previous'  =>  'Предыдущая',
+	'Processing...'  =>  'Загрузка...',
+	// / DataTables
 ];

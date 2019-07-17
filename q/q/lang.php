@@ -25,7 +25,7 @@ function l($s) {
 			$s .= $v . join('%', $aS);
 		}
 		
-		if (isset($_POST['xhr']) || isset($_GET['xhr'])) {
+		if (utils_isXhr()) {
 			$s = mb_convert_encoding($s, 'UTF-8', 'Windows-1251');
 			header('Content-Type: text/html; charset=UTF-8');
 		}
