@@ -52,8 +52,7 @@ class B4DataTablesPreloader {
         this.oDataTables = oDataTables;
     }
     /**
-     * @description
-     * En: Watch window resizing and adjust spinner position
+     * @description En: Start observe window resizing and adjust spinner position
      * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
      * 
     */
@@ -70,7 +69,7 @@ class B4DataTablesPreloader {
     }
     /**
      * @description
-     * En: Watch window resizing and adjust spinner position
+     * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
      * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
      * 
     */
@@ -79,7 +78,8 @@ class B4DataTablesPreloader {
         this.setPosition();
     }
     /**
-     * @description Добавляет спиннер в блок
+     * @description En: Prepend spinner in preloader block
+     * Ru: Добавляет спиннер в блок
     */
     setSpinner() {
         if (!this.jPreloader[0] || !this.isShowSpinner) {
@@ -106,6 +106,10 @@ class B4DataTablesPreloader {
             `);
         }
     }
+    /**
+     * @description En: Drop spinner from preloader
+     * Ru: Удалить спиннер с прелоадера
+    */
     removeSpinnerBlock() {
         let spinnerBlockId = `${this.tableId}Spinner`;
         if ($(spinnerBlockId)[0]) {
@@ -113,7 +117,8 @@ class B4DataTablesPreloader {
         }
     }
     /**
-     * @description Установить прелоадер по центру таблицы
+     * @description En: Align center preloader 
+     * Ru: Установить прелоадер по центру таблицы
     */
    setPosition() {
         let t = this.jTable[0], 
@@ -167,9 +172,6 @@ class B4DataTablesPreloader {
         /** @property  isSetPosition if false preloader will not draw spinner*/
         this.isSetPosition = isSetPosition;
    }
-   
-   //Configure onlyAddSpinner
-   //Configure onlySetPos
 }
 
 export default B4DataTablesPreloader;
