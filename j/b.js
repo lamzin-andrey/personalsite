@@ -25351,6 +25351,7 @@ window.app = new Vue({
                 if (!_this.preloaderIsInitalize) {
                     //Делаем прелоадер по центру
                     _this.dataTablesPreloader.setIdentifiers('#articles', '#articles_processing', _this.dataTable);
+                    //this.dataTablesPreloader.configure(true, false);
                     _this.dataTablesPreloader.watch();
                     _this.preloaderIsInitalize = true;
                 }
@@ -41638,6 +41639,12 @@ var B4DataTablesPreloader = function () {
 
         /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
         this.b4ClassesIterator = 0;
+
+        /** @property  isShowSpinner if false preloader will not draw spinner*/
+        this.isShowSpinner = true;
+
+        /** @property  isSetPosition if false preloader will not draw spinner*/
+        this.isSetPosition = true;
     }
     /**
      * @description
@@ -41705,7 +41712,7 @@ var B4DataTablesPreloader = function () {
     }, {
         key: 'setSpinner',
         value: function setSpinner() {
-            if (!this.jPreloader[0]) {
+            if (!this.jPreloader[0] || !this.isShowSpinner) {
                 return;
             }
             var text = this.jPreloader.text().trim(),
@@ -41739,7 +41746,7 @@ var B4DataTablesPreloader = function () {
                 p = this.jPreloader[0],
                 x = void 0,
                 y = void 0;
-            if (!p || !t) {
+            if (!p || !t || !this.isSetPosition) {
                 return;
             }
             x = (t.offsetWidth - p.offsetWidth) / 2;
@@ -41768,8 +41775,37 @@ var B4DataTablesPreloader = function () {
             jSpinner.removeClass(p);
             jSpinner.addClass(s);
         }
-        //TODO Добавить 
-        //установку zIndex
+        /**
+         * @description set this.zIndex
+         * @param {Number} zIndex
+        */
+
+    }, {
+        key: 'setZIndex',
+        value: function setZIndex(zIndex) {
+            this.zIndex = zIndex;
+        }
+        /**
+         * @description 
+         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
+         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
+         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
+         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
+        */
+
+    }, {
+        key: 'configure',
+        value: function configure() {
+            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            /** @property  isShowSpinner if false preloader will not draw spinner*/
+            this.isShowSpinner = isShowSpinner;
+
+            /** @property  isSetPosition if false preloader will not draw spinner*/
+            this.isSetPosition = isSetPosition;
+        }
+
         //Configure onlyAddSpinner
         //Configure onlySetPos
 

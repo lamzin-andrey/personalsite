@@ -134,6 +134,7 @@ window.app = new Vue({
             if (!this.preloaderIsInitalize) {
                 //Делаем прелоадер по центру
                 this.dataTablesPreloader.setIdentifiers('#articles', '#articles_processing', this.dataTable);
+                //this.dataTablesPreloader.configure(true, false);
                 this.dataTablesPreloader.watch();
                 this.preloaderIsInitalize = true;
             }

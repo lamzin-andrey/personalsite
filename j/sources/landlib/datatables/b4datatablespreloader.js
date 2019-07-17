@@ -30,6 +30,12 @@ class B4DataTablesPreloader {
 
         /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
         this.b4ClassesIterator = 0;
+
+        /** @property  isShowSpinner if false preloader will not draw spinner*/
+        this.isShowSpinner = true;
+
+        /** @property  isSetPosition if false preloader will not draw spinner*/
+        this.isSetPosition = true;
     }
     /**
      * @description
@@ -76,7 +82,7 @@ class B4DataTablesPreloader {
      * @description Добавляет спиннер в блок
     */
     setSpinner() {
-        if (!this.jPreloader[0]) {
+        if (!this.jPreloader[0] || !this.isShowSpinner) {
             return;
         }
         let text = this.jPreloader.text().trim(),
@@ -113,7 +119,7 @@ class B4DataTablesPreloader {
         let t = this.jTable[0], 
             p = this.jPreloader[0],
             x, y;
-        if (!p || !t) {
+        if (!p || !t || !this.isSetPosition) {
             return;
         }
         x = (t.offsetWidth - p.offsetWidth) / 2;
@@ -140,8 +146,28 @@ class B4DataTablesPreloader {
         jSpinner.addClass(s);
         
    }
-   //TODO Добавить 
-   //установку zIndex
+   /**
+    * @description set this.zIndex
+    * @param {Number} zIndex
+   */
+   setZIndex(zIndex) {
+        this.zIndex = zIndex;
+   }
+   /**
+    * @description 
+    * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
+    * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
+    * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
+    * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
+   */
+   configure(isShowSpinner = true, isSetPosition = true) {
+        /** @property  isShowSpinner if false preloader will not draw spinner*/
+        this.isShowSpinner = isShowSpinner;
+
+        /** @property  isSetPosition if false preloader will not draw spinner*/
+        this.isSetPosition = isSetPosition;
+   }
+   
    //Configure onlyAddSpinner
    //Configure onlySetPos
 }

@@ -7,7 +7,7 @@ class ArticlesPage extends AdminAuthJson {
 	public $uid = 0;
 	
 	public function __construct() {
-		//sleep(3);
+		sleep(3);
 		$this->table = 'pages';
 		parent::__construct();
 		
