@@ -107,6 +107,7 @@ window.app = new Vue({
         this.dataTable =  $(id).DataTable( {
             'processing': true,
             'serverSide': true,
+            'searching' : false,
             'ajax': "/p/articleslist.jn/",
             "columns": [
                 { 
@@ -146,6 +147,7 @@ window.app = new Vue({
                 this.onClickRemoveArticle(evt);
             });
         }).on('processing', () => {
+            //Preloader
             if (!this.preloaderIsInitalize) {
                 //Делаем прелоадер по центру
                 this.dataTablesPreloader.setIdentifiers('#articles', '#articles_processing', this.dataTable);
@@ -154,6 +156,17 @@ window.app = new Vue({
                 this.preloaderIsInitalize = true;
             }
         });
+        //Search settings
+        if (!this.addLeftLimitOnSearchField) {
+            this.addLeftLimitOnSearchField = true;
+            let inp = $('#iTopSearch');
+            inp.on('input', () => {
+                let val = inp.val();
+                if (val.length > 4) {
+                    this.dataTable.search(inp.val()).draw();
+                }
+            });
+        }
     },
     /**
      * @description Click on button "Remove article"
