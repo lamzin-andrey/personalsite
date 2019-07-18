@@ -1,18 +1,19 @@
 <p>
-	Может океазаться хорошей темой
+	Может оказаться хорошей темой
 	https://www.npmjs.com/package/vue2-datatable-component
 	
-	Пока попробую импортировать из zip архива
+	Пока использую package.json: npm install --save datatables.net-bs4
 </p>
 <p>
 	
 	https://datatables.net/examples/data_sources/server_side.html
 	  - нашёл.
-	  
+	<p>Что должно быть на форме редактирования (не SEO):</p>
 	<ul>
-		<li>добавить поиск</li>
-		<li>стилизовать алерты (примерами из sbadmin если они там есть)</li>
-		<li>Форма редактирования сохраняем пока в базе, компиляцию предусмотреть (вызов)</li>
+		<li>Title, Readonly url, heading, content, icon, insertimage button</li>
+		<li>Список разделов блога</li>
+		<li>Readonly url</li>
+		<li>сохраняем пока в базе, компиляцию предусмотреть (вызов)</li>
 	</ul>
 </p>
 <ul class="nav nav-tabs" role="tablist">
@@ -74,7 +75,7 @@
 			<div class="card-body">
 				<h5 class="card-title">Новая/редактируемая статья</h5>
 				<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-				<a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+				<button  class="btn btn-primary">Переход куда-нибудь</button>
 			</div>
 		</div>
 	</div>

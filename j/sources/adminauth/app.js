@@ -38,6 +38,8 @@ import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.j
 
 //Компонент вместо стандартного confirm
 Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'));
+//Компонент вместо стандартного alert
+Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue'));
 
 window.app = new Vue({
     i18n : i18n,
@@ -68,7 +70,7 @@ window.app = new Vue({
 
      /** @property {Object} b4ConfirmDlgParams @see b4confirmdlg.props.params*/
      b4ConfirmDlgParams : {
-        title :'Are yoy sure',
+        title :'Are you sure',
         body  :'Press Ok button for confirm it action',
         btnCancelText : 'Cancel',
         btnOkText     : 'OK',
@@ -81,7 +83,16 @@ window.app = new Vue({
             context : window.app
         }
      },
-
+     /** @property {Object} b4AlertDlgParams @see b4alertdlg.props.params*/
+     b4AlertDlgParams : {
+        title :'Are you sure',
+        body  :'Press Ok button for confirm it action',
+        btnOkText     : 'OK',
+        onOk          : {
+            f : () => {},
+            context : window.app
+        }
+     },
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -107,7 +118,6 @@ window.app = new Vue({
         this.dataTable =  $(id).DataTable( {
             'processing': true,
             'serverSide': true,
-            'searching' : false,
             'ajax': "/p/articleslist.jn/",
             "columns": [
                 { 
@@ -155,18 +165,21 @@ window.app = new Vue({
                 this.dataTablesPreloader.watch();
                 this.preloaderIsInitalize = true;
             }
+
+            //Search settings
+            if (!this.addLeftLimitOnSearchField) {
+                this.addLeftLimitOnSearchField = true;
+                let inp = $(id + '_filter input').first();
+                inp.unbind();
+                inp.on('input', () => {
+                    let val = inp.val();
+                    if (val.length > 4 || val.length == 0) {
+                        this.dataTable.search(val).draw();
+                    }
+                });
+            }
         });
-        //Search settings
-        if (!this.addLeftLimitOnSearchField) {
-            this.addLeftLimitOnSearchField = true;
-            let inp = $('#iTopSearch');
-            inp.on('input', () => {
-                let val = inp.val();
-                if (val.length > 4) {
-                    this.dataTable.search(inp.val()).draw();
-                }
-            });
-        }
+        
     },
     /**
      * @description Click on button "Remove article"
@@ -200,6 +213,20 @@ window.app = new Vue({
         $('#appConfirmDlg').modal(s);
     },
     /**
+     * @description Alert replace
+     * @param {Boolean} isVisible
+    */
+    alert(s) {
+        let id = '#appAlertDlg';
+        //this.b4AlertDlgParams.title = this.$t('app.Information');
+        this.b4AlertDlgParams.body = s;
+        this.b4AlertDlgParams.onOk = {
+            f : () => { $(id).modal('hide'); },
+            context : this
+        };
+        $(id).modal('show');
+    },
+    /**
      * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
      * @param data - Данные с сервера
     */
@@ -222,7 +249,7 @@ window.app = new Vue({
             alert(data.msg);
             return;
         }
-        alert('DefaultFail');//TODO themize
+        this.alert($t('DefaultFail'));
     },
     /**
      * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
@@ -257,6 +284,9 @@ window.app = new Vue({
         //Текст на кнопках диалога подтверждения действия
         this.b4ConfirmDlgParams.btnCancelText = this.$t('app.Cancel');
         this.b4ConfirmDlgParams.btnOkText = this.$t('app.OK');
+        
+        //Текст на кнопках диалога с информацией
+        this.b4AlertDlgParams.title = this.$t('app.Information');
     },
     /**
      * @description Используем jQuery, так как бэкенд ждёт данные как formData

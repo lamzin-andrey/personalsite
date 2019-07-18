@@ -70,6 +70,7 @@
     </div>
     <!-- End of Content Wrapper -->
 <b4confirmdlg :params="b4ConfirmDlgParams" id="appConfirmDlg" ></b4confirmdlg>
+<b4alertdlg :params="b4AlertDlgParams" id="appAlertDlg" ></b4alertdlg>
   </div>
   <!-- End of Page Wrapper -->
 
