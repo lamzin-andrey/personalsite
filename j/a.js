@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -24721,66 +24721,6 @@ VueI18n.version = '7.8.1';
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var locales = {
-    "en": {
-        "app": {
-            "example": "Example",
-            "RememberMe": "Remember Me",
-            "email": "Email",
-            "RegisterNow": "Register Account",
-            "LoginFormButtonText": "Login",
-            "FormFieldRequired": "Field is required",
-            "IncorrectEmail": "Incorrect Email",
-            "YourName": "Your name",
-            "YourSurname": "Your surname",
-            "EnterPasssword": "Enter passsword",
-            "EnterPasswordTwo": "Enter passsword again",
-            "PasswordsIsDifferent": "Passwords is different",
-            "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
-            "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
-            "IHavePolicy": "I agree to the ",
-            'sendResetSuccess': 'New password sent your',
-            'ResetPassword': 'Reset Password',
-            "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
-            "LoginNow": "login page",
-            "Policystr": "Privacy Policy"
-        }
-    },
-    'ru': {
-        'app': {
-            'example': "Пример",
-            "YourName": "Ваше имя",
-            "YourSurname": "Ваша фамилия",
-            'sendResetSuccess': 'Новый пароль отправлен вам на',
-            "RememberMe": "Запомнить меня",
-            "RegisterNow": "Зарегистрироваться",
-            "email": "Email",
-            "EnterPassword": "Введите пароль",
-            "EnterPasswordTwo": "Введите пароль повторно",
-            "PasswordsIsDifferent": "Пароли не совпадают",
-            "EnterEmail": "Введите email",
-            "LoginFormButtonText": "Войти",
-            "FormFieldRequired": "Поле обязательно для заполнения",
-            "IncorrectEmail": "Неверный Email",
-            "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
-            "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
-            "IHavePolicy": "Я согласен с ",
-            "Policystr": "Политикой конфендициальности",
-            'ResetPassword': 'Сбросить пароль',
-            "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
-            "LoginNow": "странице авторизации",
-            "Passsword": "Пароль" /**/
-        }
-    }
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (locales);
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports) {
 
 Vue.directive('b421validators', {
@@ -24847,11 +24787,11 @@ Vue.directive('b421validators', {
 });
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(10);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25095,7 +25035,7 @@ var B421Validators = function () {
 /* harmony default export */ __webpack_exports__["a"] = (B421Validators);
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25193,7 +25133,7 @@ var Validator = {
 /* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -25302,21 +25242,21 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(14);
+module.exports = __webpack_require__(13);
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(9);
 window.jQuery = window.$ = window.jquery = __webpack_require__(1);
 window.Vue = __webpack_require__(2);
 
@@ -25332,7 +25272,7 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
 
 //"Стандартная" валидация полей формы0000
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
-__webpack_require__(9);
+__webpack_require__(8);
 
 //класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
 //(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
@@ -25477,11 +25417,71 @@ window.app = new Vue({
 }).$mount('#wrapperapp');
 
 /***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var locales = {
+    "en": {
+        "app": {
+            "example": "Example",
+            "RememberMe": "Remember Me",
+            "email": "Email",
+            "RegisterNow": "Register Account",
+            "LoginFormButtonText": "Login",
+            "FormFieldRequired": "Field is required",
+            "IncorrectEmail": "Incorrect Email",
+            "YourName": "Your name",
+            "YourSurname": "Your surname",
+            "EnterPasssword": "Enter passsword",
+            "EnterPasswordTwo": "Enter passsword again",
+            "PasswordsIsDifferent": "Passwords is different",
+            "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
+            "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
+            "IHavePolicy": "I agree to the ",
+            'sendResetSuccess': 'New password sent your',
+            'ResetPassword': 'Reset Password',
+            "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
+            "LoginNow": "login page",
+            "Policystr": "Privacy Policy"
+        }
+    },
+    'ru': {
+        'app': {
+            'example': "Пример",
+            "YourName": "Ваше имя",
+            "YourSurname": "Ваша фамилия",
+            'sendResetSuccess': 'Новый пароль отправлен вам на',
+            "RememberMe": "Запомнить меня",
+            "RegisterNow": "Зарегистрироваться",
+            "email": "Email",
+            "EnterPassword": "Введите пароль",
+            "EnterPasswordTwo": "Введите пароль повторно",
+            "PasswordsIsDifferent": "Пароли не совпадают",
+            "EnterEmail": "Введите email",
+            "LoginFormButtonText": "Войти",
+            "FormFieldRequired": "Поле обязательно для заполнения",
+            "IncorrectEmail": "Неверный Email",
+            "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
+            "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
+            "IHavePolicy": "Я согласен с ",
+            "Policystr": "Политикой конфендициальности",
+            'ResetPassword': 'Сбросить пароль',
+            "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
+            "LoginNow": "странице авторизации",
+            "Passsword": "Пароль" /**/
+        }
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (locales);
+
+/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(12)
+var normalizeComponent = __webpack_require__(11)
 /* script */
 var __vue_script__ = __webpack_require__(16)
 /* template */
@@ -25842,7 +25842,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(12)
+var normalizeComponent = __webpack_require__(11)
 /* script */
 var __vue_script__ = __webpack_require__(19)
 /* template */
@@ -26376,7 +26376,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(12)
+var normalizeComponent = __webpack_require__(11)
 /* script */
 var __vue_script__ = __webpack_require__(22)
 /* template */

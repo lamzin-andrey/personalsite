@@ -69,7 +69,7 @@
 
     </div>
     <!-- End of Content Wrapper -->
-
+<b4confirmdlg :params="b4ConfirmDlgParams" id="appConfirmDlg" ></b4confirmdlg>
   </div>
   <!-- End of Page Wrapper -->
 
@@ -78,7 +78,27 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Logout Modal-->
+	
+	
+	 <!--div class="modal fade" id="appConfirmDlg" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="modalLabel"> params.title </h5>
+			  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">×</span>
+			  </button>
+			</div>
+			<div class="modal-body"> params.body </div>
+			<div class="modal-footer">
+			  <button class="btn btn-secondary" type="button" click="onClickCacnel" data-dismiss="modal"> params.btnCancelText </button>
+			  <button  class="btn btn-primary" type="button" click="onClickOk"> params.btnOkText </button >
+			</div>
+		  </div>
+		</div>
+	  </div-->
+	
+  <!-- Logout Modal TODO drop it later-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

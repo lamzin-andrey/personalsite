@@ -24721,66 +24721,6 @@ VueI18n.version = '7.8.1';
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var locales = {
-    "en": {
-        "app": {
-            "example": "Example",
-            "RememberMe": "Remember Me",
-            "email": "Email",
-            "RegisterNow": "Register Account",
-            "LoginFormButtonText": "Login",
-            "FormFieldRequired": "Field is required",
-            "IncorrectEmail": "Incorrect Email",
-            "YourName": "Your name",
-            "YourSurname": "Your surname",
-            "EnterPasssword": "Enter passsword",
-            "EnterPasswordTwo": "Enter passsword again",
-            "PasswordsIsDifferent": "Passwords is different",
-            "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
-            "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
-            "IHavePolicy": "I agree to the ",
-            'sendResetSuccess': 'New password sent your',
-            'ResetPassword': 'Reset Password',
-            "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
-            "LoginNow": "login page",
-            "Policystr": "Privacy Policy"
-        }
-    },
-    'ru': {
-        'app': {
-            'example': "Пример",
-            "YourName": "Ваше имя",
-            "YourSurname": "Ваша фамилия",
-            'sendResetSuccess': 'Новый пароль отправлен вам на',
-            "RememberMe": "Запомнить меня",
-            "RegisterNow": "Зарегистрироваться",
-            "email": "Email",
-            "EnterPassword": "Введите пароль",
-            "EnterPasswordTwo": "Введите пароль повторно",
-            "PasswordsIsDifferent": "Пароли не совпадают",
-            "EnterEmail": "Введите email",
-            "LoginFormButtonText": "Войти",
-            "FormFieldRequired": "Поле обязательно для заполнения",
-            "IncorrectEmail": "Неверный Email",
-            "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
-            "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
-            "IHavePolicy": "Я согласен с ",
-            "Policystr": "Политикой конфендициальности",
-            'ResetPassword': 'Сбросить пароль',
-            "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
-            "LoginNow": "странице авторизации",
-            "Passsword": "Пароль" /**/
-        }
-    }
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (locales);
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports) {
 
 Vue.directive('b421validators', {
@@ -24847,11 +24787,11 @@ Vue.directive('b421validators', {
 });
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(10);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25095,7 +25035,7 @@ var B421Validators = function () {
 /* harmony default export */ __webpack_exports__["a"] = (B421Validators);
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25193,6 +25133,115 @@ var Validator = {
 /* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
 /* 12 */,
 /* 13 */,
 /* 14 */,
@@ -25218,11 +25267,11 @@ module.exports = __webpack_require__(25);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__admin_vue_js_vue_i18n_locales__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(34);
 window.jQuery = window.$ = window.jquery = __webpack_require__(1);
 window.Vue = __webpack_require__(2);
 
@@ -25232,13 +25281,13 @@ window.Vue = __webpack_require__(2);
 
 var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
     locale: 'ru', // set locale
-    messages: __WEBPACK_IMPORTED_MODULE_1__admin_vue_js_vue_i18n_locales__["a" /* default */] // set locale messages
+    messages: __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__["a" /* default */] // set locale messages
 });
 //end Интернациализация
 
 //"Стандартная" валидация полей формы
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
-__webpack_require__(9);
+__webpack_require__(8);
 
 //класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
 //(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
@@ -25251,7 +25300,7 @@ __webpack_require__(9);
 //DataTables
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
-__webpack_require__(26);
+__webpack_require__(27);
 //my patch pagination for extra small view
 
 // /DataTables
@@ -25260,8 +25309,8 @@ __webpack_require__(26);
 
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
-
-//Vue.component('articles-table-ctrls', require('./views/Articleslistconreols'));
+//Компонент вместо стандартного confirm
+Vue.component('b4confirmdlg', __webpack_require__(35));
 
 window.app = new Vue({
     i18n: i18n,
@@ -25288,7 +25337,28 @@ window.app = new Vue({
         dataTable: null,
 
         /** @property {Boolean} preloaderIsInitalize true when dataTablesPreloader initalized and watch */
-        preloaderIsInitalize: false
+        preloaderIsInitalize: false,
+
+        /** @property {Object} b4ConfirmDlgParams @see b4confirmdlg.props.params*/
+        b4ConfirmDlgParams: {
+            title: 'Are yoy sure',
+            body: 'Press Ok button for confirm it action',
+            btnCancelText: 'Cancel',
+            btnOkText: 'OK',
+            onOk: {
+                f: function f() {
+                    alert('Ok!');return true;
+                },
+                context: window.app
+            },
+            onCancel: {
+                f: function f() {
+                    return true;
+                },
+                context: window.app
+            }
+        }
+
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
@@ -25296,6 +25366,7 @@ window.app = new Vue({
     mounted: function mounted() {
         this.initSeotab();
         this.initDataTables();
+        this.localizeParams();
     },
 
     /**
@@ -25337,15 +25408,7 @@ window.app = new Vue({
                     //TODO show edit form
                 });
                 $(id + ' .j-rm-btn').click(function (evt) {
-                    var args = { i: $(evt.target).attr('data-id') };
-                    if (confirm('Are you sure?')) {
-                        //TODO localize
-                        _this._post(args, function (data) {
-                            _this.onSuccessRemove(data);
-                        }, '/p/removearticle.jn/', function (data) {
-                            _this.onFailRemove(data);
-                        });
-                    }
+                    _this.onClickRemoveArticle(evt);
                 });
             }).on('processing', function () {
                 if (!_this.preloaderIsInitalize) {
@@ -25359,14 +25422,55 @@ window.app = new Vue({
         },
 
         /**
+         * @description Click on button "Remove article"
+         * @param {Event} evt
+        */
+        onClickRemoveArticle: function onClickRemoveArticle(evt) {
+            this.confirmDialogArticleArgs = { i: $(evt.target).attr('data-id') };
+            this.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Article') + '?';
+            this.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_remove');
+            this.b4ConfirmDlgParams.onOk = {
+                f: this.onClickConfirmRemoveArticle,
+                context: this
+            };
+            this.setConfirmDlgVisible(true);
+        },
+
+        /**
+         * @description Click on button "OK" on confirm dialog Remove article
+         * @param {Event} evt
+        */
+        onClickConfirmRemoveArticle: function onClickConfirmRemoveArticle() {
+            var _this2 = this;
+
+            var args = this.confirmDialogArticleArgs;
+            this._post(args, function (data) {
+                _this2.onSuccessRemove(data);
+            }, '/p/removearticle.jn/', function (data) {
+                _this2.onFailRemove(data);
+            });
+            this.setConfirmDlgVisible(false);
+        },
+
+        /**
+         * @description Show or hide confirm dlg
+         * @param {Boolean} isVisible
+        */
+        setConfirmDlgVisible: function setConfirmDlgVisible() {
+            var isVisible = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+            var s = isVisible ? 'show' : 'hide';
+            $('#appConfirmDlg').modal(s);
+        },
+
+        /**
          * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
          * @param data - Данные с сервера
-         */
+        */
         onSuccessRemove: function onSuccessRemove(data) {
             if (data.status == 'ok') {
                 if (data.id) {
                     var tr = $('#articles button[data-id=' + data.id + ']').first().parents('tr').first();
-                    console.log(tr);
                     tr.remove();
                 }
             } else {
@@ -25390,15 +25494,15 @@ window.app = new Vue({
          * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
          */
         initSeotab: function initSeotab() {
-            var _this2 = this;
+            var _this3 = this;
 
             $('#edit-tab').on('shown.bs.tab', function (ev) {
                 ev.preventDefault();
-                _this2.isSeotabVisible = true;
+                _this3.isSeotabVisible = true;
             });
             $('#alist-tab').on('shown.bs.tab', function (ev) {
                 ev.preventDefault();
-                _this2.isSeotabVisible = false;
+                _this3.isSeotabVisible = false;
             });
 
             $('#sidebarToggleTop').click(function (ev) {
@@ -25412,6 +25516,15 @@ window.app = new Vue({
                     jSidebar.removeClass(t);
                 }
             });
+        },
+
+        /**
+         * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
+         */
+        localizeParams: function localizeParams() {
+            //Текст на кнопках диалога подтверждения действия
+            this.b4ConfirmDlgParams.btnCancelText = this.$t('app.Cancel');
+            this.b4ConfirmDlgParams.btnOkText = this.$t('app.OK');
         },
 
         /**
@@ -25523,6 +25636,76 @@ window.app = new Vue({
 
 /***/ }),
 /* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var locales = {
+    "en": {
+        "app": {
+            "example": "Example",
+            "RememberMe": "Remember Me",
+            "email": "Email",
+            "RegisterNow": "Register Account",
+            "LoginFormButtonText": "Login",
+            "FormFieldRequired": "Field is required",
+            "IncorrectEmail": "Incorrect Email",
+            "YourName": "Your name",
+            "YourSurname": "Your surname",
+            "EnterPasssword": "Enter passsword",
+            "EnterPasswordTwo": "Enter passsword again",
+            "PasswordsIsDifferent": "Passwords is different",
+            "InvalidPasswordMsg": "Password must containts numbers and letters different case: upper and lower",
+            "InvalidPasswordLength": "Password length must be from 6 to 1285 chars",
+            "IHavePolicy": "I agree to the ",
+            'sendResetSuccess': 'New password sent your',
+            'ResetPassword': 'Reset Password',
+            "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
+            "LoginNow": "login page",
+
+            "Cancel": "Cancel",
+            "OK": "OK",
+            "Are_You_Sure_drop_Article": "Are you sure drop the article",
+            "Click_Ok_button_for_remove": "Press OK button for remove",
+
+            "Policystr": "Privacy Policy"
+        }
+    },
+    'ru': {
+        'app': {
+            'example': "Пример",
+            "YourName": "Ваше имя",
+            "YourSurname": "Ваша фамилия",
+            'sendResetSuccess': 'Новый пароль отправлен вам на',
+            "RememberMe": "Запомнить меня",
+            "RegisterNow": "Зарегистрироваться",
+            "email": "Email",
+            "EnterPassword": "Введите пароль",
+            "EnterPasswordTwo": "Введите пароль повторно",
+            "PasswordsIsDifferent": "Пароли не совпадают",
+            "EnterEmail": "Введите email",
+            "LoginFormButtonText": "Войти",
+            "FormFieldRequired": "Поле обязательно для заполнения",
+            "IncorrectEmail": "Неверный Email",
+            "InvalidPasswordMsg": "Пароль должен содержать цифры и большие и маленькие буквы",
+            "InvalidPasswordLength": "Пароль должен быть длиной от 6 до 128 символов",
+            "IHavePolicy": "Я согласен с ",
+            "Policystr": "Политикой конфендициальности",
+            'ResetPassword': 'Сбросить пароль',
+            "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
+            "LoginNow": "странице авторизации",
+            "Cancel": "Отмена",
+            "OK": "OK",
+            "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
+            "Click_Ok_button_for_remove": "Нажмите OK для удаления",
+            "Passsword": "Пароль" /**/
+        }
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (locales);
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables Bootstrap 4 integration
@@ -25540,7 +25723,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables B
 (function( factory ){
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(27)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(28)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -25713,7 +25896,7 @@ return DataTable;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -41016,13 +41199,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(29);
+var content = __webpack_require__(30);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -41030,7 +41213,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(31)(content, options);
+var update = __webpack_require__(32)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -41047,10 +41230,10 @@ if(false) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(30)(false);
+exports = module.exports = __webpack_require__(31)(false);
 // imports
 
 
@@ -41061,7 +41244,7 @@ exports.push([module.i, "@media (width < 720px ) {\n\t#articles_paginate .pagina
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /*
@@ -41143,7 +41326,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -41189,7 +41372,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(32);
+var	fixUrls = __webpack_require__(33);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -41502,7 +41685,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 
@@ -41597,7 +41780,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41665,8 +41848,7 @@ var B4DataTablesPreloader = function () {
             this.oDataTables = oDataTables;
         }
         /**
-         * @description
-         * En: Watch window resizing and adjust spinner position
+         * @description En: Start observe window resizing and adjust spinner position
          * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
          * 
         */
@@ -41694,7 +41876,7 @@ var B4DataTablesPreloader = function () {
         }
         /**
          * @description
-         * En: Watch window resizing and adjust spinner position
+         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
          * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
          * 
         */
@@ -41706,7 +41888,8 @@ var B4DataTablesPreloader = function () {
             this.setPosition();
         }
         /**
-         * @description Добавляет спиннер в блок
+         * @description En: Prepend spinner in preloader block
+         * Ru: Добавляет спиннер в блок
         */
 
     }, {
@@ -41727,6 +41910,11 @@ var B4DataTablesPreloader = function () {
                 this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
             }
         }
+        /**
+         * @description En: Drop spinner from preloader
+         * Ru: Удалить спиннер с прелоадера
+        */
+
     }, {
         key: 'removeSpinnerBlock',
         value: function removeSpinnerBlock() {
@@ -41736,7 +41924,8 @@ var B4DataTablesPreloader = function () {
             }
         }
         /**
-         * @description Установить прелоадер по центру таблицы
+         * @description En: Align center preloader 
+         * Ru: Установить прелоадер по центру таблицы
         */
 
     }, {
@@ -41805,16 +41994,215 @@ var B4DataTablesPreloader = function () {
             /** @property  isSetPosition if false preloader will not draw spinner*/
             this.isSetPosition = isSetPosition;
         }
-
-        //Configure onlyAddSpinner
-        //Configure onlySetPos
-
     }]);
 
     return B4DataTablesPreloader;
 }();
 
 /* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(11)
+/* script */
+var __vue_script__ = __webpack_require__(36)
+/* template */
+var __vue_template__ = __webpack_require__(37)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/b4confirmdialog/b4confirmdlg.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2aa9f7f0", Component.options)
+  } else {
+    hotAPI.reload("data-v-2aa9f7f0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'b4confirmdlg',
+    //Аргументы извне
+    props: [
+    /**
+     * params must contains:
+     *  {title:String, body:String, btnCancelText:String, btnOkText:String, onOk:Object, onCancel:Object}
+     * where onOk and onCancel like:
+     *    {f:Function, context:Object}
+     * it call as f.call(context)
+    */
+    'params', 'id'],
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {};
+    },
+    //
+    methods: {
+        /**
+         * @description En: Click on Ok button
+         * Ru: Обработка клика на "Ok"
+         */
+        onClickOk: function onClickOk() {
+            this.params.onOk.f.call(this.params.onOk.context);
+        },
+
+        /**
+         * @description En: Click on Cacncel button
+         * Ru: Обработка клика на "Отмена"
+         */
+        onClickCancel: function onClickCancel() {
+            this.params.onCancel.f.call(this.params.onCancel.context);
+        }
+    }, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {}
+});
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: {
+        id: _vm.id,
+        tabindex: "-1",
+        role: "dialog",
+        "aria-labelledby": "modalLabel",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog", attrs: { role: "document" } }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c(
+              "h5",
+              { staticClass: "modal-title", attrs: { id: "modalLabel" } },
+              [_vm._v(_vm._s(_vm.params.title))]
+            ),
+            _vm._v(" "),
+            _vm._m(0)
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-body" }, [
+            _vm._v(_vm._s(_vm.params.body))
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-footer" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: { type: "button", "data-dismiss": "modal" },
+                on: { click: _vm.onClickCancel }
+              },
+              [_vm._v(_vm._s(_vm.params.btnCancelText))]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { type: "button" },
+                on: { click: _vm.onClickOk }
+              },
+              [_vm._v(_vm._s(_vm.params.btnOkText))]
+            )
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2aa9f7f0", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

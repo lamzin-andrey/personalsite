@@ -4,7 +4,7 @@ window.Vue = require('vue');
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';
-import locales  from '../admin/vue/js/vue-i18n-locales';
+import locales  from './vue-i18n-locales';
 
 const i18n = new VueI18n({
     locale: 'ru', // set locale
@@ -36,8 +36,8 @@ import './css/patchdatatablepaginationview.css';
 import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.js';
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
-
-//Vue.component('articles-table-ctrls', require('./views/Articleslistconreols'));
+//Компонент вместо стандартного confirm
+Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'));
 
 window.app = new Vue({
     i18n : i18n,
@@ -64,7 +64,24 @@ window.app = new Vue({
      dataTable : null,
 
      /** @property {Boolean} preloaderIsInitalize true when dataTablesPreloader initalized and watch */
-     preloaderIsInitalize : false
+     preloaderIsInitalize : false,
+
+     /** @property {Object} b4ConfirmDlgParams @see b4confirmdlg.props.params*/
+     b4ConfirmDlgParams : {
+        title :'Are yoy sure',
+        body  :'Press Ok button for confirm it action',
+        btnCancelText : 'Cancel',
+        btnOkText     : 'OK',
+        onOk          : {
+            f : () => { alert('Ok!'); return true;},
+            context : window.app
+        },
+        onCancel:{
+            f : () => {return true;},
+            context : window.app
+        }
+     },
+
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -72,6 +89,7 @@ window.app = new Vue({
    mounted() {
         this.initSeotab();
         this.initDataTables();
+        this.localizeParams();
    },
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
@@ -125,10 +143,7 @@ window.app = new Vue({
                 //TODO show edit form
             });
             $(id + ' .j-rm-btn').click((evt) => {
-                let args = {i:$(evt.target).attr('data-id')};
-                if (confirm('Are you sure?')) {//TODO localize
-                    this._post(args, (data) => {this.onSuccessRemove(data);}, '/p/removearticle.jn/', (data) => {this.onFailRemove(data);})
-                }
+                this.onClickRemoveArticle(evt);
             });
         }).on('processing', () => {
             if (!this.preloaderIsInitalize) {
@@ -141,14 +156,44 @@ window.app = new Vue({
         });
     },
     /**
+     * @description Click on button "Remove article"
+     * @param {Event} evt
+    */
+    onClickRemoveArticle(evt) {
+        this.confirmDialogArticleArgs  = {i:$(evt.target).attr('data-id')};
+        this.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Article') + '?';
+        this.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_remove');
+        this.b4ConfirmDlgParams.onOk = {
+            f : this.onClickConfirmRemoveArticle,
+            context:this
+        };
+        this.setConfirmDlgVisible(true);
+    },
+    /**
+     * @description Click on button "OK" on confirm dialog Remove article
+     * @param {Event} evt
+    */
+    onClickConfirmRemoveArticle() {
+        let args = this.confirmDialogArticleArgs;
+        this._post(args, (data) => {this.onSuccessRemove(data);}, '/p/removearticle.jn/', (data) => {this.onFailRemove(data);})
+        this.setConfirmDlgVisible(false);
+    },
+    /**
+     * @description Show or hide confirm dlg
+     * @param {Boolean} isVisible
+    */
+    setConfirmDlgVisible(isVisible = true) {
+        let s = isVisible ? 'show' : 'hide';
+        $('#appConfirmDlg').modal(s);
+    },
+    /**
      * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
      * @param data - Данные с сервера
-     */
+    */
     onSuccessRemove(data) {
         if (data.status == 'ok') {
             if (data.id) {
                 let tr = $(`#articles button[data-id=${data.id}]`).first().parents('tr').first();
-                console.log(tr);
                 tr.remove();
             }
         } else {
@@ -191,6 +236,14 @@ window.app = new Vue({
             
         });
         
+    },
+    /**
+     * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
+     */
+    localizeParams() {
+        //Текст на кнопках диалога подтверждения действия
+        this.b4ConfirmDlgParams.btnCancelText = this.$t('app.Cancel');
+        this.b4ConfirmDlgParams.btnOkText = this.$t('app.OK');
     },
     /**
      * @description Используем jQuery, так как бэкенд ждёт данные как formData
