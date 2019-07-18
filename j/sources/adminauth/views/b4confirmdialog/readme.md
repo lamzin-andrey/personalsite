@@ -2,7 +2,7 @@
 
 ## About
 
-This confirm component Vue 2 for use it with Vue 2 (Vue 2.5.17).
+This confirm component Vue 2 for use it with Vue 2 (Vue 2.5.17). Styling bootstrap 4.
 It use bootstrap 4 and template SB Admin https://startbootstrap.com/previews/sb-admin-2/
 
 ## Usage
@@ -138,7 +138,7 @@ If you use bootstrap 4 without template sb admin 2, you can change layout in com
 
 ## Что это
 
-Это компонент диалога подтверждения действия Vue 2  ( использовался с Vue 2.5.17).
+Компонент диалога подтверждения действия bootstrap 4 для vue 2 ( использовался с Vue 2.5.17).
 Он использует bootstrap 4 и стили шаблона SB Admin https://startbootstrap.com/previews/sb-admin-2/
 
 ## Использование
