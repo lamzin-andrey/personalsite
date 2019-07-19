@@ -33,7 +33,7 @@
 			href="#edit"
 			role="tab"
 			aria-controls="profile"
-			aria-selected="false"><?php echo l('NewEdit') ?></a>
+			aria-selected="false"><?php echo l('Append');?></a>
 	</li>
 	<li v-if="isSeotabVisible" class="nav-item">
 		<a class="nav-link"
@@ -73,9 +73,9 @@
 	<div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
 		<div class="card">
 			<div class="card-body">
-				<h5 class="card-title">Новая/редактируемая статья</h5>
-				<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-				<button  class="btn btn-primary">Переход куда-нибудь</button>
+				<h5 class="card-title"><?php echo l('NewEdit') ?></h5>
+				<articleform></articleform>
+				
 			</div>
 		</div>
 	</div>

@@ -67,33 +67,6 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -197,6 +170,33 @@ module.exports = function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -22759,7 +22759,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(5).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(5).setImmediate))
 
 /***/ }),
 /* 5 */
@@ -22829,7 +22829,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
 /* 6 */
@@ -23022,7 +23022,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
 /* 7 */
@@ -25313,6 +25313,11 @@ __webpack_require__(27);
 Vue.component('b4confirmdlg', __webpack_require__(35));
 //Компонент вместо стандартного alert
 Vue.component('b4alertdlg', __webpack_require__(38));
+//Компонент для отображения формы редактирования статьи
+Vue.component('articleform', __webpack_require__(41));
+//Компонент для отображения инпута ввода текста bootstrap 4
+//Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
+
 
 window.app = new Vue({
     i18n: i18n,
@@ -25711,8 +25716,8 @@ var locales = {
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Are you sure drop the article",
             "Click_Ok_button_for_remove": "Press OK button for remove",
-            "Information": "Информация",
-
+            "Information": "Information",
+            "Title": "Browser title",
             "Policystr": "Privacy Policy"
         }
     },
@@ -25746,7 +25751,8 @@ var locales = {
             "Click_Ok_button_for_remove": "Нажмите OK для удаления",
             "Information": "Информация",
 
-            "Passsword": "Пароль" /**/
+            "Passsword": "Пароль",
+            "Title": "Тайтл страницы"
         }
     }
 };
@@ -42055,7 +42061,7 @@ var B4DataTablesPreloader = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(36)
 /* template */
@@ -42258,7 +42264,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(1)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(39)
 /* template */
@@ -42434,6 +42440,579 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-23d0b710", module.exports)
+  }
+}
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(42)
+/* template */
+var __vue_template__ = __webpack_require__(49)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/articleform.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1f2fd10c", Component.options)
+  } else {
+    hotAPI.reload("data-v-1f2fd10c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*const vModelComputed = {
+    get() {
+        return this.value;
+    },
+    set(newValue) {
+        this.$emit('input', newValue);
+    }
+};*/
+
+//Компонент для отображения инпута ввода текста bootstrap 4
+Vue.component('inputb4', __webpack_require__(43));
+Vue.component('inputb4', __webpack_require__(46));
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'articleform',
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {
+            //Значение title
+            title: ''
+        };
+    },
+    //
+    methods: {
+        /** 
+         * @description Пробуем отправить форму
+        */
+        onSubmit: function onSubmit(evt) {
+            var _this = this;
+
+            evt.preventDefault();
+
+            var formInputValidator = this.$root.formInputValidator,
+
+            /** @var {Validator} validator */
+            validator = formInputValidator.getValidator();
+            if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+                this.$root._post({
+                    email: this.email,
+                    rememberMe: this.rememberMe,
+                    passwordL: this.password
+                }, function (data) {
+                    _this.onSuccessLogin(data, formInputValidator);
+                }, '/p/signin.jn/', function (a, b, c) {
+                    _this.onFailLogin(a, b, c, formInputValidator);
+                });
+            }
+        },
+
+        /**
+         * @param {Object} data
+         * @param {B421Validators} formInputValidator
+        */
+        onSuccessLogin: function onSuccessLogin(data, formInputValidator) {
+            if (data.status == 'error') {
+                return this.onFailLogin(data, null, null, formInputValidator);
+            }
+            window.location.href = '/p/';
+        },
+
+        /**
+         * @param {Object} a
+         * @param {Object} b
+         * @param {Object} c
+         * @param {B421Validators} formInputValidator
+        */
+        onFailLogin: function onFailLogin(a, b, c, formInputValidator) {
+            if (a.status == 'error' && a.errors) {
+                var i = void 0,
+                    jEl = void 0,
+                    s = void 0;
+                for (i in a.errors) {
+                    s = i == 'password' ? i + 'L' : i;
+                    jEl = $('#' + s);
+                    if (jEl[0]) {
+                        formInputValidator.viewSetError(jEl, a.errors[i]);
+                    }
+                }
+            }
+        }
+    }, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+        //console.log('I mounted!');
+    }
+});
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(44)
+/* template */
+var __vue_template__ = __webpack_require__(45)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/inputb4.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5ba540b0", Component.options)
+  } else {
+    hotAPI.reload("data-v-5ba540b0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['label', 'validators', 'id', 'placeholder', 'ariaDescribedby', 'type', 'value', 'className'],
+    name: 'inputb4',
+
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {};
+    },
+    //
+    methods: {}, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+        //console.log('I mounted!');
+    }
+});
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "input-group" }, [
+      _c("input", {
+        class: "form-control " + _vm.validators,
+        attrs: {
+          placeholder: _vm.placeholder,
+          type: _vm.type,
+          id: _vm.id,
+          name: _vm.id
+        },
+        domProps: { value: _vm.value },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "invalid-feedback" }),
+      _vm._v(" "),
+      _c("small", {
+        staticClass: "form-text text-muted",
+        attrs: { id: "emailHelp" }
+      })
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5ba540b0", module.exports)
+  }
+}
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(47)
+/* template */
+var __vue_template__ = __webpack_require__(48)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/textareab4.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-47367d28", Component.options)
+  } else {
+    hotAPI.reload("data-v-47367d28", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['text', 'label', 'validators', 'id', 'placeholder', 'ariaDescribedby', 'type', 'value', 'className'],
+    name: 'tezxtareab4',
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {};
+    },
+    //
+    methods: {}, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+        //console.log('I mounted!');
+    }
+});
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "input-group" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "b421validators",
+            rawName: "v-b421validators",
+            value: _vm.validators,
+            expression: "validators"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          placeholder: _vm.placeholder,
+          type: _vm.type,
+          id: _vm.id,
+          name: _vm.id
+        },
+        domProps: { value: _vm.value },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "invalid-feedback" }),
+      _vm._v(" "),
+      _c("small", {
+        staticClass: "form-text text-muted",
+        attrs: { id: "emailHelp" }
+      })
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-47367d28", module.exports)
+  }
+}
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      staticClass: "user",
+      attrs: {
+        id: "signinform",
+        method: "POST",
+        action: "/p/signin.jn/",
+        novalidate: ""
+      },
+      on: { submit: _vm.onSubmit }
+    },
+    [
+      _c("div", { staticClass: "input-group" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "b421validators",
+              rawName: "v-b421validators",
+              value: "email",
+              expression: "'email'"
+            }
+          ],
+          attrs: {
+            placeholder: "Placeholder",
+            type: "text",
+            id: "idTest",
+            name: "idTest"
+          }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "invalid-feedback" }),
+        _vm._v(" "),
+        _c("small", {
+          staticClass: "form-text text-muted",
+          attrs: { id: "emailHelp" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("inputb4", {
+        attrs: {
+          className: "can",
+          type: "text",
+          placeholder: _vm.$t("app.Title"),
+          label: _vm.$t("app.Title"),
+          id: "title",
+          validators: "'required'"
+        },
+        model: {
+          value: _vm.title,
+          callback: function($$v) {
+            _vm.title = $$v
+          },
+          expression: "title"
+        }
+      }),
+      _vm._v(" "),
+      _c("inputb4", {
+        attrs: {
+          type: "url",
+          label: _vm.$t("app.Url"),
+          placeholder: _vm.$t("app.Url"),
+          id: "url"
+        }
+      }),
+      _vm._v(" "),
+      _c("inputb4", {
+        attrs: {
+          type: "text",
+          label: _vm.$t("app.Heading"),
+          placeholder: _vm.$t("app.Heading"),
+          id: "heading"
+        }
+      }),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-right m-3" }, [
+        _c("button", { staticClass: "btn btn-primary" }, [
+          _vm._v(_vm._s(_vm.$t("app.Save")))
+        ])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1f2fd10c", module.exports)
   }
 }
 

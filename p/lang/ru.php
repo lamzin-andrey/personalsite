@@ -62,6 +62,7 @@ $aLang = [
 	'SigninFormLabel'        => 'Авторизация',
 	'Change-password'        => 'Настройки авторизации',
 	
+	
 	//DataTables
 	'Show _MENU_ entries'  =>  'Показывать по _MENU_',
 	'Showing _START_ to _END_ of _TOTAL_ entries'  =>  'Показано с _START_ по _END_ из _TOTAL_ записей',
@@ -69,4 +70,8 @@ $aLang = [
 	'Previous'  =>  'Предыдущая',
 	'Processing...'  =>  'Загрузка...',
 	// / DataTables
+	
+	//Article form
+	'Append'        => 'Добавить',
+	// /Article form
 ];

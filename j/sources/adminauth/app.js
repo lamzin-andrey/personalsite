@@ -40,6 +40,11 @@ import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.j
 Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'));
 //Компонент вместо стандартного alert
 Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue'));
+//Компонент для отображения формы редактирования статьи
+Vue.component('articleform', require('./views/articleform.vue'));
+//Компонент для отображения инпута ввода текста bootstrap 4
+//Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
+    
 
 window.app = new Vue({
     i18n : i18n,

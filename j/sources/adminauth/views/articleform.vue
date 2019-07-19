@@ -1,59 +1,56 @@
 <template>
-    <form class="user" id="signinform" method="POST" action="/p/signin.jn/" @submit="onSubmitLoginForm" novalidate>
-        <div class="form-group">
-            <input 
-                v-model="email" 
-                v-bind:placeholder="$t('app.EnterEmail')"
-                v-b421validators="'required,email'"
-                type="email" class="form-control form-control-user"  aria-describedby="emailHelp"  id="email" name="email">
-            <div class="invalid-feedback"></div>
-            <small id="emailHelp" class="form-text text-muted"></small>
-        </div>
-        <div class="form-group">
-            <input 
-            v-model="password"
-            v-bind:placeholder="$t('app.EnterPassword')"
-            v-b421validators="'required,password,length6_128'"
-            type="password" class="form-control form-control-user" id="password">
-            <div class="invalid-feedback"></div>
-            <small id="passwordHelp" class="form-text text-muted"></small>
-        </div>
-        <div class="form-group">
-            <div class="custom-control custom-checkbox small">
-                <input v-model="rememberMe" type="checkbox" class="custom-control-input" id="rememberMe" value="true">
-                <label class="custom-control-label" for="rememberMe">{{ $t('app.RememberMe') }}</label>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-user btn-block">
-            {{ $t('app.LoginFormButtonText') }}
-        </button>
-        <!--hr>
-        <a href="index.html" class="btn btn-google btn-user btn-block">
-            <i class="fab fa-google fa-fw"></i> Login with Google
-        </a>
-        <a href="index.html" class="btn btn-facebook btn-user btn-block">
-            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-        </a-->
+    <form class="user" id="signinform" method="POST" action="/p/signin.jn/" @submit="onSubmit" novalidate>
+        <!--selectb4 label="<?php echo l('Section') ?>" id="category_id"></selectb4><!-- Try Use slot! -->
+
+        <div class="input-group">
+			<input
+                v-b421validators="'email'"
+				placeholder="Placeholder"
+				type="text"     id="idTest" name="idTest">
+			<div class="invalid-feedback"></div>
+			<small id="emailHelp" class="form-text text-muted"></small>
+		</div>
+
+        <inputb4 className="can" v-model="title" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
+        <inputb4 type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
+        <inputb4 type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
+        <!--textareab4 :label="$t('App.Content')"  id="content_block" ></textareab4>
+        <!--inputfileb4 type="text" label="<?php echo l('Heading') ?>" id="heading" ></inputb4-->
+        
+        <p class="text-right m-3">
+            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+        </p>
+        
     </form>
+
 </template>
 <script>
+    /*const vModelComputed = {
+        get() {
+            return this.value;
+        },
+        set(newValue) {
+            this.$emit('input', newValue);
+        }
+    };*/
+
+    //Компонент для отображения инпута ввода текста bootstrap 4
+    Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+    Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
+
     export default {
-        name: 'Loginform',
+        name: 'articleform',
         //вызывается раньше чем mounted
         data: function(){return {
-            //Значение email
-            email:null,
-            //Значение password
-            password:null,
-            //Значение rememberMe
-            rememberMe:null
+            //Значение title
+            title:''
         }; },
         //
         methods:{
             /** 
              * @description Пробуем отправить форму
             */
-            onSubmitLoginForm(evt) {
+            onSubmit(evt) {
                 evt.preventDefault();
 
                 let formInputValidator = this.$root.formInputValidator,

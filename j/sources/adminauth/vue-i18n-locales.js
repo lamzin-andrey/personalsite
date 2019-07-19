@@ -25,8 +25,8 @@ var locales = {
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Are you sure drop the article",
             "Click_Ok_button_for_remove": "Press OK button for remove",
-            "Information": "Информация",
-            
+            "Information": "Information",
+            "Title": "Browser title",
             "Policystr": "Privacy Policy"
         },
     },
@@ -60,7 +60,8 @@ var locales = {
             "Click_Ok_button_for_remove": "Нажмите OK для удаления",
             "Information": "Информация"
             ,
-            "Passsword": "Пароль"/**/
+            "Passsword": "Пароль",
+            "Title": "Тайтл страницы",
         }
     }
 }
