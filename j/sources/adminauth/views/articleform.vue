@@ -1,23 +1,15 @@
 <template>
-    <form class="user" id="signinform" method="POST" action="/p/signin.jn/" @submit="onSubmit" novalidate>
+    <form class="user" method="POST" action="/p/signin.jn/" @submit="onSubmit" novalidate id="tform">
         <!--selectb4 label="<?php echo l('Section') ?>" id="category_id"></selectb4><!-- Try Use slot! -->
-
-        <div class="input-group">
-			<input
-                v-b421validators="'email'"
-				placeholder="Placeholder"
-				type="text"     id="idTest" name="idTest">
-			<div class="invalid-feedback"></div>
-			<small id="emailHelp" class="form-text text-muted"></small>
-		</div>
-
-        <inputb4 className="can" v-model="title" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
+        <inputb4 v-model="title" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
-        <!--textareab4 :label="$t('App.Content')"  id="content_block" ></textareab4>
-        <!--inputfileb4 type="text" label="<?php echo l('Heading') ?>" id="heading" ></inputb4-->
+        <textareab4 :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
+        <inputfileb4 
+            url="/p/articlelogoupload/"   
+         :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
         
-        <p class="text-right m-3">
+        <p class="text-right my-3">
             <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
         </p>
         
@@ -36,7 +28,8 @@
 
     //Компонент для отображения инпута ввода текста bootstrap 4
     Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
-    Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
+    Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
+    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4.vue'));
 
     export default {
         name: 'articleform',
@@ -53,10 +46,10 @@
             onSubmit(evt) {
                 evt.preventDefault();
 
-                let formInputValidator = this.$root.formInputValidator,
+                //let formInputValidator = this.$root.formInputValidator,
                     /** @var {Validator} validator */
-                    validator = formInputValidator.getValidator();
-                if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+                  //  validator = formInputValidator.getValidator();
+                /*if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
                     this.$root._post(
                         {
                             email:      this.email,
@@ -67,7 +60,7 @@
                         '/p/signin.jn/',
                         (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
                     );
-                }
+                }*/
             },
             /**
              * @param {Object} data

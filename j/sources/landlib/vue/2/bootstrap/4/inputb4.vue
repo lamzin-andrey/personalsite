@@ -1,19 +1,17 @@
 <template>
-	<div>
-		<!-- TODO class="form-control" сделать динамическим :class="className" и className всегда должен начинаться с form-control 
-		:aria-describedby="ariaDescribedby" - то же самое
-		-->
+	<div class="mt-2">
 		<label :for="id">{{ label }}</label>
 		<div class="input-group">
 			<input
 				:value="value"
 				@input="$emit('input', $event.target.value)"
 				:placeholder="placeholder"
-				:class="'form-control ' + validators"
-				
+				v-b421validators="validators"
+				:class="'form-control' + (className ? (' ' + className) : '')"
+				:aria-describedby="id + 'Help'"
 				:type="type"     :id="id" :name="id">
 			<div class="invalid-feedback"></div>
-			<small id="emailHelp" class="form-text text-muted"></small>
+			<small :id="id + 'Help'" class="form-text text-muted"></small>
 		</div>
 	</div>
 </template>
@@ -24,7 +22,6 @@
 			'validators',
 			'id',
 			'placeholder',
-			'ariaDescribedby',
 			'type',
 			'value',
 			'className'

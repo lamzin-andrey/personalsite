@@ -27,6 +27,11 @@ var locales = {
             "Click_Ok_button_for_remove": "Press OK button for remove",
             "Information": "Information",
             "Title": "Browser title",
+            "Url": "Url",
+            "Heading": "Heading",
+            "Content": "Content",
+            "SelectLogo": "Select logotype",
+
             "Policystr": "Privacy Policy"
         },
     },
@@ -61,7 +66,13 @@ var locales = {
             "Information": "Информация"
             ,
             "Passsword": "Пароль",
+
+            //Form articles
             "Title": "Тайтл страницы",
+            "Url": "Путь к файлу статьи",
+            "Heading": "Заголовок статьи",
+            "Content": "Статья",
+            "SelectLogo": "Загрузить логотип",
         }
     }
 }

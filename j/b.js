@@ -25718,6 +25718,11 @@ var locales = {
             "Click_Ok_button_for_remove": "Press OK button for remove",
             "Information": "Information",
             "Title": "Browser title",
+            "Url": "Url",
+            "Heading": "Heading",
+            "Content": "Content",
+            "SelectLogo": "Select logotype",
+
             "Policystr": "Privacy Policy"
         }
     },
@@ -25752,7 +25757,13 @@ var locales = {
             "Information": "Информация",
 
             "Passsword": "Пароль",
-            "Title": "Тайтл страницы"
+
+            //Form articles
+            "Title": "Тайтл страницы",
+            "Url": "Путь к файлу статьи",
+            "Heading": "Заголовок статьи",
+            "Content": "Статья",
+            "SelectLogo": "Загрузить логотип"
         }
     }
 };
@@ -42514,14 +42525,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /*const vModelComputed = {
     get() {
@@ -42534,7 +42537,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 //Компонент для отображения инпута ввода текста bootstrap 4
 Vue.component('inputb4', __webpack_require__(43));
-Vue.component('inputb4', __webpack_require__(46));
+Vue.component('textareab4', __webpack_require__(46));
+Vue.component('inputfileb4', __webpack_require__(50));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'articleform',
@@ -42551,25 +42555,23 @@ Vue.component('inputb4', __webpack_require__(46));
          * @description Пробуем отправить форму
         */
         onSubmit: function onSubmit(evt) {
-            var _this = this;
-
             evt.preventDefault();
 
-            var formInputValidator = this.$root.formInputValidator,
-
+            //let formInputValidator = this.$root.formInputValidator,
             /** @var {Validator} validator */
-            validator = formInputValidator.getValidator();
-            if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
-                this.$root._post({
-                    email: this.email,
-                    rememberMe: this.rememberMe,
-                    passwordL: this.password
-                }, function (data) {
-                    _this.onSuccessLogin(data, formInputValidator);
-                }, '/p/signin.jn/', function (a, b, c) {
-                    _this.onFailLogin(a, b, c, formInputValidator);
-                });
-            }
+            //  validator = formInputValidator.getValidator();
+            /*if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+                this.$root._post(
+                    {
+                        email:      this.email,
+                        rememberMe: this.rememberMe,
+                        passwordL:  this.password
+                    },
+                    (data) => { this.onSuccessLogin(data, formInputValidator);},
+                    '/p/signin.jn/',
+                    (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
+                );
+            }*/
         },
 
         /**
@@ -42689,11 +42691,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['label', 'validators', 'id', 'placeholder', 'ariaDescribedby', 'type', 'value', 'className'],
+    props: ['label', 'validators', 'id', 'placeholder', 'type', 'value', 'className'],
     name: 'inputb4',
 
     //вызывается раньше чем mounted
@@ -42725,14 +42725,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "mt-2" }, [
     _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
     _vm._v(" "),
     _c("div", { staticClass: "input-group" }, [
       _c("input", {
-        class: "form-control " + _vm.validators,
+        directives: [
+          {
+            name: "b421validators",
+            rawName: "v-b421validators",
+            value: _vm.validators,
+            expression: "validators"
+          }
+        ],
+        class: "form-control" + (_vm.className ? " " + _vm.className : ""),
         attrs: {
           placeholder: _vm.placeholder,
+          "aria-describedby": _vm.id + "Help",
           type: _vm.type,
           id: _vm.id,
           name: _vm.id
@@ -42749,7 +42758,7 @@ var render = function() {
       _vm._v(" "),
       _c("small", {
         staticClass: "form-text text-muted",
-        attrs: { id: "emailHelp" }
+        attrs: { id: _vm.id + "Help" }
       })
     ])
   ])
@@ -42831,13 +42840,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['text', 'label', 'validators', 'id', 'placeholder', 'ariaDescribedby', 'type', 'value', 'className'],
-    name: 'tezxtareab4',
+    props: ['label', 'validators', 'id', 'placeholder', 'rows', 'type', 'value', 'className'],
+    name: 'textareab4',
+
     //вызывается раньше чем mounted
     data: function data() {
         return {};
@@ -42867,23 +42874,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "mb-3 mt-2" }, [
     _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
     _vm._v(" "),
-    _c("div", { staticClass: "input-group" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "b421validators",
-            rawName: "v-b421validators",
-            value: _vm.validators,
-            expression: "validators"
-          }
-        ],
-        staticClass: "form-control",
+    _c(
+      "textarea",
+      {
+        class: "form-control" + (_vm.className ? " " + _vm.className : ""),
         attrs: {
           placeholder: _vm.placeholder,
-          type: _vm.type,
+          rows: _vm.rows,
           id: _vm.id,
           name: _vm.id
         },
@@ -42893,15 +42893,16 @@ var render = function() {
             return _vm.$emit("input", $event.target.value)
           }
         }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "invalid-feedback" }),
-      _vm._v(" "),
-      _c("small", {
-        staticClass: "form-text text-muted",
-        attrs: { id: "emailHelp" }
-      })
-    ])
+      },
+      [_vm._v("<slot></slot>")]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "invalid-feedback" }),
+    _vm._v(" "),
+    _c("small", {
+      staticClass: "form-text text-muted",
+      attrs: { id: _vm.id + "Help" }
+    })
   ])
 }
 var staticRenderFns = []
@@ -42927,43 +42928,16 @@ var render = function() {
     {
       staticClass: "user",
       attrs: {
-        id: "signinform",
         method: "POST",
         action: "/p/signin.jn/",
-        novalidate: ""
+        novalidate: "",
+        id: "tform"
       },
       on: { submit: _vm.onSubmit }
     },
     [
-      _c("div", { staticClass: "input-group" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "b421validators",
-              rawName: "v-b421validators",
-              value: "email",
-              expression: "'email'"
-            }
-          ],
-          attrs: {
-            placeholder: "Placeholder",
-            type: "text",
-            id: "idTest",
-            name: "idTest"
-          }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "invalid-feedback" }),
-        _vm._v(" "),
-        _c("small", {
-          staticClass: "form-text text-muted",
-          attrs: { id: "emailHelp" }
-        })
-      ]),
-      _vm._v(" "),
       _c("inputb4", {
         attrs: {
-          className: "can",
           type: "text",
           placeholder: _vm.$t("app.Title"),
           label: _vm.$t("app.Title"),
@@ -42997,7 +42971,27 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("p", { staticClass: "text-right m-3" }, [
+      _c(
+        "textareab4",
+        {
+          attrs: {
+            label: _vm.$t("app.Content"),
+            id: "content_block",
+            rows: "18"
+          }
+        },
+        [_vm._v("Привет!")]
+      ),
+      _vm._v(" "),
+      _c("inputfileb4", {
+        attrs: {
+          url: "/p/articlelogoupload/",
+          label: _vm.$t("app.SelectLogo"),
+          id: "logotype"
+        }
+      }),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-right my-3" }, [
         _c("button", { staticClass: "btn btn-primary" }, [
           _vm._v(_vm._s(_vm.$t("app.Save")))
         ])
@@ -43013,6 +43007,262 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-1f2fd10c", module.exports)
+  }
+}
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(51)
+/* template */
+var __vue_template__ = __webpack_require__(52)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/inputfileb4.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d38593a8", Component.options)
+  } else {
+    hotAPI.reload("data-v-d38593a8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['label', 'validators', 'id', 'placeholder', 'value', 'className'],
+	name: 'inputb4',
+
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {};
+	},
+	//
+	methods: {
+		b4InpOnSelectFile: function b4InpOnSelectFile(evt) {
+			mcrOnSelectFile(evt);
+			return;
+		},
+
+		/**
+   * @see initFileInputs
+  */
+		mcrOnSelectFile: function mcrOnSelectFile(evt) {
+			//TОDO тут не торопясь подумать и функцию переименовать
+			if (iFiles[evt.target.id]) {
+				var o = iFiles[evt.target.id];
+				sendFile(e(evt.target.id), o.url, W[o.success], W[o.fail], W[o.progress]);
+			}
+		},
+
+		/**
+   * @see initFileInputs
+  */
+		sendFile: function sendFile(iFile, url, onSuccess, onFail, onProgress) {
+			var xhr = new XMLHttpRequest(),
+			    form = new FormData(),
+			    t;
+			form.append(iFile.id, iFile.files[0]);
+			//form.append("isFormData", 1);
+			form.append("path", url); //TODO ??
+			t = getToken();
+			if (t) {
+				form.append("_token", t);
+			}
+			xhr.upload.addEventListener("progress", function (pEvt) {
+				var loadedPercents, loadedBytes, total;
+				if (pEvt && pEvt.lengthComputable) {
+					loadedPercents = Math.round(pEvt.loaded * 100 / pEvt.total);
+				}
+				onProgress(loadedPercents, loadedBytes, total);
+			});
+			xhr.upload.addEventListener("error", onFail);
+			xhr.onreadystatechange = function () {
+				t = this;
+				if (t.readyState == 4) {
+					if (this.status == 200) {
+						var s;
+						try {
+							s = JSON.parse(t.responseText);
+						} catch (e) {
+							;
+						}
+						onSuccess(s);
+					} else {
+						onFail(t.status, arguments);
+					}
+				}
+			};
+			xhr.open("POST", url);
+			xhr.send(form);
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+		var self = this;
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
+});
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "custom-file mt-2" }, [
+    _c("input", {
+      directives: [
+        {
+          name: "b421validators",
+          rawName: "v-b421validators",
+          value: _vm.validators,
+          expression: "validators"
+        }
+      ],
+      class: "custom-file-input" + (_vm.className ? " " + _vm.className : ""),
+      attrs: {
+        type: "file",
+        "aria-describedby": _vm.id + "Help",
+        id: _vm.id,
+        name: _vm.id,
+        "data-success": "chatOnUploadFile",
+        "data-fail": "chatOnFailUploadFile"
+      },
+      on: { progress: _vm.b4InpOnUploadProgress, select: _vm.b4InpOnSelectFile }
+    }),
+    _vm._v(" "),
+    _c("label", { staticClass: "custom-file-label", attrs: { for: ":id" } }, [
+      _vm._v(_vm._s(_vm.label))
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "invalid-feedback" }),
+    _vm._v(" "),
+    _c(
+      "small",
+      { staticClass: "form-text text-muted", attrs: { id: _vm.id + "Help" } },
+      [_vm._m(0)]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "relative chat-upload-token-anim-block",
+        staticStyle: { display: "none" },
+        attrs: { id: "chatUploadProcessView" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "pull-left chat-upload-token-anim-color",
+            attrs: { id: "chatUploadProcessLeftSide" }
+          },
+          [_vm._v(" ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "pull-left chat-upload-token-anim-color",
+            attrs: { id: "chatUploadProcessRightSide" }
+          },
+          [_vm._v(" ")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "clearfix" }),
+        _vm._v(" "),
+        _c("img", {
+          attrs: { id: "chatUploadProcessTokenImage", src: "/i/token.png" }
+        }),
+        _vm._v(" "),
+        _c("div", { attrs: { id: "chatUploadProcessText" } }, [_vm._v("9")])
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-d38593a8", module.exports)
   }
 }
 

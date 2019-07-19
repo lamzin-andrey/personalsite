@@ -18,7 +18,7 @@
 </p>
 <ul class="nav nav-tabs" role="tablist">
 	<li class="nav-item">
-		<a class="nav-link active" 
+		<a class="nav-link" 
 			id="alist-tab"
 			data-toggle="tab"
 			href="#alist"
@@ -27,7 +27,7 @@
 			aria-selected="true"><?php echo l('List') ?></a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link"
+		<a class="nav-link active"
 			id="edit-tab"
 			data-toggle="tab"
 			href="#edit"
@@ -46,7 +46,7 @@
 	</li>
 </ul>
 <div class="tab-content">
-	<div class="tab-pane fade show active" id="alist" role="tabpanel" aria-labelledby="list-tab">
+	<div class="tab-pane fade " id="alist" role="tabpanel" aria-labelledby="list-tab">
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title">Список статей</h5>
@@ -70,12 +70,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+	<div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title"><?php echo l('NewEdit') ?></h5>
 				<articleform></articleform>
-				
 			</div>
 		</div>
 	</div>

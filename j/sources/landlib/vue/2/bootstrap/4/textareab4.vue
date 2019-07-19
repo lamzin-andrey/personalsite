@@ -1,34 +1,31 @@
 <template>
-	<div>
-		<!-- TODO тут пока вообще ничего не готово
-		-->
-		<label :for="id">{{ label }}</label>
-		<div class="input-group">
-			<input
-				:value="value"
-				@input="$emit('input', $event.target.value)"
-				:placeholder="placeholder"
-				v-b421validators="validators"
-				:type="type" class="form-control"    :id="id" :name="id">
-			<div class="invalid-feedback"></div>
-			<small id="emailHelp" class="form-text text-muted"></small>
-		</div>
+	<div class="mb-3 mt-2">
+		<label :for="id">{{label}}</label>
+		<textarea 
+			:value="value"
+			@input="$emit('input', $event.target.value)"
+			:placeholder="placeholder"
+			:rows="rows"
+			:class="'form-control' + (className ? (' ' + className) : '')"
+			:id="id" :name="id"><slot></slot></textarea>
+		<div class="invalid-feedback"></div>
+		<small :id="id + 'Help'" class="form-text text-muted"></small>
 	</div>
 </template>
 <script>
     export default {
 		props: [
-			'text',
 			'label',
 			'validators',
 			'id',
 			'placeholder',
-			'ariaDescribedby',
+			'rows',
 			'type',
 			'value',
 			'className'
 		],
-        name: 'tezxtareab4',
+		name: 'textareab4',
+		
         //вызывается раньше чем mounted
         data: function(){return {
             
