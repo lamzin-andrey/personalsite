@@ -59,6 +59,8 @@ var locales = {
             "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
             "LoginNow": "странице авторизации",
 
+            "DefaultError": "Произошла неизвестная ошибка, попробуйте позже",
+
             "Cancel": "Отмена",
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",

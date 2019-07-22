@@ -29,7 +29,7 @@
     //Компонент для отображения инпута ввода текста bootstrap 4
     Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
     Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4.vue'));
+    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
     export default {
         name: 'articleform',

@@ -25750,6 +25750,8 @@ var locales = {
             "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
             "LoginNow": "странице авторизации",
 
+            "DefaultError": "Произошла неизвестная ошибка, попробуйте позже",
+
             "Cancel": "Отмена",
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
@@ -42463,7 +42465,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(42)
 /* template */
-var __vue_template__ = __webpack_require__(49)
+var __vue_template__ = __webpack_require__(52)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42538,7 +42540,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //Компонент для отображения инпута ввода текста bootstrap 4
 Vue.component('inputb4', __webpack_require__(43));
 Vue.component('textareab4', __webpack_require__(46));
-Vue.component('inputfileb4', __webpack_require__(50));
+Vue.component('inputfileb4', __webpack_require__(49));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'articleform',
@@ -42919,6 +42921,387 @@ if (false) {
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(50)
+/* template */
+var __vue_template__ = __webpack_require__(51)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b46f1a16", Component.options)
+  } else {
+    hotAPI.reload("data-v-b46f1a16", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__defaultupload_css__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*** TODO тут нужны ещё:
+ * Конфиг через атрибут , используем или нет прогрессбар по умолчанию
+ * 	Атрибут содержит параметры с функциями и контекстами, вызываем вместо стандартных, emit - не нужен.
+ *  А можно попробовать подписаться на переданные параметры тут же. (Смысл?)
+ *  
+ * Конфиг через атрибут, показываем кнопку Загрузить или грузим по умолчанию сразу после выбора.
+ *  Как она вообще должна выглядеть?
+ * 
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['label', 'validators', 'url', 'id', 'placeholder', 'value', 'className'],
+	name: 'inputb4',
+
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {
+			input: null
+		};
+	},
+	//
+	methods: {
+		onTestPercents: function onTestPercents(evt) {
+			var n = parseInt(evt.target.value);
+			if (n) {
+				this.showFileprogress(n);
+			} else {
+				this.hideFileprogress();
+			}
+		},
+		onTestPercents2: function onTestPercents2(evt) {
+			this.onFail();
+		},
+		b4InpOnSelectFile: function b4InpOnSelectFile(evt) {
+			this.onSelectFile(evt);
+			return;
+		},
+
+		/**
+   * @description Обработка выбора файла
+  */
+		onSelectFile: function onSelectFile(evt) {
+			//TОDO тут не торопясь подумать и функцию переименовать
+			//TODO config support, show or hide upload btn
+			this.sendFile(evt.target);
+		},
+
+		/**
+   * @description Отправка файла
+   * @param {InputFile}
+  */
+		sendFile: function sendFile(iFile) {
+			var _this = this;
+
+			var xhr = new XMLHttpRequest(),
+			    form = new FormData(),
+			    t = void 0;
+			form.append(iFile.id, iFile.files[0]);
+			//form.append("isFormData", 1);
+			form.append("path", this.url);
+			t = this.$root.getToken();
+			if (t) {
+				form.append("_token", t);
+			}
+			xhr.upload.addEventListener("progress", function (pEvt) {
+				var loadedPercents = void 0,
+				    loadedBytes = void 0,
+				    total = void 0;
+				if (pEvt && pEvt.lengthComputable) {
+					total = pEvt.total;
+					loadedBytes = pEvt.loaded;
+					loadedPercents = Math.round(pEvt.loaded * 100 / pEvt.total);
+				}
+				this.onProgress(loadedPercents, loadedBytes, total);
+				$emit('progress', /*$event.target.value*/loadedPercents, loadedBytes, total);
+			});
+			xhr.upload.addEventListener("error", function () {
+				_this.onFail();
+			});
+			xhr.onreadystatechange = function () {
+				t = this;
+				if (t.readyState == 4) {
+					if (this.status == 200) {
+						var s;
+						try {
+							s = JSON.parse(t.responseText);
+						} catch (e) {
+							;
+						}
+						this.onSuccess(s); //TODO config может быть отключен этот вызов
+						$emit('progress', /*$event.target.value*/loadedPercents, loadedBytes, total);
+					} else {
+						this.onFail(t.status, arguments);
+						$emit('uploadfail', t.status, arguments);
+					}
+				}
+			};
+			xhr.open("POST", this.url);
+			xhr.send(form);
+		},
+
+		/**
+   * @description Обработка процесса загрузки файлов по умолчанию
+   * @param {Number} nPercents
+  */
+		onSuccess: function onSuccess(d) {
+			if (d && d.status == 'ok') {
+				$emit('uploadsuccess', d.path);
+			} else if (d.status == 'error' && d.errors && d.errors.file && String(d.errors.file)) {
+				this.$root.alert(String(d.errors.file));
+			}
+		},
+		onFail: function onFail() {
+			//TODO config может быть отключен этот вызов
+			this.$root.alert(this.$root.$t('app.DefaultError'));
+		},
+
+		/**
+   * @description Обработка процесса загрузки файлов по умолчанию
+   * @param {Number} nPercents
+  */
+		onProgress: function onProgress(nPercents) {
+			if (a < 100 && a > 0) {
+				this.showFileprogress(a);
+			} else if (a == 0) {
+				this.hideFileprogress();
+			}
+		},
+
+		/**
+   * @see onProgress
+   * @param {Number} nPercents
+  */
+		showFileprogress: function showFileprogress(a) {
+			var h = 'height',
+			    m = 'margin-top',
+			    l = 'margin-left',
+			    r = $('#uploadProcessRightSide' + this.id),
+			    L = $('#uploadProcessLeftSide' + this.id);
+			$('#uploadBtn' + this.id).addClass('hide');
+			$('#uploadProcessView' + this.id)[0].style.display = null;
+			r.css(h, '0px');
+			L.css(h, '0px');
+			L.css(m, '0px');
+			r.css(l, '10px');
+			var t = a,
+			    bar = a < 50 ? r : L,
+			    mode = a < 50 ? 1 : 2,
+			    v;
+			a = a < 50 ? a : a - 50;
+			a *= 2;
+			v = a / 5;
+			bar.css(h, v + 'px');
+			if (mode == 2) {
+				bar.css(m, 20 - v + 'px');
+				r.css(h, '20px');
+				r.css(l, '0px');
+			}
+			$('#uploadProcessText' + this.id).text(t);
+		},
+
+		/**
+   * @see onProgress
+  */
+		hideFileprogress: function hideFileprogress() {
+			console.log('I hide vall!');
+			//$('#uploadBtn' + this.id).removeClass('hide');
+			$('#uploadProcessView' + this.id)[0].style.display = 'none';
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+		//let self = this;
+
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
+});
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "custom-file mt-2" }, [
+    _c("input", {
+      directives: [
+        {
+          name: "b421validators",
+          rawName: "v-b421validators",
+          value: _vm.validators,
+          expression: "validators"
+        }
+      ],
+      class: "custom-file-input" + (_vm.className ? " " + _vm.className : ""),
+      attrs: {
+        type: "file",
+        "aria-describedby": _vm.id + "Help",
+        id: _vm.id,
+        name: _vm.id
+      },
+      on: { select: _vm.b4InpOnSelectFile }
+    }),
+    _vm._v(" "),
+    _c("label", { staticClass: "custom-file-label", attrs: { for: ":id" } }, [
+      _vm._v(_vm._s(_vm.label))
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "invalid-feedback" }),
+    _vm._v(" "),
+    _c(
+      "small",
+      { staticClass: "form-text text-muted", attrs: { id: _vm.id + "Help" } },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "text-center",
+            staticStyle: { display: "none" },
+            attrs: { id: "uploadProcessView" + _vm.id }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "upload-process-text d-inline-block ml-1",
+                attrs: { id: "uploadProcessText" + _vm.id }
+              },
+              [_vm._v("9")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "relative upload-token-anim-block uploadrocess-view  "
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "float-left upload-token-anim-color upload-process-left-side",
+                    attrs: { id: "uploadProcessLeftSide" + _vm.id }
+                  },
+                  [_vm._v(" ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "float-left upload-token-anim-color upload-process-right-side",
+                    attrs: { id: "uploadProcessRightSide" + _vm.id }
+                  },
+                  [_vm._v(" ")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "clearfix" }),
+                _vm._v(" "),
+                _c("img", {
+                  staticClass: "upload-process-token-image d-inline-block",
+                  attrs: {
+                    id: "uploadProcessTokenImage" + _vm.id,
+                    src: "/i/token.png"
+                  }
+                })
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("input", {
+      attrs: { type: "number" },
+      on: { input: _vm.onTestPercents }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-b46f1a16", module.exports)
+  }
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -43011,260 +43394,49 @@ if (false) {
 }
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(51)
-/* template */
-var __vue_template__ = __webpack_require__(52)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "sources/landlib/vue/2/bootstrap/4/inputfileb4.vue"
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d38593a8", Component.options)
-  } else {
-    hotAPI.reload("data-v-d38593a8", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
+// load the styles
+var content = __webpack_require__(54);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
 
-module.exports = Component.exports
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['label', 'validators', 'id', 'placeholder', 'value', 'className'],
-	name: 'inputb4',
-
-	//вызывается раньше чем mounted
-	data: function data() {
-		return {};
-	},
-	//
-	methods: {
-		b4InpOnSelectFile: function b4InpOnSelectFile(evt) {
-			mcrOnSelectFile(evt);
-			return;
-		},
-
-		/**
-   * @see initFileInputs
-  */
-		mcrOnSelectFile: function mcrOnSelectFile(evt) {
-			//TОDO тут не торопясь подумать и функцию переименовать
-			if (iFiles[evt.target.id]) {
-				var o = iFiles[evt.target.id];
-				sendFile(e(evt.target.id), o.url, W[o.success], W[o.fail], W[o.progress]);
-			}
-		},
-
-		/**
-   * @see initFileInputs
-  */
-		sendFile: function sendFile(iFile, url, onSuccess, onFail, onProgress) {
-			var xhr = new XMLHttpRequest(),
-			    form = new FormData(),
-			    t;
-			form.append(iFile.id, iFile.files[0]);
-			//form.append("isFormData", 1);
-			form.append("path", url); //TODO ??
-			t = getToken();
-			if (t) {
-				form.append("_token", t);
-			}
-			xhr.upload.addEventListener("progress", function (pEvt) {
-				var loadedPercents, loadedBytes, total;
-				if (pEvt && pEvt.lengthComputable) {
-					loadedPercents = Math.round(pEvt.loaded * 100 / pEvt.total);
-				}
-				onProgress(loadedPercents, loadedBytes, total);
-			});
-			xhr.upload.addEventListener("error", onFail);
-			xhr.onreadystatechange = function () {
-				t = this;
-				if (t.readyState == 4) {
-					if (this.status == 200) {
-						var s;
-						try {
-							s = JSON.parse(t.responseText);
-						} catch (e) {
-							;
-						}
-						onSuccess(s);
-					} else {
-						onFail(t.status, arguments);
-					}
-				}
-			};
-			xhr.open("POST", url);
-			xhr.send(form);
-		}
-	}, //end methods
-	//вызывается после data, поля из data видны "напрямую" как this.fieldName
-	mounted: function mounted() {
-		var self = this;
-		/*this.$root.$on('showMenuEvent', function(evt) {
-      self.menuBlockVisible   = 'block';
-      self.isMainMenuVisible  = true;
-      self.isScrollWndVisible = false;
-      self.isColorWndVisible  = false;
-      self.isHelpWndVisible   = false;
-      self.nStep = self.$root.nStep;
-  })/**/
-		//console.log('I mounted!');
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(32)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!./defaultupload.css", function() {
+			var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!./defaultupload.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
 	}
-});
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "custom-file mt-2" }, [
-    _c("input", {
-      directives: [
-        {
-          name: "b421validators",
-          rawName: "v-b421validators",
-          value: _vm.validators,
-          expression: "validators"
-        }
-      ],
-      class: "custom-file-input" + (_vm.className ? " " + _vm.className : ""),
-      attrs: {
-        type: "file",
-        "aria-describedby": _vm.id + "Help",
-        id: _vm.id,
-        name: _vm.id,
-        "data-success": "chatOnUploadFile",
-        "data-fail": "chatOnFailUploadFile"
-      },
-      on: { progress: _vm.b4InpOnUploadProgress, select: _vm.b4InpOnSelectFile }
-    }),
-    _vm._v(" "),
-    _c("label", { staticClass: "custom-file-label", attrs: { for: ":id" } }, [
-      _vm._v(_vm._s(_vm.label))
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "invalid-feedback" }),
-    _vm._v(" "),
-    _c(
-      "small",
-      { staticClass: "form-text text-muted", attrs: { id: _vm.id + "Help" } },
-      [_vm._m(0)]
-    )
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "relative chat-upload-token-anim-block",
-        staticStyle: { display: "none" },
-        attrs: { id: "chatUploadProcessView" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "pull-left chat-upload-token-anim-color",
-            attrs: { id: "chatUploadProcessLeftSide" }
-          },
-          [_vm._v(" ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "pull-left chat-upload-token-anim-color",
-            attrs: { id: "chatUploadProcessRightSide" }
-          },
-          [_vm._v(" ")]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "clearfix" }),
-        _vm._v(" "),
-        _c("img", {
-          attrs: { id: "chatUploadProcessTokenImage", src: "/i/token.png" }
-        }),
-        _vm._v(" "),
-        _c("div", { attrs: { id: "chatUploadProcessText" } }, [_vm._v("9")])
-      ]
-    )
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-d38593a8", module.exports)
-  }
-}
+exports = module.exports = __webpack_require__(31)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/*.upload-process-text {\n\tposition: absolute;\n\tz-index: 31;\n\tfont-size: 8px;\n\ttop: 5px;\n\ttext-align: center;\n\twidth: 20px;\n\tfont-family:Arial;\n}/**/\n\n.upload-process-text {\n\tfont-size: 32px;\n\tfont-family:Arial;\n}\n\n.upload-process-token-image {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n\tz-index: 30;\n}\n.upload-token-anim-color {\n\tbackground-color: #42BCB1;\n}\n.upload-process-left-side, .upload-process-right-side {\n\twidth: 10px;\n}\n.upload-process-right-side {\n\tmargin-left: 10px;\n}\n.upload-token-anim-block {\n\theight: 20px;\n\tbackground-color: gray;\n\twidth: 20px;\n\tdisplay:inline-block;\n\tposition:relative;\n}\n.upload-label {\n\tline-height: 20px!important;\n\tvertical-align: top;\n}", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);
