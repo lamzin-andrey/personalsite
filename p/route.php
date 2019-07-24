@@ -58,6 +58,11 @@ class Route {
 			$this->view    = __dir__ . '/view/signupform.tpl.php';
 			$this->app = new Signup();
 		}
+		if ($baseUrl == '/p/articlelogoupload.jn/') {
+			$handler = __dir__ . '/ctrl/articlelogoupload.php';
+			require_once $handler;
+			$this->app = new ArticleLogoUpload();
+		}
 		if ($baseUrl == '/p/reset/') {
 			$handler = __dir__ . '/ctrl/reset.php';
 			require_once $handler;

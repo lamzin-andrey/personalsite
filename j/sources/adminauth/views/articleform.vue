@@ -7,10 +7,12 @@
         <textareab4 :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
         <inputfileb4 
             v-model="filepath"
-            url="/p/articlelogoupload/"
+            url="/p/articlelogoupload.jn/"
             immediateleyUploadOff="true"
             tokenImagePath="/i/token.png"
             :progressListener="progressbarListener"
+			:uploadButtonLabel="$t('app.Upload')"
+            :csrfToken="$root._getToken()"
             
          :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
 
@@ -20,7 +22,7 @@
                 :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
          </div>
 
-         <input type="button" @click="_alert(filepath);" value="GetValue">
+         
         
         <p class="text-right my-3">
             <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
@@ -67,10 +69,7 @@
             onProgress(a) {
                 if (a <= 100 && a > 0) {
                     this.progressValue = a;
-                    //this.showFileprogress(a);
-                } /*else if (a == 0){
-                    this.hideFileprogress();
-                }*/
+                }
             },
             /** 
              * @description Пробуем отправить форму

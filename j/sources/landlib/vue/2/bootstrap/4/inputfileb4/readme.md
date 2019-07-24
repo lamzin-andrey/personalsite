@@ -177,7 +177,7 @@ your vue app or component property with custom listeners.
 	}
 ```
 
-### [progressListener]
+### progressListener
 
 By default this component show progress bar as token, which making filled while upload process continues.
 You can off this view and use (for next example) bootstrap 4 progress bar with label.
@@ -270,12 +270,26 @@ Set custom text on file input label.
 
 Yet not release. Need required validator support. (Wil Depends from bootstrap421-validators)
 
+### csrfToken
+
+You can set csrf token. It will send in field _token
+
+### uploadButtonLabel
+
+Text on upload button (if you use immediateleyUploadOff attribute).
+
+### id
+
+Unique id for input. Uploaded file url will set in hidden input with it id.
+
+
 ## Expected server response format
 
 If success 
 
 ```json
 {
+	"status" : "ok",
 	"path" : "/path/to/file/on/server"
 }
 ```
@@ -285,6 +299,7 @@ If application error
 ```json
 {
 	"errors": {
+		"status" : "error",
 		"file" : "Error text"
 	}
 }
@@ -295,24 +310,23 @@ If application error
 
 ### uploadapperror
 
-	This event emit when file upload stop because server application reject uploaded file. For example, file too big, file has invalid extension - it errors application level.
+This event emit when file upload stop because server application reject uploaded file. For example, file too big, file has invalid extension - it errors application level.
 
-	This event emit only when attribute `listeners` not set.
+This event emit only when attribute `listeners` not set.
 
 ###  uploadneterror
 
-	This event emit when file upload stop because happened error not provided server application.
-	For example, disconnect or server return code 502.
+This event emit when file upload stop because happened error not provided server application.
+For example, disconnect or server return code 502.
 
-	This event emit only when attribute `listeners` not set.
+This event emit only when attribute `listeners` not set.
 
 ###  input 
 
-	This event emit when server response success. You can no listen this event, because 
-	this component set path to uploaded file as him value, and binding model will containts it value.
+This event emit when server response success. You can no listen this event, because 
+this component set path to uploaded file as him value, and binding model will containts it value.
 
 
-----------
 # Ru
 
 ## Что это
@@ -385,13 +399,13 @@ In this example after upload file code
 Обязательный.
 Это url на который будет отправлен файл.
 
-### tokenImagePath
+### Атрибут tokenImagePath
 
 Обязательный.
 По умолчанию этот компонент показывает индикатор загрузки как кольцо, которое заполняется цветом по мере того, как происходит загрузка файла на сервер.
 При этом используется файл images/token.png. Вам придется установить путь у этому изображению на вашем сервере.
 
-### immediateleyUploadOff
+### Атрибут immediateleyUploadOff
 
 По умолчанию этот компонент начинает загрузку файла на сервер сразу после того как файл выбран.
 Вы можете изменить это поведение. Установите атрибут
@@ -401,7 +415,7 @@ In this example after upload file code
 и инпут выбора файла станет содержать кнопку загрузки рядом с кнопкой выбора файла.
 Загрузка файла на сервер начнется только после того, как пользователь нажмёт на эту кнопку.
 
-### listeners
+### Атрибут listeners
 
 По умолчанию этот компонент загружает файл на сервер и если это действие успешно, установит значение
 
@@ -495,7 +509,7 @@ If action not success, component emit event
 	}
 ```
 
-### [progressListener]
+### Атрибут progressListener
 
 По умолчанию этот компонент показывает индикатор загрузки как кольцо, которое заполняется цветом по мере того, как происходит загрузка файла на сервер.
 
@@ -576,18 +590,31 @@ If action not success, component emit event
 	}
 ```
 
-### className
+### Атрибут className
 
 Вы можете дополнить css селектор `custom-file-input` своим пользовательским классом при необходимости.
 
-### label
+### Атрибут label
 
 Установите текст на компоненте выбора файла
 
-### validators
+### Атрибут validators
 
 Yet not release. Need required validator support. (Wil Depends from bootstrap421-validators)
 Пока не используется. После реализации этот компонент будет зависеть от bootstrap421-validators и использовать значение 'required'.
+
+### Атрибут csrfToken
+
+Вы можете установить csrf token. Он будет отправлен в переменной _token.
+
+### Атрибут uploadButtonLabel
+
+Текст на кнопке загрузки файла (она видна если вы используете атрибут immediateleyUploadOff)
+
+### Атрибут id
+
+Unique id for input. Uploaded file url will set in hidden input with it id.
+Уникальный id компонента. Url загруженного файла будет записан в атрибут value скрытого инпута с таким id.
 
 ## Ожидаемый ответ сервера
 
@@ -595,6 +622,7 @@ Yet not release. Need required validator support. (Wil Depends from bootstrap421
 
 ```json
 {
+	"status" : "ok",
 	"path" : "/path/to/file/on/server"
 }
 ```
@@ -603,6 +631,7 @@ Yet not release. Need required validator support. (Wil Depends from bootstrap421
 
 ```json
 {
+	"status" : "error",
 	"errors": {
 		"file" : "Error text"
 	}

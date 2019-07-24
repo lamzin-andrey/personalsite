@@ -58,7 +58,7 @@ function json_error_arr($data) {
  * */
 function json_error() {
 	$sz = func_num_args();
-	$data['status'] = "error";
+	$data['status'] = 'error';
  	for ($i = 0; $i < $sz; $i++) {
  		if ($i + 1 < $sz) {
  			$data[func_get_arg($i)] = func_get_arg($i + 1);
