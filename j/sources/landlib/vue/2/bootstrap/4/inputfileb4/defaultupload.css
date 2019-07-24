@@ -1,4 +1,7 @@
-/*.upload-process-text {
+/* Progress view */
+/*
+text in circle
+.upload-process-text {
 	position: absolute;
 	z-index: 31;
 	font-size: 8px;
@@ -39,3 +42,4 @@
 	line-height: 20px!important;
 	vertical-align: top;
 }
+/* /Progress view */

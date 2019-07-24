@@ -6,8 +6,21 @@
         <inputb4 type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
         <textareab4 :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
         <inputfileb4 
-            url="/p/articlelogoupload/"   
+            v-model="filepath"
+            url="/p/articlelogoupload/"
+            immediateleyUploadOff="true"
+            tokenImagePath="/i/token.png"
+            :progressListener="progressbarListener"
+            
          :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
+
+         <div class="progress">
+            <div class="progress-bar" role="progressbar" 
+                :style="'width: ' + progressValue + '%;'" 
+                :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
+         </div>
+
+         <input type="button" @click="_alert(filepath);" value="GetValue">
         
         <p class="text-right my-3">
             <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
@@ -17,14 +30,6 @@
 
 </template>
 <script>
-    /*const vModelComputed = {
-        get() {
-            return this.value;
-        },
-        set(newValue) {
-            this.$emit('input', newValue);
-        }
-    };*/
 
     //Компонент для отображения инпута ввода текста bootstrap 4
     Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
@@ -36,10 +41,37 @@
         //вызывается раньше чем mounted
         data: function(){return {
             //Значение title
-            title:''
+            title:'',
+            //Путь к загруженному логотипу
+            filepath:'default ops!',
+            //Параметры для кастомного прогресс-бара
+            progressbarListener:{
+                onProgress: {
+                    f: this.onProgress,
+                    context:this
+                }
+            },
+            //Значение по умолчанию для кастомной шкалы прогресса
+            progressValue : 0
         }; },
         //
         methods:{
+            //TODO remove me
+            _alert(s) {
+                alert(s);
+            },
+            /** 
+             * @description Кастомный прогресс
+             * @param {Number} n
+            */
+            onProgress(a) {
+                if (a <= 100 && a > 0) {
+                    this.progressValue = a;
+                    //this.showFileprogress(a);
+                } /*else if (a == 0){
+                    this.hideFileprogress();
+                }*/
+            },
             /** 
              * @description Пробуем отправить форму
             */

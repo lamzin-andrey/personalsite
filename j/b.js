@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -25242,8 +25242,447 @@ var Validator = {
 /* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ }),
-/* 12 */,
-/* 13 */,
+/* 12 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			memo[selector] = fn.call(this, selector);
+		}
+
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(33);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
 /* 14 */,
 /* 15 */,
 /* 16 */,
@@ -25254,22 +25693,24 @@ var Validator = {
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */,
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(25);
+module.exports = __webpack_require__(27);
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(34);
 window.jQuery = window.$ = window.jquery = __webpack_require__(2);
@@ -25300,7 +25741,7 @@ __webpack_require__(9);
 //DataTables
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
-__webpack_require__(27);
+__webpack_require__(29);
 //my patch pagination for extra small view
 
 // /DataTables
@@ -25685,7 +26126,7 @@ window.app = new Vue({
 }).$mount('#wrapper');
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25773,7 +26214,7 @@ var locales = {
 /* harmony default export */ __webpack_exports__["a"] = (locales);
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables Bootstrap 4 integration
@@ -25791,7 +26232,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables B
 (function( factory ){
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(28)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(30)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -25964,7 +26405,7 @@ return DataTable;
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -41267,13 +41708,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(30);
+var content = __webpack_require__(32);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -41281,7 +41722,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(32)(content, options);
+var update = __webpack_require__(13)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -41298,10 +41739,10 @@ if(false) {
 }
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(31)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -41309,447 +41750,6 @@ exports = module.exports = __webpack_require__(31)(false);
 exports.push([module.i, "@media (width < 720px ) {\n\t#articles_paginate .paginate_button.page-item {\n\t\tdisplay:none;\n\t}\n\t#articles_paginate .paginate_button.page-item.previous, #articles_paginate .paginate_button.page-item.next {\n\t\tdisplay:block;\n\t}\n}\n\n", ""]);
 
 // exports
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-
-var stylesInDom = {};
-
-var	memoize = function (fn) {
-	var memo;
-
-	return function () {
-		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-		return memo;
-	};
-};
-
-var isOldIE = memoize(function () {
-	// Test for IE <= 9 as proposed by Browserhacks
-	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
-	// Tests for existence of standard globals is to allow style-loader
-	// to operate correctly into non-standard environments
-	// @see https://github.com/webpack-contrib/style-loader/issues/177
-	return window && document && document.all && !window.atob;
-});
-
-var getElement = (function (fn) {
-	var memo = {};
-
-	return function(selector) {
-		if (typeof memo[selector] === "undefined") {
-			memo[selector] = fn.call(this, selector);
-		}
-
-		return memo[selector]
-	};
-})(function (target) {
-	return document.querySelector(target)
-});
-
-var singleton = null;
-var	singletonCounter = 0;
-var	stylesInsertedAtTop = [];
-
-var	fixUrls = __webpack_require__(33);
-
-module.exports = function(list, options) {
-	if (typeof DEBUG !== "undefined" && DEBUG) {
-		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-	}
-
-	options = options || {};
-
-	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
-
-	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-	// tags it will allow on a page
-	if (!options.singleton) options.singleton = isOldIE();
-
-	// By default, add <style> tags to the <head> element
-	if (!options.insertInto) options.insertInto = "head";
-
-	// By default, add <style> tags to the bottom of the target
-	if (!options.insertAt) options.insertAt = "bottom";
-
-	var styles = listToStyles(list, options);
-
-	addStylesToDom(styles, options);
-
-	return function update (newList) {
-		var mayRemove = [];
-
-		for (var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-
-			domStyle.refs--;
-			mayRemove.push(domStyle);
-		}
-
-		if(newList) {
-			var newStyles = listToStyles(newList, options);
-			addStylesToDom(newStyles, options);
-		}
-
-		for (var i = 0; i < mayRemove.length; i++) {
-			var domStyle = mayRemove[i];
-
-			if(domStyle.refs === 0) {
-				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
-
-				delete stylesInDom[domStyle.id];
-			}
-		}
-	};
-};
-
-function addStylesToDom (styles, options) {
-	for (var i = 0; i < styles.length; i++) {
-		var item = styles[i];
-		var domStyle = stylesInDom[item.id];
-
-		if(domStyle) {
-			domStyle.refs++;
-
-			for(var j = 0; j < domStyle.parts.length; j++) {
-				domStyle.parts[j](item.parts[j]);
-			}
-
-			for(; j < item.parts.length; j++) {
-				domStyle.parts.push(addStyle(item.parts[j], options));
-			}
-		} else {
-			var parts = [];
-
-			for(var j = 0; j < item.parts.length; j++) {
-				parts.push(addStyle(item.parts[j], options));
-			}
-
-			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-		}
-	}
-}
-
-function listToStyles (list, options) {
-	var styles = [];
-	var newStyles = {};
-
-	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var id = options.base ? item[0] + options.base : item[0];
-		var css = item[1];
-		var media = item[2];
-		var sourceMap = item[3];
-		var part = {css: css, media: media, sourceMap: sourceMap};
-
-		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
-		else newStyles[id].parts.push(part);
-	}
-
-	return styles;
-}
-
-function insertStyleElement (options, style) {
-	var target = getElement(options.insertInto)
-
-	if (!target) {
-		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
-	}
-
-	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
-
-	if (options.insertAt === "top") {
-		if (!lastStyleElementInsertedAtTop) {
-			target.insertBefore(style, target.firstChild);
-		} else if (lastStyleElementInsertedAtTop.nextSibling) {
-			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
-		} else {
-			target.appendChild(style);
-		}
-		stylesInsertedAtTop.push(style);
-	} else if (options.insertAt === "bottom") {
-		target.appendChild(style);
-	} else {
-		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-	}
-}
-
-function removeStyleElement (style) {
-	if (style.parentNode === null) return false;
-	style.parentNode.removeChild(style);
-
-	var idx = stylesInsertedAtTop.indexOf(style);
-	if(idx >= 0) {
-		stylesInsertedAtTop.splice(idx, 1);
-	}
-}
-
-function createStyleElement (options) {
-	var style = document.createElement("style");
-
-	options.attrs.type = "text/css";
-
-	addAttrs(style, options.attrs);
-	insertStyleElement(options, style);
-
-	return style;
-}
-
-function createLinkElement (options) {
-	var link = document.createElement("link");
-
-	options.attrs.type = "text/css";
-	options.attrs.rel = "stylesheet";
-
-	addAttrs(link, options.attrs);
-	insertStyleElement(options, link);
-
-	return link;
-}
-
-function addAttrs (el, attrs) {
-	Object.keys(attrs).forEach(function (key) {
-		el.setAttribute(key, attrs[key]);
-	});
-}
-
-function addStyle (obj, options) {
-	var style, update, remove, result;
-
-	// If a transform function was defined, run it on the css
-	if (options.transform && obj.css) {
-	    result = options.transform(obj.css);
-
-	    if (result) {
-	    	// If transform returns a value, use that instead of the original css.
-	    	// This allows running runtime transformations on the css.
-	    	obj.css = result;
-	    } else {
-	    	// If the transform function returns a falsy value, don't add this css.
-	    	// This allows conditional loading of css
-	    	return function() {
-	    		// noop
-	    	};
-	    }
-	}
-
-	if (options.singleton) {
-		var styleIndex = singletonCounter++;
-
-		style = singleton || (singleton = createStyleElement(options));
-
-		update = applyToSingletonTag.bind(null, style, styleIndex, false);
-		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
-
-	} else if (
-		obj.sourceMap &&
-		typeof URL === "function" &&
-		typeof URL.createObjectURL === "function" &&
-		typeof URL.revokeObjectURL === "function" &&
-		typeof Blob === "function" &&
-		typeof btoa === "function"
-	) {
-		style = createLinkElement(options);
-		update = updateLink.bind(null, style, options);
-		remove = function () {
-			removeStyleElement(style);
-
-			if(style.href) URL.revokeObjectURL(style.href);
-		};
-	} else {
-		style = createStyleElement(options);
-		update = applyToTag.bind(null, style);
-		remove = function () {
-			removeStyleElement(style);
-		};
-	}
-
-	update(obj);
-
-	return function updateStyle (newObj) {
-		if (newObj) {
-			if (
-				newObj.css === obj.css &&
-				newObj.media === obj.media &&
-				newObj.sourceMap === obj.sourceMap
-			) {
-				return;
-			}
-
-			update(obj = newObj);
-		} else {
-			remove();
-		}
-	};
-}
-
-var replaceText = (function () {
-	var textStore = [];
-
-	return function (index, replacement) {
-		textStore[index] = replacement;
-
-		return textStore.filter(Boolean).join('\n');
-	};
-})();
-
-function applyToSingletonTag (style, index, remove, obj) {
-	var css = remove ? "" : obj.css;
-
-	if (style.styleSheet) {
-		style.styleSheet.cssText = replaceText(index, css);
-	} else {
-		var cssNode = document.createTextNode(css);
-		var childNodes = style.childNodes;
-
-		if (childNodes[index]) style.removeChild(childNodes[index]);
-
-		if (childNodes.length) {
-			style.insertBefore(cssNode, childNodes[index]);
-		} else {
-			style.appendChild(cssNode);
-		}
-	}
-}
-
-function applyToTag (style, obj) {
-	var css = obj.css;
-	var media = obj.media;
-
-	if(media) {
-		style.setAttribute("media", media)
-	}
-
-	if(style.styleSheet) {
-		style.styleSheet.cssText = css;
-	} else {
-		while(style.firstChild) {
-			style.removeChild(style.firstChild);
-		}
-
-		style.appendChild(document.createTextNode(css));
-	}
-}
-
-function updateLink (link, options, obj) {
-	var css = obj.css;
-	var sourceMap = obj.sourceMap;
-
-	/*
-		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
-		and there is no publicPath defined then lets turn convertToAbsoluteUrls
-		on by default.  Otherwise default to the convertToAbsoluteUrls option
-		directly
-	*/
-	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
-
-	if (options.convertToAbsoluteUrls || autoFixUrls) {
-		css = fixUrls(css);
-	}
-
-	if (sourceMap) {
-		// http://stackoverflow.com/a/26603875
-		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-	}
-
-	var blob = new Blob([css], { type: "text/css" });
-
-	var oldSrc = link.href;
-
-	link.href = URL.createObjectURL(blob);
-
-	if(oldSrc) URL.revokeObjectURL(oldSrc);
-}
 
 
 /***/ }),
@@ -42465,7 +42465,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(42)
 /* template */
-var __vue_template__ = __webpack_require__(52)
+var __vue_template__ = __webpack_require__(54)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42527,15 +42527,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-/*const vModelComputed = {
-    get() {
-        return this.value;
-    },
-    set(newValue) {
-        this.$emit('input', newValue);
-    }
-};*/
 
 //Компонент для отображения инпута ввода текста bootstrap 4
 Vue.component('inputb4', __webpack_require__(43));
@@ -42548,11 +42553,40 @@ Vue.component('inputfileb4', __webpack_require__(49));
     data: function data() {
         return {
             //Значение title
-            title: ''
+            title: '',
+            //Путь к загруженному логотипу
+            filepath: 'default ops!',
+            //Параметры для кастомного прогресс-бара
+            progressbarListener: {
+                onProgress: {
+                    f: this.onProgress,
+                    context: this
+                }
+            },
+            //Значение по умолчанию для кастомной шкалы прогресса
+            progressValue: 0
         };
     },
     //
     methods: {
+        //TODO remove me
+        _alert: function _alert(s) {
+            alert(s);
+        },
+
+        /** 
+         * @description Кастомный прогресс
+         * @param {Number} n
+        */
+        onProgress: function onProgress(a) {
+            if (a <= 100 && a > 0) {
+                this.progressValue = a;
+                //this.showFileprogress(a);
+            } /*else if (a == 0){
+                this.hideFileprogress();
+              }*/
+        },
+
         /** 
          * @description Пробуем отправить форму
         */
@@ -42926,7 +42960,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(50)
 /* template */
-var __vue_template__ = __webpack_require__(51)
+var __vue_template__ = __webpack_require__(53)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42970,8 +43004,42 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__defaultupload_css__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -42999,37 +43067,154 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /*** TODO тут нужны ещё:
+ * Изображение токена - путь должен быть конфигурируемым, attribute tokenImagePath
+ *
  * Конфиг через атрибут , используем или нет прогрессбар по умолчанию
  * 	Атрибут содержит параметры с функциями и контекстами, вызываем вместо стандартных, emit - не нужен.
- *  А можно попробовать подписаться на переданные параметры тут же. (Смысл?)
+ *  А можно попробовать подписаться на переданные параметры тут же и emit тогда нужен. (Смысл?)
  *  
- * Конфиг через атрибут, показываем кнопку Загрузить или грузим по умолчанию сразу после выбора.
- *  Как она вообще должна выглядеть?
+ * Конфиг через атрибут immediateleyUploadOff, показываем кнопку Загрузить или грузим по умолчанию сразу после выбора.
+
+ СОбытия
+  uploadapperror
+  uploadneterror
+  input при использовании onSuccess по умолчанию. Подписыватсья на него не обязательно, потому что
+  input[id=myId] будет содержать путь к загруженному файлу
+
+От сервера ждет путь к загруженному файлу
+{
+	path:String
+}
+
+, либо ошибку в формате
+{
+	errors: {
+		file : String
+	}
+}
+
+Ожидает локализацию i18n
+ обращается к ней 
+ this.$root.$t('app.DefaultFail');
+
+
+ Пример формы использующей кастомный прогрессбар
+
+ <form class="user" method="POST" action="/p/signin.jn/" @submit="onSubmit" novalidate id="tform">
+        <!--selectb4 label="<?php echo l('Section') ?>" id="category_id"></selectb4><!-- Try Use slot! -->
+        <inputb4 v-model="title" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
+        <inputb4 type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
+        <inputb4 type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
+        <textareab4 :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
+        <inputfileb4 
+            v-model="filepath"
+            url="/p/articlelogoupload/"
+            immediateleyUploadOff="true"
+            tokenImagePath="/i/token.png"
+            :progressListener="progressbarListener"
+            
+         :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
+
+		<!-- Custom progressbar -->
+         <div class="progress">
+            <div class="progress-bar" role="progressbar" 
+                :style="'width: ' + progressValue + '%;'" 
+                :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
+         </div>
+         
+        
+        <p class="text-right my-3">
+            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+        </p>
+        
+    </form>
+[script]
+
+    //Компонент для отображения инпута ввода текста bootstrap 4
+    Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+    Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
+    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+
+    export default {
+        name: 'articleform',
+        //вызывается раньше чем mounted
+        data: function(){return {
+            //Значение title
+            title:'',
+            //Путь к загруженному логотипу
+            filepath:'default ops!',
+            //Параметры для кастомного прогресс-бара
+            progressbarListener:{
+                onProgress: {
+                    f: this.onProgress,
+                    context:this
+                }
+            },
+            //Значение по умолчанию для кастомной шкалы прогресса
+            progressValue : 0
+        }; },
+        //
+        methods:{
+            //TODO remove me
+            _alert(s) {
+                alert(s);
+            },
+            // 
+             * @description Кастомный прогресс
+            // * @param {Number} n
+            //
+            onProgress(a) {
+                if (a <= 100 && a > 0) {
+                    this.progressValue = a;
+                }
+            },
+            //* 
+             * @description Send form data
+            //
+            onSubmit(evt) {
+                
+            },
+           
+        }, //end methods
+        //вызывается после data, поля из data видны "напрямую" как this.fieldName
+        mounted() {
+        }
+    }
+[/script]
  * 
  */
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['label', 'validators', 'url', 'id', 'placeholder', 'value', 'className'],
+	props: {
+		'label': { type: String },
+		'validators': { type: String },
+		'url': { type: String, required: true },
+		'id': { type: String },
+		'value': { type: String },
+		//Если передан, немедленной загрузки файла на сервер при выборе не происходит, а вместо показа инпута выбора файла показывается другой инпут выбора файла, с двумя кнопками "Выбрать" и "Загрузить"
+		'immediateleyUploadOff': { type: String },
+		//Для прелоадера по умолчанию необходимо изображение token.png. Серез этот атрибут можно указать путь к нему
+		'tokenImagePath': { type: String, default: '/js/inputfileb4/images/token.png', required: true },
+		//Кастомные функции {onSuccess, onFail}. Формат каждого свойства {f:Function, context:Object}
+		'listeners': { type: Object },
+		//Кастомная функция {onProgress}. Формат onProgress такой же как у свойств listeners
+		'progressListener': { type: Object },
+		'className': { type: String }
+	},
 	name: 'inputb4',
 
 	//вызывается раньше чем mounted
 	data: function data() {
 		return {
 			input: null
+
 		};
 	},
 	//
 	methods: {
 		onTestPercents: function onTestPercents(evt) {
 			var n = parseInt(evt.target.value);
-			if (n) {
-				this.showFileprogress(n);
-			} else {
-				this.hideFileprogress();
-			}
-		},
-		onTestPercents2: function onTestPercents2(evt) {
-			this.onFail();
+			this.onProgress(n);
 		},
 		b4InpOnSelectFile: function b4InpOnSelectFile(evt) {
 			this.onSelectFile(evt);
@@ -43072,7 +43257,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					loadedPercents = Math.round(pEvt.loaded * 100 / pEvt.total);
 				}
 				this.onProgress(loadedPercents, loadedBytes, total);
-				$emit('progress', /*$event.target.value*/loadedPercents, loadedBytes, total);
 			});
 			xhr.upload.addEventListener("error", function () {
 				_this.onFail();
@@ -43087,11 +43271,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						} catch (e) {
 							;
 						}
-						this.onSuccess(s); //TODO config может быть отключен этот вызов
-						$emit('progress', /*$event.target.value*/loadedPercents, loadedBytes, total);
+						if (!this.listeners.onSuccess) {
+							this.onSuccess(s);
+						} else {
+							this.listeners.onSuccess.f.call(this.listeners.onSuccess.context, s);
+						}
 					} else {
 						this.onFail(t.status, arguments);
-						$emit('uploadfail', t.status, arguments);
+						//$emit('uploadfail', t.status, arguments);
 					}
 				}
 			};
@@ -43105,25 +43292,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   */
 		onSuccess: function onSuccess(d) {
 			if (d && d.status == 'ok') {
-				$emit('uploadsuccess', d.path);
+				//this.value = d.path;
+				this.$emit('input', d.path);
+				if (this.listeners && this.listeners.onSuccess) {
+					this.listeners.onSuccess.f.call(this.listeners.onSuccess.context, d.path);
+				}
 			} else if (d.status == 'error' && d.errors && d.errors.file && String(d.errors.file)) {
-				this.$root.alert(String(d.errors.file));
+				//this.$root.alert(String(d.errors.file));
+				$emit('uploadapperror', String(d.errors.file));
 			}
 		},
 		onFail: function onFail() {
-			//TODO config может быть отключен этот вызов
-			this.$root.alert(this.$root.$t('app.DefaultError'));
+			if (!this.listeners || !this.listeners.onFail) {
+				//this.$root.alert(this.$root.$t('app.DefaultError'));
+				$emit('uploadneterror', this.$root.$t('app.DefaultError'));
+			} else {
+				this.listeners.onFail.f.call(this.listeners.onFail.context, this.$root.$t('app.DefaultError'));
+			}
 		},
 
 		/**
    * @description Обработка процесса загрузки файлов по умолчанию
    * @param {Number} nPercents
   */
-		onProgress: function onProgress(nPercents) {
-			if (a < 100 && a > 0) {
-				this.showFileprogress(a);
-			} else if (a == 0) {
-				this.hideFileprogress();
+		onProgress: function onProgress(nPercents, loadedBytes, total) {
+			if (!this.progressListener) {
+				if (nPercents <= 100 && nPercents > 0) {
+					this.showFileprogress(nPercents);
+				} else if (nPercents == 0) {
+					this.hideFileprogress();
+				}
+			} else {
+				this.progressListener.onProgress.f.call(this.progressListener.onProgress.context, nPercents, loadedBytes, total);
 			}
 		},
 
@@ -43163,8 +43363,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
    * @see onProgress
   */
 		hideFileprogress: function hideFileprogress() {
-			console.log('I hide vall!');
-			//$('#uploadBtn' + this.id).removeClass('hide');
 			$('#uploadProcessView' + this.id)[0].style.display = 'none';
 		}
 	}, //end methods
@@ -43188,41 +43386,142 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(52);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(13)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!./defaultupload.css", function() {
+			var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!./defaultupload.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(12)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/* Progress view */\n/*\ntext in circle\n.upload-process-text {\n\tposition: absolute;\n\tz-index: 31;\n\tfont-size: 8px;\n\ttop: 5px;\n\ttext-align: center;\n\twidth: 20px;\n\tfont-family:Arial;\n}/**/\n\n.upload-process-text {\n\tfont-size: 32px;\n\tfont-family:Arial;\n}\n\n.upload-process-token-image {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n\tz-index: 30;\n}\n.upload-token-anim-color {\n\tbackground-color: #42BCB1;\n}\n.upload-process-left-side, .upload-process-right-side {\n\twidth: 10px;\n}\n.upload-process-right-side {\n\tmargin-left: 10px;\n}\n.upload-token-anim-block {\n\theight: 20px;\n\tbackground-color: gray;\n\twidth: 20px;\n\tdisplay:inline-block;\n\tposition:relative;\n}\n.upload-label {\n\tline-height: 20px!important;\n\tvertical-align: top;\n}\n/* /Progress view */", ""]);
+
+// exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "custom-file mt-2" }, [
-    _c("input", {
-      directives: [
-        {
-          name: "b421validators",
-          rawName: "v-b421validators",
-          value: _vm.validators,
-          expression: "validators"
-        }
-      ],
-      class: "custom-file-input" + (_vm.className ? " " + _vm.className : ""),
-      attrs: {
-        type: "file",
-        "aria-describedby": _vm.id + "Help",
-        id: _vm.id,
-        name: _vm.id
-      },
-      on: { select: _vm.b4InpOnSelectFile }
-    }),
+  return _c("div", [
+    !_vm.immediateleyUploadOff
+      ? _c("div", { staticClass: "custom-file mt-2" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "b421validators",
+                rawName: "v-b421validators",
+                value: _vm.validators,
+                expression: "validators"
+              }
+            ],
+            class:
+              "custom-file-input" + (_vm.className ? " " + _vm.className : ""),
+            attrs: {
+              type: "file",
+              "aria-describedby": _vm.id + "FileImmediatelyHelp",
+              id: _vm.id + "FileImmediately",
+              name: _vm.id + "FileImmediately"
+            },
+            on: { select: _vm.b4InpOnSelectFile }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass: "custom-file-label",
+              attrs: { for: _vm.id + "FileImmediately" }
+            },
+            [_vm._v(_vm._s(_vm.label))]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "invalid-feedback" }),
+          _vm._v(" "),
+          _c("small", {
+            staticClass: "form-text text-muted",
+            attrs: { id: _vm.id + "FileImmediatelyHelp" }
+          })
+        ])
+      : _vm._e(),
     _vm._v(" "),
-    _c("label", { staticClass: "custom-file-label", attrs: { for: ":id" } }, [
-      _vm._v(_vm._s(_vm.label))
-    ]),
+    _vm.immediateleyUploadOff
+      ? _c("div", { staticClass: "input-group" }, [
+          _c("div", { staticClass: "custom-file mt-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "b421validators",
+                  rawName: "v-b421validators",
+                  value: _vm.validators,
+                  expression: "validators"
+                }
+              ],
+              class:
+                "custom-file-input" +
+                (_vm.className ? " " + _vm.className : ""),
+              attrs: {
+                type: "file",
+                "aria-describedby": _vm.id + "FileDefferHelp",
+                id: _vm.id + "FileDeffer",
+                name: _vm.id + "FileDeffer"
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass: "custom-file-label",
+                attrs: { for: _vm.id + "FileDeffer" }
+              },
+              [_vm._v(_vm._s(_vm.label))]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "invalid-feedback" }),
+            _vm._v(" "),
+            _c("small", {
+              staticClass: "form-text text-muted",
+              attrs: { id: _vm.id + "FileDefferHelp" }
+            })
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "invalid-feedback" }),
-    _vm._v(" "),
-    _c(
-      "small",
-      { staticClass: "form-text text-muted", attrs: { id: _vm.id + "Help" } },
-      [
-        _c(
+    !_vm.progressListener
+      ? _c(
           "div",
           {
             staticClass: "text-center",
@@ -43272,23 +43571,40 @@ var render = function() {
                   staticClass: "upload-process-token-image d-inline-block",
                   attrs: {
                     id: "uploadProcessTokenImage" + _vm.id,
-                    src: "/i/token.png"
+                    src: _vm.tokenImagePath
                   }
                 })
               ]
             )
           ]
         )
-      ]
-    ),
+      : _vm._e(),
     _vm._v(" "),
     _c("input", {
-      attrs: { type: "number" },
-      on: { input: _vm.onTestPercents }
+      attrs: { type: "hidden", id: _vm.id, name: _vm.id },
+      domProps: { value: _vm.value },
+      on: {
+        input: function($event) {
+          return _vm.$emit("input", $event.target.value)
+        }
+      }
     })
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-success mt-2", attrs: { type: "button" } },
+        [_vm._v("Upload")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -43299,7 +43615,7 @@ if (false) {
 }
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43369,8 +43685,44 @@ var render = function() {
       _c("inputfileb4", {
         attrs: {
           url: "/p/articlelogoupload/",
+          immediateleyUploadOff: "true",
+          tokenImagePath: "/i/token.png",
+          progressListener: _vm.progressbarListener,
           label: _vm.$t("app.SelectLogo"),
           id: "logotype"
+        },
+        model: {
+          value: _vm.filepath,
+          callback: function($$v) {
+            _vm.filepath = $$v
+          },
+          expression: "filepath"
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "progress" }, [
+        _c(
+          "div",
+          {
+            staticClass: "progress-bar",
+            style: "width: " + _vm.progressValue + "%;",
+            attrs: {
+              role: "progressbar",
+              "aria-valuenow": _vm.progressValue,
+              "aria-valuemin": "0",
+              "aria-valuemax": "100"
+            }
+          },
+          [_vm._v(_vm._s(_vm.progressValue) + "%")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "button", value: "GetValue" },
+        on: {
+          click: function($event) {
+            return _vm._alert(_vm.filepath)
+          }
         }
       }),
       _vm._v(" "),
@@ -43392,51 +43744,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-1f2fd10c", module.exports)
   }
 }
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(54);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(32)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!./defaultupload.css", function() {
-			var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!./defaultupload.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(31)(false);
-// imports
-
-
-// module
-exports.push([module.i, "/*.upload-process-text {\n\tposition: absolute;\n\tz-index: 31;\n\tfont-size: 8px;\n\ttop: 5px;\n\ttext-align: center;\n\twidth: 20px;\n\tfont-family:Arial;\n}/**/\n\n.upload-process-text {\n\tfont-size: 32px;\n\tfont-family:Arial;\n}\n\n.upload-process-token-image {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n\tz-index: 30;\n}\n.upload-token-anim-color {\n\tbackground-color: #42BCB1;\n}\n.upload-process-left-side, .upload-process-right-side {\n\twidth: 10px;\n}\n.upload-process-right-side {\n\tmargin-left: 10px;\n}\n.upload-token-anim-block {\n\theight: 20px;\n\tbackground-color: gray;\n\twidth: 20px;\n\tdisplay:inline-block;\n\tposition:relative;\n}\n.upload-label {\n\tline-height: 20px!important;\n\tvertical-align: top;\n}", ""]);
-
-// exports
-
 
 /***/ })
 /******/ ]);
