@@ -21,7 +21,9 @@ var locales = {
             "YouSuccessLoginClickAndLoginNow": "You are successfully registered and can log in on the",
             "LoginNow": "login page",
 
-            "Cancel": "Cancel",
+			"Cancel": "Cancel",
+			"Save": "Save",
+			"Upload": "Upload",
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Are you sure drop the article",
             "Click_Ok_button_for_remove": "Press OK button for remove",
@@ -62,7 +64,10 @@ var locales = {
             "DefaultError": "Произошла неизвестная ошибка, попробуйте позже",
 
             "Cancel": "Отмена",
-            "OK": "OK",
+            "Save": "Сохранить",
+			"OK": "OK",
+			"Upload": "Загрузить",
+			
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
             "Click_Ok_button_for_remove": "Нажмите OK для удаления",
             "Information": "Информация"

@@ -10,10 +10,10 @@
 	  - нашёл.
 	<p>Что должно быть на форме редактирования (не SEO):</p>
 	<ul>
-		<li>Title, Readonly url, heading, content, icon, insertimage button</li>
 		<li>Список разделов блога</li>
 		<li>Readonly url</li>
 		<li>сохраняем пока в базе, компиляцию предусмотреть (вызов)</li>
+		<li>insertimage button</li>
 	</ul>
 </p>
 <ul class="nav nav-tabs" role="tablist">
