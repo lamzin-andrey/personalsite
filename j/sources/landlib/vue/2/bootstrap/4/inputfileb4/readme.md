@@ -8,48 +8,48 @@ This vue2 component ajax custom file input with progress bar.
 
 ```html
  <form class="user" method="POST" action="/createpost.json" @submit="onSubmit" novalidate id="tempform">
-        <inputfileb4 
-            v-model="imageurl"
-            url="/articlelogoupload.json"
+		<inputfileb4 
+			v-model="imageurl"
+			url="/articlelogoupload.json"
 			tokenImagePath="/i/token.png"
-            immediateleyUploadOff="true"
-         :label="$t('app.SelectLogo')" 
+			immediateleyUploadOff="true"
+		 :label="$t('app.SelectLogo')" 
 		 id="logotype" >
 		</inputfileb4>
 
 		 
-        
-        <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
-        </p>
-        
-    </form>
+		
+		<p class="text-right my-3">
+			<button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+		</p>
+		
+	</form>
 ```
 
 ```javascript
  	//This component
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
-    export default {
-        name: 'editpostform',
-        
-        data: function(){return {
-            //Uploaded image url
-            imageurl:''
-        }; },
-        //
-        methods:{
-            /* 
-             * @description Send form data
-            */
-            onSubmit(evt) {},
-           
-        }, //end methods
-        
-        mounted() {
+	export default {
+		name: 'editpostform',
+		
+		data: function(){return {
+			//Uploaded image url
+			imageurl:''
+		}; },
+		//
+		methods:{
+			/* 
+			 * @description Send form data
+			*/
+			onSubmit(evt) {},
+		   
+		}, //end methods
+		
+		mounted() {
 			//...
-        }
-    }
+		}
+	}
 ```
 
 In this example after upload file code
@@ -110,35 +110,35 @@ your vue app or component property with custom listeners.
 
 ```html
  <form class="user" method="POST" action="/createpost.json" @submit="onSubmit" novalidate id="tempform">
-        <inputfileb4 
-            v-model="imageurl"
-            url="/articlelogoupload.json"
+		<inputfileb4 
+			v-model="imageurl"
+			url="/articlelogoupload.json"
 			tokenImagePath="/i/token.png"
-            immediateleyUploadOff="true"
+			immediateleyUploadOff="true"
 			:listeners="fileUploadListeners"
-         :label="$t('app.SelectLogo')" 
+		 :label="$t('app.SelectLogo')" 
 		 id="logotype" >
 		</inputfileb4>
 
 		 
-        
-        <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
-        </p>
-        
-    </form>
+		
+		<p class="text-right my-3">
+			<button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+		</p>
+		
+	</form>
 ```
 
 ```javascript
  	//This component
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
-    export default {
-        name: 'editpostform',
-        
-        data: function(){return {
-            //Uploaded image url
-            imageurl:'',
+	export default {
+		name: 'editpostform',
+		
+		data: function(){return {
+			//Uploaded image url
+			imageurl:'',
 			fileUploadListeners: {
 				onSuccess:{
 					f:this.onSuccess,
@@ -149,32 +149,32 @@ your vue app or component property with custom listeners.
 					context:this
 				}
 			}
-        }; },
-        //
-        methods:{
+		}; },
+		//
+		methods:{
 			/* 
-             * @description Send form data
-            */
-            onSuccess(data) {
+			 * @description Send form data
+			*/
+			onSuccess(data) {
 				//TODO write here custom logic
 			},
 			/* 
-             * @description Send form data
-            */
-            onFail(s, oInfo) {
+			 * @description Send form data
+			*/
+			onFail(s, oInfo) {
 				//TODO write here custom logic
 			},
-            /* 
-             * @description Send form data
-            */
-            onSubmit(evt) {},
-           
-        }, //end methods
-        
-        mounted() {
+			/* 
+			 * @description Send form data
+			*/
+			onSubmit(evt) {},
+		   
+		}, //end methods
+		
+		mounted() {
 			//...
-        }
-    }
+		}
+	}
 ```
 
 ### [progressListener]
@@ -185,77 +185,77 @@ You can off this view and use (for next example) bootstrap 4 progress bar with l
 
 ```html
  <form class="user" method="POST" action="/createpost.json" @submit="onSubmit" novalidate id="tempform">
-        <inputfileb4 
-            v-model="imageurl"
-            url="/articlelogoupload.json"
+		<inputfileb4 
+			v-model="imageurl"
+			url="/articlelogoupload.json"
 			tokenImagePath="/i/token.png"
-            immediateleyUploadOff="true"
+			immediateleyUploadOff="true"
 			:progressListener="progressbarListener"
-         :label="$t('app.SelectLogo')" 
+		 :label="$t('app.SelectLogo')" 
 		 id="logotype" >
 		</inputfileb4>
 
 		<!-- Custom progressbar -->
-         <div class="progress">
-            <div class="progress-bar" role="progressbar" 
-                :style="'width: ' + progressValue + '%;'" 
-                :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
-         </div>
+		 <div class="progress">
+			<div class="progress-bar" role="progressbar" 
+				:style="'width: ' + progressValue + '%;'" 
+				:aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
+		 </div>
 		 
-        
-        <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
-        </p>
-        
-    </form>
+		
+		<p class="text-right my-3">
+			<button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+		</p>
+		
+	</form>
 ```
 
 ```javascript
  	//This component
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
-    export default {
-        name: 'editpostform',
-        
-        data: function(){return {
-            //Uploaded image url
-            imageurl:'',
+	export default {
+		name: 'editpostform',
+		
+		data: function(){return {
+			//Uploaded image url
+			imageurl:'',
 
 			//Custom progress bar params
-            progressbarListener:{
-                onProgress: {
-                    f: this.onProgress,
-                    context:this
-                }
-            },
-            //Custom progress bar model
-            progressValue : 0
-        }; },
-        //
-        methods:{
+			progressbarListener:{
+				onProgress: {
+					f: this.onProgress,
+					context:this
+				}
+			},
+			//Custom progress bar model
+			progressValue : 0
+		}; },
+		//
+		methods:{
 			/* 
-             * @description Send form data
-            */
-            onSuccess(data) {
+			 * @description Send form data
+			*/
+			onSuccess(data) {
 				//TODO write here custom logic
 			},
 			/**
 			 * @description Set custom progress value
-             * @param {Number} n
-            */
-            onProgress(n) {
-                if (n <= 100 && n > 0) {
-                    this.progressValue = n;
-                }
-            },
-            
-           
-        }, //end methods
-        
-        mounted() {
+			 * @param {Number} n
+			*/
+			onProgress(n) {
+				if (n <= 100 && n > 0) {
+					this.progressValue = n;
+				}
+			},
+			
+		   
+		}, //end methods
+		
+		mounted() {
 			//...
-        }
-    }
+		}
+	}
 ```
 
 ### className
@@ -323,48 +323,48 @@ If application error
 
 ```html
  <form class="user" method="POST" action="/createpost.json" @submit="onSubmit" novalidate id="tempform">
-        <inputfileb4 
-            v-model="imageurl"
-            url="/articlelogoupload.json"
+		<inputfileb4 
+			v-model="imageurl"
+			url="/articlelogoupload.json"
 			tokenImagePath="/i/token.png"
-            immediateleyUploadOff="true"
-         :label="$t('app.SelectLogo')" 
+			immediateleyUploadOff="true"
+		 :label="$t('app.SelectLogo')" 
 		 id="logotype" >
 		</inputfileb4>
 
 		 
-        
-        <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
-        </p>
-        
-    </form>
+		
+		<p class="text-right my-3">
+			<button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+		</p>
+		
+	</form>
 ```
 
 ```javascript
  	//Подключите этот компонент
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
-    export default {
-        name: 'editpostform',
-        
-        data: function(){return {
-            //Будет содержать url загруженного файла
-            imageurl:''
-        }; },
-        //
-        methods:{
-            /* 
-             * @description Отпавка данных формы
-            */
-            onSubmit(evt) {},
-           
-        }, //end methods
-        
-        mounted() {
+	export default {
+		name: 'editpostform',
+		
+		data: function(){return {
+			//Будет содержать url загруженного файла
+			imageurl:''
+		}; },
+		//
+		methods:{
+			/* 
+			 * @description Отпавка данных формы
+			*/
+			onSubmit(evt) {},
+		   
+		}, //end methods
+		
+		mounted() {
 			//...
-        }
-    }
+		}
+	}
 ```
 
 In this example after upload file code
@@ -428,35 +428,35 @@ If action not success, component emit event
 
 ```html
  <form class="user" method="POST" action="/createpost.json" @submit="onSubmit" novalidate id="tempform">
-        <inputfileb4 
-            v-model="imageurl"
-            url="/articlelogoupload.json"
+		<inputfileb4 
+			v-model="imageurl"
+			url="/articlelogoupload.json"
 			tokenImagePath="/i/token.png"
-            immediateleyUploadOff="true"
+			immediateleyUploadOff="true"
 			:listeners="fileUploadListeners"
-         :label="$t('app.SelectLogo')" 
+		 :label="$t('app.SelectLogo')" 
 		 id="logotype" >
 		</inputfileb4>
 
 		 
-        
-        <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
-        </p>
-        
-    </form>
+		
+		<p class="text-right my-3">
+			<button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+		</p>
+		
+	</form>
 ```
 
 ```javascript
  	//This component
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
-    export default {
-        name: 'editpostform',
-        
-        data: function(){return {
-            //Uploaded image url
-            imageurl:'',
+	export default {
+		name: 'editpostform',
+		
+		data: function(){return {
+			//Uploaded image url
+			imageurl:'',
 			fileUploadListeners: {
 				onSuccess:{
 					f:this.onSuccess,
@@ -467,32 +467,32 @@ If action not success, component emit event
 					context:this
 				}
 			}
-        }; },
-        //
-        methods:{
+		}; },
+		//
+		methods:{
 			/* 
-             * @description Send form data
-            */
-            onSuccess(data) {
+			 * @description Send form data
+			*/
+			onSuccess(data) {
 				//TODO write here custom logic
 			},
 			/* 
-             * @description Send form data
-            */
-            onFail(s, oInfo) {
+			 * @description Send form data
+			*/
+			onFail(s, oInfo) {
 				//TODO write here custom logic
 			},
-            /* 
-             * @description Send form data
-            */
-            onSubmit(evt) {},
-           
-        }, //end methods
-        
-        mounted() {
+			/* 
+			 * @description Send form data
+			*/
+			onSubmit(evt) {},
+		   
+		}, //end methods
+		
+		mounted() {
 			//...
-        }
-    }
+		}
+	}
 ```
 
 ### [progressListener]
@@ -503,77 +503,77 @@ If action not success, component emit event
 
 ```html
  <form class="user" method="POST" action="/createpost.json" @submit="onSubmit" novalidate id="tempform">
-        <inputfileb4 
-            v-model="imageurl"
-            url="/articlelogoupload.json"
+		<inputfileb4 
+			v-model="imageurl"
+			url="/articlelogoupload.json"
 			tokenImagePath="/i/token.png"
-            immediateleyUploadOff="true"
+			immediateleyUploadOff="true"
 			:progressListener="progressbarListener"
-         :label="$t('app.SelectLogo')" 
+		 :label="$t('app.SelectLogo')" 
 		 id="logotype" >
 		</inputfileb4>
 
 		<!-- Custom progressbar -->
-         <div class="progress">
-            <div class="progress-bar" role="progressbar" 
-                :style="'width: ' + progressValue + '%;'" 
-                :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
-         </div>
+		 <div class="progress">
+			<div class="progress-bar" role="progressbar" 
+				:style="'width: ' + progressValue + '%;'" 
+				:aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
+		 </div>
 		 
-        
-        <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
-        </p>
-        
-    </form>
+		
+		<p class="text-right my-3">
+			<button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+		</p>
+		
+	</form>
 ```
 
 ```javascript
  	//This component
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
-    export default {
-        name: 'editpostform',
-        
-        data: function(){return {
-            //Uploaded image url
-            imageurl:'',
+	export default {
+		name: 'editpostform',
+		
+		data: function(){return {
+			//Uploaded image url
+			imageurl:'',
 
 			//Custom progress bar params
-            progressbarListener:{
-                onProgress: {
-                    f: this.onProgress,
-                    context:this
-                }
-            },
-            //Custom progress bar model
-            progressValue : 0
-        }; },
-        //
-        methods:{
+			progressbarListener:{
+				onProgress: {
+					f: this.onProgress,
+					context:this
+				}
+			},
+			//Custom progress bar model
+			progressValue : 0
+		}; },
+		//
+		methods:{
 			/* 
-             * @description Send form data
-            */
-            onSuccess(data) {
+			 * @description Send form data
+			*/
+			onSuccess(data) {
 				//TODO write here custom logic
 			},
 			/**
 			 * @description Set custom progress value
-             * @param {Number} n
-            */
-            onProgress(n) {
-                if (n <= 100 && n > 0) {
-                    this.progressValue = n;
-                }
-            },
-            
-           
-        }, //end methods
-        
-        mounted() {
+			 * @param {Number} n
+			*/
+			onProgress(n) {
+				if (n <= 100 && n > 0) {
+					this.progressValue = n;
+				}
+			},
+			
+		   
+		}, //end methods
+		
+		mounted() {
 			//...
-        }
-    }
+		}
+	}
 ```
 
 ### className
