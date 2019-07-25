@@ -76,6 +76,8 @@
 			'progressListener' : {type:Object},
 			'csrfToken' : {type:String},
 			'uploadButtonLabel' : {type:String, default : 'Upload'},
+			//Отправляем дополнительно данные перечисленных инпутов
+			'sendInputs' : {type:Array, default : []},
 			'className' : {type:String}
 		},
 		name: 'inputb4',
@@ -106,13 +108,26 @@
 			 * @param {InputFile}
 			*/
 			sendFile(iFile) {
-				let xhr = new XMLHttpRequest(), form = new FormData(), t, that = this;
+				let xhr = new XMLHttpRequest(), form = new FormData(), t, that = this, i, s, inp;
 				form.append(iFile.id, iFile.files[0]);
 				//form.append("isFormData", 1);
 				form.append("path", this.url);
 				t = this.csrfToken;
 				if (t) {
 					form.append("_token", t);
+				}
+				if (this.sendInputs && this.sendInputs.length) {
+					for (i = 0; i < this.sendInputs.length; i++) {
+						s = this.sendInputs[i];
+						inp = $('#' + s)[0];
+						if (inp && (inp.value || inp.checked)) {
+							if (inp.checked) {
+								form.append(s, (inp.value ? inp.value : 'true') );
+							} else if (inp.type != 'checkbox' && inp.value.trim()){
+								form.append(s, inp.value.trim() );
+							}
+						}
+					}
 				}
 				xhr.upload.addEventListener("progress", (pEvt) => {
 					let loadedPercents, loadedBytes, total;

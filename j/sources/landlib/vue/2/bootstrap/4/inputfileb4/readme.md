@@ -282,6 +282,15 @@ Text on upload button (if you use immediateleyUploadOff attribute).
 
 Unique id for input. Uploaded file url will set in hidden input with it id.
 
+### sendInputs
+
+You can send values one or some html inputs with file data. Use attribute sendInputs:
+
+`:sendInputs="['alpha']"`
+
+	'alpha' is html input id (input#alpha[type=checkbox|text]).
+
+If you use sendInputs, when this component send file data, it also append values html inputs types text, checkbox ant html textarea.
 
 ## Expected server response format
 
@@ -615,6 +624,17 @@ Yet not release. Need required validator support. (Wil Depends from bootstrap421
 
 Unique id for input. Uploaded file url will set in hidden input with it id.
 Уникальный id компонента. Url загруженного файла будет записан в атрибут value скрытого инпута с таким id.
+
+### Атрибут sendInputs
+
+Вы можете отправить значения одного или нескольких элементов ввода вместе с данными файла. Используйте
+
+`:sendInputs="['alpha']"`
+
+(alpha - это id инпута)
+
+Вместе с данными файла будут переданы значения инпута c id alpha. Поддерживаются текстовые инпуты и чекбоксы.
+
 
 ## Ожидаемый ответ сервера
 

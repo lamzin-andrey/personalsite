@@ -2,13 +2,13 @@
 
 class FileUpload extends BaseApp {
 	/** @property _path */
-	private $_path = '';
+	protected $_path = '';
 	
 	/** @property _url Здесь ссылка на файл (или файловый путь) для чата */
-	private $_url = '';
+	protected $_url = '';
 	
 	/** @property bool _isImg  */
-	private $_isImg = false;
+	protected $_isImg = false;
 	
 	/** @property string _fileId */
 	protected $_fileId = '';
@@ -30,7 +30,7 @@ class FileUpload extends BaseApp {
 		}
 	}
 	
-	private function _savePhoto(array $photo)
+	protected function _savePhoto(array $photo)
 	{
 		$errors = [];
 		if ($this->_validateFile($photo, $errors)) {
@@ -47,7 +47,6 @@ class FileUpload extends BaseApp {
 			return;
 		}
 		json_error('msg', l('unable-upload-file'));
-		//return;
 	}
 	
 	private function _saveAudioData($photo) {
@@ -70,7 +69,7 @@ class FileUpload extends BaseApp {
 		)");
 	}
 	
-	private function _validateFile(array $photo, array &$report = []/*{}*/) : bool
+	protected function _validateFile(array $photo, array &$report = []/*{}*/) : bool
 	{
 		$errors = [];
 		if ($photo['error'] > 0) {

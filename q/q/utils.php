@@ -218,25 +218,40 @@ function now($ignore_summer_time = false) {
  * @param int   $destW - требуемая ширина изображения
  * @param int   $destH - требуемая высота изображения
  * @param array $defaultTransparentColor [0,0,0] - это значение цвета будет использоваться как прозрачное, если прозрачный цвет не удасться определить из исходного изображения 
+ * @param int $bgW = 0 ширина бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по горизонтали на прямоугольники данной ширины
+ * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
+ * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
-function utils_pngResize($srcFilename, $destFilename, $destW, $destH, $compression = 9, $defaultTransparentColor = array(0, 0, 0)) {
+function utils_pngResize(string $srcFilename, string $destFilename, int $destW, int $destH, int $compression = 9, array $defaultTransparentColor = [0, 0, 0], int $bgW = 0, int $bgH = 0, bool $withAlpha = true) {
 	if (!$img = @imagecreatefrompng($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
 	$sz = getImageSize($srcFilename);
 	$srcW = $sz[0];
 	$srcH = $sz[1];
-	$output = imagecreatetruecolor($destW, $destH);
-    imagealphablending($output, false); //чтобы не было непрозрачной границы по контуру
-    imagesavealpha($output, true);
-    $transparencyIndex = imagecolortransparent($img);
-    if ($transparencyIndex >= 0) {
-        $transparencyColor = imagecolorsforindex($img, $transparencyIndex);
-    }
-    $transparenctColor = imagecolorallocate($output, $defaultTransparentColor[0], $defaultTransparentColor[1], $defaultTransparentColor[2]);
-    imagecolortransparent($output, $transparencyIndex);
+	
+	$outW = $bgW ? $bgW : $destW;
+	$outH = $bgH ? $bgH : $destH;
+	$dstX = 0;
+	$dstY = 0;
+	if ($bgH && $bgW) {
+		$dstX = round(($bgW - $destW) / 2);
+		$dstY = round(($bgH - $destH) / 2);
+	}
+	
+	$output = imagecreatetruecolor($outW, $outH);
+	
+	if ($withAlpha) {
+		imagealphablending($output, false); //чтобы не было непрозрачной границы по контуру
+		imagesavealpha($output, true);
+		$transparencyIndex = imagecolortransparent($img);
+		imagecolortransparent($output, $transparencyIndex);
+	} else {
+		$transparencyIndex = imagecolorallocate($output, $defaultTransparentColor[0], $defaultTransparentColor[1], $defaultTransparentColor[2]);
+	}
     imagefill($output, 0, 0, $transparencyIndex);
-    imagecopyresampled($output, $img, 0, 0, 0, 0, $destW, $destH, $srcW, $srcH);
+    
+    imagecopyresampled($output, $img, $dstX, $dstY, 0, 0, $destW, $destH, $srcW, $srcH);
 	if (!@imagepng($output, $destFilename, $compression)) {
     	throw new Exception('Ошибка сохранения изображения');
 	}
@@ -248,42 +263,129 @@ function utils_pngResize($srcFilename, $destFilename, $destW, $destH, $compressi
  * @param int   $destW - требуемая ширина изображения
  * @param int   $destH - требуемая высота изображения
  * @param array $defaultTransparentColor [0,0,0] - это значение цвета будет использоваться как прозрачное, если прозрачный цвет не удасться определить из исходного изображения 
+ * @param int $bgW = 0 ширина бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по горизонтали на прямоугольники данной ширины
+ * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
+ * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
-function utils_gifResize($srcFilename, $destFilename, $destW, $destH, $defaultTransparentColor = array(0, 0, 0)) {
+function utils_gifResize(string $srcFilename, string $destFilename, int $destW, int $destH, array $defaultTransparentColor = [0, 0, 0], int $bgW = 0, int $bgH = 0, bool $withAlpha = true) {
 	if (!$img = @imagecreatefromgif($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
 	$sz = getImageSize($srcFilename);
 	$srcW = $sz[0];
 	$srcH = $sz[1];
-	$output = imagecreatetruecolor($destW, $destH);
-    //imagealphablending($output, false); //чтобы не было непрозрачной границы по контуру
-    //imagesavealpha($output, true);
-    $transparencyIndex = imagecolortransparent($img);
-    if ($transparencyIndex !== -1) {
-        $transparencyColor = imagecolorsforindex($img, $transparencyIndex);
-    }
-    $transparenctColor = imagecolorallocate($output, $defaultTransparentColor[0], $defaultTransparentColor[1], $defaultTransparentColor[2]);
-    imagecolortransparent($output, $transparencyIndex);
+	
+	$outW = $bgW ? $bgW : $destW;
+	$outH = $bgH ? $bgH : $destH;
+	$dstX = 0;
+	$dstY = 0;
+	if ($bgH && $bgW) {
+		$dstX = round(($bgW - $destW) / 2);
+		$dstY = round(($bgH - $destH) / 2);
+	}
+	
+	$output = imagecreatetruecolor($outW, $outH);
+    
+    if ($withAlpha) {
+		$transparencyIndex = imagecolortransparent($img);
+		imagecolortransparent($output, $transparencyIndex);
+	} else {
+		$transparencyIndex = imagecolorallocate($output, $defaultTransparentColor[0], $defaultTransparentColor[1], $defaultTransparentColor[2]);
+	}
+    
     imagefill($output, 0, 0, $transparencyIndex);
-    imagecopyresampled($output, $img, 0, 0, 0, 0, $destW, $destH, $srcW, $srcH);
+    imagecopyresampled($output, $img, $dstX, $dstY, 0, 0, $destW, $destH, $srcW, $srcH);
 	if (!@imagegif($output, $destFilename)) {
     	throw new Exception('Ошибка сохранения изображения');
 	}
 }
-
-function utils_jpgResize($srcFilename, $destFilename, $destW, $destH, $quality = 80) {
+/**
+ * @desc Функция ресайза jpg
+ * @param string $srcFilename   - путь к файлу изображения в формате png
+ * @param string $destFilename  - путь к файлу изображения в формате png
+ * @param int   $destW - требуемая ширина изображения
+ * @param int   $destH - требуемая высота изображения
+ * @param int $quality = 80 - качество jpg
+ * @param int $bgW = 0 ширина бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по горизонтали на прямоугольники данной ширины
+ * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
+ * @param array of int $color = [0, 0, 0] Цвет бэкграунда. Если переданы bgH и bgW, фон ыне уменьшенного изображения будет залит этим цветом
+ * */
+function utils_jpgResize(string $srcFilename, string $destFilename, int $destW, int $destH, int $quality = 80, int $bgW = 0, int $bgH = 0, array $color = [0, 0, 0])
+{
 	if (!$img = @imagecreatefromjpeg($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
 	$sz = getImageSize($srcFilename);
 	$srcW = $sz[0];
 	$srcH = $sz[1];
-	$output = imagecreatetruecolor($destW, $destH);
-    imagecopyresampled($output, $img, 0, 0, 0, 0, $destW, $destH, $srcW, $srcH);
+	
+	$outW = $bgW ? $bgW : $destW;
+	$outH = $bgH ? $bgH : $destH;
+	$dstX = 0;
+	$dstY = 0;
+	if ($bgH && $bgW) {
+		$dstX = round(($bgW - $destW) / 2);
+		$dstY = round(($bgH - $destH) / 2);
+	}
+	
+	$output = imagecreatetruecolor($outW, $outH);
+	$color = imagecolorallocate($output, $color[0], $color[1], $color[2]);
+    
+	imagefill($output, 0, 0, $color);
+    imagecopyresampled($output, $img, $dstX, $dstY, 0, 0, $destW, $destH, $srcW, $srcH);
 	if (!@imagejpeg($output, $destFilename, $quality)) {
     	throw new Exception('Ошибка сохранения изображения');
 	}
+}
+/**
+ * @description Изменяет изображение так, чтобы ширина была не более чем $nWidth а высота не более чем $nHeight
+ * Помещает изменённое изображение на фон цвета $color размером $nWidth на $nHeight
+ * @param string $srcPath
+ * @param string $destPath
+ * @param int $nWidth
+ * @param int $nHeight
+ * @param array $color [r,g,b]
+ * @param bool $withAlpha = true
+*/
+function utils_resizeAndAddBg(string $srcPath, string $destPath, int $nWidth, int $nHeight, array $color, bool $withAlpha = true)
+{
+	if (!file_exists($srcPath)) {
+		return;
+	}
+	$sz = getImageSize($srcPath);
+	$srcW = $sz[0];
+	$srcH = $sz[1];
+	$isLandscape = $srcW > $srcH;
+	
+	$isSrcLgBg = $srcW > $nWidth || $srcH > $nHeight;
+	$destX = 0;
+	$destY = 0;
+	$newW = $srcW;
+	$newH = $srcH;
+	
+	//это случай, когда изображение больше фона
+	if ($isSrcLgBg) {
+		if ($isLandscape) {
+			$nScale = $nWidth / $srcW;
+		} else {
+			$nScale = $nHeight / $srcH;
+		}
+		$newW = round($srcW * $nScale);
+		$newH = round($srcH * $nScale);
+	}
+	$mime = $sz['mime'];
+	switch ($mime) {
+		case 'image/png':
+			utils_pngResize($srcPath, $destPath, $newW, $newH, 9, $color, $nWidth, $nHeight, $withAlpha);
+			break;
+		case 'image/gif':
+			utils_gifResize($srcPath, $destPath, $newW, $newH, $color, $nWidth, $nHeight);
+			break;
+		case 'image/jpeg':
+			utils_jpgResize($srcPath, $destPath, $newW, $newH, 80, $nWidth, $nHeight, $color);
+			break;
+	}
+	
 }
 
 function utils_404($template = null, $masterTemplate = null) {
@@ -689,6 +791,12 @@ function utils_setUrlVar($var, $val) {
 }
 function ireq($key, $scope = 'REQUEST'){
 	return (int)req($key, $scope);
+}
+function breq(string $key, string $scope = 'REQUEST') : bool
+{
+	$s = trim(req($key, $scope));
+	$r = ($s == 'true' ? true : false);
+	return $r;
 }
 function ilistFromString($key, $separator = ',', $scope = 'REQUEST'){
 	$arr = explode($separator, req($key));

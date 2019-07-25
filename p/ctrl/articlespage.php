@@ -6,9 +6,11 @@ require __DIR__ . '/adminauthjson.php';
 class ArticlesPage extends AdminAuthJson {
 	public $uid = 0;
 	
+	
 	public function __construct() {
 		$this->table = 'pages';
 		parent::__construct();
+		
 		
 		$url = explode('?', $_SERVER['REQUEST_URI']);
 		$url = $url[0];
@@ -27,6 +29,7 @@ class ArticlesPage extends AdminAuthJson {
 		json_ok_arr($aResult);
 		
 	}
+	
 	/**
 	 * @description Установить фильтрацию по переданому слову
 	*/

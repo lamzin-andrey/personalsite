@@ -46,6 +46,7 @@
 	</li>
 </ul>
 <div class="tab-content">
+	
 	<div class="tab-pane fade " id="alist" role="tabpanel" aria-labelledby="list-tab">
 		<div class="card">
 			<div class="card-body">
@@ -70,14 +71,17 @@
 			</div>
 		</div>
 	</div>
+	
 	<div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title"><?php echo l('NewEdit') ?></h5>
 				<articleform></articleform>
+				<textarea hidden style="display:none" id="jdata"><?php echo $route->app->jsonData ?></textarea>
 			</div>
 		</div>
 	</div>
+	
 	<div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
 		<div class="card">
 			<div class="card-body">
@@ -87,6 +91,7 @@
 			</div>
 		</div>
 	</div>
+	
 </div>
 
 

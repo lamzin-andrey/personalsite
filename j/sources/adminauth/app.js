@@ -1,5 +1,6 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
+window.slug = require('laravel-slug');
 
 
 //Интернациализация

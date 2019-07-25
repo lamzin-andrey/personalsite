@@ -1,16 +1,19 @@
 <template>
-	<div class="mb-3 mt-2">
-		<label :for="id">{{label}}</label>
-		<textarea 
+	<div class="form-group mt-2">
+		<div class="custom-control custom-checkbox small">
+			<input 
 			:value="value"
-			@input="$emit('input', $event.target.value); onInput($event);"
-			:placeholder="placeholder"
-			:rows="rows"
-			:class="'form-control' + (className ? (' ' + className) : '')"
-			:id="id" :name="id"></textarea>
-		<div v-if="counter" :class="'bg-gradient-info rounded-bottom text-light text-right pr-3' + (counter && counter.className ? ('' + counter.className) : '')">{{ textLength }}</div>
-		<div class="invalid-feedback"></div>
-		<small :id="id + 'Help'" class="form-text text-muted"></small>
+			@input="$emit('input', $event.target.value)"
+			v-b421validators="validators"
+			type="checkbox" 
+			:class="'custom-control-input' + (className ? (' ' + className) : '')"
+			:id="id" :name="id"
+			>
+			<label class="custom-control-label ml-1" :for="id">
+				{{ label }}
+			</label>
+			<div class="invalid-feedback"></div>
+		</div>
 	</div>
 </template>
 <script>
@@ -19,27 +22,19 @@
 			'label',
 			'validators',
 			'id',
-			'placeholder',
-			//if set counter showed symbol counter
-			/*** @property counter {className: 'bg-success text-light'} */
-			'counter',
-			'rows',
 			'type',
 			'value',
 			'className'
 		],
-		name: 'textareab4',
+		name: 'checkboxb4',
 		
         //вызывается раньше чем mounted
         data: function(){return {
-            textLength:0,
+            
         }; },
         //
         methods:{
-            onInput(ev) {
-				this.textLength = ev.target.value.length;
-				return true;
-			}
+            
            
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName

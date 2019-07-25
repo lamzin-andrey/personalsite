@@ -25715,6 +25715,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(34);
 window.jQuery = window.$ = window.jquery = __webpack_require__(2);
 window.Vue = __webpack_require__(3);
+window.slug = __webpack_require__(61);
 
 //Интернациализация
 
@@ -26165,6 +26166,8 @@ var locales = {
             "Heading": "Heading",
             "Content": "Content",
             "SelectLogo": "Select logotype",
+            "isMakeTransparentBg": "Transparent background",
+            "Sections": "Choose section",
 
             "Policystr": "Privacy Policy"
         }
@@ -26211,7 +26214,9 @@ var locales = {
             "Url": "Путь к файлу статьи",
             "Heading": "Заголовок статьи",
             "Content": "Статья",
-            "SelectLogo": "Загрузить логотип"
+            "SelectLogo": "Загрузить логотип",
+            "isMakeTransparentBg": "Прозрачный фон",
+            "Sections": "Категория"
         }
     }
 };
@@ -42470,7 +42475,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(42)
 /* template */
-var __vue_template__ = __webpack_require__(54)
+var __vue_template__ = __webpack_require__(60)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42547,118 +42552,137 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 //Компонент для отображения инпута ввода текста bootstrap 4
 Vue.component('inputb4', __webpack_require__(43));
-Vue.component('textareab4', __webpack_require__(46));
-Vue.component('inputfileb4', __webpack_require__(49));
+Vue.component('selectb4', __webpack_require__(46));
+Vue.component('checkboxb4', __webpack_require__(49));
+Vue.component('textareab4', __webpack_require__(52));
+Vue.component('inputfileb4', __webpack_require__(55));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'articleform',
-    //вызывается раньше чем mounted
-    data: function data() {
-        return {
-            //Значение title
-            title: '',
-            //Путь к загруженному логотипу
-            filepath: 'default ops!',
-            //Параметры для кастомного прогресс-бара
-            progressbarListener: {
-                onProgress: {
-                    f: this.onProgress,
-                    context: this
-                }
-            },
-            //Значение по умолчанию для кастомной шкалы прогресса
-            progressValue: 0
-        };
-    },
-    //
-    methods: {
-        //TODO remove me
-        _alert: function _alert(s) {
-            alert(s);
-        },
-
-        /** 
-         * @description Кастомный прогресс
-         * @param {Number} n
-        */
-        onProgress: function onProgress(a) {
-            if (a <= 100 && a > 0) {
-                this.progressValue = a;
-            }
-        },
-
-        /** 
-         * @description Пробуем отправить форму
-        */
-        onSubmit: function onSubmit(evt) {
-            evt.preventDefault();
-
-            //let formInputValidator = this.$root.formInputValidator,
-            /** @var {Validator} validator */
-            //  validator = formInputValidator.getValidator();
-            /*if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
-                this.$root._post(
-                    {
-                        email:      this.email,
-                        rememberMe: this.rememberMe,
-                        passwordL:  this.password
-                    },
-                    (data) => { this.onSuccessLogin(data, formInputValidator);},
-                    '/p/signin.jn/',
-                    (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
-                );
-            }*/
-        },
-
-        /**
-         * @param {Object} data
-         * @param {B421Validators} formInputValidator
-        */
-        onSuccessLogin: function onSuccessLogin(data, formInputValidator) {
-            if (data.status == 'error') {
-                return this.onFailLogin(data, null, null, formInputValidator);
-            }
-            window.location.href = '/p/';
-        },
-
-        /**
-         * @param {Object} a
-         * @param {Object} b
-         * @param {Object} c
-         * @param {B421Validators} formInputValidator
-        */
-        onFailLogin: function onFailLogin(a, b, c, formInputValidator) {
-            if (a.status == 'error' && a.errors) {
-                var i = void 0,
-                    jEl = void 0,
-                    s = void 0;
-                for (i in a.errors) {
-                    s = i == 'password' ? i + 'L' : i;
-                    jEl = $('#' + s);
-                    if (jEl[0]) {
-                        formInputValidator.viewSetError(jEl, a.errors[i]);
-                    }
-                }
-            }
+  name: 'articleform',
+  //вызывается раньше чем mounted
+  data: function data() {
+    var _data = {
+      //Значение title
+      title: '',
+      //Значение body
+      body: '',
+      //Значение url
+      url: '',
+      //Путь к загруженному логотипу
+      filepath: 'default ops!',
+      //Параметры для кастомного прогресс-бара
+      progressbarListener: {
+        onProgress: {
+          f: this.onProgress,
+          context: this
         }
-    }, //end methods
-    //вызывается после data, поля из data видны "напрямую" как this.fieldName
-    mounted: function mounted() {
-        var self = this;
-        /*this.$root.$on('showMenuEvent', function(evt) {
-            self.menuBlockVisible   = 'block';
-            self.isMainMenuVisible  = true;
-            self.isScrollWndVisible = false;
-            self.isColorWndVisible  = false;
-            self.isHelpWndVisible   = false;
-            self.nStep = self.$root.nStep;
-        })/**/
-        //console.log('I mounted!');
+      },
+      fileUploadListeners: {
+        onSuccess: {
+          f: this.onSuccessUploadLogo,
+          context: this
+        }
+      },
+      //
+      defaultLogo: '/i/64.jpg',
+      //Значение по умолчанию для кастомной шкалы прогресса
+      progressValue: 0,
+      //Выбранная категория
+      category: 0,
+      //
+      pagesCategories: [{ id: 1, name: "One" }, { id: 2, name: "Two" }],
+      counter: true
+    };
+    try {
+      var jdata = JSON.parse($('#jdata').val());
+      _data.pagesCategories = jdata.pagesCategories;
+    } catch (e) {
+      console.log('opace', e);
     }
+    return _data;
+  },
+  //
+  methods: {
+    //TODO remove me
+    _alert: function _alert(s) {
+      alert(s);
+    },
+
+    /** 
+     * @description Кастомный прогресс
+     * @param {Number} n
+    */
+    onProgress: function onProgress(a) {
+      if (a <= 100 && a > 0) {
+        this.progressValue = a;
+      }
+    },
+
+    /** 
+     * @description Пробуем отправить форму
+    */
+    onSubmit: function onSubmit(evt) {
+      evt.preventDefault();
+
+      //let formInputValidator = this.$root.formInputValidator,
+      /** @var {Validator} validator */
+      //  validator = formInputValidator.getValidator();
+      /*if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+          this.$root._post(
+              {
+                  email:      this.email,
+                  rememberMe: this.rememberMe,
+                  passwordL:  this.password
+              },
+              (data) => { this.onSuccessLogin(data, formInputValidator);},
+              '/p/signin.jn/',
+              (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
+          );
+      }*/
+    },
+
+    /**
+     * @param {Object} data
+    */
+    onSuccessUploadLogo: function onSuccessUploadLogo(data) {
+      if (data.path) {
+        this.defaultLogo = data.path;
+      }
+    },
+
+    /**
+    * @description Транслирует url каждый раз, когда происходит ввод в поле с назваием статьи
+     
+    */
+    transliteUrl: function transliteUrl() {
+      if (this.title.trim()) {
+        this.url = '/articles/' + slug(this.title) + '/';
+      } else {
+        this.url = '';
+      }
+    }
+  }, //end methods
+  //вызывается после data, поля из data видны "напрямую" как this.fieldName
+  mounted: function mounted() {
+    var self = this;
+    /*this.$root.$on('showMenuEvent', function(evt) {
+        self.menuBlockVisible   = 'block';
+        self.isMainMenuVisible  = true;
+        self.isScrollWndVisible = false;
+        self.isColorWndVisible  = false;
+        self.isHelpWndVisible   = false;
+        self.nStep = self.$root.nStep;
+    })/**/
+    //console.log('I mounted!');
+  }
 });
 
 /***/ }),
@@ -42733,28 +42757,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['label', 'validators', 'id', 'placeholder', 'type', 'value', 'className'],
-    name: 'inputb4',
+	props: ['label', 'validators', 'id', 'placeholder',
+	//set readonly="readonly" for apply
+	'readonly', 'type', 'value', 'className'],
+	name: 'inputb4',
 
-    //вызывается раньше чем mounted
-    data: function data() {
-        return {};
-    },
-    //
-    methods: {}, //end methods
-    //вызывается после data, поля из data видны "напрямую" как this.fieldName
-    mounted: function mounted() {
-        var self = this;
-        /*this.$root.$on('showMenuEvent', function(evt) {
-            self.menuBlockVisible   = 'block';
-            self.isMainMenuVisible  = true;
-            self.isScrollWndVisible = false;
-            self.isColorWndVisible  = false;
-            self.isHelpWndVisible   = false;
-            self.nStep = self.$root.nStep;
-        })/**/
-        //console.log('I mounted!');
-    }
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {};
+	},
+	computed: {
+		readonlyWatch: function readonlyWatch() {
+			console.log('watch called');
+		}
+	},
+	//
+	methods: {}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+		var s = 'readonly';
+		if (this[s] == s) {
+			$('#' + this.id)[0].setAttribute(s, s);
+		}
+	}
 });
 
 /***/ }),
@@ -42839,7 +42864,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "sources/landlib/vue/2/bootstrap/4/textareab4.vue"
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/selectb4.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -42848,9 +42873,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-47367d28", Component.options)
+    hotAPI.createRecord("data-v-356b426a", Component.options)
   } else {
-    hotAPI.reload("data-v-47367d28", Component.options)
+    hotAPI.reload("data-v-356b426a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -42880,10 +42905,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['label', 'validators', 'id', 'placeholder', 'rows', 'type', 'value', 'className'],
-    name: 'textareab4',
+    props: ['label', 'data', 'id', 'value', 'className'],
+    name: 'selectb4',
 
     //вызывается раньше чем mounted
     data: function data() {
@@ -42914,19 +42940,14 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mb-3 mt-2" }, [
+  return _c("div", { staticClass: "form-group mt-2" }, [
     _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
     _vm._v(" "),
     _c(
-      "textarea",
+      "select",
       {
-        class: "form-control" + (_vm.className ? " " + _vm.className : ""),
-        attrs: {
-          placeholder: _vm.placeholder,
-          rows: _vm.rows,
-          id: _vm.id,
-          name: _vm.id
-        },
+        class: "custom-select" + (_vm.className ? " " + _vm.className : ""),
+        attrs: { id: _vm.id, name: _vm.id },
         domProps: { value: _vm.value },
         on: {
           input: function($event) {
@@ -42934,8 +42955,319 @@ var render = function() {
           }
         }
       },
-      [_vm._v("<slot></slot>")]
+      _vm._l(_vm.data, function(item) {
+        return _c("option", { domProps: { value: item.id } }, [
+          _vm._v(_vm._s(item.name))
+        ])
+      }),
+      0
     ),
+    _vm._v(" "),
+    _c("div", { staticClass: "invalid-feedback" })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-356b426a", module.exports)
+  }
+}
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(50)
+/* template */
+var __vue_template__ = __webpack_require__(51)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/checkboxb4.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-988ed21e", Component.options)
+  } else {
+    hotAPI.reload("data-v-988ed21e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['label', 'validators', 'id', 'type', 'value', 'className'],
+    name: 'checkboxb4',
+
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {};
+    },
+    //
+    methods: {}, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+        //console.log('I mounted!');
+    }
+});
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group mt-2" }, [
+    _c("div", { staticClass: "custom-control custom-checkbox small" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "b421validators",
+            rawName: "v-b421validators",
+            value: _vm.validators,
+            expression: "validators"
+          }
+        ],
+        class:
+          "custom-control-input" + (_vm.className ? " " + _vm.className : ""),
+        attrs: { type: "checkbox", id: _vm.id, name: _vm.id },
+        domProps: { value: _vm.value },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "custom-control-label ml-1", attrs: { for: _vm.id } },
+        [_vm._v("\n\t\t\t" + _vm._s(_vm.label) + "\n\t\t")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "invalid-feedback" })
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-988ed21e", module.exports)
+  }
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(53)
+/* template */
+var __vue_template__ = __webpack_require__(54)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/textareab4.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-47367d28", Component.options)
+  } else {
+    hotAPI.reload("data-v-47367d28", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['label', 'validators', 'id', 'placeholder',
+    //if set counter showed symbol counter
+    /*** @property counter {className: 'bg-success text-light'} */
+    'counter', 'rows', 'type', 'value', 'className'],
+    name: 'textareab4',
+
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {
+            textLength: 0
+        };
+    },
+    //
+    methods: {
+        onInput: function onInput(ev) {
+            this.textLength = ev.target.value.length;
+            return true;
+        }
+    }, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+        //console.log('I mounted!');
+    }
+});
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mb-3 mt-2" }, [
+    _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
+    _vm._v(" "),
+    _c("textarea", {
+      class: "form-control" + (_vm.className ? " " + _vm.className : ""),
+      attrs: {
+        placeholder: _vm.placeholder,
+        rows: _vm.rows,
+        id: _vm.id,
+        name: _vm.id
+      },
+      domProps: { value: _vm.value },
+      on: {
+        input: function($event) {
+          _vm.$emit("input", $event.target.value)
+          _vm.onInput($event)
+        }
+      }
+    }),
+    _vm._v(" "),
+    _vm.counter
+      ? _c(
+          "div",
+          {
+            class:
+              "bg-gradient-info rounded-bottom text-light text-right pr-3" +
+              (_vm.counter && _vm.counter.className
+                ? "" + _vm.counter.className
+                : "")
+          },
+          [_vm._v(_vm._s(_vm.textLength))]
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "invalid-feedback" }),
     _vm._v(" "),
@@ -42956,15 +43288,15 @@ if (false) {
 }
 
 /***/ }),
-/* 49 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(50)
+var __vue_script__ = __webpack_require__(56)
 /* template */
-var __vue_template__ = __webpack_require__(53)
+var __vue_template__ = __webpack_require__(59)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43003,12 +43335,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 50 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__defaultupload_css__);
 //
 //
@@ -43088,6 +43420,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		'progressListener': { type: Object },
 		'csrfToken': { type: String },
 		'uploadButtonLabel': { type: String, default: 'Upload' },
+		//Отправляем дополнительно данные перечисленных инпутов
+		'sendInputs': { type: Array, default: [] },
 		'className': { type: String }
 	},
 	name: 'inputb4',
@@ -43127,13 +43461,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var xhr = new XMLHttpRequest(),
 			    form = new FormData(),
 			    t = void 0,
-			    that = this;
+			    that = this,
+			    i = void 0,
+			    s = void 0,
+			    inp = void 0;
 			form.append(iFile.id, iFile.files[0]);
 			//form.append("isFormData", 1);
 			form.append("path", this.url);
 			t = this.csrfToken;
 			if (t) {
 				form.append("_token", t);
+			}
+			if (this.sendInputs && this.sendInputs.length) {
+				for (i = 0; i < this.sendInputs.length; i++) {
+					s = this.sendInputs[i];
+					inp = $('#' + s)[0];
+					if (inp && (inp.value || inp.checked)) {
+						if (inp.checked) {
+							form.append(s, inp.value ? inp.value : 'true');
+						} else if (inp.type != 'checkbox' && inp.value.trim()) {
+							form.append(s, inp.value.trim());
+						}
+					}
+				}
 			}
 			xhr.upload.addEventListener("progress", function (pEvt) {
 				var loadedPercents = void 0,
@@ -43279,13 +43629,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 51 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(52);
+var content = __webpack_require__(58);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -43310,7 +43660,7 @@ if(false) {
 }
 
 /***/ }),
-/* 52 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -43324,7 +43674,7 @@ exports.push([module.i, "/* Progress view */\n/*\ntext in circle\n.upload-proces
 
 
 /***/ }),
-/* 53 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43508,7 +43858,7 @@ if (false) {
 }
 
 /***/ }),
-/* 54 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43528,6 +43878,21 @@ var render = function() {
       on: { submit: _vm.onSubmit }
     },
     [
+      _c("selectb4", {
+        attrs: {
+          label: _vm.$t("app.Sections"),
+          id: "category_id",
+          data: _vm.pagesCategories
+        },
+        model: {
+          value: _vm.category,
+          callback: function($$v) {
+            _vm.category = $$v
+          },
+          expression: "category"
+        }
+      }),
+      _vm._v(" "),
       _c("inputb4", {
         attrs: {
           type: "text",
@@ -43536,6 +43901,7 @@ var render = function() {
           id: "title",
           validators: "'required'"
         },
+        on: { input: _vm.transliteUrl },
         model: {
           value: _vm.title,
           callback: function($$v) {
@@ -43547,10 +43913,18 @@ var render = function() {
       _vm._v(" "),
       _c("inputb4", {
         attrs: {
+          readonly: "readonly",
           type: "url",
           label: _vm.$t("app.Url"),
           placeholder: _vm.$t("app.Url"),
           id: "url"
+        },
+        model: {
+          value: _vm.url,
+          callback: function($$v) {
+            _vm.url = $$v
+          },
+          expression: "url"
         }
       }),
       _vm._v(" "),
@@ -43567,13 +43941,23 @@ var render = function() {
         "textareab4",
         {
           attrs: {
+            counter: _vm.counter,
             label: _vm.$t("app.Content"),
             id: "content_block",
             rows: "18"
+          },
+          model: {
+            value: _vm.body,
+            callback: function($$v) {
+              _vm.body = $$v
+            },
+            expression: "body"
           }
         },
         [_vm._v("Привет!")]
       ),
+      _vm._v(" "),
+      _c("img", { attrs: { src: _vm.defaultLogo } }),
       _vm._v(" "),
       _c("inputfileb4", {
         attrs: {
@@ -43581,8 +43965,10 @@ var render = function() {
           immediateleyUploadOff: "true",
           tokenImagePath: "/i/token.png",
           progressListener: _vm.progressbarListener,
+          listeners: _vm.fileUploadListeners,
           uploadButtonLabel: _vm.$t("app.Upload"),
           csrfToken: _vm.$root._getToken(),
+          sendInputs: ["alpha"],
           label: _vm.$t("app.SelectLogo"),
           id: "logotype"
         },
@@ -43592,6 +43978,14 @@ var render = function() {
             _vm.filepath = $$v
           },
           expression: "filepath"
+        }
+      }),
+      _vm._v(" "),
+      _c("checkboxb4", {
+        attrs: {
+          id: "alpha",
+          label: _vm.$t("app.isMakeTransparentBg"),
+          value: "true"
         }
       }),
       _vm._v(" "),
@@ -43630,6 +44024,480 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-1f2fd10c", module.exports)
   }
 }
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports) {
+
+/**
+ * Laravel Slug
+ *
+ * Scroll to the bottom of the file for the good stuff.
+ */
+var char_map = {
+    // 0
+    '°': '0', '₀': '0', '۰': '0',
+
+    // 1
+    '¹': '1', '₁': '1', '۱': '1',
+
+    // 2
+    '²': '2', '₂': '2', '۲': '2',
+
+    // 3
+    '³': '3', '₃': '3', '۳': '3',
+
+    // 4
+    '⁴': '4', '₄': '4', '۴': '4', '٤': '4',
+
+    // 5
+    '⁵': '5', '₅': '5', '۵': '5', '٥': '5',
+
+    // 6
+    '⁶': '6', '₆': '6', '۶': '6', '٦': '6',
+
+    // 7
+    '⁷': '7', '₇': '7', '۷': '7',
+
+    // 8
+    '⁸': '8', '₈': '8', '۸': '8',
+
+    // 9
+    '⁹': '9', '₉': '9', '۹': '9',
+
+    // a
+    'à': 'a', 'á': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a', 'ă': 'a', 'ắ': 'a',
+    'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a', 'â': 'a', 'ấ': 'a', 'ầ': 'a',
+    'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a', 'ā': 'a', 'ą': 'a', 'å': 'a', 'α': 'a',
+    'ά': 'a', 'ἀ': 'a', 'ἁ': 'a', 'ἂ': 'a', 'ἃ': 'a', 'ἄ': 'a', 'ἅ': 'a',
+    'ἆ': 'a', 'ἇ': 'a', 'ᾀ': 'a', 'ᾁ': 'a', 'ᾂ': 'a', 'ᾃ': 'a', 'ᾄ': 'a',
+    'ᾅ': 'a', 'ᾆ': 'a', 'ᾇ': 'a', 'ὰ': 'a', 'ά': 'a', 'ᾰ': 'a', 'ᾱ': 'a',
+    'ᾲ': 'a', 'ᾳ': 'a', 'ᾴ': 'a', 'ᾶ': 'a', 'ᾷ': 'a', 'а': 'a', 'أ': 'a',
+    'အ': 'a', 'ာ': 'a', 'ါ': 'a', 'ǻ': 'a', 'ǎ': 'a', 'ª': 'a', 'ა': 'a',
+    'अ': 'a', 'ا': 'a',
+
+    // b
+    'б': 'b', 'β': 'b', 'Ъ': 'b', 'Ь': 'b', 'ب': 'b', 'ဗ': 'b', 'ბ': 'b',
+
+    // c
+    'ç': 'c', 'ć': 'c', 'č': 'c', 'ĉ': 'c', 'ċ': 'c',
+
+    // d
+    'ď': 'd', 'ð': 'd', 'đ': 'd', 'ƌ': 'd', 'ȡ': 'd', 'ɖ': 'd', 'ɗ': 'd',
+    'ᵭ': 'd', 'ᶁ': 'd', 'ᶑ': 'd', 'д': 'd', 'δ': 'd', 'ض': 'd', 'د': 'd',
+    'ဍ': 'd', 'ဒ': 'd', 'დ': 'd',
+
+    // e
+    'é': 'e', 'è': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ẹ': 'e', 'ê': 'e', 'ế': 'e',
+    'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e', 'ë': 'e', 'ē': 'e', 'ę': 'e',
+    'ě': 'e', 'ĕ': 'e', 'ė': 'e', 'ε': 'e', 'έ': 'e', 'ἐ': 'e', 'ἑ': 'e',
+    'ἒ': 'e', 'ἓ': 'e', 'ἔ': 'e', 'ἕ': 'e', 'ὲ': 'e', 'έ': 'e', 'е': 'e',
+    'ё': 'e', 'э': 'e', 'є': 'e', 'ə': 'e', 'ဧ': 'e', 'ေ': 'e', 'ဲ': 'e',
+    'ე': 'e', 'ए': 'e', 'ئ': 'e', 'إ': 'e',
+
+    // f
+    'ф': 'f', 'φ': 'f', 'ف': 'f', 'ƒ': 'f', 'ფ': 'f',
+
+    // g
+    'ĝ': 'g', 'ğ': 'g', 'ġ': 'g', 'ģ': 'g', 'г': 'g', 'ґ': 'g', 'γ': 'g',
+    'ဂ': 'g', 'გ': 'g', 'گ': 'g',
+
+    // h
+    'ĥ': 'h', 'ħ': 'h', 'η': 'h', 'ή': 'h', 'ه': 'h', 'ح': 'h', 'ဟ': 'h',
+    'ှ': 'h', 'ჰ': 'h',
+
+    // i
+    'í': 'i', 'ì': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i', 'î': 'i', 'ï': 'i',
+    'ī': 'i', 'ĭ': 'i', 'į': 'i', 'ı': 'i', 'ι': 'i', 'ί': 'i', 'ϊ': 'i',
+    'ΐ': 'i', 'ἰ': 'i', 'ἱ': 'i', 'ἲ': 'i', 'ἳ': 'i', 'ἴ': 'i', 'ἵ': 'i',
+    'ἶ': 'i', 'ἷ': 'i', 'ὶ': 'i', 'ί': 'i', 'ῐ': 'i', 'ῑ': 'i', 'ῒ': 'i',
+    'ΐ': 'i', 'ῖ': 'i', 'ῗ': 'i', 'і': 'i', 'ї': 'i', 'и': 'i', 'ဣ': 'i',
+    'ိ': 'i', 'ီ': 'i', 'ည်': 'i', 'ǐ': 'i', 'ი': 'i', 'इ': 'i',
+
+    // j
+    'ĵ': 'j', 'ј': 'j', 'Ј': 'j', 'ჯ': 'j', 'ج': 'j',
+
+    // k
+    'ķ': 'k', 'ĸ': 'k', 'к': 'k', 'κ': 'k', 'Ķ': 'k', 'ك': 'k', 'ك': 'k',
+    'က': 'k', 'კ': 'k', 'ქ': 'k', 'ک': 'k',
+
+    // l
+    'ł': 'l', 'ľ': 'l', 'ĺ': 'l', 'ļ': 'l', 'ŀ': 'l', 'л': 'l', 'λ': 'l',
+    'ل': 'l', 'လ': 'l', 'ლ': 'l',
+
+    // m
+    'м': 'm', 'μ': 'm', 'م': 'm', 'မ': 'm', 'მ': 'm',
+
+    // n
+    'ñ': 'n', 'ń': 'n', 'ň': 'n', 'ņ': 'n', 'ŉ': 'n', 'ŋ': 'n', 'ν': 'n',
+    'н': 'n', 'ن': 'n', 'န': 'n', 'ნ': 'n',
+
+    // o
+    'ó': 'o', 'ò': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o', 'ô': 'o', 'ố': 'o',
+    'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o', 'ơ': 'o', 'ớ': 'o', 'ờ': 'o',
+    'ở': 'o', 'ỡ': 'o', 'ợ': 'o', 'ø': 'o', 'ō': 'o', 'ő': 'o', 'ŏ': 'o',
+    'ο': 'o', 'ὀ': 'o', 'ὁ': 'o', 'ὂ': 'o', 'ὃ': 'o', 'ὄ': 'o', 'ὅ': 'o',
+    'ὸ': 'o', 'ό': 'o', 'о': 'o', 'و': 'o', 'θ': 'o', 'ို': 'o', 'ǒ': 'o',
+    'ǿ': 'o', 'º': 'o', 'ო': 'o', 'ओ': 'o',
+
+    // p
+    'п': 'p', 'π': 'p', 'ပ': 'p', 'პ': 'p', 'پ': 'p',
+
+    // q
+    'ყ': 'q',
+
+    // r
+    'ŕ': 'r', 'ř': 'r', 'ŗ': 'r', 'р': 'r', 'ρ': 'r', 'ر': 'r', 'რ': 'r',
+
+    // s
+    'ś': 's', 'š': 's', 'ş': 's', 'с': 's', 'σ': 's', 'ș': 's', 'ς': 's',
+    'ص': 's', 'س': 's', 'စ': 's', 'ſ': 's', 'ს': 's',
+
+    // t
+    'ť': 't', 'ţ': 't', 'т': 't', 'τ': 't', 'ț': 't', 'ط': 't', 'ت': 't',
+    'ဋ': 't', 'တ': 't', 'ŧ': 't', 'თ': 't', 'ტ': 't',
+
+    // u
+    'ú': 'u', 'ù': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u', 'ư': 'u', 'ứ': 'u',
+    'ừ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u', 'û': 'u', 'ū': 'u', 'ů': 'u',
+    'ű': 'u', 'ŭ': 'u', 'ų': 'u', 'µ': 'u', 'у': 'u', 'ဉ': 'u', 'ု': 'u',
+    'ူ': 'u', 'ǔ': 'u', 'ǖ': 'u', 'ǘ': 'u', 'ǚ': 'u', 'ǜ': 'u', 'უ': 'u',
+    'उ': 'u',
+
+    // v
+    'в': 'v', 'ვ': 'v', 'ϐ': 'v',
+
+    // w
+    'ŵ': 'w', 'ω': 'w', 'ώ': 'w', 'ဝ': 'w', 'ွ': 'w',
+
+    // x
+    'χ': 'x', 'ξ': 'x',
+
+    // y
+    'ý': 'y', 'ỳ': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y', 'ÿ': 'y', 'ŷ': 'y',
+    'й': 'y', 'ы': 'y', 'υ': 'y', 'ϋ': 'y', 'ύ': 'y', 'ΰ': 'y', 'ي': 'y',
+    'ယ': 'y',
+
+    // z
+    'ź': 'z', 'ž': 'z', 'ż': 'z', 'з': 'z', 'ζ': 'z', 'ز': 'z', 'ဇ': 'z',
+    'ზ': 'z',
+
+    // aa
+    'ع': 'aa', 'आ': 'aa', 'آ': 'aa',
+
+    // ae
+    'ä': 'ae', 'æ': 'ae', 'ǽ': 'ae',
+
+    // ai
+    'ऐ': 'ai',
+
+    // at
+    '@': 'at',
+
+    // ch
+    'ч': 'ch', 'ჩ': 'ch', 'ჭ': 'ch', 'چ': 'ch',
+
+    // dj
+    'ђ': 'dj', 'đ': 'dj',
+
+    // dz
+    'џ': 'dz', 'ძ': 'dz',
+
+    // ei
+    'ऍ': 'ei',
+
+    // gh
+    'غ': 'gh', 'ღ': 'gh',
+
+    // ii
+    'ई': 'ii',
+
+    // ij
+    'ĳ': 'ij',
+
+    // kh
+    'х': 'kh', 'خ': 'kh', 'ხ': 'kh',
+
+    // lj
+    'љ': 'lj',
+
+    // nj
+    'њ': 'nj',
+
+    // oe
+    'ö': 'oe', 'œ': 'oe', 'ؤ': 'oe',
+
+    // oi
+    'ऑ': 'oi',
+
+    // oii
+    'ऒ': 'oii',
+
+    // ps
+    'ψ': 'ps',
+
+    // sh
+    'ш': 'sh', 'შ': 'sh', 'ش': 'sh',
+
+    // shch
+    'щ': 'shch',
+
+    // ss
+    'ß': 'ss',
+
+    // sx
+    'ŝ': 'sx',
+
+    // th
+    'þ': 'th', 'ϑ': 'th', 'ظ': 'th', 'ذ': 'th', 'ث': 'th',
+
+    // ts
+    'ц': 'ts', 'ც': 'ts', 'წ': 'ts',
+
+    // ue
+    'ü': 'ue',
+
+    // uu
+    'ऊ': 'uu',
+
+    // ya
+    'я': 'ya',
+
+    // yu
+    'ю': 'yu',
+
+    // zh
+    'ж': 'zh', 'ჟ': 'zh', 'ژ': 'zh',
+
+    // (c)
+    '©': '(c)',
+
+    // A
+    'Á': 'A', 'À': 'A', 'Ả': 'A', 'Ã': 'A', 'Ạ': 'A', 'Ă': 'A', 'Ắ': 'A',
+    'Ằ': 'A', 'Ẳ': 'A', 'Ẵ': 'A', 'Ặ': 'A', 'Â': 'A', 'Ấ': 'A', 'Ầ': 'A',
+    'Ẩ': 'A', 'Ẫ': 'A', 'Ậ': 'A', 'Å': 'A', 'Ā': 'A', 'Ą': 'A', 'Α': 'A',
+    'Ά': 'A', 'Ἀ': 'A', 'Ἁ': 'A', 'Ἂ': 'A', 'Ἃ': 'A', 'Ἄ': 'A', 'Ἅ': 'A',
+    'Ἆ': 'A', 'Ἇ': 'A', 'ᾈ': 'A', 'ᾉ': 'A', 'ᾊ': 'A', 'ᾋ': 'A', 'ᾌ': 'A',
+    'ᾍ': 'A', 'ᾎ': 'A', 'ᾏ': 'A', 'Ᾰ': 'A', 'Ᾱ': 'A', 'Ὰ': 'A', 'Ά': 'A',
+    'ᾼ': 'A', 'А': 'A', 'Ǻ': 'A', 'Ǎ': 'A',
+
+    // B
+    'Б': 'B', 'Β': 'B', 'ब': 'B',
+
+    // C
+    'Ç': 'C', 'Ć': 'C', 'Č': 'C', 'Ĉ': 'C', 'Ċ': 'C',
+
+    // D
+    'Ď': 'D', 'Ð': 'D', 'Đ': 'D', 'Ɖ': 'D', 'Ɗ': 'D', 'Ƌ': 'D', 'ᴅ': 'D',
+    'ᴆ': 'D', 'Д': 'D', 'Δ': 'D',
+
+    // E
+    'É': 'E', 'È': 'E', 'Ẻ': 'E', 'Ẽ': 'E', 'Ẹ': 'E', 'Ê': 'E', 'Ế': 'E',
+    'Ề': 'E', 'Ể': 'E', 'Ễ': 'E', 'Ệ': 'E', 'Ë': 'E', 'Ē': 'E', 'Ę': 'E',
+    'Ě': 'E', 'Ĕ': 'E', 'Ė': 'E', 'Ε': 'E', 'Έ': 'E', 'Ἐ': 'E', 'Ἑ': 'E',
+    'Ἒ': 'E', 'Ἓ': 'E', 'Ἔ': 'E', 'Ἕ': 'E', 'Έ': 'E', 'Ὲ': 'E', 'Е': 'E',
+    'Ё': 'E', 'Э': 'E', 'Є': 'E', 'Ə': 'E',
+
+    // F
+    'Ф': 'F', 'Φ': 'F',
+
+    // G
+    'Ğ': 'G', 'Ġ': 'G', 'Ģ': 'G', 'Г': 'G', 'Ґ': 'G', 'Γ': 'G',
+
+    // H
+    'Η': 'H', 'Ή': 'H', 'Ħ': 'H',
+
+    // I
+    'Í': 'I', 'Ì': 'I', 'Ỉ': 'I', 'Ĩ': 'I', 'Ị': 'I', 'Î': 'I', 'Ï': 'I',
+    'Ī': 'I', 'Ĭ': 'I', 'Į': 'I', 'İ': 'I', 'Ι': 'I', 'Ί': 'I', 'Ϊ': 'I',
+    'Ἰ': 'I', 'Ἱ': 'I', 'Ἳ': 'I', 'Ἴ': 'I', 'Ἵ': 'I', 'Ἶ': 'I', 'Ἷ': 'I',
+    'Ῐ': 'I', 'Ῑ': 'I', 'Ὶ': 'I', 'Ί': 'I', 'И': 'I', 'І': 'I', 'Ї': 'I',
+    'Ǐ': 'I', 'ϒ': 'I',
+
+    // K
+    'К': 'K', 'Κ': 'K',
+
+    // L
+    'Ĺ': 'L', 'Ł': 'L', 'Л': 'L', 'Λ': 'L', 'Ļ': 'L', 'Ľ': 'L', 'Ŀ': 'L',
+    'ल': 'L',
+
+    // M
+    'М': 'M', 'Μ': 'M',
+
+    // N
+    'Ń': 'N', 'Ñ': 'N', 'Ň': 'N', 'Ņ': 'N', 'Ŋ': 'N', 'Н': 'N', 'Ν': 'N',
+
+    // O
+    'Ó': 'O', 'Ò': 'O', 'Ỏ': 'O', 'Õ': 'O', 'Ọ': 'O', 'Ô': 'O', 'Ố': 'O',
+    'Ồ': 'O', 'Ổ': 'O', 'Ỗ': 'O', 'Ộ': 'O', 'Ơ': 'O', 'Ớ': 'O', 'Ờ': 'O',
+    'Ở': 'O', 'Ỡ': 'O', 'Ợ': 'O', 'Ø': 'O', 'Ō': 'O', 'Ő': 'O', 'Ŏ': 'O',
+    'Ο': 'O', 'Ό': 'O', 'Ὀ': 'O', 'Ὁ': 'O', 'Ὂ': 'O', 'Ὃ': 'O', 'Ὄ': 'O',
+    'Ὅ': 'O', 'Ὸ': 'O', 'Ό': 'O', 'О': 'O', 'Θ': 'O', 'Ө': 'O', 'Ǒ': 'O',
+    'Ǿ': 'O',
+
+    // P
+    'П': 'P', 'Π': 'P',
+
+    // R
+    'Ř': 'R', 'Ŕ': 'R', 'Р': 'R', 'Ρ': 'R', 'Ŗ': 'R',
+
+    // S
+    'Ş': 'S', 'Ŝ': 'S', 'Ș': 'S', 'Š': 'S', 'Ś': 'S', 'С': 'S', 'Σ': 'S',
+
+    // T
+    'Ť': 'T', 'Ţ': 'T', 'Ŧ': 'T', 'Ț': 'T', 'Т': 'T', 'Τ': 'T',
+
+    // U
+    'Ú': 'U', 'Ù': 'U', 'Ủ': 'U', 'Ũ': 'U', 'Ụ': 'U', 'Ư': 'U', 'Ứ': 'U',
+    'Ừ': 'U', 'Ử': 'U', 'Ữ': 'U', 'Ự': 'U', 'Û': 'U', 'Ū': 'U', 'Ů': 'U',
+    'Ű': 'U', 'Ŭ': 'U', 'Ų': 'U', 'У': 'U', 'Ǔ': 'U', 'Ǖ': 'U', 'Ǘ': 'U',
+    'Ǚ': 'U', 'Ǜ': 'U',
+
+    // V
+    'В': 'V',
+
+    // W
+    'Ω': 'W', 'Ώ': 'W', 'Ŵ': 'W',
+
+    // X
+    'Χ': 'X', 'Ξ': 'X',
+
+    // Y
+    'Ý': 'Y', 'Ỳ': 'Y', 'Ỷ': 'Y', 'Ỹ': 'Y', 'Ỵ': 'Y', 'Ÿ': 'Y', 'Ῠ': 'Y',
+    'Ῡ': 'Y', 'Ὺ': 'Y', 'Ύ': 'Y', 'Ы': 'Y', 'Й': 'Y', 'Υ': 'Y', 'Ϋ': 'Y',
+    'Ŷ': 'Y',
+
+    // Z
+    'Ź': 'Z', 'Ž': 'Z', 'Ż': 'Z', 'З': 'Z', 'Ζ': 'Z',
+
+    // AE
+    'Ä': 'AE', 'Æ': 'AE', 'Ǽ': 'AE',
+
+    // CH
+    'Ч': 'CH',
+
+    // DJ
+    'Ђ': 'DJ',
+
+    // DZ
+    'Џ': 'DZ',
+
+    // GX
+    'Ĝ': 'GX',
+
+    // HX
+    'Ĥ': 'HX',
+
+    // IJ
+    'Ĳ': 'IJ',
+
+    // JX
+    'Ĵ': 'JX',
+
+    // KH
+    'Х': 'KH',
+
+    // LJ
+    'Љ': 'LJ',
+
+    // NJ
+    'Њ': 'NJ',
+
+    // OE
+    'Ö': 'OE', 'Œ': 'OE',
+
+    // PS
+    'Ψ': 'PS',
+
+    // SH
+    'Ш': 'SH',
+
+    // SHCH
+    'Щ': 'SHCH',
+
+    // SS
+    'ẞ': 'SS',
+
+    // TH
+    'Þ': 'TH',
+
+    // TS
+    'Ц': 'TS',
+
+    // UE
+    'Ü': 'UE',
+
+    // YA
+    'Я': 'YA',
+
+    // YU
+    'Ю': 'YU',
+
+    // ZH
+    'Ж': 'ZH',
+
+    // Spaces
+    ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ',
+    ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ', ' ': ' ',
+    '　': ' ',
+};
+
+// Instantiated here for performance
+var char_regex = RegExp("("+Object.keys(char_map).join('|')+")", 'g');
+
+module.exports = function (s, opt) {
+    s = String(s);
+    opt = Object(opt);
+
+    var defaults = {
+        'delimiter': '-',
+        'limit': undefined,
+        'lowercase': true,
+        'replacements': {},
+        'transliterate': true,
+    };
+
+    // Merge options
+    for (var k in defaults) {
+        if (!opt.hasOwnProperty(k)) {
+            opt[k] = defaults[k];
+        }
+    }
+
+    // Make custom replacements
+    for (var k in opt.replacements) {
+        s = s.replace(RegExp(k, 'g'), opt.replacements[k]);
+    }
+
+    // Transliterate characters to ASCII
+    if (opt.transliterate) {
+        s = s.replace(char_regex, function(m) { return char_map[m]; });
+    }
+
+    // Convert all dashes/underscores into separator
+    var underscores = RegExp('\_', 'ig');
+    s = s.replace(underscores, opt.delimiter);
+
+    // Remove all characters that are not the separator, letters, numbers, or whitespace
+    var alnum = RegExp('[^' + opt.delimiter + '\\d\\w\\s\\u4e00-\\u9eff]+', 'ig');
+    s = s.replace(alnum, '');
+
+    // Replace all separator characters and whitespace by a single separator
+    var spaces = RegExp('[' + opt.delimiter + '\\s]+', 'ig');
+    s = s.replace(spaces, opt.delimiter);
+
+    // Remove duplicate delimiters
+    s = s.replace(RegExp('[' + opt.delimiter + ']{2,}', 'g'), opt.delimiter);
+
+    // Remove delimiter from ends
+    s = s.replace(RegExp('(^' + opt.delimiter + '|' + opt.delimiter + '$)', 'g'), '');
+
+    // Truncate slug to max characters
+    s = s.substring(0, opt.limit);
+
+    return opt.lowercase ? s.toLowerCase() : s;
+}
+
 
 /***/ })
 /******/ ]);

@@ -1,45 +1,36 @@
 <template>
-	<div class="mb-3 mt-2">
-		<label :for="id">{{label}}</label>
-		<textarea 
+	<div class="form-group mt-2">
+		<label :for="id">{{ label }}</label>
+		<select  
+			:class="'custom-select' + (className ? (' ' + className) : '')"
 			:value="value"
-			@input="$emit('input', $event.target.value); onInput($event);"
-			:placeholder="placeholder"
-			:rows="rows"
-			:class="'form-control' + (className ? (' ' + className) : '')"
-			:id="id" :name="id"></textarea>
-		<div v-if="counter" :class="'bg-gradient-info rounded-bottom text-light text-right pr-3' + (counter && counter.className ? ('' + counter.className) : '')">{{ textLength }}</div>
+			@input="$emit('input', $event.target.value)"
+			:id="id" :name="id"
+		>
+			<option v-for="item in data" :value="item.id">{{ item.name }}</option>
+		</select>
 		<div class="invalid-feedback"></div>
-		<small :id="id + 'Help'" class="form-text text-muted"></small>
 	</div>
+
 </template>
 <script>
     export default {
 		props: [
 			'label',
-			'validators',
+			'data',
 			'id',
-			'placeholder',
-			//if set counter showed symbol counter
-			/*** @property counter {className: 'bg-success text-light'} */
-			'counter',
-			'rows',
-			'type',
 			'value',
 			'className'
 		],
-		name: 'textareab4',
+		name: 'selectb4',
 		
         //вызывается раньше чем mounted
         data: function(){return {
-            textLength:0,
+            
         }; },
         //
         methods:{
-            onInput(ev) {
-				this.textLength = ev.target.value.length;
-				return true;
-			}
+            
            
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName

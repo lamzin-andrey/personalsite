@@ -32,7 +32,9 @@ var locales = {
             "Url": "Url",
             "Heading": "Heading",
             "Content": "Content",
-            "SelectLogo": "Select logotype",
+			"SelectLogo": "Select logotype",
+			"isMakeTransparentBg": "Transparent background",
+			"Sections": "Choose section",
 
             "Policystr": "Privacy Policy"
         },
@@ -80,6 +82,8 @@ var locales = {
             "Heading": "Заголовок статьи",
             "Content": "Статья",
             "SelectLogo": "Загрузить логотип",
+			"isMakeTransparentBg": "Прозрачный фон",
+			"Sections": "Категория",
         }
     }
 }

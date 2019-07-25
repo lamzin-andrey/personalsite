@@ -22,6 +22,8 @@
 			'validators',
 			'id',
 			'placeholder',
+			//set readonly="readonly" for apply
+			'readonly',
 			'type',
 			'value',
 			'className'
@@ -31,7 +33,13 @@
         //вызывается раньше чем mounted
         data: function(){return {
             
-        }; },
+		}; },
+		computed: {
+			readonlyWatch() {
+				console.log('watch called');
+				
+			}
+		},
         //
         methods:{
             
@@ -39,16 +47,10 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-            var self = this;
-            /*this.$root.$on('showMenuEvent', function(evt) {
-                self.menuBlockVisible   = 'block';
-                self.isMainMenuVisible  = true;
-                self.isScrollWndVisible = false;
-                self.isColorWndVisible  = false;
-                self.isHelpWndVisible   = false;
-                self.nStep = self.$root.nStep;
-            })/**/
-            //console.log('I mounted!');
+            let s = 'readonly';
+			if (this[s] == s) {
+				$('#' + this.id)[0].setAttribute(s, s);
+			}
         }
     }
 </script>

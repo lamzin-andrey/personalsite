@@ -1,21 +1,25 @@
 <template>
     <form class="user" method="POST" action="/p/signin.jn/" @submit="onSubmit" novalidate id="tform">
-        <!--selectb4 label="<?php echo l('Section') ?>" id="category_id"></selectb4><!-- Try Use slot! -->
-        <inputb4 v-model="title" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
-        <inputb4 type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
-        <inputb4 type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
-        <textareab4 :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
-        <inputfileb4 
+        <selectb4 v-model="category" :label="$t('app.Sections')" id="category_id" :data="pagesCategories"></selectb4>
+		<inputb4 v-model="title" @input="transliteUrl" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
+        <inputb4 readonly="readonly" v-model="url" type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
+        <inputb4  type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
+        <textareab4 v-model="body" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
+        <img :src="defaultLogo" >
+		<inputfileb4 
             v-model="filepath"
             url="/p/articlelogoupload.jn/"
             immediateleyUploadOff="true"
             tokenImagePath="/i/token.png"
             :progressListener="progressbarListener"
+            :listeners="fileUploadListeners"
 			:uploadButtonLabel="$t('app.Upload')"
             :csrfToken="$root._getToken()"
+            :sendInputs="['alpha']"
             
          :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
 
+		<checkboxb4 id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
          <div class="progress">
             <div class="progress-bar" role="progressbar" 
                 :style="'width: ' + progressValue + '%;'" 
@@ -35,30 +39,61 @@
 
     //Компонент для отображения инпута ввода текста bootstrap 4
     Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+    Vue.component('selectb4', require('../../landlib/vue/2/bootstrap/4/selectb4.vue'));
+    Vue.component('checkboxb4', require('../../landlib/vue/2/bootstrap/4/checkboxb4.vue'));
     Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
     Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
 
     export default {
         name: 'articleform',
         //вызывается раньше чем mounted
-        data: function(){return {
-            //Значение title
-            title:'',
-            //Путь к загруженному логотипу
-            filepath:'default ops!',
-            //Параметры для кастомного прогресс-бара
-            progressbarListener:{
-                onProgress: {
-                    f: this.onProgress,
-                    context:this
-                }
-            },
-            //Значение по умолчанию для кастомной шкалы прогресса
-            progressValue : 0
-        }; },
+        data: function(){
+			let _data  = {
+				//Значение title
+				title:'',
+				//Значение body
+				body:'',
+				//Значение url
+				url:'',
+				//Путь к загруженному логотипу
+				filepath:'default ops!',
+				//Параметры для кастомного прогресс-бара
+				progressbarListener:{
+					onProgress: {
+						f: this.onProgress,
+						context:this
+					}
+				},
+				fileUploadListeners : {
+					onSuccess:{
+						f : this.onSuccessUploadLogo,
+						context:this
+					}
+				},
+				//
+				defaultLogo: '/i/64.jpg',
+				//Значение по умолчанию для кастомной шкалы прогресса
+				progressValue : 0,
+				//Выбранная категория
+				category : 0,
+				//
+				pagesCategories : [
+					{id:1, name:"One"},
+					{id:2, name:"Two"}
+				],
+				counter: true
+			};
+			try {
+				let jdata = JSON.parse($('#jdata').val());
+				_data.pagesCategories = jdata.pagesCategories;
+			} catch(e) {
+				console.log('opace', e);
+			}
+			return _data;
+		},
         //
         methods:{
-            //TODO remove me
+			//TODO remove me
             _alert(s) {
                 alert(s);
             },
@@ -95,31 +130,22 @@
             },
             /**
              * @param {Object} data
-             * @param {B421Validators} formInputValidator
             */
-            onSuccessLogin(data, formInputValidator) {
-                if (data.status == 'error') {
-                    return this.onFailLogin(data, null, null, formInputValidator);
-                }
-                window.location.href = '/p/';
+            onSuccessUploadLogo(data) {
+				if (data.path) {
+					this.defaultLogo = data.path;
+				}
             },
             /**
-             * @param {Object} a
-             * @param {Object} b
-             * @param {Object} c
-             * @param {B421Validators} formInputValidator
+			 * @description Транслирует url каждый раз, когда происходит ввод в поле с назваием статьи
+             
             */
-            onFailLogin(a, b, c, formInputValidator) {
-                if (a.status == 'error' && a.errors) {
-                    let i, jEl, s;
-                    for (i in a.errors) {
-                        s = (i == 'password' ? (i + 'L') : i);
-                        jEl = $('#' + s);
-                        if (jEl[0]) {
-                            formInputValidator.viewSetError(jEl, a.errors[i]);
-                        }
-                    }
-                }
+            transliteUrl() {
+				if (this.title.trim()) {
+					this.url = '/articles/' + slug(this.title) + '/';
+				} else {
+					this.url = '';
+				}
             },
            
         }, //end methods
