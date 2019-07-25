@@ -1,4 +1,5 @@
 <?php
+//TODO candidate deprecated
 
 class Upload extends BaseApp {
 	/** @property _path */

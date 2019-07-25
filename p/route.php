@@ -21,6 +21,11 @@ class Route {
 			require_once $handler;
 			$this->app = new ArticlesPage();
 		}
+		if ($baseUrl == '/p/articlesave.jn/') {
+			$handler = __dir__ . '/ctrl/articlesave.php';
+			require_once $handler;
+			$this->app = new ArticlePost();
+		}
 		//Локализация для DataTables
 		if ($baseUrl == '/p/datatablelang.jn/') {
 			$handler = __dir__ . '/ctrl/datatablelang.php';

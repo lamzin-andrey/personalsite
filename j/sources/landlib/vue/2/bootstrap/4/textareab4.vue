@@ -5,6 +5,7 @@
 			:value="value"
 			@input="$emit('input', $event.target.value); onInput($event);"
 			:placeholder="placeholder"
+			v-b421validators="validators"
 			:rows="rows"
 			:class="'form-control' + (className ? (' ' + className) : '')"
 			:id="id" :name="id"></textarea>

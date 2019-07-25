@@ -1,10 +1,10 @@
 <template>
-    <form class="user" method="POST" action="/p/signin.jn/" @submit="onSubmit" novalidate id="tform">
-        <selectb4 v-model="category" :label="$t('app.Sections')" id="category_id" :data="pagesCategories"></selectb4>
+    <form class="user" method="POST" action="/p/savearticle.jn/" @submit="onSubmit" novalidate>
+        <selectb4 v-model="category" :label="$t('app.Sections')" id="category_id" :data="pagesCategories" validators="'required'"></selectb4>
 		<inputb4 v-model="title" @input="transliteUrl" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
-        <inputb4 readonly="readonly" v-model="url" type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
-        <inputb4  type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')" id="heading" ></inputb4>
-        <textareab4 v-model="body" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="18">Привет!</textareab4>
+        <inputb4 v-model="url" readonly="readonly"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
+        <inputb4 v-model="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
+        <textareab4 v-model="body" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
         <img :src="defaultLogo" >
 		<inputfileb4 
             v-model="filepath"
@@ -50,11 +50,13 @@
         data: function(){
 			let _data  = {
 				//Значение title
-				title:'',
+				title:'1',
 				//Значение body
-				body:'',
+				body:'2',
 				//Значение url
 				url:'',
+				//Значение heading
+				heading:'3',
 				//Путь к загруженному логотипу
 				filepath:'default ops!',
 				//Параметры для кастомного прогресс-бара
@@ -70,17 +72,21 @@
 						context:this
 					}
 				},
-				//
+				//Логотип статьи
 				defaultLogo: '/i/64.jpg',
+				//Исходное имя файл изображения
+				srcFileName: '',
 				//Значение по умолчанию для кастомной шкалы прогресса
 				progressValue : 0,
 				//Выбранная категория
-				category : 0,
+				category : 1,
 				//
 				pagesCategories : [
 					{id:1, name:"One"},
 					{id:2, name:"Two"}
 				],
+				//Идентификатор редактируемой статьи
+				id : 0,
 				counter: true
 			};
 			try {
@@ -111,29 +117,51 @@
             */
             onSubmit(evt) {
                 evt.preventDefault();
-
-                //let formInputValidator = this.$root.formInputValidator,
-                    /** @var {Validator} validator */
-                  //  validator = formInputValidator.getValidator();
-                /*if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+                if (this.allRequiredFilled()) {
+					let formInputValidator = this.$root.formInputValidator;
+					this.id = this.$root.getArticleId();
+					console.log( 'GOTp: ' + this.$root.getArticleId() );
                     this.$root._post(
-                        {
-                            email:      this.email,
-                            rememberMe: this.rememberMe,
-                            passwordL:  this.password
-                        },
-                        (data) => { this.onSuccessLogin(data, formInputValidator);},
-                        '/p/signin.jn/',
-                        (a, b, c) => { this.onFailLogin(a, b, c, formInputValidator);}
+                        this.$data,
+                        (data) => { this.onSuccessAddArticle(data, formInputValidator);},
+                        '/p/articlesave.jn/',
+                        (a, b, c) => { this.onFailAddArticle(a, b, c);}
                     );
-                }*/
-            },
+                }
+			},
+			/**
+			 * @description Успешное добавление статьи
+			*/
+			onSuccessAddArticle(data, formInputValidator){
+				/*if (!this.onFailAddArticle(data)) {
+					return;
+				}*/
+				let id = parseInt(data.id);
+				if (data.status == 'ok' && id) {
+					this.$root.setArticleId(id);
+				}
+			},
+			/**
+             * @description Проверяет, заполнены ли все необходимые поля
+            */
+			allRequiredFilled(){
+				return (
+					parseInt(this.category) > 0
+					&& String(this.title).length > 0
+					&& String(this.heading).length > 0
+					&& String(this.body).length > 0
+				);
+			},
             /**
+			 * @description
              * @param {Object} data
             */
             onSuccessUploadLogo(data) {
 				if (data.path) {
 					this.defaultLogo = data.path;
+				}
+				if (data.srcname) {
+					this.srcFileName = data.srcname;
 				}
             },
             /**
@@ -142,7 +170,7 @@
             */
             transliteUrl() {
 				if (this.title.trim()) {
-					this.url = '/articles/' + slug(this.title) + '/';
+					this.url = '/blog/' + slug(this.title, {delimiter: '_'}) + '/';
 				} else {
 					this.url = '';
 				}

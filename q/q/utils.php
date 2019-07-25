@@ -594,6 +594,13 @@ function req($v, $varname = 'REQUEST') {
 /**
  * @desc получить переменную из request
 **/
+function treq($v, $varname = 'REQUEST') : string
+{
+	return trim(req($v, $varname));
+}
+/**
+ * @desc получить переменную из request
+**/
 function is_ajax() {
 	return (req('xhr') == '1');
 }

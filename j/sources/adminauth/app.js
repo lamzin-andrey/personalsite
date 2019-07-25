@@ -98,7 +98,9 @@ window.app = new Vue({
             f : () => {},
             context : window.app
         }
-     },
+	 },
+	 /** @property {Number} _articleId Идентификатор редактируемой статьи */
+	 articleId : 0,
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -112,6 +114,20 @@ window.app = new Vue({
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
    methods:{
+	/**
+	 * @description Установить id редактируемой статьи
+	 * @param {Number} id 
+	*/
+	setArticleId(id) {
+		this.articleId = id;
+	},
+	/**
+	 * @description Получить id редактируемой статьи
+	 * @return Number
+	*/
+	getArticleId() {
+		return this.articleId;
+	},
     /**
      * @description инициализация DataTables с данными статей
     */
@@ -321,7 +337,15 @@ window.app = new Vue({
         return '';
     },
     _restreq(method, data, onSuccess, url, onFail) {
-        let W = window;
+		let W = window, sendData = {...data}, i;
+		console.log(sendData);
+		for (i in sendData) {
+			if (i == '__ob__' || (sendData[i] instanceof Object) ) {
+				delete  sendData[i];
+			}
+		}
+
+		
         W.root = '';
         if (!url) {
             url = window.location.href;
@@ -339,7 +363,7 @@ window.app = new Vue({
         }
         $.ajax({
             method: method,
-            data:data,
+            data:sendData,
             url:url,
             dataType:'json',
             success:onSuccess,

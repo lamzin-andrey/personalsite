@@ -18,8 +18,7 @@ class ArticleLogoUpload extends AdminAuthFileUpload {
 			if ($success) {
 				utils_resizeAndAddBg($this->_path, $this->_path, 64, 64, [255, 255, 255], breq('alpha'));
 				$s = str_replace(DOC_ROOT, '', $this->_path);
-				global $dberror;
-				json_ok('path', $this->_url, 'error', $dberror);
+				json_ok('path', $this->_url, 'srcname', $photo['name']);
 				return;
 			}
 		}

@@ -8,9 +8,12 @@ $aLang = [
 	'Message Center'	=> 'Сообщения',
 	'Operations'         	 => 'Операции',
 	'Heading'         	 => 'Заголовок',
+	'Heading Article'         	 => 'Заголовок статьи',
 	'NewEdit'         	 => 'Новая/Редактировать',
 	'Sections'         => 'Разделы',
 	'Articles'         => 'Статьи',
+	'Article'         => 'Статья',
+	'Category'         => 'Категория',
 	'profile-save-success'         => 'Данные успешно сохранены',
 	'enter-current-password'       => 'Введите ваш действующий пароль', 
 	'Password_Current'       => 'Действующий пароль',
@@ -61,6 +64,8 @@ $aLang = [
 	'file_is_executing_upload_denied'        => 'Файл может содержать вредоносный программный код, загрузка этого файла невозможна.',
 	'SigninFormLabel'        => 'Авторизация',
 	'Change-password'        => 'Настройки авторизации',
+	
+	'Title'        => 'Тайтл страницы',
 	
 	
 	//DataTables

@@ -4,6 +4,12 @@
 
 This vue2 component ajax custom file input with progress bar.
 
+## Installation
+
+`git clone https://github.com/lamzin-andrey/vue2-bootstrap4.2.1-validator` You can remove the v-b421validators directive in the code of this component, then this repository is not needed.
+
+`git clone https://github.com/lamzin-andrey/landlib/`
+
 ## Usage
 
 ```html
@@ -341,6 +347,12 @@ this component set path to uploaded file as him value, and binding model will co
 ## Что это
 
 Это компонент vue2 для ajax загрузки файлов на сервер с индикатором процесса загрузки.
+
+## Установка
+
+`git clone https://github.com/lamzin-andrey/vue2-bootstrap4.2.1-validator/` Вы можете удалить директиву v-b421validators в коде этого компонента, тогда этот репозиторий не нужен.
+
+`git clone https://github.com/lamzin-andrey/landlib/`
 
 ## Использование
 

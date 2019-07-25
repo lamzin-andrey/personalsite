@@ -66,15 +66,29 @@ class BaseApp {
 	public function streq($key, $field = '', $varname = 'REQUEST') {
 		return $this->tsreq($key, $field = '', $varname);
 	}
-	
-	public function treq($key, $field = '', $varname = 'REQUEST') {
+	/**
+	 * @description
+	 * @param string $key - имя переменной в REQUEST
+	 * @param string $field = '' имя поля в таблице БД, если не передано, то принимается равным $key
+	 * @param string $varname = 'REQUEST'
+	 * @return string
+	*/
+	public function treq(string $key, string $field = '', string $varname = 'REQUEST') : string
+	{
 		$field = $field ? $field : $key;
 		$this->$field = trim(req($key, $varname) );
 		$this->request[$field] = $this->$field;
 		return $this->$field;
 	}
-	
-	public function ireq($key, $field = '', $varname = 'REQUEST') {
+	/**
+	 * @description
+	 * @param string $key - имя переменной в REQUEST
+	 * @param string $field = '' имя поля в таблице БД, если не передано, то принимается равным $key
+	 * @param string $varname = 'REQUEST'
+	 * @return int
+	*/
+	public function ireq(string $key, string $field = '', string $varname = 'REQUEST') :int
+	{
 		$field = $field ? $field : $key;
 		$this->$field = ireq($key, $varname);
 		$this->request[$field] = $this->$field;

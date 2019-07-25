@@ -3,6 +3,7 @@
 		<label :for="id">{{ label }}</label>
 		<select  
 			:class="'custom-select' + (className ? (' ' + className) : '')"
+			v-b421validators="validators"
 			:value="value"
 			@input="$emit('input', $event.target.value)"
 			:id="id" :name="id"
@@ -18,6 +19,7 @@
 		props: [
 			'label',
 			'data',
+			'validators',
 			'id',
 			'value',
 			'className'
