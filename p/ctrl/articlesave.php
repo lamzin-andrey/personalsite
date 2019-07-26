@@ -21,7 +21,7 @@ class ArticlePost extends AdminAuth {
 		
 		$this->treq('description');
 		$this->treq('keywords');
-		$this->treq('og_description', '');
+		$this->treq('og_description');
 		$this->treq('og_title');
 		$this->treq('og_image');
 		
@@ -44,8 +44,12 @@ class ArticlePost extends AdminAuth {
 			if (!$id) {
 				$id = $newId;
 			}
-			//TODO call compile
-			$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block);
+			$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
+													$this->description,
+													$this->keywords,
+													$this->og_title,
+													$this->og_description,
+													$this->og_image);
 			$comiErr = $oCompiler->emsg;
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}

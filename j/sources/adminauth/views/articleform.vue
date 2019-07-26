@@ -27,13 +27,13 @@
             :sendInputs="['alpha']"
             
          :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
-
+		<div class="progress">
+			<div class="progress-bar" role="progressbar" 
+				:style="'width: ' + progressValue + '%;'" 
+				:aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
+        </div>
 		<checkboxb4  id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
-         <div class="progress">
-            <div class="progress-bar" role="progressbar" 
-                :style="'width: ' + progressValue + '%;'" 
-                :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
-         </div>
+         
 
         <div class="accordion" id="seoAccord">
 			<div class="card">
@@ -284,8 +284,8 @@
 			 * @description Обработка успешной загрузки фото ДЛЯ соц. сетей
             */
 			onSuccessUploadOgImage(data) {
-				if (data.path) {
-					this.defaultSocImage = data.path;
+				if (data.path) {;
+					this.og_image = this.defaultSocImage = `${window.location.protocol}//${window.location.host}${data.path}`;
 				}
 			},
 			/**
@@ -298,7 +298,7 @@
 						s = this.body;
 						head = s.substring(0, n);
 						tail = s.substring(n);
-						s = `<img src="${data.path}">`;
+						s = `[html]<img src="${data.path}">[/html]`;
 						this.body = head + s + tail;
 						setTimeout(() => {
 							this.$refs[x].setCursorPosition(n + s.length);

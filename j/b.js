@@ -43429,7 +43429,8 @@ Vue.component('inputfileb4', __webpack_require__(56));
            */
 		onSuccessUploadOgImage: function onSuccessUploadOgImage(data) {
 			if (data.path) {
-				this.defaultSocImage = data.path;
+				;
+				this.og_image = this.defaultSocImage = window.location.protocol + '//' + window.location.host + data.path;
 			}
 		},
 
@@ -43449,7 +43450,7 @@ Vue.component('inputfileb4', __webpack_require__(56));
 					s = this.body;
 					head = s.substring(0, n);
 					tail = s.substring(n);
-					s = '<img src="' + data.path + '">';
+					s = '[html]<img src="' + data.path + '">[/html]';
 					this.body = head + s + tail;
 					setTimeout(function () {
 						_this2.$refs[x].setCursorPosition(n + s.length);
@@ -44938,14 +44939,6 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("checkboxb4", {
-        attrs: {
-          id: "alpha",
-          label: _vm.$t("app.isMakeTransparentBg"),
-          value: "true"
-        }
-      }),
-      _vm._v(" "),
       _c("div", { staticClass: "progress" }, [
         _c(
           "div",
@@ -44962,6 +44955,14 @@ var render = function() {
           [_vm._v(_vm._s(_vm.progressValue) + "%")]
         )
       ]),
+      _vm._v(" "),
+      _c("checkboxb4", {
+        attrs: {
+          id: "alpha",
+          label: _vm.$t("app.isMakeTransparentBg"),
+          value: "true"
+        }
+      }),
       _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
         _c("div", { staticClass: "card" }, [

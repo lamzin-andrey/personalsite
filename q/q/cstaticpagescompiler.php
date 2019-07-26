@@ -5,7 +5,9 @@ class CStaticPagesCompiler {
 	
 	public $emsg = "";
 	
-    public function __construct(int $masterTemplateId, string $destFilePath, string $title, string $heading, string $content)
+    public function __construct(int $masterTemplateId, string $destFilePath, string $title, string $heading, string $content, 
+									string $description, string $keywords, string $ogTitle, 
+									string $ogDescription, string $ogImage)
     {
     	$this->DEST_DOC_ROOT = DOC_ROOT;
     	$rows = query("SELECT * FROM master_templates WHERE id = {$masterTemplateId}");
@@ -41,10 +43,43 @@ class CStaticPagesCompiler {
     	$this->cyr($heading);
     	$this->cyr($heading2);
     	$this->cyr($content);
+    	$this->cyr($description);
+    	$this->cyr($keywords);
+    	$this->cyr($ogTitle);
+    	$this->cyr($ogDescription);
     	
     	$s = file_get_contents($this->DEST_DOC_ROOT . $masterFile);
         $s = str_replace('{TITLE}', $title, $s);
         $s = str_replace('{HEADING}', $heading, $s);
+        
+        if ($description) {
+			$s = str_replace('<!--DESCRIPTION -->', '<meta name="description" content="' . $description . '">', $s);
+		} else {
+			$s = str_replace('<!--DESCRIPTION -->', '', $s);
+		}
+        if ($keywords) {
+			$s = str_replace('<!--KEYWORDS -->', '<meta name="keywords" content="' . $keywords . '">', $s);
+		} else {
+			$s = str_replace('<!--KEYWORDS -->', '', $s);
+		}
+        
+        if ($ogTitle) {
+			$s = str_replace('<!--OGTITLE -->', '<meta property="og:title" content="' . $ogTitle . '">', $s);
+		} else {
+			$s = str_replace('<!--OGTITLE -->', '', $s);
+		}
+        if ($ogDescription) {
+			$s = str_replace('<!--OGDESCRIPTION -->', '<meta property="og:description" content="' . $ogDescription . '">', $s);
+		} else {
+			$s = str_replace('<!--OGDESCRIPTION -->', '', $s);
+		}
+        if ($ogImage) {
+			$s = str_replace('<!--OGIMAGE -->', '<meta property="og:image" content="' . $ogImage . '">', $s);
+		} else {
+			$s = str_replace('<!--OGIMAGE -->', '', $s);
+		}
+        
+        
         //$s = str_replace('{HEADING2}', $heading2, $s);
         $s = str_replace('{CONTENT}', $content, $s);
         //$s = str_replace('{TSTAMP}', dechex(time()), $s);
