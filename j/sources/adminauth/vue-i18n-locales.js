@@ -67,6 +67,9 @@ var locales = {
 
             "Cancel": "Отмена",
             "Save": "Сохранить",
+			"Append": "Добавить",
+			"New": "Новая",
+			"Edit": "Редактировать",
 			"OK": "OK",
 			"Upload": "Загрузить",
 			"SaveCompleted": "Данные успешно сохранены",
@@ -87,7 +90,10 @@ var locales = {
 			"Sections": "Категория",
 			"Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
 			"Click_Ok_button_for_continue": "Нажмите OK для продолжения",
-			"SelectOgImage": "Выбрать изображение для соц. сетей",
+			"SelectOgImage": "Соц. сети",
+
+			//List Articles
+			
         }
     }
 }

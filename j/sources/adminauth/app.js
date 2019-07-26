@@ -101,6 +101,10 @@ window.app = new Vue({
 	 articleId : 0,
 	 /** @property {Boolean} isChange Принимает true когда данные статьи изменены, но не сохранены */
 	 isChange : false,
+	 /** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования статьи */
+	 newEdit : 'app.New',
+	 /** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования статьи */
+	 formTabTitle : 'app.Append',
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -109,6 +113,9 @@ window.app = new Vue({
         this.initSeotab();
         this.initDataTables();
         this.localizeParams();
+   },
+   computed:{
+		
    },
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
@@ -120,6 +127,14 @@ window.app = new Vue({
 	*/
 	setArticleId(id) {
 		this.articleId = id;
+		let key = 'app.New',
+			key2 = 'app.Append';
+		
+		if (id > 0) {
+			key2 = key =  'app.Edit';
+		}
+		this.newEdit = this.$root.$t(key);
+		this.formTabTitle = this.$root.$t(key2);
 	},
 	/**
 	 * @description Получить id редактируемой статьи
@@ -293,7 +308,7 @@ window.app = new Vue({
 				//Покажем диалог
 				this.setConfirmDlgVisible(true);
 			} else {
-				$('#alist-tab').tab('show');
+				this.gotoArticlesListTab();
 			}
         });
 
@@ -315,11 +330,19 @@ window.app = new Vue({
 	 * @description Обработка OK на диалоге подтверждения переключения между вкладками
 	*/
 	onClickConfirmLeaveEditTab() {
-		$('#alist-tab').tab('show');
+		this.gotoArticlesListTab();
 		//Скроем диалог
 		this.setConfirmDlgVisible(false);
 	},
-	
+	/**
+	 * @description Показать список статей, сбросить id редактируемой статьи, установить флаг "данные не изменялись" и очистить форму
+	*/
+	gotoArticlesListTab() {
+		$('#alist-tab').tab('show');
+		$('#aricleform')[0].reset();
+		this.setArticleId(0);
+		this.setDataChanges(false);
+	},
     /**
      * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
      */
@@ -330,7 +353,11 @@ window.app = new Vue({
 		this.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_continue');
         
         //Текст на кнопках диалога с информацией
-        this.b4AlertDlgParams.title = this.$t('app.Information');
+		this.b4AlertDlgParams.title = this.$t('app.Information');
+		
+		//Заголовок формы редактиорвания
+		this.newEdit = this.$t('app.New');
+		this.formTabTitle = this.$t('app.Append');
 	},
 	//Ниже функции, которые неплохобы вынести в какую-то библиотеку
     /**

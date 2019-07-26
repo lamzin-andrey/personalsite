@@ -11,13 +11,20 @@
 	<p>Что должно быть на форме редактирования (не SEO):</p>
 	<ul>
 		
-		<li>Кстати, не почитать ли про тестирование в Vue?</li>
-		
-		<li>Когда установлен id редактируемой статьи таб "Добавить" меняется на "Редактирование" и заголовок конента
-			таба тоже.</li>
-		
+		<li>Когда установлен id редактируемой статьи таб "Добавить" меняется на "Редактирование" и заголовок конента таба тоже.</li>
 		<li>insertimage button</li>
+		<li>Сьрос значений формы при переходе с таба списка</li>
+		<li>На полноэкранном сайдбарразвернут, на мобиле свернут</li>
+		<li>А не сделать ли редакцию списка категорий на основе этой страницы?
+			<ol>
+				<li>Как отдельное приложение 3 для страницы и посмотреть, сколько времени уqдёт</li>
+				<li>Потом вынести всё что можно в компонент и посмотреть, сколько времени уйдёт</li>
+				<li>Потом избавиться от приложения 3 а компонет подключить к приложению 2</li>
+			</ol>
+		</li>
+		
 		<li>https://habr.com/ru/company/ruvds/blog/346220/ - как всегда, всё уже украдено, до нас.</li>
+		<li>Кстати, не почитать ли про тестирование в Vue?</li>
 	</ul>
 </p>
 <ul class="nav nav-tabs" role="tablist">
@@ -36,7 +43,7 @@
 			href="#edit"
 			role="tab"
 			aria-controls="profile"
-			aria-selected="false"><?php echo l('Append');?></a>
+			aria-selected="false">{{ formTabTitle }}</a>
 	</li>
 </ul>
 <div class="tab-content">
@@ -69,8 +76,8 @@
 	<div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
 		<div class="card">
 			<div class="card-body">
-				<h5 class="card-title"><?php echo l('NewEdit') ?></h5>
-				<articleform></articleform>
+				<h5 class="card-title">{{ newEdit }}</h5>
+				<articleform ref="articlesform"></articleform>
 				<textarea hidden style="display:none" id="jdata"><?php echo $route->app->jsonData ?></textarea>
 			</div>
 		</div>

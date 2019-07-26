@@ -1,5 +1,5 @@
 <template>
-    <form class="user" method="POST" action="/p/savearticle.jn/" @submit="onSubmit" novalidate>
+    <form class="user" method="POST" action="/p/savearticle.jn/" @submit="onSubmit" novalidate id="aricleform">
 		<selectb4 v-model="category" @input="setDataChanges" :label="$t('app.Sections')" id="category" :data="pagesCategories" validators="'required'"></selectb4>
 		<inputb4 v-model="title" @input="transliteUrl" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url" readonly="readonly"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
@@ -174,7 +174,10 @@
 			//TODO remove me
             _alert(s) {
                 alert(s);
-            },
+			},
+			resetValidators(){
+				console.log('OI call');
+			},
             /** 
              * @description Кастомный прогресс для загрузкти лого
              * @param {Number} n
@@ -198,7 +201,6 @@
                 if (this.allRequiredFilled()) {
 					let formInputValidator = this.$root.formInputValidator;
 					this.id = this.$root.getArticleId();
-					console.log( 'GOTp: ' + this.$root.getArticleId() );
                     this.$root._post(
                         this.$data,
                         (data) => { this.onSuccessAddArticle(data, formInputValidator);},

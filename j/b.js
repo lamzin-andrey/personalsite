@@ -24852,6 +24852,19 @@ Vue.directive('b421validators', {
             });
         }
 
+        /**
+               * @description Set form reset listener 
+               * Установить обработчик события reset формы
+               * @param {jQueryInput} $el 
+               * @param {B421Validators} obj 
+               * @param {jQueryForm} $form
+               */
+        function _setResetListener($el, obj, $form) {
+            $form.on('reset', function (event) {
+                obj.viewClearError($el);obj.viewClearSuccess($el);
+            });
+        }
+
         var $el = $(el),
             $form = $el.parents('form').first(),
             args = String(binding.value).split(','),
@@ -24889,6 +24902,7 @@ Vue.directive('b421validators', {
                 //вместо этого вот так: (иначе последний листенер два раза назначится)
                 _setListener($el, 'input', validator, vnode.context.$root.$t, func, null, aValidatorMethodArgs);
                 _setListener($el, 'submit', validator, vnode.context.$root.$t, func, $form, aValidatorMethodArgs);
+                _setResetListener($el, validator, $form);
             }
         }
     }
@@ -25819,7 +25833,11 @@ window.app = new Vue({
         /** @property {Number} articleId Идентификатор редактируемой статьи */
         articleId: 0,
         /** @property {Boolean} isChange Принимает true когда данные статьи изменены, но не сохранены */
-        isChange: false
+        isChange: false,
+        /** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования статьи */
+        newEdit: 'app.New',
+        /** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования статьи */
+        formTabTitle: 'app.Append'
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
@@ -25830,6 +25848,7 @@ window.app = new Vue({
         this.localizeParams();
     },
 
+    computed: {},
     /**
      * @property methods эти методы можно указывать непосредственно в @ - атрибутах
     */
@@ -25840,6 +25859,14 @@ window.app = new Vue({
         */
         setArticleId: function setArticleId(id) {
             this.articleId = id;
+            var key = 'app.New',
+                key2 = 'app.Append';
+
+            if (id > 0) {
+                key2 = key = 'app.Edit';
+            }
+            this.newEdit = this.$root.$t(key);
+            this.formTabTitle = this.$root.$t(key2);
         },
 
         /**
@@ -26020,7 +26047,7 @@ window.app = new Vue({
                     //Покажем диалог
                     _this3.setConfirmDlgVisible(true);
                 } else {
-                    $('#alist-tab').tab('show');
+                    _this3.gotoArticlesListTab();
                 }
             });
 
@@ -26042,11 +26069,20 @@ window.app = new Vue({
          * @description Обработка OK на диалоге подтверждения переключения между вкладками
         */
         onClickConfirmLeaveEditTab: function onClickConfirmLeaveEditTab() {
-            $('#alist-tab').tab('show');
+            this.gotoArticlesListTab();
             //Скроем диалог
             this.setConfirmDlgVisible(false);
         },
 
+        /**
+         * @description Показать список статей, сбросить id редактируемой статьи, установить флаг "данные не изменялись" и очистить форму
+        */
+        gotoArticlesListTab: function gotoArticlesListTab() {
+            $('#alist-tab').tab('show');
+            $('#aricleform')[0].reset();
+            this.setArticleId(0);
+            this.setDataChanges(false);
+        },
 
         /**
          * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
@@ -26059,6 +26095,10 @@ window.app = new Vue({
 
             //Текст на кнопках диалога с информацией
             this.b4AlertDlgParams.title = this.$t('app.Information');
+
+            //Заголовок формы редактиорвания
+            this.newEdit = this.$t('app.New');
+            this.formTabTitle = this.$t('app.Append');
         },
 
         //Ниже функции, которые неплохобы вынести в какую-то библиотеку
@@ -26771,6 +26811,9 @@ var locales = {
 
             "Cancel": "Отмена",
             "Save": "Сохранить",
+            "Append": "Добавить",
+            "New": "Новая",
+            "Edit": "Редактировать",
             "OK": "OK",
             "Upload": "Загрузить",
             "SaveCompleted": "Данные успешно сохранены",
@@ -26791,7 +26834,10 @@ var locales = {
             "Sections": "Категория",
             "Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
             "Click_Ok_button_for_continue": "Нажмите OK для продолжения",
-            "SelectOgImage": "Выбрать изображение для соц. сетей"
+            "SelectOgImage": "Соц. сети"
+
+            //List Articles
+
         }
     }
 };
@@ -43268,6 +43314,9 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		_alert: function _alert(s) {
 			alert(s);
 		},
+		resetValidators: function resetValidators() {
+			console.log('OI call');
+		},
 
 		/** 
    * @description Кастомный прогресс для загрузкти лого
@@ -43296,7 +43345,6 @@ Vue.component('inputfileb4', __webpack_require__(56));
 			if (this.allRequiredFilled()) {
 				var formInputValidator = this.$root.formInputValidator;
 				this.id = this.$root.getArticleId();
-				console.log('GOTp: ' + this.$root.getArticleId());
 				this.$root._post(this.$data, function (data) {
 					_this.onSuccessAddArticle(data, formInputValidator);
 				}, '/p/articlesave.jn/', function (a, b, c) {
@@ -44611,7 +44659,12 @@ var render = function() {
     "form",
     {
       staticClass: "user",
-      attrs: { method: "POST", action: "/p/savearticle.jn/", novalidate: "" },
+      attrs: {
+        method: "POST",
+        action: "/p/savearticle.jn/",
+        novalidate: "",
+        id: "aricleform"
+      },
       on: { submit: _vm.onSubmit }
     },
     [
