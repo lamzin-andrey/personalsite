@@ -1,13 +1,13 @@
 <template>
     <form class="user" method="POST" action="/p/savearticle.jn/" @submit="onSubmit" novalidate>
-        <selectb4 v-model="category" :label="$t('app.Sections')" id="category_id" :data="pagesCategories" validators="'required'"></selectb4>
+		<selectb4 v-model="category" @input="setDataChanges" :label="$t('app.Sections')" id="category" :data="pagesCategories" validators="'required'"></selectb4>
 		<inputb4 v-model="title" @input="transliteUrl" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url" readonly="readonly"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
-        <inputb4 v-model="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
-        <textareab4 v-model="body" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
+        <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
+        <textareab4 v-model="body" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
         <img :src="defaultLogo" >
 		<inputfileb4 
-            v-model="filepath"
+            v-model="filepath" todo watch
             url="/p/articlelogoupload.jn/"
             immediateleyUploadOff="true"
             tokenImagePath="/i/token.png"
@@ -19,15 +19,58 @@
             
          :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
 
-		<checkboxb4 id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
+		<checkboxb4  id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
          <div class="progress">
             <div class="progress-bar" role="progressbar" 
                 :style="'width: ' + progressValue + '%;'" 
                 :aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
          </div>
 
-         
-        
+        <div class="accordion" id="seoAccord">
+			<div class="card">
+				<div class="card-header" id="headingSeo">
+				<h5 class="mb-0">
+					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSeo" aria-expanded="true" aria-controls="collapseSeo">
+					SEO
+					</button>
+				</h5>
+			</div>
+
+			<div id="collapseSeo" class="collapse" aria-labelledby="headingSeo" data-parent="#seoAccord">
+				<div class="card-body">
+					<inputb4 @input="setDataChanges" v-model="description" type="text" placeholderlabel="meta[name=description]" ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="keywords" type="text" placeholderlabel="meta[name=keywords]" ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="og_title" type="text" placeholderlabel="og:title"  ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="og_description" type="text" placeholderlabel="og:description"  ></inputb4>
+					<img :src="defaultSocImage" style="max-width:100px; max-height:100px;">
+					<inputfileb4 
+						v-model="og_image" todo watch
+						url="/p/articleogimageupload.jn/"
+						tokenImagePath="/i/token.png"
+						:listeners="ogImageUploadListeners"
+						:csrfToken="$root._getToken()"
+						:label="$t('app.SelectOgImage')" id="og_image" ></inputfileb4>
+				</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="float-right ">
+			<div id="Saver" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+				<div class="toast-header">
+					<strong class="mr-auto">Info</strong>
+					<small class="text-muted"></small>
+					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="toast-body">
+					{{ $t('app.SaveCompleted') }}
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+
         <p class="text-right my-3">
             <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
         </p>
@@ -50,16 +93,16 @@
         data: function(){
 			let _data  = {
 				//Значение title
-				title:'1',
+				title:'',
 				//Значение body
-				body:'2',
+				body:'',
 				//Значение url
 				url:'',
 				//Значение heading
-				heading:'3',
+				heading:'',
 				//Путь к загруженному логотипу
-				filepath:'default ops!',
-				//Параметры для кастомного прогресс-бара
+				filepath:'',
+				//Параметры для кастомного прогресс-бара инпута загрузки лого
 				progressbarListener:{
 					onProgress: {
 						f: this.onProgress,
@@ -74,6 +117,8 @@
 				},
 				//Логотип статьи
 				defaultLogo: '/i/64.jpg',
+				//Изображение для соц. сетей
+				defaultSocImage: '/i/64.jpg',
 				//Исходное имя файл изображения
 				srcFileName: '',
 				//Значение по умолчанию для кастомной шкалы прогресса
@@ -87,7 +132,26 @@
 				],
 				//Идентификатор редактируемой статьи
 				id : 0,
-				counter: true
+				//Чтобы передать в textareab4 true пришлось определить
+				counter: true,
+
+				//Содержимое META тега
+				description : '',
+				//Содержимое META тега
+				keywords : '',
+				//Содержимое META тега
+				og_title : '',
+				//Содержимое META тега
+				og_description : '',
+				//Содержимое META тега
+				og_image : '',
+				//Параметры для кастомного слушателя загрузки og_image
+				ogImageUploadListeners:{
+					onSuccess:{
+						f : this.onSuccessUploadOgImage,
+						context : this
+					}
+				},
 			};
 			try {
 				let jdata = JSON.parse($('#jdata').val());
@@ -97,6 +161,14 @@
 			}
 			return _data;
 		},
+		watch: {
+			og_image:function() {
+				this.$root.setDataChanges(true);
+			},
+			filepath:function() {
+				this.$root.setDataChanges(true);
+			}
+		},
         //
         methods:{
 			//TODO remove me
@@ -104,14 +176,20 @@
                 alert(s);
             },
             /** 
-             * @description Кастомный прогресс
+             * @description Кастомный прогресс для загрузкти лого
              * @param {Number} n
             */
             onProgress(a) {
                 if (a <= 100 && a > 0) {
                     this.progressValue = a;
                 }
-            },
+			},
+			/**
+			 * @description уведомляем приложение, что данные изменились
+			 */
+			setDataChanges() {
+				this.$root.setDataChanges(true);
+			},
             /** 
              * @description Пробуем отправить форму
             */
@@ -133,13 +211,27 @@
 			 * @description Успешное добавление статьи
 			*/
 			onSuccessAddArticle(data, formInputValidator){
-				/*if (!this.onFailAddArticle(data)) {
+				if (!this.onFailAddArticle(data)) {
 					return;
-				}*/
+				}
 				let id = parseInt(data.id);
 				if (data.status == 'ok' && id) {
 					this.$root.setArticleId(id);
+					/*this.saveSucces = true;
+					setTimeout(() => {
+						this.saveSucces = false;
+					}, 2*1000);*/
+					$('#Saver').toast('show');
+					this.$root.setDataChanges(false);
 				}
+			},
+			/**
+			 * @description Неуспешное добавление статьи
+			 * @return Boolean false если существует data.status == 'error'
+			*/
+			onFailAddArticle(data, b, c){
+				return this.$root.defaultFailSendFormListener(data,b, c);
+				
 			},
 			/**
              * @description Проверяет, заполнены ли все необходимые поля
@@ -163,12 +255,21 @@
 				if (data.srcname) {
 					this.srcFileName = data.srcname;
 				}
-            },
+			},
+			/**
+			 * @description Обработка успешной загрузки фото ДЛЯ соц. сетей
+            */
+			onSuccessUploadOgImage(data) {
+				if (data.path) {
+					this.defaultSocImage = data.path;
+				}
+			},
             /**
 			 * @description Транслирует url каждый раз, когда происходит ввод в поле с назваием статьи
              
             */
             transliteUrl() {
+				this.$root.setDataChanges(true);
 				if (this.title.trim()) {
 					this.url = '/blog/' + slug(this.title, {delimiter: '_'}) + '/';
 				} else {

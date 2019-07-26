@@ -1,11 +1,11 @@
 <template>
 	<div class="mt-2">
-		<label :for="id">{{ label }}</label>
+		<label :for="id">{{ dinlabel }}</label>
 		<div class="input-group">
 			<input
 				:value="value"
 				@input="$emit('input', $event.target.value)"
-				:placeholder="placeholder"
+				:placeholder="dinplaceholder"
 				v-b421validators="validators"
 				:class="'form-control' + (className ? (' ' + className) : '')"
 				:aria-describedby="id + 'Help'"
@@ -22,6 +22,8 @@
 			'validators',
 			'id',
 			'placeholder',
+			//if set, values label and placeholder will ignore and label set === placeholder
+			'placeholderlabel',
 			//set readonly="readonly" for apply
 			'readonly',
 			'type',
@@ -35,9 +37,17 @@
             
 		}; },
 		computed: {
-			readonlyWatch() {
-				console.log('watch called');
-				
+			dinplaceholder : function() {
+				if (this.placeholderlabel) {
+					return this.placeholderlabel;
+				}
+				return this.placeholder;
+			},
+			dinlabel : function() {
+				if (this.placeholderlabel) {
+					return this.placeholderlabel;
+				}
+				return this.label;
 			}
 		},
         //
@@ -47,7 +57,8 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-            let s = 'readonly';
+			//set readonly
+            let s = 'readonly', inp;
 			if (this[s] == s) {
 				$('#' + this.id)[0].setAttribute(s, s);
 			}

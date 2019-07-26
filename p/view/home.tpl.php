@@ -10,10 +10,12 @@
 	  - нашёл.
 	<p>Что должно быть на форме редактирования (не SEO):</p>
 	<ul>
-		<li>Тестирование валидации не забываем.</li>
+		
 		<li>Кстати, не почитать ли про тестирование в Vue?</li>
-		<li>Когда установлен id редактируемой статьи таб "Добавить" меняется на "Редактирование" и заголовок конетнта таба тоже.</li>
-		<li>В табе Добавить и SEO под формами сделать кнопки "Сохранить и закончить редактирование" и "Закончить редактирование" (нужен конфирм для вторых!). Новую статью возможно создать только после того, как нажата одна из них</li>
+		
+		<li>Когда установлен id редактируемой статьи таб "Добавить" меняется на "Редактирование" и заголовок конента
+			таба тоже.</li>
+		
 		<li>insertimage button</li>
 		<li>https://habr.com/ru/company/ruvds/blog/346220/ - как всегда, всё уже украдено, до нас.</li>
 	</ul>
@@ -22,7 +24,6 @@
 	<li class="nav-item">
 		<a class="nav-link" 
 			id="alist-tab"
-			data-toggle="tab"
 			href="#alist"
 			role="tab"
 			aria-controls="home"
@@ -36,15 +37,6 @@
 			role="tab"
 			aria-controls="profile"
 			aria-selected="false"><?php echo l('Append');?></a>
-	</li>
-	<li v-if="isSeotabVisible" class="nav-item">
-		<a class="nav-link"
-			id="seo-tab"
-			data-toggle="tab"
-			href="#seo"
-			role="tab"
-			aria-controls="contact"
-			aria-selected="false"><?php echo l('SEO') ?></a>
 	</li>
 </ul>
 <div class="tab-content">

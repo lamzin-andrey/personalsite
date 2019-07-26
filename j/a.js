@@ -25101,7 +25101,7 @@ var B421Validators = function () {
         key: 'viewSetError',
         value: function viewSetError(jInp, errorText) {
             jInp.addClass('is-invalid');
-            jInp.parent().find('.invalid-feedback').text(errorText);
+            jInp.parent().find('.invalid-feedback').html(errorText);
         }
         /**
          * @description Установить вид "Ошибка" и текст ошибки

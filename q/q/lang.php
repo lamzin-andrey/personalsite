@@ -1,6 +1,7 @@
 <?php
 
-function l($s) {
+function l(string $s, bool $skipConvertEncoding = false) : string
+{
 	$lang = 'ru';
 	if (isset($_COOKIE['flang'])) {
 		$lang = $_COOKIE['flang'];
@@ -18,14 +19,14 @@ function l($s) {
 	if (isset($aLang) && isset($aLang[$s])) {
 		$s = $aLang[$s];
 		$sz = func_num_args();
-		for ($i = 1; $i < $sz; $i++) {
+		for ($i = 2; $i < $sz; $i++) {
 			$v = func_get_arg($i);
 			$aS = explode('%', $s);
 			$s = array_shift($aS);
 			$s .= $v . join('%', $aS);
 		}
 		
-		if (utils_isXhr()) {
+		if (!$skipConvertEncoding && defined('DB_ENC_IS_1251') && utils_isXhr()) {
 			$s = mb_convert_encoding($s, 'UTF-8', 'Windows-1251');
 			header('Content-Type: text/html; charset=UTF-8');
 		}

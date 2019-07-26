@@ -59,8 +59,6 @@ window.app = new Vue({
      //Валидатор для полей ввода формы
      formInputValidator: B421Validators,
 
-     //Видимость таба "SEO"
-     isSeotabVisible: false,
 
      isArticlesDataTableInitalized : false,
 
@@ -99,8 +97,10 @@ window.app = new Vue({
             context : window.app
         }
 	 },
-	 /** @property {Number} _articleId Идентификатор редактируемой статьи */
+	 /** @property {Number} articleId Идентификатор редактируемой статьи */
 	 articleId : 0,
+	 /** @property {Boolean} isChange Принимает true когда данные статьи изменены, но не сохранены */
+	 isChange : false,
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -127,6 +127,9 @@ window.app = new Vue({
 	*/
 	getArticleId() {
 		return this.articleId;
+	},
+	setDataChanges(isChange) {
+		this.isChange = isChange;
 	},
     /**
      * @description инициализация DataTables с данными статей
@@ -277,16 +280,25 @@ window.app = new Vue({
      * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
      */
     initSeotab() {
-        $('#edit-tab').on('shown.bs.tab', (ev) => {
-            ev.preventDefault();
-            this.isSeotabVisible = true;
-        });
-        $('#alist-tab').on('shown.bs.tab', (ev) => {
-            ev.preventDefault();
-            this.isSeotabVisible = false;
+		$('#alist-tab').on('click', (ev) => {
+			ev.preventDefault();
+			if (this.isChange) {
+				//Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
+				this.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
+				//И сменим обработчик, чтобы удалялась именно статья
+				this.b4ConfirmDlgParams.onOk = {
+					f : this.onClickConfirmLeaveEditTab,
+					context:this
+				};
+				//Покажем диалог
+				this.setConfirmDlgVisible(true);
+			} else {
+				$('#alist-tab').tab('show');
+			}
         });
 
-        $('#sidebarToggleTop').click((ev) => {
+		// Был fix для sidebar SB Admin не помню для какого именно, возможно баг снова вылезет.
+		/*$('#sidebarToggleTop').click((ev) => {
             ev.preventDefault();
             ev.stopImmediatePropagation();
             let jSidebar = $('#accordionSidebar'), t = 'toggled';
@@ -296,20 +308,31 @@ window.app = new Vue({
                 jSidebar.removeClass(t);
             }
             
-        });
+        });/**/
         
-    },
+	},
+	/**
+	 * @description Обработка OK на диалоге подтверждения переключения между вкладками
+	*/
+	onClickConfirmLeaveEditTab() {
+		$('#alist-tab').tab('show');
+		//Скроем диалог
+		this.setConfirmDlgVisible(false);
+	},
+	
     /**
      * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
      */
     localizeParams() {
         //Текст на кнопках диалога подтверждения действия
         this.b4ConfirmDlgParams.btnCancelText = this.$t('app.Cancel');
-        this.b4ConfirmDlgParams.btnOkText = this.$t('app.OK');
+		this.b4ConfirmDlgParams.btnOkText = this.$t('app.OK');
+		this.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_continue');
         
         //Текст на кнопках диалога с информацией
         this.b4AlertDlgParams.title = this.$t('app.Information');
-    },
+	},
+	//Ниже функции, которые неплохобы вынести в какую-то библиотеку
     /**
      * @description Используем jQuery, так как бэкенд ждёт данные как formData
      * @param {Object} data 
@@ -338,7 +361,7 @@ window.app = new Vue({
     },
     _restreq(method, data, onSuccess, url, onFail) {
 		let W = window, sendData = {...data}, i;
-		console.log(sendData);
+		//console.log(sendData);
 		for (i in sendData) {
 			if (i == '__ob__' || (sendData[i] instanceof Object) ) {
 				delete  sendData[i];
@@ -370,7 +393,49 @@ window.app = new Vue({
             error:onFail
         });
         
-    },
+	},
+	/**
+     * @description Показ алерта с ошибкой по умолчанию
+    */
+	defaultError() {
+		this.alert( this.$t('app.DefaultError') );
+	},
+	/**
+     * @description Стандартная обработка неуспешной отправки формы.
+	 * В случае ошибки сети или сбоя серверного приложения вызывает defaultError()
+	 * В случае ошибки серверного приложения анализирует data 
+	 *  Ожидает найти там status == 'error || success' и объект errors
+	 *  Ожидаемый формат объекта errors:
+	 *  key:String : errorMessage:String
+	 *  Для каждого ключа будет выполнен поиск инпута с таким id
+	 *   В случае успешного поиска для него будет установлен текст ошибки errorMessage
+	 * 
+	 * Можно  использовать в обработчике успешной отправки формы
+	 *  if (!this.$root.defaultFailSendFormListener(data)) {
+	 * 		return;
+	 * 	}
+	 *  @param {*} data
+	 *  @param {*} b
+	 *  @param {*} c
+	 *	@return Boolean
+    */
+	defaultFailSendFormListener(data, b, c){
+		if (data.status == 'error') {
+			if (data.errors) {
+				let i, jEl;
+				for (i in data.errors) {
+					jEl = $('#' + i);
+					if (jEl[0]) {
+						this.formInputValidator.viewSetError(jEl, data.errors[i]);
+					}
+				}
+			}
+			return false;
+		} else if (data.status != 'ok') {
+			this.defaultError();
+		}
+		return true;
+	},
     /**
      * @description Извлекает clientX из 0 элемента changedTouches события TouchStartEvent
      * @param {TouchStartEvent} evt

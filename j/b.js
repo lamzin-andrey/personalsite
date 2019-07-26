@@ -25101,7 +25101,7 @@ var B421Validators = function () {
         key: 'viewSetError',
         value: function viewSetError(jInp, errorText) {
             jInp.addClass('is-invalid');
-            jInp.parent().find('.invalid-feedback').text(errorText);
+            jInp.parent().find('.invalid-feedback').html(errorText);
         }
         /**
          * @description Установить вид "Ошибка" и текст ошибки
@@ -25775,9 +25775,6 @@ window.app = new Vue({
         //Валидатор для полей ввода формы
         formInputValidator: __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__["a" /* default */],
 
-        //Видимость таба "SEO"
-        isSeotabVisible: false,
-
         isArticlesDataTableInitalized: false,
 
         //Центрируем прелоадер DataTables и добавляем в него спиннер
@@ -25819,8 +25816,10 @@ window.app = new Vue({
                 context: window.app
             }
         },
-        /** @property {Number} _articleId Идентификатор редактируемой статьи */
-        articleId: 0
+        /** @property {Number} articleId Идентификатор редактируемой статьи */
+        articleId: 0,
+        /** @property {Boolean} isChange Принимает true когда данные статьи изменены, но не сохранены */
+        isChange: false
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
@@ -25849,6 +25848,9 @@ window.app = new Vue({
         */
         getArticleId: function getArticleId() {
             return this.articleId;
+        },
+        setDataChanges: function setDataChanges(isChange) {
+            this.isChange = isChange;
         },
 
         /**
@@ -26005,27 +26007,46 @@ window.app = new Vue({
         initSeotab: function initSeotab() {
             var _this3 = this;
 
-            $('#edit-tab').on('shown.bs.tab', function (ev) {
+            $('#alist-tab').on('click', function (ev) {
                 ev.preventDefault();
-                _this3.isSeotabVisible = true;
-            });
-            $('#alist-tab').on('shown.bs.tab', function (ev) {
-                ev.preventDefault();
-                _this3.isSeotabVisible = false;
-            });
-
-            $('#sidebarToggleTop').click(function (ev) {
-                ev.preventDefault();
-                ev.stopImmediatePropagation();
-                var jSidebar = $('#accordionSidebar'),
-                    t = 'toggled';
-                if (!jSidebar.hasClass(t)) {
-                    jSidebar.addClass(t);
+                if (_this3.isChange) {
+                    //Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
+                    _this3.b4ConfirmDlgParams.title = _this3.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
+                    //И сменим обработчик, чтобы удалялась именно статья
+                    _this3.b4ConfirmDlgParams.onOk = {
+                        f: _this3.onClickConfirmLeaveEditTab,
+                        context: _this3
+                    };
+                    //Покажем диалог
+                    _this3.setConfirmDlgVisible(true);
                 } else {
-                    jSidebar.removeClass(t);
+                    $('#alist-tab').tab('show');
                 }
             });
+
+            // Был fix для sidebar SB Admin не помню для какого именно, возможно баг снова вылезет.
+            /*$('#sidebarToggleTop').click((ev) => {
+                      ev.preventDefault();
+                      ev.stopImmediatePropagation();
+                      let jSidebar = $('#accordionSidebar'), t = 'toggled';
+                      if (!jSidebar.hasClass(t)) {
+                          jSidebar.addClass(t);
+                      } else {
+                          jSidebar.removeClass(t);
+                      }
+                      
+                  });/**/
         },
+
+        /**
+         * @description Обработка OK на диалоге подтверждения переключения между вкладками
+        */
+        onClickConfirmLeaveEditTab: function onClickConfirmLeaveEditTab() {
+            $('#alist-tab').tab('show');
+            //Скроем диалог
+            this.setConfirmDlgVisible(false);
+        },
+
 
         /**
          * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
@@ -26034,11 +26055,13 @@ window.app = new Vue({
             //Текст на кнопках диалога подтверждения действия
             this.b4ConfirmDlgParams.btnCancelText = this.$t('app.Cancel');
             this.b4ConfirmDlgParams.btnOkText = this.$t('app.OK');
+            this.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_continue');
 
             //Текст на кнопках диалога с информацией
             this.b4AlertDlgParams.title = this.$t('app.Information');
         },
 
+        //Ниже функции, которые неплохобы вынести в какую-то библиотеку
         /**
          * @description Используем jQuery, так как бэкенд ждёт данные как formData
          * @param {Object} data 
@@ -26070,7 +26093,7 @@ window.app = new Vue({
             var W = window,
                 sendData = _extends({}, data),
                 i = void 0;
-            console.log(sendData);
+            //console.log(sendData);
             for (i in sendData) {
                 if (i == '__ob__' || sendData[i] instanceof Object) {
                     delete sendData[i];
@@ -26100,6 +26123,51 @@ window.app = new Vue({
                 success: onSuccess,
                 error: onFail
             });
+        },
+
+        /**
+            * @description Показ алерта с ошибкой по умолчанию
+           */
+        defaultError: function defaultError() {
+            this.alert(this.$t('app.DefaultError'));
+        },
+
+        /**
+            * @description Стандартная обработка неуспешной отправки формы.
+         * В случае ошибки сети или сбоя серверного приложения вызывает defaultError()
+         * В случае ошибки серверного приложения анализирует data 
+         *  Ожидает найти там status == 'error || success' и объект errors
+         *  Ожидаемый формат объекта errors:
+         *  key:String : errorMessage:String
+         *  Для каждого ключа будет выполнен поиск инпута с таким id
+         *   В случае успешного поиска для него будет установлен текст ошибки errorMessage
+         * 
+         * Можно  использовать в обработчике успешной отправки формы
+         *  if (!this.$root.defaultFailSendFormListener(data)) {
+         * 		return;
+         * 	}
+         *  @param {*} data
+         *  @param {*} b
+         *  @param {*} c
+         *	@return Boolean
+           */
+        defaultFailSendFormListener: function defaultFailSendFormListener(data, b, c) {
+            if (data.status == 'error') {
+                if (data.errors) {
+                    var i = void 0,
+                        jEl = void 0;
+                    for (i in data.errors) {
+                        jEl = $('#' + i);
+                        if (jEl[0]) {
+                            this.formInputValidator.viewSetError(jEl, data.errors[i]);
+                        }
+                    }
+                }
+                return false;
+            } else if (data.status != 'ok') {
+                this.defaultError();
+            }
+            return true;
         },
 
         /**
@@ -26705,6 +26773,7 @@ var locales = {
             "Save": "Сохранить",
             "OK": "OK",
             "Upload": "Загрузить",
+            "SaveCompleted": "Данные успешно сохранены",
 
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
             "Click_Ok_button_for_remove": "Нажмите OK для удаления",
@@ -26717,9 +26786,12 @@ var locales = {
             "Url": "Путь к файлу статьи",
             "Heading": "Заголовок статьи",
             "Content": "Статья",
-            "SelectLogo": "Загрузить логотип",
+            "SelectLogo": "Логотип",
             "isMakeTransparentBg": "Прозрачный фон",
-            "Sections": "Категория"
+            "Sections": "Категория",
+            "Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
+            "Click_Ok_button_for_continue": "Нажмите OK для продолжения",
+            "SelectOgImage": "Выбрать изображение для соц. сетей"
         }
     }
 };
@@ -43059,6 +43131,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 //Компонент для отображения инпута ввода текста bootstrap 4
@@ -43074,16 +43189,16 @@ Vue.component('inputfileb4', __webpack_require__(56));
 	data: function data() {
 		var _data = {
 			//Значение title
-			title: '1',
+			title: '',
 			//Значение body
-			body: '2',
+			body: '',
 			//Значение url
 			url: '',
 			//Значение heading
-			heading: '3',
+			heading: '',
 			//Путь к загруженному логотипу
-			filepath: 'default ops!',
-			//Параметры для кастомного прогресс-бара
+			filepath: '',
+			//Параметры для кастомного прогресс-бара инпута загрузки лого
 			progressbarListener: {
 				onProgress: {
 					f: this.onProgress,
@@ -43098,6 +43213,8 @@ Vue.component('inputfileb4', __webpack_require__(56));
 			},
 			//Логотип статьи
 			defaultLogo: '/i/64.jpg',
+			//Изображение для соц. сетей
+			defaultSocImage: '/i/64.jpg',
 			//Исходное имя файл изображения
 			srcFileName: '',
 			//Значение по умолчанию для кастомной шкалы прогресса
@@ -43108,7 +43225,26 @@ Vue.component('inputfileb4', __webpack_require__(56));
 			pagesCategories: [{ id: 1, name: "One" }, { id: 2, name: "Two" }],
 			//Идентификатор редактируемой статьи
 			id: 0,
-			counter: true
+			//Чтобы передать в textareab4 true пришлось определить
+			counter: true,
+
+			//Содержимое META тега
+			description: '',
+			//Содержимое META тега
+			keywords: '',
+			//Содержимое META тега
+			og_title: '',
+			//Содержимое META тега
+			og_description: '',
+			//Содержимое META тега
+			og_image: '',
+			//Параметры для кастомного слушателя загрузки og_image
+			ogImageUploadListeners: {
+				onSuccess: {
+					f: this.onSuccessUploadOgImage,
+					context: this
+				}
+			}
 		};
 		try {
 			var jdata = JSON.parse($('#jdata').val());
@@ -43118,6 +43254,14 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		}
 		return _data;
 	},
+	watch: {
+		og_image: function og_image() {
+			this.$root.setDataChanges(true);
+		},
+		filepath: function filepath() {
+			this.$root.setDataChanges(true);
+		}
+	},
 	//
 	methods: {
 		//TODO remove me
@@ -43126,13 +43270,20 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		},
 
 		/** 
-   * @description Кастомный прогресс
+   * @description Кастомный прогресс для загрузкти лого
    * @param {Number} n
   */
 		onProgress: function onProgress(a) {
 			if (a <= 100 && a > 0) {
 				this.progressValue = a;
 			}
+		},
+
+		/**
+   * @description уведомляем приложение, что данные изменились
+   */
+		setDataChanges: function setDataChanges() {
+			this.$root.setDataChanges(true);
 		},
 
 		/** 
@@ -43158,13 +43309,27 @@ Vue.component('inputfileb4', __webpack_require__(56));
    * @description Успешное добавление статьи
   */
 		onSuccessAddArticle: function onSuccessAddArticle(data, formInputValidator) {
-			/*if (!this.onFailAddArticle(data)) {
-   	return;
-   }*/
+			if (!this.onFailAddArticle(data)) {
+				return;
+			}
 			var id = parseInt(data.id);
 			if (data.status == 'ok' && id) {
 				this.$root.setArticleId(id);
+				/*this.saveSucces = true;
+    setTimeout(() => {
+    	this.saveSucces = false;
+    }, 2*1000);*/
+				$('#Saver').toast('show');
+				this.$root.setDataChanges(false);
 			}
+		},
+
+		/**
+   * @description Неуспешное добавление статьи
+   * @return Boolean false если существует data.status == 'error'
+  */
+		onFailAddArticle: function onFailAddArticle(data, b, c) {
+			return this.$root.defaultFailSendFormListener(data, b, c);
 		},
 
 		/**
@@ -43188,10 +43353,20 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		},
 
 		/**
+   * @description Обработка успешной загрузки фото ДЛЯ соц. сетей
+           */
+		onSuccessUploadOgImage: function onSuccessUploadOgImage(data) {
+			if (data.path) {
+				this.defaultSocImage = data.path;
+			}
+		},
+
+		/**
   * @description Транслирует url каждый раз, когда происходит ввод в поле с назваием статьи
    
   */
 		transliteUrl: function transliteUrl() {
+			this.$root.setDataChanges(true);
 			if (this.title.trim()) {
 				this.url = '/blog/' + slug(this.title, { delimiter: '_' }) + '/';
 			} else {
@@ -43287,6 +43462,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['label', 'validators', 'id', 'placeholder',
+	//if set, values label and placeholder will ignore and label set === placeholder
+	'placeholderlabel',
 	//set readonly="readonly" for apply
 	'readonly', 'type', 'value', 'className'],
 	name: 'inputb4',
@@ -43296,15 +43473,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {};
 	},
 	computed: {
-		readonlyWatch: function readonlyWatch() {
-			console.log('watch called');
+		dinplaceholder: function dinplaceholder() {
+			if (this.placeholderlabel) {
+				return this.placeholderlabel;
+			}
+			return this.placeholder;
+		},
+		dinlabel: function dinlabel() {
+			if (this.placeholderlabel) {
+				return this.placeholderlabel;
+			}
+			return this.label;
 		}
 	},
 	//
 	methods: {}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
 	mounted: function mounted() {
-		var s = 'readonly';
+		//set readonly
+		var s = 'readonly',
+		    inp = void 0;
 		if (this[s] == s) {
 			$('#' + this.id)[0].setAttribute(s, s);
 		}
@@ -43320,7 +43508,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mt-2" }, [
-    _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.label))]),
+    _c("label", { attrs: { for: _vm.id } }, [_vm._v(_vm._s(_vm.dinlabel))]),
     _vm._v(" "),
     _c("div", { staticClass: "input-group" }, [
       _c("input", {
@@ -43334,7 +43522,7 @@ var render = function() {
         ],
         class: "form-control" + (_vm.className ? " " + _vm.className : ""),
         attrs: {
-          placeholder: _vm.placeholder,
+          placeholder: _vm.dinplaceholder,
           "aria-describedby": _vm.id + "Help",
           type: _vm.type,
           id: _vm.id,
@@ -43968,7 +44156,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		'csrfToken': { type: String },
 		'uploadButtonLabel': { type: String, default: 'Upload' },
 		//Отправляем дополнительно данные перечисленных инпутов
-		'sendInputs': { type: Array, default: [] },
+		'sendInputs': { type: Array, default: function _default() {
+				return [];
+			} },
 		'className': { type: String }
 	},
 	name: 'inputb4',
@@ -43995,6 +44185,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
    * @description Обработка выбора файла
   */
 		onSelectFile: function onSelectFile(evt) {
+			console.log('I call');
 			this.sendFile(evt.target);
 		},
 
@@ -44059,6 +44250,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						if (!that.listeners || !that.listeners.onSuccess) {
 							that.onSuccess(s);
 						} else {
+							that.onSuccess(s);
 							that.listeners.onSuccess.f.call(that.listeners.onSuccess.context, s);
 						}
 					} else {
@@ -44076,8 +44268,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
    * @param {Number} nPercents
   */
 		onSuccess: function onSuccess(d) {
+			this.hideFileprogress();
 			if (d && d.status == 'ok') {
-				//this.value = d.path;
 				this.$emit('input', d.path);
 				if (this.listeners && this.listeners.onSuccess) {
 					this.listeners.onSuccess.f.call(this.listeners.onSuccess.context, d.path);
@@ -44088,6 +44280,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 		},
 		onFail: function onFail() {
+			this.hideFileprogress();
 			if (!this.listeners || !this.listeners.onFail) {
 				//this.$root.alert(this.$root.$t('app.DefaultError'));
 				$emit('uploadneterror', this.$root.$t('app.DefaultError'));
@@ -44148,14 +44341,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
    * @see onProgress
   */
 		hideFileprogress: function hideFileprogress() {
-			$('#uploadProcessView' + this.id)[0].style.display = 'none';
+			var b = $('#uploadProcessView' + this.id)[0];
+			if (b) {
+				b.style.display = 'none';
+			}
 		},
 
 		/**
    * @description
   */
 		onClickUploadButton: function onClickUploadButton() {
-			console.log('Click ok');
 			this.sendFile($('#' + this.id + 'FileDeffer')[0]);
 		}
 	}, //end methods
@@ -44248,7 +44443,7 @@ var render = function() {
               id: _vm.id + "FileImmediately",
               name: _vm.id + "FileImmediately"
             },
-            on: { select: _vm.b4InpOnSelectFile }
+            on: { change: _vm.onSelectFile }
           }),
           _vm._v(" "),
           _c(
@@ -44423,10 +44618,11 @@ var render = function() {
       _c("selectb4", {
         attrs: {
           label: _vm.$t("app.Sections"),
-          id: "category_id",
+          id: "category",
           data: _vm.pagesCategories,
           validators: "'required'"
         },
+        on: { input: _vm.setDataChanges },
         model: {
           value: _vm.category,
           callback: function($$v) {
@@ -44473,11 +44669,13 @@ var render = function() {
       _vm._v(" "),
       _c("inputb4", {
         attrs: {
+          id: "heading",
           type: "text",
           label: _vm.$t("app.Heading"),
           placeholder: _vm.$t("app.Heading"),
           validators: "'required'"
         },
+        on: { input: _vm.setDataChanges },
         model: {
           value: _vm.heading,
           callback: function($$v) {
@@ -44495,6 +44693,7 @@ var render = function() {
           rows: "12",
           validators: "'required'"
         },
+        on: { input: _vm.setDataChanges },
         model: {
           value: _vm.body,
           callback: function($$v) {
@@ -44508,6 +44707,8 @@ var render = function() {
       _vm._v(" "),
       _c("inputfileb4", {
         attrs: {
+          todo: "",
+          watch: "",
           url: "/p/articlelogoupload.jn/",
           immediateleyUploadOff: "true",
           tokenImagePath: "/i/token.png",
@@ -44553,6 +44754,143 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse",
+              attrs: {
+                id: "collapseSeo",
+                "aria-labelledby": "headingSeo",
+                "data-parent": "#seoAccord"
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c("inputb4", {
+                    attrs: {
+                      type: "text",
+                      placeholderlabel: "meta[name=description]"
+                    },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.description,
+                      callback: function($$v) {
+                        _vm.description = $$v
+                      },
+                      expression: "description"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: {
+                      type: "text",
+                      placeholderlabel: "meta[name=keywords]"
+                    },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.keywords,
+                      callback: function($$v) {
+                        _vm.keywords = $$v
+                      },
+                      expression: "keywords"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: { type: "text", placeholderlabel: "og:title" },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.og_title,
+                      callback: function($$v) {
+                        _vm.og_title = $$v
+                      },
+                      expression: "og_title"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: { type: "text", placeholderlabel: "og:description" },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.og_description,
+                      callback: function($$v) {
+                        _vm.og_description = $$v
+                      },
+                      expression: "og_description"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("img", {
+                    staticStyle: {
+                      "max-width": "100px",
+                      "max-height": "100px"
+                    },
+                    attrs: { src: _vm.defaultSocImage }
+                  }),
+                  _vm._v(" "),
+                  _c("inputfileb4", {
+                    attrs: {
+                      todo: "",
+                      watch: "",
+                      url: "/p/articleogimageupload.jn/",
+                      tokenImagePath: "/i/token.png",
+                      listeners: _vm.ogImageUploadListeners,
+                      csrfToken: _vm.$root._getToken(),
+                      label: _vm.$t("app.SelectOgImage"),
+                      id: "og_image"
+                    },
+                    model: {
+                      value: _vm.og_image,
+                      callback: function($$v) {
+                        _vm.og_image = $$v
+                      },
+                      expression: "og_image"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right " }, [
+        _c(
+          "div",
+          {
+            staticClass: "toast",
+            attrs: {
+              id: "Saver",
+              role: "alert",
+              "aria-live": "assertive",
+              "aria-atomic": "true",
+              "data-delay": "3000"
+            }
+          },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "toast-body" }, [
+              _vm._v(
+                "\n\t\t\t\t\t" +
+                  _vm._s(_vm.$t("app.SaveCompleted")) +
+                  "\n\t\t\t\t"
+              )
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "clearfix" }),
+      _vm._v(" "),
       _c("p", { staticClass: "text-right my-3" }, [
         _c("button", { staticClass: "btn btn-primary" }, [
           _vm._v(_vm._s(_vm.$t("app.Save")))
@@ -44562,7 +44900,58 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "card-header", attrs: { id: "headingSeo" } },
+      [
+        _c("h5", { staticClass: "mb-0" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-link",
+              attrs: {
+                type: "button",
+                "data-toggle": "collapse",
+                "data-target": "#collapseSeo",
+                "aria-expanded": "true",
+                "aria-controls": "collapseSeo"
+              }
+            },
+            [_vm._v("\n\t\t\t\t\tSEO\n\t\t\t\t\t")]
+          )
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "toast-header" }, [
+      _c("strong", { staticClass: "mr-auto" }, [_vm._v("Info")]),
+      _vm._v(" "),
+      _c("small", { staticClass: "text-muted" }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "ml-2 mb-1 close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "toast",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

@@ -69,6 +69,7 @@ var locales = {
             "Save": "Сохранить",
 			"OK": "OK",
 			"Upload": "Загрузить",
+			"SaveCompleted": "Данные успешно сохранены",
 			
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
             "Click_Ok_button_for_remove": "Нажмите OK для удаления",
@@ -81,9 +82,12 @@ var locales = {
             "Url": "Путь к файлу статьи",
             "Heading": "Заголовок статьи",
             "Content": "Статья",
-            "SelectLogo": "Загрузить логотип",
+            "SelectLogo": "Логотип",
 			"isMakeTransparentBg": "Прозрачный фон",
 			"Sections": "Категория",
+			"Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
+			"Click_Ok_button_for_continue": "Нажмите OK для продолжения",
+			"SelectOgImage": "Выбрать изображение для соц. сетей",
         }
     }
 }

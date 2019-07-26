@@ -17,16 +17,25 @@ class ArticlePost extends AdminAuth {
 		$this->treq('url');
 		$this->treq('heading');
 		$this->treq('defaultLogo', 'logo');
-		$this->ireq('category');
+		$this->ireq('category', 'category_id');
+		
+		$this->treq('description');
+		$this->treq('keywords');
+		$this->treq('og_description', '');
+		$this->treq('og_title');
+		$this->treq('og_image');
 		
 		$errors = [];
+		
+		
 		
 		if ($this->_validate($errors)) {
 			$id = ireq('id');
 			$this->_setLogo();
 			$sql = '';
 			if ($id) {
-				$sql = $this->updateQuery(('id = ' . $id), []);
+				$sql = $this->updateQuery(('id = ' . $id), ['updated_at' => now()]);
+				//die($sql);
 			} else {
 				$sql = $this->insertQuery([]);
 			}
@@ -40,7 +49,7 @@ class ArticlePost extends AdminAuth {
 			$comiErr = $oCompiler->emsg;
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}
-		json_error_arr($errors);
+		json_error_arr(['errors' => $errors]);
 	}
 	/**
 	 * @description Записывает в таблицу logos данные файла, если его там нет. Заменяет $this->logo с пути на logos.id 
@@ -78,8 +87,8 @@ class ArticlePost extends AdminAuth {
 		$this->_setRequiredError('content_block', 'Article', $errors);
 		
 		//category
-		if (!$this->category ) {
-			$errors['category'] = l('field-required', l('Category'));
+		if (!$this->category_id ) {
+			$errors['category_id'] = l('field-required', 0, l('Category', 1));
 		}
 		if (count($errors)) {
 			return false;
@@ -96,7 +105,7 @@ class ArticlePost extends AdminAuth {
 	private function _setRequiredError(string $varname, string $localizeKey, array &$errors)
 	{
 		if (!strlen($this->$varname) ) {
-			$errors[$varname] = l('field-required', l($localizeKey));
+			$errors[$varname] = l('field-required', 0, l($localizeKey, 1));
 		}
 	}
 }

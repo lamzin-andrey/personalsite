@@ -7,7 +7,7 @@
 			v-b421validators="validators"
 			:aria-describedby="id + 'FileImmediatelyHelp'"
 			:id="id + 'FileImmediately'" :name="id + 'FileImmediately'"
-			@select="b4InpOnSelectFile"
+			@change="onSelectFile"
 			>
 			
 			<label class="custom-file-label" :for="id + 'FileImmediately'">{{label}}</label>
@@ -77,7 +77,7 @@
 			'csrfToken' : {type:String},
 			'uploadButtonLabel' : {type:String, default : 'Upload'},
 			//Отправляем дополнительно данные перечисленных инпутов
-			'sendInputs' : {type:Array, default : []},
+			'sendInputs' : {type:Array, default : () => { return []; }},
 			'className' : {type:String}
 		},
 		name: 'inputb4',
@@ -101,6 +101,7 @@
 			 * @description Обработка выбора файла
 			*/
 			onSelectFile(evt) {
+				console.log('I call');
 				this.sendFile(evt.target);
 			},
 			/**
@@ -150,6 +151,7 @@
 							if (!that.listeners || !that.listeners.onSuccess) {
 								that.onSuccess(s);
 							} else {
+								that.onSuccess(s);
 								that.listeners.onSuccess.f.call(that.listeners.onSuccess.context, s);
 							}
 						} else {
@@ -166,8 +168,8 @@
 			 * @param {Number} nPercents
 			*/
 			onSuccess(d) {
+				this.hideFileprogress();
 				if (d && d.status == 'ok') {
-					//this.value = d.path;
 					this.$emit('input', d.path);
 					if (this.listeners && this.listeners.onSuccess) {
 						this.listeners.onSuccess.f.call(this.listeners.onSuccess.context, d.path);
@@ -178,6 +180,7 @@
 				}
 			},
 			onFail() {
+				this.hideFileprogress();
 				if (!this.listeners || !this.listeners.onFail) {
 					//this.$root.alert(this.$root.$t('app.DefaultError'));
 					$emit('uploadneterror', this.$root.$t('app.DefaultError'));
@@ -231,13 +234,15 @@
 			 * @see onProgress
 			*/
 			hideFileprogress() {
-				$('#uploadProcessView' + this.id)[0].style.display = 'none';
+				let b = $('#uploadProcessView' + this.id)[0];
+				if (b) {
+					b.style.display = 'none';
+				}
 			},
 			/**
 			 * @description
 			*/
 			onClickUploadButton() {
-				console.log('Click ok');
 				this.sendFile( $('#' + this.id + 'FileDeffer')[0] );
 			}
            

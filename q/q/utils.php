@@ -769,7 +769,7 @@ function utils_getFilePath($app_root, $tmp_file, $src_file_name, &$is_image, $de
 		}
 	}
 	if ($ext) {
-		$md5 = md5('YmdHis'.$src_file_name);
+		$md5 = md5(date('YmdHis').$src_file_name);
 		return "{$folder}{$md5}.{$ext}";
 	}
 	return false;
@@ -1052,7 +1052,7 @@ function utils_header_utf8()
 	header('Content-Type: text/html; charset=UTF-8');
 }
 /**
- * @description 
+ * @description Вернет true если функция вызвана в процессе выполнения ajax запроса
 */
 function utils_isXhr() : bool
 {
