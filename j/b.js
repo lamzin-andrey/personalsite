@@ -26080,6 +26080,7 @@ window.app = new Vue({
         gotoArticlesListTab: function gotoArticlesListTab() {
             $('#alist-tab').tab('show');
             $('#aricleform')[0].reset();
+            this.$refs.articleform.resetImages();
             this.setArticleId(0);
             this.setDataChanges(false);
         },
@@ -43271,6 +43272,8 @@ Vue.component('inputfileb4', __webpack_require__(56));
 			defaultLogo: '/i/64.jpg',
 			//Изображение для соц. сетей
 			defaultSocImage: '/i/64.jpg',
+			//Путь к изображению по умолчанию
+			defaultLogoValue: '/i/64.jpg',
 			//Исходное имя файл изображения
 			srcFileName: '',
 			//Значение по умолчанию для кастомной шкалы прогресса
@@ -43333,6 +43336,14 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		//TODO remove me
 		_alert: function _alert(s) {
 			alert(s);
+		},
+
+		/**
+   * @description Очистить инпуты изображений
+  */
+		resetImages: function resetImages() {
+			this.defaultSocImage = this.filepath = this.defaultLogo = this.defaultLogoValue;
+			this.og_image = '';
 		},
 
 		/**
@@ -45047,8 +45058,6 @@ var render = function() {
                   _vm._v(" "),
                   _c("inputfileb4", {
                     attrs: {
-                      todo: "",
-                      watch: "",
                       url: "/p/articleogimageupload.jn/",
                       tokenImagePath: "/i/token.png",
                       listeners: _vm.ogImageUploadListeners,

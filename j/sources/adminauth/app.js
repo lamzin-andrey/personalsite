@@ -340,6 +340,7 @@ window.app = new Vue({
 	gotoArticlesListTab() {
 		$('#alist-tab').tab('show');
 		$('#aricleform')[0].reset();
+		this.$refs.articleform.resetImages();
 		this.setArticleId(0);
 		this.setDataChanges(false);
 	},

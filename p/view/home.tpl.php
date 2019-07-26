@@ -75,7 +75,7 @@
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title">{{ newEdit }}</h5>
-				<articleform ref="articlesform"></articleform>
+				<articleform ref="articleform"></articleform>
 				<textarea hidden style="display:none" id="jdata"><?php echo $route->app->jsonData ?></textarea>
 			</div>
 		</div>
