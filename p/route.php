@@ -73,6 +73,11 @@ class Route {
 			require_once $handler;
 			$this->app = new ArticleOgImageUpload();
 		}
+		if ($baseUrl == '/p/articleinlineimageupload.jn/') {
+			$handler = __dir__ . '/ctrl/articleinlineimageupload.php';
+			require_once $handler;
+			$this->app = new ArticleInlineImageUpload();
+		}
 		if ($baseUrl == '/p/reset/') {
 			$handler = __dir__ . '/ctrl/reset.php';
 			require_once $handler;

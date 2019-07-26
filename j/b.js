@@ -26834,7 +26834,8 @@ var locales = {
             "Sections": "Категория",
             "Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
             "Click_Ok_button_for_continue": "Нажмите OK для продолжения",
-            "SelectOgImage": "Соц. сети"
+            "SelectOgImage": "Соц. сети",
+            "insertImage": "Вставить ссылку на изображение"
 
             //List Articles
 
@@ -43220,6 +43221,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 //Компонент для отображения инпута ввода текста bootstrap 4
@@ -43290,6 +43300,15 @@ Vue.component('inputfileb4', __webpack_require__(56));
 					f: this.onSuccessUploadOgImage,
 					context: this
 				}
+			},
+			//Переменная для хранения ссылки на инлайновое изображение
+			poster: '',
+			//Параметры для кастомного слушателя загрузки изображений, ссылки на которые вставляются в textarea
+			posterUploadListeners: {
+				onSuccess: {
+					f: this.onSuccessUploadposter,
+					context: this
+				}
 			}
 		};
 		try {
@@ -43301,6 +43320,7 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		return _data;
 	},
 	watch: {
+		//Чтобы известить об том, что контент отредактирован при загрузке изображения на сервер
 		og_image: function og_image() {
 			this.$root.setDataChanges(true);
 		},
@@ -43314,7 +43334,11 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		_alert: function _alert(s) {
 			alert(s);
 		},
-		resetValidators: function resetValidators() {
+
+		/**
+   * @description Вставить изображение на место курсора
+  */
+		onClickInsertImage: function onClickInsertImage() {
 			console.log('OI call');
 		},
 
@@ -43406,6 +43430,31 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		onSuccessUploadOgImage: function onSuccessUploadOgImage(data) {
 			if (data.path) {
 				this.defaultSocImage = data.path;
+			}
+		},
+
+		/**
+   * @description Обработка успешной загрузки изображения для вставки в текстовое поле
+           */
+		onSuccessUploadposter: function onSuccessUploadposter(data) {
+			var _this2 = this;
+
+			if (data.path) {
+				var x = 'articlebody',
+				    n = this.$refs[x].getCursorPosition(),
+				    s = void 0,
+				    head = void 0,
+				    tail = void 0;
+				if (n > -1) {
+					s = this.body;
+					head = s.substring(0, n);
+					tail = s.substring(n);
+					s = '<img src="' + data.path + '">';
+					this.body = head + s + tail;
+					setTimeout(function () {
+						_this2.$refs[x].setCursorPosition(n + s.length);
+					}, 200);
+				}
 			}
 		},
 
@@ -43968,38 +44017,121 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['label', 'validators', 'id', 'placeholder',
-    //if set counter showed symbol counter
-    /*** @property counter {className: 'bg-success text-light'} */
-    'counter', 'rows', 'type', 'value', 'className'],
-    name: 'textareab4',
+	props: ['label', 'validators', 'id', 'placeholder',
+	//if set counter showed symbol counter
+	/*** @property counter {className: 'bg-success text-light'} */
+	'counter', 'rows', 'type', 'value', 'className'],
+	name: 'textareab4',
 
-    //вызывается раньше чем mounted
-    data: function data() {
-        return {
-            textLength: 0
-        };
-    },
-    //
-    methods: {
-        onInput: function onInput(ev) {
-            this.textLength = ev.target.value.length;
-            return true;
-        }
-    }, //end methods
-    //вызывается после data, поля из data видны "напрямую" как this.fieldName
-    mounted: function mounted() {
-        var self = this;
-        /*this.$root.$on('showMenuEvent', function(evt) {
-            self.menuBlockVisible   = 'block';
-            self.isMainMenuVisible  = true;
-            self.isScrollWndVisible = false;
-            self.isColorWndVisible  = false;
-            self.isHelpWndVisible   = false;
-            self.nStep = self.$root.nStep;
-        })/**/
-        //console.log('I mounted!');
-    }
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {
+			textLength: 0
+		};
+	},
+	//
+	methods: {
+		onInput: function onInput(ev) {
+			this.textLength = ev.target.value.length;
+			return true;
+		},
+
+		/**
+   * @description Установка позиции курсора в текстовом поле
+   * @param {Number} pos
+  **/
+		setCursorPosition: function setCursorPosition(pos) {
+			var input = $('#' + this.id)[0],
+			    f = 0;
+			if (input.readOnly) return;
+			if (input.value == "") return;
+			if (!pos && pos !== 0) return;
+
+			try {
+				f = input.setSelectionRange;
+			} catch (e) {
+				;
+			}
+			if (f) {
+				input.focus();
+				try {
+					input.setSelectionRange(pos, pos);
+				} catch (e) {
+					//если находится в контейнере с style="display:none" выдает ошибку
+				}
+			} else if (input.createTextRange) {
+				var range = input.createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', pos);
+				range.moveStart('character', pos);
+				range.select();
+			}
+		},
+		focus: function focus() {
+			$('#' + this.id).focus();
+		},
+
+		/**
+   * 
+  **/
+		/**
+   * @description En: get caret (cursor) position in textarea.
+   *  Ru: Получение позиции курсора в текстовом поле
+   * @return Number
+  */
+		getCursorPosition: function getCursorPosition() {
+			var input = $('#' + this.id)[0],
+			    pos = 0;
+			if (!input) {
+				return -1;
+			}
+			// IE Support
+			if (document.selection) {
+				if (input.value.length == 0) return 0;
+				ta.focus();
+				var sel = document.selection.createRange();
+				var clone = sel.duplicate();
+				sel.collapse(true);
+				clone.moveToElementText(ta);
+				clone.setEndPoint('EndToEnd', sel);
+				return clone.text.length;
+			}
+			// Firefox support
+			else if (input.selectionStart || input.selectionStart == '0') {
+					pos = input.selectionStart;
+				}
+			return pos;
+		},
+
+		/**
+   * @description En: Alias for get caret position. Ru: Псевдоним для getCursorPosition.
+   * @return Number
+  */
+		getCaretPosition: function getCaretPosition() {
+			return this.getCursorPosition();
+		},
+
+		/**
+   * @description En: Alias for set caret position. Ru: Псевдоним для setCursorPosition.
+   * @return Number
+  */
+		setCaretPosition: function setCaretPosition(n) {
+			return this.setCursorPosition(n);
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+		var self = this;
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
 });
 
 /***/ }),
@@ -44739,6 +44871,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("textareab4", {
+        ref: "articlebody",
         attrs: {
           counter: _vm.counter,
           label: _vm.$t("app.Content"),
@@ -44756,12 +44889,35 @@ var render = function() {
         }
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mb-3" },
+        [
+          _c("inputfileb4", {
+            attrs: {
+              url: "/p/articleinlineimageupload.jn/",
+              tokenImagePath: "/i/token.png",
+              listeners: _vm.posterUploadListeners,
+              csrfToken: _vm.$root._getToken(),
+              label: _vm.$t("app.insertImage"),
+              id: "poster"
+            },
+            model: {
+              value: _vm.poster,
+              callback: function($$v) {
+                _vm.poster = $$v
+              },
+              expression: "poster"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("img", { attrs: { src: _vm.defaultLogo } }),
       _vm._v(" "),
       _c("inputfileb4", {
         attrs: {
-          todo: "",
-          watch: "",
           url: "/p/articlelogoupload.jn/",
           immediateleyUploadOff: "true",
           tokenImagePath: "/i/token.png",

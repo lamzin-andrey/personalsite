@@ -4,10 +4,19 @@
 		<inputb4 v-model="title" @input="transliteUrl" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url" readonly="readonly"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
-        <textareab4 v-model="body" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
-        <img :src="defaultLogo" >
+        <textareab4 v-model="body" ref="articlebody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
+        <div class="mb-3">
+			<inputfileb4 
+						v-model="poster"
+						url="/p/articleinlineimageupload.jn/"
+						tokenImagePath="/i/token.png"
+						:listeners="posterUploadListeners"
+						:csrfToken="$root._getToken()"
+						:label="$t('app.insertImage')" id="poster" ></inputfileb4>
+		</div>
+		<img :src="defaultLogo" >
 		<inputfileb4 
-            v-model="filepath" todo watch
+            v-model="filepath"
             url="/p/articlelogoupload.jn/"
             immediateleyUploadOff="true"
             tokenImagePath="/i/token.png"
@@ -152,6 +161,15 @@
 						context : this
 					}
 				},
+				//Переменная для хранения ссылки на инлайновое изображение
+				poster : '',
+				//Параметры для кастомного слушателя загрузки изображений, ссылки на которые вставляются в textarea
+				posterUploadListeners: {
+					onSuccess:{
+						f : this.onSuccessUploadposter,
+						context : this
+					}
+				}
 			};
 			try {
 				let jdata = JSON.parse($('#jdata').val());
@@ -162,6 +180,7 @@
 			return _data;
 		},
 		watch: {
+			//Чтобы известить об том, что контент отредактирован при загрузке изображения на сервер
 			og_image:function() {
 				this.$root.setDataChanges(true);
 			},
@@ -175,7 +194,10 @@
             _alert(s) {
                 alert(s);
 			},
-			resetValidators(){
+			/**
+			 * @description Вставить изображение на место курсора
+			*/
+			onClickInsertImage(){
 				console.log('OI call');
 			},
             /** 
@@ -264,6 +286,24 @@
 			onSuccessUploadOgImage(data) {
 				if (data.path) {
 					this.defaultSocImage = data.path;
+				}
+			},
+			/**
+			 * @description Обработка успешной загрузки изображения для вставки в текстовое поле
+            */
+			onSuccessUploadposter(data) {
+				if (data.path) {
+					let x = 'articlebody', n = this.$refs[x].getCursorPosition(), s, head, tail;
+					if (n > -1) {
+						s = this.body;
+						head = s.substring(0, n);
+						tail = s.substring(n);
+						s = `<img src="${data.path}">`;
+						this.body = head + s + tail;
+						setTimeout(() => {
+							this.$refs[x].setCursorPosition(n + s.length);
+						}, 200);
+					}
 				}
 			},
             /**

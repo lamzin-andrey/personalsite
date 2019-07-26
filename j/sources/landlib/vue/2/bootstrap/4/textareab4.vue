@@ -40,6 +40,84 @@
             onInput(ev) {
 				this.textLength = ev.target.value.length;
 				return true;
+			},
+			/**
+			 * @description Установка позиции курсора в текстовом поле
+			 * @param {Number} pos
+			**/
+			setCursorPosition(pos)  {
+				let input = $('#' + this.id)[0], f = 0;
+				if (input.readOnly) return;	
+				if (input.value == "") return;	
+				if ((!pos)&&(pos !== 0)) return;
+				
+				try {
+					f = input.setSelectionRange;
+				} catch(e){
+					;
+				}
+				if(f){
+					input.focus();		
+					try{
+						input.setSelectionRange(pos,pos);
+					}catch(e){
+						//если находится в контейнере с style="display:none" выдает ошибку
+					}
+				}else if (input.createTextRange) {
+					var range = input.createTextRange();
+					range.collapse(true);
+					range.moveEnd('character', pos);
+					range.moveStart('character', pos);
+					range.select();
+				}
+			},
+			focus() {
+				$('#' + this.id).focus();
+			},
+			/**
+			 * 
+			**/
+			/**
+			 * @description En: get caret (cursor) position in textarea.
+			 *  Ru: Получение позиции курсора в текстовом поле
+			 * @return Number
+			*/
+			getCursorPosition() {
+				let input = $('#' + this.id)[0],
+					pos = 0;
+				if (!input) {
+					return -1;
+				}
+				// IE Support
+				if (document.selection) {		
+					if (input.value.length == 0) return 0;
+					ta.focus();
+					var sel = document.selection.createRange();
+					var clone  = sel.duplicate();
+					sel.collapse(true);
+					clone.moveToElementText(ta);
+					clone.setEndPoint('EndToEnd', sel);
+					return (clone.text.length);
+				}
+				// Firefox support
+				else if (input.selectionStart || input.selectionStart == '0'){
+					pos = input.selectionStart;		
+				}
+				return pos;
+			},
+			/**
+			 * @description En: Alias for get caret position. Ru: Псевдоним для getCursorPosition.
+			 * @return Number
+			*/
+			getCaretPosition(){
+				return this.getCursorPosition();
+			},
+			/**
+			 * @description En: Alias for set caret position. Ru: Псевдоним для setCursorPosition.
+			 * @return Number
+			*/
+			setCaretPosition(n){
+				return this.setCursorPosition(n);
 			}
            
         }, //end methods

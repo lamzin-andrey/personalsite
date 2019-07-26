@@ -91,6 +91,7 @@ var locales = {
 			"Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
 			"Click_Ok_button_for_continue": "Нажмите OK для продолжения",
 			"SelectOgImage": "Соц. сети",
+			"insertImage": "Вставить ссылку на изображение",
 
 			//List Articles
 			
