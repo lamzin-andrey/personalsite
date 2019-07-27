@@ -92,16 +92,6 @@ function dbvalue($cmd) {
 		return $v;
 	}
 	return false;
-	/*$link = setConnection();
-    $res = mysqli_query($link, $cmd);
-    if ($res && mysqli_num_rows($res) != 0) {
-		$val = mysqli_fetch_array($res);
-		$val = $val[0] ?? 0;
-		mysqli_close($link);
-    	return db_unsafeString($val);
-    }
-    mysqli_close($link);
-    return false;*/
 }
 function setConnection() {
 	$link = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD) or die('Error connect to mysql');
