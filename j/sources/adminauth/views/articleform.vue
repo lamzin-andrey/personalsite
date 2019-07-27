@@ -1,8 +1,8 @@
 <template>
     <form class="user" method="POST" action="/p/savearticle.jn/" @submit="onSubmit" novalidate id="aricleform">
 		<selectb4 v-model="category" @input="setDataChanges" :label="$t('app.Sections')" id="category" :data="pagesCategories" validators="'required'"></selectb4>
-		<inputb4 v-model="title" @input="transliteUrl" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
-        <inputb4 v-model="url" readonly="readonly"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
+		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
+        <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
         <textareab4 v-model="body" ref="articlebody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
         <div class="mb-3">
@@ -351,22 +351,10 @@
 					}
 				}
 			},
-            /**
-			 * @description Транслирует url каждый раз, когда происходит ввод в поле с назваием статьи
-             
-            */
-            transliteUrl() {
-				this.$root.setDataChanges(true);
-				if (this.title.trim()) {
-					this.url = '/blog/' + slug(this.title, {delimiter: '_'}) + '/';
-				} else {
-					this.url = '';
-				}
-            },
-           
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
+
             var self = this;
             /*this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';

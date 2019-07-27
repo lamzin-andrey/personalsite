@@ -2,6 +2,14 @@ window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 window.slug = require('laravel-slug');
 
+require('../landlib/nodom/textformat.js');
+require('../landlib/dom/livetranslit/livetranslit.js');
+$(() => {
+	
+	window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
+});
+
+
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';
@@ -45,7 +53,7 @@ Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue'));
 Vue.component('articleform', require('./views/articleform.vue'));
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
-    
+
 
 window.app = new Vue({
     i18n : i18n,

@@ -70,8 +70,110 @@ window.TextFormat = {
 			lex = one;
 		}
 		return lex;
+	},
+	/**
+	 * @description 
+	 * Translite string to url part
+	 * Преобразует строку в url
+	 * 
+	*/
+	transliteUrl:function (s)  {
+		function str_replace(search, replace, subject, oCount) {
+			oCount = oCount ? oCount : {};
+			oCount.n = 0;
+			while (~subject.indexOf(search)) {
+				subject = subject.replace(search, replace);
+				oCount.n++;
+			}
+			return subject;
+		}
+
+		var a = str_replace;
+		s = a("ё","e", s);
+		s = a("й","i", s);
+		s = a("ю","u", s);
+		s = a("ь","", s);
+		s = a("ч","ch", s);
+		s = a("щ","sh", s);
+		s = a("ц","c", s);
+		s = a("у","u", s);
+		s = a("к","k", s);
+		s = a("е","e", s);
+		s = a("н","n", s);
+		s = a("г","g", s);
+		s = a("ш","sh", s);
+		s = a("з","z", s);
+		s = a("х","h", s);
+		s = a("ъ","", s);
+		s = a("ф","f", s);
+		s = a("ы","y", s);
+		s = a("в","v", s);
+		s = a("а","a", s);
+		s = a("п","p", s);
+		s = a("р","r", s);
+		s = a("о","o", s);
+		s = a("л","l", s);
+		s = a("д","d", s);
+		s = a("ж","j", s);
+		s = a("э","e", s);
+		s = a("я","ya", s);
+		s = a("с","s", s);
+		s = a("м","m", s);
+		s = a("и","i", s);
+		s = a("т","t", s);
+		s = a("б","b", s);
+		s = a("Ё","E", s);
+		s = a("Й","I", s);
+		s = a("Ю","U", s);
+		s = a("Ч","CH", s);
+		s = a("Ь","", s);
+		s = a("Щ","SH", s);
+		s = a("Ц","C", s);
+		s = a("У","U", s);
+		s = a("К","K", s);
+		s = a("Е","E", s);
+		s = a("Н","N", s);
+		s = a("Г","G", s);
+		s = a("Ш","SH", s);
+		s = a("З","Z", s);
+		s = a("Х","H", s);
+		s = a("Ъ","", s);
+		s = a("Ф","F", s);
+		s = a("Ы","y", s);
+		s = a("В","V", s);
+		s = a("А","A", s);
+		s = a("П","P", s);
+		s = a("Р","R", s);
+		s = a("О","O", s);
+		s = a("Л","L", s);
+		s = a("Д","D", s);
+		s = a("Ж","J", s);
+		s = a("Э","E", s);
+		s = a("Я","YA", s);
+		s = a("С","S", s);
+		s = a("М","M", s);
+		s = a("И","I", s);
+		s = a("Т","T", s);
+		s = a("Б","B", s);
+		s = a(" ","_",s);
+		s = a('"',"",s);
+		s = a('.',"",s);
+		s = a("'","",s);
+		s = str_replace(".","",s);
+		s = str_replace(",","",s);
+		s = str_replace('\\', "", s);
+		s = str_replace('?', "", s);
+		s = str_replace('/', "_", s);
+		s = str_replace('&', "and", s);
+		var allow = 'abcdefghijklmnopqrstuvwxyz', i, r = '';
+		allow += allow.toUpperCase() + '0123456789-_';
+		for (i = 0; i < s.length; i++) {
+			if (~allow.indexOf(s.charAt(i))) {
+				r += s.charAt(i);
+			}
+		}
+		return r;
 	}
-	
 }
 
 

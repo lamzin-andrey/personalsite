@@ -146,7 +146,7 @@ function db_safeString(&$s) {
 * @return string $s
 **/
 function db_unsafeString(&$s) {
-    //$s = htmlspecialchars_decode($s, ENT_QUOTES);
+    $s = htmlspecialchars_decode($s, ENT_QUOTES);
     $s = str_replace('`', '\'', $s);
 	$s = str_replace('_QUICK_ENGIN__APOSTROF__', '`', $s);
     return $s;
