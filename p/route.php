@@ -21,6 +21,11 @@ class Route {
 			require_once $handler;
 			$this->app = new ArticlesPage();
 		}
+		if ($baseUrl == '/p/article/jn/') {
+			$handler = __dir__ . '/ctrl/article.php';
+			require_once $handler;
+			$this->app = new Article();
+		}
 		if ($baseUrl == '/p/articlesave.jn/') {
 			$handler = __dir__ . '/ctrl/articlesave.php';
 			require_once $handler;

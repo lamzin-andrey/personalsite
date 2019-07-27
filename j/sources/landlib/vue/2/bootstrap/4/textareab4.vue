@@ -16,6 +16,10 @@
 </template>
 <script>
     export default {
+		model: {
+			prop: 'value',
+			event: 'input'
+		},
 		props: [
 			'label',
 			'validators',

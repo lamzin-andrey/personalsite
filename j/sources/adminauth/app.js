@@ -105,6 +105,8 @@ window.app = new Vue({
 	 newEdit : 'app.New',
 	 /** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования статьи */
 	 formTabTitle : 'app.Append',
+	 /** @property {Number}  Переменная для хранения id статьи запрошенной для редактирования */
+	 requestedArticleId : 0,
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
@@ -143,6 +145,10 @@ window.app = new Vue({
 	getArticleId() {
 		return this.articleId;
 	},
+	/**
+	 * @see isChange
+	 * @param {Boolean} isChange 
+	 */
 	setDataChanges(isChange) {
 		this.isChange = isChange;
 	},
@@ -191,7 +197,8 @@ window.app = new Vue({
         } ).on('draw', () => {
             //Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
             $(id + ' .j-edit-btn').click((evt) => {
-                //TODO show edit form
+				//TODO show edit form
+				this.onClickEditArticle(evt);
             });
             $(id + ' .j-rm-btn').click((evt) => {
                 this.onClickRemoveArticle(evt);
@@ -220,7 +227,41 @@ window.app = new Vue({
             }
         });
         
-    },
+	},
+	/**
+     * @description Click on button "Edit article"
+     * @param {Event} evt
+    */
+   onClickEditArticle(evt) {
+		if (this.requestedArticleId > 0) {
+			this.alert(this.$t('app.Other_article_requested_for_edit'));
+			return;
+		}
+		this.requestedArticleId = $(evt.target).attr('data-id');
+		this.$root._get((d) => {this.onSuccessGetArticle(d);}, `/p/article/jn/?id=${this.requestedArticleId}`, (a, b, c) => {this.onFailGetArticle(a, b, c);} );   },
+	/**
+     * @description Success request article data for edit
+	 * @param {Object} data
+	*/
+	onSuccessGetArticle(data) {
+		if (!this.onFailGetArticle(data)) {
+			return;
+		}
+		this.setArticleId(data.id);
+		this.$refs.articleform.setArticleData(data);
+		setTimeout(() => {
+			this.setDataChanges(false);
+		}, 1000);
+		$('#edit-tab').tab('show');
+	},
+	/**
+     * @description Failed request article data for edit
+	 * @return Boolean
+	*/
+	onFailGetArticle(data, b ,c) {
+		this.requestedArticleId = 0;
+		return this.defaultFailSendFormListener(data, b ,c);
+	},
     /**
      * @description Click on button "Remove article"
      * @param {Event} evt
@@ -310,7 +351,10 @@ window.app = new Vue({
 			} else {
 				this.gotoArticlesListTab();
 			}
-        });
+		});
+		$('#edit-tab').on('shown.bs.tab', (ev) => {
+			this.setDataChanges(false);
+		});
 
 		// Был fix для sidebar SB Admin не помню для какого именно, возможно баг снова вылезет.
 		/*$('#sidebarToggleTop').click((ev) => {
@@ -342,6 +386,7 @@ window.app = new Vue({
 		$('#aricleform')[0].reset();
 		this.$refs.articleform.resetImages();
 		this.setArticleId(0);
+		
 		this.setDataChanges(false);
 	},
     /**

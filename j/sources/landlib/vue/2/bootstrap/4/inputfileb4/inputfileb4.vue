@@ -60,6 +60,10 @@
 <script>
 	import './defaultupload.css';
     export default {
+		model: {
+			prop: 'value',
+			event: 'input'
+		},
 		props: {
 			'label' : {type:String},
 			'validators' : {type:String},

@@ -197,6 +197,41 @@
                 alert(s);
 			},
 			/**
+			 * @description Установитрь данные статьи для редактирования
+			 * @param {Object} data @see mysql table fields pages
+			*/
+			setArticleData(data) {
+				
+				this.category = 1001;
+				this.title = 'a';
+				this.url = 'b';
+				this.heading = 'c';
+				this.body = 'd';
+				this.filepath = this.defaultLogo = this.defaultLogoValue;
+				this.description = 'e';
+				this.keywords = 'f';
+				this.og_title = 'g';
+				this.og_description = 'h';
+				this.og_image = this.defaultSocImage = this.defaultLogoValue;
+				
+				//Fix bug when edit the article more then one time...
+				setTimeout(() => {
+					this.category = data.category_id;
+					this.title = data.title;
+					this.url = data.url;
+					this.heading = data.heading;
+					this.body = data.content_block;
+					this.filepath = this.defaultLogo = data.logo;
+					this.description = data.description;
+					this.keywords = data.keywords;
+					this.og_title = data.og_title;
+					this.og_description = data.og_description;
+					this.og_image = this.defaultSocImage = data.og_image;
+					console.log('I set');
+				}, 1);
+				
+			},
+			/**
 			 * @description Очистить инпуты изображений
 			*/
 			resetImages() {
@@ -222,6 +257,7 @@
 			 * @description уведомляем приложение, что данные изменились
 			 */
 			setDataChanges() {
+				console.log('articlegor,setDataChanges...');
 				this.$root.setDataChanges(true);
 			},
             /** 

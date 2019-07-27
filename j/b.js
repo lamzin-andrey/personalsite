@@ -25837,7 +25837,9 @@ window.app = new Vue({
         /** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования статьи */
         newEdit: 'app.New',
         /** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования статьи */
-        formTabTitle: 'app.Append'
+        formTabTitle: 'app.Append',
+        /** @property {Number}  Переменная для хранения id статьи запрошенной для редактирования */
+        requestedArticleId: 0
     },
     /**
      * @description Событие, наступающее после связывания el с этой логикой
@@ -25876,6 +25878,11 @@ window.app = new Vue({
         getArticleId: function getArticleId() {
             return this.articleId;
         },
+
+        /**
+         * @see isChange
+         * @param {Boolean} isChange 
+         */
         setDataChanges: function setDataChanges(isChange) {
             this.isChange = isChange;
         },
@@ -25913,6 +25920,7 @@ window.app = new Vue({
                 //Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
                 $(id + ' .j-edit-btn').click(function (evt) {
                     //TODO show edit form
+                    _this.onClickEditArticle(evt);
                 });
                 $(id + ' .j-rm-btn').click(function (evt) {
                     _this.onClickRemoveArticle(evt);
@@ -25943,6 +25951,52 @@ window.app = new Vue({
         },
 
         /**
+            * @description Click on button "Edit article"
+            * @param {Event} evt
+           */
+        onClickEditArticle: function onClickEditArticle(evt) {
+            var _this2 = this;
+
+            if (this.requestedArticleId > 0) {
+                this.alert(this.$t('app.Other_article_requested_for_edit'));
+                return;
+            }
+            this.requestedArticleId = $(evt.target).attr('data-id');
+            this.$root._get(function (d) {
+                _this2.onSuccessGetArticle(d);
+            }, '/p/article/jn/?id=' + this.requestedArticleId, function (a, b, c) {
+                _this2.onFailGetArticle(a, b, c);
+            });
+        },
+
+        /**
+            * @description Success request article data for edit
+         * @param {Object} data
+        */
+        onSuccessGetArticle: function onSuccessGetArticle(data) {
+            var _this3 = this;
+
+            if (!this.onFailGetArticle(data)) {
+                return;
+            }
+            this.setArticleId(data.id);
+            this.$refs.articleform.setArticleData(data);
+            setTimeout(function () {
+                _this3.setDataChanges(false);
+            }, 1000);
+            $('#edit-tab').tab('show');
+        },
+
+        /**
+            * @description Failed request article data for edit
+         * @return Boolean
+        */
+        onFailGetArticle: function onFailGetArticle(data, b, c) {
+            this.requestedArticleId = 0;
+            return this.defaultFailSendFormListener(data, b, c);
+        },
+
+        /**
          * @description Click on button "Remove article"
          * @param {Event} evt
         */
@@ -25962,13 +26016,13 @@ window.app = new Vue({
          * @param {Event} evt
         */
         onClickConfirmRemoveArticle: function onClickConfirmRemoveArticle() {
-            var _this2 = this;
+            var _this4 = this;
 
             var args = this.confirmDialogArticleArgs;
             this._post(args, function (data) {
-                _this2.onSuccessRemove(data);
+                _this4.onSuccessRemove(data);
             }, '/p/removearticle.jn/', function (data) {
-                _this2.onFailRemove(data);
+                _this4.onFailRemove(data);
             });
             this.setConfirmDlgVisible(false);
         },
@@ -26032,23 +26086,26 @@ window.app = new Vue({
          * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
          */
         initSeotab: function initSeotab() {
-            var _this3 = this;
+            var _this5 = this;
 
             $('#alist-tab').on('click', function (ev) {
                 ev.preventDefault();
-                if (_this3.isChange) {
+                if (_this5.isChange) {
                     //Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
-                    _this3.b4ConfirmDlgParams.title = _this3.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
+                    _this5.b4ConfirmDlgParams.title = _this5.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
                     //И сменим обработчик, чтобы удалялась именно статья
-                    _this3.b4ConfirmDlgParams.onOk = {
-                        f: _this3.onClickConfirmLeaveEditTab,
-                        context: _this3
+                    _this5.b4ConfirmDlgParams.onOk = {
+                        f: _this5.onClickConfirmLeaveEditTab,
+                        context: _this5
                     };
                     //Покажем диалог
-                    _this3.setConfirmDlgVisible(true);
+                    _this5.setConfirmDlgVisible(true);
                 } else {
-                    _this3.gotoArticlesListTab();
+                    _this5.gotoArticlesListTab();
                 }
+            });
+            $('#edit-tab').on('shown.bs.tab', function (ev) {
+                _this5.setDataChanges(false);
             });
 
             // Был fix для sidebar SB Admin не помню для какого именно, возможно баг снова вылезет.
@@ -26082,6 +26139,7 @@ window.app = new Vue({
             $('#aricleform')[0].reset();
             this.$refs.articleform.resetImages();
             this.setArticleId(0);
+
             this.setDataChanges(false);
         },
 
@@ -26836,7 +26894,8 @@ var locales = {
             "Are_You_Sure_Stop_Edit_Article": "Вы уверены, что сохранили изменения",
             "Click_Ok_button_for_continue": "Нажмите OK для продолжения",
             "SelectOgImage": "Соц. сети",
-            "insertImage": "Вставить ссылку на изображение"
+            "insertImage": "Вставить ссылку на изображение",
+            "Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи"
 
             //List Articles
 
@@ -43339,6 +43398,42 @@ Vue.component('inputfileb4', __webpack_require__(56));
 		},
 
 		/**
+   * @description Установитрь данные статьи для редактирования
+   * @param {Object} data @see mysql table fields pages
+  */
+		setArticleData: function setArticleData(data) {
+			var _this = this;
+
+			this.category = 1001;
+			this.title = 'a';
+			this.url = 'b';
+			this.heading = 'c';
+			this.body = 'd';
+			this.filepath = this.defaultLogo = this.defaultLogoValue;
+			this.description = 'e';
+			this.keywords = 'f';
+			this.og_title = 'g';
+			this.og_description = 'h';
+			this.og_image = this.defaultSocImage = this.defaultLogoValue;
+
+			//Fix bug when edit the article more then one time...
+			setTimeout(function () {
+				_this.category = data.category_id;
+				_this.title = data.title;
+				_this.url = data.url;
+				_this.heading = data.heading;
+				_this.body = data.content_block;
+				_this.filepath = _this.defaultLogo = data.logo;
+				_this.description = data.description;
+				_this.keywords = data.keywords;
+				_this.og_title = data.og_title;
+				_this.og_description = data.og_description;
+				_this.og_image = _this.defaultSocImage = data.og_image;
+				console.log('I set');
+			}, 1);
+		},
+
+		/**
    * @description Очистить инпуты изображений
   */
 		resetImages: function resetImages() {
@@ -43367,6 +43462,7 @@ Vue.component('inputfileb4', __webpack_require__(56));
    * @description уведомляем приложение, что данные изменились
    */
 		setDataChanges: function setDataChanges() {
+			console.log('articlegor,setDataChanges...');
 			this.$root.setDataChanges(true);
 		},
 
@@ -43374,16 +43470,16 @@ Vue.component('inputfileb4', __webpack_require__(56));
    * @description Пробуем отправить форму
   */
 		onSubmit: function onSubmit(evt) {
-			var _this = this;
+			var _this2 = this;
 
 			evt.preventDefault();
 			if (this.allRequiredFilled()) {
 				var formInputValidator = this.$root.formInputValidator;
 				this.id = this.$root.getArticleId();
 				this.$root._post(this.$data, function (data) {
-					_this.onSuccessAddArticle(data, formInputValidator);
+					_this2.onSuccessAddArticle(data, formInputValidator);
 				}, '/p/articlesave.jn/', function (a, b, c) {
-					_this.onFailAddArticle(a, b, c);
+					_this2.onFailAddArticle(a, b, c);
 				});
 			}
 		},
@@ -43449,7 +43545,7 @@ Vue.component('inputfileb4', __webpack_require__(56));
    * @description Обработка успешной загрузки изображения для вставки в текстовое поле
            */
 		onSuccessUploadposter: function onSuccessUploadposter(data) {
-			var _this2 = this;
+			var _this3 = this;
 
 			if (data.path) {
 				var x = 'articlebody',
@@ -43464,7 +43560,7 @@ Vue.component('inputfileb4', __webpack_require__(56));
 					s = '[html]<img src="' + data.path + '">[/html]';
 					this.body = head + s + tail;
 					setTimeout(function () {
-						_this2.$refs[x].setCursorPosition(n + s.length);
+						_this3.$refs[x].setCursorPosition(n + s.length);
 					}, 200);
 				}
 			}
@@ -43570,6 +43666,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	model: {
+		prop: 'value',
+		event: 'input'
+	},
 	props: ['label', 'validators', 'id', 'placeholder',
 	//if set, values label and placeholder will ignore and label set === placeholder
 	'placeholderlabel',
@@ -43735,6 +43835,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    model: {
+        prop: 'value',
+        event: 'input'
+    },
     props: ['label', 'data', 'validators', 'id', 'value', 'className'],
     name: 'selectb4',
 
@@ -44029,6 +44133,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	model: {
+		prop: 'value',
+		event: 'input'
+	},
 	props: ['label', 'validators', 'id', 'placeholder',
 	//if set counter showed symbol counter
 	/*** @property counter {className: 'bg-success text-light'} */
@@ -44331,6 +44439,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	model: {
+		prop: 'value',
+		event: 'input'
+	},
 	props: {
 		'label': { type: String },
 		'validators': { type: String },

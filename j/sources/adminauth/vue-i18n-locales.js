@@ -92,6 +92,7 @@ var locales = {
 			"Click_Ok_button_for_continue": "Нажмите OK для продолжения",
 			"SelectOgImage": "Соц. сети",
 			"insertImage": "Вставить ссылку на изображение",
+			"Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи",
 
 			//List Articles
 			
