@@ -25910,7 +25910,7 @@ window.app = new Vue({
                 }, {
                     "data": "id",
                     'render': function render(data, type, row) {
-                        return '\n                            <div class="form-group d-md-inline d-block ">\n                                <button data-id="' + data + '" type="button" class="btn btn-primary j-edit-btn">\n                                    <i data-id="' + data + '" class="fas fa-edit fa-sm"></i>\n                                </button>\n                            </div>\n                            <div class="form-group d-md-inline d-block ">\n                                <button data-id="' + data + '" type="button" class="btn btn-danger j-rm-btn">\n                                    <i data-id="' + data + '" class="fas fa-trash fa-sm"></i>\n                                </button>\n                            </div>\n                            ';
+                        return '\n                            <div class="form-group d-md-inline d-block ">\n                                <button data-id="' + data + '" type="button" class="btn btn-primary j-edit-btn">\n                                    <i data-id="' + data + '" class="fas fa-edit fa-sm"></i>\n                                </button>\n                            </div>\n                            <div class="form-group d-md-inline d-block ">\n                                <button data-id="' + data + '" type="button" class="btn btn-danger j-rm-btn">\n                                    <i data-id="' + data + '" class="fas fa-trash fa-sm"></i>\n                                </button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t<div id="spin' + data + '" class="spinner-grow text-success d-none" role="status">\n\t\t\t\t\t\t\t\t\t<span class="sr-only">Loading...</span>\n\t\t\t\t\t\t\t\t</div>\n                            </div>\n                            ';
                     }
                 }],
                 language: {
@@ -25962,6 +25962,7 @@ window.app = new Vue({
                 return;
             }
             this.requestedArticleId = $(evt.target).attr('data-id');
+            $('#spin' + this.requestedArticleId).toggleClass('d-none');
             this.$root._get(function (d) {
                 _this2.onSuccessGetArticle(d);
             }, '/p/article/jn/?id=' + this.requestedArticleId, function (a, b, c) {
@@ -25992,6 +25993,7 @@ window.app = new Vue({
          * @return Boolean
         */
         onFailGetArticle: function onFailGetArticle(data, b, c) {
+            $('#spin' + this.requestedArticleId).toggleClass('d-none');
             this.requestedArticleId = 0;
             return this.defaultFailSendFormListener(data, b, c);
         },

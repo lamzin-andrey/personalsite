@@ -185,6 +185,11 @@ window.app = new Vue({
                                 <button data-id="${data}" type="button" class="btn btn-danger j-rm-btn">
                                     <i data-id="${data}" class="fas fa-trash fa-sm"></i>
                                 </button>
+							</div>
+							<div class="form-group d-md-inline d-block ">
+								<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
+									<span class="sr-only">Loading...</span>
+								</div>
                             </div>
                             `;
                     }
@@ -238,6 +243,7 @@ window.app = new Vue({
 			return;
 		}
 		this.requestedArticleId = $(evt.target).attr('data-id');
+		$('#spin' + this.requestedArticleId).toggleClass('d-none');
 		this.$root._get((d) => {this.onSuccessGetArticle(d);}, `/p/article/jn/?id=${this.requestedArticleId}`, (a, b, c) => {this.onFailGetArticle(a, b, c);} );   },
 	/**
      * @description Success request article data for edit
@@ -259,6 +265,7 @@ window.app = new Vue({
 	 * @return Boolean
 	*/
 	onFailGetArticle(data, b ,c) {
+		$('#spin' + this.requestedArticleId).toggleClass('d-none');
 		this.requestedArticleId = 0;
 		return this.defaultFailSendFormListener(data, b ,c);
 	},
