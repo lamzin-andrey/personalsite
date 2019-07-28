@@ -25,6 +25,7 @@
 			'validators',
 			'id',
 			'placeholder',
+			'maxlength',
 			//if set counter showed symbol counter
 			/*** @property counter {className: 'bg-success text-light'} */
 			'counter',
@@ -127,8 +128,15 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-            var self = this;
-            /*this.$root.$on('showMenuEvent', function(evt) {
+			let s, n;
+			//set maxlength
+			s = 'maxlength';
+			n = parseInt(this[s]);
+			if (!isNaN(n) ) {
+				$('#' + this.id)[0].setAttribute(s, n);
+			}
+            /*var self = this;
+            this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';
                 self.isMainMenuVisible  = true;
                 self.isScrollWndVisible = false;
