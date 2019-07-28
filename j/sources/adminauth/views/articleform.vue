@@ -47,7 +47,7 @@
 
 			<div id="collapseSeo" class="collapse" aria-labelledby="headingSeo" data-parent="#seoAccord">
 				<div class="card-body">
-					<inputb4 @input="setDataChanges" v-model="description" type="text" placeholderlabel="meta[name=description]" ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="description" type="text" placeholderlabel="meta[name=description]" maxlength="200" id="description"></inputb4>
 					<inputb4 @input="setDataChanges" v-model="keywords" type="text" placeholderlabel="meta[name=keywords]" ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="og_title" type="text" placeholderlabel="og:title"  ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="og_description" type="text" placeholderlabel="og:description"  ></inputb4>

@@ -25384,7 +25384,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(34);
+var	fixUrls = __webpack_require__(36);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -25722,19 +25722,19 @@ module.exports = __webpack_require__(27);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(37);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 window.jQuery = window.$ = window.jquery = __webpack_require__(2);
 window.Vue = __webpack_require__(3);
 window.slug = __webpack_require__(28);
 
-__webpack_require__(63);
-__webpack_require__(64);
+__webpack_require__(29);
+__webpack_require__(30);
 $(function () {
 
     window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
@@ -25765,7 +25765,7 @@ __webpack_require__(9);
 //DataTables
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
-__webpack_require__(30);
+__webpack_require__(32);
 //my patch pagination for extra small view
 
 // /DataTables
@@ -25775,11 +25775,11 @@ __webpack_require__(30);
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 //Компонент вместо стандартного confirm
-Vue.component('b4confirmdlg', __webpack_require__(36));
+Vue.component('b4confirmdlg', __webpack_require__(38));
 //Компонент вместо стандартного alert
-Vue.component('b4alertdlg', __webpack_require__(39));
+Vue.component('b4alertdlg', __webpack_require__(41));
 //Компонент для отображения формы редактирования статьи
-Vue.component('articleform', __webpack_require__(42));
+Vue.component('articleform', __webpack_require__(44));
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
 
@@ -26807,6 +26807,263 @@ module.exports = function (s, opt) {
 
 /***/ }),
 /* 29 */
+/***/ (function(module, exports) {
+
+/**
+ * @object TextFormat - специальный объект, который форматирует текстовые значения
+ *  (например если сторка должна содержать только цифры - вырежет все другие символы)
+*/
+window.TextFormat = {
+	/**
+  * @description Splits a long number of three characters. For example argument 1000000 return '1 000 000'
+ */
+	money: function money(s) {
+		var o = this,
+		    i,
+		    a = [],
+		    j = 0;
+		s = o.nums(s);
+		for (i = s.length - 1; i > -1; i--, j++) {
+			if (j > 0 && j % 3 == 0) {
+				a.push(' ');
+			}
+			a.push(s.charAt(i));
+		}
+		s = a.reverse().join('');
+		return s;
+	},
+	/**
+  * @description Remove all no numbers chars  
+ */
+	nums: function nums(s) {
+		var o = this;
+		s = s.replace(/[\D]/mig, '');
+		return s;
+	},
+	/**
+  * @description 
+  * 
+  * Change word from value of argument n
+  * For example "day"
+  * 
+  * pluralize(n, 'day', 'days', 'days');
+  * becouse 'one day' (one),
+  * 			  'three days'(less4, 3 <= 4),
+  *			  'twenty days' (more19, 20 > 19)
+      * (less4 and more19 is actual for russian language)
+  * 
+  *  
+  * Склоняет лексему (eд. измерения) в зависимости от значения n
+  * На примере "день"
+  * pluralize(n, 'день', 'дня', 'дней');
+  * потому что 'один день' (one),
+  * 			  'три дня'(less4, 3 <= 4),
+  *			  '20 дней' (more19, 20 > 19)
+ */
+	pluralize: function pluralize(n, one, less4, more19) {
+		var m, lex, r, i;
+		m = String(n);
+		if (m.length > 1) {
+			m = parseInt(m.charAt(m.length - 2) + m.charAt(m.length - 1));
+		}
+		lex = less4;
+		if (m > 20) {
+			r = String(n);
+			i = parseInt(r.charAt(r.length - 1));
+			if (i == 1) {
+				lex = one;
+			} else {
+				if (i == 0 || i > 4) {
+					lex = more19;
+				}
+			}
+		} else if (m > 4 || m == '00' || m == '0') {
+			lex = more19;
+		} else if (m == 1) {
+			lex = one;
+		}
+		return lex;
+	},
+	/**
+  * @description 
+  * Translite string to url part
+  * Преобразует строку в url
+  * 
+ */
+	transliteUrl: function transliteUrl(s) {
+		function str_replace(search, replace, subject, oCount) {
+			oCount = oCount ? oCount : {};
+			oCount.n = 0;
+			while (~subject.indexOf(search)) {
+				subject = subject.replace(search, replace);
+				oCount.n++;
+			}
+			return subject;
+		}
+
+		var a = str_replace;
+		s = a("ё", "e", s);
+		s = a("й", "i", s);
+		s = a("ю", "u", s);
+		s = a("ь", "", s);
+		s = a("ч", "ch", s);
+		s = a("щ", "sh", s);
+		s = a("ц", "c", s);
+		s = a("у", "u", s);
+		s = a("к", "k", s);
+		s = a("е", "e", s);
+		s = a("н", "n", s);
+		s = a("г", "g", s);
+		s = a("ш", "sh", s);
+		s = a("з", "z", s);
+		s = a("х", "h", s);
+		s = a("ъ", "", s);
+		s = a("ф", "f", s);
+		s = a("ы", "y", s);
+		s = a("в", "v", s);
+		s = a("а", "a", s);
+		s = a("п", "p", s);
+		s = a("р", "r", s);
+		s = a("о", "o", s);
+		s = a("л", "l", s);
+		s = a("д", "d", s);
+		s = a("ж", "j", s);
+		s = a("э", "e", s);
+		s = a("я", "ya", s);
+		s = a("с", "s", s);
+		s = a("м", "m", s);
+		s = a("и", "i", s);
+		s = a("т", "t", s);
+		s = a("б", "b", s);
+		s = a("Ё", "E", s);
+		s = a("Й", "I", s);
+		s = a("Ю", "U", s);
+		s = a("Ч", "CH", s);
+		s = a("Ь", "", s);
+		s = a("Щ", "SH", s);
+		s = a("Ц", "C", s);
+		s = a("У", "U", s);
+		s = a("К", "K", s);
+		s = a("Е", "E", s);
+		s = a("Н", "N", s);
+		s = a("Г", "G", s);
+		s = a("Ш", "SH", s);
+		s = a("З", "Z", s);
+		s = a("Х", "H", s);
+		s = a("Ъ", "", s);
+		s = a("Ф", "F", s);
+		s = a("Ы", "y", s);
+		s = a("В", "V", s);
+		s = a("А", "A", s);
+		s = a("П", "P", s);
+		s = a("Р", "R", s);
+		s = a("О", "O", s);
+		s = a("Л", "L", s);
+		s = a("Д", "D", s);
+		s = a("Ж", "J", s);
+		s = a("Э", "E", s);
+		s = a("Я", "YA", s);
+		s = a("С", "S", s);
+		s = a("М", "M", s);
+		s = a("И", "I", s);
+		s = a("Т", "T", s);
+		s = a("Б", "B", s);
+		s = a(" ", "_", s);
+		s = a('"', "", s);
+		s = a('.', "", s);
+		s = a("'", "", s);
+		s = str_replace(".", "", s);
+		s = str_replace(",", "", s);
+		s = str_replace('\\', "", s);
+		s = str_replace('?', "", s);
+		s = str_replace('/', "_", s);
+		s = str_replace('&', "and", s);
+		var allow = 'abcdefghijklmnopqrstuvwxyz',
+		    i,
+		    r = '';
+		allow += allow.toUpperCase() + '0123456789-_';
+		for (i = 0; i < s.length; i++) {
+			if (~allow.indexOf(s.charAt(i))) {
+				r += s.charAt(i);
+			}
+		}
+		return r;
+	}
+};
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+window.LandLibDom = {
+	/**
+  * @description Транслитирует текст из поля с id donorId и помещает его в поле с id acceptorId если поле с id acceptorId пусто или равно траанслитированному тексту из поле с id donorId в момент нажатия клавиши.
+  * Оставляет допустимыми для ввода в поле с id acceptorId только цифры, латиницу и знаки - _
+  * @require Определить window.LandLibDom[modifyFlagValiableName] в момент инициализации формы ввода true если сохраненный в базе hfu_title не равен транслитированному title
+  * @param {String} donorId идентификатор поля ввода с символом #
+  * @param {String} acceptorId
+  * @param {String} modifyFlagValiableName уникальное для каждой пары donor - acceptor значение. 
+  * @param {String} prefix = '' Перед транслитированным url будет добавляться префикс prefix
+  * @param {String} suffix = '' К транслитированному url будет добавляться suffix
+ */
+	liveTranslite: function liveTranslite(donorId, acceptorId, modifyFlagValiableName, prefix, suffix) {
+		var a = $(donorId),
+		    b = $(acceptorId),
+		    allow = 'abcdefghijklmnopqrstuvwxyz0123456789-_';
+		if (!a[0] || !b[0]) {
+			return;
+		}
+		prefix = String(prefix) == 'undefined' ? '' : prefix;
+		suffix = String(suffix) == 'undefined' ? '' : suffix;
+		a.keydown(function (evt) {
+
+			setTimeout(function () {
+				if (!window.LandLibDom[modifyFlagValiableName]) {
+					b.val(prefix + TextFormat.transliteUrl(a.val().toLowerCase().trim()) + suffix);
+				} else {
+					if (!a.val().trim() && !b.val().trim()) {
+						window.LandLibDom[modifyFlagValiableName] = false;
+					}
+				}
+			}, 100);
+		});
+		b.keydown(function (evt) {
+			var allowCodes = { 37: 1, 39: 1, 8: 1, 46: 1, 111: 1, 191: 1, 35: 1, 36: 1, 9: 1 };
+			if (evt.key && allow.indexOf(evt.key) == -1) {
+				if (!(evt.keyCode in allowCodes) || evt.key == '?') {
+					evt.preventDefault();
+					return;
+				}
+			}
+			window.LandLibDom[modifyFlagValiableName] = true;
+			if (!a.val().trim() && !b.val().trim()) {
+				window.LandLibDom[modifyFlagValiableName] = false;
+			}
+		});
+
+		/*setInterval(, 100);*/
+		b[0].addEventListener('input', function () {
+			var s = b.val(),
+			    q = '',
+			    i,
+			    j;
+			if (s.trim()) {
+				for (i = 0; i < s.length; i++) {
+					j = s.charAt(i);
+					if (~allow.indexOf(j) || j == '/') {
+						q += j;
+					}
+				}
+				if (s != q) {
+					b.val(q);
+				}
+			}
+		}, true);
+	}
+};
+
+/***/ }),
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26915,7 +27172,7 @@ var locales = {
 /* harmony default export */ __webpack_exports__["a"] = (locales);
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables Bootstrap 4 integration
@@ -26933,7 +27190,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables B
 (function( factory ){
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(31)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(33)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -27106,7 +27363,7 @@ return DataTable;
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -42409,13 +42666,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(33);
+var content = __webpack_require__(35);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -42440,7 +42697,7 @@ if(false) {
 }
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -42454,7 +42711,7 @@ exports.push([module.i, "@media (width < 720px ) {\n\t#articles_paginate .pagina
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports) {
 
 
@@ -42549,7 +42806,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42771,15 +43028,15 @@ var B4DataTablesPreloader = function () {
 /* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(37)
+var __vue_script__ = __webpack_require__(39)
 /* template */
-var __vue_template__ = __webpack_require__(38)
+var __vue_template__ = __webpack_require__(40)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -42818,7 +43075,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42883,7 +43140,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -42974,15 +43231,15 @@ if (false) {
 }
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(40)
+var __vue_script__ = __webpack_require__(42)
 /* template */
-var __vue_template__ = __webpack_require__(41)
+var __vue_template__ = __webpack_require__(43)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43021,7 +43278,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43077,7 +43334,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43158,15 +43415,15 @@ if (false) {
 }
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(43)
+var __vue_script__ = __webpack_require__(45)
 /* template */
-var __vue_template__ = __webpack_require__(61)
+var __vue_template__ = __webpack_require__(63)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43205,7 +43462,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43302,11 +43559,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 //Компонент для отображения инпута ввода текста bootstrap 4
-Vue.component('inputb4', __webpack_require__(44));
-Vue.component('selectb4', __webpack_require__(47));
-Vue.component('checkboxb4', __webpack_require__(50));
-Vue.component('textareab4', __webpack_require__(53));
-Vue.component('inputfileb4', __webpack_require__(56));
+Vue.component('inputb4', __webpack_require__(46));
+Vue.component('selectb4', __webpack_require__(49));
+Vue.component('checkboxb4', __webpack_require__(52));
+Vue.component('textareab4', __webpack_require__(55));
+Vue.component('inputfileb4', __webpack_require__(58));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'articleform',
@@ -43592,15 +43849,15 @@ Vue.component('inputfileb4', __webpack_require__(56));
 });
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(45)
+var __vue_script__ = __webpack_require__(47)
 /* template */
-var __vue_template__ = __webpack_require__(46)
+var __vue_template__ = __webpack_require__(48)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43639,7 +43896,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43667,7 +43924,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		prop: 'value',
 		event: 'input'
 	},
-	props: ['label', 'validators', 'id', 'placeholder',
+	props: ['label', 'validators', 'id', 'placeholder', 'maxlength',
 	//if set, values label and placeholder will ignore and label set === placeholder
 	'placeholderlabel',
 	//set readonly="readonly" for apply
@@ -43698,15 +43955,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	mounted: function mounted() {
 		//set readonly
 		var s = 'readonly',
-		    inp = void 0;
+		    n = void 0;
 		if (this[s] == s) {
 			$('#' + this.id)[0].setAttribute(s, s);
+		}
+		//set maxlength
+		s = 'maxlength';
+		n = parseInt(this[s]);
+		if (!isNaN(n)) {
+			$('#' + this.id)[0].setAttribute(s, n);
 		}
 	}
 });
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43762,15 +44025,15 @@ if (false) {
 }
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(48)
+var __vue_script__ = __webpack_require__(50)
 /* template */
-var __vue_template__ = __webpack_require__(49)
+var __vue_template__ = __webpack_require__(51)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43809,7 +44072,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43861,7 +44124,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43913,15 +44176,15 @@ if (false) {
 }
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(51)
+var __vue_script__ = __webpack_require__(53)
 /* template */
-var __vue_template__ = __webpack_require__(52)
+var __vue_template__ = __webpack_require__(54)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43960,7 +44223,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44010,7 +44273,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44060,15 +44323,15 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(54)
+var __vue_script__ = __webpack_require__(56)
 /* template */
-var __vue_template__ = __webpack_require__(55)
+var __vue_template__ = __webpack_require__(57)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44107,7 +44370,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44252,7 +44515,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44320,15 +44583,15 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(57)
+var __vue_script__ = __webpack_require__(59)
 /* template */
-var __vue_template__ = __webpack_require__(60)
+var __vue_template__ = __webpack_require__(62)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44367,12 +44630,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__defaultupload_css__);
 //
 //
@@ -44672,13 +44935,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(59);
+var content = __webpack_require__(61);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -44703,7 +44966,7 @@ if(false) {
 }
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -44717,7 +44980,7 @@ exports.push([module.i, "/* Progress view */\n/*\ntext in circle\n.upload-proces
 
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44901,7 +45164,7 @@ if (false) {
 }
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45106,7 +45369,9 @@ var render = function() {
                   _c("inputb4", {
                     attrs: {
                       type: "text",
-                      placeholderlabel: "meta[name=description]"
+                      placeholderlabel: "meta[name=description]",
+                      maxlength: "200",
+                      id: "description"
                     },
                     on: { input: _vm.setDataChanges },
                     model: {
@@ -45288,264 +45553,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-1f2fd10c", module.exports)
   }
 }
-
-/***/ }),
-/* 62 */,
-/* 63 */
-/***/ (function(module, exports) {
-
-/**
- * @object TextFormat - специальный объект, который форматирует текстовые значения
- *  (например если сторка должна содержать только цифры - вырежет все другие символы)
-*/
-window.TextFormat = {
-	/**
-  * @description Splits a long number of three characters. For example argument 1000000 return '1 000 000'
- */
-	money: function money(s) {
-		var o = this,
-		    i,
-		    a = [],
-		    j = 0;
-		s = o.nums(s);
-		for (i = s.length - 1; i > -1; i--, j++) {
-			if (j > 0 && j % 3 == 0) {
-				a.push(' ');
-			}
-			a.push(s.charAt(i));
-		}
-		s = a.reverse().join('');
-		return s;
-	},
-	/**
-  * @description Remove all no numbers chars  
- */
-	nums: function nums(s) {
-		var o = this;
-		s = s.replace(/[\D]/mig, '');
-		return s;
-	},
-	/**
-  * @description 
-  * 
-  * Change word from value of argument n
-  * For example "day"
-  * 
-  * pluralize(n, 'day', 'days', 'days');
-  * becouse 'one day' (one),
-  * 			  'three days'(less4, 3 <= 4),
-  *			  'twenty days' (more19, 20 > 19)
-      * (less4 and more19 is actual for russian language)
-  * 
-  *  
-  * Склоняет лексему (eд. измерения) в зависимости от значения n
-  * На примере "день"
-  * pluralize(n, 'день', 'дня', 'дней');
-  * потому что 'один день' (one),
-  * 			  'три дня'(less4, 3 <= 4),
-  *			  '20 дней' (more19, 20 > 19)
- */
-	pluralize: function pluralize(n, one, less4, more19) {
-		var m, lex, r, i;
-		m = String(n);
-		if (m.length > 1) {
-			m = parseInt(m.charAt(m.length - 2) + m.charAt(m.length - 1));
-		}
-		lex = less4;
-		if (m > 20) {
-			r = String(n);
-			i = parseInt(r.charAt(r.length - 1));
-			if (i == 1) {
-				lex = one;
-			} else {
-				if (i == 0 || i > 4) {
-					lex = more19;
-				}
-			}
-		} else if (m > 4 || m == '00' || m == '0') {
-			lex = more19;
-		} else if (m == 1) {
-			lex = one;
-		}
-		return lex;
-	},
-	/**
-  * @description 
-  * Translite string to url part
-  * Преобразует строку в url
-  * 
- */
-	transliteUrl: function transliteUrl(s) {
-		function str_replace(search, replace, subject, oCount) {
-			oCount = oCount ? oCount : {};
-			oCount.n = 0;
-			while (~subject.indexOf(search)) {
-				subject = subject.replace(search, replace);
-				oCount.n++;
-			}
-			return subject;
-		}
-
-		var a = str_replace;
-		s = a("ё", "e", s);
-		s = a("й", "i", s);
-		s = a("ю", "u", s);
-		s = a("ь", "", s);
-		s = a("ч", "ch", s);
-		s = a("щ", "sh", s);
-		s = a("ц", "c", s);
-		s = a("у", "u", s);
-		s = a("к", "k", s);
-		s = a("е", "e", s);
-		s = a("н", "n", s);
-		s = a("г", "g", s);
-		s = a("ш", "sh", s);
-		s = a("з", "z", s);
-		s = a("х", "h", s);
-		s = a("ъ", "", s);
-		s = a("ф", "f", s);
-		s = a("ы", "y", s);
-		s = a("в", "v", s);
-		s = a("а", "a", s);
-		s = a("п", "p", s);
-		s = a("р", "r", s);
-		s = a("о", "o", s);
-		s = a("л", "l", s);
-		s = a("д", "d", s);
-		s = a("ж", "j", s);
-		s = a("э", "e", s);
-		s = a("я", "ya", s);
-		s = a("с", "s", s);
-		s = a("м", "m", s);
-		s = a("и", "i", s);
-		s = a("т", "t", s);
-		s = a("б", "b", s);
-		s = a("Ё", "E", s);
-		s = a("Й", "I", s);
-		s = a("Ю", "U", s);
-		s = a("Ч", "CH", s);
-		s = a("Ь", "", s);
-		s = a("Щ", "SH", s);
-		s = a("Ц", "C", s);
-		s = a("У", "U", s);
-		s = a("К", "K", s);
-		s = a("Е", "E", s);
-		s = a("Н", "N", s);
-		s = a("Г", "G", s);
-		s = a("Ш", "SH", s);
-		s = a("З", "Z", s);
-		s = a("Х", "H", s);
-		s = a("Ъ", "", s);
-		s = a("Ф", "F", s);
-		s = a("Ы", "y", s);
-		s = a("В", "V", s);
-		s = a("А", "A", s);
-		s = a("П", "P", s);
-		s = a("Р", "R", s);
-		s = a("О", "O", s);
-		s = a("Л", "L", s);
-		s = a("Д", "D", s);
-		s = a("Ж", "J", s);
-		s = a("Э", "E", s);
-		s = a("Я", "YA", s);
-		s = a("С", "S", s);
-		s = a("М", "M", s);
-		s = a("И", "I", s);
-		s = a("Т", "T", s);
-		s = a("Б", "B", s);
-		s = a(" ", "_", s);
-		s = a('"', "", s);
-		s = a('.', "", s);
-		s = a("'", "", s);
-		s = str_replace(".", "", s);
-		s = str_replace(",", "", s);
-		s = str_replace('\\', "", s);
-		s = str_replace('?', "", s);
-		s = str_replace('/', "_", s);
-		s = str_replace('&', "and", s);
-		var allow = 'abcdefghijklmnopqrstuvwxyz',
-		    i,
-		    r = '';
-		allow += allow.toUpperCase() + '0123456789-_';
-		for (i = 0; i < s.length; i++) {
-			if (~allow.indexOf(s.charAt(i))) {
-				r += s.charAt(i);
-			}
-		}
-		return r;
-	}
-};
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports) {
-
-window.LandLibDom = {
-	/**
-  * @description Транслитирует текст из поля с id donorId и помещает его в поле с id acceptorId если поле с id acceptorId пусто или равно траанслитированному тексту из поле с id donorId в момент нажатия клавиши.
-  * Оставляет допустимыми для ввода в поле с id acceptorId только цифры, латиницу и знаки - _
-  * @require Определить window.LandLibDom[modifyFlagValiableName] в момент инициализации формы ввода true если сохраненный в базе hfu_title не равен транслитированному title
-  * @param {String} donorId идентификатор поля ввода с символом #
-  * @param {String} acceptorId
-  * @param {String} modifyFlagValiableName уникальное для каждой пары donor - acceptor значение. 
-  * @param {String} prefix = '' Перед транслитированным url будет добавляться префикс prefix
-  * @param {String} suffix = '' К транслитированному url будет добавляться suffix
- */
-	liveTranslite: function liveTranslite(donorId, acceptorId, modifyFlagValiableName, prefix, suffix) {
-		var a = $(donorId),
-		    b = $(acceptorId),
-		    allow = 'abcdefghijklmnopqrstuvwxyz0123456789-_';
-		if (!a[0] || !b[0]) {
-			return;
-		}
-		prefix = String(prefix) == 'undefined' ? '' : prefix;
-		suffix = String(suffix) == 'undefined' ? '' : suffix;
-		a.keydown(function (evt) {
-
-			setTimeout(function () {
-				if (!window.LandLibDom[modifyFlagValiableName]) {
-					b.val(prefix + TextFormat.transliteUrl(a.val().toLowerCase().trim()) + suffix);
-				} else {
-					if (!a.val().trim() && !b.val().trim()) {
-						window.LandLibDom[modifyFlagValiableName] = false;
-					}
-				}
-			}, 100);
-		});
-		b.keydown(function (evt) {
-			var allowCodes = { 37: 1, 39: 1, 8: 1, 46: 1, 111: 1, 191: 1, 35: 1, 36: 1, 9: 1 };
-			if (evt.key && allow.indexOf(evt.key) == -1) {
-				if (!(evt.keyCode in allowCodes) || evt.key == '?') {
-					evt.preventDefault();
-					return;
-				}
-			}
-			window.LandLibDom[modifyFlagValiableName] = true;
-			if (!a.val().trim() && !b.val().trim()) {
-				window.LandLibDom[modifyFlagValiableName] = false;
-			}
-		});
-
-		/*setInterval(, 100);*/
-		b[0].addEventListener('input', function () {
-			var s = b.val(),
-			    q = '',
-			    i,
-			    j;
-			if (s.trim()) {
-				for (i = 0; i < s.length; i++) {
-					j = s.charAt(i);
-					if (~allow.indexOf(j) || j == '/') {
-						q += j;
-					}
-				}
-				if (s != q) {
-					b.val(q);
-				}
-			}
-		}, true);
-	}
-};
 
 /***/ })
 /******/ ]);

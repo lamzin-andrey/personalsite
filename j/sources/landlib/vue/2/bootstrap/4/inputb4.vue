@@ -26,6 +26,7 @@
 			'validators',
 			'id',
 			'placeholder',
+			'maxlength',
 			//if set, values label and placeholder will ignore and label set === placeholder
 			'placeholderlabel',
 			//set readonly="readonly" for apply
@@ -62,9 +63,15 @@
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
 			//set readonly
-            let s = 'readonly', inp;
+            let s = 'readonly', n;
 			if (this[s] == s) {
 				$('#' + this.id)[0].setAttribute(s, s);
+			}
+			//set maxlength
+			s = 'maxlength';
+			n = parseInt(this[s]);
+			if (!isNaN(n) ) {
+				$('#' + this.id)[0].setAttribute(s, n);
 			}
         }
     }
