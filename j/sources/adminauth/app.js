@@ -120,9 +120,10 @@ window.app = new Vue({
     * @description Событие, наступающее после связывания el с этой логикой
    */
    mounted() {
+		this.initSidebar();
         this.initSeotab();
         this.initDataTables();
-        this.localizeParams();
+		this.localizeParams();		
    },
    computed:{
 		
@@ -131,6 +132,15 @@ window.app = new Vue({
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
    methods:{
+	/**
+	 * @description Установить для md+ экранов состояние сайдбара "развернут", а для более медких - свёрнут
+	*/
+	initSidebar() {
+		let w = $('#sidebarToggle')[0].offsetWidth;
+		if (w) {
+			$('#accordionSidebar').removeClass('toggled');
+		}
+	},
 	/**
 	 * @description Установить id редактируемой статьи
 	 * @param {Number} id 

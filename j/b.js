@@ -25852,6 +25852,7 @@ window.app = new Vue({
      * @description Событие, наступающее после связывания el с этой логикой
     */
     mounted: function mounted() {
+        this.initSidebar();
         this.initSeotab();
         this.initDataTables();
         this.localizeParams();
@@ -25862,6 +25863,16 @@ window.app = new Vue({
      * @property methods эти методы можно указывать непосредственно в @ - атрибутах
     */
     methods: {
+        /**
+         * @description Установить для md+ экранов состояние сайдбара "развернут", а для более медких - свёрнут
+        */
+        initSidebar: function initSidebar() {
+            var w = $('#sidebarToggle')[0].offsetWidth;
+            if (w) {
+                $('#accordionSidebar').removeClass('toggled');
+            }
+        },
+
         /**
          * @description Установить id редактируемой статьи
          * @param {Number} id 
@@ -44397,7 +44408,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		prop: 'value',
 		event: 'input'
 	},
-	props: ['label', 'validators', 'id', 'placeholder',
+	props: ['label', 'validators', 'id', 'placeholder', 'maxlength',
 	//if set counter showed symbol counter
 	/*** @property counter {className: 'bg-success text-light'} */
 	'counter', 'rows', 'type', 'value', 'className'],
@@ -44501,8 +44512,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
 	mounted: function mounted() {
-		var self = this;
-		/*this.$root.$on('showMenuEvent', function(evt) {
+		var s = void 0,
+		    n = void 0;
+		//set maxlength
+		s = 'maxlength';
+		n = parseInt(this[s]);
+		if (!isNaN(n)) {
+			$('#' + this.id)[0].setAttribute(s, n);
+		}
+		/*var self = this;
+  this.$root.$on('showMenuEvent', function(evt) {
       self.menuBlockVisible   = 'block';
       self.isMainMenuVisible  = true;
       self.isScrollWndVisible = false;
