@@ -17,6 +17,7 @@ class Route {
 		}
 		
 		$this->_p();
+		$this->_acategories();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -61,6 +62,20 @@ class Route {
 			$handler = __dir__ . '/ctrl/logout.php';
 			require_once $handler;
 			$this->app = new Logout();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/articlecategories/
+	*/
+	protected function _acategories()
+	{
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/articlecategories/') {
+			$this->master = __dir__ . '/master.tpl.php';
+			$handler = __dir__ . '/ctrl/acategories/list.php';
+			$this->view    = __dir__ . '/view/acategories/acategorieslist.tpl.php';
+			require_once $handler;
+			$this->app = new ArticleCategoriesEditor();
 		}
 	}
 	/**

@@ -23,7 +23,8 @@
             <!--h6 class="collapse-header">Login Screens:</h6>
             <div class="collapse-divider"></div>
             <a class="collapse-item" href="404.html">404 Page</a-->
-            <a class="collapse-item active" href="/p/"><?php echo l('Articles')?></a>
+            <?php echo $app->drawMenuItem('/p/', 'Articles') ?>
+            <?php echo $app->drawMenuItem('/p/articlecategories/', 'Articles Categories') ?>
           </div>
         </div>
       </li>

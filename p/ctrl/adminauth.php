@@ -43,8 +43,8 @@ class AdminAuth extends BaseApp {
 	// / Переменные связанные с алертом непрочтённых сообщений
 	
 	
-	
-	public function __construct() {
+	public function __construct()
+	{
 		$this->uid = $uid = Auth::getUid();
 		if (!$uid) {
 			header('location: /p/signin/');
@@ -57,9 +57,28 @@ class AdminAuth extends BaseApp {
 		parent::__construct();
 		
 		$url = explode('?', $_SERVER['REQUEST_URI']);
-		$url = $url[0];
+		$this->_baseUrl = $url[0];
 		
 		//get alerts
-		
+	}
+	
+	/**
+	 * @description Вернет строку active если запрошенный url совпадает с запрошеным (для пунктов меню сайдбара)
+	 * @return string
+	*/
+	protected function _activeMenuItem(string $href) : string
+	{
+		if ($this->_baseUrl == $href) {
+			return ' active';
+		}
+		return '';
+	}
+	/**
+	 * @description Вернёт html строки меню левого сайдбара
+	 * @return string
+	*/
+	public function drawMenuItem(string $href, string $text) : string
+	{
+		return '<a class="collapse-item'. $this->_activeMenuItem($href) . '" href="' . $href . '">' . l($text) . '</a>';
 	}
 }

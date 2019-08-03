@@ -45688,6 +45688,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 //Компонент для отображения инпута ввода текста bootstrap 4
 /*Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
@@ -45738,6 +45740,7 @@ var render = function() {
             staticClass: "nav-link",
             attrs: {
               id: "acatlist-tab",
+              "data-toggle": "tab",
               href: "#acatlist",
               role: "tab",
               "aria-controls": "home",
@@ -45799,27 +45802,7 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "tab-pane fade show active",
-          attrs: {
-            id: "editacat",
-            role: "tabpanel",
-            "aria-labelledby": "edit-tab"
-          }
-        },
-        [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("h5", { staticClass: "card-title" }, [
-                _vm._v(_vm._s(_vm.newEdit))
-              ]),
-              _vm._v("\n\t\t\t\t\tHERE EDIT FORM\n\t\t\t\t")
-            ])
-          ])
-        ]
-      )
+      _vm._m(1)
     ])
   ])
 }
@@ -45845,6 +45828,30 @@ var staticRenderFns = [
         [_vm._v(" formTabTitle ")]
       )
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "tab-pane fade show active",
+        attrs: {
+          id: "editacat",
+          role: "tabpanel",
+          "aria-labelledby": "edit-tab"
+        }
+      },
+      [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("h5", { staticClass: "card-title" }, [_vm._v(" newEdit ")]),
+            _vm._v("\n\t\t\t\t\tHERE EDIT FORM\n\t\t\t\t")
+          ])
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true

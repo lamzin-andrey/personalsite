@@ -13,6 +13,7 @@ $aLang = [
 	'Sections'         => 'Разделы',
 	'Articles'         => 'Статьи',
 	'Article'         => 'Статья',
+	'Articles Categories'         => 'Категория для статей',
 	'Category'         => 'Категория',
 	'profile-save-success'         => 'Данные успешно сохранены',
 	'enter-current-password'       => 'Введите ваш действующий пароль', 
