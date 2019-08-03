@@ -25783,6 +25783,8 @@ Vue.component('articleform', __webpack_require__(44));
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
 
+//Компонент страницы просмотра / редактирования категорий страниц
+Vue.component('articlesections', __webpack_require__(64));
 
 window.app = new Vue({
     i18n: i18n,
@@ -43753,6 +43755,7 @@ Vue.component('inputfileb4', __webpack_require__(58));
 			if (this.allRequiredFilled()) {
 				var formInputValidator = this.$root.formInputValidator;
 				this.id = this.$root.getArticleId();
+				this.url = $('#url').val();
 				this.$root._post(this.$data, function (data) {
 					_this2.onSuccessAddArticle(data, formInputValidator);
 				}, '/p/articlesave.jn/', function (a, b, c) {
@@ -45570,6 +45573,286 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-1f2fd10c", module.exports)
+  }
+}
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(65)
+/* template */
+var __vue_template__ = __webpack_require__(66)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/articlesections.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-35b40576", Component.options)
+  } else {
+    hotAPI.reload("data-v-35b40576", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//Компонент для отображения инпута ввода текста bootstrap 4
+/*Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+Vue.component('selectb4', require('../../landlib/vue/2/bootstrap/4/selectb4.vue'));
+Vue.component('checkboxb4', require('../../landlib/vue/2/bootstrap/4/checkboxb4.vue'));
+Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
+Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));*/
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'articlesections',
+    //вызывается раньше чем mounted
+    data: function data() {
+        var _data = {};
+        return _data;
+    },
+    //
+    methods: {}, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+        //console.log('I mounted!');
+    }
+});
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("ul", { staticClass: "nav nav-tabs", attrs: { role: "tablist" } }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: {
+              id: "acatlist-tab",
+              href: "#acatlist",
+              role: "tab",
+              "aria-controls": "home",
+              "aria-selected": "true"
+            }
+          },
+          [_vm._v(_vm._s(_vm.$t("app.List")))]
+        )
+      ]),
+      _vm._v(" "),
+      _vm._m(0)
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "tab-content" }, [
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade ",
+          attrs: {
+            id: "acatlist",
+            role: "tabpanel",
+            "aria-labelledby": "list-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h5", { staticClass: "card-title" }, [
+                _vm._v("Список категорий статей")
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                {
+                  staticClass: "display table table-bordered",
+                  staticStyle: { width: "100%" },
+                  attrs: { id: "articlecats" }
+                },
+                [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tfoot", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
+                    ])
+                  ])
+                ]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade show active",
+          attrs: {
+            id: "editacat",
+            role: "tabpanel",
+            "aria-labelledby": "edit-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h5", { staticClass: "card-title" }, [
+                _vm._v(_vm._s(_vm.newEdit))
+              ]),
+              _vm._v("\n\t\t\t\t\tHERE EDIT FORM\n\t\t\t\t")
+            ])
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link active",
+          attrs: {
+            id: "editacat-tab",
+            "data-toggle": "tab",
+            href: "#editacat",
+            role: "tab",
+            "aria-controls": "profile",
+            "aria-selected": "false"
+          }
+        },
+        [_vm._v(" formTabTitle ")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-35b40576", module.exports)
   }
 }
 

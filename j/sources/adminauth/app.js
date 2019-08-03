@@ -54,6 +54,8 @@ Vue.component('articleform', require('./views/articleform.vue'));
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
 
+//Компонент страницы просмотра / редактирования категорий страниц
+Vue.component('articlesections', require('./views/articlesections.vue'));
 
 window.app = new Vue({
     i18n : i18n,

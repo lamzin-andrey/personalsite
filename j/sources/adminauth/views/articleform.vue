@@ -268,6 +268,7 @@
                 if (this.allRequiredFilled()) {
 					let formInputValidator = this.$root.formInputValidator;
 					this.id = this.$root.getArticleId();
+					this.url = $('#url').val();
                     this.$root._post(
                         this.$data,
                         (data) => { this.onSuccessAddArticle(data, formInputValidator);},

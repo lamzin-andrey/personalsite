@@ -3,45 +3,21 @@ class Route {
 	public function __construct() {
 		$url  = $_SERVER['REQUEST_URI'];
 		$aUrl = explode('?', $url);
-		$baseUrl = $aUrl[0];
+		$this->_baseUrl =  $baseUrl = $aUrl[0];
 
+		//Default
 		$this->master = __dir__ . '/master.tpl.php';
 		$handler = __dir__ . '/ctrl/main.php';
 		$this->view    = __dir__ . '/view/home.tpl.php';
-		
-		if ($baseUrl == '/p/') {
-			$this->master = __dir__ . '/master.tpl.php';
-			$handler = __dir__ . '/ctrl/main.php';
-			$this->view    = __dir__ . '/view/home.tpl.php';
-			require_once $handler;
-			$this->app = new ArticleEditor();
-		}
-		if ($baseUrl == '/p/articleslist.jn/') {
-			$handler = __dir__ . '/ctrl/articlespage.php';
-			require_once $handler;
-			$this->app = new ArticlesPage();
-		}
-		if ($baseUrl == '/p/article/jn/') {
-			$handler = __dir__ . '/ctrl/article.php';
-			require_once $handler;
-			$this->app = new Article();
-		}
-		if ($baseUrl == '/p/articlesave.jn/') {
-			$handler = __dir__ . '/ctrl/articlesave.php';
-			require_once $handler;
-			$this->app = new ArticlePost();
-		}
 		//Локализация для DataTables
 		if ($baseUrl == '/p/datatablelang.jn/') {
 			$handler = __dir__ . '/ctrl/datatablelang.php';
 			require_once $handler;
 			$this->app = new DataTablesLang();
 		}
-		if ($baseUrl == '/p/removearticle.jn/') {
-			$handler = __dir__ . '/ctrl/removearticle.php';
-			require_once $handler;
-			$this->app = new RemoveArticle();
-		}
+		
+		$this->_p();
+		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
 			require_once $handler;
@@ -68,21 +44,6 @@ class Route {
 			$this->view    = __dir__ . '/view/signupform.tpl.php';
 			$this->app = new Signup();
 		}
-		if ($baseUrl == '/p/articlelogoupload.jn/') {
-			$handler = __dir__ . '/ctrl/articlelogoupload.php';
-			require_once $handler;
-			$this->app = new ArticleLogoUpload();
-		}
-		if ($baseUrl == '/p/articleogimageupload.jn/') {
-			$handler = __dir__ . '/ctrl/articleogimageupload.php';
-			require_once $handler;
-			$this->app = new ArticleOgImageUpload();
-		}
-		if ($baseUrl == '/p/articleinlineimageupload.jn/') {
-			$handler = __dir__ . '/ctrl/articleinlineimageupload.php';
-			require_once $handler;
-			$this->app = new ArticleInlineImageUpload();
-		}
 		if ($baseUrl == '/p/reset/') {
 			$handler = __dir__ . '/ctrl/reset.php';
 			require_once $handler;
@@ -100,6 +61,56 @@ class Route {
 			$handler = __dir__ . '/ctrl/logout.php';
 			require_once $handler;
 			$this->app = new Logout();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/
+	*/
+	protected function _p()
+	{
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/') {
+			$this->master = __dir__ . '/master.tpl.php';
+			$handler = __dir__ . '/ctrl/main.php';
+			$this->view    = __dir__ . '/view/home.tpl.php';
+			require_once $handler;
+			$this->app = new ArticleEditor();
+		}
+		if ($baseUrl == '/p/articleslist.jn/') {
+			$handler = __dir__ . '/ctrl/articlespage.php';
+			require_once $handler;
+			$this->app = new ArticlesPage();
+		}
+		if ($baseUrl == '/p/article/jn/') {
+			$handler = __dir__ . '/ctrl/article.php';
+			require_once $handler;
+			$this->app = new Article();
+		}
+		if ($baseUrl == '/p/articlesave.jn/') {
+			$handler = __dir__ . '/ctrl/articlesave.php';
+			require_once $handler;
+			$this->app = new ArticlePost();
+		}
+		
+		if ($baseUrl == '/p/removearticle.jn/') {
+			$handler = __dir__ . '/ctrl/removearticle.php';
+			require_once $handler;
+			$this->app = new RemoveArticle();
+		}
+		if ($baseUrl == '/p/articlelogoupload.jn/') {
+			$handler = __dir__ . '/ctrl/articlelogoupload.php';
+			require_once $handler;
+			$this->app = new ArticleLogoUpload();
+		}
+		if ($baseUrl == '/p/articleogimageupload.jn/') {
+			$handler = __dir__ . '/ctrl/articleogimageupload.php';
+			require_once $handler;
+			$this->app = new ArticleOgImageUpload();
+		}
+		if ($baseUrl == '/p/articleinlineimageupload.jn/') {
+			$handler = __dir__ . '/ctrl/articleinlineimageupload.php';
+			require_once $handler;
+			$this->app = new ArticleInlineImageUpload();
 		}
 	}
 }
