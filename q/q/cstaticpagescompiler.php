@@ -7,7 +7,7 @@ class CStaticPagesCompiler {
 	
     public function __construct(int $masterTemplateId, string $destFilePath, string $title, string $heading, string $content, 
 									string $description, string $keywords, string $ogTitle, 
-									string $ogDescription, string $ogImage)
+									string $ogDescription, string $ogImage, string $dateCreate)
     {
     	$this->DEST_DOC_ROOT = DOC_ROOT;
     	$rows = query("SELECT * FROM master_templates WHERE id = {$masterTemplateId}");
@@ -37,7 +37,7 @@ class CStaticPagesCompiler {
     	$content = str_replace("\n", "</p><p>", $content);
     	$content = '<p>' . $content . '</p>';
     	//$content = str_replace("  ", "<br/>", $content);
-    	$content = str_replace(array(md5('newline'), '[html]', '[/html]', md5('monosp'), md5("\t")), array("\n", '', '', ' ', "\t"), $content);
+    	$content = str_replace(array(md5('newline'), '[html]', '[/html]', md5('monosp'), md5("\t"), '[code]', '[/code]'), array("\n", '', '', ' ', "\t", '', ''), $content);
     	
     	$this->cyr($title);
     	$this->cyr($heading);
@@ -83,8 +83,9 @@ class CStaticPagesCompiler {
         //$s = str_replace('{HEADING2}', $heading2, $s);
         $s = str_replace('{CONTENT}', $content, $s);
         //$s = str_replace('{TSTAMP}', dechex(time()), $s);
-        $s = str_replace('{DATEENG}', date('Y-m-d'), $s);
-        $s = str_replace('{DATERUS}', date('d.m.Y'), $s);
+        $ts = strtotime($dateCreate);
+        $s = str_replace('{DATEENG}', date('Y-m-d', $ts), $s);
+        $s = str_replace('{DATERUS}', date('d.m.Y', $ts), $s);
         
         file_put_contents($destFolder . '/index.html', $s);
     }
@@ -92,6 +93,7 @@ class CStaticPagesCompiler {
     private function stripHtmlCode(string &$s)
     {
     	$inTag = false;
+    	$inCode = false;
     	$q = '';
     	$nQuoteCounter = 0;
     	for ($i = 0; $i < strlen($s); $i++) {
@@ -102,13 +104,20 @@ class CStaticPagesCompiler {
     			$inTag = 0;
     		}
     		
+    		if ($s[$i] == '[' && strpos($s, '[code]', $i) === $i) {
+    			$inCode = 1;
+    		}
+    		if ($s[$i] == '[' && strpos($s, '[/code]', $i) === $i) {
+    			$inCode = 0;
+    		}
+    		
     		if ($inTag && $s[$i] == "\n") {
     			$q .= md5('newline');
     		} elseif($inTag && $s[$i] == ' ') {
     			$q .= md5('monosp');
     		} elseif($inTag && $s[$i] == "\t") {
     			$q .= md5("\t");
-    		}else {
+    		} else {
 				
 				if (!$inTag && $s[$i] == '"') {
 					if ($nQuoteCounter == 0) {
@@ -119,7 +128,13 @@ class CStaticPagesCompiler {
 						$q .= '&raquo;';
 					}
 				} else {
-					$q .= $s[$i];
+					if($inCode && $s[$i] == '<') {
+						$q .= '&lt;';
+					} else if($inCode && $s[$i] == '>') {
+						$q .= '&gt;';
+					} else {
+						$q .= $s[$i];
+					}
 				}
     			
     		}

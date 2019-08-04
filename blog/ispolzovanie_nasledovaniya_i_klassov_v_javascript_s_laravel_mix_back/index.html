@@ -2,10 +2,9 @@
 <html xml:lang="ru" lang="ru">
 	<head>
 		<meta charset="WINDOWS-1251">
-		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no"><meta property="og:image" content="/i/64.jpg">
-		<title>Использование наследования и классов в javascript с laravel-mix -|- Сайт Андрея</title>
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no">
+		<title>Использование наследования и классов в javascript с laravel-mix - Сайт Андрея</title>
 		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
-		<!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous"-->
 		<link rel="stylesheet" href="/s/fontawesome5/all.css" >
 		<link rel="stylesheet" type="text/css" href="/s/app.css">
 		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
@@ -32,13 +31,13 @@
 			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 				  <li class="nav-item">
-					<a class="nav-link" href="/portfolio/">Портфолио</a>
+					<a class="nav-link" href="/portfolio">Портфолио</a>
 				  </li>
 				  <li class="nav-item active">
 					<a class="nav-link" href="javascript:;">Блог</a>
 				  </li>
 				  <li class="nav-item">
-					<a class="nav-link" href="/clients/">Клиентам</a>
+					<a class="nav-link" href="/clients">Клиентам</a>
 				  </li>
 				</ul>
 			  </div>
@@ -47,9 +46,9 @@
 			<div class="row">
 				<div class="col-12 col-lg-8">
 					<article>
-						<h1>Использование laravel-mix для сборки кода использующего наследование в javascript</h1>
-						<time datetime="2019-06-20" class="d-block text-right text-muted small">20.06.2019</time>
-						<p>После запуска laravel-mix могут появляться ошибки вида &laquo;ReferenceError: A is not defined&raquo; имеющие смысл &laquo;класс A не найден&raquo;.</p>
+<h1>Использование laravel-mix для сборки кода использующего наследование в javascript</h1>
+<time datetime="2019-06-20" class="d-block text-right text-muted small">20.06.2019</time>
+<p>После запуска laravel-mix могут появляться ошибки вида &laquo;ReferenceError: A is not defined&raquo; имеющие смысл &laquo;класс A не найден&raquo;.</p>
 <p>Если вы новичок в использовании laravel-mix для сборки вашего js кода в один минимизированый файл, 
 но вместе с тем привыкли использовать наследование,
 вы можете стокнуться со следующей проблемой: если вы подключаете скрипты с определениями классов и
@@ -233,7 +232,7 @@ window.addEventListener('load', function() {
 <pre><code class="language-javascript">import $ from 'jquery'</pre></code>
 <p>Путь при этом без <code>'./'</code> потому, что jquery у нас уже загружен во время </p>
 <pre><code class="language-bash">npm run install</pre></code>
-<p>(он указан в секции 'devDependencies' package.json).</p></p>
+<p>(он указан в секции 'devDependencies' package.json).</p>
 					</article>
 				</div>
 				<div class="col-12 col-lg-4  u-right-side">

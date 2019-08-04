@@ -43,13 +43,21 @@ class ArticlePost extends AdminAuth {
 			$newId = query($sql);
 			if (!$id) {
 				$id = $newId;
+				$sDate = now();
+			} else {
+				$sDate = dbvalue("SELECT created_at FROM {$this->table} WHERE id = {$id}");
+				if (!$sDate) {
+					$sDate = now();
+				}
 			}
 			$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
 													$this->description,
 													$this->keywords,
 													$this->og_title,
 													$this->og_description,
-													$this->og_image);
+													$this->og_image,
+													$sDate
+													);
 			$comiErr = $oCompiler->emsg;
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}

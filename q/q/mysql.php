@@ -175,9 +175,11 @@ function db_createInsertQuery($data, $tableName, $config = array(), &$options = 
             } else {
                 $fields[] = '`'. $config[$key] .'`';
             }
+            db_safeString($item);
             $values[] = "'{$item}'";
             $count++;
         } else {
+			db_safeString($item);
             $options[$key] = $item;
         }
     }
@@ -213,9 +215,11 @@ function db_createInsertQueryExt(&$data, $tableName, $config = array(), &$option
             } else {
                 $fields[] = '`'. $config[$key] .'`';
             }
+            db_safeString($item);
             $values[] = "'{$item}'";
             $count++;
         } else {
+			db_safeString($item);
             $options[$key] = $item;
         }
     }
@@ -248,9 +252,11 @@ function db_createUpdateQuery($data, $tableName, $condition, $config = array(), 
             } else {
                 $key = '`'. $config[$key] .'`';
             }
+            db_safeString($item);
             $pairs[] = "{$key} = '{$item}'";
             $count++;
         } else {
+			db_safeString($item);
             $options[$key] = $item;
         }
     }
@@ -283,9 +289,11 @@ function db_createUpdateQueryExt($data, $tableName, $condition, $config = array(
             } else {
                 $key = '`'. $config[$key] .'`';
             }
+            db_safeString($item);
             $pairs[] = "{$key} = '{$item}'";
             $count++;
         } else {
+			db_safeString($item);
             $options[$key] = $item;
         }
     }
