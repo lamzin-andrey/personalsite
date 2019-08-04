@@ -1,14 +1,14 @@
 <?php
 require __DIR__ . '/../adminauthjson.php';
 /**
- * @class ArticlesCategories  - получение списка категорий статей для страницы админки
+ * @class PortfolioList  - получение списка продуктов (работ) для страницы админки
 */
-class ArticlesCategories extends AdminAuthJson {
+class PortfolioList extends AdminAuthJson {
 	public $uid = 0;
 	
 	
 	public function __construct() {
-		$this->table = 'pages_categories';
+		$this->table = 'portfolio';
 		parent::__construct();
 		
 		
@@ -17,7 +17,7 @@ class ArticlesCategories extends AdminAuthJson {
 		
 		$this->_setSearchCondition();
 		
-		$pages = $this->getPage('page', ireq('length'), 'id, category_name', ireq('start'));
+		$pages = $this->getPage('page', ireq('length'), 'id, url, heading', ireq('start'));
 		$nTotal = $this->getTotal();
 		utils_header_utf8();
 		$aResult = [
@@ -38,7 +38,10 @@ class ArticlesCategories extends AdminAuthJson {
 		$sWord = ($_GET['search']['value'] ?? '');
 		if ($sWord) {
 			$sWord = utils_cp1251($sWord);
-			$this->condition = " AND (category_name = '{$sWord}' OR category_name LIKE('%{$sWord}%'))";
+			$this->condition = " AND (
+				heading = '{$sWord}' OR heading LIKE('%{$sWord}%') OR content_block LIKE('%{$sWord}%')
+				-- OR content_page LIKE('%{$sWord}%')
+			)";
 		}
 	}
 }

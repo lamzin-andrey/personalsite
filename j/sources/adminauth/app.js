@@ -57,6 +57,9 @@ Vue.component('articleform', require('./views/articleform.vue'));
 //Компонент страницы просмотра / редактирования категорий страниц
 Vue.component('articlesections', require('./views/articlesections.vue'));
 
+//Компонент страницы просмотра / редактирования работами портфолио
+Vue.component('portfolio', require('./views/portfolio.vue'));
+
 window.app = new Vue({
     i18n : i18n,
     el: '#wrapper',

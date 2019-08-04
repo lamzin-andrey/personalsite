@@ -26008,6 +26008,9 @@ Vue.component('articleform', __webpack_require__(44));
 //Компонент страницы просмотра / редактирования категорий страниц
 Vue.component('articlesections', __webpack_require__(64));
 
+//Компонент страницы просмотра / редактирования работами портфолио
+Vue.component('portfolio', __webpack_require__(70));
+
 window.app = new Vue({
     i18n: i18n,
     el: '#wrapper',
@@ -27405,7 +27408,12 @@ var locales = {
 
             //List Category Articles
             "Other_category_requested_for_edit": "Уже запрошены для редактирования данные другой категории",
-            "Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию"
+            "Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию",
+
+            //Portfolio list
+            'Worklist': 'Список работ',
+            Other_product_requested_for_edit: 'Уже запрошены для редактирования данные другой работы',
+            Are_You_Sure_drop_Product: 'Вы действительно хотите удалить работу'
 
         }
     }
@@ -46428,6 +46436,1373 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-35b40576", module.exports)
+  }
+}
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(71)
+/* template */
+var __vue_template__ = __webpack_require__(72)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/portfolio.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-30ad51cc", Component.options)
+  } else {
+    hotAPI.reload("data-v-30ad51cc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(14);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//Центровка прелоадера DataTables по центру (самоделка, но надо оформить как плагин)
+
+//Конец Центровка прелоадера DataTables по центру (самоделка)
+
+
+Vue.component('portfolioform', __webpack_require__(73));
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'portfolio',
+	//вызывается раньше чем mounted
+	data: function data() {
+		var _data = {
+			/** @property {Number}  Переменная для хранения id работы запрошенной для редактирования */
+			requestedProductId: 0,
+
+			/** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования  */
+			newEdit: 'app.New',
+
+			/** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования  */
+			formTabTitle: 'app.Append',
+
+			/** @property {Boolean} isChange Принимает true когда данные работы изменены, но не сохранены */
+			isChange: false,
+
+			//Центрируем прелоадер DataTables и добавляем в него спиннер
+			/** @property  {B4DataTablesPreloader} dataTablesPreloader */
+			dataTablesPreloader: new __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__["a" /* default */](),
+
+			/** @property {Number} productId Идентификатор редактируемой работы */
+			categeoryId: 0
+		};
+		return _data;
+	},
+	//
+	methods: {
+		/**
+   * @description инициализация DataTables с данными статей
+  */
+		initDataTables: function initDataTables() {
+			var _this = this;
+
+			if (this.isDataTableInitalized) {
+				return;
+			}
+			var id = '#portfoliotable';
+			this.isDataTableInitalized = true;
+			this.dataTable = $(id).DataTable({
+				'processing': true,
+				'serverSide': true,
+				'ajax': "/p/portfolio/list.jn/",
+				"columns": [{
+					"data": "heading",
+					'render': function render(data, type, row) {
+						return data;
+					}
+				}, {
+					"data": "id",
+					'render': function render(data, type, row) {
+						return '\n\t\t\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t\t\t<button data-id="' + data + '" type="button" class="btn btn-primary j-edit-btn">\n\t\t\t\t\t\t\t\t\t\t\t<i data-id="' + data + '" class="fas fa-edit fa-sm"></i>\n\t\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t\t\t<button data-id="' + data + '" type="button" class="btn btn-danger j-rm-btn">\n\t\t\t\t\t\t\t\t\t\t\t<i data-id="' + data + '" class="fas fa-trash fa-sm"></i>\n\t\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t\t\t<div id="spin' + data + '" class="spinner-grow text-success d-none" role="status">\n\t\t\t\t\t\t\t\t\t\t\t<span class="sr-only">Loading...</span>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t';
+					}
+				}],
+				language: {
+					url: '/p/datatablelang.jn/'
+				}
+			}).on('draw', function () {
+				//Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
+				$(id + ' .j-edit-btn').click(function (evt) {
+					_this.onClickEditProduct(evt);
+				});
+				$(id + ' .j-rm-btn').click(function (evt) {
+					_this.onClickRemoveProduct(evt);
+				});
+			}).on('processing', function () {
+				//Preloader
+				if (!_this.preloaderIsInitalize) {
+					//Делаем прелоадер по центру
+					_this.dataTablesPreloader.setIdentifiers(id, id + '_processing', _this.dataTable);
+					//this.dataTablesPreloader.configure(true, false);
+					_this.dataTablesPreloader.watch();
+					_this.preloaderIsInitalize = true;
+				}
+
+				//Search settings
+				if (!_this.addLeftLimitOnSearchField) {
+					_this.addLeftLimitOnSearchField = true;
+					var inp = $(id + '_filter input').first();
+					inp.unbind();
+					inp.on('input', function () {
+						var val = inp.val();
+						if (val.length > 4 || val.length == 0) {
+							_this.dataTable.search(val).draw();
+						}
+					});
+				}
+			});
+		},
+
+		/**
+   * @description Click on button "Edit product"
+   * @param {Event} evt
+  */
+		onClickEditProduct: function onClickEditProduct(evt) {
+			var _this2 = this;
+
+			if (this.requestedProductId > 0) {
+				this.alert(this.$t('app.Other_product_requested_for_edit'));
+				return;
+			}
+			this.requestedProductId = $(evt.target).attr('data-id');
+			$('#spin' + this.requestedProductId).toggleClass('d-none');
+			this.$root._get(function (d) {
+				_this2.onSuccessGetProduct(d);
+			}, '/p/portfolio/product.jn/?id=' + this.requestedProductId, function (a, b, c) {
+				_this2.onFailGetProduct(a, b, c);
+			});
+		},
+
+		/**
+   * @description Success request product data for edit
+   * @param {Object} data
+  */
+		onSuccessGetProduct: function onSuccessGetProduct(data) {
+			var _this3 = this;
+
+			if (!this.onFailGetProduct(data)) {
+				return;
+			}
+			this.setProductId(data.id);
+			this.$refs.portfolioform.setProductData(data);
+			setTimeout(function () {
+				_this3.setDataChanges(false);
+			}, 1000);
+			$('#editportfolio-tab').tab('show');
+		},
+
+		/**
+   * @description Failed request product data for edit
+   * @return Boolean
+  */
+		onFailGetProduct: function onFailGetProduct(data, b, c) {
+			$('#spin' + this.requestedProductId).toggleClass('d-none');
+			this.requestedProductId = 0;
+			return this.$root.defaultFailSendFormListener(data, b, c);
+		},
+
+		/**
+   * @description Click on button "Remove product"
+   * @param {Event} evt
+  */
+		onClickRemoveProduct: function onClickRemoveProduct(evt) {
+			this.$root.confirmDialogArticleArgs = { i: $(evt.target).attr('data-id') };
+			this.$root.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Product') + '?';
+			this.$root.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_remove');
+			this.$root.b4ConfirmDlgParams.onOk = {
+				f: this.onClickConfirmRemoveProduct,
+				context: this
+			};
+			this.$root.setConfirmDlgVisible(true);
+		},
+
+		/**
+   * @description Click on button "OK" on confirm dialog Remove article
+   * @param {Event} evt
+  */
+		onClickConfirmRemoveProduct: function onClickConfirmRemoveProduct() {
+			var _this4 = this;
+
+			var args = this.$root.confirmDialogArticleArgs;
+			this.$root._post(args, function (data) {
+				_this4.onSuccessRemove(data);
+			}, '/p/portfolio/removeproduct.jn/', function (data) {
+				_this4.onFailRemove(data);
+			});
+			this.$root.setConfirmDlgVisible(false);
+		},
+
+		/**
+   * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+   * @param data - Данные с сервера
+  */
+		onSuccessRemove: function onSuccessRemove(data) {
+			if (data.status == 'ok') {
+				if (data.id) {
+					var tr = $('#portfoliotable button[data-id=' + data.id + ']').first().parents('tr').first();
+					tr.remove();
+				}
+			} else {
+				this.onFailRemove(data);
+			}
+		},
+
+		/**
+   * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+   * @param data - Данные с сервера
+   */
+		onFailRemove: function onFailRemove(data) {
+			if (data.status == 'error' && data.msg) {
+				this.$root.alert(data.msg);
+				return;
+			}
+			this.$root.alert($t('DefaultFail'));
+		},
+
+		/**
+   * @description Установить id редактируемой категории
+   * @param {Number} id 
+  */
+		setProductId: function setProductId(id) {
+			this.productId = id;
+			var key = 'app.New',
+			    key2 = 'app.Append';
+
+			if (id > 0) {
+				key2 = key = 'app.Edit';
+			}
+			this.newEdit = this.$root.$t(key);
+			this.formTabTitle = this.$root.$t(key2);
+		},
+
+		/**
+   * @description Получить id редактируемого товара
+   * @return Number
+  */
+		getProductId: function getProductId() {
+			return this.productId;
+		},
+
+		/**
+   * @see isChange
+   * @param {Boolean} isChange 
+   */
+		setDataChanges: function setDataChanges(isChange) {
+			this.isChange = isChange;
+		},
+
+		/**
+   * @description Добавляем инициализацию табов
+   */
+		initSeotab: function initSeotab() {
+			var _this5 = this;
+
+			$('#portfoliolist-tab').on('click', function (ev) {
+				ev.preventDefault();
+				if (_this5.isChange) {
+					//Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
+					_this5.$root.b4ConfirmDlgParams.title = _this5.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
+					//И сменим обработчик, чтобы удалялась именно статья
+					_this5.$root.b4ConfirmDlgParams.onOk = {
+						f: _this5.onClickConfirmLeaveEditTab,
+						context: _this5
+					};
+					//Покажем диалог
+					_this5.$root.setConfirmDlgVisible(true);
+				} else {
+					_this5.gotoProductsListTab();
+				}
+			});
+			$('#editportfolio-tab').on('shown.bs.tab', function (ev) {
+				_this5.setDataChanges(false);
+			});
+		},
+
+		/**
+   * @description Обработка OK на диалоге подтверждения переключения между вкладками
+  */
+		onClickConfirmLeaveEditTab: function onClickConfirmLeaveEditTab() {
+			this.gotoProductsListTab();
+			//Скроем диалог
+			this.$root.setConfirmDlgVisible(false);
+		},
+
+		/**
+   * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
+  */
+		gotoProductsListTab: function gotoProductsListTab() {
+			$('#portfoliolist-tab').tab('show');
+			$('#portfolioform')[0].reset();
+			this.setProductId(0);
+			this.setDataChanges(false);
+		},
+
+		/**
+   * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
+   */
+		localizeParams: function localizeParams() {
+			//Заголовок формы редактирования
+			this.newEdit = this.$root.$t('app.New');
+			this.formTabTitle = this.$root.$t('app.Append');
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+		this.localizeParams();
+		this.initDataTables();
+		this.initSeotab();
+
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
+});
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("ul", { staticClass: "nav nav-tabs", attrs: { role: "tablist" } }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: {
+              id: "portfoliolist-tab",
+              href: "#portfoliolist",
+              role: "tab",
+              "aria-controls": "home",
+              "aria-selected": "true"
+            }
+          },
+          [_vm._v(_vm._s(_vm.$t("app.List")))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link active",
+            attrs: {
+              id: "editportfolio-tab",
+              "data-toggle": "tab",
+              href: "#editportfolio",
+              role: "tab",
+              "aria-controls": "profile",
+              "aria-selected": "false"
+            }
+          },
+          [_vm._v(" " + _vm._s(_vm.formTabTitle) + " ")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "tab-content" }, [
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade ",
+          attrs: {
+            id: "portfoliolist",
+            role: "tabpanel",
+            "aria-labelledby": "list-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h5", { staticClass: "card-title" }, [
+                _vm._v(_vm._s(_vm.$t("app.Worklist")))
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                {
+                  staticClass: "display table table-bordered",
+                  staticStyle: { width: "100%" },
+                  attrs: { id: "portfoliotable" }
+                },
+                [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tfoot", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
+                    ])
+                  ])
+                ]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade show active",
+          attrs: {
+            id: "editportfolio",
+            role: "tabpanel",
+            "aria-labelledby": "edit-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("h5", { staticClass: "card-title" }, [
+                  _vm._v(" " + _vm._s(_vm.newEdit) + " ")
+                ]),
+                _vm._v(" "),
+                _c("portfolioform", { ref: "portfolioform" })
+              ],
+              1
+            )
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-30ad51cc", module.exports)
+  }
+}
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(74)
+/* template */
+var __vue_template__ = __webpack_require__(75)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/portfolioform.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0e195e44", Component.options)
+  } else {
+    hotAPI.reload("data-v-0e195e44", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//Компонент для 
+//Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'portfolioform',
+	//вызывается раньше чем mounted
+	data: function data() {
+		var _data = {
+			//Значение title
+			title: '',
+			//Значение body
+			body: '',
+			//Значение url
+			url: '',
+			//Значение heading
+			heading: '',
+			//Путь к загруженному логотипу
+			filepath: '',
+			//Параметры для кастомного прогресс-бара инпута загрузки лого
+			progressbarListener: {
+				onProgress: {
+					f: this.onProgress,
+					context: this
+				}
+			},
+			fileUploadListeners: {
+				onSuccess: {
+					f: this.onSuccessUploadLogo,
+					context: this
+				}
+			},
+			//Логотип статьи
+			defaultLogo: '/i/64.jpg',
+			//Изображение для соц. сетей
+			defaultSocImage: '/i/64.jpg',
+			//Путь к изображению по умолчанию
+			defaultLogoValue: '/i/64.jpg',
+			//Исходное имя файл изображения
+			srcFileName: '',
+			//Значение по умолчанию для кастомной шкалы прогресса
+			progressValue: 0,
+			//Выбранная категория
+			category: 1,
+			//
+			portfolioCategories: [{ id: 1, name: "One" }, { id: 2, name: "Two" }],
+			//Идентификатор редактируемой статьи
+			id: 0,
+			//Чтобы передать в textareab4 true пришлось определить
+			counter: true,
+
+			//Содержимое META тега
+			description: '',
+			//Содержимое META тега
+			keywords: '',
+			//Содержимое META тега
+			og_title: '',
+			//Содержимое META тега
+			og_description: '',
+			//Содержимое META тега
+			og_image: '',
+			//Параметры для кастомного слушателя загрузки og_image
+			ogImageUploadListeners: {
+				onSuccess: {
+					f: this.onSuccessUploadOgImage,
+					context: this
+				}
+			},
+			//Переменная для хранения ссылки на инлайновое изображение
+			poster: '',
+			//Параметры для кастомного слушателя загрузки изображений, ссылки на которые вставляются в textarea
+			posterUploadListeners: {
+				onSuccess: {
+					f: this.onSuccessUploadposter,
+					context: this
+				}
+			}
+		};
+		try {
+			var jdata = JSON.parse($('#jdata').val());
+			_data.portfolioCategories = jdata.portfolioCategories;
+		} catch (e) {
+			;
+		}
+		return _data;
+	},
+	watch: {
+		//Чтобы известить об том, что контент отредактирован при загрузке изображения на сервер
+		og_image: function og_image() {
+			this.$root.$refs.portfolio.setDataChanges(true);
+		},
+		filepath: function filepath() {
+			this.$root.$refs.portfolio.setDataChanges(true);
+		}
+	},
+	//
+	methods: {
+		/**
+   * @description Установитрь данные статьи для редактирования
+   * @param {Object} data @see mysql table fields pages
+  */
+		setProductData: function setProductData(data) {
+			var _this = this;
+
+			this.category = 1001;
+			this.title = 'a';
+			this.url = 'b';
+			this.heading = 'c';
+			this.body = 'd';
+			this.filepath = this.defaultLogo = this.defaultLogoValue;
+			this.description = 'e';
+			this.keywords = 'f';
+			this.og_title = 'g';
+			this.og_description = 'h';
+			this.og_image = this.defaultSocImage = this.defaultLogoValue;
+
+			//Fix bug when edit the article more then one time...
+			setTimeout(function () {
+				_this.category = data.category_id;
+				_this.title = data.title;
+				_this.url = data.url;
+				_this.heading = data.heading;
+				_this.body = data.content_block;
+				_this.filepath = _this.defaultLogo = data.logo;
+				_this.description = data.description;
+				_this.keywords = data.keywords;
+				_this.og_title = data.og_title;
+				_this.og_description = data.og_description;
+				_this.og_image = _this.defaultSocImage = data.og_image;
+			}, 1);
+		},
+
+		/**
+   * @description Очистить инпуты изображений
+  */
+		resetImages: function resetImages() {
+			this.defaultSocImage = this.filepath = this.defaultLogo = this.defaultLogoValue;
+			this.og_image = '';
+		},
+
+		/**
+   * @description Вставить изображение на место курсора
+  */
+		onClickInsertImage: function onClickInsertImage() {
+			console.log('OI call');
+		},
+
+		/** 
+   * @description Кастомный прогресс для загрузкти лого
+   * @param {Number} n
+  */
+		onProgress: function onProgress(a) {
+			if (a <= 100 && a > 0) {
+				this.progressValue = a;
+			}
+		},
+
+		/**
+   * @description уведомляем приложение, что данные изменились
+   */
+		setDataChanges: function setDataChanges() {
+			console.log('articlegor,setDataChanges...');
+			this.$root.$refs.portfolio.setDataChanges(true);
+		},
+
+		/** 
+   * @description Пробуем отправить форму
+  */
+		onSubmit: function onSubmit(evt) {
+			var _this2 = this;
+
+			evt.preventDefault();
+			if (this.allRequiredFilled()) {
+				var formInputValidator = this.$root.formInputValidator;
+				this.id = this.$root.$refs.portfolio.getProductId();
+				this.url = $('#url').val();
+				this.$root._post(this.$data, function (data) {
+					_this2.onSuccessAddProduct(data, formInputValidator);
+				}, '/p/portfolio/psave.jn/', function (a, b, c) {
+					_this2.onFailAddProduct(a, b, c);
+				});
+			}
+		},
+
+		/**
+   * @description Успешное добавление статьи
+  */
+		onSuccessAddProduct: function onSuccessAddProduct(data, formInputValidator) {
+			if (!this.onFailAddProduct(data)) {
+				return;
+			}
+			var id = parseInt(data.id);
+			if (data.status == 'ok' && id) {
+				this.$root.$refs.portfolio.setProductId(id);
+				$('#portfolioSaver').toast('show');
+				this.$root.$refs.portfolio.setDataChanges(false);
+			}
+		},
+
+		/**
+   * @description Неуспешное добавление статьи
+   * @return Boolean false если существует data.status == 'error'
+  */
+		onFailAddProduct: function onFailAddProduct(data, b, c) {
+			return this.$root.defaultFailSendFormListener(data, b, c);
+		},
+
+		/**
+            * @description Проверяет, заполнены ли все необходимые поля
+           */
+		allRequiredFilled: function allRequiredFilled() {
+			return parseInt(this.category) > 0 && String(this.title).length > 0 && String(this.heading).length > 0 && String(this.body).length > 0;
+		},
+
+		/**
+  * @description
+   * @param {Object} data
+  */
+		onSuccessUploadLogo: function onSuccessUploadLogo(data) {
+			if (data.path) {
+				this.defaultLogo = data.path;
+			}
+			if (data.srcname) {
+				this.srcFileName = data.srcname;
+			}
+		},
+
+		/**
+   * @description Обработка успешной загрузки фото ДЛЯ соц. сетей
+           */
+		onSuccessUploadOgImage: function onSuccessUploadOgImage(data) {
+			if (data.path) {
+				;
+				this.og_image = this.defaultSocImage = window.location.protocol + '//' + window.location.host + data.path;
+			}
+		},
+
+		/**
+   * @description Обработка успешной загрузки изображения для вставки в текстовое поле
+           */
+		onSuccessUploadposter: function onSuccessUploadposter(data) {
+			var _this3 = this;
+
+			if (data.path) {
+				var x = 'articlebody',
+				    n = this.$refs[x].getCursorPosition(),
+				    s = void 0,
+				    head = void 0,
+				    tail = void 0;
+				if (n > -1) {
+					s = this.body;
+					head = s.substring(0, n);
+					tail = s.substring(n);
+					s = '[html]<img src="' + data.path + '">[/html]';
+					this.body = head + s + tail;
+					setTimeout(function () {
+						_this3.$refs[x].setCursorPosition(n + s.length);
+					}, 200);
+				}
+			}
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+
+		var self = this;
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
+});
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      staticClass: "user",
+      attrs: {
+        method: "POST",
+        action: "/p/portfolio/psave.jn/",
+        novalidate: "",
+        id: "portfolioform"
+      },
+      on: { submit: _vm.onSubmit }
+    },
+    [
+      _c("selectb4", {
+        attrs: {
+          label: _vm.$t("app.Sections"),
+          id: "category",
+          data: _vm.portfolioCategories,
+          validators: "'required'"
+        },
+        on: { input: _vm.setDataChanges },
+        model: {
+          value: _vm.category,
+          callback: function($$v) {
+            _vm.category = $$v
+          },
+          expression: "category"
+        }
+      }),
+      _vm._v(" "),
+      _c("inputb4", {
+        attrs: {
+          type: "text",
+          placeholder: _vm.$t("app.Title"),
+          label: _vm.$t("app.Title"),
+          id: "title",
+          validators: "'required'"
+        },
+        on: { input: _vm.setDataChanges },
+        model: {
+          value: _vm.title,
+          callback: function($$v) {
+            _vm.title = $$v
+          },
+          expression: "title"
+        }
+      }),
+      _vm._v(" "),
+      _c("inputb4", {
+        attrs: {
+          type: "url",
+          label: _vm.$t("app.Url"),
+          placeholder: _vm.$t("app.Url"),
+          id: "url"
+        },
+        on: { input: _vm.setDataChanges },
+        model: {
+          value: _vm.url,
+          callback: function($$v) {
+            _vm.url = $$v
+          },
+          expression: "url"
+        }
+      }),
+      _vm._v(" "),
+      _c("inputb4", {
+        attrs: {
+          id: "heading",
+          type: "text",
+          label: _vm.$t("app.Heading"),
+          placeholder: _vm.$t("app.Heading"),
+          validators: "'required'"
+        },
+        on: { input: _vm.setDataChanges },
+        model: {
+          value: _vm.heading,
+          callback: function($$v) {
+            _vm.heading = $$v
+          },
+          expression: "heading"
+        }
+      }),
+      _vm._v(" "),
+      _c("textareab4", {
+        ref: "portfoliobody",
+        attrs: {
+          counter: _vm.counter,
+          label: _vm.$t("app.Content"),
+          id: "content_block",
+          rows: "12",
+          validators: "'required'"
+        },
+        on: { input: _vm.setDataChanges },
+        model: {
+          value: _vm.body,
+          callback: function($$v) {
+            _vm.body = $$v
+          },
+          expression: "body"
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mb-3" },
+        [
+          _c("inputfileb4", {
+            attrs: {
+              url: "/p/articleinlineimageupload.jn/",
+              tokenImagePath: "/i/token.png",
+              listeners: _vm.posterUploadListeners,
+              csrfToken: _vm.$root._getToken(),
+              label: _vm.$t("app.insertImage"),
+              id: "poster"
+            },
+            model: {
+              value: _vm.poster,
+              callback: function($$v) {
+                _vm.poster = $$v
+              },
+              expression: "poster"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("img", { attrs: { src: _vm.defaultLogo } }),
+      _vm._v(" "),
+      _c("inputfileb4", {
+        attrs: {
+          url: "/p/articlelogoupload.jn/",
+          immediateleyUploadOff: "true",
+          tokenImagePath: "/i/token.png",
+          progressListener: _vm.progressbarListener,
+          listeners: _vm.fileUploadListeners,
+          uploadButtonLabel: _vm.$t("app.Upload"),
+          csrfToken: _vm.$root._getToken(),
+          sendInputs: ["alpha"],
+          label: _vm.$t("app.SelectLogo"),
+          id: "logotype"
+        },
+        model: {
+          value: _vm.filepath,
+          callback: function($$v) {
+            _vm.filepath = $$v
+          },
+          expression: "filepath"
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "progress" }, [
+        _c(
+          "div",
+          {
+            staticClass: "progress-bar",
+            style: "width: " + _vm.progressValue + "%;",
+            attrs: {
+              role: "progressbar",
+              "aria-valuenow": _vm.progressValue,
+              "aria-valuemin": "0",
+              "aria-valuemax": "100"
+            }
+          },
+          [_vm._v(_vm._s(_vm.progressValue) + "%")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("checkboxb4", {
+        attrs: {
+          id: "alpha",
+          label: _vm.$t("app.isMakeTransparentBg"),
+          value: "true"
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse",
+              attrs: {
+                id: "collapseSeo",
+                "aria-labelledby": "headingSeo",
+                "data-parent": "#seoAccord"
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c("inputb4", {
+                    attrs: {
+                      type: "text",
+                      placeholderlabel: "meta[name=description]",
+                      maxlength: "200",
+                      id: "description"
+                    },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.description,
+                      callback: function($$v) {
+                        _vm.description = $$v
+                      },
+                      expression: "description"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: {
+                      type: "text",
+                      placeholderlabel: "meta[name=keywords]"
+                    },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.keywords,
+                      callback: function($$v) {
+                        _vm.keywords = $$v
+                      },
+                      expression: "keywords"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: { type: "text", placeholderlabel: "og:title" },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.og_title,
+                      callback: function($$v) {
+                        _vm.og_title = $$v
+                      },
+                      expression: "og_title"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: { type: "text", placeholderlabel: "og:description" },
+                    on: { input: _vm.setDataChanges },
+                    model: {
+                      value: _vm.og_description,
+                      callback: function($$v) {
+                        _vm.og_description = $$v
+                      },
+                      expression: "og_description"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("img", {
+                    staticStyle: {
+                      "max-width": "100px",
+                      "max-height": "100px"
+                    },
+                    attrs: { src: _vm.defaultSocImage }
+                  }),
+                  _vm._v(" "),
+                  _c("inputfileb4", {
+                    attrs: {
+                      url: "/p/articleogimageupload.jn/",
+                      tokenImagePath: "/i/token.png",
+                      listeners: _vm.ogImageUploadListeners,
+                      csrfToken: _vm.$root._getToken(),
+                      label: _vm.$t("app.SelectOgImage"),
+                      id: "og_image"
+                    },
+                    model: {
+                      value: _vm.og_image,
+                      callback: function($$v) {
+                        _vm.og_image = $$v
+                      },
+                      expression: "og_image"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right " }, [
+        _c(
+          "div",
+          {
+            staticClass: "toast",
+            attrs: {
+              id: "portfolioSaver",
+              role: "alert",
+              "aria-live": "assertive",
+              "aria-atomic": "true",
+              "data-delay": "3000"
+            }
+          },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "toast-body" }, [
+              _vm._v(
+                "\n\t\t\t\t\t" +
+                  _vm._s(_vm.$t("app.SaveCompleted")) +
+                  "\n\t\t\t\t"
+              )
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "clearfix" }),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-right my-3" }, [
+        _c("button", { staticClass: "btn btn-primary" }, [
+          _vm._v(_vm._s(_vm.$t("app.Save")))
+        ])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "card-header", attrs: { id: "headingSeo" } },
+      [
+        _c("h5", { staticClass: "mb-0" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-link",
+              attrs: {
+                type: "button",
+                "data-toggle": "collapse",
+                "data-target": "#collapseSeo",
+                "aria-expanded": "true",
+                "aria-controls": "collapseSeo"
+              }
+            },
+            [_vm._v("\n\t\t\t\t\tSEO\n\t\t\t\t\t")]
+          )
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "toast-header" }, [
+      _c("strong", { staticClass: "mr-auto" }, [_vm._v("Info")]),
+      _vm._v(" "),
+      _c("small", { staticClass: "text-muted" }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "ml-2 mb-1 close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "toast",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0e195e44", module.exports)
   }
 }
 

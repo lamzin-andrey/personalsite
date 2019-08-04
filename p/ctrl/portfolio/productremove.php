@@ -1,13 +1,13 @@
 <?php
 require __DIR__ . '/../adminauthjson.php';
 /**
- * @class CategoryRemove  - удаление категории статьи
+ * @class ProductRemove  - удаление продукта (работы портфолио)
 */
-class CategoryRemove extends AdminAuthJson {
+class ProductRemove extends AdminAuthJson {
 	public $uid = 0;
 	
 	public function __construct() {
-		$this->table = 'pages_categories';
+		$this->table = 'portfolio';
 		parent::__construct();
 		
 		$url = explode('?', $_SERVER['REQUEST_URI']);

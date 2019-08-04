@@ -115,6 +115,32 @@ class Route {
 			require_once $handler;
 			$this->app = new ProductsEditor();
 		}
+		if ($baseUrl == '/p/portfolio/list.jn/') {
+			$handler = $sCtrlDir . 'plist.php';
+			require_once $handler;
+			$this->app = new PortfolioList();
+		}
+		if ($baseUrl == '/p/portfolio/product.jn/') {
+			$handler = $sCtrlDir . 'product.php';
+			require_once $handler;
+			$this->app = new Product();
+		}
+		if ($baseUrl == '/p/portfolio/removeproduct.jn/') {
+			$handler = $sCtrlDir . 'productremove.php';
+			require_once $handler;
+			$this->app = new ProductRemove();
+		}
+		if ($baseUrl == '/p/portfolio/psave.jn/') {
+			$handler = $sCtrlDir . 'psave.php';
+			require_once $handler;
+			$this->app = new ProudctPost();
+		}
+		if ($baseUrl == '/p/portfolio/inlineimageupload.jn/') {
+			$handler = $sCtrlDir . 'inlineimageupload.php';
+			require_once $handler;
+			$this->app = new PortfolioInlineImageUpload();
+		}
+		
 	}
 	/**
 	 * @description Маршруты для страницы /p/

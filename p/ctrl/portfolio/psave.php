@@ -1,17 +1,15 @@
 <?php
-include __DIR__ . '/adminauthjson.php';
+include __DIR__ . '/../adminauthjson.php';
 include DOC_ROOT . '/q/q/cstaticpagescompiler.php';
-
-class ArticlePost extends AdminAuthJson {
-	
-	
+class ProudctPost extends AdminAuthJson {
 	/** @property string */
 	//public $ = '';
 	
 	
 	public function __construct() {
 		parent::__construct();
-		$this->table = 'pages';
+		$this->table = 'portfolio';
+		
 		$this->treq('title');
 		$this->treq('body', 'content_block');
 		$this->treq('url');
@@ -50,6 +48,7 @@ class ArticlePost extends AdminAuthJson {
 					$sDate = now();
 				}
 			}
+			//TODO тут на этапе расширения функционала будет наследник
 			$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
 													$this->description,
 													$this->keywords,
@@ -85,7 +84,7 @@ class ArticlePost extends AdminAuthJson {
 		}
 	}
 	/**
-	 * @description Проверка, заполнены ли поля TODO test it
+	 * @description Проверка, заполнены ли поля
 	*/
 	private function _validate(array &$errors) : bool
 	{

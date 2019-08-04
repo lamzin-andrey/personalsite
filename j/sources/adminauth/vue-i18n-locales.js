@@ -102,6 +102,11 @@ var locales = {
 			//List Category Articles
 			"Other_category_requested_for_edit": "Уже запрошены для редактирования данные другой категории",
 			"Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию",
+
+			//Portfolio list
+			'Worklist' : 'Список работ',
+			Other_product_requested_for_edit : 'Уже запрошены для редактирования данные другой работы',
+			Are_You_Sure_drop_Product : 'Вы действительно хотите удалить работу',
 			
         }
     }

@@ -13,17 +13,17 @@ class ProductsEditor extends AdminAuth {
 		$this->table = 'portfolio';
 		$this->pageHeading = l('Portfolio');
 		parent::__construct();
-		//$this->_setJsonData();
+		$this->_setJsonData();
 	}
 	/**
 	 * @description Установить $this->jsonData ??
 	*/
 	private function _setJsonData()
 	{
-		$a = ['pagesCategories' => null];
+		$a = ['portfolioCategories' => null];
 		$safe = ($_REQUEST['xhr'] ?? -1);
 		$_REQUEST['xhr'] = true;
-		$a['pagesCategories'] = query("SELECT id, category_name AS name FROM pages_categories WHERE is_deleted = 0 ORDER BY delta");
+		$a['portfolioCategories'] = query("SELECT id, category_name AS name FROM portfolio_categories WHERE is_deleted = 0 ORDER BY delta");
 		if ($safe == -1) {
 			unset($_REQUEST['xhr']);
 		} else {
@@ -31,5 +31,4 @@ class ProductsEditor extends AdminAuth {
 		}
 		$this->jsonData = json_encode($a);
 	}
-	
 }

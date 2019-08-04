@@ -24,7 +24,6 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ $t('app.Worklist') }}</h5>
-					<!-- TODO stop here то есть модуль в зайчаточном состоянии-->
 					<table id="portfoliotable" class="display table table-bordered" style="width:100%">
 						<thead>
 							<tr>
@@ -47,7 +46,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"> {{ newEdit }} </h5>
-					<!--articlecategoryform ref="categoryform"></articlecategoryform-->
+					<portfolioform ref="portfolioform"></portfolioform>
 				</div>
 			</div>
 		</div>
@@ -61,30 +60,30 @@
 	//Конец Центровка прелоадера DataTables по центру (самоделка)
 
     
-	Vue.component('articlecategoryform', require('./articlecategoriesform.vue'));
+	Vue.component('portfolioform', require('./portfolioform.vue'));
 
     export default {
-        name: 'articlesections',
+        name: 'portfolio',
         //вызывается раньше чем mounted
         data: function(){
 			let _data  = {
-				/** @property {Number}  Переменная для хранения id категории статьи запрошенной для редактирования */
-				requestedCategoryId : 0,
+				/** @property {Number}  Переменная для хранения id работы запрошенной для редактирования */
+				requestedProductId : 0,
 				
-				/** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования категории */
+				/** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования  */
 				 newEdit : 'app.New',
 				 
-	 			/** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования категории */
+	 			/** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования  */
 				formTabTitle : 'app.Append',
 
-				/** @property {Boolean} isChange Принимает true когда данные категории изменены, но не сохранены */
+				/** @property {Boolean} isChange Принимает true когда данные работы изменены, но не сохранены */
 				isChange : false,
 				 
 				//Центрируем прелоадер DataTables и добавляем в него спиннер
 				/** @property  {B4DataTablesPreloader} dataTablesPreloader */
 				dataTablesPreloader: new B4DataTablesPreloader(),
 
-				/** @property {Number} categeoryId Идентификатор редактируемой категории статьи */
+				/** @property {Number} productId Идентификатор редактируемой работы */
 	 			categeoryId : 0,
 			};
 			return _data;
@@ -95,18 +94,18 @@
 			 * @description инициализация DataTables с данными статей
 			*/
 			initDataTables() {
-				if (this.isArticlesDataTableInitalized) {
+				if (this.isDataTableInitalized) {
 					return;
 				}
-				let id = '#articlecats';
-				this.isArticlesDataTableInitalized = true;
+				let id = '#portfoliotable';
+				this.isDataTableInitalized = true;
 				this.dataTable =  $(id).DataTable( {
 					'processing': true,
 					'serverSide': true,
-					'ajax': "/p/portfolioegories/portfolioslist.jn/",
+					'ajax': "/p/portfolio/list.jn/",
 					"columns": [
 						{ 
-							"data": "category_name",
+							"data": "heading",
 							'render' : function(data, type, row) {
 								return  data;
 							}
@@ -141,10 +140,10 @@
 				} ).on('draw', () => {
 					//Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
 					$(id + ' .j-edit-btn').click((evt) => {
-						this.onClickEditCategory(evt);
+						this.onClickEditProduct(evt);
 					});
 					$(id + ' .j-rm-btn').click((evt) => {
-						this.onClickRemoveCategory(evt);
+						this.onClickRemoveProduct(evt);
 					});
 				}).on('processing', () => {
 					//Preloader
@@ -172,52 +171,52 @@
 				
 			},
 			/**
-			 * @description Click on button "Edit category"
+			 * @description Click on button "Edit product"
 			 * @param {Event} evt
 			*/
-			onClickEditCategory(evt) {
-				if (this.requestedCategoryId > 0) {
-					this.alert(this.$t('app.Other_category_requested_for_edit'));
+			onClickEditProduct(evt) {
+				if (this.requestedProductId > 0) {
+					this.alert(this.$t('app.Other_product_requested_for_edit'));
 					return;
 				}
-				this.requestedCategoryId = $(evt.target).attr('data-id');
-				$('#spin' + this.requestedCategoryId).toggleClass('d-none');
-				this.$root._get((d) => {this.onSuccessGetCategory(d);}, `/p/portfolioegories/category.jn/?id=${this.requestedCategoryId}`, (a, b, c) => {this.onFailGetCategory(a, b, c);} );
+				this.requestedProductId = $(evt.target).attr('data-id');
+				$('#spin' + this.requestedProductId).toggleClass('d-none');
+				this.$root._get((d) => {this.onSuccessGetProduct(d);}, `/p/portfolio/product.jn/?id=${this.requestedProductId}`, (a, b, c) => {this.onFailGetProduct(a, b, c);} );
 			},
 			/**
-			 * @description Success request category data for edit
+			 * @description Success request product data for edit
 			 * @param {Object} data
 			*/
-			onSuccessGetCategory(data) {
-				if (!this.onFailGetCategory(data)) {
+			onSuccessGetProduct(data) {
+				if (!this.onFailGetProduct(data)) {
 					return;
 				}
-				this.setCategoryId(data.id);
-				this.$refs.categoryform.setCategoryData(data);
+				this.setProductId(data.id);
+				this.$refs.portfolioform.setProductData(data);
 				setTimeout(() => {
 					this.setDataChanges(false);
 				}, 1000);
 				$('#editportfolio-tab').tab('show');
 			},
 			/**
-			 * @description Failed request category data for edit
+			 * @description Failed request product data for edit
 			 * @return Boolean
 			*/
-			onFailGetCategory(data, b ,c) {
-				$('#spin' + this.requestedCategoryId).toggleClass('d-none');
-				this.requestedCategoryId = 0;
+			onFailGetProduct(data, b ,c) {
+				$('#spin' + this.requestedProductId).toggleClass('d-none');
+				this.requestedProductId = 0;
 				return this.$root.defaultFailSendFormListener(data, b ,c);
 			},
 			/**
-			 * @description Click on button "Remove category"
+			 * @description Click on button "Remove product"
 			 * @param {Event} evt
 			*/
-			onClickRemoveCategory(evt) {
+			onClickRemoveProduct(evt) {
 				this.$root.confirmDialogArticleArgs  = {i:$(evt.target).attr('data-id')};
-				this.$root.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Article_Category') + '?';
+				this.$root.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Product') + '?';
 				this.$root.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_remove');
 				this.$root.b4ConfirmDlgParams.onOk = {
-					f : this.onClickConfirmRemoveCategory,
+					f : this.onClickConfirmRemoveProduct,
 					context:this
 				};
 				this.$root.setConfirmDlgVisible(true);
@@ -226,9 +225,9 @@
 			 * @description Click on button "OK" on confirm dialog Remove article
 			 * @param {Event} evt
 			*/
-			onClickConfirmRemoveCategory() {
+			onClickConfirmRemoveProduct() {
 				let args = this.$root.confirmDialogArticleArgs;
-				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, '/p/portfolioegories/removecategory.jn/', (data) => {this.onFailRemove(data);})
+				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, '/p/portfolio/removeproduct.jn/', (data) => {this.onFailRemove(data);})
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
@@ -238,7 +237,7 @@
 			onSuccessRemove(data) {
 				if (data.status == 'ok') {
 					if (data.id) {
-						let tr = $(`#articlecats button[data-id=${data.id}]`).first().parents('tr').first();
+						let tr = $(`#portfoliotable button[data-id=${data.id}]`).first().parents('tr').first();
 						tr.remove();
 					}
 				} else {
@@ -260,8 +259,8 @@
 			 * @description Установить id редактируемой категории
 			 * @param {Number} id 
 			*/
-			setCategoryId(id) {
-				this.categoryId = id;
+			setProductId(id) {
+				this.productId = id;
 				let key = 'app.New',
 					key2 = 'app.Append';
 				
@@ -272,11 +271,11 @@
 				this.formTabTitle = this.$root.$t(key2);
 			},
 			/**
-			 * @description Получить id редактируемой категории
+			 * @description Получить id редактируемого товара
 			 * @return Number
 			*/
-			getCategoryId() {
-				return this.categoryId;
+			getProductId() {
+				return this.productId;
 			},
 			/**
 			 * @see isChange
@@ -286,7 +285,7 @@
 				this.isChange = isChange;
 			},
 			/**
-			 * @description Добавляем 
+			 * @description Добавляем инициализацию табов
 			 */
 			initSeotab() {
 				$('#portfoliolist-tab').on('click', (ev) => {
@@ -302,7 +301,7 @@
 						//Покажем диалог
 						this.$root.setConfirmDlgVisible(true);
 					} else {
-						this.gotoCategoriesListTab();
+						this.gotoProductsListTab();
 					}
 				});
 				$('#editportfolio-tab').on('shown.bs.tab', (ev) => {
@@ -313,24 +312,24 @@
 			 * @description Обработка OK на диалоге подтверждения переключения между вкладками
 			*/
 			onClickConfirmLeaveEditTab() {
-				this.gotoCategoriesListTab();
+				this.gotoProductsListTab();
 				//Скроем диалог
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
 			 * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
 			*/
-			gotoCategoriesListTab() {
+			gotoProductsListTab() {
 				$('#portfoliolist-tab').tab('show');
-				$('#ariclecategoriesform')[0].reset();
-				this.setCategoryId(0);
+				$('#portfolioform')[0].reset();
+				this.setProductId(0);
 				this.setDataChanges(false);
 			},
 			/**
 			 * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
 			 */
 			localizeParams() {
-				//Заголовок формы редактиорвания
+				//Заголовок формы редактирования
 				this.newEdit = this.$root.$t('app.New');
 				this.formTabTitle = this.$root.$t('app.Append');
 			},
