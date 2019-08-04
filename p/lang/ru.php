@@ -14,6 +14,7 @@ $aLang = [
 	'Articles'         => 'Статьи',
 	'Article'         => 'Статья',
 	'Articles Categories'         => 'Категория для статей',
+	'Portfolio'         => 'Портфолио',
 	'Category'         => 'Категория',
 	'profile-save-success'         => 'Данные успешно сохранены',
 	'enter-current-password'       => 'Введите ваш действующий пароль', 

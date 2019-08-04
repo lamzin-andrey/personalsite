@@ -18,6 +18,7 @@ class Route {
 		
 		$this->_p();
 		$this->_acategories();
+		$this->_portfolio();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -76,6 +77,43 @@ class Route {
 			$this->view    = __dir__ . '/view/acategories/acategorieslist.tpl.php';
 			require_once $handler;
 			$this->app = new ArticleCategoriesEditor();
+		}
+		if ($baseUrl == '/p/acategories/acatslist.jn/') {
+			$handler = __dir__ . '/ctrl/acategories/acatslist.php';
+			require_once $handler;
+			$this->app = new ArticlesCategories();
+		}
+		if ($baseUrl == '/p/acategories/category.jn/') {
+			$handler = __dir__ . '/ctrl/acategories/category.php';
+			require_once $handler;
+			$this->app = new ArticlesCategory();
+		}
+		if ($baseUrl == '/p/acategories/removecategory.jn/') {
+			$handler = __dir__ . '/ctrl/acategories/categoryremove.php';
+			require_once $handler;
+			$this->app = new CategoryRemove();
+		}
+		if ($baseUrl == '/p/acategories/categorysave.jn/') {
+			$handler = __dir__ . '/ctrl/acategories/categorysave.php';
+			require_once $handler;
+			$this->app = new ArticleCategoryPost();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/portfolio/
+	*/
+	protected function _portfolio()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/portfolio/') {
+			$this->master = __dir__ . '/master.tpl.php';
+			$handler = $sCtrlDir . 'list.php'; //from list
+			$this->view    = __dir__ . '/view/portfolio.tpl.php';
+			require_once $handler;
+			$this->app = new ProductsEditor();
 		}
 	}
 	/**

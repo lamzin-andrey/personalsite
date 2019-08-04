@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -25384,7 +25384,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(36);
+var	fixUrls = __webpack_require__(37);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -25697,7 +25697,228 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 14 */,
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class
+ * En:
+ * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
+ * into center of the table and add bootstrap 4 spinner into preloader
+ * Ru:
+ * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
+ * bootstrap 4 спиннер в блок прелоадера
+ * 
+*/
+var B4DataTablesPreloader = function () {
+    /**
+     * @description 
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
+        _classCallCheck(this, B4DataTablesPreloader);
+
+        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
+        /** @property {Number} zIndex Default preloader z-index */
+        this.zIndex = 100;
+
+        /** @property {String} loaderText Default preloader text */
+        this.loaderText = '';
+
+        /** @property {Array} b4Classes Bootstrap 4 standart colors */
+        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+
+        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
+        this.b4ClassesIterator = 0;
+
+        /** @property  isShowSpinner if false preloader will not draw spinner*/
+        this.isShowSpinner = true;
+
+        /** @property  isSetPosition if false preloader will not draw spinner*/
+        this.isSetPosition = true;
+    }
+    /**
+     * @description
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+
+
+    _createClass(B4DataTablesPreloader, [{
+        key: 'setIdentifiers',
+        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
+            this.tableId = tableId;
+            this.jTable = $(tableId);
+            this.jPreloader = $(preloaderBlockId);
+            this.oDataTables = oDataTables;
+        }
+        /**
+         * @description En: Start observe window resizing and adjust spinner position
+         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
+         * 
+        */
+
+    }, {
+        key: 'watch',
+        value: function watch() {
+            var _this = this;
+
+            window.addEventListener('resize', function () {
+                _this.setSpinnerPosition();
+            }, true);
+            if (this.oDataTables) {
+                this.oDataTables.on('processing', function () {
+                    _this.setSpinnerPosition();
+                });
+                this.oDataTables.on('draw', function () {
+                    _this.removeSpinnerBlock();
+                });
+            }
+            setInterval(function () {
+                _this.onTick();
+            }, 1 * 1000);
+            this.setSpinnerPosition();
+        }
+        /**
+         * @description
+         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
+         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
+         * 
+        */
+
+    }, {
+        key: 'setSpinnerPosition',
+        value: function setSpinnerPosition() {
+            this.setSpinner();
+            this.setPosition();
+        }
+        /**
+         * @description En: Prepend spinner in preloader block
+         * Ru: Добавляет спиннер в блок
+        */
+
+    }, {
+        key: 'setSpinner',
+        value: function setSpinner() {
+            if (!this.jPreloader[0] || !this.isShowSpinner) {
+                return;
+            }
+            var text = this.jPreloader.text().trim(),
+                s = this.tableId.replace('#', ''),
+                spinnerBlockId = this.tableId + 'Spinner';
+            if (!this.loaderText) {
+                this.loaderText = text;
+            }
+            text = text ? text : this.loaderText;
+            if (!$(spinnerBlockId)[0]) {
+                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
+                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
+            }
+        }
+        /**
+         * @description En: Drop spinner from preloader
+         * Ru: Удалить спиннер с прелоадера
+        */
+
+    }, {
+        key: 'removeSpinnerBlock',
+        value: function removeSpinnerBlock() {
+            var spinnerBlockId = this.tableId + 'Spinner';
+            if ($(spinnerBlockId)[0]) {
+                $(spinnerBlockId).remove();
+            }
+        }
+        /**
+         * @description En: Align center preloader 
+         * Ru: Установить прелоадер по центру таблицы
+        */
+
+    }, {
+        key: 'setPosition',
+        value: function setPosition() {
+            var t = this.jTable[0],
+                p = this.jPreloader[0],
+                x = void 0,
+                y = void 0;
+            if (!p || !t || !this.isSetPosition) {
+                return;
+            }
+            x = (t.offsetWidth - p.offsetWidth) / 2;
+            y = (t.offsetHeight - p.offsetHeight) / 2;
+            this.jPreloader.css('position', 'absolute');
+            this.jPreloader.css('z-index', '100');
+            this.jPreloader.css('left', x + 'px');
+            this.jPreloader.css('top', y + 'px');
+        }
+        /**
+         * @description En: Spinner color animation
+         * Ru: Анимация классов цвета спиннера
+        */
+
+    }, {
+        key: 'onTick',
+        value: function onTick() {
+            var prevClass = this.b4ClassesIterator;
+            this.b4ClassesIterator++;
+            if (this.b4ClassesIterator >= this.b4Classes.length) {
+                this.b4ClassesIterator = 0;
+            }
+            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
+                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
+                p = 'text-' + this.b4Classes[prevClass];
+            jSpinner.removeClass(p);
+            jSpinner.addClass(s);
+        }
+        /**
+         * @description set this.zIndex
+         * @param {Number} zIndex
+        */
+
+    }, {
+        key: 'setZIndex',
+        value: function setZIndex(zIndex) {
+            this.zIndex = zIndex;
+        }
+        /**
+         * @description 
+         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
+         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
+         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
+         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
+        */
+
+    }, {
+        key: 'configure',
+        value: function configure() {
+            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            /** @property  isShowSpinner if false preloader will not draw spinner*/
+            this.isShowSpinner = isShowSpinner;
+
+            /** @property  isSetPosition if false preloader will not draw spinner*/
+            this.isSetPosition = isSetPosition;
+        }
+    }]);
+
+    return B4DataTablesPreloader;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
+
+/***/ }),
 /* 15 */,
 /* 16 */,
 /* 17 */,
@@ -25709,32 +25930,33 @@ function updateLink (link, options, obj) {
 /* 23 */,
 /* 24 */,
 /* 25 */,
-/* 26 */
+/* 26 */,
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(27);
+module.exports = __webpack_require__(28);
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(14);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 window.jQuery = window.$ = window.jquery = __webpack_require__(2);
 window.Vue = __webpack_require__(3);
-window.slug = __webpack_require__(28);
+window.slug = __webpack_require__(29);
 
-__webpack_require__(29);
 __webpack_require__(30);
+__webpack_require__(31);
 $(function () {
 
     window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
@@ -25765,7 +25987,7 @@ __webpack_require__(9);
 //DataTables
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
-__webpack_require__(32);
+__webpack_require__(33);
 //my patch pagination for extra small view
 
 // /DataTables
@@ -26098,7 +26320,7 @@ window.app = new Vue({
          */
         onFailRemove: function onFailRemove(data) {
             if (data.status == 'error' && data.msg) {
-                alert(data.msg);
+                this.alert(data.msg);
                 return;
             }
             this.alert($t('DefaultFail'));
@@ -26345,7 +26567,7 @@ window.app = new Vue({
 }).$mount('#wrapper');
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /**
@@ -26819,7 +27041,7 @@ module.exports = function (s, opt) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /**
@@ -27005,7 +27227,7 @@ window.TextFormat = {
 };
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 window.LandLibDom = {
@@ -27076,7 +27298,7 @@ window.LandLibDom = {
 };
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27144,6 +27366,9 @@ var locales = {
             'ResetPassword': 'Сбросить пароль',
             "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
             "LoginNow": "странице авторизации",
+            "List": "Список",
+            "Category": "Категория",
+            "Operations": "Действия",
 
             "DefaultError": "Произошла неизвестная ошибка, попробуйте позже",
 
@@ -27174,9 +27399,13 @@ var locales = {
             "Click_Ok_button_for_continue": "Нажмите OK для продолжения",
             "SelectOgImage": "Соц. сети",
             "insertImage": "Вставить ссылку на изображение",
-            "Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи"
+            "Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи",
 
             //List Articles
+
+            //List Category Articles
+            "Other_category_requested_for_edit": "Уже запрошены для редактирования данные другой категории",
+            "Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию"
 
         }
     }
@@ -27185,7 +27414,7 @@ var locales = {
 /* harmony default export */ __webpack_exports__["a"] = (locales);
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables Bootstrap 4 integration
@@ -27203,7 +27432,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables B
 (function( factory ){
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(33)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(34)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -27376,7 +27605,7 @@ return DataTable;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -42679,13 +42908,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(36);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -42710,7 +42939,7 @@ if(false) {
 }
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -42724,7 +42953,7 @@ exports.push([module.i, "@media (width < 720px ) {\n\t#articles_paginate .pagina
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 
@@ -42817,228 +43046,6 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
-
-/***/ }),
-/* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @class
- * En:
- * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
- * into center of the table and add bootstrap 4 spinner into preloader
- * Ru:
- * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
- * bootstrap 4 спиннер в блок прелоадера
- * 
-*/
-var B4DataTablesPreloader = function () {
-    /**
-     * @description 
-     * En: Set block identifier with table and block with preloader
-     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
-     * @param {String} tableId start with '#' 
-     * @param {String} preloaderBlockId start with '#' 
-     * @param {DataTables} oDataTables
-    */
-    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
-        _classCallCheck(this, B4DataTablesPreloader);
-
-        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
-        /** @property {Number} zIndex Default preloader z-index */
-        this.zIndex = 100;
-
-        /** @property {String} loaderText Default preloader text */
-        this.loaderText = '';
-
-        /** @property {Array} b4Classes Bootstrap 4 standart colors */
-        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-
-        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
-        this.b4ClassesIterator = 0;
-
-        /** @property  isShowSpinner if false preloader will not draw spinner*/
-        this.isShowSpinner = true;
-
-        /** @property  isSetPosition if false preloader will not draw spinner*/
-        this.isSetPosition = true;
-    }
-    /**
-     * @description
-     * En: Set block identifier with table and block with preloader
-     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
-     * @param {String} tableId start with '#' 
-     * @param {String} preloaderBlockId start with '#' 
-     * @param {DataTables} oDataTables
-    */
-
-
-    _createClass(B4DataTablesPreloader, [{
-        key: 'setIdentifiers',
-        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
-            this.tableId = tableId;
-            this.jTable = $(tableId);
-            this.jPreloader = $(preloaderBlockId);
-            this.oDataTables = oDataTables;
-        }
-        /**
-         * @description En: Start observe window resizing and adjust spinner position
-         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
-         * 
-        */
-
-    }, {
-        key: 'watch',
-        value: function watch() {
-            var _this = this;
-
-            window.addEventListener('resize', function () {
-                _this.setSpinnerPosition();
-            }, true);
-            if (this.oDataTables) {
-                this.oDataTables.on('processing', function () {
-                    _this.setSpinnerPosition();
-                });
-                this.oDataTables.on('draw', function () {
-                    _this.removeSpinnerBlock();
-                });
-            }
-            setInterval(function () {
-                _this.onTick();
-            }, 1 * 1000);
-            this.setSpinnerPosition();
-        }
-        /**
-         * @description
-         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
-         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
-         * 
-        */
-
-    }, {
-        key: 'setSpinnerPosition',
-        value: function setSpinnerPosition() {
-            this.setSpinner();
-            this.setPosition();
-        }
-        /**
-         * @description En: Prepend spinner in preloader block
-         * Ru: Добавляет спиннер в блок
-        */
-
-    }, {
-        key: 'setSpinner',
-        value: function setSpinner() {
-            if (!this.jPreloader[0] || !this.isShowSpinner) {
-                return;
-            }
-            var text = this.jPreloader.text().trim(),
-                s = this.tableId.replace('#', ''),
-                spinnerBlockId = this.tableId + 'Spinner';
-            if (!this.loaderText) {
-                this.loaderText = text;
-            }
-            text = text ? text : this.loaderText;
-            if (!$(spinnerBlockId)[0]) {
-                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
-                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
-            }
-        }
-        /**
-         * @description En: Drop spinner from preloader
-         * Ru: Удалить спиннер с прелоадера
-        */
-
-    }, {
-        key: 'removeSpinnerBlock',
-        value: function removeSpinnerBlock() {
-            var spinnerBlockId = this.tableId + 'Spinner';
-            if ($(spinnerBlockId)[0]) {
-                $(spinnerBlockId).remove();
-            }
-        }
-        /**
-         * @description En: Align center preloader 
-         * Ru: Установить прелоадер по центру таблицы
-        */
-
-    }, {
-        key: 'setPosition',
-        value: function setPosition() {
-            var t = this.jTable[0],
-                p = this.jPreloader[0],
-                x = void 0,
-                y = void 0;
-            if (!p || !t || !this.isSetPosition) {
-                return;
-            }
-            x = (t.offsetWidth - p.offsetWidth) / 2;
-            y = (t.offsetHeight - p.offsetHeight) / 2;
-            this.jPreloader.css('position', 'absolute');
-            this.jPreloader.css('z-index', '100');
-            this.jPreloader.css('left', x + 'px');
-            this.jPreloader.css('top', y + 'px');
-        }
-        /**
-         * @description En: Spinner color animation
-         * Ru: Анимация классов цвета спиннера
-        */
-
-    }, {
-        key: 'onTick',
-        value: function onTick() {
-            var prevClass = this.b4ClassesIterator;
-            this.b4ClassesIterator++;
-            if (this.b4ClassesIterator >= this.b4Classes.length) {
-                this.b4ClassesIterator = 0;
-            }
-            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
-                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
-                p = 'text-' + this.b4Classes[prevClass];
-            jSpinner.removeClass(p);
-            jSpinner.addClass(s);
-        }
-        /**
-         * @description set this.zIndex
-         * @param {Number} zIndex
-        */
-
-    }, {
-        key: 'setZIndex',
-        value: function setZIndex(zIndex) {
-            this.zIndex = zIndex;
-        }
-        /**
-         * @description 
-         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
-         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
-         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
-         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
-        */
-
-    }, {
-        key: 'configure',
-        value: function configure() {
-            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-            /** @property  isShowSpinner if false preloader will not draw spinner*/
-            this.isShowSpinner = isShowSpinner;
-
-            /** @property  isSetPosition if false preloader will not draw spinner*/
-            this.isSetPosition = isSetPosition;
-        }
-    }]);
-
-    return B4DataTablesPreloader;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
 
 /***/ }),
 /* 38 */
@@ -45585,7 +45592,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(65)
 /* template */
-var __vue_template__ = __webpack_require__(66)
+var __vue_template__ = __webpack_require__(69)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45629,9 +45636,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(14);
 //
 //
 //
@@ -45691,40 +45696,609 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-//Компонент для отображения инпута ввода текста bootstrap 4
-/*Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
-Vue.component('selectb4', require('../../landlib/vue/2/bootstrap/4/selectb4.vue'));
-Vue.component('checkboxb4', require('../../landlib/vue/2/bootstrap/4/checkboxb4.vue'));
-Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
-Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));*/
+//Центровка прелоадера DataTables по центру (самоделка, но надо оформить как плагин)
+
+//Конец Центровка прелоадера DataTables по центру (самоделка)
+
+
+Vue.component('articlecategoryform', __webpack_require__(66));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'articlesections',
-    //вызывается раньше чем mounted
-    data: function data() {
-        var _data = {};
-        return _data;
-    },
-    //
-    methods: {}, //end methods
-    //вызывается после data, поля из data видны "напрямую" как this.fieldName
-    mounted: function mounted() {
+	name: 'articlesections',
+	//вызывается раньше чем mounted
+	data: function data() {
+		var _data = {
+			/** @property {Number}  Переменная для хранения id категории статьи запрошенной для редактирования */
+			requestedCategoryId: 0,
 
-        var self = this;
-        /*this.$root.$on('showMenuEvent', function(evt) {
-            self.menuBlockVisible   = 'block';
-            self.isMainMenuVisible  = true;
-            self.isScrollWndVisible = false;
-            self.isColorWndVisible  = false;
-            self.isHelpWndVisible   = false;
-            self.nStep = self.$root.nStep;
-        })/**/
-        //console.log('I mounted!');
-    }
+			/** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования категории */
+			newEdit: 'app.New',
+
+			/** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования категории */
+			formTabTitle: 'app.Append',
+
+			/** @property {Boolean} isChange Принимает true когда данные категории изменены, но не сохранены */
+			isChange: false,
+
+			//Центрируем прелоадер DataTables и добавляем в него спиннер
+			/** @property  {B4DataTablesPreloader} dataTablesPreloader */
+			dataTablesPreloader: new __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__["a" /* default */](),
+
+			/** @property {Number} categeoryId Идентификатор редактируемой категории статьи */
+			categeoryId: 0
+		};
+		return _data;
+	},
+	//
+	methods: {
+		/**
+   * @description инициализация DataTables с данными статей
+  */
+		initDataTables: function initDataTables() {
+			var _this = this;
+
+			if (this.isArticlesDataTableInitalized) {
+				return;
+			}
+			var id = '#articlecats';
+			this.isArticlesDataTableInitalized = true;
+			this.dataTable = $(id).DataTable({
+				'processing': true,
+				'serverSide': true,
+				'ajax': "/p/acategories/acatslist.jn/",
+				"columns": [{
+					"data": "category_name",
+					'render': function render(data, type, row) {
+						return data;
+					}
+				}, {
+					"data": "id",
+					'render': function render(data, type, row) {
+						return '\n\t\t\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t\t\t<button data-id="' + data + '" type="button" class="btn btn-primary j-edit-btn">\n\t\t\t\t\t\t\t\t\t\t\t<i data-id="' + data + '" class="fas fa-edit fa-sm"></i>\n\t\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t\t\t<button data-id="' + data + '" type="button" class="btn btn-danger j-rm-btn">\n\t\t\t\t\t\t\t\t\t\t\t<i data-id="' + data + '" class="fas fa-trash fa-sm"></i>\n\t\t\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class="form-group d-md-inline d-block ">\n\t\t\t\t\t\t\t\t\t\t<div id="spin' + data + '" class="spinner-grow text-success d-none" role="status">\n\t\t\t\t\t\t\t\t\t\t\t<span class="sr-only">Loading...</span>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t';
+					}
+				}],
+				language: {
+					url: '/p/datatablelang.jn/'
+				}
+			}).on('draw', function () {
+				//Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
+				$(id + ' .j-edit-btn').click(function (evt) {
+					_this.onClickEditCategory(evt);
+				});
+				$(id + ' .j-rm-btn').click(function (evt) {
+					_this.onClickRemoveCategory(evt);
+				});
+			}).on('processing', function () {
+				//Preloader
+				if (!_this.preloaderIsInitalize) {
+					//Делаем прелоадер по центру
+					_this.dataTablesPreloader.setIdentifiers(id, id + '_processing', _this.dataTable);
+					//this.dataTablesPreloader.configure(true, false);
+					_this.dataTablesPreloader.watch();
+					_this.preloaderIsInitalize = true;
+				}
+
+				//Search settings
+				if (!_this.addLeftLimitOnSearchField) {
+					_this.addLeftLimitOnSearchField = true;
+					var inp = $(id + '_filter input').first();
+					inp.unbind();
+					inp.on('input', function () {
+						var val = inp.val();
+						if (val.length > 4 || val.length == 0) {
+							_this.dataTable.search(val).draw();
+						}
+					});
+				}
+			});
+		},
+
+		/**
+   * @description Click on button "Edit category"
+   * @param {Event} evt
+  */
+		onClickEditCategory: function onClickEditCategory(evt) {
+			var _this2 = this;
+
+			if (this.requestedCategoryId > 0) {
+				this.alert(this.$t('app.Other_category_requested_for_edit'));
+				return;
+			}
+			this.requestedCategoryId = $(evt.target).attr('data-id');
+			$('#spin' + this.requestedCategoryId).toggleClass('d-none');
+			this.$root._get(function (d) {
+				_this2.onSuccessGetCategory(d);
+			}, '/p/acategories/category.jn/?id=' + this.requestedCategoryId, function (a, b, c) {
+				_this2.onFailGetCategory(a, b, c);
+			});
+		},
+
+		/**
+   * @description Success request category data for edit
+   * @param {Object} data
+  */
+		onSuccessGetCategory: function onSuccessGetCategory(data) {
+			var _this3 = this;
+
+			if (!this.onFailGetCategory(data)) {
+				return;
+			}
+			this.setCategoryId(data.id);
+			this.$refs.categoryform.setCategoryData(data);
+			setTimeout(function () {
+				_this3.setDataChanges(false);
+			}, 1000);
+			$('#editacat-tab').tab('show');
+		},
+
+		/**
+   * @description Failed request category data for edit
+   * @return Boolean
+  */
+		onFailGetCategory: function onFailGetCategory(data, b, c) {
+			$('#spin' + this.requestedCategoryId).toggleClass('d-none');
+			this.requestedCategoryId = 0;
+			return this.$root.defaultFailSendFormListener(data, b, c);
+		},
+
+		/**
+   * @description Click on button "Remove category"
+   * @param {Event} evt
+  */
+		onClickRemoveCategory: function onClickRemoveCategory(evt) {
+			this.$root.confirmDialogArticleArgs = { i: $(evt.target).attr('data-id') };
+			this.$root.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Article_Category') + '?';
+			this.$root.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_remove');
+			this.$root.b4ConfirmDlgParams.onOk = {
+				f: this.onClickConfirmRemoveCategory,
+				context: this
+			};
+			this.$root.setConfirmDlgVisible(true);
+		},
+
+		/**
+   * @description Click on button "OK" on confirm dialog Remove article
+   * @param {Event} evt
+  */
+		onClickConfirmRemoveCategory: function onClickConfirmRemoveCategory() {
+			var _this4 = this;
+
+			var args = this.$root.confirmDialogArticleArgs;
+			this.$root._post(args, function (data) {
+				_this4.onSuccessRemove(data);
+			}, '/p/acategories/removecategory.jn/', function (data) {
+				_this4.onFailRemove(data);
+			});
+			this.$root.setConfirmDlgVisible(false);
+		},
+
+		/**
+   * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+   * @param data - Данные с сервера
+  */
+		onSuccessRemove: function onSuccessRemove(data) {
+			if (data.status == 'ok') {
+				if (data.id) {
+					var tr = $('#articlecats button[data-id=' + data.id + ']').first().parents('tr').first();
+					tr.remove();
+				}
+			} else {
+				this.onFailRemove(data);
+			}
+		},
+
+		/**
+   * @description Добавляем поведение для таба SEO - он должен показываться только когда активна не первая вкладка
+   * @param data - Данные с сервера
+   */
+		onFailRemove: function onFailRemove(data) {
+			if (data.status == 'error' && data.msg) {
+				this.$root.alert(data.msg);
+				return;
+			}
+			this.$root.alert($t('DefaultFail'));
+		},
+
+		/**
+   * @description Установить id редактируемой категории
+   * @param {Number} id 
+  */
+		setCategoryId: function setCategoryId(id) {
+			this.categoryId = id;
+			var key = 'app.New',
+			    key2 = 'app.Append';
+
+			if (id > 0) {
+				key2 = key = 'app.Edit';
+			}
+			this.newEdit = this.$root.$t(key);
+			this.formTabTitle = this.$root.$t(key2);
+		},
+
+		/**
+   * @description Получить id редактируемой категории
+   * @return Number
+  */
+		getCategoryId: function getCategoryId() {
+			return this.categoryId;
+		},
+
+		/**
+   * @see isChange
+   * @param {Boolean} isChange 
+   */
+		setDataChanges: function setDataChanges(isChange) {
+			this.isChange = isChange;
+		},
+
+		/**
+   * @description Добавляем 
+   */
+		initSeotab: function initSeotab() {
+			var _this5 = this;
+
+			$('#acatlist-tab').on('click', function (ev) {
+				ev.preventDefault();
+				if (_this5.isChange) {
+					//Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
+					_this5.$root.b4ConfirmDlgParams.title = _this5.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
+					//И сменим обработчик, чтобы удалялась именно статья
+					_this5.$root.b4ConfirmDlgParams.onOk = {
+						f: _this5.onClickConfirmLeaveEditTab,
+						context: _this5
+					};
+					//Покажем диалог
+					_this5.$root.setConfirmDlgVisible(true);
+				} else {
+					_this5.gotoCategoriesListTab();
+				}
+			});
+			$('#editacat-tab').on('shown.bs.tab', function (ev) {
+				_this5.setDataChanges(false);
+			});
+		},
+
+		/**
+   * @description Обработка OK на диалоге подтверждения переключения между вкладками
+  */
+		onClickConfirmLeaveEditTab: function onClickConfirmLeaveEditTab() {
+			this.gotoCategoriesListTab();
+			//Скроем диалог
+			this.$root.setConfirmDlgVisible(false);
+		},
+
+		/**
+   * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
+  */
+		gotoCategoriesListTab: function gotoCategoriesListTab() {
+			$('#acatlist-tab').tab('show');
+			$('#ariclecategoriesform')[0].reset();
+			this.setCategoryId(0);
+			this.setDataChanges(false);
+		},
+
+		/**
+   * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
+   */
+		localizeParams: function localizeParams() {
+			//Заголовок формы редактиорвания
+			this.newEdit = this.$root.$t('app.New');
+			this.formTabTitle = this.$root.$t('app.Append');
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+		this.localizeParams();
+		this.initDataTables();
+		this.initSeotab();
+
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
 });
 
 /***/ }),
 /* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(67)
+/* template */
+var __vue_template__ = __webpack_require__(68)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/articlecategoriesform.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-378c5f28", Component.options)
+  } else {
+    hotAPI.reload("data-v-378c5f28", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'articlecategoryform',
+	//вызывается раньше чем mounted
+	data: function data() {
+		var _data = {
+			//Значение category_name
+			category_name: '',
+			//Идентификатор редактируемой категории
+			id: 0
+		};
+		return _data;
+	},
+	//
+	methods: {
+		/**
+   * @description Установить данные категории статьи для редактирования
+   * @param {Object} data @see mysql table fields pages_categories
+  */
+		setCategoryData: function setCategoryData(data) {
+			var _this = this;
+
+			this.category_name = 'a';
+
+			//Fix bug when edit the article more then one time...
+			setTimeout(function () {
+				_this.category_name = data.category_name;
+				console.log('I set');
+			}, 1);
+		},
+
+		/**
+   * @description уведомляем приложение, что данные изменились
+   */
+		setDataChanges: function setDataChanges() {
+			this.$root.$refs.articlecategories.setDataChanges(true);
+		},
+
+		/** 
+   * @description Пробуем отправить форму
+  */
+		onSubmit: function onSubmit(evt) {
+			var _this2 = this;
+
+			evt.preventDefault();
+			if (this.allRequiredFilled()) {
+				var formInputValidator = this.$root.formInputValidator;
+				this.id = this.$root.$refs.articlecategories.getCategoryId();
+				this.$root._post(this.$data, function (data) {
+					_this2.onSuccessAddCategory(data, formInputValidator);
+				}, '/p/acategories/categorysave.jn/', function (a, b, c) {
+					_this2.onFailAddCategory(a, b, c);
+				});
+			}
+		},
+
+		/**
+   * @description Успешное добавление категории статьи
+  */
+		onSuccessAddCategory: function onSuccessAddCategory(data, formInputValidator) {
+			if (!this.onFailAddCategory(data)) {
+				return;
+			}
+			var id = parseInt(data.id);
+			if (data.status == 'ok' && id) {
+				this.$root.$refs.articlecategories.setCategoryId(id);
+				$('#categorySaver').toast('show');
+				this.$root.$refs.articlecategories.setDataChanges(false);
+			}
+		},
+
+		/**
+   * @description Неуспешное добавление категории статьи
+   * @return Boolean false если существует data.status == 'error'
+  */
+		onFailAddCategory: function onFailAddCategory(data, b, c) {
+			return this.$root.defaultFailSendFormListener(data, b, c);
+		},
+
+		/**
+            * @description Проверяет, заполнены ли все необходимые поля
+           */
+		allRequiredFilled: function allRequiredFilled() {
+			return String(this.category_name).length > 0;
+		}
+	}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {
+
+		var self = this;
+		/*this.$root.$on('showMenuEvent', function(evt) {
+      self.menuBlockVisible   = 'block';
+      self.isMainMenuVisible  = true;
+      self.isScrollWndVisible = false;
+      self.isColorWndVisible  = false;
+      self.isHelpWndVisible   = false;
+      self.nStep = self.$root.nStep;
+  })/**/
+		//console.log('I mounted!');
+	}
+});
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      staticClass: "user",
+      attrs: {
+        method: "POST",
+        action: "/p/acategories/savearticle.jn/",
+        novalidate: "",
+        id: "ariclecategoriesform"
+      },
+      on: { submit: _vm.onSubmit }
+    },
+    [
+      _c("inputb4", {
+        attrs: {
+          type: "text",
+          placeholder: _vm.$t("app.Category"),
+          label: _vm.$t("app.Category"),
+          id: "category",
+          validators: "'required'"
+        },
+        on: { input: _vm.setDataChanges },
+        model: {
+          value: _vm.category_name,
+          callback: function($$v) {
+            _vm.category_name = $$v
+          },
+          expression: "category_name"
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right " }, [
+        _c(
+          "div",
+          {
+            staticClass: "toast",
+            attrs: {
+              id: "categorySaver",
+              role: "alert",
+              "aria-live": "assertive",
+              "aria-atomic": "true",
+              "data-delay": "3000"
+            }
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "toast-body" }, [
+              _vm._v(
+                "\n\t\t\t\t\t" +
+                  _vm._s(_vm.$t("app.SaveCompleted")) +
+                  "\n\t\t\t\t"
+              )
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "clearfix" }),
+      _vm._v(" "),
+      _c("p", { staticClass: "text-right my-3" }, [
+        _c("button", { staticClass: "btn btn-primary" }, [
+          _vm._v(_vm._s(_vm.$t("app.Save")))
+        ])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "toast-header" }, [
+      _c("strong", { staticClass: "mr-auto" }, [_vm._v("Info")]),
+      _vm._v(" "),
+      _c("small", { staticClass: "text-muted" }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "ml-2 mb-1 close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "toast",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-378c5f28", module.exports)
+  }
+}
+
+/***/ }),
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45740,7 +46314,6 @@ var render = function() {
             staticClass: "nav-link",
             attrs: {
               id: "acatlist-tab",
-              "data-toggle": "tab",
               href: "#acatlist",
               role: "tab",
               "aria-controls": "home",
@@ -45751,7 +46324,23 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link active",
+            attrs: {
+              id: "editacat-tab",
+              "data-toggle": "tab",
+              href: "#editacat",
+              role: "tab",
+              "aria-controls": "profile",
+              "aria-selected": "false"
+            }
+          },
+          [_vm._v(" " + _vm._s(_vm.formTabTitle) + " ")]
+        )
+      ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "tab-content" }, [
@@ -45802,58 +46391,37 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._m(1)
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade show active",
+          attrs: {
+            id: "editacat",
+            role: "tabpanel",
+            "aria-labelledby": "edit-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("h5", { staticClass: "card-title" }, [
+                  _vm._v(" " + _vm._s(_vm.newEdit) + " ")
+                ]),
+                _vm._v(" "),
+                _c("articlecategoryform", { ref: "categoryform" })
+              ],
+              1
+            )
+          ])
+        ]
+      )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "nav-item" }, [
-      _c(
-        "a",
-        {
-          staticClass: "nav-link active",
-          attrs: {
-            id: "editacat-tab",
-            "data-toggle": "tab",
-            href: "#editacat",
-            role: "tab",
-            "aria-controls": "profile",
-            "aria-selected": "false"
-          }
-        },
-        [_vm._v(" formTabTitle ")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "tab-pane fade show active",
-        attrs: {
-          id: "editacat",
-          role: "tabpanel",
-          "aria-labelledby": "edit-tab"
-        }
-      },
-      [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("h5", { staticClass: "card-title" }, [_vm._v(" newEdit ")]),
-            _vm._v("\n\t\t\t\t\tHERE EDIT FORM\n\t\t\t\t")
-          ])
-        ])
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

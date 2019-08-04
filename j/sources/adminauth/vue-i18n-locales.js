@@ -62,6 +62,9 @@ var locales = {
             'ResetPassword' : 'Сбросить пароль',
             "YouSuccessLoginClickAndLoginNow": "Вы успешно зарегистрированы и можете войти на",
             "LoginNow": "странице авторизации",
+            "List": "Список",
+            "Category": "Категория",
+            "Operations": "Действия",
 
             "DefaultError": "Произошла неизвестная ошибка, попробуйте позже",
 
@@ -95,6 +98,10 @@ var locales = {
 			"Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи",
 
 			//List Articles
+
+			//List Category Articles
+			"Other_category_requested_for_edit": "Уже запрошены для редактирования данные другой категории",
+			"Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию",
 			
         }
     }

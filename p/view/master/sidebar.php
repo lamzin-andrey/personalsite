@@ -25,6 +25,7 @@
             <a class="collapse-item" href="404.html">404 Page</a-->
             <?php echo $app->drawMenuItem('/p/', 'Articles') ?>
             <?php echo $app->drawMenuItem('/p/articlecategories/', 'Articles Categories') ?>
+            <?php echo $app->drawMenuItem('/p/portfolio/', 'Portfolio') ?>
           </div>
         </div>
       </li>
