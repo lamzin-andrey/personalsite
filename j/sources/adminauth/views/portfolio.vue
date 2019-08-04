@@ -24,7 +24,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ $t('app.Worklist') }}</h5>
-					<!-- TODO stop here-->
+					<!-- TODO stop here то есть модуль в зайчаточном состоянии-->
 					<table id="portfoliotable" class="display table table-bordered" style="width:100%">
 						<thead>
 							<tr>
