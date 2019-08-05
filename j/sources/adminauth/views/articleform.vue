@@ -355,7 +355,7 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-
+			window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
             var self = this;
             /*this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';

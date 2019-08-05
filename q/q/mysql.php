@@ -386,7 +386,7 @@ function _db_load_struct_for_table(string $table) {
 	    <br>
 	    Mysql Error:<br>
 	    <hr>
-	    " . mysql_error()."<hr>";
+	    " . mysqli_error($link)."<hr>";
 	    die;
     }
     $data  = array();

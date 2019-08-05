@@ -107,6 +107,12 @@ var locales = {
 			'Worklist' : 'Список работ',
 			Other_product_requested_for_edit : 'Уже запрошены для редактирования данные другой работы',
 			Are_You_Sure_drop_Product : 'Вы действительно хотите удалить работу',
+
+			//treeview
+			'Delete_node' : 'Удалить категорию',
+			'Add_node' : 'Добавить категорию',
+			'Rename_node' : 'Переименовать категорию',
+			'Nothing_select' : 'Ничего не выбрано',
 			
         }
     }

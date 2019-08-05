@@ -59,8 +59,7 @@
 	import B4DataTablesPreloader from '../../landlib/datatables/b4datatablespreloader.js';
 	//Конец Центровка прелоадера DataTables по центру (самоделка)
 
-    
-	Vue.component('portfolioform', require('./portfolioform.vue'));
+    Vue.component('portfolioform', require('./portfolioform.vue'));
 
     export default {
         name: 'portfolio',

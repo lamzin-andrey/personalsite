@@ -2,12 +2,13 @@ window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 window.slug = require('laravel-slug');
 
+//For REST request server
+require('../landlib/net/rest.js');
+
+
+//For live translit
 require('../landlib/nodom/textformat.js');
 require('../landlib/dom/livetranslit/livetranslit.js');
-$(() => {
-	
-	window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
-});
 
 
 
@@ -128,7 +129,8 @@ window.app = new Vue({
 		this.initSidebar();
         this.initSeotab();
         this.initDataTables();
-		this.localizeParams();		
+		this.localizeParams();
+		Rest._token = this._getToken();
    },
    computed:{
 		

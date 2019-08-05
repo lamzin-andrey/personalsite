@@ -1,6 +1,8 @@
 <template>
     <form class="user" method="POST" action="/p/portfolio/psave.jn/" @submit="onSubmit" novalidate id="portfolioform">
 		<selectb4 v-model="category" @input="setDataChanges" :label="$t('app.Sections')" id="category" :data="portfolioCategories" validators="'required'"></selectb4>
+		<categorytree v-model="pcategory" ref="categorytree"  id="portfolio_category_id" ></categorytree>
+		<input type="text" v-model="pcategory">
 		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
@@ -91,14 +93,15 @@
 
 </template>
 <script>
-    //Компонент для 
-    //Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+	//TODO перерегистрировать локально
+    Vue.component('categorytree', require('./portfolio/categorytree.vue'));
     
     export default {
         name: 'portfolioform',
         //вызывается раньше чем mounted
         data: function(){
 			let _data  = {
+				pcategory: 2222,
 				//Значение title
 				title:'',
 				//Значение body
@@ -134,7 +137,7 @@
 				progressValue : 0,
 				//Выбранная категория
 				category : 1,
-				//
+				//@deprecated!
 				portfolioCategories : [
 					{id:1, name:"One"},
 					{id:2, name:"Two"}
@@ -337,10 +340,11 @@
 					}
 				}
 			},
+			
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-
+			window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/portfolio/', '/');
             var self = this;
             /*this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';
@@ -349,7 +353,9 @@
                 self.isColorWndVisible  = false;
                 self.isHelpWndVisible   = false;
                 self.nStep = self.$root.nStep;
-            })/**/
+			})/**/
+			
+			
             //console.log('I mounted!');
         }
     }

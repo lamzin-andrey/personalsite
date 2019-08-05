@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -201,6 +201,88 @@ module.exports = g;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10805,18 +10887,258 @@ return jQuery;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false) {
   module.exports = require('./vue.common.prod.js')
 } else {
-  module.exports = __webpack_require__(4)
+  module.exports = __webpack_require__(7)
 }
 
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(86)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+var EventBus = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a();
+/* harmony default export */ __webpack_exports__["a"] = (EventBus);
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22759,10 +23081,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(5).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8).setImmediate))
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -22818,7 +23140,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(6);
+__webpack_require__(9);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -22832,7 +23154,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -23022,10 +23344,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(10)))
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -23215,7 +23537,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24829,7 +25151,7 @@ VueI18n.version = '7.8.1';
 
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports) {
 
 Vue.directive('b421validators', {
@@ -24910,11 +25232,11 @@ Vue.directive('b421validators', {
 });
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_nodom_validator__ = __webpack_require__(14);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25158,7 +25480,7 @@ var B421Validators = function () {
 /* harmony default export */ __webpack_exports__["a"] = (B421Validators);
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25256,89 +25578,229 @@ var Validator = {
 /* harmony default export */ __webpack_exports__["a"] = (Validator);
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports) {
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class
+ * En:
+ * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
+ * into center of the table and add bootstrap 4 spinner into preloader
+ * Ru:
+ * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
+ * bootstrap 4 спиннер в блок прелоадера
+ * 
 */
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
+var B4DataTablesPreloader = function () {
+    /**
+     * @description 
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
+        _classCallCheck(this, B4DataTablesPreloader);
 
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
+        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
+        /** @property {Number} zIndex Default preloader z-index */
+        this.zIndex = 100;
 
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
+        /** @property {String} loaderText Default preloader text */
+        this.loaderText = '';
 
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
+        /** @property {Array} b4Classes Bootstrap 4 standart colors */
+        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
 
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
+        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
+        this.b4ClassesIterator = 0;
 
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
+        /** @property  isShowSpinner if false preloader will not draw spinner*/
+        this.isShowSpinner = true;
 
-	return [content].join('\n');
-}
+        /** @property  isSetPosition if false preloader will not draw spinner*/
+        this.isSetPosition = true;
+    }
+    /**
+     * @description
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
 
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
 
-	return '/*# ' + data + ' */';
-}
+    _createClass(B4DataTablesPreloader, [{
+        key: 'setIdentifiers',
+        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
+            this.tableId = tableId;
+            this.jTable = $(tableId);
+            this.jPreloader = $(preloaderBlockId);
+            this.oDataTables = oDataTables;
+        }
+        /**
+         * @description En: Start observe window resizing and adjust spinner position
+         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
+         * 
+        */
 
+    }, {
+        key: 'watch',
+        value: function watch() {
+            var _this = this;
+
+            window.addEventListener('resize', function () {
+                _this.setSpinnerPosition();
+            }, true);
+            if (this.oDataTables) {
+                this.oDataTables.on('processing', function () {
+                    _this.setSpinnerPosition();
+                });
+                this.oDataTables.on('draw', function () {
+                    _this.removeSpinnerBlock();
+                });
+            }
+            setInterval(function () {
+                _this.onTick();
+            }, 1 * 1000);
+            this.setSpinnerPosition();
+        }
+        /**
+         * @description
+         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
+         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
+         * 
+        */
+
+    }, {
+        key: 'setSpinnerPosition',
+        value: function setSpinnerPosition() {
+            this.setSpinner();
+            this.setPosition();
+        }
+        /**
+         * @description En: Prepend spinner in preloader block
+         * Ru: Добавляет спиннер в блок
+        */
+
+    }, {
+        key: 'setSpinner',
+        value: function setSpinner() {
+            if (!this.jPreloader[0] || !this.isShowSpinner) {
+                return;
+            }
+            var text = this.jPreloader.text().trim(),
+                s = this.tableId.replace('#', ''),
+                spinnerBlockId = this.tableId + 'Spinner';
+            if (!this.loaderText) {
+                this.loaderText = text;
+            }
+            text = text ? text : this.loaderText;
+            if (!$(spinnerBlockId)[0]) {
+                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
+                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
+            }
+        }
+        /**
+         * @description En: Drop spinner from preloader
+         * Ru: Удалить спиннер с прелоадера
+        */
+
+    }, {
+        key: 'removeSpinnerBlock',
+        value: function removeSpinnerBlock() {
+            var spinnerBlockId = this.tableId + 'Spinner';
+            if ($(spinnerBlockId)[0]) {
+                $(spinnerBlockId).remove();
+            }
+        }
+        /**
+         * @description En: Align center preloader 
+         * Ru: Установить прелоадер по центру таблицы
+        */
+
+    }, {
+        key: 'setPosition',
+        value: function setPosition() {
+            var t = this.jTable[0],
+                p = this.jPreloader[0],
+                x = void 0,
+                y = void 0;
+            if (!p || !t || !this.isSetPosition) {
+                return;
+            }
+            x = (t.offsetWidth - p.offsetWidth) / 2;
+            y = (t.offsetHeight - p.offsetHeight) / 2;
+            this.jPreloader.css('position', 'absolute');
+            this.jPreloader.css('z-index', '100');
+            this.jPreloader.css('left', x + 'px');
+            this.jPreloader.css('top', y + 'px');
+        }
+        /**
+         * @description En: Spinner color animation
+         * Ru: Анимация классов цвета спиннера
+        */
+
+    }, {
+        key: 'onTick',
+        value: function onTick() {
+            var prevClass = this.b4ClassesIterator;
+            this.b4ClassesIterator++;
+            if (this.b4ClassesIterator >= this.b4Classes.length) {
+                this.b4ClassesIterator = 0;
+            }
+            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
+                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
+                p = 'text-' + this.b4Classes[prevClass];
+            jSpinner.removeClass(p);
+            jSpinner.addClass(s);
+        }
+        /**
+         * @description set this.zIndex
+         * @param {Number} zIndex
+        */
+
+    }, {
+        key: 'setZIndex',
+        value: function setZIndex(zIndex) {
+            this.zIndex = zIndex;
+        }
+        /**
+         * @description 
+         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
+         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
+         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
+         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
+        */
+
+    }, {
+        key: 'configure',
+        value: function configure() {
+            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            /** @property  isShowSpinner if false preloader will not draw spinner*/
+            this.isShowSpinner = isShowSpinner;
+
+            /** @property  isSetPosition if false preloader will not draw spinner*/
+            this.isSetPosition = isSetPosition;
+        }
+    }]);
+
+    return B4DataTablesPreloader;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -25384,7 +25846,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(37);
+var	fixUrls = __webpack_require__(41);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -25697,231 +26159,57 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(92)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(94)
+/* template */
+var __vue_template__ = __webpack_require__(95)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/bootstrap-vue-treeview/components/DropBetweenZone.vue"
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6d15e2c6", Component.options)
+  } else {
+    hotAPI.reload("data-v-6d15e2c6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
 
-/**
- * @class
- * En:
- * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
- * into center of the table and add bootstrap 4 spinner into preloader
- * Ru:
- * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
- * bootstrap 4 спиннер в блок прелоадера
- * 
-*/
-var B4DataTablesPreloader = function () {
-    /**
-     * @description 
-     * En: Set block identifier with table and block with preloader
-     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
-     * @param {String} tableId start with '#' 
-     * @param {String} preloaderBlockId start with '#' 
-     * @param {DataTables} oDataTables
-    */
-    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
-        _classCallCheck(this, B4DataTablesPreloader);
+module.exports = Component.exports
 
-        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
-        /** @property {Number} zIndex Default preloader z-index */
-        this.zIndex = 100;
-
-        /** @property {String} loaderText Default preloader text */
-        this.loaderText = '';
-
-        /** @property {Array} b4Classes Bootstrap 4 standart colors */
-        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-
-        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
-        this.b4ClassesIterator = 0;
-
-        /** @property  isShowSpinner if false preloader will not draw spinner*/
-        this.isShowSpinner = true;
-
-        /** @property  isSetPosition if false preloader will not draw spinner*/
-        this.isSetPosition = true;
-    }
-    /**
-     * @description
-     * En: Set block identifier with table and block with preloader
-     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
-     * @param {String} tableId start with '#' 
-     * @param {String} preloaderBlockId start with '#' 
-     * @param {DataTables} oDataTables
-    */
-
-
-    _createClass(B4DataTablesPreloader, [{
-        key: 'setIdentifiers',
-        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
-            this.tableId = tableId;
-            this.jTable = $(tableId);
-            this.jPreloader = $(preloaderBlockId);
-            this.oDataTables = oDataTables;
-        }
-        /**
-         * @description En: Start observe window resizing and adjust spinner position
-         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
-         * 
-        */
-
-    }, {
-        key: 'watch',
-        value: function watch() {
-            var _this = this;
-
-            window.addEventListener('resize', function () {
-                _this.setSpinnerPosition();
-            }, true);
-            if (this.oDataTables) {
-                this.oDataTables.on('processing', function () {
-                    _this.setSpinnerPosition();
-                });
-                this.oDataTables.on('draw', function () {
-                    _this.removeSpinnerBlock();
-                });
-            }
-            setInterval(function () {
-                _this.onTick();
-            }, 1 * 1000);
-            this.setSpinnerPosition();
-        }
-        /**
-         * @description
-         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
-         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
-         * 
-        */
-
-    }, {
-        key: 'setSpinnerPosition',
-        value: function setSpinnerPosition() {
-            this.setSpinner();
-            this.setPosition();
-        }
-        /**
-         * @description En: Prepend spinner in preloader block
-         * Ru: Добавляет спиннер в блок
-        */
-
-    }, {
-        key: 'setSpinner',
-        value: function setSpinner() {
-            if (!this.jPreloader[0] || !this.isShowSpinner) {
-                return;
-            }
-            var text = this.jPreloader.text().trim(),
-                s = this.tableId.replace('#', ''),
-                spinnerBlockId = this.tableId + 'Spinner';
-            if (!this.loaderText) {
-                this.loaderText = text;
-            }
-            text = text ? text : this.loaderText;
-            if (!$(spinnerBlockId)[0]) {
-                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
-                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
-            }
-        }
-        /**
-         * @description En: Drop spinner from preloader
-         * Ru: Удалить спиннер с прелоадера
-        */
-
-    }, {
-        key: 'removeSpinnerBlock',
-        value: function removeSpinnerBlock() {
-            var spinnerBlockId = this.tableId + 'Spinner';
-            if ($(spinnerBlockId)[0]) {
-                $(spinnerBlockId).remove();
-            }
-        }
-        /**
-         * @description En: Align center preloader 
-         * Ru: Установить прелоадер по центру таблицы
-        */
-
-    }, {
-        key: 'setPosition',
-        value: function setPosition() {
-            var t = this.jTable[0],
-                p = this.jPreloader[0],
-                x = void 0,
-                y = void 0;
-            if (!p || !t || !this.isSetPosition) {
-                return;
-            }
-            x = (t.offsetWidth - p.offsetWidth) / 2;
-            y = (t.offsetHeight - p.offsetHeight) / 2;
-            this.jPreloader.css('position', 'absolute');
-            this.jPreloader.css('z-index', '100');
-            this.jPreloader.css('left', x + 'px');
-            this.jPreloader.css('top', y + 'px');
-        }
-        /**
-         * @description En: Spinner color animation
-         * Ru: Анимация классов цвета спиннера
-        */
-
-    }, {
-        key: 'onTick',
-        value: function onTick() {
-            var prevClass = this.b4ClassesIterator;
-            this.b4ClassesIterator++;
-            if (this.b4ClassesIterator >= this.b4Classes.length) {
-                this.b4ClassesIterator = 0;
-            }
-            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
-                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
-                p = 'text-' + this.b4Classes[prevClass];
-            jSpinner.removeClass(p);
-            jSpinner.addClass(s);
-        }
-        /**
-         * @description set this.zIndex
-         * @param {Number} zIndex
-        */
-
-    }, {
-        key: 'setZIndex',
-        value: function setZIndex(zIndex) {
-            this.zIndex = zIndex;
-        }
-        /**
-         * @description 
-         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
-         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
-         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
-         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
-        */
-
-    }, {
-        key: 'configure',
-        value: function configure() {
-            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-            /** @property  isShowSpinner if false preloader will not draw spinner*/
-            this.isShowSpinner = isShowSpinner;
-
-            /** @property  isSetPosition if false preloader will not draw spinner*/
-            this.isSetPosition = isSetPosition;
-        }
-    }]);
-
-    return B4DataTablesPreloader;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
 
 /***/ }),
-/* 15 */,
-/* 16 */,
-/* 17 */,
 /* 18 */,
 /* 19 */,
 /* 20 */,
@@ -25931,36 +26219,39 @@ var B4DataTablesPreloader = function () {
 /* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(28);
+module.exports = __webpack_require__(31);
 
 
 /***/ }),
-/* 28 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(15);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-window.jQuery = window.$ = window.jquery = __webpack_require__(2);
-window.Vue = __webpack_require__(3);
-window.slug = __webpack_require__(29);
+window.jQuery = window.$ = window.jquery = __webpack_require__(3);
+window.Vue = __webpack_require__(4);
+window.slug = __webpack_require__(32);
 
-__webpack_require__(30);
-__webpack_require__(31);
-$(function () {
+//For REST request server
+__webpack_require__(33);
 
-    window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
-});
+//For live translit
+__webpack_require__(34);
+__webpack_require__(35);
 
 //Интернациализация
 
@@ -25974,7 +26265,7 @@ var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
 
 //"Стандартная" валидация полей формы
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
-__webpack_require__(9);
+__webpack_require__(12);
 
 //класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
 //(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
@@ -25987,7 +26278,7 @@ __webpack_require__(9);
 //DataTables
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
-__webpack_require__(33);
+__webpack_require__(37);
 //my patch pagination for extra small view
 
 // /DataTables
@@ -25997,19 +26288,19 @@ __webpack_require__(33);
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 //Компонент вместо стандартного confirm
-Vue.component('b4confirmdlg', __webpack_require__(38));
+Vue.component('b4confirmdlg', __webpack_require__(42));
 //Компонент вместо стандартного alert
-Vue.component('b4alertdlg', __webpack_require__(41));
+Vue.component('b4alertdlg', __webpack_require__(45));
 //Компонент для отображения формы редактирования статьи
-Vue.component('articleform', __webpack_require__(44));
+Vue.component('articleform', __webpack_require__(48));
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
 
 //Компонент страницы просмотра / редактирования категорий страниц
-Vue.component('articlesections', __webpack_require__(64));
+Vue.component('articlesections', __webpack_require__(68));
 
 //Компонент страницы просмотра / редактирования работами портфолио
-Vue.component('portfolio', __webpack_require__(70));
+Vue.component('portfolio', __webpack_require__(74));
 
 window.app = new Vue({
     i18n: i18n,
@@ -26083,6 +26374,7 @@ window.app = new Vue({
         this.initSeotab();
         this.initDataTables();
         this.localizeParams();
+        Rest._token = this._getToken();
     },
 
     computed: {},
@@ -26570,7 +26862,7 @@ window.app = new Vue({
 }).$mount('#wrapper');
 
 /***/ }),
-/* 29 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -27044,7 +27336,137 @@ module.exports = function (s, opt) {
 
 
 /***/ }),
-/* 30 */
+/* 33 */
+/***/ (function(module, exports) {
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+window.Rest = {
+    /**
+     * @property {String} csrf token, set it from app
+    */
+    _token: '',
+    root: '',
+    /**
+        * @description ajax post request (FormData)
+        * @param {Object} data 
+        * @param {Function} onSuccess
+        * @param {String} url 
+        * @param {Function} onFail 
+        */
+    _post: function _post(data, onSuccess, url, onFail) {
+        var t = this._getToken();
+        if (t) {
+            data._token = t;
+            this._restreq('post', data, onSuccess, url, onFail);
+        }
+    },
+
+    /**
+        * @description ajax post request (FormData)
+        * @param {Object} data 
+        * @param {Function} onSuccess
+        * @param {String} url 
+        * @param {Function} onFail 
+        */
+    _put: function _put(data, onSuccess, url, onFail) {
+        var t = this._getToken();
+        if (t) {
+            data._token = t;
+            this._restreq('put', data, onSuccess, url, onFail);
+        }
+    },
+
+    /**
+        * @description ajax patch request (FormData)
+        * @param {Object} data 
+        * @param {Function} onSuccess
+        * @param {String} url 
+        * @param {Function} onFail 
+        */
+    _patch: function _patch(data, onSuccess, url, onFail) {
+        var t = this._getToken();
+        if (t) {
+            data._token = t;
+            this._restreq('patch', data, onSuccess, url, onFail);
+        }
+    },
+
+    /**
+        * @description ajax delte request (FormData)
+        * @param {Object} data 
+        * @param {Function} onSuccess
+        * @param {String} url 
+        * @param {Function} onFail 
+        */
+    _delete: function _delete(data, onSuccess, url, onFail) {
+        var t = this._getToken();
+        if (t) {
+            data._token = t;
+            this._restreq('delete', data, onSuccess, url, onFail);
+        }
+    },
+
+    /**
+        * @description ajax get request (FormData)
+        * @param {Function} onSuccess
+        * @param {String} url 
+        * @param {Function} onFail 
+        */
+    _get: function _get(onSuccess, url, onFail) {
+        this._restreq('get', {}, onSuccess, url, onFail);
+    },
+
+    /**
+        * @description get asrf token
+     * @return String
+        */
+    _getToken: function _getToken() {
+        return this._token;
+    },
+
+    /**
+        * @description ajax request (FormData). Default delete Objects and Arrays from data argument
+     * @param {String} method 
+        * @param {Function} onSuccess
+        * @param {String} url 
+        * @param {Function} onFail 
+        */
+    _restreq: function _restreq(method, data, onSuccess, url, onFail) {
+        var sendData = _extends({}, data),
+            i = void 0;
+        for (i in sendData) {
+            if (i == '__ob__' || sendData[i] instanceof Object) {
+                delete sendData[i];
+            }
+        }
+        if (!url) {
+            url = window.location.href;
+        } else {
+            url = this.root + url;
+        }
+        if (!onFail) {
+            onFail = defaultFail;
+        }
+        /*switch (method) {
+            case 'put':
+            case 'patch':
+            case 'delete':
+                break;
+        }*/
+        $.ajax({
+            method: method,
+            data: sendData,
+            url: url,
+            dataType: 'json',
+            success: onSuccess,
+            error: onFail
+        });
+    }
+};
+
+/***/ }),
+/* 34 */
 /***/ (function(module, exports) {
 
 /**
@@ -27230,7 +27652,7 @@ window.TextFormat = {
 };
 
 /***/ }),
-/* 31 */
+/* 35 */
 /***/ (function(module, exports) {
 
 window.LandLibDom = {
@@ -27301,7 +27723,7 @@ window.LandLibDom = {
 };
 
 /***/ }),
-/* 32 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27413,7 +27835,13 @@ var locales = {
             //Portfolio list
             'Worklist': 'Список работ',
             Other_product_requested_for_edit: 'Уже запрошены для редактирования данные другой работы',
-            Are_You_Sure_drop_Product: 'Вы действительно хотите удалить работу'
+            Are_You_Sure_drop_Product: 'Вы действительно хотите удалить работу',
+
+            //treeview
+            'Delete_node': 'Удалить категорию',
+            'Add_node': 'Добавить категорию',
+            'Rename_node': 'Переименовать категорию',
+            'Nothing_select': 'Ничего не выбрано'
 
         }
     }
@@ -27422,7 +27850,7 @@ var locales = {
 /* harmony default export */ __webpack_exports__["a"] = (locales);
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables Bootstrap 4 integration
@@ -27440,7 +27868,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables B
 (function( factory ){
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(34)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(38)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -27613,7 +28041,7 @@ return DataTable;
 
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -27647,7 +28075,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -42916,13 +43344,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(36);
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -42930,7 +43358,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(13)(content, options);
+var update = __webpack_require__(16)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -42947,10 +43375,10 @@ if(false) {
 }
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -42961,7 +43389,7 @@ exports.push([module.i, "@media (width < 720px ) {\n\t#articles_paginate .pagina
 
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, exports) {
 
 
@@ -43056,15 +43484,15 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(39)
+var __vue_script__ = __webpack_require__(43)
 /* template */
-var __vue_template__ = __webpack_require__(40)
+var __vue_template__ = __webpack_require__(44)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43103,7 +43531,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43168,7 +43596,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 40 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43259,15 +43687,15 @@ if (false) {
 }
 
 /***/ }),
-/* 41 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(42)
+var __vue_script__ = __webpack_require__(46)
 /* template */
-var __vue_template__ = __webpack_require__(43)
+var __vue_template__ = __webpack_require__(47)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43306,7 +43734,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 42 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43362,7 +43790,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 43 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43443,15 +43871,15 @@ if (false) {
 }
 
 /***/ }),
-/* 44 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(45)
+var __vue_script__ = __webpack_require__(49)
 /* template */
-var __vue_template__ = __webpack_require__(63)
+var __vue_template__ = __webpack_require__(67)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43490,7 +43918,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 45 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43587,11 +44015,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 //Компонент для отображения инпута ввода текста bootstrap 4
-Vue.component('inputb4', __webpack_require__(46));
-Vue.component('selectb4', __webpack_require__(49));
-Vue.component('checkboxb4', __webpack_require__(52));
-Vue.component('textareab4', __webpack_require__(55));
-Vue.component('inputfileb4', __webpack_require__(58));
+Vue.component('inputb4', __webpack_require__(50));
+Vue.component('selectb4', __webpack_require__(53));
+Vue.component('checkboxb4', __webpack_require__(56));
+Vue.component('textareab4', __webpack_require__(59));
+Vue.component('inputfileb4', __webpack_require__(62));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'articleform',
@@ -43863,7 +44291,7 @@ Vue.component('inputfileb4', __webpack_require__(58));
 	}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
 	mounted: function mounted() {
-
+		window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/blog/', '/');
 		var self = this;
 		/*this.$root.$on('showMenuEvent', function(evt) {
       self.menuBlockVisible   = 'block';
@@ -43878,15 +44306,15 @@ Vue.component('inputfileb4', __webpack_require__(58));
 });
 
 /***/ }),
-/* 46 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(47)
+var __vue_script__ = __webpack_require__(51)
 /* template */
-var __vue_template__ = __webpack_require__(48)
+var __vue_template__ = __webpack_require__(52)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43925,7 +44353,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 47 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43998,7 +44426,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 48 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44054,15 +44482,15 @@ if (false) {
 }
 
 /***/ }),
-/* 49 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(50)
+var __vue_script__ = __webpack_require__(54)
 /* template */
-var __vue_template__ = __webpack_require__(51)
+var __vue_template__ = __webpack_require__(55)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44101,7 +44529,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 50 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44153,7 +44581,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 51 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44205,15 +44633,15 @@ if (false) {
 }
 
 /***/ }),
-/* 52 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(53)
+var __vue_script__ = __webpack_require__(57)
 /* template */
-var __vue_template__ = __webpack_require__(54)
+var __vue_template__ = __webpack_require__(58)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44252,7 +44680,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 53 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44302,7 +44730,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 54 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44352,15 +44780,15 @@ if (false) {
 }
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(56)
+var __vue_script__ = __webpack_require__(60)
 /* template */
-var __vue_template__ = __webpack_require__(57)
+var __vue_template__ = __webpack_require__(61)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44399,7 +44827,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44552,7 +44980,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44620,15 +45048,15 @@ if (false) {
 }
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(59)
+var __vue_script__ = __webpack_require__(63)
 /* template */
-var __vue_template__ = __webpack_require__(62)
+var __vue_template__ = __webpack_require__(66)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44667,12 +45095,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 59 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__defaultupload_css__);
 //
 //
@@ -44972,13 +45400,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 60 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(61);
+var content = __webpack_require__(65);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -44986,7 +45414,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(13)(content, options);
+var update = __webpack_require__(16)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -45003,10 +45431,10 @@ if(false) {
 }
 
 /***/ }),
-/* 61 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -45017,7 +45445,7 @@ exports.push([module.i, "/* Progress view */\n/*\ntext in circle\n.upload-proces
 
 
 /***/ }),
-/* 62 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45201,7 +45629,7 @@ if (false) {
 }
 
 /***/ }),
-/* 63 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45592,15 +46020,15 @@ if (false) {
 }
 
 /***/ }),
-/* 64 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(65)
+var __vue_script__ = __webpack_require__(69)
 /* template */
-var __vue_template__ = __webpack_require__(69)
+var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45639,12 +46067,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 65 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(15);
 //
 //
 //
@@ -45709,7 +46137,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 
-Vue.component('articlecategoryform', __webpack_require__(66));
+Vue.component('articlecategoryform', __webpack_require__(70));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'articlesections',
@@ -46013,15 +46441,15 @@ Vue.component('articlecategoryform', __webpack_require__(66));
 });
 
 /***/ }),
-/* 66 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(67)
+var __vue_script__ = __webpack_require__(71)
 /* template */
-var __vue_template__ = __webpack_require__(68)
+var __vue_template__ = __webpack_require__(72)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46060,7 +46488,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 67 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46195,7 +46623,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 68 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46306,7 +46734,7 @@ if (false) {
 }
 
 /***/ }),
-/* 69 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46440,15 +46868,15 @@ if (false) {
 }
 
 /***/ }),
-/* 70 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(71)
+var __vue_script__ = __webpack_require__(75)
 /* template */
-var __vue_template__ = __webpack_require__(72)
+var __vue_template__ = __webpack_require__(107)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46487,12 +46915,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 71 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(15);
 //
 //
 //
@@ -46554,8 +46982,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
-
-Vue.component('portfolioform', __webpack_require__(73));
+Vue.component('portfolioform', __webpack_require__(76));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'portfolio',
@@ -46859,149 +47286,15 @@ Vue.component('portfolioform', __webpack_require__(73));
 });
 
 /***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("ul", { staticClass: "nav nav-tabs", attrs: { role: "tablist" } }, [
-      _c("li", { staticClass: "nav-item" }, [
-        _c(
-          "a",
-          {
-            staticClass: "nav-link",
-            attrs: {
-              id: "portfoliolist-tab",
-              href: "#portfoliolist",
-              role: "tab",
-              "aria-controls": "home",
-              "aria-selected": "true"
-            }
-          },
-          [_vm._v(_vm._s(_vm.$t("app.List")))]
-        )
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "nav-item" }, [
-        _c(
-          "a",
-          {
-            staticClass: "nav-link active",
-            attrs: {
-              id: "editportfolio-tab",
-              "data-toggle": "tab",
-              href: "#editportfolio",
-              role: "tab",
-              "aria-controls": "profile",
-              "aria-selected": "false"
-            }
-          },
-          [_vm._v(" " + _vm._s(_vm.formTabTitle) + " ")]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "tab-content" }, [
-      _c(
-        "div",
-        {
-          staticClass: "tab-pane fade ",
-          attrs: {
-            id: "portfoliolist",
-            role: "tabpanel",
-            "aria-labelledby": "list-tab"
-          }
-        },
-        [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("h5", { staticClass: "card-title" }, [
-                _vm._v(_vm._s(_vm.$t("app.Worklist")))
-              ]),
-              _vm._v(" "),
-              _c(
-                "table",
-                {
-                  staticClass: "display table table-bordered",
-                  staticStyle: { width: "100%" },
-                  attrs: { id: "portfoliotable" }
-                },
-                [
-                  _c("thead", [
-                    _c("tr", [
-                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
-                      _vm._v(" "),
-                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tfoot", [
-                    _c("tr", [
-                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
-                      _vm._v(" "),
-                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
-                    ])
-                  ])
-                ]
-              )
-            ])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "tab-pane fade show active",
-          attrs: {
-            id: "editportfolio",
-            role: "tabpanel",
-            "aria-labelledby": "edit-tab"
-          }
-        },
-        [
-          _c("div", { staticClass: "card" }, [
-            _c(
-              "div",
-              { staticClass: "card-body" },
-              [
-                _c("h5", { staticClass: "card-title" }, [
-                  _vm._v(" " + _vm._s(_vm.newEdit) + " ")
-                ]),
-                _vm._v(" "),
-                _c("portfolioform", { ref: "portfolioform" })
-              ],
-              1
-            )
-          ])
-        ]
-      )
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-30ad51cc", module.exports)
-  }
-}
-
-/***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(74)
+var __vue_script__ = __webpack_require__(77)
 /* template */
-var __vue_template__ = __webpack_require__(75)
+var __vue_template__ = __webpack_require__(106)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47040,7 +47333,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47137,15 +47430,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
-//Компонент для 
-//Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
+//TODO перерегистрировать локально
+Vue.component('categorytree', __webpack_require__(78));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'portfolioform',
 	//вызывается раньше чем mounted
 	data: function data() {
 		var _data = {
+			pcategory: 2222,
 			//Значение title
 			title: '',
 			//Значение body
@@ -47181,7 +47477,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			progressValue: 0,
 			//Выбранная категория
 			category: 1,
-			//
+			//@deprecated!
 			portfolioCategories: [{ id: 1, name: "One" }, { id: 2, name: "Two" }],
 			//Идентификатор редактируемой статьи
 			id: 0,
@@ -47401,7 +47697,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
 	mounted: function mounted() {
-
+		window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/portfolio/', '/');
 		var self = this;
 		/*this.$root.$on('showMenuEvent', function(evt) {
       self.menuBlockVisible   = 'block';
@@ -47411,12 +47707,2283 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       self.isHelpWndVisible   = false;
       self.nStep = self.$root.nStep;
   })/**/
+
 		//console.log('I mounted!');
 	}
 });
 
 /***/ }),
-/* 75 */
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(79)
+/* template */
+var __vue_template__ = __webpack_require__(105)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/adminauth/views/portfolio/categorytree.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c4b9f1be", Component.options)
+  } else {
+    hotAPI.reload("data-v-c4b9f1be", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//TODO перерегистрировать локально
+Vue.component('accordionselecttree', __webpack_require__(80));
+/* harmony default export */ __webpack_exports__["default"] = ({
+	model: {
+		prop: 'value',
+		event: 'input'
+	},
+	props: {
+		'id': {
+			type: String
+		},
+		'value': {
+			type: Number
+		}
+	},
+	name: 'categorytree',
+
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {
+			val: 2222,
+			/** @property {Array} данные дерева категорий */
+			portfolioCategoriesTree: [{ "id": 2222, "name": "Venus", "children": [{ "id": 3333, "parent_id": 2222, "name": "Neptune" }, { "id": 4444, "parent_id": 2222, "name": "Stratus" }] }]
+		};
+	},
+	computed: {
+		/*dinlabel : function() {
+  	if (this.placeholderlabel) {
+  		return this.placeholderlabel;
+  	}
+  	return this.label;
+  }*/
+	},
+	//
+	methods: {}, //end methods
+	//вызывается после data, поля из data видны "напрямую" как this.fieldName
+	mounted: function mounted() {}
+});
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(81)
+/* template */
+var __vue_template__ = __webpack_require__(104)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/accordionselecttree/acordionselecttree.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4122b52c", Component.options)
+  } else {
+    hotAPI.reload("data-v-4122b52c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(82);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//Компонент для дерева категорий
+//так импортировалось из bootstrap-vue-treeview
+//import BootstrapVueTreeview from 'bootstrap-vue-treeview';
+//Vue.use(BootstrapVueTreeview);
+
+//Пытаюсь импортировать из своего форка
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* default */]);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	model: {
+		prop: 'value',
+		event: 'input'
+	},
+	props: {
+		id: {
+			type: String
+		},
+		value: {
+			type: Number
+		},
+		label: {
+			type: String
+		},
+		/** @property field name for parent id */
+		nodeParentKeyProp: {
+			type: String,
+			default: 'parent_id'
+		},
+		/** @property {String} url post request created new menu item*/
+		urlCreateNewItem: {
+			type: String,
+			default: ''
+		},
+		/** @property {String} url post request updated (rename) menu item */
+		urlUpdateItem: {
+			type: String,
+			default: ''
+		},
+		/** @property {String} url post request delete menu item */
+		urlRemoveItem: {
+			type: String,
+			default: ''
+		},
+		//This props will be passed in TreeView
+		data: {
+			type: Array,
+			required: true
+		},
+		allowMultiple: {
+			type: Boolean,
+			default: false
+		},
+		nodeKeyProp: {
+			type: String,
+			default: 'id'
+		},
+		nodeChildrenProp: {
+			type: String,
+			default: 'children'
+		},
+		nodeLabelProp: {
+			type: String,
+			default: 'name'
+		},
+		nodesDraggable: {
+			type: Boolean,
+			default: false
+		},
+		contextMenu: {
+			type: Boolean,
+			default: true
+		},
+		/* Exclude from props
+           contextMenuItems: {
+               type: Array,
+               default: () => {
+  		return [
+  			{code: 'ADD_NODE', label: 'Add node'},
+  			{code: 'RENAME_NODE', label: 'Rename node'},
+  			{code: 'DELETE_NODE', label: 'Delete node'}
+  		];
+  	}
+  },*/
+		renameNodeOnDblClick: {
+			type: Boolean,
+			default: true
+		},
+		// class added to every icon no matter what
+		prependIconClass: {
+			type: String,
+			default: null
+		},
+		// default icon if node icon is not specified
+		defaultIconClass: {
+			type: String,
+			default: null
+		},
+		// where to search for node icon
+		iconClassProp: {
+			type: String,
+			default: "icon"
+		},
+		// show icons
+		showIcons: {
+			type: Boolean,
+			default: false
+		}
+	},
+	name: 'categorytree',
+
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {
+
+			/** @property {Object} defaultSelectedNode Значение активной ноды по умолчанию (ничего не выбрано) */
+			defaultSelectedNode: { name: this.$t('app.Nothing_select'), id: 0 },
+
+			/** @property {Object} selectedNode Активная нода */
+			selectedNode: this.defaultSelectedNode,
+
+			/** @property {Number} selectedNodeId id активной ноды */
+			selectedNodeId: 0,
+
+			/** @property {String} Вид кнопки с именем выбранной категории */
+			btnCss: 'btn btn-danger',
+
+			/** @property {Array} contextMenuItems */
+			contextMenuItems: [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }]
+
+		};
+	},
+	computed: {
+		/*dinlabel : function() {
+  	if (this.placeholderlabel) {
+  		return this.placeholderlabel;
+  	}
+  	return this.label;
+  }*/
+	},
+	//
+	methods: {
+		/**
+   * @description Обработка выбора пункта контекстного меню дерева категорий
+  */
+		onSelectTreeViewContextMenuItem: function onSelectTreeViewContextMenuItem(item, node) {
+			var _this = this;
+
+			console.log(item);
+			console.log(node.data);
+			if (item.code == 'ADD_NODE') {
+				//TODO add spinner
+				/* <div role="status" class="spinner-grow small">
+    				  <span class="sr-only">Loading...</span>
+    </div>*/
+				//data, onSuccess, url, onFail
+
+				if (this.nRequestAddNodeId) {
+					this.showError(this.$t('app.Add_request_already_sended_wait')); //TODO loc and showError
+					return;
+				}
+				var id = node.data[this.nodeKeyProp];
+				this.nRequestAddNodeId = id;
+				Rest._post({ parent_id: id }, function (data) {
+					_this.onSuccessAddNewItem(data);
+				}, this.urlCreateNewItem, function (a, b, c) {
+					_this.onFailItemAction(a, b, c);
+				});
+			}
+			if (item.code == 'DELETE_NODE') {
+				//TODO add spinner
+				/* <div role="status" class="spinner-grow small">
+    				  <span class="sr-only">Loading...</span>
+    </div>*/
+				//data, onSuccess, url, onFail
+
+				if (!this.stackremovedItems) {
+					//TODO сюда помещаем всех потомков ветки и ветку по id
+					//скорее всего понадобиться в TreeView.menuItemSelected перед удалением собрать все id
+					this.stackremovedItems = {};
+				}
+
+				var _id = node.data[this.nodeKeyProp];
+				this.nRequestDeleteNodeId = _id;
+				this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
+				this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];
+				Rest._post({ id: _id }, function (data) {
+					_this.onSuccessDeleteItem(data);
+				}, this.urlRemoveItem, function (a, b, c) {
+					_this.onFailDeleteItem(a, b, c);
+				});
+			}
+			//On delete expand all child id and send to server
+			//on add send info to server, get id. 
+		},
+
+		/**
+   * @description Processed success add new item
+   * @param {Object} data
+  */
+		onSuccessAddNewItem: function onSuccessAddNewItem(data) {
+			if (!this.onFailItemAction(data)) {
+				//TODO drop spinner
+				return;
+			}
+			//if (!this.nodeMapCreated) {
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+			//	this.nodeMapCreated = true;
+			//}
+			console.log('try search by key ' + this.nodeParentKeyProp + ' = ' + data[this.nodeParentKeyProp]);
+			var x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
+			var newNodeData = {};
+			newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
+			newNodeData[this.nodeLabelProp] = data[this.nodeLabelProp];
+			newNodeData[this.nodeParentKeyProp] = data[this.nodeParentKeyProp];
+			newNodeData.icon = this.defaultIconClass;
+			x.appendChild(newNodeData);
+		},
+
+		/**
+   * @description default process failure item operations
+   * @param {Object} data
+  */
+		onFailItemAction: function onFailItemAction(data, b, c) {
+			this.nRequestAddNodeId = 0;
+			if (data.status && data.status == 'ok') {
+				return true;
+			}
+			if (data.status && data.status == 'error') {
+				if (data.msg) {
+					this.showError(data.msg);
+					return false;
+				}
+			} else {
+				this.showError(this.$t('app.DefaultError'));
+				return false;
+			}
+		},
+
+		/**
+   * @description Repair item if it no remove
+   * @param {Object} data
+  */
+		onFailDeleteItem: function onFailDeleteItem(data, b, c) {
+			this.nRequestAddNodeId = 0;
+			if (data.status && data.status == 'ok') {
+				return true;
+			}
+			if (data.status && data.status == 'error') {
+				if (data.msg) {
+					this.showError(data.msg);
+					return false;
+				}
+			} else {
+				this.showError(this.$t('app.DefaultError'));
+				return false;
+			}
+		},
+
+		/**
+   * @description 
+  */
+		onRenameTreeViewItem: function onRenameTreeViewItem(node) {
+			var _this2 = this;
+
+			console.log(node.data);
+			var sendData = {};
+			sendData[this.nodeKeyProp] = node.data[this.nodeKeyProp];
+			sendData[this.nodeParentKeyProp] = node.data[this.nodeParentKeyProp];
+			sendData[this.nodeLabelProp] = node.data[this.nodeLabelProp];
+			Rest._post(sendData, function (data) {
+				_this2.onSuccessRenameItem(data);
+			}, this.urlUpdateItem, function (a, b, c) {
+				_this2.onFailItemAction(a, b, c);
+			});
+		},
+
+		/**
+   * @description On end rename item on server if no rename will show error
+  */
+		onSuccessRenameItem: function onSuccessRenameItem(data) {
+			if (!this.onFailItemAction(data)) {
+				//TODO drop spinner
+				return;
+			}
+		},
+
+		/**
+   * TODO Пусть в конейнере со списком снизу розовый алерт выдвигается
+   */
+		showError: function showError(s) {
+			alert(s);
+		},
+
+		/**
+   * @description Обработка выбора элемента дерева.
+  */
+		onSelectTreeViewItem: function onSelectTreeViewItem(node, isSelected) {
+			if (isSelected) {
+				this.selectedNode = node.data;
+				this.btnCss = 'btn btn-success';
+			} else if (node.data[this.nodeKeyProp] === this.selectedNode[this.nodeKeyProp]) {
+				this.selectedNode = this.defaultSelectedNode;
+				this.btnCss = 'btn btn-danger';
+			}
+			this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
+			this.$emit('input', this.selectedNodeId);
+		},
+
+		/**
+   * @param {TreeNode} oNode
+  */
+		expandBranch: function expandBranch(oNode) {
+			oNode.expand();
+			var x = this.$refs['v' + this.id].getNodeByKey(oNode.data[this.nodeParentKeyProp]);
+			while (x) {
+				x.expand();
+				x = this.$refs['v' + this.id].getNodeByKey(x.data[this.nodeParentKeyProp]);
+			}
+		},
+
+		/**
+   * @description Initalize defaultSelectedNode
+  */
+		initDefaultSelectedNode: function initDefaultSelectedNode() {
+			//defaultSelectedNode : {name: this.$t('app.Nothing_select'), id : 0}
+			this.defaultSelectedNode = {};
+			this.defaultSelectedNode[this.nodeKeyProp] = 0;
+			this.defaultSelectedNode[this.nodeLabelProp] = this.$t('app.Nothing_select');
+		},
+
+		/**
+   * @description Localize default menu only if it default menu
+  */
+		localizeDefaultMenu: function localizeDefaultMenu() {
+			this.contextMenuItems = [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }];
+		}
+	}, //end methods
+
+	mounted: function mounted() {
+		var _this3 = this;
+
+		this.localizeDefaultMenu();
+		this.initDefaultSelectedNode();
+		this.selectedNode = this.defaultSelectedNode;
+
+		console.log('in vcategorytree.Mounted ' + this.value);
+		this.$refs['v' + this.id].createNodeMap();
+		var x = this.$refs['v' + this.id].getNodeByKey(this.value);
+		if (x) {
+			x.select();
+			this.expandBranch(x);
+		}
+		this.$refs['v' + this.id].$on('contextMenuItemSelect', function (item, node) {
+			_this3.onSelectTreeViewContextMenuItem(item, node);
+		});
+		this.$refs['v' + this.id].$on('nodeSelect', function (node, isSelected) {
+			_this3.onSelectTreeViewItem(node, isSelected);
+		});
+		this.$refs['v' + this.id].$on('nodeRenamed', function (node) {
+			_this3.onRenameTreeViewItem(node);
+		});
+	}
+});
+
+/***/ }),
+/* 82 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue__);
+/* unused harmony reexport bTreeView */
+
+
+var VuePlugin = {
+	install: function install(Vue) {
+		Vue.component('BTreeView', __WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue___default.a);
+	}
+};
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = (VuePlugin);
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(84)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(87)
+/* template */
+var __vue_template__ = __webpack_require__(103)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/bootstrap-vue-treeview/components/TreeView.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-78bb4f52", Component.options)
+  } else {
+    hotAPI.reload("data-v-78bb4f52", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(85);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("2f7b8a6e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78bb4f52\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TreeView.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78bb4f52\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TreeView.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.tree-view {\n    text-align: left;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TreeNode_vue__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TreeNode_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__TreeNode_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__EventBus_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropBetweenZone_vue__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropBetweenZone_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__DropBetweenZone_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ContextMenu_vue__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ContextMenu_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__ContextMenu_vue__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        data: {
+            type: Array,
+            required: true
+        },
+        allowMultiple: {
+            type: Boolean,
+            default: false
+        },
+        nodeKeyProp: {
+            type: String,
+            default: 'id'
+        },
+        nodeChildrenProp: {
+            type: String,
+            default: 'children'
+        },
+        nodeLabelProp: {
+            type: String,
+            default: 'name'
+        },
+        nodesDraggable: {
+            type: Boolean,
+            default: false
+        },
+        contextMenu: {
+            type: Boolean,
+            default: true
+        },
+        contextMenuItems: {
+            type: Array,
+            default: [{ code: 'DELETE_NODE', label: 'Delete node' }, { code: 'RENAME_NODE', label: 'Rename node' }]
+        },
+        renameNodeOnDblClick: {
+            type: Boolean,
+            default: true
+        },
+        // class added to every icon no matter what
+        prependIconClass: {
+            type: String,
+            default: null
+        },
+        // default icon if node icon is not specified
+        defaultIconClass: {
+            type: String,
+            default: null
+        },
+        // where to search for node icon
+        iconClassProp: {
+            type: String,
+            default: "icon"
+        },
+        // show icons
+        showIcons: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data: function data() {
+        return {
+            draggedNode: null
+        };
+    },
+
+    components: {
+        TreeNode: __WEBPACK_IMPORTED_MODULE_0__TreeNode_vue___default.a,
+        DropBetweenZone: __WEBPACK_IMPORTED_MODULE_2__DropBetweenZone_vue___default.a,
+        ContextMenu: __WEBPACK_IMPORTED_MODULE_3__ContextMenu_vue___default.a
+    },
+    methods: {
+        createNodeMap: function createNodeMap() {
+            if (this.nodeMap === undefined) {
+                var nodeMap = this.nodeMap = new Map();
+
+                var nodes = this.$refs.rootNodes.slice();
+
+                for (var i = 0; i < nodes.length; i++) {
+                    var tmpNode = nodes[i];
+                    nodes.push.apply(nodes, _toConsumableArray(tmpNode.getChildNodes()));
+                }
+
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = nodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _tmpNode = _step.value;
+
+                        nodeMap.set(_tmpNode.data[this.nodeKeyProp], _tmpNode); // TODO: change to getter
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+            }
+        },
+        getNodeByKey: function getNodeByKey(key) {
+            return this.nodeMap.get(key);
+        },
+
+        // event bubbles up to the roots
+        nodeSelect: function nodeSelect(node, isSelected) {
+            this.$emit('nodeSelect', node, isSelected);
+            if (isSelected) {
+                if (this.selectedNode !== null) {
+                    this.selectedNode.deselect();
+                }
+                this.selectedNode = node;
+            } else if (node === this.selectedNode) {
+                this.selectedNode = null;
+            }
+        },
+        nodeDragStart: function nodeDragStart() {
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('dropOK', this.cutNode);
+        },
+        cutNode: function cutNode() {
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$off('dropOK');
+            var idx = this.data.indexOf(window._bTreeView.draggedNodeData);
+            this.data.splice(idx, 1);
+            // let's notify that node data was successfully cut (removed from array)
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$emit('cutOK');
+        },
+        draggingStarted: function draggingStarted(draggedNode) {
+            this.draggedNode = draggedNode;
+            // let's listen for the drag end event
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('nodeDragEnd', this.draggingEnded);
+        },
+        draggingEnded: function draggingEnded() {
+            // stop listening for the dragging end event
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$off('nodeDragEnd', this.draggingEnded);
+            this.draggedNode = null;
+        },
+        dropNodeAtPosition: function dropNodeAtPosition(pos) {
+            var _this = this;
+
+            // position can change if we move node within the same parent node (same level)
+            // so it's better to remember node at previous position
+            var insertAfter = pos - 1 < 0 ? null : this.data[pos - 1];
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('cutOK', function () {
+                var pos = _this.data.indexOf(insertAfter) + 1;
+                _this.data.splice(pos, 0, window._bTreeView.draggedNodeData);
+                delete window._bTreeView.draggedNodeKey;
+                delete window._bTreeView.draggedNodeData;
+                __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$off('cutOK');
+            });
+            __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$emit('dropOK');
+        },
+        deleteNode: function deleteNode(nodeData) {
+            var nodes = this.data;
+            var idx = nodes.indexOf(nodeData);
+            nodes.splice(idx, 1);
+        },
+        menuItemSelected: function menuItemSelected(item, node) {
+            switch (item.code) {
+                case 'DELETE_NODE':
+                    node.delete();
+                case 'RENAME_NODE':
+                    node.startRenaming();
+                default:
+                    this.$emit('contextMenuItemSelect', item, node);
+            }
+        }
+    },
+    created: function created() {
+        var _this2 = this;
+
+        this.selectedNode = null;
+        __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('nodeDragStart', this.draggingStarted);
+        __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('contextMenuItemSelect', this.menuItemSelected);
+        __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('nodeRenamed', function (node) {
+            _this2.$emit('nodeRenamed', node);
+        });
+
+        this.$nextTick(function () {
+            _this2.createNodeMap();
+        });
+    }
+});
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(89)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(91)
+/* template */
+var __vue_template__ = __webpack_require__(96)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/bootstrap-vue-treeview/components/TreeNode.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7464cc2f", Component.options)
+  } else {
+    hotAPI.reload("data-v-7464cc2f", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(90);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("c4d31e6c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7464cc2f\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TreeNode.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7464cc2f\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TreeNode.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.tree-node-label {\n    cursor: pointer;\n    padding: 2px 4px;\n    border-radius: 3px;\n    -ms-user-select: none;\n    user-select: none;\n}\n.tree-node-label:hover {\n    background-color: #EBECEE;\n}\n.tree-node-icon {\n    color: #464646;\n    transition: transform 0.3s;\n}\n.tree-node {\n    margin-left: 16px;\n}\n.tree-node.has-child-nodes {\n    margin-left: 0;\n}\n.tree-node.has-child-nodes .tree-node-icon {\n    cursor: pointer;\n}\n.tree-node-expanded .tree-node-icon {\n    transform: rotate(90deg);\n    transition: transform 0.3s;\n}\n.tree-node-children {\n    margin-left: 22px;\n}\n.tree-branch {\n    position: relative;\n}\n.tree-branch.selected > .tree-node > .tree-node-label {\n    background-color: #007bff;\n    color: #fff;\n}\n.tree-node.drop-active {\n    border: 1px dashed #D2D2D2;\n}\n.tree-node-label .label-icon {\n    font-size: 90%;\n}\n.tree-node > svg {\n    display: inline-block;\n    -ms-user-select: none;\n    user-select: none;\n}\n.tree-node .input-rename {\n    display: inline-block;\n    width: auto;\n    font-weight: 400;\n    line-height: 1;\n    font-size: 1rem;\n    padding: 2px 4px;\n    height: auto;\n    box-sizing: border-box;\n}\n.tree-node svg > .svg-icon {\n    fill: none;\n    opacity: 1;\n    stroke: currentColor;\n    stroke-width: 1.5;\n    stroke-linecap: round;\n    stroke-linejoin: round;\n    stroke-miterlimit: 4;\n    stroke-dasharray: none;\n    stroke-opacity: 1\n}\n.tree-node.tree-node-expanded > svg > .svg-icon {\n    fill: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__EventBus__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DropBetweenZone_vue__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DropBetweenZone_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__DropBetweenZone_vue__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'tree-node',
+    components: {
+        DropBetweenZone: __WEBPACK_IMPORTED_MODULE_1__DropBetweenZone_vue___default.a
+    },
+    props: {
+        data: {
+            type: Object,
+            required: true
+        },
+        keyProp: {
+            type: String,
+            default: 'id'
+        },
+        labelProp: {
+            type: String,
+            default: 'name'
+        },
+        childrenProp: {
+            type: String,
+            default: 'children'
+        },
+        draggable: {
+            type: Boolean,
+            default: false
+        },
+        renameOnDblClick: {
+            type: Boolean,
+            default: false
+        },
+        // default icon if node icon is not specified
+        defaultIconClass: {
+            type: String,
+            default: null
+        },
+        // where to search for node icon
+        iconClassProp: {
+            type: String,
+            default: null
+        },
+        // show icon
+        showIcon: {
+            type: Boolean,
+            default: false
+        },
+        // class added to every icon no matter what
+        prependIconClass: {
+            type: String,
+            default: null
+        },
+        contextMenu: {
+            type: Boolean,
+            default: true
+        }
+    },
+    data: function data() {
+        return {
+            expanded: false,
+            selected: false,
+            nodeDragOver: false,
+            enterLeaveCounter: 0,
+            draggedNode: null,
+            dropDisabled: false,
+            renaming: false,
+            renameNewLabel: this.data[this.labelProp]
+        };
+    },
+
+    directives: {
+        focus: {
+            // directive definition
+            inserted: function inserted(el) {
+                el.focus();
+            }
+        },
+        selectText: {
+            inserted: function inserted(el) {
+                el.select();
+            }
+        }
+    },
+    watch: {
+        selected: function selected(_selected) {
+            this.$emit('nodeSelect', this, _selected);
+        },
+        dropDisabled: function dropDisabled(disabled) {
+            this.$emit(disabled ? 'dropDisabled' : 'dropEnabled');
+        },
+        nodeDragOver: function nodeDragOver(dragover) {
+            if (dragover) {
+                // check if node has any children, if yes then expand it after 1 sec
+                if (!this.expanded && Array.isArray(this.data[this.childrenProp]) && this.data[this.childrenProp].length > 0) {
+                    this.expandNodeTimeout = setTimeout(this.toggle, 1000);
+                }
+            } else if (this.expandNodeTimeout) {
+                clearTimeout(this.expandNodeTimeout);
+            }
+        }
+    },
+    computed: {
+        hasChildren: function hasChildren() {
+            return this.data[this.childrenProp] !== undefined && this.data[this.childrenProp].length > 0;
+        },
+        iconClass: function iconClass() {
+            return this.iconClassProp && this.data[this.iconClassProp] !== undefined ? this.data[this.iconClassProp] : this.defaultIconClass;
+        }
+    },
+    methods: {
+        toggle: function toggle() {
+            if (this.data[this.childrenProp] && Array.isArray(this.data[this.childrenProp]) && this.data[this.childrenProp].length > 0) {
+                this.expanded = !this.expanded;
+            }
+        },
+        toggleSelection: function toggleSelection() {
+            if (!this.renaming) {
+                this.selected = !this.selected;
+            }
+        },
+        select: function select() {
+            if (!this.renaming) {
+                this.selected = true;
+            }
+        },
+        deselect: function deselect() {
+            if (!this.renaming) {
+                this.selected = false;
+            }
+        },
+        expand: function expand() {
+            if (this.data[this.childrenProp] && Array.isArray(this.data[this.childrenProp]) && this.data[this.childrenProp].length > 0) {
+                this.expanded = true;
+            }
+        },
+        collapse: function collapse() {
+            this.expanded = false;
+        },
+        childNodeSelect: function childNodeSelect(node, isSelected) {
+            // forward event to the parent node
+            this.$emit('nodeSelect', node, isSelected);
+        },
+        nodeDragStart: function nodeDragStart() {
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$on('dropOK', this.cutNode);
+        },
+        cutNode: function cutNode() {
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$off('dropOK');
+            var idx = this.data[this.childrenProp].indexOf(window._bTreeView.draggedNodeData);
+            this.data[this.childrenProp].splice(idx, 1);
+            // let's notify that node data was successfully cut (removed from array)
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('cutOK');
+        },
+        getChildNodes: function getChildNodes() {
+            return this.$refs.childNodes || [];
+        },
+        dragstart: function dragstart(ev) {
+            this.dropDisabled = true;
+            ev.dataTransfer.dropEffect = 'none';
+            this.$emit('nodeDragStart');
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('nodeDragStart', this);
+            // didn't use dataTransfer it's not fully supported by ie
+            // and beacuse it's not available in the dragover event handler
+            if (window._bTreeView === undefined) {
+                window._bTreeView = {};
+            }
+            _bTreeView.draggedNodeData = this.data;
+            _bTreeView.draggedNodeKey = this.data[this.keyProp];
+        },
+        drop: function drop(ev) {
+            if (this.data[this.childrenProp] === undefined) {
+                Vue.set(this.data, this.childrenProp, []);
+            }
+            // append node
+            this.dropNodeAtPosition(this.data[this.childrenProp].length);
+            this.nodeDragOver = false;
+        },
+        dragEnter: function dragEnter(ev) {
+            this.enterLeaveCounter++;
+            this.dropEffect = ev.dataTransfer.dropEffect = !this.dropDisabled && window._bTreeView !== undefined && window._bTreeView.draggedNodeKey !== undefined && this.data[this.keyProp] !== window._bTreeView.draggedNodeKey && (this.data[this.childrenProp] === undefined || this.data[this.childrenProp].indexOf(window._bTreeView.draggedNodeData) < 0) && !this.isDescendantOf(window._bTreeView.draggedNodeData) ? 'move' : 'none';
+            if (this.dropEffect === 'move' && this.enterLeaveCounter === 1) {
+                this.nodeDragOver = true;
+            }
+        },
+        dragLeave: function dragLeave() {
+            this.enterLeaveCounter--;
+            if (this.enterLeaveCounter !== 1) {
+                this.nodeDragOver = false;
+            }
+        },
+        dragend: function dragend(ev) {
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$off('dropOK');
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$off('cutOK');
+            this.dropDisabled = false;
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('nodeDragEnd');
+        },
+        dragover: function dragover(ev) {
+            ev.dataTransfer.dropEffect = this.dropEffect || 'none';
+        },
+        isDescendantOf: function isDescendantOf(nodeData) {
+            if (nodeData[this.childrenProp] === undefined) {
+                return false;
+            }
+            var nodes = [nodeData];
+            for (var i = 0; i < nodes.length; i++) {
+                var tmpNode = nodes[i];
+                if (tmpNode[this.childrenProp] !== undefined) {
+                    var _iteratorNormalCompletion = true;
+                    var _didIteratorError = false;
+                    var _iteratorError = undefined;
+
+                    try {
+                        for (var _iterator = tmpNode[this.childrenProp][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            var child = _step.value;
+
+                            if (child === this.data) {
+                                return true;
+                            }
+                        }
+                    } catch (err) {
+                        _didIteratorError = true;
+                        _iteratorError = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion && _iterator.return) {
+                                _iterator.return();
+                            }
+                        } finally {
+                            if (_didIteratorError) {
+                                throw _iteratorError;
+                            }
+                        }
+                    }
+
+                    nodes.push.apply(nodes, _toConsumableArray(tmpNode[this.childrenProp]));
+                }
+            }
+        },
+        draggingStarted: function draggingStarted(draggedNode) {
+            this.draggedNode = draggedNode;
+            this.enterLeaveCounter = 0;
+            // let's listen for the drag end event
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$on('nodeDragEnd', this.draggingEnded);
+        },
+        draggingEnded: function draggingEnded() {
+            // stop listening for the dragging end event
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$off('nodeDragEnd', this.draggingEnded);
+            this.draggedNode = null;
+        },
+        dropNodeAtPosition: function dropNodeAtPosition(pos) {
+            var _this = this;
+
+            // position can change if we move node within the same parent node (same level)
+            // so it's better to remember node at previous position
+            var insertAfter = pos - 1 < 0 ? null : this.data[this.childrenProp][pos - 1];
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$on('cutOK', function () {
+                var pos = _this.data[_this.childrenProp].indexOf(insertAfter) + 1;
+                _this.data[_this.childrenProp].splice(pos, 0, window._bTreeView.draggedNodeData);
+                delete window._bTreeView.draggedNodeKey;
+                delete window._bTreeView.draggedNodeData;
+                __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$off('cutOK');
+            });
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('dropOK');
+        },
+        showContextMenu: function showContextMenu(event) {
+            if (this.renaming) {
+                this.cancelRenaming();
+            }
+            this.select();
+            if (this.contextMenu) {
+                event.preventDefault();
+                __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('openNodeContextMenu', this);
+            }
+        },
+        delete: function _delete() {
+            this.$emit('deleteNode', this);
+        },
+        deleteChildNode: function deleteChildNode(childNodeData) {
+            var children = this.data[this.childrenProp];
+            var idx = children.indexOf(childNodeData);
+            children.splice(idx, 1);
+        },
+        appendChild: function appendChild(childNodeData) {
+            if (this.data[this.childrenProp] === undefined) {
+                Vue.set(this.data, this.childrenProp, []);
+            }
+            this.data[this.childrenProp].push(childNodeData);
+            this.expanded = true;
+        },
+        startRenaming: function startRenaming() {
+            this.deselect();
+            this.renameNewLabel = this.data[this.labelProp];
+            this.renaming = true;
+        },
+        cancelRenaming: function cancelRenaming() {
+            this.renameNewLabel = this.data[this.labelProp];
+            this.renaming = false;
+        },
+        endRenaming: function endRenaming() {
+            this.data[this.labelProp] = this.renameNewLabel;
+            this.renaming = false;
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('nodeRenamed', this);
+        },
+        dblClickLabel: function dblClickLabel() {
+            if (this.renameOnDblClick) {
+                this.startRenaming();
+            }
+        }
+    },
+    created: function created() {
+        var _this2 = this;
+
+        __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$on('nodeDragStart', this.draggingStarted);
+        this.$watch('data.' + this.childrenProp, function (children) {
+            if (children.length === 0 && this.expanded) {
+                this.expanded = false;
+            }
+        });
+        if (this.$parent) {
+            this.$parent.$on('dropDisabled', function () {
+                _this2.dropDisabled = true;
+            });
+            this.$parent.$on('dropEnabled', function () {
+                _this2.dropDisabled = false;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(93);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("8521588a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d15e2c6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./DropBetweenZone.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d15e2c6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./DropBetweenZone.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.drop-between-zone {\n  height: 4px;\n  width: 100%;\n  z-index: 1;\n}\n.drop-between-zone.active {\n  position: static;\n  top: 0;\n  border: 1px dashed #D2D2D2;\n  height: 24px;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 94 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__EventBus__ = __webpack_require__(6);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      nodeDragOver: false
+    };
+  },
+
+  methods: {
+    draggingEnded: function draggingEnded() {
+      this.draggedNode = null;
+    },
+    dragover: function dragover(ev) {
+      ev.dataTransfer.dropEffect = 'move';
+    },
+    drop: function drop() {
+      this.$emit('nodeDrop');
+    }
+  }
+});
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {
+    staticClass: "drop-between-zone",
+    class: { active: _vm.nodeDragOver },
+    on: {
+      drop: function($event) {
+        $event.preventDefault()
+        $event.stopPropagation()
+        return _vm.drop($event)
+      },
+      dragover: function($event) {
+        $event.preventDefault()
+        return _vm.dragover($event)
+      },
+      dragenter: function($event) {
+        $event.preventDefault()
+        $event.stopPropagation()
+        _vm.nodeDragOver = true
+      },
+      dragleave: function($event) {
+        $event.preventDefault()
+        $event.stopPropagation()
+        _vm.nodeDragOver = false
+      }
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6d15e2c6", module.exports)
+  }
+}
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "tree-branch", class: { selected: _vm.selected } },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "tree-node",
+          class: {
+            "has-child-nodes": _vm.hasChildren,
+            "tree-node-expanded": _vm.expanded,
+            "drop-active": _vm.nodeDragOver
+          },
+          attrs: { draggable: _vm.draggable && !_vm.renaming },
+          on: {
+            drop: function($event) {
+              $event.preventDefault()
+              return _vm.drop($event)
+            },
+            dragover: function($event) {
+              $event.preventDefault()
+              return _vm.dragover($event)
+            },
+            dragstart: function($event) {
+              $event.stopPropagation()
+              return _vm.dragstart($event)
+            },
+            dragend: _vm.dragend,
+            dragenter: function($event) {
+              $event.preventDefault()
+              $event.stopPropagation()
+              return _vm.dragEnter($event)
+            },
+            dragleave: function($event) {
+              $event.preventDefault()
+              $event.stopPropagation()
+              return _vm.dragLeave($event)
+            },
+            contextmenu: function($event) {
+              return _vm.showContextMenu($event)
+            }
+          }
+        },
+        [
+          _c("transition", { attrs: { name: "rotateArrow" } }, [
+            _vm.hasChildren
+              ? _c(
+                  "svg",
+                  {
+                    staticClass: "tree-node-icon",
+                    attrs: { width: "12", height: "12" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.toggle($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("path", {
+                      staticClass: "svg-icon",
+                      attrs: { d: "M2 1 L10 6 L2 11 Z" }
+                    })
+                  ]
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass: "tree-node-label",
+              on: { click: _vm.toggleSelection, dblclick: _vm.dblClickLabel }
+            },
+            [
+              _vm.showIcon && _vm.iconClass !== null
+                ? _c("i", {
+                    class: ["label-icon", _vm.prependIconClass, _vm.iconClass]
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.renaming
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.renameNewLabel,
+                        expression: "renameNewLabel"
+                      },
+                      { name: "focus", rawName: "v-focus" },
+                      { name: "select-text", rawName: "v-select-text" }
+                    ],
+                    ref: "inputRename",
+                    staticClass: "form-control form-control-sm input-rename",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.renameNewLabel },
+                    on: {
+                      blur: _vm.endRenaming,
+                      keyup: [
+                        function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k($event.keyCode, "esc", 27, $event.key, [
+                              "Esc",
+                              "Escape"
+                            ])
+                          ) {
+                            return null
+                          }
+                          $event.stopPropagation()
+                          return _vm.cancelRenaming($event)
+                        },
+                        function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          $event.stopPropagation()
+                          return _vm.endRenaming($event)
+                        }
+                      ],
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.renameNewLabel = $event.target.value
+                      }
+                    }
+                  })
+                : _c("span", [_vm._v(_vm._s(_vm.data[_vm.labelProp]))])
+            ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value:
+                _vm.expanded &&
+                _vm.data[_vm.childrenProp] &&
+                Array.isArray(_vm.data[_vm.childrenProp]),
+              expression:
+                "expanded && data[childrenProp] && Array.isArray(data[childrenProp])"
+            }
+          ],
+          staticClass: "tree-node-children"
+        },
+        [
+          !_vm.dropDisabled &&
+          _vm.draggedNode !== null &&
+          _vm.data[_vm.childrenProp] &&
+          _vm.draggedNode.data !== _vm.data[_vm.childrenProp][0]
+            ? _c("drop-between-zone", {
+                on: {
+                  nodeDrop: function($event) {
+                    return _vm.dropNodeAtPosition(0)
+                  }
+                }
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.data[_vm.childrenProp], function(nodeData, index) {
+            return [
+              _c("tree-node", {
+                key: nodeData[_vm.keyProp],
+                ref: "childNodes",
+                refInFor: true,
+                attrs: {
+                  data: nodeData,
+                  keyProp: _vm.keyProp,
+                  labelProp: _vm.labelProp,
+                  childrenProp: _vm.childrenProp,
+                  renameOnDblClick: _vm.renameOnDblClick,
+                  draggable: _vm.draggable,
+                  defaultIconClass: _vm.defaultIconClass,
+                  iconClassProp: _vm.iconClassProp,
+                  showIcon: _vm.showIcon,
+                  prependIconClass: _vm.prependIconClass,
+                  contextMenu: _vm.contextMenu
+                },
+                on: {
+                  nodeSelect: _vm.childNodeSelect,
+                  nodeDragStart: _vm.nodeDragStart,
+                  deleteNode: _vm.deleteChildNode
+                }
+              }),
+              _vm._v(" "),
+              !_vm.dropDisabled &&
+              _vm.draggedNode &&
+              _vm.draggedNode.data !== nodeData &&
+              (index + 1 >= _vm.data[_vm.childrenProp].length ||
+                _vm.draggedNode.data !== _vm.data[_vm.childrenProp][index + 1])
+                ? _c("drop-between-zone", {
+                    on: {
+                      nodeDrop: function($event) {
+                        return _vm.dropNodeAtPosition(index + 1)
+                      }
+                    }
+                  })
+                : _vm._e()
+            ]
+          })
+        ],
+        2
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7464cc2f", module.exports)
+  }
+}
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(98)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(100)
+/* template */
+var __vue_template__ = __webpack_require__(102)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/bootstrap-vue-treeview/components/ContextMenu.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-366bd5e2", Component.options)
+  } else {
+    hotAPI.reload("data-v-366bd5e2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(99);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("e33ee15c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366bd5e2\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ContextMenu.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-366bd5e2\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ContextMenu.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.ctx-item {\n  cursor: pointer;\n  user-select: none;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 100 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__EventBus__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_context_menu__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_context_menu___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_context_menu__);
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VueContextMenu: __WEBPACK_IMPORTED_MODULE_1_vue_context_menu___default.a
+  },
+  props: {
+    contextMenuItems: {
+      type: Array
+    }
+  },
+  data: function data() {
+    return {
+      activeNode: null
+    };
+  },
+
+  methods: {
+    open: function open(node) {
+      this.activeNode = node;
+      this.$refs.ctxMenu.open();
+    },
+    menuItemSelected: function menuItemSelected(item) {
+      __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('contextMenuItemSelect', item, this.activeNode);
+    }
+  },
+  created: function created() {
+    __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$on('openNodeContextMenu', this.open);
+  }
+});
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.VueContextMenu=e():t.VueContextMenu=e()}(this,function(){return function(t){function e(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return t[o].call(r.exports,r,r.exports,e),r.l=!0,r.exports}var n={};return e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,n,o){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:o})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p=".",e(e.s=10)}([function(t,e,n){n(7);var o=n(5)(n(2),n(6),null,null);t.exports=o.exports},function(t,e,n){"use strict";t.exports=function(t){function e(e){e.preventDefault(),"function"==typeof t&&t(e)}function n(t){27===t.keyCode&&e(t)}var o=!1;return{get isListening(){return o},start:function(t){window.addEventListener("click",e,!0),window.addEventListener("keyup",n,!0),o=!0,"function"==typeof t&&t()},stop:function(t){window.removeEventListener("click",e,!0),window.removeEventListener("keyup",n,!0),o=!1,"function"==typeof t&&t()}}}},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"__esModule",{value:!0});var r=n(1),i=o(r);e.default={name:"context-menu",props:{id:{type:String,default:"default-ctx"}},data:function(){var t=this;return{locals:{},align:"left",ctxTop:0,ctxLeft:0,ctxVisible:!1,bodyClickListener:(0,i.default)(function(e){var n=!!t.ctxVisible,o=n&&!t.$el.contains(e.target);if(o){if(1!==e.which)return e.preventDefault(),e.stopPropagation(),!1;t.ctxVisible=!1,t.$emit("ctx-cancel",t.locals),e.stopPropagation()}else t.ctxVisible=!1,t.$emit("ctx-close",t.locals)})}},methods:{setPositionFromEvent:function(t){var e=this;t=t||window.event;var n=document.scrollingElement||document.documentElement;return t.pageX||t.pageY?(this.ctxLeft=t.pageX,this.ctxTop=t.pageY-n.scrollTop):(t.clientX||t.clientY)&&(this.ctxLeft=t.clientX+n.scrollLeft,this.ctxTop=t.clientY+n.scrollTop),this.$nextTick(function(){var t=e.$el,n=(t.style.minHeight||t.style.height).replace("px","")||32,o=(t.style.minWidth||t.style.width).replace("px","")||32,r=t.scrollHeight||n,i=t.scrollWidth||o,c=window.innerHeight-r-25,a=window.innerWidth-i-25;e.ctxTop>c&&(e.ctxTop=c),e.ctxLeft>a&&(e.ctxLeft=a)}),t},open:function(t,e){return this.ctxVisible&&(this.ctxVisible=!1),this.ctxVisible=!0,this.$emit("ctx-open",this.locals=e||{}),this.setPositionFromEvent(t),this.$el.setAttribute("tab-index",-1),this.bodyClickListener.start(),this}},watch:{ctxVisible:function(t,e){e===!0&&t===!1&&this.bodyClickListener.stop(function(t){})}},computed:{ctxStyle:function(){return{display:this.ctxVisible?"block":"none",top:(this.ctxTop||0)+"px",left:(this.ctxLeft||0)+"px"}}}}},function(t,e,n){e=t.exports=n(4)(void 0),e.push([t.i,'.ctx{position:relative}.ctx-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:160px;padding:5px 0;margin:2px 0 0;font-size:.9rem;color:#373a3c;text-align:left;list-style:none;background-color:#fff;-webkit-background-clip:padding-box;background-clip:padding-box;border:1px solid rgba(0,0,0,.15);border-radius:.25rem;-moz-box-shadow:0 0 5px #ccc;-webkit-box-shadow:0 0 5px #ccc;box-shadow:0 0 5px #ccc}.ctx-divider{height:1px;margin:.5rem 0;overflow:hidden;background-color:#e5e5e5}.ctx-item{display:block;padding:3px 20px;clear:both;font-weight:400;line-height:1.5;color:#373a3c;text-align:inherit;white-space:nowrap;background:none;border:0;cursor:default}.ctx-item:focus,.ctx-item:hover{color:#2b2d2f;text-decoration:none;background-color:#f5f5f5;cursor:normal}.ctx-item.active,.ctx-item.active:focus,.ctx-item.active:hover{color:#fff;text-decoration:none;background-color:#0275d8;outline:0}.ctx-item.disabled,.ctx-item.disabled:focus,.ctx-item.disabled:hover{color:#818a91}.ctx-item.disabled:focus,.ctx-item.disabled:hover{text-decoration:none;cursor:not-allowed;background-color:transparent;background-image:none;filter:"progid:DXImageTransform.Microsoft.gradient(enabled = false)"}.open>.ctx-menu{display:block}.open>a{outline:0}.ctx-menu-right{right:0;left:auto}.ctx-menu-left{right:auto;left:0}.ctx-header{display:block;padding:3px 20px;font-size:.9rem;line-height:1.5;color:#818a91;white-space:nowrap}.ctx-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:990}.pull-right>.ctx-menu{right:0;left:auto}.ctx-menu-container{position:fixed;padding:0;border:1px solid #bbb;background-color:#f5f5f5;z-index:99999;box-shadow:0 5px 11px 0 rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15)}',""])},function(t,e){function n(t,e){var n=t[1]||"",r=t[3];if(!r)return n;if(e&&"function"==typeof btoa){var i=o(r),c=r.sources.map(function(t){return"/*# sourceURL="+r.sourceRoot+t+" */"});return[n].concat(c).concat([i]).join("\n")}return[n].join("\n")}function o(t){var e=btoa(unescape(encodeURIComponent(JSON.stringify(t)))),n="sourceMappingURL=data:application/json;charset=utf-8;base64,"+e;return"/*# "+n+" */"}t.exports=function(t){var e=[];return e.toString=function(){return this.map(function(e){var o=n(e,t);return e[2]?"@media "+e[2]+"{"+o+"}":o}).join("")},e.i=function(t,n){"string"==typeof t&&(t=[[null,t,""]]);for(var o={},r=0;r<this.length;r++){var i=this[r][0];"number"==typeof i&&(o[i]=!0)}for(r=0;r<t.length;r++){var c=t[r];"number"==typeof c[0]&&o[c[0]]||(n&&!c[2]?c[2]=n:n&&(c[2]="("+c[2]+") and ("+n+")"),e.push(c))}},e}},function(t,e){t.exports=function(t,e,n,o){var r,i=t=t||{},c=typeof t.default;"object"!==c&&"function"!==c||(r=t,i=t.default);var a="function"==typeof i?i.options:i;if(e&&(a.render=e.render,a.staticRenderFns=e.staticRenderFns),n&&(a._scopeId=n),o){var s=a.computed||(a.computed={});Object.keys(o).forEach(function(t){var e=o[t];s[t]=function(){return e}})}return{esModule:r,exports:i,options:a}}},function(t,e){t.exports={render:function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{ref:"contextMenu",staticClass:"ctx-menu-container",style:t.ctxStyle,attrs:{id:t.id},on:{click:function(t){t.stopPropagation()},contextmenu:function(t){t.stopPropagation()}}},[n("div",{staticClass:"ctx open",staticStyle:{"background-color":"transparent"}},[n("ul",{staticClass:"ctx-menu",class:{"ctx-menu-right":"right"===t.align,"ctx-menu-left":"left"===t.align},attrs:{role:"menu"}},[t._t("default")],2)])])},staticRenderFns:[]}},function(t,e,n){var o=n(3);"string"==typeof o&&(o=[[t.i,o,""]]),o.locals&&(t.exports=o.locals);n(8)("0df30a58",o,!0)},function(t,e,n){function o(t){for(var e=0;e<t.length;e++){var n=t[e],o=l[n.id];if(o){o.refs++;for(var r=0;r<o.parts.length;r++)o.parts[r](n.parts[r]);for(;r<n.parts.length;r++)o.parts.push(c(n.parts[r]));o.parts.length>n.parts.length&&(o.parts.length=n.parts.length)}else{for(var i=[],r=0;r<n.parts.length;r++)i.push(c(n.parts[r]));l[n.id]={id:n.id,refs:1,parts:i}}}}function r(t,e){for(var n=[],o={},r=0;r<e.length;r++){var i=e[r],c=i[0],a=i[1],s=i[2],u=i[3],l={css:a,media:s,sourceMap:u};o[c]?(l.id=t+":"+o[c].parts.length,o[c].parts.push(l)):(l.id=t+":0",n.push(o[c]={id:c,parts:[l]}))}return n}function i(){var t=document.createElement("style");return t.type="text/css",d.appendChild(t),t}function c(t){var e,n,o=document.querySelector('style[data-vue-ssr-id~="'+t.id+'"]'),r=null!=o;if(r&&x)return h;if(g){var c=p++;o=f||(f=i()),e=a.bind(null,o,c,!1),n=a.bind(null,o,c,!0)}else o=o||i(),e=s.bind(null,o),n=function(){o.parentNode.removeChild(o)};return r||e(t),function(o){if(o){if(o.css===t.css&&o.media===t.media&&o.sourceMap===t.sourceMap)return;e(t=o)}else n()}}function a(t,e,n,o){var r=n?"":o.css;if(t.styleSheet)t.styleSheet.cssText=m(e,r);else{var i=document.createTextNode(r),c=t.childNodes;c[e]&&t.removeChild(c[e]),c.length?t.insertBefore(i,c[e]):t.appendChild(i)}}function s(t,e){var n=e.css,o=e.media,r=e.sourceMap;if(o&&t.setAttribute("media",o),r&&(n+="\n/*# sourceURL="+r.sources[0]+" */",n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(r))))+" */"),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(n))}}var u="undefined"!=typeof document;if("undefined"!=typeof DEBUG&&DEBUG&&!u)throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");var r=n(9),l={},d=u&&(document.head||document.getElementsByTagName("head")[0]),f=null,p=0,x=!1,h=function(){},g="undefined"!=typeof navigator&&/msie [6-9]\b/.test(navigator.userAgent.toLowerCase());t.exports=function(t,e,n){x=n;var i=r(t,e);return o(i),function(e){for(var n=[],c=0;c<i.length;c++){var a=i[c],s=l[a.id];s.refs--,n.push(s)}e?(i=r(t,e),o(i)):i=[];for(var c=0;c<n.length;c++){var s=n[c];if(0===s.refs){for(var u=0;u<s.parts.length;u++)s.parts[u]();delete l[s.id]}}}};var m=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n")}}()},function(t,e){t.exports=function(t,e){for(var n=[],o={},r=0;r<e.length;r++){var i=e[r],c=i[0],a=i[1],s=i[2],u=i[3],l={id:t+":"+r,css:a,media:s,sourceMap:u};o[c]?o[c].parts.push(l):n.push(o[c]={id:c,parts:[l]})}return n}},function(t,e,n){"use strict";var o=n(0);o.install=function(t){var e=t.component("context-menu",o);return e},window.VueContextMenu=o,t.exports=t.exports.default=o}])});
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "vue-context-menu",
+    { ref: "ctxMenu", attrs: { id: "context-menu" } },
+    _vm._l(_vm.contextMenuItems, function(item) {
+      return _c(
+        "li",
+        {
+          staticClass: "ctx-item",
+          on: {
+            click: function($event) {
+              $event.stopPropagation()
+              $event.preventDefault()
+              return _vm.menuItemSelected(item)
+            }
+          }
+        },
+        [_vm._v(_vm._s(item.label))]
+      )
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-366bd5e2", module.exports)
+  }
+}
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "tree-view" },
+    [
+      _vm.contextMenu
+        ? _c("context-menu", {
+            attrs: { contextMenuItems: _vm.contextMenuItems }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.draggedNode !== null && _vm.draggedNode.data !== _vm.data[0]
+        ? _c("drop-between-zone", {
+            on: {
+              nodeDrop: function($event) {
+                return _vm.dropNodeAtPosition(0)
+              }
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.data, function(nodeData, index) {
+        return [
+          _c("tree-node", {
+            key: nodeData[_vm.nodeKeyProp],
+            ref: "rootNodes",
+            refInFor: true,
+            attrs: {
+              keyProp: _vm.nodeKeyProp,
+              renameOnDblClick: _vm.renameNodeOnDblClick,
+              childrenProp: _vm.nodeChildrenProp,
+              labelProp: _vm.nodeLabelProp,
+              data: nodeData,
+              draggable: _vm.nodesDraggable,
+              defaultIconClass: _vm.defaultIconClass,
+              iconClassProp: _vm.iconClassProp,
+              showIcon: _vm.showIcons,
+              prependIconClass: _vm.prependIconClass,
+              contextMenu: _vm.contextMenu
+            },
+            on: {
+              nodeSelect: _vm.nodeSelect,
+              nodeDragStart: _vm.nodeDragStart,
+              deleteNode: _vm.deleteNode
+            }
+          }),
+          _vm._v(" "),
+          _vm.draggedNode !== null &&
+          _vm.draggedNode.data !== nodeData &&
+          (index + 1 >= _vm.data.length ||
+            _vm.draggedNode.data !== _vm.data[index + 1])
+            ? _c("drop-between-zone", {
+                on: {
+                  nodeDrop: function($event) {
+                    return _vm.dropNodeAtPosition(index + 1)
+                  }
+                }
+              })
+            : _vm._e()
+        ]
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-78bb4f52", module.exports)
+  }
+}
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.selectedNodeId,
+          expression: "selectedNodeId"
+        }
+      ],
+      attrs: { type: "hidden", id: _vm.id, name: _vm.id },
+      domProps: { value: _vm.selectedNodeId },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.selectedNodeId = $event.target.value
+        }
+      }
+    }),
+    _vm._v(" "),
+    _c("div", { staticClass: "accordion", attrs: { id: _vm.id + "Accord" } }, [
+      _c("div", { staticClass: "card" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card-header",
+            attrs: { id: _vm.id + "AccordHeading" }
+          },
+          [
+            _c("h5", { staticClass: "mb-0" }, [
+              _c("label", [_vm._v(_vm._s(_vm.label) + ": ")]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  class: _vm.btnCss,
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "collapse",
+                    "data-target": "#collapsePortCatTreeAccord",
+                    "aria-expanded": "true",
+                    "aria-controls": "collapseSeo"
+                  }
+                },
+                [
+                  _vm.selectedNode
+                    ? _c("span", [
+                        _vm._v(_vm._s(_vm.selectedNode[_vm.nodeLabelProp]))
+                      ])
+                    : _vm._e()
+                ]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "collapse",
+            attrs: {
+              id: "collapsePortCatTreeAccord",
+              "aria-labelledby": _vm.id + "AccordHeading",
+              "data-parent": "#" + _vm.id + "Accord"
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("b-tree-view", {
+                  ref: "v" + _vm.id,
+                  attrs: {
+                    data: _vm.data,
+                    contextMenuItems: _vm.contextMenuItems,
+                    showIcons: _vm.showIcons,
+                    showIcon: "true",
+                    defaultIconClass: _vm.defaultIconClass,
+                    allowMultiple: _vm.allowMultiple,
+                    nodeKeyProp: _vm.nodeKeyProp,
+                    nodeChildrenProp: _vm.nodeChildrenProp,
+                    nodeLabelProp: _vm.nodeLabelProp,
+                    nodesDraggable: _vm.nodesDraggable,
+                    contextMenu: _vm.contextMenu,
+                    renameNodeOnDblClick: _vm.renameNodeOnDblClick,
+                    prependIconClass: _vm.prependIconClass,
+                    iconClassProp: _vm.iconClassProp
+                  }
+                })
+              ],
+              1
+            )
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4122b52c", module.exports)
+  }
+}
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("accordionselecttree", {
+        attrs: {
+          id: "portfolioCategoriesTree",
+          label: "Categories",
+          value: _vm.value,
+          data: _vm.portfolioCategoriesTree,
+          showIcons: true,
+          showIcon: true,
+          defaultIconClass: "fas fa-book",
+          urlCreateNewItem: "/p/portfoliocats/pcsave.jn/",
+          urlUpdateItem: "/p/portfoliocats/pcsave.jn/",
+          urlRemoveItem: "/p/portfoliocats/pcdelte.jn/"
+        },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", _vm.value)
+          }
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-c4b9f1be", module.exports)
+  }
+}
+
+/***/ }),
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47450,6 +50017,39 @@ var render = function() {
             _vm.category = $$v
           },
           expression: "category"
+        }
+      }),
+      _vm._v(" "),
+      _c("categorytree", {
+        ref: "categorytree",
+        attrs: { id: "portfolio_category_id" },
+        model: {
+          value: _vm.pcategory,
+          callback: function($$v) {
+            _vm.pcategory = $$v
+          },
+          expression: "pcategory"
+        }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.pcategory,
+            expression: "pcategory"
+          }
+        ],
+        attrs: { type: "text" },
+        domProps: { value: _vm.pcategory },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.pcategory = $event.target.value
+          }
         }
       }),
       _vm._v(" "),
@@ -47803,6 +50403,140 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-0e195e44", module.exports)
+  }
+}
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("ul", { staticClass: "nav nav-tabs", attrs: { role: "tablist" } }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: {
+              id: "portfoliolist-tab",
+              href: "#portfoliolist",
+              role: "tab",
+              "aria-controls": "home",
+              "aria-selected": "true"
+            }
+          },
+          [_vm._v(_vm._s(_vm.$t("app.List")))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link active",
+            attrs: {
+              id: "editportfolio-tab",
+              "data-toggle": "tab",
+              href: "#editportfolio",
+              role: "tab",
+              "aria-controls": "profile",
+              "aria-selected": "false"
+            }
+          },
+          [_vm._v(" " + _vm._s(_vm.formTabTitle) + " ")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "tab-content" }, [
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade ",
+          attrs: {
+            id: "portfoliolist",
+            role: "tabpanel",
+            "aria-labelledby": "list-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h5", { staticClass: "card-title" }, [
+                _vm._v(_vm._s(_vm.$t("app.Worklist")))
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                {
+                  staticClass: "display table table-bordered",
+                  staticStyle: { width: "100%" },
+                  attrs: { id: "portfoliotable" }
+                },
+                [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tfoot", [
+                    _c("tr", [
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Heading")))]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v(_vm._s(_vm.$t("app.Operations")))])
+                    ])
+                  ])
+                ]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane fade show active",
+          attrs: {
+            id: "editportfolio",
+            role: "tabpanel",
+            "aria-labelledby": "edit-tab"
+          }
+        },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("h5", { staticClass: "card-title" }, [
+                  _vm._v(" " + _vm._s(_vm.newEdit) + " ")
+                ]),
+                _vm._v(" "),
+                _c("portfolioform", { ref: "portfolioform" })
+              ],
+              1
+            )
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-30ad51cc", module.exports)
   }
 }
 

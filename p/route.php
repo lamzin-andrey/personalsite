@@ -19,6 +19,7 @@ class Route {
 		$this->_p();
 		$this->_acategories();
 		$this->_portfolio();
+		$this->_portfoliocats();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -63,6 +64,21 @@ class Route {
 			$handler = __dir__ . '/ctrl/logout.php';
 			require_once $handler;
 			$this->app = new Logout();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/portfoliocats/
+	*/
+	protected function _portfoliocats()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/portfoliocats/pcsave.jn/') {
+			$handler = $sCtrlDir . 'pcsave.php';
+			require_once $handler;
+			$this->app = new ProudctCategoryPost();
 		}
 	}
 	/**
