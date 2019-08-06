@@ -21,8 +21,6 @@ land/rest
 
 ## Installation
 
-See https://www.npmjs.com/package/bootstrap-vue-treeview for install bootstrap-vue-treeview
-
 git clone ... TODO
 
 # Ru

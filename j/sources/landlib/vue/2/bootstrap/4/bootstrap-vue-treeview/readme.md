@@ -10,3 +10,4 @@ TreeNode got new argument parentKeyProp
 
 New depends treealg.js
 
+Fix bug remove node (always deleeted last node on the level)

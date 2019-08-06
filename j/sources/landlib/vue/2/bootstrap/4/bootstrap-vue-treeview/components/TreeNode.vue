@@ -344,9 +344,18 @@
                 this.$emit('deleteNode', this);
             },
             deleteChildNode(childNodeData) {
-                let children = this.data[this.childrenProp]
-                let idx = children.indexOf(childNodeData)
-                children.splice(idx, 1)
+				let children = this.data[this.childrenProp]
+                //let idx = children.indexOf(childNodeData)
+				let idx = -1, i, searchKey = childNodeData.data[this.keyProp];
+				for (i = 0; i < children.length; i++) {
+					if (children[i][this.keyProp] == searchKey) {
+						idx = i;
+						break;
+					}
+				} 
+				if (idx > -1) {
+					children.splice(idx, 1);
+				}
             },
             appendChild(childNodeData) {
                 if (this.data[this.childrenProp] === undefined) {
