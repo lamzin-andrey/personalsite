@@ -5,7 +5,7 @@
 			label="Categories"
 			:value="value"
 			@input="$emit('input', value)"
-			:data="portfolioCategoriesTree"
+			:treedata="portfolioCategoriesTree"
 			:showIcons="true" 
 			:showIcon="true" 
 			defaultIconClass="fas fa-book"
@@ -37,7 +37,7 @@
         data: function(){return {
 			val: 2222,
 			/** @property {Array} данные дерева категорий */
-            portfolioCategoriesTree: [{"id": 2222, "name": "Venus", "children": [{"id": 3333, "parent_id" : 2222, "name": "Neptune"}, {"id": 4444, "parent_id" : 2222, "name": "Stratus"} ] } ],
+            portfolioCategoriesTree: [{"id": 2222, "name": "Zevs", "children": [{"id": 3333, "parent_id" : 2222, "name": "Neptune"}, {"id": 4444, "parent_id" : 2222, "name": "Stratus"} ] } ],
 		}; },
 		computed: {
 			/*dinlabel : function() {

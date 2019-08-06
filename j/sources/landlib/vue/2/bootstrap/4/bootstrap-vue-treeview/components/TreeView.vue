@@ -185,8 +185,18 @@
             },
             deleteNode(nodeData) {
                 let nodes = this.data
-                let idx = nodes.indexOf(nodeData)
-                nodes.splice(idx, 1)
+                //let idx = nodes.indexOf(nodeData)
+				//nodes.splice(idx, 1)
+				let idx = -1, i, searchKey = nodeData.data[this.keyProp];
+				for (i = 0; i < nodes.length; i++) {
+					if (nodes[i][this.keyProp] == searchKey) {
+						idx = i;
+						break;
+					}
+				} 
+				if (idx > -1) {
+					nodes.splice(idx, 1);
+				}
             },
             menuItemSelected(item, node) {
                 switch (item.code) {
@@ -209,7 +219,10 @@
 			EventBus.$on('deleteNodeEx', (node, idList) => {
 				//grab all data
 				let nodeData = [], currentObj, currentData, i, j;
+				
 				for (i = 0; i < idList.length; i++) {
+					delete this.nodeMap;
+					this.createNodeMap();
 					currentObj = this.getNodeByKey(idList[i]);
 					if (currentObj) {
 						currentData = {};

@@ -9,4 +9,6 @@ window.onload = function(){
 	console.log('arr', arr);
 	oTree = TreeAlgorithms.buildTreeFromFlatList(arr);
 	console.log('oTree', oTree);
+	var k = TreeAlgorithms.remove(oTree[0], 3333);
+	console.log('k', k);
 }

@@ -335,12 +335,14 @@
                     EventBus.$emit('openNodeContextMenu', this)
                 }
             },
-            delete() {
+            delete(emitDeleteNodeEx = true) {
 				TreeAlgorithms.idFieldName = this.keyProp;
 				TreeAlgorithms.parentIdFieldName = this.parentKeyProp;
 				TreeAlgorithms.childsFieldName = this.childrenProp;
 				let idList = TreeAlgorithms.getBranchIdList(this.data);
-				EventBus.$emit('deleteNodeEx', this, idList);
+				if (emitDeleteNodeEx) {
+					EventBus.$emit('deleteNodeEx', this, idList);
+				}
                 this.$emit('deleteNode', this);
             },
             deleteChildNode(childNodeData) {

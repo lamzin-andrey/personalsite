@@ -63,9 +63,10 @@ window.TreeAlgorithms = {
 	/**
 	 * @description build tree from flat list
 	 * @param {Object} aScopesArg array of objects {this.idFieldName, this.parentIdFieldName}
+	 * @param {Boolean} bSetChildsAsArray = false if true, all 'children' (this.childsFieldName) property will convert to array
 	 * @return Array with root nodes in items
 	 */
-	buildTreeFromFlatList(aScopesArg) {
+	buildTreeFromFlatList(aScopesArg, bSetChildsAsArray = false) {
 		let aBuf, nId, oItem, sChilds, oParent, a, r = [], i;
 		
 		aScopes = [...aScopesArg];
@@ -102,7 +103,6 @@ window.TreeAlgorithms = {
 					}
 					//a = &oParent->sChilds;
 					a = oParent[sChilds];
-					//console.log();
 					a[nId] = oItem;
 					//aScopes[nId] = &a[nId];
 					aScopes[nId] = a[nId];
@@ -120,8 +120,91 @@ window.TreeAlgorithms = {
 		}
 		for (nId in aScopes) {
 			oItem = aScopes[nId];
+			if (bSetChildsAsArray) {
+				this.walkAndExecuteAction(oItem, {context:this, f:this._convertChildsToArray});
+			}
 			r.push(oItem);
 		}
+
 		return r;
+	},
+	/**
+	 * @description Convert childs to array
+	 * @param {Object} node 
+	 */
+	_convertChildsToArray(node) {
+		let newChilds = [], k;
+		for (k in node[this.childsFieldName]) {			
+			newChilds.push(node[this.childsFieldName][k]);
+		}
+		node[this.childsFieldName] = newChilds;
+	},
+	/**
+	 * @description Find nodt By Id
+	 * @param {Object} node (or tree)
+	 * @param {String} id
+	 * @return Object node or null
+	*/
+	findById(node, id) {
+		let r, i;
+		if (node[this.idFieldName] == id) {
+			return node;
+		}
+		if (node[this.childsFieldName]) {
+			if ( node[this.childsFieldName] instanceof Array ) {
+				for (i = 0; i < node[this.childsFieldName].length; i++) {
+					r = this.findById( node[this.childsFieldName][i], id );
+					if (r) {
+						return r;
+					}
+				}
+			} else {
+				for (i in node[this.childsFieldName]) {
+					r = this.findById( node[this.childsFieldName][i], id );
+					if (r) {
+						return r;
+					}
+				}
+			}
+			
+		}
+		return null;
+	},
+	/**
+	 * @description Remove node from tree by node id
+	 * @param {Object} tree (or tree)
+	 * @param {String} id
+	 * @return Boolean
+	*/
+	remove(tree, id) {
+		let i, node = this.findById(tree, id), parentNode;
+		if (!node) {
+			return false;
+		}
+		if (node[this.parentIdFieldName]) {
+			parentNode = this.findById(tree, node[this.parentIdFieldName]);
+		}
+		if (!parentNode || !parentNode[this.childsFieldName]) {
+			return false;
+		}
+		
+		if ( parentNode[this.childsFieldName] instanceof Array ) {
+			for (i = 0; i < parentNode[this.childsFieldName].length; i++) {
+				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
+					parentNode[this.childsFieldName].splice(i, 1);
+					//delete node;
+					return true;
+				}
+			}
+		} else {
+			for (i in parentNode[this.childsFieldName]) {
+				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
+					delete parentNode[this.childsFieldName][i];
+					//delete node;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 };

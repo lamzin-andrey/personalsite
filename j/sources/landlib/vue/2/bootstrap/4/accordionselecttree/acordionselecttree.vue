@@ -14,7 +14,7 @@
 			<div id="collapsePortCatTreeAccord" class="collapse" :aria-labelledby="id + 'AccordHeading'" :data-parent="'#' + id + 'Accord'">
 				<div class="card-body">
 					<b-tree-view :ref="'v' + id" 
-						:data="data" 
+						:data="treedata" 
 						:contextMenuItems="contextMenuItems" 
 						:showIcons="showIcons" 
 						showIcon="true"
@@ -82,7 +82,7 @@
 				default: ''
 			},
 			//This props will be passed in TreeView
-			data: {
+			treedata: {
                 type: Array,
                 required: true
             },
@@ -210,11 +210,10 @@
 					//TODO drop spinner
 					return;
 				}
-				//if (!this.nodeMapCreated) {
-					delete this.$refs['v' + this.id].nodeMap;
-					this.$refs['v' + this.id].createNodeMap();
-				//	this.nodeMapCreated = true;
-				//}
+				
+				delete this.$refs['v' + this.id].nodeMap;
+				this.$refs['v' + this.id].createNodeMap();
+				
 				let x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
 				let newNodeData = {};
 				newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
@@ -222,6 +221,8 @@
 				newNodeData[this.nodeParentKeyProp] = data[this.nodeParentKeyProp];
 				newNodeData.icon = this.defaultIconClass;
 				x.appendChild(newNodeData);
+				delete this.$refs['v' + this.id].nodeMap;
+				this.$refs['v' + this.id].createNodeMap();
 			},
 			/**
 			 * @description default process failure item operations
@@ -247,7 +248,6 @@
 			 * @description 
 			*/
 			onRenameTreeViewItem(node) {
-				console.log(node.data);
 				let sendData = {};
 				sendData[this.nodeKeyProp] = node.data[this.nodeKeyProp];
 				sendData[this.nodeParentKeyProp] = node.data[this.nodeParentKeyProp];
@@ -291,7 +291,6 @@
 			 * @param {Array} idList (array of numbers)
 			*/
 			onDeleteTreeViewItem(node, nodesData, idList) {
-				console.log(nodesData);
 				//TODO add spinner
 				/* <div role="status" class="spinner-grow small">
 									<span class="sr-only">Loading...</span>
@@ -314,9 +313,13 @@
 					currObj[this.nodeKeyProp] = nodesData[i][this.nodeKeyProp];
 					currObj[this.nodeLabelProp] = nodesData[i][this.nodeLabelProp];
 					currObj[this.nodeParentKeyProp] = nodesData[i][this.nodeParentKeyProp];
-
 					this.stackremovedItems[ currObj[this.nodeKeyProp] ] = currObj;
 					this.stackremovedItems.length++;
+
+					//remove from treedata
+					TreeAlgorithms.idFieldName = this.nodeKeyProp;
+					TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
+					TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
 				}
 				Rest._post({idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
 			},
@@ -341,6 +344,10 @@
 					return false;
 				}
 			},
+			//TODO Для TreeAlg документацию написать и запушить её в landlib.
+			//TODO Описать добавленные события TreeView  и TreeNode на русском сначала.
+			//TODO onSuccessDeleteItem надо  this.stackremovedItems очищать
+			//TODO onSuccessDeleteItem надо  подумать, зачем я туда stackremovedItems.length придумал, ели оно не нужно, то ок.
 			/**
 			 * TODO подумай, что делать с удалением всего дерева (parent_id undefined)
 			 * @description Restore tree nodes if nodes no removed
@@ -356,8 +363,9 @@
 				TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
 				TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
 				console.log('arr', arr);
-				aTree = TreeAlgorithms.buildTreeFromFlatList(arr);
+				aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
 				console.log('aTree', aTree);
+				
 				for (i = 0; i < aTree.length; i++) {
 					TreeAlgorithms.walkAndExecuteAction(aTree[i], {context:this, f:this.addNode});
 				}
@@ -368,20 +376,18 @@
 			 * @param {Object} nodeData
 			*/
 			addNode(nodeData) {
-				console.log('Call addNode', nodeData);
+				let i;
 				//есть ли такой узел в дереве?
 				delete this.$refs['v' + this.id].nodeMap;
 				this.$refs['v' + this.id].createNodeMap();
 				let parentNode, x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
 				if (x) {
-					console.log(`Found node ${nodeData[this.nodeKeyProp]}, return`);
 					return;
 				}
 				parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 				if (parentNode) {
 					parentNode.appendChild(nodeData);
-				} else {
-					console.log(`Not Found Parent Node ${nodeData[this.nodeParentKeyProp]}, fin`);
+					let dTreeData = [...this.treedata];
 				}
 			},
 			/**
@@ -420,8 +426,6 @@
 			this.localizeDefaultMenu();
 			this.initDefaultSelectedNode();
 			this.selectedNode = this.defaultSelectedNode;
-
-			console.log('in vcategorytree.Mounted ' + this.value);
 			this.$refs['v' + this.id].createNodeMap();
 			let x = this.$refs['v' + this.id].getNodeByKey(this.value);
 			if (x) {

@@ -47805,7 +47805,7 @@ Vue.component('accordionselecttree', __webpack_require__(80));
 		return {
 			val: 2222,
 			/** @property {Array} данные дерева категорий */
-			portfolioCategoriesTree: [{ "id": 2222, "name": "Venus", "children": [{ "id": 3333, "parent_id": 2222, "name": "Neptune" }, { "id": 4444, "parent_id": 2222, "name": "Stratus" }] }]
+			portfolioCategoriesTree: [{ "id": 2222, "name": "Zevs", "children": [{ "id": 3333, "parent_id": 2222, "name": "Neptune" }, { "id": 4444, "parent_id": 2222, "name": "Stratus" }] }]
 		};
 	},
 	computed: {
@@ -47876,6 +47876,8 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(82);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 //
 //
 //
@@ -47960,7 +47962,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			default: ''
 		},
 		//This props will be passed in TreeView
-		data: {
+		treedata: {
 			type: Array,
 			required: true
 		},
@@ -48093,11 +48095,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 				//TODO drop spinner
 				return;
 			}
-			//if (!this.nodeMapCreated) {
+
 			delete this.$refs['v' + this.id].nodeMap;
 			this.$refs['v' + this.id].createNodeMap();
-			//	this.nodeMapCreated = true;
-			//}
+
 			var x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
 			var newNodeData = {};
 			newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
@@ -48105,6 +48106,8 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			newNodeData[this.nodeParentKeyProp] = data[this.nodeParentKeyProp];
 			newNodeData.icon = this.defaultIconClass;
 			x.appendChild(newNodeData);
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
 		},
 
 		/**
@@ -48133,7 +48136,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		onRenameTreeViewItem: function onRenameTreeViewItem(node) {
 			var _this2 = this;
 
-			console.log(node.data);
 			var sendData = {};
 			sendData[this.nodeKeyProp] = node.data[this.nodeKeyProp];
 			sendData[this.nodeParentKeyProp] = node.data[this.nodeParentKeyProp];
@@ -48187,7 +48189,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		onDeleteTreeViewItem: function onDeleteTreeViewItem(node, nodesData, idList) {
 			var _this3 = this;
 
-			console.log(nodesData);
 			//TODO add spinner
 			/* <div role="status" class="spinner-grow small">
    					<span class="sr-only">Loading...</span>
@@ -48212,9 +48213,13 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 				currObj[this.nodeKeyProp] = nodesData[i][this.nodeKeyProp];
 				currObj[this.nodeLabelProp] = nodesData[i][this.nodeLabelProp];
 				currObj[this.nodeParentKeyProp] = nodesData[i][this.nodeParentKeyProp];
-
 				this.stackremovedItems[currObj[this.nodeKeyProp]] = currObj;
 				this.stackremovedItems.length++;
+
+				//remove from treedata
+				TreeAlgorithms.idFieldName = this.nodeKeyProp;
+				TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
+				TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
 			}
 			Rest._post({ idList: idList }, function (data) {
 				_this3.onSuccessDeleteItem(data);
@@ -48245,6 +48250,9 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			}
 		},
 
+		//TODO Описать добавленные события TreeView  и TreeNode на русском сначала.
+		//TODO onSuccessDeleteItem надо  this.stackremovedItems очищать
+		//TODO onSuccessDeleteItem надо  подумать, зачем я туда stackremovedItems.length придумал, ели оно не нужно, то ок.
 		/**
    * TODO подумай, что делать с удалением всего дерева (parent_id undefined)
    * @description Restore tree nodes if nodes no removed
@@ -48262,8 +48270,9 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
 			TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
 			console.log('arr', arr);
-			aTree = TreeAlgorithms.buildTreeFromFlatList(arr);
+			aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
 			console.log('aTree', aTree);
+
 			for (i = 0; i < aTree.length; i++) {
 				TreeAlgorithms.walkAndExecuteAction(aTree[i], { context: this, f: this.addNode });
 			}
@@ -48275,21 +48284,19 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
    * @param {Object} nodeData
   */
 		addNode: function addNode(nodeData) {
-			console.log('Call addNode', nodeData);
+			var i = void 0;
 			//есть ли такой узел в дереве?
 			delete this.$refs['v' + this.id].nodeMap;
 			this.$refs['v' + this.id].createNodeMap();
 			var parentNode = void 0,
 			    x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
 			if (x) {
-				console.log('Found node ' + nodeData[this.nodeKeyProp] + ', return');
 				return;
 			}
 			parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 			if (parentNode) {
 				parentNode.appendChild(nodeData);
-			} else {
-				console.log('Not Found Parent Node ' + nodeData[this.nodeParentKeyProp] + ', fin');
+				var dTreeData = [].concat(_toConsumableArray(this.treedata));
 			}
 		},
 
@@ -48329,8 +48336,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		this.localizeDefaultMenu();
 		this.initDefaultSelectedNode();
 		this.selectedNode = this.defaultSelectedNode;
-
-		console.log('in vcategorytree.Mounted ' + this.value);
 		this.$refs['v' + this.id].createNodeMap();
 		var x = this.$refs['v' + this.id].getNodeByKey(this.value);
 		if (x) {
@@ -48723,8 +48728,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         },
         deleteNode: function deleteNode(nodeData) {
             var nodes = this.data;
-            var idx = nodes.indexOf(nodeData);
-            nodes.splice(idx, 1);
+            //let idx = nodes.indexOf(nodeData)
+            //nodes.splice(idx, 1)
+            var idx = -1,
+                i = void 0,
+                searchKey = nodeData.data[this.keyProp];
+            for (i = 0; i < nodes.length; i++) {
+                if (nodes[i][this.keyProp] == searchKey) {
+                    idx = i;
+                    break;
+                }
+            }
+            if (idx > -1) {
+                nodes.splice(idx, 1);
+            }
         },
         menuItemSelected: function menuItemSelected(item, node) {
             switch (item.code) {
@@ -48753,7 +48770,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 currentData = void 0,
                 i = void 0,
                 j = void 0;
+
             for (i = 0; i < idList.length; i++) {
+                delete _this2.nodeMap;
+                _this2.createNodeMap();
                 currentObj = _this2.getNodeByKey(idList[i]);
                 if (currentObj) {
                     currentData = {};
@@ -49228,11 +49248,15 @@ __webpack_require__(96);
             }
         },
         delete: function _delete() {
+            var emitDeleteNodeEx = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
             TreeAlgorithms.idFieldName = this.keyProp;
             TreeAlgorithms.parentIdFieldName = this.parentKeyProp;
             TreeAlgorithms.childsFieldName = this.childrenProp;
             var idList = TreeAlgorithms.getBranchIdList(this.data);
-            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('deleteNodeEx', this, idList);
+            if (emitDeleteNodeEx) {
+                __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('deleteNodeEx', this, idList);
+            }
             this.$emit('deleteNode', this);
         },
         deleteChildNode: function deleteChildNode(childNodeData) {
@@ -49499,9 +49523,12 @@ window.TreeAlgorithms = {
 	/**
   * @description build tree from flat list
   * @param {Object} aScopesArg array of objects {this.idFieldName, this.parentIdFieldName}
+  * @param {Boolean} bSetChildsAsArray = false if true, all 'children' (this.childsFieldName) property will convert to array
   * @return Array with root nodes in items
   */
 	buildTreeFromFlatList: function buildTreeFromFlatList(aScopesArg) {
+		var bSetChildsAsArray = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
 		var aBuf = void 0,
 		    nId = void 0,
 		    oItem = void 0,
@@ -49545,7 +49572,6 @@ window.TreeAlgorithms = {
 					}
 					//a = &oParent->sChilds;
 					a = oParent[sChilds];
-					//console.log();
 					a[nId] = oItem;
 					//aScopes[nId] = &a[nId];
 					aScopes[nId] = a[nId];
@@ -49563,9 +49589,98 @@ window.TreeAlgorithms = {
 		}
 		for (nId in aScopes) {
 			oItem = aScopes[nId];
+			if (bSetChildsAsArray) {
+				this.walkAndExecuteAction(oItem, { context: this, f: this._convertChildsToArray });
+			}
 			r.push(oItem);
 		}
+
 		return r;
+	},
+
+	/**
+  * @description Convert childs to array
+  * @param {Object} node 
+  */
+	_convertChildsToArray: function _convertChildsToArray(node) {
+		var newChilds = [],
+		    k = void 0;
+		for (k in node[this.childsFieldName]) {
+			newChilds.push(node[this.childsFieldName][k]);
+		}
+		node[this.childsFieldName] = newChilds;
+	},
+
+	/**
+  * @description Find nodt By Id
+  * @param {Object} node (or tree)
+  * @param {String} id
+  * @return Object node or null
+ */
+	findById: function findById(node, id) {
+		var r = void 0,
+		    i = void 0;
+		if (node[this.idFieldName] == id) {
+			return node;
+		}
+		if (node[this.childsFieldName]) {
+			if (node[this.childsFieldName] instanceof Array) {
+				for (i = 0; i < node[this.childsFieldName].length; i++) {
+					r = this.findById(node[this.childsFieldName][i], id);
+					if (r) {
+						return r;
+					}
+				}
+			} else {
+				for (i in node[this.childsFieldName]) {
+					r = this.findById(node[this.childsFieldName][i], id);
+					if (r) {
+						return r;
+					}
+				}
+			}
+		}
+		return null;
+	},
+
+	/**
+  * @description Remove node from tree by node id
+  * @param {Object} tree (or tree)
+  * @param {String} id
+  * @return Boolean
+ */
+	remove: function remove(tree, id) {
+		var i = void 0,
+		    node = this.findById(tree, id),
+		    parentNode = void 0;
+		if (!node) {
+			return false;
+		}
+		if (node[this.parentIdFieldName]) {
+			parentNode = this.findById(tree, node[this.parentIdFieldName]);
+		}
+		if (!parentNode || !parentNode[this.childsFieldName]) {
+			return false;
+		}
+
+		if (parentNode[this.childsFieldName] instanceof Array) {
+			for (i = 0; i < parentNode[this.childsFieldName].length; i++) {
+				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
+					parentNode[this.childsFieldName].splice(i, 1);
+					//delete node;
+					return true;
+				}
+			}
+		} else {
+			for (i in parentNode[this.childsFieldName]) {
+				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
+					delete parentNode[this.childsFieldName][i];
+					//delete node;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 };
 
@@ -50165,7 +50280,7 @@ var render = function() {
                 _c("b-tree-view", {
                   ref: "v" + _vm.id,
                   attrs: {
-                    data: _vm.data,
+                    data: _vm.treedata,
                     contextMenuItems: _vm.contextMenuItems,
                     showIcons: _vm.showIcons,
                     showIcon: "true",
@@ -50216,7 +50331,7 @@ var render = function() {
           id: "portfolioCategoriesTree",
           label: "Categories",
           value: _vm.value,
-          data: _vm.portfolioCategoriesTree,
+          treedata: _vm.portfolioCategoriesTree,
           showIcons: true,
           showIcon: true,
           defaultIconClass: "fas fa-book",
