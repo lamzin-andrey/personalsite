@@ -12,6 +12,7 @@
             <tree-node
                     :key="nodeData[nodeKeyProp]"
                     :keyProp="nodeKeyProp"
+                    :parentKeyProp="nodeParentKeyProp"
                     :renameOnDblClick="renameNodeOnDblClick"
                     :childrenProp="nodeChildrenProp"
                     :labelProp="nodeLabelProp"
@@ -57,6 +58,10 @@
             nodeKeyProp: {
                 type: String,
                 default: 'id'
+			},
+			nodeParentKeyProp: {
+                type: String,
+                default: 'parent_id'
             },
             nodeChildrenProp: {
                 type: String,
@@ -200,6 +205,21 @@
             EventBus.$on('contextMenuItemSelect', this.menuItemSelected)
 			EventBus.$on('nodeRenamed', (node) => {
 				this.$emit('nodeRenamed', node);
+			});
+			EventBus.$on('deleteNodeEx', (node, idList) => {
+				//grab all data
+				let nodeData = [], currentObj, currentData, i, j;
+				for (i = 0; i < idList.length; i++) {
+					currentObj = this.getNodeByKey(idList[i]);
+					if (currentObj) {
+						currentData = {};
+						currentData[this.nodeKeyProp] = currentObj.data[this.nodeKeyProp];
+						currentData[this.nodeParentKeyProp] = currentObj.data[this.nodeParentKeyProp];
+						currentData[this.nodeLabelProp] = currentObj.data[this.nodeLabelProp];
+						nodeData.push(currentData);
+					}
+				}
+				this.$emit('deleteNodeEx', node, nodeData, idList);
 			});
 			
             this.$nextTick(() => {

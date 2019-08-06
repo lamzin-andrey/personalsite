@@ -48063,8 +48063,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		onSelectTreeViewContextMenuItem: function onSelectTreeViewContextMenuItem(item, node) {
 			var _this = this;
 
-			console.log(item);
-			console.log(node.data);
 			if (item.code == 'ADD_NODE') {
 				//TODO add spinner
 				/* <div role="status" class="spinner-grow small">
@@ -48084,31 +48082,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 					_this.onFailItemAction(a, b, c);
 				});
 			}
-			if (item.code == 'DELETE_NODE') {
-				//TODO add spinner
-				/* <div role="status" class="spinner-grow small">
-    				  <span class="sr-only">Loading...</span>
-    </div>*/
-				//data, onSuccess, url, onFail
-
-				if (!this.stackremovedItems) {
-					//TODO сюда помещаем всех потомков ветки и ветку по id
-					//скорее всего понадобиться в TreeView.menuItemSelected перед удалением собрать все id
-					this.stackremovedItems = {};
-				}
-
-				var _id = node.data[this.nodeKeyProp];
-				this.nRequestDeleteNodeId = _id;
-				this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
-				this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];
-				Rest._post({ id: _id }, function (data) {
-					_this.onSuccessDeleteItem(data);
-				}, this.urlRemoveItem, function (a, b, c) {
-					_this.onFailDeleteItem(a, b, c);
-				});
-			}
-			//On delete expand all child id and send to server
-			//on add send info to server, get id. 
 		},
 
 		/**
@@ -48125,7 +48098,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			this.$refs['v' + this.id].createNodeMap();
 			//	this.nodeMapCreated = true;
 			//}
-			console.log('try search by key ' + this.nodeParentKeyProp + ' = ' + data[this.nodeParentKeyProp]);
 			var x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
 			var newNodeData = {};
 			newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
@@ -48140,26 +48112,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
    * @param {Object} data
   */
 		onFailItemAction: function onFailItemAction(data, b, c) {
-			this.nRequestAddNodeId = 0;
-			if (data.status && data.status == 'ok') {
-				return true;
-			}
-			if (data.status && data.status == 'error') {
-				if (data.msg) {
-					this.showError(data.msg);
-					return false;
-				}
-			} else {
-				this.showError(this.$t('app.DefaultError'));
-				return false;
-			}
-		},
-
-		/**
-   * @description Repair item if it no remove
-   * @param {Object} data
-  */
-		onFailDeleteItem: function onFailDeleteItem(data, b, c) {
 			this.nRequestAddNodeId = 0;
 			if (data.status && data.status == 'ok') {
 				return true;
@@ -48211,7 +48163,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		},
 
 		/**
-   * @description Обработка выбора элемента дерева.
+   * @description Processing select tree node
   */
 		onSelectTreeViewItem: function onSelectTreeViewItem(node, isSelected) {
 			if (isSelected) {
@@ -48223,6 +48175,122 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			}
 			this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
 			this.$emit('input', this.selectedNodeId);
+		},
+
+		/**
+   * TODO try _delete later
+   * @description Processing delete node (nodes)
+   * @param {TreeNode} node
+   * @param {Array} nodesData (array of objects {this.nodeKeyProp, this.nodeParentKeyProp, this.nodeLabelProp})
+   * @param {Array} idList (array of numbers)
+  */
+		onDeleteTreeViewItem: function onDeleteTreeViewItem(node, nodesData, idList) {
+			var _this3 = this;
+
+			console.log(nodesData);
+			//TODO add spinner
+			/* <div role="status" class="spinner-grow small">
+   					<span class="sr-only">Loading...</span>
+   </div>*/
+			//data, onSuccess, url, onFail
+
+			if (!this.stackremovedItems) {
+				//TODO сюда помещаем всех потомков ветки и ветку по id
+				//скорее всего понадобится в TreeView.menuItemSelected перед удалением собрать все id
+				this.stackremovedItems = { length: 0 };
+			}
+
+			var id = node.data[this.nodeKeyProp],
+			    i = void 0,
+			    currObj = void 0;
+			/*this.nRequestDeleteNodeId = id;
+   this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
+   this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];*/
+			for (i = 0; i < nodesData.length; i++) {
+				//currObj = {...nodesData[i]}; TODO try it
+				currObj = {}; //TODO  currObj = {...nodesData[i]}; вместо этой и трёх следующих
+				currObj[this.nodeKeyProp] = nodesData[i][this.nodeKeyProp];
+				currObj[this.nodeLabelProp] = nodesData[i][this.nodeLabelProp];
+				currObj[this.nodeParentKeyProp] = nodesData[i][this.nodeParentKeyProp];
+
+				this.stackremovedItems[currObj[this.nodeKeyProp]] = currObj;
+				this.stackremovedItems.length++;
+			}
+			Rest._post({ idList: idList }, function (data) {
+				_this3.onSuccessDeleteItem(data);
+			}, this.urlRemoveItem, function (a, b, c) {
+				_this3.onFailDeleteItem(a, b, c);
+			});
+		},
+
+		/**
+   * @description Restore tree nodes if nodes no removed
+   * @param {Object} data
+  */
+		onFailDeleteItem: function onFailDeleteItem(data, b, c) {
+			this.nRequestAddNodeId = 0;
+			if (data.status && data.status == 'ok') {
+				return true;
+			}
+			if (data.status && data.status == 'error') {
+				if (data.msg) {
+					this.showError(data.msg);
+					this.restoreAllRemovedItems();
+					return false;
+				}
+			} else {
+				this.showError(this.$t('app.DefaultError'));
+				this.restoreAllRemovedItems();
+				return false;
+			}
+		},
+
+		/**
+   * TODO подумай, что делать с удалением всего дерева (parent_id undefined)
+   * @description Restore tree nodes if nodes no removed
+  */
+		restoreAllRemovedItems: function restoreAllRemovedItems() {
+			var arr = [],
+			    i = void 0,
+			    aTree = void 0;
+			for (i in this.stackremovedItems) {
+				if (i !== 'length') {
+					arr.push(this.stackremovedItems[i]);
+				}
+			}
+			TreeAlgorithms.idFieldName = this.nodeKeyProp;
+			TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
+			TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
+			console.log('arr', arr);
+			aTree = TreeAlgorithms.buildTreeFromFlatList(arr);
+			console.log('aTree', aTree);
+			for (i = 0; i < aTree.length; i++) {
+				TreeAlgorithms.walkAndExecuteAction(aTree[i], { context: this, f: this.addNode });
+			}
+		},
+
+		/**
+   * TODO rename this file
+   * @description Add node in Tree if it no exists
+   * @param {Object} nodeData
+  */
+		addNode: function addNode(nodeData) {
+			console.log('Call addNode', nodeData);
+			//есть ли такой узел в дереве?
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+			var parentNode = void 0,
+			    x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
+			if (x) {
+				console.log('Found node ' + nodeData[this.nodeKeyProp] + ', return');
+				return;
+			}
+			parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
+			if (parentNode) {
+				parentNode.appendChild(nodeData);
+			} else {
+				console.log('Not Found Parent Node ' + nodeData[this.nodeParentKeyProp] + ', fin');
+			}
 		},
 
 		/**
@@ -48256,7 +48324,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 	}, //end methods
 
 	mounted: function mounted() {
-		var _this3 = this;
+		var _this4 = this;
 
 		this.localizeDefaultMenu();
 		this.initDefaultSelectedNode();
@@ -48270,13 +48338,16 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			this.expandBranch(x);
 		}
 		this.$refs['v' + this.id].$on('contextMenuItemSelect', function (item, node) {
-			_this3.onSelectTreeViewContextMenuItem(item, node);
+			_this4.onSelectTreeViewContextMenuItem(item, node);
 		});
 		this.$refs['v' + this.id].$on('nodeSelect', function (node, isSelected) {
-			_this3.onSelectTreeViewItem(node, isSelected);
+			_this4.onSelectTreeViewItem(node, isSelected);
 		});
 		this.$refs['v' + this.id].$on('nodeRenamed', function (node) {
-			_this3.onRenameTreeViewItem(node);
+			_this4.onRenameTreeViewItem(node);
+		});
+		this.$refs['v' + this.id].$on('deleteNodeEx', function (node, nodesData, idList) {
+			_this4.onDeleteTreeViewItem(node, nodesData, idList);
 		});
 	}
 });
@@ -48479,6 +48550,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
 
 
 
@@ -48499,6 +48571,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         nodeKeyProp: {
             type: String,
             default: 'id'
+        },
+        nodeParentKeyProp: {
+            type: String,
+            default: 'parent_id'
         },
         nodeChildrenProp: {
             type: String,
@@ -48669,6 +48745,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('contextMenuItemSelect', this.menuItemSelected);
         __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('nodeRenamed', function (node) {
             _this2.$emit('nodeRenamed', node);
+        });
+        __WEBPACK_IMPORTED_MODULE_1__EventBus_js__["a" /* default */].$on('deleteNodeEx', function (node, idList) {
+            //grab all data
+            var nodeData = [],
+                currentObj = void 0,
+                currentData = void 0,
+                i = void 0,
+                j = void 0;
+            for (i = 0; i < idList.length; i++) {
+                currentObj = _this2.getNodeByKey(idList[i]);
+                if (currentObj) {
+                    currentData = {};
+                    currentData[_this2.nodeKeyProp] = currentObj.data[_this2.nodeKeyProp];
+                    currentData[_this2.nodeParentKeyProp] = currentObj.data[_this2.nodeParentKeyProp];
+                    currentData[_this2.nodeLabelProp] = currentObj.data[_this2.nodeLabelProp];
+                    nodeData.push(currentData);
+                }
+            }
+            _this2.$emit('deleteNodeEx', node, nodeData, idList);
         });
 
         this.$nextTick(function () {
@@ -48855,6 +48950,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
 
+__webpack_require__(108);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'tree-node',
@@ -48877,6 +48973,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         childrenProp: {
             type: String,
             default: 'children'
+        },
+        parentKeyProp: {
+            type: String,
+            default: 'parent_id'
         },
         draggable: {
             type: Boolean,
@@ -49128,6 +49228,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             }
         },
         delete: function _delete() {
+            TreeAlgorithms.idFieldName = this.keyProp;
+            TreeAlgorithms.parentIdFieldName = this.parentKeyProp;
+            TreeAlgorithms.childsFieldName = this.childrenProp;
+            var idList = TreeAlgorithms.getBranchIdList(this.data);
+            __WEBPACK_IMPORTED_MODULE_0__EventBus__["a" /* default */].$emit('deleteNodeEx', this, idList);
             this.$emit('deleteNode', this);
         },
         deleteChildNode: function deleteChildNode(childNodeData) {
@@ -49773,6 +49878,7 @@ var render = function() {
             refInFor: true,
             attrs: {
               keyProp: _vm.nodeKeyProp,
+              parentKeyProp: _vm.nodeParentKeyProp,
               renameOnDblClick: _vm.renameNodeOnDblClick,
               childrenProp: _vm.nodeChildrenProp,
               labelProp: _vm.nodeLabelProp,
@@ -50539,6 +50645,152 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-30ad51cc", module.exports)
   }
 }
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports) {
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Algorithm for work with tree. 
+*/
+window.TreeAlgorithms = {
+	/** @property {String} idFieldName */
+	idFieldName: 'id',
+
+	/** @property {String} parentIdFieldName */
+	parentIdFieldName: 'parent_id',
+
+	/** @property {String} childsFieldName */
+	childsFieldName: 'children',
+
+	/**
+  * @description Get all "this.idFieldName" values from node and all node childs (all levels)
+  * @param {Object} node 
+  * @return Array of "this.idFieldName" nodes  (all levels)
+  */
+	getBranchIdList: function getBranchIdList(node) {
+		var r = [],
+		    part = void 0,
+		    i = void 0,
+		    j = void 0;
+		r.push(node[this.idFieldName]);
+		if (node[this.childsFieldName]) {
+			part = [];
+			if (node[this.childsFieldName] instanceof Array) {
+				for (i = 0; i < node[this.childsFieldName].length; i++) {
+					part = this.getBranchIdList(node[this.childsFieldName][i]);
+					for (j = 0; j < part.length; j++) {
+						r.push(part[j]);
+					}
+				}
+			} else {
+				for (i in node[this.childsFieldName]) {
+					part = this.getBranchIdList(node[this.childsFieldName][i]);
+					for (j = 0; j < part.length; j++) {
+						r.push(part[j]);
+					}
+				}
+			}
+		}
+		return r;
+	},
+
+	/**
+  * @description walking oTree and execute oCallback(currentNode)
+  * @param {Object} oTree
+  * @param {Object} oCallback  {context, f:function}
+  */
+	walkAndExecuteAction: function walkAndExecuteAction(oTree, oCallback) {
+		var i = void 0;
+		oCallback.f.call(oCallback.context, oTree);
+		if (oTree[this.childsFieldName]) {
+			if (oTree[this.childsFieldName] instanceof Array) {
+				for (i = 0; i < oTree[this.childsFieldName].length; i++) {
+					this.walkAndExecuteAction(oTree[this.childsFieldName][i], oCallback);
+				}
+			} else {
+				for (i in oTree[this.childsFieldName]) {
+					this.walkAndExecuteAction(oTree[this.childsFieldName][i], oCallback);
+				}
+			}
+		}
+	},
+
+	/**
+  * @description build tree from flat list
+  * @param {Object} aScopesArg array of objects {this.idFieldName, this.parentIdFieldName}
+  * @return Array with root nodes in items
+  */
+	buildTreeFromFlatList: function buildTreeFromFlatList(aScopesArg) {
+		var aBuf = void 0,
+		    nId = void 0,
+		    oItem = void 0,
+		    sChilds = void 0,
+		    oParent = void 0,
+		    a = void 0,
+		    r = [],
+		    i = void 0;
+
+		aScopes = [].concat(_toConsumableArray(aScopesArg));
+		aBuf = {};
+
+		if (aScopes instanceof Array) {
+			for (i = 0; i < aScopes.length; i++) {
+				nId = aScopes[i][this.idFieldName];
+				aBuf[nId] = aScopes[i];
+				aBuf[nId][this.childsFieldName] = {};
+			}
+		} else {
+			for (nId in aScopes) {
+				oItem = aScopes[nId];
+				aBuf[nId] = oItem;
+				aBuf[nId][this.childsFieldName] = {};
+			}
+		}
+		console.log(aBuf);
+		aScopes = aBuf;
+
+		//тут строим дерево
+		sChilds = this.childsFieldName;
+		for (nId in aScopes) {
+			oItem = aScopes[nId];
+
+			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]); //it need?
+
+			//перемещаем вложенные во внутрь
+			if (oItem[this.parentIdFieldName] > 0) {
+				oParent = aScopes[oItem[this.parentIdFieldName]];
+				if (oParent) {
+					if (!oParent[sChilds]) {
+						oParent[sChilds] = {};
+					}
+					//a = &oParent->sChilds;
+					a = oParent[sChilds];
+					//console.log();
+					a[nId] = oItem;
+					//aScopes[nId] = &a[nId];
+					aScopes[nId] = a[nId];
+					aScopes[nId].isMoved = true;
+				}
+			}
+		}
+
+		//удаляем из корня ссылки на перемещенные в родителей.
+		for (nId in aScopes) {
+			oItem = aScopes[nId];
+			if (oItem.isMoved) {
+				delete aScopes[nId];
+			}
+		}
+		for (nId in aScopes) {
+			oItem = aScopes[nId];
+			r.push(oItem);
+		}
+		return r;
+	}
+};
 
 /***/ })
 /******/ ]);

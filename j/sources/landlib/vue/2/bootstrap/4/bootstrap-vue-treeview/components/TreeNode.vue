@@ -73,7 +73,8 @@
 
 <script>
     import EventBus from '../EventBus';
-    import DropBetweenZone from './DropBetweenZone.vue';
+	import DropBetweenZone from './DropBetweenZone.vue';
+	require('../../../../../../nodom/treealg');
 
     export default {
         name: 'tree-node',
@@ -96,7 +97,11 @@
             childrenProp: {
                 type: String,
                 default: 'children'
-            },
+			},
+			parentKeyProp: {
+                type: String,
+                default: 'parent_id'
+			},
             draggable: {
                 type: Boolean,
                 default: false
@@ -331,7 +336,12 @@
                 }
             },
             delete() {
-                this.$emit('deleteNode', this)
+				TreeAlgorithms.idFieldName = this.keyProp;
+				TreeAlgorithms.parentIdFieldName = this.parentKeyProp;
+				TreeAlgorithms.childsFieldName = this.childrenProp;
+				let idList = TreeAlgorithms.getBranchIdList(this.data);
+				EventBus.$emit('deleteNodeEx', this, idList);
+                this.$emit('deleteNode', this);
             },
             deleteChildNode(childNodeData) {
                 let children = this.data[this.childrenProp]

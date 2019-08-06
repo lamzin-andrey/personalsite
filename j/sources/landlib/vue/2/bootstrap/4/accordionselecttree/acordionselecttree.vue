@@ -185,8 +185,6 @@
 			 * @description Обработка выбора пункта контекстного меню дерева категорий
 			*/
 			onSelectTreeViewContextMenuItem(item, node){
-				console.log(item);
-				console.log(node.data);
 				if (item.code == 'ADD_NODE') {
 					//TODO add spinner
 					/* <div role="status" class="spinner-grow small">
@@ -202,27 +200,6 @@
 					this.nRequestAddNodeId = id;
 					Rest._post({parent_id : id}, (data) => {this.onSuccessAddNewItem(data); }, this.urlCreateNewItem, (a, b, c) => {this.onFailItemAction(a, b, c);});
 				}
-				if (item.code == 'DELETE_NODE') {
-					//TODO add spinner
-					/* <div role="status" class="spinner-grow small">
-									  <span class="sr-only">Loading...</span>
-					</div>*/
-					//data, onSuccess, url, onFail
-
-					if (!this.stackremovedItems) {
-						//TODO сюда помещаем всех потомков ветки и ветку по id
-						//скорее всего понадобиться в TreeView.menuItemSelected перед удалением собрать все id
-						this.stackremovedItems = {};
-					}
-
-					let id = node.data[this.nodeKeyProp];
-					this.nRequestDeleteNodeId = id;
-					this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
-					this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];
-					Rest._post({id : id}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
-				}
-				//On delete expand all child id and send to server
-				//on add send info to server, get id. 
 			},
 			/**
 			 * @description Processed success add new item
@@ -238,7 +215,6 @@
 					this.$refs['v' + this.id].createNodeMap();
 				//	this.nodeMapCreated = true;
 				//}
-				console.log('try search by key ' + this.nodeParentKeyProp + ' = ' + data[this.nodeParentKeyProp]);
 				let x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
 				let newNodeData = {};
 				newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
@@ -252,26 +228,6 @@
 			 * @param {Object} data
 			*/
 			onFailItemAction(data, b, c) {
-				this.nRequestAddNodeId = 0;
-				if (data.status && data.status == 'ok') {
-					return true;
-				}
-				if (data.status && data.status == 'error') {
-					if (data.msg) {
-						this.showError(data.msg);
-						return false;
-					}
-				} else {
-					this.showError(this.$t('app.DefaultError') );
-					return false;
-				}
-				
-			},
-			/**
-			 * @description Repair item if it no remove
-			 * @param {Object} data
-			*/
-			onFailDeleteItem(data, b, c) {
 				this.nRequestAddNodeId = 0;
 				if (data.status && data.status == 'ok') {
 					return true;
@@ -314,7 +270,7 @@
 				alert(s);
 			},
 			/**
-			 * @description Обработка выбора элемента дерева.
+			 * @description Processing select tree node
 			*/
 			onSelectTreeViewItem(node, isSelected){
 				if (isSelected) {
@@ -326,6 +282,107 @@
 				}
 				this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
 				this.$emit('input', this.selectedNodeId);
+			},
+			/**
+			 * TODO try _delete later
+			 * @description Processing delete node (nodes)
+			 * @param {TreeNode} node
+			 * @param {Array} nodesData (array of objects {this.nodeKeyProp, this.nodeParentKeyProp, this.nodeLabelProp})
+			 * @param {Array} idList (array of numbers)
+			*/
+			onDeleteTreeViewItem(node, nodesData, idList) {
+				console.log(nodesData);
+				//TODO add spinner
+				/* <div role="status" class="spinner-grow small">
+									<span class="sr-only">Loading...</span>
+				</div>*/
+				//data, onSuccess, url, onFail
+
+				if (!this.stackremovedItems) {
+					//TODO сюда помещаем всех потомков ветки и ветку по id
+					//скорее всего понадобится в TreeView.menuItemSelected перед удалением собрать все id
+					this.stackremovedItems = {length:0};
+				}
+
+				let id = node.data[this.nodeKeyProp], i, currObj;
+				/*this.nRequestDeleteNodeId = id;
+				this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
+				this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];*/
+				for (i = 0; i < nodesData.length; i++) {
+					//currObj = {...nodesData[i]}; TODO try it
+					currObj = {};//TODO  currObj = {...nodesData[i]}; вместо этой и трёх следующих
+					currObj[this.nodeKeyProp] = nodesData[i][this.nodeKeyProp];
+					currObj[this.nodeLabelProp] = nodesData[i][this.nodeLabelProp];
+					currObj[this.nodeParentKeyProp] = nodesData[i][this.nodeParentKeyProp];
+
+					this.stackremovedItems[ currObj[this.nodeKeyProp] ] = currObj;
+					this.stackremovedItems.length++;
+				}
+				Rest._post({idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
+			},
+			/**
+			 * @description Restore tree nodes if nodes no removed
+			 * @param {Object} data
+			*/
+			onFailDeleteItem(data, b, c) {
+				this.nRequestAddNodeId = 0;
+				if (data.status && data.status == 'ok') {
+					return true;
+				}
+				if (data.status && data.status == 'error') {
+					if (data.msg) {
+						this.showError(data.msg);
+						this.restoreAllRemovedItems();
+						return false;
+					}
+				} else {
+					this.showError(this.$t('app.DefaultError') );
+					this.restoreAllRemovedItems();
+					return false;
+				}
+			},
+			/**
+			 * TODO подумай, что делать с удалением всего дерева (parent_id undefined)
+			 * @description Restore tree nodes if nodes no removed
+			*/
+			restoreAllRemovedItems() {
+				let arr = [], i, aTree;
+				for (i in this.stackremovedItems) {
+					if (i !== 'length') {
+						arr.push( this.stackremovedItems[i] );
+					}
+				}
+				TreeAlgorithms.idFieldName = this.nodeKeyProp;
+				TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
+				TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
+				console.log('arr', arr);
+				aTree = TreeAlgorithms.buildTreeFromFlatList(arr);
+				console.log('aTree', aTree);
+				for (i = 0; i < aTree.length; i++) {
+					TreeAlgorithms.walkAndExecuteAction(aTree[i], {context:this, f:this.addNode});
+				}
+			},
+			/**
+			 * TODO rename this file
+			 * @description Add node in Tree if it no exists
+			 * @param {Object} nodeData
+			*/
+			addNode(nodeData) {
+				console.log('Call addNode', nodeData);
+				//есть ли такой узел в дереве?
+				delete this.$refs['v' + this.id].nodeMap;
+				this.$refs['v' + this.id].createNodeMap();
+				let parentNode, x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
+				if (x) {
+					console.log(`Found node ${nodeData[this.nodeKeyProp]}, return`);
+					return;
+				}
+				parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
+				if (parentNode) {
+					parentNode.appendChild(nodeData);
+				} else {
+					console.log(`Not Found Parent Node ${nodeData[this.nodeParentKeyProp]}, fin`);
+				}
 			},
 			/**
 			 * @param {TreeNode} oNode
@@ -379,6 +436,9 @@
 			});
 			this.$refs['v' + this.id].$on('nodeRenamed', (node) => {
                 this.onRenameTreeViewItem(node);
+			});
+			this.$refs['v' + this.id].$on('deleteNodeEx', (node, nodesData, idList) => {
+                this.onDeleteTreeViewItem(node, nodesData, idList);
 			});
         }
     }
