@@ -178,12 +178,7 @@
 			*/
 			onSelectTreeViewContextMenuItem(item, node){
 				if (item.code == 'ADD_NODE') {
-					//TODO add spinner
-					/* <div role="status" class="spinner-grow small">
-									  <span class="sr-only">Loading...</span>
-					</div>*/
-					//data, onSuccess, url, onFail
-
+					this.showSpinner(node.$el);
 					if (this.nRequestAddNodeId) {
 						this.showError(this.$t('app.Add_request_already_sended_wait'));//TODO loc and showError
 						return;
@@ -194,15 +189,27 @@
 				}
 			},
 			/**
+			 * @description Show spinner for add node
+			*/
+			showSpinner(el) {
+				$(el).find('.tree-node').first().append($(`<div role="status" class="spinner-grow small j-node-spinner">
+					  <span class="sr-only">Loading...</span>
+				</div>`));
+			},
+			/**
+			 * @description Delete spinner for add node
+			*/
+			deleteSpinner(){
+				$('.j-node-spinner').remove();
+			},
+			/**
 			 * @description Processed success add new item
 			 * @param {Object} data
 			*/
 			onSuccessAddNewItem(data) {
 				if (!this.onFailItemAction(data)) {
-					//TODO drop spinner
 					return;
 				}
-				
 				delete this.$refs['v' + this.id].nodeMap;
 				this.$refs['v' + this.id].createNodeMap();
 				
@@ -221,6 +228,7 @@
 			 * @param {Object} data
 			*/
 			onFailItemAction(data, b, c) {
+				this.deleteSpinner();
 				this.nRequestAddNodeId = 0;
 				if (data.status && data.status == 'ok') {
 					return true;
@@ -237,9 +245,10 @@
 				
 			},
 			/**
-			 * @description 
+			 * @description Send request to server with new item name
 			*/
 			onRenameTreeViewItem(node) {
+				this.showSpinner(node.$el);
 				let sendData = {};
 				sendData[this.nodeKeyProp] = node.data[this.nodeKeyProp];
 				sendData[this.nodeParentKeyProp] = node.data[this.nodeParentKeyProp];
@@ -251,7 +260,6 @@
 			*/
 			onSuccessRenameItem(data) {
 				if (!this.onFailItemAction(data)) {
-					//TODO drop spinner
 					return;
 				}
 			},
@@ -283,12 +291,6 @@
 			 * @param {Array} idList (array of numbers)
 			*/
 			onDeleteTreeViewItem(node, nodesData, idList) {
-				//TODO add spinner
-				/* <div role="status" class="spinner-grow small">
-									<span class="sr-only">Loading...</span>
-				</div>*/
-				//data, onSuccess, url, onFail
-
 				if (!this.stackremovedItems) {
 					//сюда помещаем всех потомков ветки и ветку по id
 					this.stackremovedItems = {};
@@ -348,10 +350,8 @@
 				TreeAlgorithms.idFieldName = this.nodeKeyProp;
 				TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
 				TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
-				console.log('arr', arr);
 				aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
-				console.log('aTree', aTree);
-
+				
 				//Restore all tree
 				if (!aTree[0][this.nodeParentKeyProp]) {
 					this.addNode(aTree[0]);
@@ -362,26 +362,24 @@
 				}
 			},
 			/**
-			 * TODO rename this file
-			 * @description Add node in Tree if it no exists
+			 * @description Add node in Tree if it no exists (@see restoreAllRemovedItems)
 			 * @param {Object} nodeData
 			*/
 			addNode(nodeData) {
-				let i;
-				//root
-				if (!nodeData[this.nodeParentKeyProp]) {
-					this.exampleNode.data = nodeData;
-					this.$refs['v' + this.id].data.push(nodeData);
-					return;
-				}
-				//no root
-				//есть ли такой узел в дереве?
+				//search node in tree
 				delete this.$refs['v' + this.id].nodeMap;
 				this.$refs['v' + this.id].createNodeMap();
 				let parentNode, x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
 				if (x) {
 					return;
 				}
+				//root
+				if (!nodeData[this.nodeParentKeyProp] || nodeData[this.nodeParentKeyProp] == 0) {
+					this.exampleNode.data = nodeData;
+					this.$refs['v' + this.id].data.push(nodeData);
+					return;
+				}
+				//no root
 				parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 				if (parentNode) {
 					parentNode.appendChild(nodeData);

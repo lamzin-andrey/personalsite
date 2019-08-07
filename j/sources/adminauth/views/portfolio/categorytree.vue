@@ -17,7 +17,7 @@
 </template>
 <script>
 	//TODO перерегистрировать локально
-	Vue.component('accordionselecttree', require('../../../landlib/vue/2/bootstrap/4/accordionselecttree/acordionselecttree'));
+	Vue.component('accordionselecttree', require('../../../landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree'));
     export default {
 		model: {
 			prop: 'value',
