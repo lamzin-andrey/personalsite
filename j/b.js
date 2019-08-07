@@ -47775,9 +47775,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 //TODO перерегистрировать локально
 Vue.component('accordionselecttree', __webpack_require__(80));
+__webpack_require__(96);
 /* harmony default export */ __webpack_exports__["default"] = ({
 	model: {
 		prop: 'value',
@@ -47787,16 +47790,22 @@ Vue.component('accordionselecttree', __webpack_require__(80));
 		'id': {
 			type: String
 		},
-		'value': {
-			type: Number
+		'value': {}
+	},
+
+	watch: {
+		value: function value(n, old) {
+			//this.selectedCategory = n; - это скорее всего лажа
+			console.log('CTree: new = ' + n + ', old = ' + old);
 		}
 	},
+
 	name: 'categorytree',
 
 	//вызывается раньше чем mounted
 	data: function data() {
 		return {
-			val: 2222,
+			selectedCategory: 0,
 			/** @property {Array} данные дерева категорий */
 			portfolioCategoriesTree: [{ "id": 2222, "name": "Zevs", "children": [{ "id": 3333, "parent_id": 2222, "name": "Neptune" }, { "id": 4444, "parent_id": 2222, "name": "Stratus" }] }]
 		};
@@ -47812,7 +47821,29 @@ Vue.component('accordionselecttree', __webpack_require__(80));
 	//
 	methods: {}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
-	mounted: function mounted() {}
+	mounted: function mounted() {
+		var _this = this;
+
+		//parse data
+		var data = $('#pcategorydata').val();
+		//this.selectedCategory = this.value;
+		console.log('this.selectedCategory', this.selectedCategory);
+		console.log('this.value', this.value);
+		try {
+			data = JSON.parse(data);
+			data = TreeAlgorithms.buildTreeFromFlatList(data.portfolioCategories, true);
+			this.portfolioCategoriesTree[0] = data[0];
+			setTimeout(function () {
+				_this.selectedCategory = 2; //TODO получить категорию работы с сервера в данных. Использовать тик. Попробовать разобраться с реактивностью
+				_this.$refs.acctree.selectNodeById(_this.selectedCategory);
+			}, 500);
+		} catch (e) {}
+
+		this.$refs.acctree.$on('input', function (value) {
+			//this.onDeleteTreeViewItem(node, nodesData, idList);
+			_this.$emit('input', value);
+		});
+	}
 });
 
 /***/ }),
@@ -47918,12 +47949,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 
-//Компонент для дерева категорий
-//так импортировалось из bootstrap-vue-treeview
-//import BootstrapVueTreeview from 'bootstrap-vue-treeview';
-//Vue.use(BootstrapVueTreeview);
-
-//Пытаюсь импортировать из своего форка
+//Accordion + Tree view componend with send ajax data to server
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* default */]);
 
@@ -47938,9 +47964,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		id: {
 			type: String
 		},
-		value: {
-			type: Number
-		},
+		value: {},
 		label: {
 			type: String
 		},
@@ -48027,6 +48051,11 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 		showIcons: {
 			type: Boolean,
 			default: false
+		}
+	},
+	watch: {
+		value: function value(n, old) {
+			console.log('AcTree: new = ' + n + ', old = ' + old);
 		}
 	},
 	name: 'categorytree',
@@ -48342,6 +48371,34 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
   */
 		localizeDefaultMenu: function localizeDefaultMenu() {
 			this.contextMenuItems = [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }];
+		},
+
+		/**
+   * @description dinamic change selection
+  */
+		selectAndExpandNode: function selectAndExpandNode() {
+			this.selectedNode = this.defaultSelectedNode;
+			this.btnCss = 'btn btn-danger';
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(this.value));
+			if (x) {
+				x.select();
+				this.expandBranch(x);
+			} else {
+				console.log('Not found');
+			}
+		},
+		selectNodeById: function selectNodeById(key) {
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(key));
+			if (x) {
+				x.select();
+				this.expandBranch(x);
+				return true;
+			}
+			return false;
 		}
 	}, //end methods
 
@@ -48350,13 +48407,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 
 		this.localizeDefaultMenu();
 		this.initDefaultSelectedNode();
-		this.selectedNode = this.defaultSelectedNode;
-		this.$refs['v' + this.id].createNodeMap();
-		var x = this.$refs['v' + this.id].getNodeByKey(this.value);
-		if (x) {
-			x.select();
-			this.expandBranch(x);
-		}
+
+		console.log('categorytree component value on mounted ' + this.value);
+
+		this.selectAndExpandNode();
 		this.$refs['v' + this.id].$on('contextMenuItemSelect', function (item, node) {
 			_this5.onSelectTreeViewContextMenuItem(item, node);
 		});
@@ -50398,10 +50452,10 @@ var render = function() {
     "div",
     [
       _c("accordionselecttree", {
+        ref: "acctree",
         attrs: {
           id: "portfolioCategoriesTree",
           label: "Categories",
-          value: _vm.value,
           treedata: _vm.portfolioCategoriesTree,
           showIcons: true,
           showIcon: true,
@@ -50414,6 +50468,13 @@ var render = function() {
           input: function($event) {
             return _vm.$emit("input", _vm.value)
           }
+        },
+        model: {
+          value: _vm.selectedCategory,
+          callback: function($$v) {
+            _vm.selectedCategory = $$v
+          },
+          expression: "selectedCategory"
         }
       })
     ],

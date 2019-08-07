@@ -52,5 +52,5 @@
 	<li >инициализацию лайвтранслит вынести из приложения в mount форм и у портфолио там /portfolio/</li>
 </ul>
 
-
+<textarea hidden style="display:none" id="pcategorydata"><?php echo $app->jsonData ?></textarea>
 <portfolio ref="portfolio"></portfolio>

@@ -37,7 +37,7 @@ class ProudctCategoryPost extends AdminAuthJson {
 			if (!$id) {
 				$id = $newId;
 			}
-			json_ok('id', $id, 'name', $this->category_name, 'parent_id', $this->parent_id);
+			json_ok('id', $id, 'name', utils_utf8($this->category_name), 'parent_id', $this->parent_id);
 		}
 		$aErr = [];
 		foreach ($errors as $key => $sText) {

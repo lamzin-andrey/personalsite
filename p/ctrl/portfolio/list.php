@@ -16,14 +16,14 @@ class ProductsEditor extends AdminAuth {
 		$this->_setJsonData();
 	}
 	/**
-	 * @description Установить $this->jsonData ??
+	 * @description Установить $this->jsonData
 	*/
 	private function _setJsonData()
 	{
 		$a = ['portfolioCategories' => null];
 		$safe = ($_REQUEST['xhr'] ?? -1);
 		$_REQUEST['xhr'] = true;
-		$a['portfolioCategories'] = query("SELECT id, category_name AS name FROM portfolio_categories WHERE is_deleted = 0 ORDER BY delta");
+		$a['portfolioCategories'] = query("SELECT id, parent_id, category_name AS name FROM portfolio_categories WHERE is_deleted = 0 ORDER BY delta");
 		if ($safe == -1) {
 			unset($_REQUEST['xhr']);
 		} else {

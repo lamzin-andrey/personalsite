@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<input	v-model="selectedNodeId"  type="hidden" :id="id" :name="id">
+		<input	v-model="selectedNodeId"  type="hidden" :id="id" :name="id"><!--TODO нужен ли вообще этот инпут? Например, если бы форама отправлялась не ajax ом ' -->
 		<div class="accordion" :id="id + 'Accord'">
 			<div class="card">
 				<div class="card-header" :id="id + 'AccordHeading'">
@@ -43,12 +43,7 @@
 	</div>
 </template>
 <script>
-	//Компонент для дерева категорий
-	//так импортировалось из bootstrap-vue-treeview
-    //import BootstrapVueTreeview from 'bootstrap-vue-treeview';
-	//Vue.use(BootstrapVueTreeview);
-
-	//Пытаюсь импортировать из своего форка
+	//Accordion + Tree view componend with send ajax data to server
 	import BootstrapVueTreeview from '../bootstrap-vue-treeview/index';
 	Vue.use(BootstrapVueTreeview);
 
@@ -65,7 +60,7 @@
 				type: String
 			},
 			value: {
-				type: Number
+				
 			},
 			label: {
 				type: String
@@ -154,6 +149,12 @@
                 type: Boolean,
                 default: false
             }
+		},
+		watch:{
+			value:function(n, old) {
+				console.log('AcTree: new = ' + n + ', old = '  + old);
+				
+			}
 		},
 		name: 'categorytree',
 		
@@ -435,19 +436,43 @@
 						{code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node')},
 						{code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node')}
 					];
+			},
+			/**
+			 * @description dinamic change selection
+			*/
+			selectAndExpandNode() {
+				this.selectedNode = this.defaultSelectedNode;
+				this.btnCss = 'btn btn-danger';
+				delete this.$refs['v' + this.id].nodeMap;
+				this.$refs['v' + this.id].createNodeMap();
+				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(this.value));
+				if (x) {
+					x.select();
+					this.expandBranch(x);
+				} else {
+					console.log('Not found');
+				}
+			},
+			selectNodeById(key) {
+				delete this.$refs['v' + this.id].nodeMap;
+				this.$refs['v' + this.id].createNodeMap();
+				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(key));
+				if (x) {
+					x.select();
+					this.expandBranch(x);
+					return true;
+				}
+				return false;
 			}
         }, //end methods
         
         mounted() {
 			this.localizeDefaultMenu();
 			this.initDefaultSelectedNode();
-			this.selectedNode = this.defaultSelectedNode;
-			this.$refs['v' + this.id].createNodeMap();
-			let x = this.$refs['v' + this.id].getNodeByKey(this.value);
-			if (x) {
-				x.select();
-				this.expandBranch(x);
-			}
+
+			console.log('categorytree component value on mounted ' + this.value);
+
+			this.selectAndExpandNode();
 			this.$refs['v' + this.id].$on('contextMenuItemSelect', (item, node) => {
                 this.onSelectTreeViewContextMenuItem(item, node);
 			});
