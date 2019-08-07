@@ -25579,228 +25579,6 @@ var Validator = {
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @class
- * En:
- * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
- * into center of the table and add bootstrap 4 spinner into preloader
- * Ru:
- * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
- * bootstrap 4 спиннер в блок прелоадера
- * 
-*/
-var B4DataTablesPreloader = function () {
-    /**
-     * @description 
-     * En: Set block identifier with table and block with preloader
-     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
-     * @param {String} tableId start with '#' 
-     * @param {String} preloaderBlockId start with '#' 
-     * @param {DataTables} oDataTables
-    */
-    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
-        _classCallCheck(this, B4DataTablesPreloader);
-
-        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
-        /** @property {Number} zIndex Default preloader z-index */
-        this.zIndex = 100;
-
-        /** @property {String} loaderText Default preloader text */
-        this.loaderText = '';
-
-        /** @property {Array} b4Classes Bootstrap 4 standart colors */
-        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
-
-        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
-        this.b4ClassesIterator = 0;
-
-        /** @property  isShowSpinner if false preloader will not draw spinner*/
-        this.isShowSpinner = true;
-
-        /** @property  isSetPosition if false preloader will not draw spinner*/
-        this.isSetPosition = true;
-    }
-    /**
-     * @description
-     * En: Set block identifier with table and block with preloader
-     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
-     * @param {String} tableId start with '#' 
-     * @param {String} preloaderBlockId start with '#' 
-     * @param {DataTables} oDataTables
-    */
-
-
-    _createClass(B4DataTablesPreloader, [{
-        key: 'setIdentifiers',
-        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
-            this.tableId = tableId;
-            this.jTable = $(tableId);
-            this.jPreloader = $(preloaderBlockId);
-            this.oDataTables = oDataTables;
-        }
-        /**
-         * @description En: Start observe window resizing and adjust spinner position
-         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
-         * 
-        */
-
-    }, {
-        key: 'watch',
-        value: function watch() {
-            var _this = this;
-
-            window.addEventListener('resize', function () {
-                _this.setSpinnerPosition();
-            }, true);
-            if (this.oDataTables) {
-                this.oDataTables.on('processing', function () {
-                    _this.setSpinnerPosition();
-                });
-                this.oDataTables.on('draw', function () {
-                    _this.removeSpinnerBlock();
-                });
-            }
-            setInterval(function () {
-                _this.onTick();
-            }, 1 * 1000);
-            this.setSpinnerPosition();
-        }
-        /**
-         * @description
-         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
-         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
-         * 
-        */
-
-    }, {
-        key: 'setSpinnerPosition',
-        value: function setSpinnerPosition() {
-            this.setSpinner();
-            this.setPosition();
-        }
-        /**
-         * @description En: Prepend spinner in preloader block
-         * Ru: Добавляет спиннер в блок
-        */
-
-    }, {
-        key: 'setSpinner',
-        value: function setSpinner() {
-            if (!this.jPreloader[0] || !this.isShowSpinner) {
-                return;
-            }
-            var text = this.jPreloader.text().trim(),
-                s = this.tableId.replace('#', ''),
-                spinnerBlockId = this.tableId + 'Spinner';
-            if (!this.loaderText) {
-                this.loaderText = text;
-            }
-            text = text ? text : this.loaderText;
-            if (!$(spinnerBlockId)[0]) {
-                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
-                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
-            }
-        }
-        /**
-         * @description En: Drop spinner from preloader
-         * Ru: Удалить спиннер с прелоадера
-        */
-
-    }, {
-        key: 'removeSpinnerBlock',
-        value: function removeSpinnerBlock() {
-            var spinnerBlockId = this.tableId + 'Spinner';
-            if ($(spinnerBlockId)[0]) {
-                $(spinnerBlockId).remove();
-            }
-        }
-        /**
-         * @description En: Align center preloader 
-         * Ru: Установить прелоадер по центру таблицы
-        */
-
-    }, {
-        key: 'setPosition',
-        value: function setPosition() {
-            var t = this.jTable[0],
-                p = this.jPreloader[0],
-                x = void 0,
-                y = void 0;
-            if (!p || !t || !this.isSetPosition) {
-                return;
-            }
-            x = (t.offsetWidth - p.offsetWidth) / 2;
-            y = (t.offsetHeight - p.offsetHeight) / 2;
-            this.jPreloader.css('position', 'absolute');
-            this.jPreloader.css('z-index', '100');
-            this.jPreloader.css('left', x + 'px');
-            this.jPreloader.css('top', y + 'px');
-        }
-        /**
-         * @description En: Spinner color animation
-         * Ru: Анимация классов цвета спиннера
-        */
-
-    }, {
-        key: 'onTick',
-        value: function onTick() {
-            var prevClass = this.b4ClassesIterator;
-            this.b4ClassesIterator++;
-            if (this.b4ClassesIterator >= this.b4Classes.length) {
-                this.b4ClassesIterator = 0;
-            }
-            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
-                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
-                p = 'text-' + this.b4Classes[prevClass];
-            jSpinner.removeClass(p);
-            jSpinner.addClass(s);
-        }
-        /**
-         * @description set this.zIndex
-         * @param {Number} zIndex
-        */
-
-    }, {
-        key: 'setZIndex',
-        value: function setZIndex(zIndex) {
-            this.zIndex = zIndex;
-        }
-        /**
-         * @description 
-         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
-         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
-         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
-         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
-        */
-
-    }, {
-        key: 'configure',
-        value: function configure() {
-            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-            /** @property  isShowSpinner if false preloader will not draw spinner*/
-            this.isShowSpinner = isShowSpinner;
-
-            /** @property  isSetPosition if false preloader will not draw spinner*/
-            this.isSetPosition = isSetPosition;
-        }
-    }]);
-
-    return B4DataTablesPreloader;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
-
-/***/ }),
-/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -26159,6 +25937,228 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class
+ * En:
+ * Move preloader DataTables in bootstrap4 theme (npm install --save datatables.net-bs4)
+ * into center of the table and add bootstrap 4 spinner into preloader
+ * Ru:
+ * Перемещает прелоадер загрузки данных DataTables с темой  bootstrap4 в центр таблицы и добавляет 
+ * bootstrap 4 спиннер в блок прелоадера
+ * 
+*/
+var B4DataTablesPreloader = function () {
+    /**
+     * @description 
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+    function B4DataTablesPreloader(tableId, preloaderBlockId, oDataTables) {
+        _classCallCheck(this, B4DataTablesPreloader);
+
+        this.setIdentifiers(tableId, preloaderBlockId, oDataTables);
+        /** @property {Number} zIndex Default preloader z-index */
+        this.zIndex = 100;
+
+        /** @property {String} loaderText Default preloader text */
+        this.loaderText = '';
+
+        /** @property {Array} b4Classes Bootstrap 4 standart colors */
+        this.b4Classes = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+
+        /** @property {Number} b4ClassesIterator current Bootstrap 4 standart color */
+        this.b4ClassesIterator = 0;
+
+        /** @property  isShowSpinner if false preloader will not draw spinner*/
+        this.isShowSpinner = true;
+
+        /** @property  isSetPosition if false preloader will not draw spinner*/
+        this.isSetPosition = true;
+    }
+    /**
+     * @description
+     * En: Set block identifier with table and block with preloader
+     * Ru: Установить идентификатор блока с таблицей и блока с предлоадером
+     * @param {String} tableId start with '#' 
+     * @param {String} preloaderBlockId start with '#' 
+     * @param {DataTables} oDataTables
+    */
+
+
+    _createClass(B4DataTablesPreloader, [{
+        key: 'setIdentifiers',
+        value: function setIdentifiers(tableId, preloaderBlockId, oDataTables) {
+            this.tableId = tableId;
+            this.jTable = $(tableId);
+            this.jPreloader = $(preloaderBlockId);
+            this.oDataTables = oDataTables;
+        }
+        /**
+         * @description En: Start observe window resizing and adjust spinner position
+         * Ru: Наблюдает за изменением размеров окна и корректирует позицию спиннера
+         * 
+        */
+
+    }, {
+        key: 'watch',
+        value: function watch() {
+            var _this = this;
+
+            window.addEventListener('resize', function () {
+                _this.setSpinnerPosition();
+            }, true);
+            if (this.oDataTables) {
+                this.oDataTables.on('processing', function () {
+                    _this.setSpinnerPosition();
+                });
+                this.oDataTables.on('draw', function () {
+                    _this.removeSpinnerBlock();
+                });
+            }
+            setInterval(function () {
+                _this.onTick();
+            }, 1 * 1000);
+            this.setSpinnerPosition();
+        }
+        /**
+         * @description
+         * En: Watch window resizing and adjust preloader position. Add spinner in preloader block
+         * Ru: Добавляет спиннер в прелоадер и устанавливает позицию прелоадера
+         * 
+        */
+
+    }, {
+        key: 'setSpinnerPosition',
+        value: function setSpinnerPosition() {
+            this.setSpinner();
+            this.setPosition();
+        }
+        /**
+         * @description En: Prepend spinner in preloader block
+         * Ru: Добавляет спиннер в блок
+        */
+
+    }, {
+        key: 'setSpinner',
+        value: function setSpinner() {
+            if (!this.jPreloader[0] || !this.isShowSpinner) {
+                return;
+            }
+            var text = this.jPreloader.text().trim(),
+                s = this.tableId.replace('#', ''),
+                spinnerBlockId = this.tableId + 'Spinner';
+            if (!this.loaderText) {
+                this.loaderText = text;
+            }
+            text = text ? text : this.loaderText;
+            if (!$(spinnerBlockId)[0]) {
+                //TODO try add transition: color 2s easy; into #...SpinnerAnimation.text-primary[all std colors]
+                this.jPreloader.html('\n            <div id="' + s + 'Spinner" class="m-4 text-center">\n                <div id="' + s + 'SpinnerAnimation"  class="spinner-border text-primary mb-3" role="status">\n                    <span class="sr-only">' + text + '</span>\n                </div>\n                <div style="margin:auto; text-align:center">\n                    ' + text + '\n                </div>\n            </div>\n            ');
+            }
+        }
+        /**
+         * @description En: Drop spinner from preloader
+         * Ru: Удалить спиннер с прелоадера
+        */
+
+    }, {
+        key: 'removeSpinnerBlock',
+        value: function removeSpinnerBlock() {
+            var spinnerBlockId = this.tableId + 'Spinner';
+            if ($(spinnerBlockId)[0]) {
+                $(spinnerBlockId).remove();
+            }
+        }
+        /**
+         * @description En: Align center preloader 
+         * Ru: Установить прелоадер по центру таблицы
+        */
+
+    }, {
+        key: 'setPosition',
+        value: function setPosition() {
+            var t = this.jTable[0],
+                p = this.jPreloader[0],
+                x = void 0,
+                y = void 0;
+            if (!p || !t || !this.isSetPosition) {
+                return;
+            }
+            x = (t.offsetWidth - p.offsetWidth) / 2;
+            y = (t.offsetHeight - p.offsetHeight) / 2;
+            this.jPreloader.css('position', 'absolute');
+            this.jPreloader.css('z-index', '100');
+            this.jPreloader.css('left', x + 'px');
+            this.jPreloader.css('top', y + 'px');
+        }
+        /**
+         * @description En: Spinner color animation
+         * Ru: Анимация классов цвета спиннера
+        */
+
+    }, {
+        key: 'onTick',
+        value: function onTick() {
+            var prevClass = this.b4ClassesIterator;
+            this.b4ClassesIterator++;
+            if (this.b4ClassesIterator >= this.b4Classes.length) {
+                this.b4ClassesIterator = 0;
+            }
+            var jSpinner = $(this.tableId + 'SpinnerAnimation'),
+                s = 'text-' + this.b4Classes[this.b4ClassesIterator],
+                p = 'text-' + this.b4Classes[prevClass];
+            jSpinner.removeClass(p);
+            jSpinner.addClass(s);
+        }
+        /**
+         * @description set this.zIndex
+         * @param {Number} zIndex
+        */
+
+    }, {
+        key: 'setZIndex',
+        value: function setZIndex(zIndex) {
+            this.zIndex = zIndex;
+        }
+        /**
+         * @description 
+         * En: Configure preloader view. If you set isShowSpinner = false, preloader will not contains bootstrap 4 spinner.
+         * Ru: Конфигурирование вида прелоадера. Если передать isShowSpinner = false прелоадер не будет содержать спиннер bootstrap 4
+         * @param {Boolean} isShowSpinner = true (if false preloader will not draw spinner)
+         * @param {Boolean} isSetPosition = true (if false preloader will not set position on center table)
+        */
+
+    }, {
+        key: 'configure',
+        value: function configure() {
+            var isShowSpinner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var isSetPosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            /** @property  isShowSpinner if false preloader will not draw spinner*/
+            this.isShowSpinner = isShowSpinner;
+
+            /** @property  isSetPosition if false preloader will not draw spinner*/
+            this.isSetPosition = isSetPosition;
+        }
+    }]);
+
+    return B4DataTablesPreloader;
+}();
+
+/* harmony default export */ __webpack_exports__["a"] = (B4DataTablesPreloader);
+
+/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26239,7 +26239,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(16);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 window.jQuery = window.$ = window.jquery = __webpack_require__(3);
@@ -27339,8 +27339,6 @@ module.exports = function (s, opt) {
 /* 33 */
 /***/ (function(module, exports) {
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 window.Rest = {
     /**
      * @property {String} csrf token, set it from app
@@ -27426,20 +27424,14 @@ window.Rest = {
     },
 
     /**
-        * @description ajax request (FormData). Default delete Objects and Arrays from data argument
+        * @description ajax request (FormData).
      * @param {String} method 
         * @param {Function} onSuccess
         * @param {String} url 
         * @param {Function} onFail 
         */
     _restreq: function _restreq(method, data, onSuccess, url, onFail) {
-        var sendData = _extends({}, data),
-            i = void 0;
-        for (i in sendData) {
-            if (i == '__ob__' || sendData[i] instanceof Object) {
-                delete sendData[i];
-            }
-        }
+        var sendData = data;
         if (!url) {
             url = window.location.href;
         } else {
@@ -27841,7 +27833,8 @@ var locales = {
             'Delete_node': 'Удалить категорию',
             'Add_node': 'Добавить категорию',
             'Rename_node': 'Переименовать категорию',
-            'Nothing_select': 'Ничего не выбрано'
+            'Nothing_select': 'Ничего не выбрано',
+            'Add_request_already_sended_wait': 'Запрос на добавление пункта меню уже отправлен, дождитесь его выплолнения'
 
         }
     }
@@ -43358,7 +43351,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(16)(content, options);
+var update = __webpack_require__(15)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -45414,7 +45407,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(16)(content, options);
+var update = __webpack_require__(15)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -46072,7 +46065,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(16);
 //
 //
 //
@@ -46876,7 +46869,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(75)
 /* template */
-var __vue_template__ = __webpack_require__(108)
+var __vue_template__ = __webpack_require__(110)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46920,7 +46913,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(16);
 //
 //
 //
@@ -47294,7 +47287,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(77)
 /* template */
-var __vue_template__ = __webpack_require__(107)
+var __vue_template__ = __webpack_require__(109)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47721,7 +47714,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(79)
 /* template */
-var __vue_template__ = __webpack_require__(106)
+var __vue_template__ = __webpack_require__(108)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47784,7 +47777,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 //TODO перерегистрировать локально
-Vue.component('accordionselecttree', __webpack_require__(109));
+Vue.component('accordionselecttree', __webpack_require__(80));
 /* harmony default export */ __webpack_exports__["default"] = ({
 	model: {
 		prop: 'value',
@@ -47823,8 +47816,563 @@ Vue.component('accordionselecttree', __webpack_require__(109));
 });
 
 /***/ }),
-/* 80 */,
-/* 81 */,
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(81)
+/* template */
+var __vue_template__ = __webpack_require__(107)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-90db35ee", Component.options)
+  } else {
+    hotAPI.reload("data-v-90db35ee", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_animerror_css__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_animerror_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_animerror_css__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//Компонент для дерева категорий
+//так импортировалось из bootstrap-vue-treeview
+//import BootstrapVueTreeview from 'bootstrap-vue-treeview';
+//Vue.use(BootstrapVueTreeview);
+
+//Пытаюсь импортировать из своего форка
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* default */]);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	model: {
+		prop: 'value',
+		event: 'input'
+	},
+	props: {
+		id: {
+			type: String
+		},
+		value: {
+			type: Number
+		},
+		label: {
+			type: String
+		},
+		/** @property field name for parent id */
+		nodeParentKeyProp: {
+			type: String,
+			default: 'parent_id'
+		},
+		/** @property {String} url post request created new menu item*/
+		urlCreateNewItem: {
+			type: String,
+			default: ''
+		},
+		/** @property {String} url post request updated (rename) menu item */
+		urlUpdateItem: {
+			type: String,
+			default: ''
+		},
+		/** @property {String} url post request delete menu item */
+		urlRemoveItem: {
+			type: String,
+			default: ''
+		},
+		//This props will be passed in TreeView
+		treedata: {
+			type: Array,
+			required: true
+		},
+		allowMultiple: {
+			type: Boolean,
+			default: false
+		},
+		nodeKeyProp: {
+			type: String,
+			default: 'id'
+		},
+		nodeChildrenProp: {
+			type: String,
+			default: 'children'
+		},
+		nodeLabelProp: {
+			type: String,
+			default: 'name'
+		},
+		nodesDraggable: {
+			type: Boolean,
+			default: false
+		},
+		contextMenu: {
+			type: Boolean,
+			default: true
+		},
+		/* Exclude from props
+           contextMenuItems: {
+               type: Array,
+               default: () => {
+  		return [
+  			{code: 'ADD_NODE', label: 'Add node'},
+  			{code: 'RENAME_NODE', label: 'Rename node'},
+  			{code: 'DELETE_NODE', label: 'Delete node'}
+  		];
+  	}
+  },*/
+		renameNodeOnDblClick: {
+			type: Boolean,
+			default: true
+		},
+		// class added to every icon no matter what
+		prependIconClass: {
+			type: String,
+			default: null
+		},
+		// default icon if node icon is not specified
+		defaultIconClass: {
+			type: String,
+			default: null
+		},
+		// where to search for node icon
+		iconClassProp: {
+			type: String,
+			default: "icon"
+		},
+		// show icons
+		showIcons: {
+			type: Boolean,
+			default: false
+		}
+	},
+	name: 'categorytree',
+
+	//вызывается раньше чем mounted
+	data: function data() {
+		return {
+
+			/** @property {Object} defaultSelectedNode Значение активной ноды по умолчанию (ничего не выбрано) */
+			defaultSelectedNode: { name: this.$t('app.Nothing_select'), id: 0 },
+
+			/** @property {Object} selectedNode Активная нода */
+			selectedNode: this.defaultSelectedNode,
+
+			/** @property {Number} selectedNodeId id активной ноды */
+			selectedNodeId: 0,
+
+			/** @property {String} Вид кнопки с именем выбранной категории */
+			btnCss: 'btn btn-danger',
+
+			/** @property {Array} contextMenuItems */
+			contextMenuItems: [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }],
+
+			/** @property {Array} sErrorText сообщение об ошибке */
+			sErrorText: ''
+
+		};
+	},
+	//
+	methods: {
+		/**
+   * @description Обработка выбора пункта контекстного меню дерева категорий
+  */
+		onSelectTreeViewContextMenuItem: function onSelectTreeViewContextMenuItem(item, node) {
+			var _this = this;
+
+			if (item.code == 'ADD_NODE') {
+				if (this.nRequestAddNodeId) {
+					this.showError(this.$t('app.Add_request_already_sended_wait'));
+					return;
+				}
+				this.showSpinner(node.$el);
+				var id = node.data[this.nodeKeyProp];
+				this.nRequestAddNodeId = id;
+				Rest._post({ parent_id: id }, function (data) {
+					_this.onSuccessAddNewItem(data);
+				}, this.urlCreateNewItem, function (a, b, c) {
+					_this.onFailItemAction(a, b, c);
+				});
+			}
+		},
+
+		/**
+   * @description Show spinner for add node
+  */
+		showSpinner: function showSpinner(el) {
+			$(el).find('.tree-node').first().append($('<div role="status" class="spinner-grow small j-node-spinner">\n\t\t\t\t\t  <span class="sr-only">Loading...</span>\n\t\t\t\t</div>'));
+		},
+
+		/**
+   * @description Delete spinner for add node
+  */
+		deleteSpinner: function deleteSpinner() {
+			$('.j-node-spinner').remove();
+		},
+
+		/**
+   * @description Processed success add new item
+   * @param {Object} data
+  */
+		onSuccessAddNewItem: function onSuccessAddNewItem(data) {
+			if (!this.onFailItemAction(data)) {
+				return;
+			}
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+
+			var x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
+			var newNodeData = {};
+			newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
+			newNodeData[this.nodeLabelProp] = data[this.nodeLabelProp];
+			newNodeData[this.nodeParentKeyProp] = data[this.nodeParentKeyProp];
+			newNodeData.icon = this.defaultIconClass;
+			x.appendChild(newNodeData);
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+		},
+
+		/**
+   * @description default process failure item operations
+   * @param {Object} data
+  */
+		onFailItemAction: function onFailItemAction(data, b, c) {
+			this.deleteSpinner();
+			this.nRequestAddNodeId = 0;
+			if (data.status && data.status == 'ok') {
+				return true;
+			}
+			if (data.status && data.status == 'error') {
+				if (data.msg) {
+					this.showError(data.msg);
+					return false;
+				}
+			} else {
+				this.showError(this.$t('app.DefaultError'));
+				return false;
+			}
+		},
+
+		/**
+   * @description Send request to server with new item name
+  */
+		onRenameTreeViewItem: function onRenameTreeViewItem(node) {
+			var _this2 = this;
+
+			this.showSpinner(node.$el);
+			var sendData = {};
+			sendData[this.nodeKeyProp] = node.data[this.nodeKeyProp];
+			sendData[this.nodeParentKeyProp] = node.data[this.nodeParentKeyProp];
+			sendData[this.nodeLabelProp] = node.data[this.nodeLabelProp];
+			Rest._post(sendData, function (data) {
+				_this2.onSuccessRenameItem(data);
+			}, this.urlUpdateItem, function (a, b, c) {
+				_this2.onFailItemAction(a, b, c);
+			});
+		},
+
+		/**
+   * @description On end rename item on server if no rename will show error
+  */
+		onSuccessRenameItem: function onSuccessRenameItem(data) {
+			if (!this.onFailItemAction(data)) {
+				return;
+			}
+		},
+
+		/**
+   * @description show error create / update items
+   */
+		showError: function showError(s) {
+			var _this3 = this;
+
+			setTimeout(function () {
+				_this3.sErrorText = s;
+				setTimeout(function () {
+					_this3.sErrorText = '';
+				}, 2 * 1000);
+			}, 500);
+		},
+
+		/**
+   * @description Processing select tree node
+  */
+		onSelectTreeViewItem: function onSelectTreeViewItem(node, isSelected) {
+			if (isSelected) {
+				this.selectedNode = node.data;
+				this.btnCss = 'btn btn-success';
+			} else if (node.data[this.nodeKeyProp] === this.selectedNode[this.nodeKeyProp]) {
+				this.selectedNode = this.defaultSelectedNode;
+				this.btnCss = 'btn btn-danger';
+			}
+			this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
+			this.$emit('input', this.selectedNodeId);
+		},
+
+		/**
+   * @description Processing delete node (nodes)
+   * @param {TreeNode} node
+   * @param {Array} nodesData (array of objects {this.nodeKeyProp, this.nodeParentKeyProp, this.nodeLabelProp})
+   * @param {Array} idList (array of numbers)
+  */
+		onDeleteTreeViewItem: function onDeleteTreeViewItem(node, nodesData, idList) {
+			var _this4 = this;
+
+			if (!this.stackremovedItems) {
+				//сюда помещаем всех потомков ветки и ветку по id
+				this.stackremovedItems = {};
+			}
+			this.exampleNode = _extends({}, node);
+			var id = node.data[this.nodeKeyProp],
+			    i = void 0,
+			    currObj = void 0;
+			for (i = 0; i < nodesData.length; i++) {
+				currObj = _extends({}, nodesData[i]);
+				this.stackremovedItems[currObj[this.nodeKeyProp]] = currObj;
+			}
+			Rest._delete({ idList: idList }, function (data) {
+				_this4.onSuccessDeleteItem(data);
+			}, this.urlRemoveItem, function (a, b, c) {
+				_this4.onFailDeleteItem(a, b, c);
+			});
+		},
+
+		/**
+   * @description Restore tree nodes if nodes no removed
+   * @param {Object} data
+  */
+		onFailDeleteItem: function onFailDeleteItem(data, b, c) {
+			this.nRequestAddNodeId = 0;
+			if (data.status && data.status == 'ok') {
+				return true;
+			}
+			if (data.status && data.status == 'error') {
+				if (data.msg) {
+					this.showError(data.msg);
+					this.restoreAllRemovedItems();
+					return false;
+				}
+			} else {
+				this.showError(this.$t('app.DefaultError'));
+				this.restoreAllRemovedItems();
+				return false;
+			}
+		},
+
+		/**
+   * @description Clear this.stackremovedItems
+   * @param {Object} data
+  */
+		onSuccessDeleteItem: function onSuccessDeleteItem(data) {
+			if (!this.onFailDeleteItem(data)) {
+				return;
+			}
+			if (data.ids) {
+				var i = void 0,
+				    cid = void 0;
+				for (i = 0; i < data.ids.length; i++) {
+					cid = data.ids[i];
+					delete this.stackremovedItems[cid];
+					if (cid == this.selectedNode[this.nodeKeyProp]) {
+						this.selectedNode = this.defaultSelectedNode;
+						this.btnCss = 'btn btn-danger';
+					}
+				}
+			}
+		},
+
+		/**
+   * @description Restore tree nodes if nodes no removed
+  */
+		restoreAllRemovedItems: function restoreAllRemovedItems() {
+			var arr = [],
+			    i = void 0,
+			    aTree = void 0;
+			for (i in this.stackremovedItems) {
+				arr.push(this.stackremovedItems[i]);
+			}
+			TreeAlgorithms.idFieldName = this.nodeKeyProp;
+			TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
+			TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
+			aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
+
+			//Restore all tree
+			if (!aTree[0][this.nodeParentKeyProp]) {
+				this.addNode(aTree[0]);
+			} else {
+				for (i = 0; i < aTree.length; i++) {
+					TreeAlgorithms.walkAndExecuteAction(aTree[i], { context: this, f: this.addNode });
+				}
+			}
+		},
+
+		/**
+   * @description Add node in Tree if it no exists (@see restoreAllRemovedItems)
+   * @param {Object} nodeData
+  */
+		addNode: function addNode(nodeData) {
+			//search node in tree
+			delete this.$refs['v' + this.id].nodeMap;
+			this.$refs['v' + this.id].createNodeMap();
+			var parentNode = void 0,
+			    x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
+			if (x) {
+				return;
+			}
+			//root
+			if (!nodeData[this.nodeParentKeyProp] || nodeData[this.nodeParentKeyProp] == 0) {
+				this.exampleNode.data = nodeData;
+				this.$refs['v' + this.id].data.push(nodeData);
+				return;
+			}
+			//no root
+			parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
+			if (parentNode) {
+				parentNode.appendChild(nodeData);
+			}
+		},
+
+		/**
+   * @param {TreeNode} oNode
+  */
+		expandBranch: function expandBranch(oNode) {
+			oNode.expand();
+			var x = this.$refs['v' + this.id].getNodeByKey(oNode.data[this.nodeParentKeyProp]);
+			while (x) {
+				x.expand();
+				x = this.$refs['v' + this.id].getNodeByKey(x.data[this.nodeParentKeyProp]);
+			}
+		},
+
+		/**
+   * @description Initalize defaultSelectedNode
+  */
+		initDefaultSelectedNode: function initDefaultSelectedNode() {
+			//defaultSelectedNode : {name: this.$t('app.Nothing_select'), id : 0}
+			this.defaultSelectedNode = {};
+			this.defaultSelectedNode[this.nodeKeyProp] = 0;
+			this.defaultSelectedNode[this.nodeLabelProp] = this.$t('app.Nothing_select');
+		},
+
+		/**
+   * @description Localize default menu only if it default menu
+  */
+		localizeDefaultMenu: function localizeDefaultMenu() {
+			this.contextMenuItems = [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }];
+		}
+	}, //end methods
+
+	mounted: function mounted() {
+		var _this5 = this;
+
+		this.localizeDefaultMenu();
+		this.initDefaultSelectedNode();
+		this.selectedNode = this.defaultSelectedNode;
+		this.$refs['v' + this.id].createNodeMap();
+		var x = this.$refs['v' + this.id].getNodeByKey(this.value);
+		if (x) {
+			x.select();
+			this.expandBranch(x);
+		}
+		this.$refs['v' + this.id].$on('contextMenuItemSelect', function (item, node) {
+			_this5.onSelectTreeViewContextMenuItem(item, node);
+		});
+		this.$refs['v' + this.id].$on('nodeSelect', function (node, isSelected) {
+			_this5.onSelectTreeViewItem(node, isSelected);
+		});
+		this.$refs['v' + this.id].$on('nodeRenamed', function (node) {
+			_this5.onRenameTreeViewItem(node);
+		});
+		this.$refs['v' + this.id].$on('deleteNodeEx', function (node, nodesData, idList) {
+			_this5.onDeleteTreeViewItem(node, nodesData, idList);
+		});
+	}
+});
+
+/***/ }),
 /* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -49664,8 +50212,182 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */,
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(106);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(15)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!./animerror.css", function() {
+			var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!./animerror.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
 /* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".fade-enter-active, .fade-leave-active {\n\ttransition: opacity .5s;\n  }\n  .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {\n\topacity: 0;\n  }", ""]);
+
+// exports
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.selectedNodeId,
+          expression: "selectedNodeId"
+        }
+      ],
+      attrs: { type: "hidden", id: _vm.id, name: _vm.id },
+      domProps: { value: _vm.selectedNodeId },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.selectedNodeId = $event.target.value
+        }
+      }
+    }),
+    _vm._v(" "),
+    _c("div", { staticClass: "accordion", attrs: { id: _vm.id + "Accord" } }, [
+      _c("div", { staticClass: "card" }, [
+        _c(
+          "div",
+          {
+            staticClass: "card-header",
+            attrs: { id: _vm.id + "AccordHeading" }
+          },
+          [
+            _c("h5", { staticClass: "mb-0" }, [
+              _c("label", [_vm._v(_vm._s(_vm.label) + ": ")]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  class: _vm.btnCss,
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "collapse",
+                    "data-target": "#collapsePortCatTreeAccord",
+                    "aria-expanded": "true",
+                    "aria-controls": "collapseSeo"
+                  }
+                },
+                [
+                  _vm.selectedNode
+                    ? _c("span", [
+                        _vm._v(_vm._s(_vm.selectedNode[_vm.nodeLabelProp]))
+                      ])
+                    : _vm._e()
+                ]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "collapse",
+            attrs: {
+              id: "collapsePortCatTreeAccord",
+              "aria-labelledby": _vm.id + "AccordHeading",
+              "data-parent": "#" + _vm.id + "Accord"
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("b-tree-view", {
+                  ref: "v" + _vm.id,
+                  attrs: {
+                    data: _vm.treedata,
+                    contextMenuItems: _vm.contextMenuItems,
+                    showIcons: _vm.showIcons,
+                    showIcon: "true",
+                    defaultIconClass: _vm.defaultIconClass,
+                    allowMultiple: _vm.allowMultiple,
+                    nodeKeyProp: _vm.nodeKeyProp,
+                    nodeChildrenProp: _vm.nodeChildrenProp,
+                    nodeLabelProp: _vm.nodeLabelProp,
+                    nodesDraggable: _vm.nodesDraggable,
+                    contextMenu: _vm.contextMenu,
+                    renameNodeOnDblClick: _vm.renameNodeOnDblClick,
+                    prependIconClass: _vm.prependIconClass,
+                    iconClassProp: _vm.iconClassProp
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("transition", { attrs: { name: "fade" } }, [
+              _vm.sErrorText
+                ? _c("div", { staticClass: "alert alert-danger" }, [
+                    _vm._v(
+                      "\n\t\t\t\t\t\t" + _vm._s(_vm.sErrorText) + "\n\t\t\t\t\t"
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ],
+          1
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-90db35ee", module.exports)
+  }
+}
+
+/***/ }),
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49709,7 +50431,7 @@ if (false) {
 }
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50133,7 +50855,7 @@ if (false) {
 }
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50263,657 +50985,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-30ad51cc", module.exports)
-  }
-}
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(110)
-/* template */
-var __vue_template__ = __webpack_require__(111)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-90db35ee", Component.options)
-  } else {
-    hotAPI.reload("data-v-90db35ee", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 110 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(82);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-//Компонент для дерева категорий
-//так импортировалось из bootstrap-vue-treeview
-//import BootstrapVueTreeview from 'bootstrap-vue-treeview';
-//Vue.use(BootstrapVueTreeview);
-
-//Пытаюсь импортировать из своего форка
-
-Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* default */]);
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	model: {
-		prop: 'value',
-		event: 'input'
-	},
-	props: {
-		id: {
-			type: String
-		},
-		value: {
-			type: Number
-		},
-		label: {
-			type: String
-		},
-		/** @property field name for parent id */
-		nodeParentKeyProp: {
-			type: String,
-			default: 'parent_id'
-		},
-		/** @property {String} url post request created new menu item*/
-		urlCreateNewItem: {
-			type: String,
-			default: ''
-		},
-		/** @property {String} url post request updated (rename) menu item */
-		urlUpdateItem: {
-			type: String,
-			default: ''
-		},
-		/** @property {String} url post request delete menu item */
-		urlRemoveItem: {
-			type: String,
-			default: ''
-		},
-		//This props will be passed in TreeView
-		treedata: {
-			type: Array,
-			required: true
-		},
-		allowMultiple: {
-			type: Boolean,
-			default: false
-		},
-		nodeKeyProp: {
-			type: String,
-			default: 'id'
-		},
-		nodeChildrenProp: {
-			type: String,
-			default: 'children'
-		},
-		nodeLabelProp: {
-			type: String,
-			default: 'name'
-		},
-		nodesDraggable: {
-			type: Boolean,
-			default: false
-		},
-		contextMenu: {
-			type: Boolean,
-			default: true
-		},
-		/* Exclude from props
-           contextMenuItems: {
-               type: Array,
-               default: () => {
-  		return [
-  			{code: 'ADD_NODE', label: 'Add node'},
-  			{code: 'RENAME_NODE', label: 'Rename node'},
-  			{code: 'DELETE_NODE', label: 'Delete node'}
-  		];
-  	}
-  },*/
-		renameNodeOnDblClick: {
-			type: Boolean,
-			default: true
-		},
-		// class added to every icon no matter what
-		prependIconClass: {
-			type: String,
-			default: null
-		},
-		// default icon if node icon is not specified
-		defaultIconClass: {
-			type: String,
-			default: null
-		},
-		// where to search for node icon
-		iconClassProp: {
-			type: String,
-			default: "icon"
-		},
-		// show icons
-		showIcons: {
-			type: Boolean,
-			default: false
-		}
-	},
-	name: 'categorytree',
-
-	//вызывается раньше чем mounted
-	data: function data() {
-		return {
-
-			/** @property {Object} defaultSelectedNode Значение активной ноды по умолчанию (ничего не выбрано) */
-			defaultSelectedNode: { name: this.$t('app.Nothing_select'), id: 0 },
-
-			/** @property {Object} selectedNode Активная нода */
-			selectedNode: this.defaultSelectedNode,
-
-			/** @property {Number} selectedNodeId id активной ноды */
-			selectedNodeId: 0,
-
-			/** @property {String} Вид кнопки с именем выбранной категории */
-			btnCss: 'btn btn-danger',
-
-			/** @property {Array} contextMenuItems */
-			contextMenuItems: [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }]
-
-		};
-	},
-	//
-	methods: {
-		/**
-   * @description Обработка выбора пункта контекстного меню дерева категорий
-  */
-		onSelectTreeViewContextMenuItem: function onSelectTreeViewContextMenuItem(item, node) {
-			var _this = this;
-
-			if (item.code == 'ADD_NODE') {
-				this.showSpinner(node.$el);
-				if (this.nRequestAddNodeId) {
-					this.showError(this.$t('app.Add_request_already_sended_wait')); //TODO loc and showError
-					return;
-				}
-				var id = node.data[this.nodeKeyProp];
-				this.nRequestAddNodeId = id;
-				Rest._post({ parent_id: id }, function (data) {
-					_this.onSuccessAddNewItem(data);
-				}, this.urlCreateNewItem, function (a, b, c) {
-					_this.onFailItemAction(a, b, c);
-				});
-			}
-		},
-
-		/**
-   * @description Show spinner for add node
-  */
-		showSpinner: function showSpinner(el) {
-			$(el).find('.tree-node').first().append($('<div role="status" class="spinner-grow small j-node-spinner">\n\t\t\t\t\t  <span class="sr-only">Loading...</span>\n\t\t\t\t</div>'));
-		},
-
-		/**
-   * @description Delete spinner for add node
-  */
-		deleteSpinner: function deleteSpinner() {
-			$('.j-node-spinner').remove();
-		},
-
-		/**
-   * @description Processed success add new item
-   * @param {Object} data
-  */
-		onSuccessAddNewItem: function onSuccessAddNewItem(data) {
-			if (!this.onFailItemAction(data)) {
-				return;
-			}
-			delete this.$refs['v' + this.id].nodeMap;
-			this.$refs['v' + this.id].createNodeMap();
-
-			var x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
-			var newNodeData = {};
-			newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
-			newNodeData[this.nodeLabelProp] = data[this.nodeLabelProp];
-			newNodeData[this.nodeParentKeyProp] = data[this.nodeParentKeyProp];
-			newNodeData.icon = this.defaultIconClass;
-			x.appendChild(newNodeData);
-			delete this.$refs['v' + this.id].nodeMap;
-			this.$refs['v' + this.id].createNodeMap();
-		},
-
-		/**
-   * @description default process failure item operations
-   * @param {Object} data
-  */
-		onFailItemAction: function onFailItemAction(data, b, c) {
-			this.deleteSpinner();
-			this.nRequestAddNodeId = 0;
-			if (data.status && data.status == 'ok') {
-				return true;
-			}
-			if (data.status && data.status == 'error') {
-				if (data.msg) {
-					this.showError(data.msg);
-					return false;
-				}
-			} else {
-				this.showError(this.$t('app.DefaultError'));
-				return false;
-			}
-		},
-
-		/**
-   * @description Send request to server with new item name
-  */
-		onRenameTreeViewItem: function onRenameTreeViewItem(node) {
-			var _this2 = this;
-
-			this.showSpinner(node.$el);
-			var sendData = {};
-			sendData[this.nodeKeyProp] = node.data[this.nodeKeyProp];
-			sendData[this.nodeParentKeyProp] = node.data[this.nodeParentKeyProp];
-			sendData[this.nodeLabelProp] = node.data[this.nodeLabelProp];
-			Rest._post(sendData, function (data) {
-				_this2.onSuccessRenameItem(data);
-			}, this.urlUpdateItem, function (a, b, c) {
-				_this2.onFailItemAction(a, b, c);
-			});
-		},
-
-		/**
-   * @description On end rename item on server if no rename will show error
-  */
-		onSuccessRenameItem: function onSuccessRenameItem(data) {
-			if (!this.onFailItemAction(data)) {
-				return;
-			}
-		},
-
-		/**
-   * TODO Пусть в конейнере со списком снизу розовый алерт выдвигается
-   */
-		showError: function showError(s) {
-			alert(s);
-		},
-
-		/**
-   * @description Processing select tree node
-  */
-		onSelectTreeViewItem: function onSelectTreeViewItem(node, isSelected) {
-			if (isSelected) {
-				this.selectedNode = node.data;
-				this.btnCss = 'btn btn-success';
-			} else if (node.data[this.nodeKeyProp] === this.selectedNode[this.nodeKeyProp]) {
-				this.selectedNode = this.defaultSelectedNode;
-				this.btnCss = 'btn btn-danger';
-			}
-			this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
-			this.$emit('input', this.selectedNodeId);
-		},
-
-		/**
-   * TODO try _delete later
-   * @description Processing delete node (nodes)
-   * @param {TreeNode} node
-   * @param {Array} nodesData (array of objects {this.nodeKeyProp, this.nodeParentKeyProp, this.nodeLabelProp})
-   * @param {Array} idList (array of numbers)
-  */
-		onDeleteTreeViewItem: function onDeleteTreeViewItem(node, nodesData, idList) {
-			var _this3 = this;
-
-			if (!this.stackremovedItems) {
-				//сюда помещаем всех потомков ветки и ветку по id
-				this.stackremovedItems = {};
-			}
-			this.exampleNode = _extends({}, node);
-			var id = node.data[this.nodeKeyProp],
-			    i = void 0,
-			    currObj = void 0;
-			for (i = 0; i < nodesData.length; i++) {
-				currObj = _extends({}, nodesData[i]);
-				this.stackremovedItems[currObj[this.nodeKeyProp]] = currObj;
-			}
-			Rest._post({ idList: idList }, function (data) {
-				_this3.onSuccessDeleteItem(data);
-			}, this.urlRemoveItem, function (a, b, c) {
-				_this3.onFailDeleteItem(a, b, c);
-			});
-		},
-
-		/**
-   * @description Restore tree nodes if nodes no removed
-   * @param {Object} data
-  */
-		onFailDeleteItem: function onFailDeleteItem(data, b, c) {
-			this.nRequestAddNodeId = 0;
-			if (data.status && data.status == 'ok') {
-				return true;
-			}
-			if (data.status && data.status == 'error') {
-				if (data.msg) {
-					this.showError(data.msg);
-					this.restoreAllRemovedItems();
-					return false;
-				}
-			} else {
-				this.showError(this.$t('app.DefaultError'));
-				this.restoreAllRemovedItems();
-				return false;
-			}
-		},
-
-		/**
-   * @description Clear this.stackremovedItems
-   * @param {Object} data
-  */
-		onSuccessDeleteItem: function onSuccessDeleteItem(data) {
-			if (!this.onFailDeleteItem(data)) {
-				return;
-			}
-			if (data.ids) {
-				var i = void 0;
-				for (i = 0; i < data.ids.length; i++) {
-					delete this.stackremovedItems[data.ids[i]];
-				}
-			}
-		},
-
-		/**
-   * @description Restore tree nodes if nodes no removed
-  */
-		restoreAllRemovedItems: function restoreAllRemovedItems() {
-			var arr = [],
-			    i = void 0,
-			    aTree = void 0;
-			for (i in this.stackremovedItems) {
-				arr.push(this.stackremovedItems[i]);
-			}
-			TreeAlgorithms.idFieldName = this.nodeKeyProp;
-			TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
-			TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
-			aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
-
-			//Restore all tree
-			if (!aTree[0][this.nodeParentKeyProp]) {
-				this.addNode(aTree[0]);
-			} else {
-				for (i = 0; i < aTree.length; i++) {
-					TreeAlgorithms.walkAndExecuteAction(aTree[i], { context: this, f: this.addNode });
-				}
-			}
-		},
-
-		/**
-   * @description Add node in Tree if it no exists (@see restoreAllRemovedItems)
-   * @param {Object} nodeData
-  */
-		addNode: function addNode(nodeData) {
-			//search node in tree
-			delete this.$refs['v' + this.id].nodeMap;
-			this.$refs['v' + this.id].createNodeMap();
-			var parentNode = void 0,
-			    x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
-			if (x) {
-				return;
-			}
-			//root
-			if (!nodeData[this.nodeParentKeyProp] || nodeData[this.nodeParentKeyProp] == 0) {
-				this.exampleNode.data = nodeData;
-				this.$refs['v' + this.id].data.push(nodeData);
-				return;
-			}
-			//no root
-			parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
-			if (parentNode) {
-				parentNode.appendChild(nodeData);
-			}
-		},
-
-		/**
-   * @param {TreeNode} oNode
-  */
-		expandBranch: function expandBranch(oNode) {
-			oNode.expand();
-			var x = this.$refs['v' + this.id].getNodeByKey(oNode.data[this.nodeParentKeyProp]);
-			while (x) {
-				x.expand();
-				x = this.$refs['v' + this.id].getNodeByKey(x.data[this.nodeParentKeyProp]);
-			}
-		},
-
-		/**
-   * @description Initalize defaultSelectedNode
-  */
-		initDefaultSelectedNode: function initDefaultSelectedNode() {
-			//defaultSelectedNode : {name: this.$t('app.Nothing_select'), id : 0}
-			this.defaultSelectedNode = {};
-			this.defaultSelectedNode[this.nodeKeyProp] = 0;
-			this.defaultSelectedNode[this.nodeLabelProp] = this.$t('app.Nothing_select');
-		},
-
-		/**
-   * @description Localize default menu only if it default menu
-  */
-		localizeDefaultMenu: function localizeDefaultMenu() {
-			this.contextMenuItems = [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }];
-		}
-	}, //end methods
-
-	mounted: function mounted() {
-		var _this4 = this;
-
-		this.localizeDefaultMenu();
-		this.initDefaultSelectedNode();
-		this.selectedNode = this.defaultSelectedNode;
-		this.$refs['v' + this.id].createNodeMap();
-		var x = this.$refs['v' + this.id].getNodeByKey(this.value);
-		if (x) {
-			x.select();
-			this.expandBranch(x);
-		}
-		this.$refs['v' + this.id].$on('contextMenuItemSelect', function (item, node) {
-			_this4.onSelectTreeViewContextMenuItem(item, node);
-		});
-		this.$refs['v' + this.id].$on('nodeSelect', function (node, isSelected) {
-			_this4.onSelectTreeViewItem(node, isSelected);
-		});
-		this.$refs['v' + this.id].$on('nodeRenamed', function (node) {
-			_this4.onRenameTreeViewItem(node);
-		});
-		this.$refs['v' + this.id].$on('deleteNodeEx', function (node, nodesData, idList) {
-			_this4.onDeleteTreeViewItem(node, nodesData, idList);
-		});
-	}
-});
-
-/***/ }),
-/* 111 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.selectedNodeId,
-          expression: "selectedNodeId"
-        }
-      ],
-      attrs: { type: "hidden", id: _vm.id, name: _vm.id },
-      domProps: { value: _vm.selectedNodeId },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.selectedNodeId = $event.target.value
-        }
-      }
-    }),
-    _vm._v(" "),
-    _c("div", { staticClass: "accordion", attrs: { id: _vm.id + "Accord" } }, [
-      _c("div", { staticClass: "card" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card-header",
-            attrs: { id: _vm.id + "AccordHeading" }
-          },
-          [
-            _c("h5", { staticClass: "mb-0" }, [
-              _c("label", [_vm._v(_vm._s(_vm.label) + ": ")]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  class: _vm.btnCss,
-                  attrs: {
-                    type: "button",
-                    "data-toggle": "collapse",
-                    "data-target": "#collapsePortCatTreeAccord",
-                    "aria-expanded": "true",
-                    "aria-controls": "collapseSeo"
-                  }
-                },
-                [
-                  _vm.selectedNode
-                    ? _c("span", [
-                        _vm._v(_vm._s(_vm.selectedNode[_vm.nodeLabelProp]))
-                      ])
-                    : _vm._e()
-                ]
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "collapse",
-            attrs: {
-              id: "collapsePortCatTreeAccord",
-              "aria-labelledby": _vm.id + "AccordHeading",
-              "data-parent": "#" + _vm.id + "Accord"
-            }
-          },
-          [
-            _c(
-              "div",
-              { staticClass: "card-body" },
-              [
-                _c("b-tree-view", {
-                  ref: "v" + _vm.id,
-                  attrs: {
-                    data: _vm.treedata,
-                    contextMenuItems: _vm.contextMenuItems,
-                    showIcons: _vm.showIcons,
-                    showIcon: "true",
-                    defaultIconClass: _vm.defaultIconClass,
-                    allowMultiple: _vm.allowMultiple,
-                    nodeKeyProp: _vm.nodeKeyProp,
-                    nodeChildrenProp: _vm.nodeChildrenProp,
-                    nodeLabelProp: _vm.nodeLabelProp,
-                    nodesDraggable: _vm.nodesDraggable,
-                    contextMenu: _vm.contextMenu,
-                    renameNodeOnDblClick: _vm.renameNodeOnDblClick,
-                    prependIconClass: _vm.prependIconClass,
-                    iconClassProp: _vm.iconClassProp
-                  }
-                })
-              ],
-              1
-            )
-          ]
-        )
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-90db35ee", module.exports)
   }
 }
 

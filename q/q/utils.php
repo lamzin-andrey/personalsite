@@ -575,13 +575,17 @@ function utils_getCurrentLang() {
 **/
 function req($v, $varname = 'REQUEST') {
 	$data = $_REQUEST;
+	$varname = $_SERVER['REQUEST_METHOD'];
 	switch ($varname) {
 		case 'POST':
-		$data = $_POST;
+			$data = $_POST;
 			break;
 		case 'GET':
 			$data = $_GET;
 			break;
+		case 'DELETE': 
+			parse_str(file_get_contents('php://input'), $_POST);
+			$data = $_POST;
 	}
 	if (isset($data[$v])) {
 		if ( defined('DB_ENC_IS_1251') && utils_isXhr() ) {
@@ -804,6 +808,47 @@ function breq(string $key, string $scope = 'REQUEST') : bool
 	$s = trim(req($key, $scope));
 	$r = ($s == 'true' ? true : false);
 	return $r;
+}
+/**
+ * @description Get array from request
+ * @param string $key - имя переменной в REQUEST
+ * @param string $functionName = '' - имя функции, которой надо передать каждый элемент массива, обычно это функции приведения типа, такие как intval
+ * @param string $varname = 'REQUEST'
+ * @return array
+*/
+function areq(string $key, string $functionName = 'strval') :array
+{
+	$a = [];
+	$data = $_REQUEST;
+	$varname = $_SERVER['REQUEST_METHOD'];
+	switch ($varname) {
+		case 'POST':
+			$data = $_POST;
+			break;
+		case 'GET':
+			$data = $_GET;
+			break;
+		case 'DELETE': 
+			parse_str(file_get_contents('php://input'), $_POST);
+			$data = $_POST;
+	}
+	if (isset($data[$key])) {
+		$a = $data[$key];
+	}
+	
+	if ($a && $functionName && function_exists($functionName)) {
+		$b = [];
+		foreach ($a as $v) {
+			$s = $functionName($v);
+			if ($functionName == 'strval' && defined('DB_ENC_IS_1251') && utils_isXhr() ) {
+				$s = utils_cp1251($s);
+			}
+			$b[] = $s;
+		}
+		$a = &$b;
+	}
+	
+	return $a;
 }
 function ilistFromString($key, $separator = ',', $scope = 'REQUEST'){
 	$arr = explode($separator, req($key));

@@ -80,6 +80,11 @@ class Route {
 			require_once $handler;
 			$this->app = new ProudctCategoryPost();
 		}
+		if ($baseUrl == '/p/portfoliocats/pcdelte.jn/') {
+			$handler = $sCtrlDir . 'pcremove.php';
+			require_once $handler;
+			$this->app = new PortfoliCategoryRemove();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/articlecategories/

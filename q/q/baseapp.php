@@ -94,7 +94,6 @@ class BaseApp {
 		$this->request[$field] = $this->$field;
 		return $this->$field;
 	}
-	
 	public function breq($key, $field = '', $varname = 'REQUEST') {
 		$field = $field ? $field : $key;
 		$s = $this->tsreq($key, $field, $varname);

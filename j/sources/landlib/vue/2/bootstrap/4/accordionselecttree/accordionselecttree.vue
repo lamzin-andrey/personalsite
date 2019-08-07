@@ -4,34 +4,40 @@
 		<div class="accordion" :id="id + 'Accord'">
 			<div class="card">
 				<div class="card-header" :id="id + 'AccordHeading'">
-				<h5 class="mb-0">
-					<label>{{label}}: </label>
-					<button :class="btnCss"  type="button" data-toggle="collapse" data-target="#collapsePortCatTreeAccord" aria-expanded="true" aria-controls="collapseSeo">
-						<span v-if="selectedNode">{{ selectedNode[nodeLabelProp] }}</span> 
-					</button>
-				</h5>
-			</div>
-			<div id="collapsePortCatTreeAccord" class="collapse" :aria-labelledby="id + 'AccordHeading'" :data-parent="'#' + id + 'Accord'">
-				<div class="card-body">
-					<b-tree-view :ref="'v' + id" 
-						:data="treedata" 
-						:contextMenuItems="contextMenuItems" 
-						:showIcons="showIcons" 
-						showIcon="true"
-						:defaultIconClass="defaultIconClass"
-						:allowMultiple="allowMultiple"
-						:nodeKeyProp="nodeKeyProp"
-						:nodeChildrenProp="nodeChildrenProp"
-						:nodeLabelProp="nodeLabelProp"
-						:nodesDraggable="nodesDraggable"
-						:contextMenu="contextMenu"
-						:renameNodeOnDblClick="renameNodeOnDblClick"
-						:prependIconClass="prependIconClass"			
-						:iconClassProp="iconClassProp"
-						></b-tree-view>
+					<h5 class="mb-0">
+						<label>{{label}}: </label>
+						<button :class="btnCss"  type="button" data-toggle="collapse" data-target="#collapsePortCatTreeAccord" aria-expanded="true" aria-controls="collapseSeo">
+							<span v-if="selectedNode">{{ selectedNode[nodeLabelProp] }}</span> 
+						</button>
+					</h5>
 				</div>
+				<div id="collapsePortCatTreeAccord" class="collapse" :aria-labelledby="id + 'AccordHeading'" :data-parent="'#' + id + 'Accord'">
+					<div class="card-body">
+						<b-tree-view :ref="'v' + id" 
+							:data="treedata" 
+							:contextMenuItems="contextMenuItems" 
+							:showIcons="showIcons" 
+							showIcon="true"
+							:defaultIconClass="defaultIconClass"
+							:allowMultiple="allowMultiple"
+							:nodeKeyProp="nodeKeyProp"
+							:nodeChildrenProp="nodeChildrenProp"
+							:nodeLabelProp="nodeLabelProp"
+							:nodesDraggable="nodesDraggable"
+							:contextMenu="contextMenu"
+							:renameNodeOnDblClick="renameNodeOnDblClick"
+							:prependIconClass="prependIconClass"			
+							:iconClassProp="iconClassProp"
+							></b-tree-view>
+					</div>
+					 <transition  name="fade">
+						<div v-if="sErrorText" class="alert alert-danger">
+							{{sErrorText}}
+						</div>
+					</transition>
 				</div>
 			</div>
+			
 		</div>
 
 	</div>
@@ -45,6 +51,9 @@
 	//Пытаюсь импортировать из своего форка
 	import BootstrapVueTreeview from '../bootstrap-vue-treeview/index';
 	Vue.use(BootstrapVueTreeview);
+
+	import './css/animerror.css';
+	
 
     export default {
 		model: {
@@ -169,6 +178,9 @@
 				{code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node')},
 				{code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node')}
 			],
+
+			/** @property {Array} sErrorText сообщение об ошибке */
+			sErrorText : '',
 			
 		}; },
         //
@@ -178,11 +190,11 @@
 			*/
 			onSelectTreeViewContextMenuItem(item, node){
 				if (item.code == 'ADD_NODE') {
-					this.showSpinner(node.$el);
 					if (this.nRequestAddNodeId) {
-						this.showError(this.$t('app.Add_request_already_sended_wait'));//TODO loc and showError
+						this.showError(this.$t('app.Add_request_already_sended_wait'));
 						return;
 					}
+					this.showSpinner(node.$el);
 					let id = node.data[this.nodeKeyProp];
 					this.nRequestAddNodeId = id;
 					Rest._post({parent_id : id}, (data) => {this.onSuccessAddNewItem(data); }, this.urlCreateNewItem, (a, b, c) => {this.onFailItemAction(a, b, c);});
@@ -264,15 +276,20 @@
 				}
 			},
 			/**
-			 * TODO Пусть в конейнере со списком снизу розовый алерт выдвигается
+			 * @description show error create / update items
 			 */
 			showError(s) {
-				alert(s);
+				setTimeout(() => {
+					this.sErrorText = s;
+					setTimeout(() => {
+						this.sErrorText = '';
+					}, 2*1000);
+				}, 500);
 			},
 			/**
 			 * @description Processing select tree node
 			*/
-			onSelectTreeViewItem(node, isSelected){
+			onSelectTreeViewItem(node, isSelected) {
 				if (isSelected) {
 					this.selectedNode = node.data;
 					this.btnCss = 'btn btn-success';
@@ -284,7 +301,6 @@
 				this.$emit('input', this.selectedNodeId);
 			},
 			/**
-			 * TODO try _delete later
 			 * @description Processing delete node (nodes)
 			 * @param {TreeNode} node
 			 * @param {Array} nodesData (array of objects {this.nodeKeyProp, this.nodeParentKeyProp, this.nodeLabelProp})
@@ -301,7 +317,7 @@
 					currObj = {...nodesData[i]};
 					this.stackremovedItems[ currObj[this.nodeKeyProp] ] = currObj;
 				}
-				Rest._post({idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
+				Rest._delete({idList:idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
 			},
 			/**
 			 * @description Restore tree nodes if nodes no removed
@@ -333,9 +349,14 @@
 					return;
 				}
 				if (data.ids) {
-					let i;
+					let i, cid;
 					for (i = 0; i < data.ids.length; i++) {
-						delete this.stackremovedItems[ data.ids[i] ];
+						cid = data.ids[i];
+						delete this.stackremovedItems[cid];
+						if (cid == this.selectedNode[this.nodeKeyProp]) {
+							this.selectedNode = this.defaultSelectedNode;
+							this.btnCss = 'btn btn-danger';
+						}
 					}
 				}
 			},
