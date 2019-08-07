@@ -47876,7 +47876,7 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(82);
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
 //
@@ -48049,14 +48049,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 
 		};
 	},
-	computed: {
-		/*dinlabel : function() {
-  	if (this.placeholderlabel) {
-  		return this.placeholderlabel;
-  	}
-  	return this.label;
-  }*/
-	},
 	//
 	methods: {
 		/**
@@ -48196,30 +48188,16 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			//data, onSuccess, url, onFail
 
 			if (!this.stackremovedItems) {
-				//TODO сюда помещаем всех потомков ветки и ветку по id
-				//скорее всего понадобится в TreeView.menuItemSelected перед удалением собрать все id
-				this.stackremovedItems = { length: 0 };
+				//сюда помещаем всех потомков ветки и ветку по id
+				this.stackremovedItems = {};
 			}
-
+			this.exampleNode = _extends({}, node);
 			var id = node.data[this.nodeKeyProp],
 			    i = void 0,
 			    currObj = void 0;
-			/*this.nRequestDeleteNodeId = id;
-   this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
-   this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];*/
 			for (i = 0; i < nodesData.length; i++) {
-				//currObj = {...nodesData[i]}; TODO try it
-				currObj = {}; //TODO  currObj = {...nodesData[i]}; вместо этой и трёх следующих
-				currObj[this.nodeKeyProp] = nodesData[i][this.nodeKeyProp];
-				currObj[this.nodeLabelProp] = nodesData[i][this.nodeLabelProp];
-				currObj[this.nodeParentKeyProp] = nodesData[i][this.nodeParentKeyProp];
+				currObj = _extends({}, nodesData[i]);
 				this.stackremovedItems[currObj[this.nodeKeyProp]] = currObj;
-				this.stackremovedItems.length++;
-
-				//remove from treedata
-				TreeAlgorithms.idFieldName = this.nodeKeyProp;
-				TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
-				TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
 			}
 			Rest._post({ idList: idList }, function (data) {
 				_this3.onSuccessDeleteItem(data);
@@ -48250,11 +48228,23 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			}
 		},
 
-		//TODO Описать добавленные события TreeView  и TreeNode на русском сначала.
-		//TODO onSuccessDeleteItem надо  this.stackremovedItems очищать
-		//TODO onSuccessDeleteItem надо  подумать, зачем я туда stackremovedItems.length придумал, ели оно не нужно, то ок.
 		/**
-   * TODO подумай, что делать с удалением всего дерева (parent_id undefined)
+   * @description Clear this.stackremovedItems
+   * @param {Object} data
+  */
+		onSuccessDeleteItem: function onSuccessDeleteItem(data) {
+			if (!this.onFailDeleteItem(data)) {
+				return;
+			}
+			if (data.ids) {
+				var i = void 0;
+				for (i = 0; i < data.ids.length; i++) {
+					delete this.stackremovedItems[data.ids[i]];
+				}
+			}
+		},
+
+		/**
    * @description Restore tree nodes if nodes no removed
   */
 		restoreAllRemovedItems: function restoreAllRemovedItems() {
@@ -48262,9 +48252,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			    i = void 0,
 			    aTree = void 0;
 			for (i in this.stackremovedItems) {
-				if (i !== 'length') {
-					arr.push(this.stackremovedItems[i]);
-				}
+				arr.push(this.stackremovedItems[i]);
 			}
 			TreeAlgorithms.idFieldName = this.nodeKeyProp;
 			TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
@@ -48273,8 +48261,13 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
 			console.log('aTree', aTree);
 
-			for (i = 0; i < aTree.length; i++) {
-				TreeAlgorithms.walkAndExecuteAction(aTree[i], { context: this, f: this.addNode });
+			//Restore all tree
+			if (!aTree[0][this.nodeParentKeyProp]) {
+				this.addNode(aTree[0]);
+			} else {
+				for (i = 0; i < aTree.length; i++) {
+					TreeAlgorithms.walkAndExecuteAction(aTree[i], { context: this, f: this.addNode });
+				}
 			}
 		},
 
@@ -48285,6 +48278,13 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
   */
 		addNode: function addNode(nodeData) {
 			var i = void 0;
+			//root
+			if (!nodeData[this.nodeParentKeyProp]) {
+				this.exampleNode.data = nodeData;
+				this.$refs['v' + this.id].data.push(nodeData);
+				return;
+			}
+			//no root
 			//есть ли такой узел в дереве?
 			delete this.$refs['v' + this.id].nodeMap;
 			this.$refs['v' + this.id].createNodeMap();
@@ -48296,7 +48296,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 			if (parentNode) {
 				parentNode.appendChild(nodeData);
-				var dTreeData = [].concat(_toConsumableArray(this.treedata));
 			}
 		},
 

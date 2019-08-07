@@ -171,14 +171,6 @@
 			],
 			
 		}; },
-		computed: {
-			/*dinlabel : function() {
-				if (this.placeholderlabel) {
-					return this.placeholderlabel;
-				}
-				return this.label;
-			}*/
-		},
         //
         methods:{
 			/**
@@ -298,28 +290,14 @@
 				//data, onSuccess, url, onFail
 
 				if (!this.stackremovedItems) {
-					//TODO сюда помещаем всех потомков ветки и ветку по id
-					//скорее всего понадобится в TreeView.menuItemSelected перед удалением собрать все id
-					this.stackremovedItems = {length:0};
+					//сюда помещаем всех потомков ветки и ветку по id
+					this.stackremovedItems = {};
 				}
-
+				this.exampleNode = {...node};
 				let id = node.data[this.nodeKeyProp], i, currObj;
-				/*this.nRequestDeleteNodeId = id;
-				this.sRequestedNodeLabel = node.data[this.nodeLabelProp];
-				this.nRequestedNodeParentId = node.data[this.nodeParentKeyProp];*/
 				for (i = 0; i < nodesData.length; i++) {
-					//currObj = {...nodesData[i]}; TODO try it
-					currObj = {};//TODO  currObj = {...nodesData[i]}; вместо этой и трёх следующих
-					currObj[this.nodeKeyProp] = nodesData[i][this.nodeKeyProp];
-					currObj[this.nodeLabelProp] = nodesData[i][this.nodeLabelProp];
-					currObj[this.nodeParentKeyProp] = nodesData[i][this.nodeParentKeyProp];
+					currObj = {...nodesData[i]};
 					this.stackremovedItems[ currObj[this.nodeKeyProp] ] = currObj;
-					this.stackremovedItems.length++;
-
-					//remove from treedata
-					TreeAlgorithms.idFieldName = this.nodeKeyProp;
-					TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
-					TreeAlgorithms.childsFieldName = this.nodeChildrenProp;
 				}
 				Rest._post({idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
 			},
@@ -344,20 +322,28 @@
 					return false;
 				}
 			},
-			//TODO Для TreeAlg документацию написать и запушить её в landlib.
-			//TODO Описать добавленные события TreeView  и TreeNode на русском сначала.
-			//TODO onSuccessDeleteItem надо  this.stackremovedItems очищать
-			//TODO onSuccessDeleteItem надо  подумать, зачем я туда stackremovedItems.length придумал, ели оно не нужно, то ок.
 			/**
-			 * TODO подумай, что делать с удалением всего дерева (parent_id undefined)
+			 * @description Clear this.stackremovedItems
+			 * @param {Object} data
+			*/
+			onSuccessDeleteItem(data) {
+				if (!this.onFailDeleteItem(data)) {
+					return;
+				}
+				if (data.ids) {
+					let i;
+					for (i = 0; i < data.ids.length; i++) {
+						delete this.stackremovedItems[ data.ids[i] ];
+					}
+				}
+			},
+			/**
 			 * @description Restore tree nodes if nodes no removed
 			*/
 			restoreAllRemovedItems() {
 				let arr = [], i, aTree;
 				for (i in this.stackremovedItems) {
-					if (i !== 'length') {
-						arr.push( this.stackremovedItems[i] );
-					}
+					arr.push( this.stackremovedItems[i] );					
 				}
 				TreeAlgorithms.idFieldName = this.nodeKeyProp;
 				TreeAlgorithms.parentIdFieldName = this.nodeParentKeyProp;
@@ -365,9 +351,14 @@
 				console.log('arr', arr);
 				aTree = TreeAlgorithms.buildTreeFromFlatList(arr, true);
 				console.log('aTree', aTree);
-				
-				for (i = 0; i < aTree.length; i++) {
-					TreeAlgorithms.walkAndExecuteAction(aTree[i], {context:this, f:this.addNode});
+
+				//Restore all tree
+				if (!aTree[0][this.nodeParentKeyProp]) {
+					this.addNode(aTree[0]);
+				} else {
+					for (i = 0; i < aTree.length; i++) {
+						TreeAlgorithms.walkAndExecuteAction(aTree[i], {context:this, f:this.addNode});
+					}
 				}
 			},
 			/**
@@ -377,6 +368,13 @@
 			*/
 			addNode(nodeData) {
 				let i;
+				//root
+				if (!nodeData[this.nodeParentKeyProp]) {
+					this.exampleNode.data = nodeData;
+					this.$refs['v' + this.id].data.push(nodeData);
+					return;
+				}
+				//no root
 				//есть ли такой узел в дереве?
 				delete this.$refs['v' + this.id].nodeMap;
 				this.$refs['v' + this.id].createNodeMap();
@@ -387,7 +385,6 @@
 				parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 				if (parentNode) {
 					parentNode.appendChild(nodeData);
-					let dTreeData = [...this.treedata];
 				}
 			},
 			/**
