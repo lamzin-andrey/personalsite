@@ -48035,8 +48035,6 @@ __webpack_require__(18);
 
 	watch: {
 		value: function value(n, old) {
-			//this.selectedCategory = n; - это скорее всего лажа
-			console.log('CTree: new = ' + n + ', old = ' + old);
 			if (n != old) {
 				this.selectedCategory = this.value;
 			}
@@ -48070,8 +48068,6 @@ __webpack_require__(18);
 		//parse data
 		var data = $('#pcategorydata').val();
 		//this.selectedCategory = this.value;
-		console.log('this.selectedCategory', this.selectedCategory);
-		console.log('this.value', this.value);
 		try {
 			data = JSON.parse(data);
 			data = TreeAlgorithms.buildTreeFromFlatList(data.portfolioCategories, true);
@@ -48300,7 +48296,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 	},
 	watch: {
 		value: function value(n, old) {
-			console.log('AC: n ' + n + ', old ' + old);
+			if (this.skipSelfWatch == true) {
+				this.skipSelfWatch = false;
+				return;
+			}
 			if (n != old) {
 				this.selectNodeById(n, false);
 			}
@@ -48325,6 +48324,9 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			btnCss: 'btn btn-danger',
 
 			/** @property {Array} contextMenuItems */
+			//TODO Писать документацию и публиковать, хватит с ним пока возиться.
+			//TODO очень потом сделать всё-таки передачу параметра (тут закомментировать, в props раскомментировать).
+			//TODO очень потом Обработчики этих ключей должны эмитировать события во вне, вдруг что-то ещё надо будет.
 			contextMenuItems: [{ code: 'ADD_NODE', label: this.$root.$t('app.Add_node') }, { code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node') }, { code: 'DELETE_NODE', label: this.$root.$t('app.Delete_node') }],
 
 			/** @property {Array} sErrorText сообщение об ошибке */
@@ -48491,12 +48493,16 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			if (isSelected) {
 				this.selectedNode = node.data;
 				this.btnCss = 'btn btn-success';
+				this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
+				this.$emit('input', this.selectedNodeId);
+				this.skipSelfWatch = true;
 			} else if (node.data[this.nodeKeyProp] === this.selectedNode[this.nodeKeyProp]) {
 				this.selectedNode = this.defaultSelectedNode;
 				this.btnCss = 'btn btn-danger';
+				this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
+				this.$emit('input', this.selectedNodeId);
+				this.skipSelfWatch = true;
 			}
-			this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
-			this.$emit('input', this.selectedNodeId);
 		},
 
 		/**
@@ -48654,8 +48660,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 
 		this.localizeDefaultMenu();
 		this.initDefaultSelectedNode();
-
-		console.log('categorytree component value on mounted ' + this.value);
 
 		this.selectAndExpandNode();
 		this.$refs['v' + this.id].$on('contextMenuItemSelect', function (item, node) {
@@ -50437,35 +50441,6 @@ var render = function() {
           ],
           1
         )
-      ]),
-      _vm._v(" "),
-      _c("label", [
-        _vm._v("Ac level\n\t\t\t"),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.selectedNodeId,
-              expression: "selectedNodeId"
-            }
-          ],
-          attrs: { type: "text" },
-          domProps: { value: _vm.selectedNodeId },
-          on: {
-            input: [
-              function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.selectedNodeId = $event.target.value
-              },
-              function($event) {
-                return _vm.$emit("input", $event.target.value)
-              }
-            ]
-          }
-        })
       ])
     ])
   ])
@@ -50495,11 +50470,11 @@ var render = function() {
         ref: "acctree",
         attrs: {
           id: "portfolioCategoriesTree",
-          label: "Categories",
+          label: _vm.$t("app.Category"),
           treedata: _vm.portfolioCategoriesTree,
           showIcons: true,
           showIcon: true,
-          defaultIconClass: "fas fa-book",
+          defaultIconClass: "fas fa-box",
           urlCreateNewItem: "/p/portfoliocats/pcsave.jn/",
           urlUpdateItem: "/p/portfoliocats/pcsave.jn/",
           urlRemoveItem: "/p/portfoliocats/pcdelte.jn/"
@@ -50511,31 +50486,7 @@ var render = function() {
           },
           expression: "selectedCategory"
         }
-      }),
-      _vm._v(" "),
-      _c("label", [
-        _vm._v("CA level\n\t\t"),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.selectedCategory,
-              expression: "selectedCategory"
-            }
-          ],
-          attrs: { type: "text" },
-          domProps: { value: _vm.selectedCategory },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.selectedCategory = $event.target.value
-            }
-          }
-        })
-      ])
+      })
     ],
     1
   )

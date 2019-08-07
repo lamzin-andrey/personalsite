@@ -2,21 +2,21 @@
 	<div>
 		<accordionselecttree
 			id="portfolioCategoriesTree"
-			label="Categories"
+			:label="$t('app.Category')"
 			v-model="selectedCategory"
 			
 			:treedata="portfolioCategoriesTree"
 			:showIcons="true" 
 			:showIcon="true" 
-			defaultIconClass="fas fa-book"
+			defaultIconClass="fas fa-box"
 			urlCreateNewItem="/p/portfoliocats/pcsave.jn/"
 			urlUpdateItem="/p/portfoliocats/pcsave.jn/"
 			urlRemoveItem="/p/portfoliocats/pcdelte.jn/"
 			ref="acctree"
 		></accordionselecttree>
-		<label>CA level
-			<input type="text" v-model="selectedCategory">
-		</label>
+		<!--label>CA level
+			<input type="text" v-----model="selectedCategory">
+		</label-->
 	</div>
 </template>
 <script>
@@ -39,8 +39,6 @@
 
 		watch:{
 			value:function(n, old) {
-				//this.selectedCategory = n; - это скорее всего лажа
-				console.log('CTree: new = ' + n + ', old = '  + old);
 				if (n != old) {
 					this.selectedCategory = this.value;
 				}
@@ -72,8 +70,6 @@
 			//parse data
 			let data = $('#pcategorydata').val();
 			//this.selectedCategory = this.value;
-			console.log('this.selectedCategory', this.selectedCategory);
-			console.log('this.value', this.value);
 			try {
 				data = JSON.parse(data);
 				data = TreeAlgorithms.buildTreeFromFlatList(data.portfolioCategories, true);

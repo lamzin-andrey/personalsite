@@ -37,9 +37,9 @@
 					</transition>
 				</div>
 			</div>
-			<label>Ac level
-				<input type="text" v-model="selectedNodeId" @input="$emit('input', $event.target.value)">
-			</label>
+			<!--label>Ac level
+				<input type="text" v-model="selectedNodeId" GUFinput="BUXemit('input', $event.target.value)">
+			</label-->
 		</div>
 
 	</div>
@@ -154,7 +154,10 @@
 		},
 		watch:{
 			value:function(n, old) {
-				console.log('AC: n ' + n + ', old ' + old);
+				if (this.skipSelfWatch == true) {
+					this.skipSelfWatch = false;
+					return;
+				}
 				if (n != old) {
 					this.selectNodeById(n, false);
 				}
@@ -178,6 +181,9 @@
 			btnCss : 'btn btn-danger',
 
 			/** @property {Array} contextMenuItems */
+			//TODO Писать документацию и публиковать, хватит с ним пока возиться.
+			//TODO очень потом сделать всё-таки передачу параметра (тут закомментировать, в props раскомментировать).
+			//TODO очень потом Обработчики этих ключей должны эмитировать события во вне, вдруг что-то ещё надо будет.
 			contextMenuItems :[
 				{code: 'ADD_NODE', label: this.$root.$t('app.Add_node')},
 				{code: 'RENAME_NODE', label: this.$root.$t('app.Rename_node')},
@@ -324,12 +330,16 @@
 				if (isSelected) {
 					this.selectedNode = node.data;
 					this.btnCss = 'btn btn-success';
+					this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
+					this.$emit('input', this.selectedNodeId);
+					this.skipSelfWatch = true;
 				} else if (node.data[this.nodeKeyProp] === this.selectedNode[this.nodeKeyProp]) {
 					this.selectedNode = this.defaultSelectedNode;
 					this.btnCss = 'btn btn-danger';
+					this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
+					this.$emit('input', this.selectedNodeId);
+					this.skipSelfWatch = true;
 				}
-				this.selectedNodeId = this.selectedNode[this.nodeKeyProp];
-				this.$emit('input', this.selectedNodeId);
 			},
 			/**
 			 * @description Processing delete node (nodes)
@@ -466,8 +476,7 @@
         mounted() {
 			this.localizeDefaultMenu();
 			this.initDefaultSelectedNode();
-
-			console.log('categorytree component value on mounted ' + this.value);
+			
 
 			this.selectAndExpandNode();
 			this.$refs['v' + this.id].$on('contextMenuItemSelect', (item, node) => {
