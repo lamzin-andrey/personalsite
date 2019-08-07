@@ -5,7 +5,6 @@
 			label="Categories"
 			v-model="selectedCategory"
 			
-			@input="$emit('input', value)"
 			:treedata="portfolioCategoriesTree"
 			:showIcons="true" 
 			:showIcon="true" 
@@ -15,6 +14,9 @@
 			urlRemoveItem="/p/portfoliocats/pcdelte.jn/"
 			ref="acctree"
 		></accordionselecttree>
+		<label>CA level
+			<input type="text" v-model="selectedCategory">
+		</label>
 	</div>
 </template>
 <script>
@@ -39,6 +41,9 @@
 			value:function(n, old) {
 				//this.selectedCategory = n; - это скорее всего лажа
 				console.log('CTree: new = ' + n + ', old = '  + old);
+				if (n != old) {
+					this.selectedCategory = this.value;
+				}
 			}
 		},
 
@@ -80,7 +85,7 @@
 			} catch(e){}
 
 			this.$refs.acctree.$on('input', (value) => {
-				//this.onDeleteTreeViewItem(node, nodesData, idList);
+				this.selectedCategory = value;
 				this.$emit('input', value);
 				
 			});	

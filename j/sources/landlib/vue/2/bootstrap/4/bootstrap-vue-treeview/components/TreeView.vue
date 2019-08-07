@@ -132,7 +132,7 @@
 
                     for (let tmpNode of nodes) {
                         nodeMap.set(tmpNode.data[this.nodeKeyProp], tmpNode) // TODO: change to getter
-                    }
+					}
                 }
             },
             getNodeByKey(key) {

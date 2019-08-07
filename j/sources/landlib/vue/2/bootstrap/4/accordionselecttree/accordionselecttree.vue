@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<input	v-model="selectedNodeId"  type="hidden" :id="id" :name="id"><!--TODO нужен ли вообще этот инпут? Например, если бы форама отправлялась не ajax ом ' -->
+		<input	v-model="selectedNodeId"  type="hidden" :id="id" :name="id">
 		<div class="accordion" :id="id + 'Accord'">
 			<div class="card">
 				<div class="card-header" :id="id + 'AccordHeading'">
@@ -14,7 +14,7 @@
 				<div id="collapsePortCatTreeAccord" class="collapse" :aria-labelledby="id + 'AccordHeading'" :data-parent="'#' + id + 'Accord'">
 					<div class="card-body">
 						<b-tree-view :ref="'v' + id" 
-							:data="treedata" 
+							:data="treedata"
 							:contextMenuItems="contextMenuItems" 
 							:showIcons="showIcons" 
 							showIcon="true"
@@ -37,7 +37,9 @@
 					</transition>
 				</div>
 			</div>
-			
+			<label>Ac level
+				<input type="text" v-model="selectedNodeId" @input="$emit('input', $event.target.value)">
+			</label>
 		</div>
 
 	</div>
@@ -152,8 +154,10 @@
 		},
 		watch:{
 			value:function(n, old) {
-				console.log('AcTree: new = ' + n + ', old = '  + old);
-				
+				console.log('AC: n ' + n + ', old ' + old);
+				if (n != old) {
+					this.selectNodeById(n, false);
+				}
 			}
 		},
 		name: 'categorytree',
@@ -186,6 +190,32 @@
 		}; },
         //
         methods:{
+			selectNodeById(key, recreatNodeMap = true) {
+				if (recreatNodeMap) {
+					delete this.$refs['v' + this.id].nodeMap;
+					this.$refs['v' + this.id].createNodeMap();
+				}
+				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(key));
+				if (x) {
+					x.select();
+					this.expandBranch(x);
+					return true;
+				}
+				this.selectedNode = this.defaultSelectedNode;
+				this.btnCss = 'btn btn-danger';
+				return false;
+			},
+			/**
+			 * @param {TreeNode} oNode
+			*/
+			expandBranch(oNode) {
+				oNode.expand();
+				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(oNode.data[this.nodeParentKeyProp]));
+				while (x) {
+					x.expand();
+					x = this.$refs['v' + this.id].getNodeByKey(parseInt(x.data[this.nodeParentKeyProp]));
+				}
+			},
 			/**
 			 * @description Обработка выбора пункта контекстного меню дерева категорий
 			*/
@@ -226,7 +256,7 @@
 				delete this.$refs['v' + this.id].nodeMap;
 				this.$refs['v' + this.id].createNodeMap();
 				
-				let x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
+				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(data[this.nodeParentKeyProp]));
 				let newNodeData = {};
 				newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
 				newNodeData[this.nodeLabelProp] = data[this.nodeLabelProp];
@@ -391,7 +421,7 @@
 				//search node in tree
 				delete this.$refs['v' + this.id].nodeMap;
 				this.$refs['v' + this.id].createNodeMap();
-				let parentNode, x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
+				let parentNode, x = this.$refs['v' + this.id].getNodeByKey(parseInt(nodeData[this.nodeKeyProp]));
 				if (x) {
 					return;
 				}
@@ -405,17 +435,6 @@
 				parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 				if (parentNode) {
 					parentNode.appendChild(nodeData);
-				}
-			},
-			/**
-			 * @param {TreeNode} oNode
-			*/
-			expandBranch(oNode) {
-				oNode.expand();
-				let x = this.$refs['v' + this.id].getNodeByKey(oNode.data[this.nodeParentKeyProp]);
-				while (x) {
-					x.expand();
-					x = this.$refs['v' + this.id].getNodeByKey(x.data[this.nodeParentKeyProp]);
 				}
 			},
 			/**
@@ -440,31 +459,9 @@
 			/**
 			 * @description dinamic change selection
 			*/
-			selectAndExpandNode() {
-				this.selectedNode = this.defaultSelectedNode;
-				this.btnCss = 'btn btn-danger';
-				delete this.$refs['v' + this.id].nodeMap;
-				this.$refs['v' + this.id].createNodeMap();
-				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(this.value));
-				if (x) {
-					x.select();
-					this.expandBranch(x);
-				} else {
-					console.log('Not found');
-				}
-			},
-			selectNodeById(key) {
-				delete this.$refs['v' + this.id].nodeMap;
-				this.$refs['v' + this.id].createNodeMap();
-				let x = this.$refs['v' + this.id].getNodeByKey(parseInt(key));
-				if (x) {
-					x.select();
-					this.expandBranch(x);
-					return true;
-				}
-				return false;
-			}
-        }, //end methods
+			selectAndExpandNode(recreatNodeMap = true) {
+				this.selectNodeById(this.value, recreatNodeMap);
+			}        }, //end methods
         
         mounted() {
 			this.localizeDefaultMenu();

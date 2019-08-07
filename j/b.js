@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10917,7 +10917,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(86)
+var listToStyles = __webpack_require__(87)
 
 /*
 type StyleObject = {
@@ -25624,7 +25624,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(41);
+var	fixUrls = __webpack_require__(42);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -26165,13 +26165,13 @@ var B4DataTablesPreloader = function () {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(92)
+  __webpack_require__(93)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(94)
+var __vue_script__ = __webpack_require__(95)
 /* template */
-var __vue_template__ = __webpack_require__(95)
+var __vue_template__ = __webpack_require__(96)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -26210,7 +26210,242 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 18 */,
+/* 18 */
+/***/ (function(module, exports) {
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Algorithm for work with tree. 
+*/
+window.TreeAlgorithms = {
+	/** @property {String} idFieldName */
+	idFieldName: 'id',
+
+	/** @property {String} parentIdFieldName */
+	parentIdFieldName: 'parent_id',
+
+	/** @property {String} childsFieldName */
+	childsFieldName: 'children',
+
+	/**
+  * @description Get all "this.idFieldName" values from node and all node childs (all levels)
+  * @param {Object} node 
+  * @return Array of "this.idFieldName" nodes  (all levels)
+  */
+	getBranchIdList: function getBranchIdList(node) {
+		var r = [],
+		    part = void 0,
+		    i = void 0,
+		    j = void 0;
+		r.push(node[this.idFieldName]);
+		if (node[this.childsFieldName]) {
+			part = [];
+			if (node[this.childsFieldName] instanceof Array) {
+				for (i = 0; i < node[this.childsFieldName].length; i++) {
+					part = this.getBranchIdList(node[this.childsFieldName][i]);
+					for (j = 0; j < part.length; j++) {
+						r.push(part[j]);
+					}
+				}
+			} else {
+				for (i in node[this.childsFieldName]) {
+					part = this.getBranchIdList(node[this.childsFieldName][i]);
+					for (j = 0; j < part.length; j++) {
+						r.push(part[j]);
+					}
+				}
+			}
+		}
+		return r;
+	},
+
+	/**
+  * @description walking oTree and execute oCallback(currentNode)
+  * @param {Object} oTree
+  * @param {Object} oCallback  {context, f:function}
+  */
+	walkAndExecuteAction: function walkAndExecuteAction(oTree, oCallback) {
+		var i = void 0;
+		oCallback.f.call(oCallback.context, oTree);
+		if (oTree[this.childsFieldName]) {
+			if (oTree[this.childsFieldName] instanceof Array) {
+				for (i = 0; i < oTree[this.childsFieldName].length; i++) {
+					this.walkAndExecuteAction(oTree[this.childsFieldName][i], oCallback);
+				}
+			} else {
+				for (i in oTree[this.childsFieldName]) {
+					this.walkAndExecuteAction(oTree[this.childsFieldName][i], oCallback);
+				}
+			}
+		}
+	},
+
+	/**
+  * @description build tree from flat list
+  * @param {Object} aScopesArg array of objects {this.idFieldName, this.parentIdFieldName}
+  * @param {Boolean} bSetChildsAsArray = false if true, all 'children' (this.childsFieldName) property will convert to array
+  * @return Array with root nodes in items
+  */
+	buildTreeFromFlatList: function buildTreeFromFlatList(aScopesArg) {
+		var bSetChildsAsArray = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+		var aBuf = void 0,
+		    nId = void 0,
+		    oItem = void 0,
+		    sChilds = void 0,
+		    oParent = void 0,
+		    a = void 0,
+		    r = [],
+		    i = void 0;
+
+		aScopes = [].concat(_toConsumableArray(aScopesArg));
+		aBuf = {};
+
+		if (aScopes instanceof Array) {
+			for (i = 0; i < aScopes.length; i++) {
+				nId = aScopes[i][this.idFieldName];
+				aBuf[nId] = aScopes[i];
+				aBuf[nId][this.childsFieldName] = {};
+			}
+		} else {
+			for (nId in aScopes) {
+				oItem = aScopes[nId];
+				aBuf[nId] = oItem;
+				aBuf[nId][this.childsFieldName] = {};
+			}
+		}
+		aScopes = aBuf;
+
+		//тут строим дерево
+		sChilds = this.childsFieldName;
+		for (nId in aScopes) {
+			oItem = aScopes[nId];
+
+			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]); //it need?
+
+			//перемещаем вложенные во внутрь
+			if (oItem[this.parentIdFieldName] > 0) {
+				oParent = aScopes[oItem[this.parentIdFieldName]];
+				if (oParent) {
+					if (!oParent[sChilds]) {
+						oParent[sChilds] = {};
+					}
+					//a = &oParent->sChilds;
+					a = oParent[sChilds];
+					a[nId] = oItem;
+					//aScopes[nId] = &a[nId];
+					aScopes[nId] = a[nId];
+					aScopes[nId].isMoved = true;
+				}
+			}
+		}
+
+		//удаляем из корня ссылки на перемещенные в родителей.
+		for (nId in aScopes) {
+			oItem = aScopes[nId];
+			if (oItem.isMoved) {
+				delete aScopes[nId];
+			}
+		}
+		for (nId in aScopes) {
+			oItem = aScopes[nId];
+			if (bSetChildsAsArray) {
+				this.walkAndExecuteAction(oItem, { context: this, f: this._convertChildsToArray });
+			}
+			r.push(oItem);
+		}
+
+		return r;
+	},
+
+	/**
+  * @description Convert childs to array
+  * @param {Object} node 
+  */
+	_convertChildsToArray: function _convertChildsToArray(node) {
+		var newChilds = [],
+		    k = void 0;
+		for (k in node[this.childsFieldName]) {
+			newChilds.push(node[this.childsFieldName][k]);
+		}
+		node[this.childsFieldName] = newChilds;
+	},
+
+	/**
+  * @description Find nodt By Id
+  * @param {Object} node (or tree)
+  * @param {String} id
+  * @return Object node or null
+ */
+	findById: function findById(node, id) {
+		var r = void 0,
+		    i = void 0;
+		if (node[this.idFieldName] == id) {
+			return node;
+		}
+		if (node[this.childsFieldName]) {
+			if (node[this.childsFieldName] instanceof Array) {
+				for (i = 0; i < node[this.childsFieldName].length; i++) {
+					r = this.findById(node[this.childsFieldName][i], id);
+					if (r) {
+						return r;
+					}
+				}
+			} else {
+				for (i in node[this.childsFieldName]) {
+					r = this.findById(node[this.childsFieldName][i], id);
+					if (r) {
+						return r;
+					}
+				}
+			}
+		}
+		return null;
+	},
+
+	/**
+  * @description Remove node from tree by node id
+  * @param {Object} tree (or tree)
+  * @param {String} id
+  * @return Boolean
+ */
+	remove: function remove(tree, id) {
+		var i = void 0,
+		    node = this.findById(tree, id),
+		    parentNode = void 0;
+		if (!node) {
+			return false;
+		}
+		if (node[this.parentIdFieldName]) {
+			parentNode = this.findById(tree, node[this.parentIdFieldName]);
+		}
+		if (!parentNode || !parentNode[this.childsFieldName]) {
+			return false;
+		}
+
+		if (parentNode[this.childsFieldName] instanceof Array) {
+			for (i = 0; i < parentNode[this.childsFieldName].length; i++) {
+				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
+					parentNode[this.childsFieldName].splice(i, 1);
+					//delete node;
+					return true;
+				}
+			}
+		} else {
+			for (i in parentNode[this.childsFieldName]) {
+				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
+					delete parentNode[this.childsFieldName][i];
+					//delete node;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+};
+
+/***/ }),
 /* 19 */,
 /* 20 */,
 /* 21 */,
@@ -26222,36 +26457,37 @@ module.exports = Component.exports
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */
+/* 30 */,
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(31);
+module.exports = __webpack_require__(32);
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(16);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 window.jQuery = window.$ = window.jquery = __webpack_require__(3);
 window.Vue = __webpack_require__(4);
-window.slug = __webpack_require__(32);
+window.slug = __webpack_require__(33);
 
 //For REST request server
-__webpack_require__(33);
+__webpack_require__(34);
 
 //For live translit
-__webpack_require__(34);
 __webpack_require__(35);
+__webpack_require__(36);
 
 //Интернациализация
 
@@ -26278,7 +26514,7 @@ __webpack_require__(12);
 //DataTables
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
-__webpack_require__(37);
+__webpack_require__(38);
 //my patch pagination for extra small view
 
 // /DataTables
@@ -26288,19 +26524,19 @@ __webpack_require__(37);
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 //Компонент вместо стандартного confirm
-Vue.component('b4confirmdlg', __webpack_require__(42));
+Vue.component('b4confirmdlg', __webpack_require__(43));
 //Компонент вместо стандартного alert
-Vue.component('b4alertdlg', __webpack_require__(45));
+Vue.component('b4alertdlg', __webpack_require__(46));
 //Компонент для отображения формы редактирования статьи
-Vue.component('articleform', __webpack_require__(48));
+Vue.component('articleform', __webpack_require__(49));
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
 
 //Компонент страницы просмотра / редактирования категорий страниц
-Vue.component('articlesections', __webpack_require__(68));
+Vue.component('articlesections', __webpack_require__(69));
 
 //Компонент страницы просмотра / редактирования работами портфолио
-Vue.component('portfolio', __webpack_require__(74));
+Vue.component('portfolio', __webpack_require__(75));
 
 window.app = new Vue({
     i18n: i18n,
@@ -26862,7 +27098,7 @@ window.app = new Vue({
 }).$mount('#wrapper');
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /**
@@ -27336,7 +27572,7 @@ module.exports = function (s, opt) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 window.Rest = {
@@ -27458,7 +27694,7 @@ window.Rest = {
 };
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -27644,7 +27880,7 @@ window.TextFormat = {
 };
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 window.LandLibDom = {
@@ -27715,7 +27951,7 @@ window.LandLibDom = {
 };
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27843,7 +28079,7 @@ var locales = {
 /* harmony default export */ __webpack_exports__["a"] = (locales);
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables Bootstrap 4 integration
@@ -27861,7 +28097,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables B
 (function( factory ){
 	if ( true ) {
 		// AMD
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(38)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(39)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ( $ ) {
 			return factory( $, window, document );
 		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -28034,7 +28270,7 @@ return DataTable;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -43337,13 +43573,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -43368,7 +43604,7 @@ if(false) {
 }
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -43382,7 +43618,7 @@ exports.push([module.i, "@media (width < 720px ) {\n\t#articles_paginate .pagina
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 
@@ -43477,15 +43713,15 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(43)
+var __vue_script__ = __webpack_require__(44)
 /* template */
-var __vue_template__ = __webpack_require__(44)
+var __vue_template__ = __webpack_require__(45)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43524,7 +43760,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43589,7 +43825,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43680,15 +43916,15 @@ if (false) {
 }
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(46)
+var __vue_script__ = __webpack_require__(47)
 /* template */
-var __vue_template__ = __webpack_require__(47)
+var __vue_template__ = __webpack_require__(48)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43727,7 +43963,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43783,7 +44019,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43864,15 +44100,15 @@ if (false) {
 }
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(49)
+var __vue_script__ = __webpack_require__(50)
 /* template */
-var __vue_template__ = __webpack_require__(67)
+var __vue_template__ = __webpack_require__(68)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -43911,7 +44147,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44008,11 +44244,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 //Компонент для отображения инпута ввода текста bootstrap 4
-Vue.component('inputb4', __webpack_require__(50));
-Vue.component('selectb4', __webpack_require__(53));
-Vue.component('checkboxb4', __webpack_require__(56));
-Vue.component('textareab4', __webpack_require__(59));
-Vue.component('inputfileb4', __webpack_require__(62));
+Vue.component('inputb4', __webpack_require__(51));
+Vue.component('selectb4', __webpack_require__(54));
+Vue.component('checkboxb4', __webpack_require__(57));
+Vue.component('textareab4', __webpack_require__(60));
+Vue.component('inputfileb4', __webpack_require__(63));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'articleform',
@@ -44299,15 +44535,15 @@ Vue.component('inputfileb4', __webpack_require__(62));
 });
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(51)
+var __vue_script__ = __webpack_require__(52)
 /* template */
-var __vue_template__ = __webpack_require__(52)
+var __vue_template__ = __webpack_require__(53)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44346,7 +44582,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44419,7 +44655,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44475,15 +44711,15 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(54)
+var __vue_script__ = __webpack_require__(55)
 /* template */
-var __vue_template__ = __webpack_require__(55)
+var __vue_template__ = __webpack_require__(56)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44522,7 +44758,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44574,7 +44810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44626,15 +44862,15 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(57)
+var __vue_script__ = __webpack_require__(58)
 /* template */
-var __vue_template__ = __webpack_require__(58)
+var __vue_template__ = __webpack_require__(59)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44673,7 +44909,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44723,7 +44959,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -44773,15 +45009,15 @@ if (false) {
 }
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(60)
+var __vue_script__ = __webpack_require__(61)
 /* template */
-var __vue_template__ = __webpack_require__(61)
+var __vue_template__ = __webpack_require__(62)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -44820,7 +45056,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44973,7 +45209,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45041,15 +45277,15 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(63)
+var __vue_script__ = __webpack_require__(64)
 /* template */
-var __vue_template__ = __webpack_require__(66)
+var __vue_template__ = __webpack_require__(67)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -45088,12 +45324,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__defaultupload_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__defaultupload_css__);
 //
 //
@@ -45393,13 +45629,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(65);
+var content = __webpack_require__(66);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -45424,7 +45660,7 @@ if(false) {
 }
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -45438,7 +45674,7 @@ exports.push([module.i, "/* Progress view */\n/*\ntext in circle\n.upload-proces
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -45622,7 +45858,7 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46013,15 +46249,15 @@ if (false) {
 }
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(69)
+var __vue_script__ = __webpack_require__(70)
 /* template */
-var __vue_template__ = __webpack_require__(73)
+var __vue_template__ = __webpack_require__(74)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46060,7 +46296,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46130,7 +46366,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 
-Vue.component('articlecategoryform', __webpack_require__(70));
+Vue.component('articlecategoryform', __webpack_require__(71));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'articlesections',
@@ -46434,15 +46670,15 @@ Vue.component('articlecategoryform', __webpack_require__(70));
 });
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(71)
+var __vue_script__ = __webpack_require__(72)
 /* template */
-var __vue_template__ = __webpack_require__(72)
+var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46481,7 +46717,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46616,7 +46852,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46727,7 +46963,7 @@ if (false) {
 }
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46861,13 +47097,13 @@ if (false) {
 }
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(75)
+var __vue_script__ = __webpack_require__(76)
 /* template */
 var __vue_template__ = __webpack_require__(110)
 /* template functional */
@@ -46908,7 +47144,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46975,7 +47211,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
-Vue.component('portfolioform', __webpack_require__(76));
+Vue.component('portfolioform', __webpack_require__(77));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'portfolio',
@@ -47279,13 +47515,13 @@ Vue.component('portfolioform', __webpack_require__(76));
 });
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(77)
+var __vue_script__ = __webpack_require__(78)
 /* template */
 var __vue_template__ = __webpack_require__(109)
 /* template functional */
@@ -47326,7 +47562,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47425,9 +47661,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 //TODO перерегистрировать локально
-Vue.component('categorytree', __webpack_require__(78));
+Vue.component('categorytree', __webpack_require__(79));
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'portfolioform',
@@ -47706,13 +47944,13 @@ Vue.component('categorytree', __webpack_require__(78));
 });
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(79)
+var __vue_script__ = __webpack_require__(80)
 /* template */
 var __vue_template__ = __webpack_require__(108)
 /* template functional */
@@ -47753,7 +47991,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47777,10 +48015,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 //TODO перерегистрировать локально
-Vue.component('accordionselecttree', __webpack_require__(80));
-__webpack_require__(96);
+Vue.component('accordionselecttree', __webpack_require__(81));
+__webpack_require__(18);
 /* harmony default export */ __webpack_exports__["default"] = ({
 	model: {
 		prop: 'value',
@@ -47797,6 +48037,9 @@ __webpack_require__(96);
 		value: function value(n, old) {
 			//this.selectedCategory = n; - это скорее всего лажа
 			console.log('CTree: new = ' + n + ', old = ' + old);
+			if (n != old) {
+				this.selectedCategory = this.value;
+			}
 		}
 	},
 
@@ -47840,20 +48083,20 @@ __webpack_require__(96);
 		} catch (e) {}
 
 		this.$refs.acctree.$on('input', function (value) {
-			//this.onDeleteTreeViewItem(node, nodesData, idList);
+			_this.selectedCategory = value;
 			_this.$emit('input', value);
 		});
 	}
 });
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(81)
+var __vue_script__ = __webpack_require__(82)
 /* template */
 var __vue_template__ = __webpack_require__(107)
 /* template functional */
@@ -47894,16 +48137,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_animerror_css__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_animerror_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_animerror_css__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
 //
 //
 //
@@ -48055,7 +48300,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 	},
 	watch: {
 		value: function value(n, old) {
-			console.log('AcTree: new = ' + n + ', old = ' + old);
+			console.log('AC: n ' + n + ', old ' + old);
+			if (n != old) {
+				this.selectNodeById(n, false);
+			}
 		}
 	},
 	name: 'categorytree',
@@ -48086,6 +48334,36 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 	},
 	//
 	methods: {
+		selectNodeById: function selectNodeById(key) {
+			var recreatNodeMap = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+			if (recreatNodeMap) {
+				delete this.$refs['v' + this.id].nodeMap;
+				this.$refs['v' + this.id].createNodeMap();
+			}
+			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(key));
+			if (x) {
+				x.select();
+				this.expandBranch(x);
+				return true;
+			}
+			this.selectedNode = this.defaultSelectedNode;
+			this.btnCss = 'btn btn-danger';
+			return false;
+		},
+
+		/**
+   * @param {TreeNode} oNode
+  */
+		expandBranch: function expandBranch(oNode) {
+			oNode.expand();
+			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(oNode.data[this.nodeParentKeyProp]));
+			while (x) {
+				x.expand();
+				x = this.$refs['v' + this.id].getNodeByKey(parseInt(x.data[this.nodeParentKeyProp]));
+			}
+		},
+
 		/**
    * @description Обработка выбора пункта контекстного меню дерева категорий
   */
@@ -48133,7 +48411,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			delete this.$refs['v' + this.id].nodeMap;
 			this.$refs['v' + this.id].createNodeMap();
 
-			var x = this.$refs['v' + this.id].getNodeByKey(data[this.nodeParentKeyProp]);
+			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(data[this.nodeParentKeyProp]));
 			var newNodeData = {};
 			newNodeData[this.nodeKeyProp] = data[this.nodeKeyProp];
 			newNodeData[this.nodeLabelProp] = data[this.nodeLabelProp];
@@ -48327,7 +48605,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			delete this.$refs['v' + this.id].nodeMap;
 			this.$refs['v' + this.id].createNodeMap();
 			var parentNode = void 0,
-			    x = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeKeyProp]);
+			    x = this.$refs['v' + this.id].getNodeByKey(parseInt(nodeData[this.nodeKeyProp]));
 			if (x) {
 				return;
 			}
@@ -48341,18 +48619,6 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			parentNode = this.$refs['v' + this.id].getNodeByKey(nodeData[this.nodeParentKeyProp]);
 			if (parentNode) {
 				parentNode.appendChild(nodeData);
-			}
-		},
-
-		/**
-   * @param {TreeNode} oNode
-  */
-		expandBranch: function expandBranch(oNode) {
-			oNode.expand();
-			var x = this.$refs['v' + this.id].getNodeByKey(oNode.data[this.nodeParentKeyProp]);
-			while (x) {
-				x.expand();
-				x = this.$refs['v' + this.id].getNodeByKey(x.data[this.nodeParentKeyProp]);
 			}
 		},
 
@@ -48377,28 +48643,9 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
    * @description dinamic change selection
   */
 		selectAndExpandNode: function selectAndExpandNode() {
-			this.selectedNode = this.defaultSelectedNode;
-			this.btnCss = 'btn btn-danger';
-			delete this.$refs['v' + this.id].nodeMap;
-			this.$refs['v' + this.id].createNodeMap();
-			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(this.value));
-			if (x) {
-				x.select();
-				this.expandBranch(x);
-			} else {
-				console.log('Not found');
-			}
-		},
-		selectNodeById: function selectNodeById(key) {
-			delete this.$refs['v' + this.id].nodeMap;
-			this.$refs['v' + this.id].createNodeMap();
-			var x = this.$refs['v' + this.id].getNodeByKey(parseInt(key));
-			if (x) {
-				x.select();
-				this.expandBranch(x);
-				return true;
-			}
-			return false;
+			var recreatNodeMap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+			this.selectNodeById(this.value, recreatNodeMap);
 		}
 	}, //end methods
 
@@ -48427,11 +48674,11 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 });
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_TreeView_vue__);
 /* unused harmony reexport bTreeView */
 
@@ -48447,17 +48694,17 @@ var VuePlugin = {
 /* harmony default export */ __webpack_exports__["a"] = (VuePlugin);
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(84)
+  __webpack_require__(85)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(87)
+var __vue_script__ = __webpack_require__(88)
 /* template */
 var __vue_template__ = __webpack_require__(104)
 /* template functional */
@@ -48498,13 +48745,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(86);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -48524,7 +48771,7 @@ if(false) {
 }
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -48538,7 +48785,7 @@ exports.push([module.i, "\n.tree-view {\n    text-align: left;\n}\n\n", ""]);
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports) {
 
 /**
@@ -48571,12 +48818,12 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TreeNode_vue__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TreeNode_vue__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__TreeNode_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__TreeNode_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__EventBus_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DropBetweenZone_vue__ = __webpack_require__(17);
@@ -48862,17 +49109,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 });
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(89)
+  __webpack_require__(90)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(91)
+var __vue_script__ = __webpack_require__(92)
 /* template */
 var __vue_template__ = __webpack_require__(97)
 /* template functional */
@@ -48913,13 +49160,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(90);
+var content = __webpack_require__(91);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -48939,7 +49186,7 @@ if(false) {
 }
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -48953,7 +49200,7 @@ exports.push([module.i, "\n.tree-node-label {\n    cursor: pointer;\n    padding
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49039,7 +49286,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
 
-__webpack_require__(96);
+__webpack_require__(18);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'tree-node',
@@ -49392,13 +49639,13 @@ __webpack_require__(96);
 });
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(93);
+var content = __webpack_require__(94);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -49418,7 +49665,7 @@ if(false) {
 }
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -49432,7 +49679,7 @@ exports.push([module.i, "\n.drop-between-zone {\n  height: 4px;\n  width: 100%;\
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49474,7 +49721,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49516,242 +49763,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-6d15e2c6", module.exports)
   }
 }
-
-/***/ }),
-/* 96 */
-/***/ (function(module, exports) {
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/**
- * Algorithm for work with tree. 
-*/
-window.TreeAlgorithms = {
-	/** @property {String} idFieldName */
-	idFieldName: 'id',
-
-	/** @property {String} parentIdFieldName */
-	parentIdFieldName: 'parent_id',
-
-	/** @property {String} childsFieldName */
-	childsFieldName: 'children',
-
-	/**
-  * @description Get all "this.idFieldName" values from node and all node childs (all levels)
-  * @param {Object} node 
-  * @return Array of "this.idFieldName" nodes  (all levels)
-  */
-	getBranchIdList: function getBranchIdList(node) {
-		var r = [],
-		    part = void 0,
-		    i = void 0,
-		    j = void 0;
-		r.push(node[this.idFieldName]);
-		if (node[this.childsFieldName]) {
-			part = [];
-			if (node[this.childsFieldName] instanceof Array) {
-				for (i = 0; i < node[this.childsFieldName].length; i++) {
-					part = this.getBranchIdList(node[this.childsFieldName][i]);
-					for (j = 0; j < part.length; j++) {
-						r.push(part[j]);
-					}
-				}
-			} else {
-				for (i in node[this.childsFieldName]) {
-					part = this.getBranchIdList(node[this.childsFieldName][i]);
-					for (j = 0; j < part.length; j++) {
-						r.push(part[j]);
-					}
-				}
-			}
-		}
-		return r;
-	},
-
-	/**
-  * @description walking oTree and execute oCallback(currentNode)
-  * @param {Object} oTree
-  * @param {Object} oCallback  {context, f:function}
-  */
-	walkAndExecuteAction: function walkAndExecuteAction(oTree, oCallback) {
-		var i = void 0;
-		oCallback.f.call(oCallback.context, oTree);
-		if (oTree[this.childsFieldName]) {
-			if (oTree[this.childsFieldName] instanceof Array) {
-				for (i = 0; i < oTree[this.childsFieldName].length; i++) {
-					this.walkAndExecuteAction(oTree[this.childsFieldName][i], oCallback);
-				}
-			} else {
-				for (i in oTree[this.childsFieldName]) {
-					this.walkAndExecuteAction(oTree[this.childsFieldName][i], oCallback);
-				}
-			}
-		}
-	},
-
-	/**
-  * @description build tree from flat list
-  * @param {Object} aScopesArg array of objects {this.idFieldName, this.parentIdFieldName}
-  * @param {Boolean} bSetChildsAsArray = false if true, all 'children' (this.childsFieldName) property will convert to array
-  * @return Array with root nodes in items
-  */
-	buildTreeFromFlatList: function buildTreeFromFlatList(aScopesArg) {
-		var bSetChildsAsArray = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-		var aBuf = void 0,
-		    nId = void 0,
-		    oItem = void 0,
-		    sChilds = void 0,
-		    oParent = void 0,
-		    a = void 0,
-		    r = [],
-		    i = void 0;
-
-		aScopes = [].concat(_toConsumableArray(aScopesArg));
-		aBuf = {};
-
-		if (aScopes instanceof Array) {
-			for (i = 0; i < aScopes.length; i++) {
-				nId = aScopes[i][this.idFieldName];
-				aBuf[nId] = aScopes[i];
-				aBuf[nId][this.childsFieldName] = {};
-			}
-		} else {
-			for (nId in aScopes) {
-				oItem = aScopes[nId];
-				aBuf[nId] = oItem;
-				aBuf[nId][this.childsFieldName] = {};
-			}
-		}
-		aScopes = aBuf;
-
-		//тут строим дерево
-		sChilds = this.childsFieldName;
-		for (nId in aScopes) {
-			oItem = aScopes[nId];
-
-			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]); //it need?
-
-			//перемещаем вложенные во внутрь
-			if (oItem[this.parentIdFieldName] > 0) {
-				oParent = aScopes[oItem[this.parentIdFieldName]];
-				if (oParent) {
-					if (!oParent[sChilds]) {
-						oParent[sChilds] = {};
-					}
-					//a = &oParent->sChilds;
-					a = oParent[sChilds];
-					a[nId] = oItem;
-					//aScopes[nId] = &a[nId];
-					aScopes[nId] = a[nId];
-					aScopes[nId].isMoved = true;
-				}
-			}
-		}
-
-		//удаляем из корня ссылки на перемещенные в родителей.
-		for (nId in aScopes) {
-			oItem = aScopes[nId];
-			if (oItem.isMoved) {
-				delete aScopes[nId];
-			}
-		}
-		for (nId in aScopes) {
-			oItem = aScopes[nId];
-			if (bSetChildsAsArray) {
-				this.walkAndExecuteAction(oItem, { context: this, f: this._convertChildsToArray });
-			}
-			r.push(oItem);
-		}
-
-		return r;
-	},
-
-	/**
-  * @description Convert childs to array
-  * @param {Object} node 
-  */
-	_convertChildsToArray: function _convertChildsToArray(node) {
-		var newChilds = [],
-		    k = void 0;
-		for (k in node[this.childsFieldName]) {
-			newChilds.push(node[this.childsFieldName][k]);
-		}
-		node[this.childsFieldName] = newChilds;
-	},
-
-	/**
-  * @description Find nodt By Id
-  * @param {Object} node (or tree)
-  * @param {String} id
-  * @return Object node or null
- */
-	findById: function findById(node, id) {
-		var r = void 0,
-		    i = void 0;
-		if (node[this.idFieldName] == id) {
-			return node;
-		}
-		if (node[this.childsFieldName]) {
-			if (node[this.childsFieldName] instanceof Array) {
-				for (i = 0; i < node[this.childsFieldName].length; i++) {
-					r = this.findById(node[this.childsFieldName][i], id);
-					if (r) {
-						return r;
-					}
-				}
-			} else {
-				for (i in node[this.childsFieldName]) {
-					r = this.findById(node[this.childsFieldName][i], id);
-					if (r) {
-						return r;
-					}
-				}
-			}
-		}
-		return null;
-	},
-
-	/**
-  * @description Remove node from tree by node id
-  * @param {Object} tree (or tree)
-  * @param {String} id
-  * @return Boolean
- */
-	remove: function remove(tree, id) {
-		var i = void 0,
-		    node = this.findById(tree, id),
-		    parentNode = void 0;
-		if (!node) {
-			return false;
-		}
-		if (node[this.parentIdFieldName]) {
-			parentNode = this.findById(tree, node[this.parentIdFieldName]);
-		}
-		if (!parentNode || !parentNode[this.childsFieldName]) {
-			return false;
-		}
-
-		if (parentNode[this.childsFieldName] instanceof Array) {
-			for (i = 0; i < parentNode[this.childsFieldName].length; i++) {
-				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
-					parentNode[this.childsFieldName].splice(i, 1);
-					//delete node;
-					return true;
-				}
-			}
-		} else {
-			for (i in parentNode[this.childsFieldName]) {
-				if (parentNode[this.childsFieldName][i][this.idFieldName] == node[this.idFieldName]) {
-					delete parentNode[this.childsFieldName][i];
-					//delete node;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-};
 
 /***/ }),
 /* 97 */
@@ -50426,6 +50437,35 @@ var render = function() {
           ],
           1
         )
+      ]),
+      _vm._v(" "),
+      _c("label", [
+        _vm._v("Ac level\n\t\t\t"),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.selectedNodeId,
+              expression: "selectedNodeId"
+            }
+          ],
+          attrs: { type: "text" },
+          domProps: { value: _vm.selectedNodeId },
+          on: {
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.selectedNodeId = $event.target.value
+              },
+              function($event) {
+                return _vm.$emit("input", $event.target.value)
+              }
+            ]
+          }
+        })
       ])
     ])
   ])
@@ -50464,11 +50504,6 @@ var render = function() {
           urlUpdateItem: "/p/portfoliocats/pcsave.jn/",
           urlRemoveItem: "/p/portfoliocats/pcdelte.jn/"
         },
-        on: {
-          input: function($event) {
-            return _vm.$emit("input", _vm.value)
-          }
-        },
         model: {
           value: _vm.selectedCategory,
           callback: function($$v) {
@@ -50476,7 +50511,31 @@ var render = function() {
           },
           expression: "selectedCategory"
         }
-      })
+      }),
+      _vm._v(" "),
+      _c("label", [
+        _vm._v("CA level\n\t\t"),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.selectedCategory,
+              expression: "selectedCategory"
+            }
+          ],
+          attrs: { type: "text" },
+          domProps: { value: _vm.selectedCategory },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.selectedCategory = $event.target.value
+            }
+          }
+        })
+      ])
     ],
     1
   )
@@ -50541,26 +50600,34 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.pcategory,
-            expression: "pcategory"
-          }
-        ],
-        attrs: { type: "text" },
-        domProps: { value: _vm.pcategory },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+      _c("label", [
+        _vm._v("Form level\n\t\t\t"),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.pcategory,
+              expression: "pcategory"
             }
-            _vm.pcategory = $event.target.value
+          ],
+          attrs: { type: "text" },
+          domProps: { value: _vm.pcategory },
+          on: {
+            input: [
+              function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.pcategory = $event.target.value
+              },
+              function($event) {
+                return _vm.$emit("input", $event.target.value)
+              }
+            ]
           }
-        }
-      }),
+        })
+      ]),
       _vm._v(" "),
       _c("inputb4", {
         attrs: {

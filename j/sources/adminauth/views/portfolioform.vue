@@ -2,7 +2,9 @@
     <form class="user" method="POST" action="/p/portfolio/psave.jn/" @submit="onSubmit" novalidate id="portfolioform">
 		<selectb4 v-model="category" @input="setDataChanges" :label="$t('app.Sections')" id="category" :data="portfolioCategories" validators="'required'"></selectb4>
 		<categorytree v-model="pcategory" ref="categorytree"  id="portfolio_category_id" ></categorytree>
-		<input type="text" v-model="pcategory">
+		<label>Form level
+			<input type="text" v-model="pcategory" @input="$emit('input', $event.target.value)">
+		</label>
 		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
