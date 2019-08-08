@@ -1111,3 +1111,11 @@ function utils_isXhr() : bool
 	}
 	return false;
 }
+/**
+ *  @description Слушать запросы с любого домена
+*/
+function utils_crossOrigin()
+{
+	//header('Access-Control-Allow-Origin: *');
+	header("Access-Control-Allow-Origin: *");
+}

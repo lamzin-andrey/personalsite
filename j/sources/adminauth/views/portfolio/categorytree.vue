@@ -6,8 +6,7 @@
 			v-model="selectedCategory"
 			
 			:treedata="portfolioCategoriesTree"
-			:showIcons="true" 
-			:showIcon="true" 
+			:showIcons="true"
 			defaultIconClass="fas fa-box"
 			urlCreateNewItem="/p/portfoliocats/pcsave.jn/"
 			urlUpdateItem="/p/portfoliocats/pcsave.jn/"
@@ -53,14 +52,7 @@
 			/** @property {Array} данные дерева категорий */
             portfolioCategoriesTree: [{"id": 2222, "name": "Zevs", "children": [{"id": 3333, "parent_id" : 2222, "name": "Neptune"}, {"id": 4444, "parent_id" : 2222, "name": "Stratus"} ] } ],
 		}; },
-		computed: {
-			/*dinlabel : function() {
-				if (this.placeholderlabel) {
-					return this.placeholderlabel;
-				}
-				return this.label;
-			}*/
-		},
+		computed: {},
         //
         methods:{
 			

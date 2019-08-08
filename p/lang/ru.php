@@ -81,4 +81,7 @@ $aLang = [
 	//Article form
 	'Append'        => 'ƒобавить',
 	// /Article form
+	
+	//demo tree
+	'Owner of the site do not allow for delete  this category.  You can delete only you created  categories.' => '¬ладелец сайта не разрешает удал€ть эту категорию. ¬ы можете удалить только созданные вами категории.'
 ];

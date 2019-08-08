@@ -20,6 +20,7 @@ class Route {
 		$this->_acategories();
 		$this->_portfolio();
 		$this->_portfoliocats();
+		$this->_treedemo();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -64,6 +65,26 @@ class Route {
 			$handler = __dir__ . '/ctrl/logout.php';
 			require_once $handler;
 			$this->app = new Logout();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/portfoliocats/
+	*/
+	protected function _treedemo()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/treedemo/dcatsave.jn/') {
+			$handler = $sCtrlDir . 'dcatsave.php';
+			require_once $handler;
+			$this->app = new DemoCategoryPost();
+		}
+		if ($baseUrl == '/p/treedemo/dcatdelte.jn/') {
+			$handler = $sCtrlDir . 'dcatremove.php';
+			require_once $handler;
+			$this->app = new DemoCategoryRemove();
 		}
 	}
 	/**

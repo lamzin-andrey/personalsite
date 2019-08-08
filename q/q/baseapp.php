@@ -33,7 +33,12 @@ class BaseApp {
 		}
 		$this->token = $token;
 		if (count($_POST)) {
-			if (a($_POST, '_token') != $token ) {
+			$postToken = a($_POST, '_token');
+			if (
+				$postToken != $token
+				//Для демо-страницы дерева категорий
+				&& !$this->_isNoCsrfPage($postToken)
+			) {
 				die('csrf');
 			}
 		}
@@ -222,5 +227,13 @@ class BaseApp {
 	static public function getDataObject() {
 		return self::$_dataObject;
 	}
+	/**
+	 * @description Вернет истину когда запрос направлен в часть сайта не требующую csrf
+	*/
+	protected function _isNoCsrfPage(string $sPostToken) : bool
+	{
+		return false;
+	}
+	
 }
 

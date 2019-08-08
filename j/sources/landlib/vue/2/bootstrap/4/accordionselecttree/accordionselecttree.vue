@@ -16,8 +16,7 @@
 						<b-tree-view :ref="'v' + id" 
 							:data="treedata"
 							:contextMenuItems="contextMenuItems" 
-							:showIcons="showIcons" 
-							showIcon="true"
+							:showIcons="showIcons"
 							:defaultIconClass="defaultIconClass"
 							:allowMultiple="allowMultiple"
 							:nodeKeyProp="nodeKeyProp"
@@ -358,7 +357,7 @@
 					currObj = {...nodesData[i]};
 					this.stackremovedItems[ currObj[this.nodeKeyProp] ] = currObj;
 				}
-				Rest._delete({idList:idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
+				Rest._post({idList:idList}, (data) => {this.onSuccessDeleteItem(data); }, this.urlRemoveItem, (a, b, c) => {this.onFailDeleteItem(a, b, c);});
 			},
 			/**
 			 * @description Restore tree nodes if nodes no removed

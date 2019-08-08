@@ -48016,7 +48016,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 //TODO перерегистрировать локально
 Vue.component('accordionselecttree', __webpack_require__(81));
@@ -48051,14 +48050,7 @@ __webpack_require__(18);
 			portfolioCategoriesTree: [{ "id": 2222, "name": "Zevs", "children": [{ "id": 3333, "parent_id": 2222, "name": "Neptune" }, { "id": 4444, "parent_id": 2222, "name": "Stratus" }] }]
 		};
 	},
-	computed: {
-		/*dinlabel : function() {
-  	if (this.placeholderlabel) {
-  		return this.placeholderlabel;
-  	}
-  	return this.label;
-  }*/
-	},
+	computed: {},
 	//
 	methods: {}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
@@ -48143,7 +48135,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_animerror_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_animerror_css__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-//
 //
 //
 //
@@ -50412,7 +50403,6 @@ var render = function() {
                     data: _vm.treedata,
                     contextMenuItems: _vm.contextMenuItems,
                     showIcons: _vm.showIcons,
-                    showIcon: "true",
                     defaultIconClass: _vm.defaultIconClass,
                     allowMultiple: _vm.allowMultiple,
                     nodeKeyProp: _vm.nodeKeyProp,
@@ -50472,8 +50462,7 @@ var render = function() {
           id: "portfolioCategoriesTree",
           label: _vm.$t("app.Category"),
           treedata: _vm.portfolioCategoriesTree,
-          showIcons: true,
-          showIcon: true,
+          showIcons: "true",
           defaultIconClass: "fas fa-box",
           urlCreateNewItem: "/p/portfoliocats/pcsave.jn/",
           urlUpdateItem: "/p/portfoliocats/pcsave.jn/",
