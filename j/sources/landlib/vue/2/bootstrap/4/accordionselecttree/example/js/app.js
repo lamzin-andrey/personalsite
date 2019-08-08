@@ -7,7 +7,7 @@ import VueI18n  from 'vue-i18n';
 import locales  from './vue-i18n-locales';
 
 const i18n = new VueI18n({
-    locale: 'ru', // set locale
+    locale: 'en', // set locale
     messages:locales, // set locale messages
 });
 //end International
@@ -25,7 +25,7 @@ window.app = new Vue({
 	
 	data: {
 		/** @property {Number} selectedCategory */
-		selectedCategory : 1,
+		selectedCategory : 3,
 		/** @property {Array} categoriesTree */
 		categoriesTree : [{id:1, name:"Loading..."}],
 
@@ -47,6 +47,7 @@ window.app = new Vue({
 	mounted() {
 		//init Rest library
 		Rest._token = this._getToken();
+		Rest._lang = 'en';
 
 		//parse data and set  selected category
 		let data = $('#categorydata').val();

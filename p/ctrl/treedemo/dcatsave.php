@@ -27,6 +27,10 @@ class DemoCategoryPost extends OpenApp {
 			//$this->_setLogo();
 			$sql = '';
 			if ($id) {
+				$check = dbvalue("SELECT system FROM {$this->table} WHERE id = {$id}");
+				if ($check) {
+					json_error('msg', l('Owner of the site do not allow for delete  this category.  You can delete only you created  categories.'));
+				}
 				$sql = $this->updateQuery(('id = ' . $id));
 				//die($sql);
 			} else {

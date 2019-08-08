@@ -6,8 +6,8 @@ function l(string $s, bool $skipConvertEncoding = false) : string
 	if (isset($_COOKIE['flang'])) {
 		$lang = $_COOKIE['flang'];
 	}
-	if (isset($_GET['lang'])) {
-		$lang = $_GET['lang'];
+	if (isset($_REQUEST['lang'])) {
+		$lang = $_REQUEST['lang'];
 		setcookie('flang', $lang, time() + 365*24*3600, '/');
 	}
 	

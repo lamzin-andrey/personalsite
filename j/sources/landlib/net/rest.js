@@ -3,6 +3,10 @@ window.Rest = {
 	 * @property {String} csrf token, set it from app
 	*/
 	_token : '',
+	/**
+	 * @property {String} _lang
+	*/
+	_lang : '',
 	root : '',
 	/**
      * @description ajax post request (FormData)
@@ -99,6 +103,9 @@ window.Rest = {
             case 'delete':
                 break;
 		}*/
+		if (this._lang && !sendData.lang) {
+			sendData.lang = this._lang;
+		}
         $.ajax({
             method: method,
             data:sendData,
