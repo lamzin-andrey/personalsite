@@ -11,7 +11,7 @@
 						</button>
 					</h5>
 				</div>
-				<div id="collapsePortCatTreeAccord" class="collapse" :aria-labelledby="id + 'AccordHeading'" :data-parent="'#' + id + 'Accord'">
+				<div id="collapsePortCatTreeAccord" :class="isAccordShow" :aria-labelledby="id + 'AccordHeading'" :data-parent="'#' + id + 'Accord'">
 					<div class="card-body">
 						<b-tree-view :ref="'v' + id" 
 							:data="treedata"
@@ -85,6 +85,10 @@
 			urlRemoveItem: {
 				type:String,
 				default: ''
+			},
+			accordisopen: {
+				type: Boolean,
+				default: false
 			},
 			//This props will be passed in TreeView
 			treedata: {
@@ -161,6 +165,17 @@
 					this.selectNodeById(n, false);
 				}
 			}
+		},
+		computed: {
+			isAccordShow:{
+				get() {
+					let s = 'collapse';
+					if (this.accordisopen) {
+						return (s + ' show');
+					}
+					return s;
+				}
+			},
 		},
 		name: 'categorytree',
 		

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no"><meta property="og:image" content="/i/64.jpg">
+		<meta name="apptoken" content="1cdslkjhs4dfjkhs8fdjkhsg">
+		<title>Компонент Vue 2 bootstrap 4 редактируемый древовидный список TreeView с немедленной отправкой данных на сервер -|- Сайт Андрея</title>
+		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
+		<link rel="stylesheet" href="/s/fontawesome5/all.css" >
+		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
+		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+		<script>window.applang='ru';</script>
+	</head>
+	<body>
+		<div class="container u-full-width">
+			<header>
+				<div class="row">
+					<div class="col">
+						<div class="text-left u-mainhead">
+							<h1>Блог Андрея</h1>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div>&nbsp;</div>
+			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+			  <a class="navbar-brand" href="/">Начало</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item active">
+					<a class="nav-link" href="javascript:;">Портфолио</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="javascript:;">Блог</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/clients/">Клиентам</a>
+				  </li>
+				</ul>
+			  </div>
+			</nav>
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-12 col-lg-8">
+					<article>
+						<h1>Vue 2 bootstrap 4 редактируемый древовидный список TreeView - online demo</h1>
+						<time datetime="2019-08-08" class="d-block text-right text-muted small">08.08.2019</time>
+						
+						<div  id="wrapper">
+							<accordionselecttree
+								id="categoriesTree"
+								default-icon-class="fas fa-box"
+								:accordisopen="true"
+								:label="$t('app.Category')"
+								v-model="selectedCategory"
+								:treedata="categoriesTree"
+								url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+								url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+								url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
+								:show-icons="true"
+								ref="treeview"
+							></accordionselecttree>
+							<textarea hidden style="display:none" id="categorydata">[
+	{
+		"id" : 1,
+		"parent_id" : 0,
+		"name" : "All categories"
+	},
+	{
+		"id" : 2,
+		"parent_id" : 1,
+		"name" : "Appliances"
+	},
+	{
+		"id" : 3,
+		"parent_id" : 1,
+		"name" : "Electronics"
+	},
+	{
+		"id" : 4,
+		"parent_id" : 3,
+		"name" : "Cell phones"
+	},
+	{
+		"id" : 5,
+		"parent_id" : 3,
+		"name" : "Notebooks"
+	},
+	{
+		"id" : 6,
+		"parent_id" : 3,
+		"name" : "Tv Sets"
+	}
+]</textarea>
+						</div>						
+					</article>
+				</div>
+				<div class="col-12 col-lg-4  u-right-side">
+					<ul class="list-group text-center">
+						<li class="list-group-item">
+							<div><img src="/i/fx.jpg" alt="Fastxampp"></div>
+							<div> <!-- style="border-top-width: 0px;" -->
+								<a href="//fastxampp.org" target="_blank">Утилита для удобного добавления сайтов на localhost</a>
+							</div>
+						</li> 
+						<li class="list-group-item">
+							<div><img src="/i/L.jpg"  alt="cordova online"></div>
+							<div><a target="_blank" href="http://fastxampp.org/compile_android_online_apache_cordova/">Компиляция html5 приложений cordova для android онлайн</a><br>
+								<p>
+									<small>
+									</small>
+								</p>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div>
+								<img src="/i/php2js.jpg" title="" alt="">
+							</div>
+							<div>
+								<a href="http://php2js.ru/" target="_blank">Транслятор php кода в код javascript</a><br>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div><img src="/i/rc.jpg" alt="RedCafe"></div>
+							<div><a href="http://redcafe.ru/">Программа для создания выкроек стильной одежды</a></div>
+							<p>
+								<small>Мой вклад - оффлайн-версия программы для экспорта выкроек в pdf и dxf</small></div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+			<div class="footer bg-dark text-light">
+				
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								&copy; Андрей Ламзин
+							</div>
+						</div>
+					</div>
+				
+			</div>
+		
+        <script src="/j/jquery-3.3.1.slim.min.js"></script>
+        <script src="/j/bootstrap4.2.1.min.js"></script>
+        <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/prism/0.js"></script>
+        <script src="/portfolio/vue2_editable_tree_view/compiled.js" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+	</body>
+</html>

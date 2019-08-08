@@ -3,7 +3,10 @@
 
 <p class="text-warning">Далее (пилю аккордион со списком):</p>
 <ul >
-	<li class="text-warning">Документацию дописать и и демо на сайт, не дожидаясь, пока закончу редактор портфолио </li>
+	<li class="text-warning">Базу от статей очистить и залить на продакшен базу и обновиться через git</li>
+	<li class="text-warning">Добиться работы  /portfolio/vue2_editable_tree_view/ на серевере, по идее там особо ничего и не надо</li>
+	<li class="text-warning">Для это йстраницы сделать подгрузку данных с сервера.</li>
+	<li>/opt/lampp/htdocs/mh.loc/www/portfolio/vue2_editable_tree_view npm eun watch</li>
 </ul>
 
 <p>Отличия от статей:</p>
