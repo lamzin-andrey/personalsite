@@ -3,16 +3,22 @@
 
 <p class="text-warning">Далее (пилю аккордион со списком):</p>
 <ul >
-	<li class="text-warning">Базу от статей очистить и залить на продакшен базу и обновиться через git</li>
-	<li class="text-warning">Добиться работы  /portfolio/vue2_editable_tree_view/ на серевере, по идее там особо ничего и не надо</li>
-	<li class="text-warning">Для это йстраницы сделать подгрузку данных с сервера.</li>
-	<li>/opt/lampp/htdocs/mh.loc/www/portfolio/vue2_editable_tree_view npm eun watch</li>
+	<li class="text-warning">Базу от статей очистить и залить на продакшен базу</li>
+	<li class="text-warning">Добиться работы  /portfolio/vue2_editable_tree_view/ на серевере, по идее там кроме базы ничего и не надо</li>
+	<li class="text-warning">Для этой страницы сделать подгрузку данных с сервера.</li>
+	<li class="text-warning">/opt/lampp/htdocs/mh.loc/www/portfolio/vue2_editable_tree_view npm run watch</li>
+	<li class="text-warning">Про Камила не забыть упомянуть всюду</li>
+	<li class="text-warning">Доку переписать, пусть на сайте тоже будет</li>
+	<li class="text-warning">Вероятно поместить её с url куда надо /portfolio/web/components/frontend/vue/</li>
+	<li class="text-warning">В список портфолио добавить</li>
+	<li class="text-warning">sitemap</li>
+	
 </ul>
 
 <p>Отличия от статей:</p>
 <ul>
 	<li>Дерево категорий вместо списка категорий</li>
-	<li>Лого может быть ссылкой на сторлнний ресурс</li>
+	<li>Лого может быть ссылкой на сторнний ресурс</li>
 	<li>Может быть отдельная страница продукта, а может и не быть. Значит - ещё одно поле для ввода текста, скорее всего в скрытом аккордеоне</li>
 	<li>Отдельная страница продукта может быть очень сложной - например для qdjs там целое шоу с блэкджеком и документацией - там не страница, а раздел</li>
 	<li>Может быть дополнительная ссылка "Для чего нужны sha256, sha1 и md5" для скачивания с моего ресурса</li>

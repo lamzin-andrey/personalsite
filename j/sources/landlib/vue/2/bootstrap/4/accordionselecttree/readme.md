@@ -112,23 +112,22 @@ The backend should provide you with the following data:
 
 #### Vue код
 
-Код vue компонента для вставки в HTML шаблон
 Vue component code for use it in the HTML template (or another vue-component)
 
 ```html
 <accordionselecttree
-								id="categoriesTree"
-								v-model="selectedCategory"
-								default-icon-class="fas fa-box"
-								:show-icons="true"
-								:label="$t('app.Category')"
-								:treedata="categoriesTree"
-								url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
-								url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
-								url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
-								ref="treeview"
-							></accordionselecttree>
-							<textarea hidden style="display:none" id="categorydata">[
+	id="categoriesTree"
+	v-model="selectedCategory"
+	default-icon-class="fas fa-box"
+	:show-icons="true"
+	:label="$t('app.Category')"
+	:treedata="categoriesTree"
+	url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+	url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+	url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
+	ref="treeview"
+></accordionselecttree>
+<textarea hidden style="display:none" id="categorydata">[
 	{
 		"id" : 1,
 		"parent_id" : 0,
@@ -180,7 +179,6 @@ const i18n = new VueI18n({
 //end Localization
 
 
-//Проследите, чтобы пути к файлам библиотек были указаны верно
 //Make sure, that path to libraries will be right
 
 //REST library
@@ -224,7 +222,6 @@ window.app = new Vue({
 		let data = $('#categorydata').val();
 		try {
 			data = JSON.parse(data);
-			//Если сервер вернул "плоский" список, мы можем построить из него дерево сами
 			//If server response containts "flat" list, we can build tree ourselves!
 			//		(Object TreeAlgorithms already imported in the our component)
 			data = TreeAlgorithms.buildTreeFromFlatList(data, true);
@@ -569,18 +566,18 @@ landlib https://github.com/lamzin-andrey/landlib.git
 
 ```html
 <accordionselecttree
-								id="categoriesTree"
-								v-model="selectedCategory"
-								default-icon-class="fas fa-box"
-								:show-icons="true"
-								:label="$t('app.Category')"
-								:treedata="categoriesTree"
-								url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
-								url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
-								url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
-								ref="treeview"
-							></accordionselecttree>
-							<textarea hidden style="display:none" id="categorydata">[
+	id="categoriesTree"
+	v-model="selectedCategory"
+	default-icon-class="fas fa-box"
+	:show-icons="true"
+	:label="$t('app.Category')"
+	:treedata="categoriesTree"
+	url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+	url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+	url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
+	ref="treeview"
+></accordionselecttree>
+<textarea hidden style="display:none" id="categorydata">[
 	{
 		"id" : 1,
 		"parent_id" : 0,
