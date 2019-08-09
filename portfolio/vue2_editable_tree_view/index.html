@@ -66,49 +66,84 @@
 								ref="treeview"
 							></accordionselecttree>
 						</div>
-					-------
+						<p>&nbsp;</p>
+<h3>Описание</h3>					
 <p>Компонент vue 2 сочетающий аккордион и древовидную структуру для выбора элемента древовидной структуры.</p>
 
-<p>Базируется на компоненте https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/bootstrap-vue-treeview, который в свою очередь форк проекта https://github.com/kamil-lip/bootstrap-vue-treeview</p>
+<p>Базируется на компоненте <a href="https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/bootstrap-vue-treeview" target="_blank">landlib/bootstrap-vue-treeview</a>, который в свою очередь форк проекта <a href="https://github.com/kamil-lip/bootstrap-vue-treeview" target="_blank">bootstrap-vue-treeview</a></p>
 
-<p>Добавление, редактирование и удаление элементов дерева немедленно отправляется на url сервера, которые вы можете указать в атрибутах  `urlCreateNewItem`, `urlUpdateItem`, `urlRemoveItem`.</p>
+<p>Добавление, редактирование и удаление элементов дерева немедленно отправляется на url сервера, которые вы можете указать в атрибутах  
+<code class="language-javascript">urlCreateNewItem</code>, <code class="language-javascript">urlUpdateItem</code>, <code class="language-javascript">urlRemoveItem</code>.</p>
 
 <p>Связанная с компонентом модель содержит id выбранного элемента.</p>
 
 <h3>Зависимости</h3>
-
-jquery
-vue 2
-bootstrap4
-i18n
-landlib https://github.com/lamzin-andrey/landlib.git
+<ul class="list-group">
+<li class="list-group-item active">Имя библиотеки</li>
+<li class="list-group-item">jquery</li>
+<li class="list-group-item">vue 2</li>
+<li class="list-group-item">bootstrap4</li>
+<li class="list-group-item">i18n</li>
+<li class="list-group-item"><a href="https://github.com/lamzin-andrey/landlib.git" target="_blank">landlib</a></li>
+</ul>
 
 
 <h3>Установка</h3>
 
-`git clone https://github.com/lamzin-andrey/landlib.git`
+<p><code class="language-bash">git clone https://github.com/lamzin-andrey/landlib.git</code></p>
 
 <h2>Использование</h2>
 
 <h3>Данные на сервере</h3>
 
-Пусть есть таблица базы данных `categories` с полями 
+<p>Пусть есть таблица базы данных `categories` с полями:</p>
 
-| id | parent_id | name |
-| --- | --- | --- |
-| 1 | 0 | Все категории |
-| 2 | 1 | Бытовая техника |
-| 3 | 1 | Электроника |
-| 4 | 3 | Мобильные телефоны |
-| 5 | 3 | Ноутбуки |
-| 6 | 3 | Телевизоры |
+<table class="table table-striped table-bordered">
+	<thead>
+	<tr>
+		<th>id</th>
+		<th>parent_id</th>
+		<th>name</th>
+	</tr>
+	</thead>
+	<tr>
+		<td>1</td>
+		<td>0</td>
+		<td>Все категории</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>1</td>
+		<td>Бытовая техника</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>1</td>
+		<td>Электроника</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>3</td>
+		<td>Мобильные телефоны</td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>3</td>
+		<td>Ноутбуки</td>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td>3</td>
+		<td>Телевизоры</td>
+	</tr>
+</table>
 
-Вы хотите отобразить это в виде редактируемного древовидного списка.
+<p>Вы хотите отобразить это в виде редактируемного древовидного списка.</p>
 
-Бэкенд должен обеспечить вам данные следующего вида:
+<p>Бэкенд должен обеспечить вам данные следующего вида:</p>
 
-```json
-[
+
+<pre><code class="language-json">[
 	{
 		"id" : 1,
 		"parent_id" : 0,
@@ -140,13 +175,13 @@ landlib https://github.com/lamzin-andrey/landlib.git
 		"name" : "Телевизоры",
 	}
 ]
-```
+</code></pre>
 
-<h3> Код базового приложения<h3>
+<h3>Код базового приложения<h3>
 
 <h4>package.json</h4>
 
-```json
+<pre><code class="language-json">
 {
 	"private": true,
 	"scripts": {
@@ -169,15 +204,13 @@ landlib https://github.com/lamzin-andrey/landlib.git
 		"vue-context-menu": "^2.0.6"
 	}
 }
-
-```
+</code></pre>
 
 <h4>Vue код</h4>
 
-Код vue компонента для вставки в HTML шаблон
+<p>Код vue компонента для вставки в HTML шаблон</p>
 
-```html
-<accordionselecttree
+<pre><code class="language-html">&lt;accordionselecttree
 	id="categoriesTree"
 	v-model="selectedCategory"
 	default-icon-class="fas fa-box"
@@ -188,8 +221,8 @@ landlib https://github.com/lamzin-andrey/landlib.git
 	url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
 	url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
 	ref="treeview"
-></accordionselecttree>
-<textarea hidden style="display:none" id="categorydata">[
+&gt;&lt;/accordionselecttree&gt;
+&lt;textarea hidden style="display:none" id="categorydata"&gt;[
 	{
 		"id" : 1,
 		"parent_id" : 0,
@@ -220,13 +253,12 @@ landlib https://github.com/lamzin-andrey/landlib.git
 		"parent_id" : 3,
 		"name" : "Tv Sets"
 	}
-]</textarea>
-```
+]&lt;/textarea&gt;
+</code></pre>
 
 <h4>app.js</h4>
 
-```javascript
-//Vue и jquery
+<pre><code class="language-javascript">//Vue и jquery
 window.jQuery = window.jquery = window.$ = require('jquery');
 window.Vue = require('vue');
 
@@ -246,8 +278,9 @@ const i18n = new VueI18n({
 //REST library
 require('../../../j/sources/landlib/net/rest.js');
 
-//Yfi rjvgjytyn
-Vue.component('accordionselecttree', require('../../../j/sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
+//Наш компонент
+Vue.component('accordionselecttree',
+require('../../../j/sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
 
 window.app = new Vue({
 	i18n : i18n,
@@ -282,17 +315,21 @@ window.app = new Vue({
 		//На каком языке отвечать
 		Rest._lang = 'en';
 
-		//Эти данные могли бы быть полученны с сервера, в этом примере они в формате JSON хранятся в textarea
+		//Эти данные могли бы быть полученны с сервера,
+		// в этом примере они в формате JSON хранятся в textarea
 		let data = $('#categorydata').val();
 		//this.selectedCategory = this.value;
 		try {
 			data = JSON.parse(data);
-			//Если сервер вернул "плоский" список, мы можем построить из него дерево сами
+			//Если сервер вернул "плоский" список,
+			// мы можем построить из него дерево сами
 			data = TreeAlgorithms.buildTreeFromFlatList(data, true);
 			this.categoriesTree = data;
 			//or this.categoriesTree[0] = data[0]; если vue warning
 			setTimeout(() =>{
-				this.selectedCategory = 3;	//Напрмер мы на странице товара, а сервер вернул нам помимо данных дерева категорий категорию товара
+				//Напрмер мы на странице товара,
+				// а сервер вернул нам помимо данных дерева категорий категорию товара
+				this.selectedCategory = 3;
 				this.$refs.treeview.selectNodeById(this.selectedCategory);
 			}, 500);
 		} catch(e){
@@ -300,76 +337,78 @@ window.app = new Vue({
 		}
 	},
 });
-```
+</pre></code>
 
 <h4> Атрибуты компонента</h4>
 
 <h5>id</h5>
-
-Каждый компонентом accordionselecttree создает скрытый инпут с id и name равным переданному id. Это удобно, если компонент содержится внутри формы, которая будет отправляться без участия javascript.
+<p>
+Каждый компонент accordionselecttree создает скрытый инпут с id и name равным переданному id. Это удобно, если компонент содержится внутри формы, которая будет отправляться без участия javascript.
+</p>
 
 <h5>v-model</h5>
 
-Стандартная директива vue. Компонент реактивен, то есть например связав его модель с текстовым инпутом вы можете вводить эти данные и наблюдать динамическое выделение элемента дерева, id которого ввели.
+<p>Стандартная директива vue. Компонент реактивен, то есть например связав его модель с текстовым инпутом вы можете вводить эти данные и наблюдать динамическое выделение элемента дерева, id которого ввели.
+</p>
 
-##### default-icon-class (defaultIconClass)
+<h5>default-icon-class (defaultIconClass)</h5>
 
-Вы можете указать иконку fontawesome, которая будет отображаться рядом с элементом списка.
+<p>Вы можете указать иконку fontawesome, которая будет отображаться рядом с элементом списка.
+</p>
 
-##### show-icons (showIcons)
+<h5>show-icons (showIcons)</h5>
 
-Показывать ли иконку
+<p>Показывать ли иконку</p>
 
-##### label
+<h5>label</h5>
 
-Текст, который отобразится в заголовке аккордиона.
+<p>Текст, который отобразится в заголовке аккордиона.</p>
 
-##### treedata
+<h5>treedata</h5>
 
-Передайте в этот атрибут имя поля vue приложения (или vue компонента), которое будет хранить данные дерева.
+<p>Передайте в этот атрибут имя поля vue приложения (или vue компонента), которое будет хранить данные дерева.</p>
 
-##### url-create-new-item (urlCreateNewItem)
+<h5>url-create-new-item (urlCreateNewItem)</h5>
 
-Укажите url на который отправятся данные о родительском элементе в который добавляется новый узел.
-Узел будет добавлен после того, как сервер вернет идентификатор и имя нового элемента.
+<p>Укажите url на который отправятся данные о родительском элементе в который добавляется новый узел.
+Узел будет добавлен после того, как сервер вернет идентификатор и имя нового элемента.</p>
 
-##### url-update-item (urlUpdateItem)
+<h5>url-update-item (urlUpdateItem)</h5>
 								
-Укажите url на который отправятся данные о новом имени переименованного элемента.
-Запрос будет выполнен после того, как элемент дерева переименован.
+<p>Укажите url на который отправятся данные о новом имени переименованного элемента.
+Запрос будет выполнен после того, как элемент дерева переименован.</p>
 
-##### url-remove-item (urlRemoveItem)
+<h5>url-remove-item (urlRemoveItem)</h5>
 
-Укажите url на который отправятся данные об удаляемом узле и его потомках.
+<p>Укажите url на который отправятся данные об удаляемом узле и его потомках.
 Запрос будет выполнен после того как узел скрыт из дерева. Если сервер не смог обработать запрос, узел и его потомки будут восстановлены в дереве и показано сообщение об ошибке.
+</p>
 
-##### node-parent-key-prop (nodeParentKeyProp)
+<h5>node-parent-key-prop (nodeParentKeyProp)</h5>
 
-Если оказалось, что в данных, которые вернул сервер поле хранящее идентификатор родительского элмента называется не `parent_id`, а иначе, например `parent_node_id`, вы можете указать его имя в этом атрибуте.
+<p>Если оказалось, что в данных, которые вернул сервер поле хранящее идентификатор родительского элмента называется 
+не <code class="language-javascript">parent_id</code>, а иначе, например <code class="language-javascript">parent_node_id</code>,
+вы можете указать его имя в этом атрибуте.</p>
+<p class="ml-5"><code class="language-javascript">Аналогичное свойство объекта TreeAlgorithms называется `parentIdFieldName`.</code></p>
 
-##### node-parent-key-prop (nodeParentKeyProp)
-
-Если оказалось, что в данных, которые вернул сервер поле хранящее идентификатор родительского элмента называется не `parent_id`, а иначе, например `parent_node_id`, вы можете указать его имя в этом атрибуте.
-    Аналогичное свойство объекта TreeAlgorithms называется `parentIdFieldName`.
-
-##### node-key-prop (nodeKeyProp)
+<h5>node-key-prop (nodeKeyProp)</h5>
 			
 Аналогично nodeParentKeyProp, но для поля, хранящего идентификатор элемента.
-	Аналогичное свойство объекта TreeAlgorithms называется `idFieldName`.
-			
-##### node-сhildren-prop (nodeChildrenProp)
+	Аналогичное свойство объекта TreeAlgorithms называется <code class="language-javascript">idFieldName</code>.
 
-Аналогично nodeParentKeyProp, но для поля, хранящего потомков элемента. В нашем примере из этой документации мы исходим из того, что сервер вернул плоский список и строим из него дерево.
-	Аналогичное свойство объекта TreeAlgorithms называется `childsFieldName`.
+<h5>node-сhildren-prop (nodeChildrenProp)</h5>
 
-```javascript
+<p>Аналогично nodeParentKeyProp, но для поля, хранящего потомков элемента. В нашем примере из этой документации мы
+исходим из того, что сервер вернул плоский список и строим из него дерево.</p>
+<p class="ml-5"><code class="language-javascript">Аналогичное свойство объекта TreeAlgorithms называется `childsFieldName`.</code></p>
+<p>&nbsp;</p>
+<pre><code class="language-javascript">
 data = TreeAlgorithms.buildTreeFromFlatList(data, true);
-```
+</pre></code>
 
-Выше фрагмент кода, который строит дерефо из плоского списка. Результатом его работы будет (для нашего примера)
+<p>Выше фрагмент кода, который строит дерево из плоского списка. Результатом его работы будет (для нашего примера)</p>
 
-```json
-[
+<pre><code class="language-json">[
 	{
 		"id" : 1,
 		"parent_id" : 0,
@@ -405,121 +444,192 @@ data = TreeAlgorithms.buildTreeFromFlatList(data, true);
 		] 
 	}
 ]
-```
+</pre></code>
 
-Эти данные могли бы сразу прийти с сервера. Но поле `children` в этом случае могло бы называтсья иначе, например `child_items`. В этом случае мы можем передать `nodeChildrenProp="child_items"` для обеспечения работы компонента.
-    Аналогичное свойство объекта TreeAlgorithms называется `childsFieldName`.
+<p>Эти данные могли бы сразу прийти с сервера. Но поле `children` в этом случае могло бы называтсья иначе, например `child_items`. В этом случае мы можем передать `nodeChildrenProp="child_items"` для обеспечения работы компонента.</p>
+<p class="ml-5"><code class="language-javascript">Аналогичное свойство объекта TreeAlgorithms называется `childsFieldName`.</code></p>
 
-##### node-label-prop (nodeLabelProp)
+<h5>node-label-prop (nodeLabelProp)</h5>
 
-Аналогично nodeParentKeyProp, но для поля, хранящего имя элемента.
-	Объект TreeAlgorithms не имеет аналогичного свойства, так как оно ему не нужно.
+<p>Аналогично nodeParentKeyProp, но для поля, хранящего имя элемента.</p>
+<p class="ml-5"><code class="language-javascript">Объект TreeAlgorithms не имеет аналогичного свойства, так как оно ему не нужно.</code></p>
 	
-##### nodes-draggable (nodesDraggable)
+<h5>nodes-draggable (nodesDraggable)</h5>
 
-Boolean. Позволяет перемещать узлы дерева. В настоящее время не поддерживается серверной стороной.
+<p>Boolean. Позволяет перемещать узлы дерева. В настоящее время не поддерживается серверной стороной.</p>
 
-##### context-menu (contextMenu)
+<h5>context-menu (contextMenu)</h5>
 
-Boolean. Позволяет ивключить ли отключить контекстное меню.
+<p>Boolean. Позволяет ивключить ли отключить контекстное меню.</p>
 
-##### rename-node-on-dbl-click (renameNodeOnDblClick)
+<h5>rename-node-on-dbl-click (renameNodeOnDblClick)</h5>
 
-Boolean. Позволяет ивключить ли отключить переименование свойства при двойном клике на нём.
+<p>Boolean. Позволяет ивключить ли отключить переименование свойства при двойном клике на нём.</p>
 
-##### default-icon-class (defaultIconClass)
+<h5>default-icon-class (defaultIconClass)</h5>
 
-String. Можно указать имя иконки fontawesome, например `fas fa-book`
+<p>String. Можно указать имя иконки fontawesome, например <code class="language-javascript">fas fa-book</code></p>
 
-##### accordisopen
+<h5>accordisopen</h5>
 
-Boolean. Можно указать должен дли аккордион быть открытым или закрытым по умолчанию
+<p>Boolean. Можно указать должен дли аккордион быть открытым или закрытым по умолчанию</p>
 
-### Формат данных для сервера.
+<h3>Формат данных для сервера.</h3>
 
-Компонент автоматически отправляет данные на сервер после добавления, переименования и удаления элемента.
+<p>Компонент автоматически отправляет данные на сервер после добавления, переименования и удаления элемента.</p>
 
-Данные отправляются в формате `form-data`.
+<p>Данные отправляются в формате `form-data`.</p>
 
-Примеры запросов и ответов:
+<p>Примеры запросов и ответов:</p>
 
-#### Добавление узла
+<h4>Добавление узла</h4>
 
-Запрос:
+<p>Запрос:</p>
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Имя переменной</th>
+			<th>Пример значения</th>
+			<th>Обязательный</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>parent_id</td>
+			<td>3</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>_token</td>
+			<td>1cdslkjhs4dfjkhs8fdjkhsg</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>lang</td>
+			<td>en</td>
+			<td>Нет</td>
+		</tr>
+	</tbody>
+</table>
 
-| Имя переменной | Пример значения | Обязательный |
-| --- | --- | --- |
-| parent_id | 3 | Yes |
-| _token | 1cdslkjhs4dfjkhs8fdjkhsg | Yes |
-| lang | en | Нет |
+<p>Response:</p>
 
-Response:
-
-```json
-{
+<pre><code class="language-json">{
 	"status":"ok",
 	"id":2412,
 	"name":"New Item",
 	"parent_id":2410
 }
-```
+</code></pre>
 
-#### Переименование узла
+<h4>Переименование узла</h4>
 
-Запрос:
+<p>Запрос:</p>
 
-| Имя переменной | Пример значения | Обязательный |
-| --- | --- | --- |
-| id | 2412 | Да |
-| _token | 1cdslkjhs4dfjkhs8fdjkhsg | Да |
-| parent_id | 3 | Нет |
-| lang | en | Нет |
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Имя переменной</th>
+			<th>Пример значения</th>
+			<th>Обязательный</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>id</td>
+			<td>2412</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>parent_id</td>
+			<td>3</td>
+			<td>Нет</td>
+		</tr>
+		<tr>
+			<td>_token</td>
+			<td>1cdslkjhs4dfjkhs8fdjkhsg</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>lang</td>
+			<td>en</td>
+			<td>Нет</td>
+		</tr>
+	</tbody>
+</table>
 
-Ответ:
+<p>Ответ:</p>
 
-```json
+<pre><code class="language-json">
 {
 	"status":"ok",
 	"id":2412,
 	"name":"Овощи и гирлянды",
 	"parent_id":2410
 }
-```
+</code></pre>
+	
+<h4>Удаление узла</h4>
 
-#### Удаление узла
+<p>Запрос:</p>
 
-Запрос:
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Имя переменной</th>
+			<th>Пример значения</th>
+			<th>Обязательный</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>idList[]</td>
+			<td>2412</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>idList[]</td>
+			<td>2413</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>idList[]</td>
+			<td>2526</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>_token</td>
+			<td>1cdslkjhs4dfjkhs8fdjkhsg</td>
+			<td>Да</td>
+		</tr>
+		<tr>
+			<td>lang</td>
+			<td>en</td>
+			<td>Нет</td>
+		</tr>
+	</tbody>
+</table>
 
 
-| Имя переменной | Пример значения | Обязательный |
-| --- | --- | --- |
-| idList[] | 2412 | Да |
-| idList[] | 2413 | Да |
-| idList[] | 2526 | Да |
-| _token | 1cdslkjhs4dfjkhs8fdjkhsg | Да |
-| lang | en | Нет |
+<p>Ответ:</p>
 
-Ответ:
-
-```json
+<pre><code class="language-json">
 {
 	"status":"ok",
 	"msg":"Record was removed",
 	"ids":[2411,2413,2415,2414]
 }
-```
+</pre></code>
 
-**Передавать в ответе сервера список идентификаторов необходимо для корректной раьботы компонента**
-
-
-## Объект TreeAlgorithms
-
-Это специальный объект, содержащий удобные методы для работы с древовидными структурами данных. Он не зависит от vue или других библиотек и фреймвёрков. Описание его молжно найти тут https://github.com/lamzin-andrey/landlib#treealgorithms
-https://github.com/lamzin-andrey/landlib#treealgorithms-1 (ru)
+<p><strong>Передавать в ответе сервера список идентификаторов необходимо для корректной работы компонента</strong></p>
 
 
+<h2>Объект TreeAlgorithms</h2>
 
-					-------
+<p>Это специальный объект, содержащий удобные методы для работы с древовидными структурами данных.
+Он не зависит от vue или других библиотек и фреймвёрков. Описание его молжно найти 
+<a href="https://github.com/lamzin-andrey/landlib#treealgorithms-1" target="_blank">тут</a>
+</p>
 					
 					
 					</article>
