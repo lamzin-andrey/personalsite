@@ -293,11 +293,13 @@ If it turned out that in the data returned by the server, the field storing the 
 ##### node-key-prop (nodeKeyProp)
 			
 Similar to nodeParentKeyProp, but for a field that stores the identifier of an element.
+
 	A similar property of the TreeAlgorithms object is called `idFieldName`.
 			
 ##### node-сhildren-prop (nodeChildrenProp)
 
 Similar to nodeParentKeyProp, but for a field that stores the descendants of an element. In our example from this documentation, we assume that the server returned a flat list and build a tree from it.
+
 	A similar property of the TreeAlgorithms object is called `childsFieldName`.
 
 ```javascript
@@ -346,7 +348,8 @@ Above is a piece of code that builds a tree from a flat list. The result of his 
 ```
 
 This data could immediately come from the server. But the `children` field in this case could be called differently, for example` child_items`. In this case, we can pass `nodeChildrenProp ="child_items"` to ensure the component works.
-    A similar property of the TreeAlgorithms object is called `childsFieldName`.
+
+	A similar property of the TreeAlgorithms object is called `childsFieldName`.
 
 ##### node-label-prop (nodeLabelProp)
 
@@ -747,16 +750,19 @@ window.app = new Vue({
 ##### node-parent-key-prop (nodeParentKeyProp)
 
 Если оказалось, что в данных, которые вернул сервер поле хранящее идентификатор родительского элмента называется не `parent_id`, а иначе, например `parent_node_id`, вы можете указать его имя в этом атрибуте.
-    Аналогичное свойство объекта TreeAlgorithms называется `parentIdFieldName`.
+	
+	Аналогичное свойство объекта TreeAlgorithms называется `parentIdFieldName`.
 
 ##### node-key-prop (nodeKeyProp)
 			
 Аналогично nodeParentKeyProp, но для поля, хранящего идентификатор элемента.
+	
 	Аналогичное свойство объекта TreeAlgorithms называется `idFieldName`.
 			
 ##### node-сhildren-prop (nodeChildrenProp)
 
 Аналогично nodeParentKeyProp, но для поля, хранящего потомков элемента. В нашем примере из этой документации мы исходим из того, что сервер вернул плоский список и строим из него дерево.
+
 	Аналогичное свойство объекта TreeAlgorithms называется `childsFieldName`.
 
 ```javascript
@@ -810,6 +816,7 @@ data = TreeAlgorithms.buildTreeFromFlatList(data, true);
 ##### node-label-prop (nodeLabelProp)
 
 Аналогично nodeParentKeyProp, но для поля, хранящего имя элемента.
+	
 	Объект TreeAlgorithms не имеет аналогичного свойства, так как оно ему не нужно.
 	
 ##### nodes-draggable (nodesDraggable)
