@@ -352,7 +352,7 @@ This data could immediately come from the server. But the `children` field in th
 
 Similar to nodeParentKeyProp, but for a field that stores the name of the element.
 		
-		The TreeAlgorithms object does not have a similar property, since it does not need it.
+            The TreeAlgorithms object does not have a similar property, since it does not need it.
 	
 ##### nodes-draggable (nodesDraggable)
 
