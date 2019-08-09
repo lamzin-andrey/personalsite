@@ -12,7 +12,7 @@ Adding, editing and deleting tree elements can be sent to the server immediately
 The model associated with the component contains the id of the selected element.
 
 
-See demo: https://andryuxa.ru/portfolio/vue2_editable_tree_view/en/
+See demo: https://andryuxa.ru/portfolio/web/components/frontend/vue/vue2_editable_tree_view/en/
 
 ## Dependicies
 
@@ -472,7 +472,7 @@ This is a special object that contains convenient methods for working with tree-
 Связанная с компонентом модель содержит id выбранного элемента.
 
 
-См. демо: https://andryuxa.ru/portfolio/vue2_editable_tree_view/
+См. демо: https://andryuxa.ru/portfolio/web/components/frontend/vue/vue2_editable_tree_view/
 
 
 ## Зависимости
