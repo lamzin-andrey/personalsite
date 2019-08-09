@@ -13,7 +13,52 @@
 		</div>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
         <textareab4 v-model="body" ref="portfoliobody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
-        <div class="mb-3">
+        <!-- SHA256 value -->
+		<div class="accordion" id="sha256Accord">
+			<div class="card">
+				<div class="card-header" id="headingSha256">
+					<h5 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSha256"	aria-expanded="true" aria-controls="collapseSha256">
+						SHA256
+						</button>
+					</h5>
+				</div>
+
+				<div id="collapseSha256" class="collapse" aria-labelledby="headingSha256" data-parent="#sha256Accord">
+					<div class="card-body">
+						<inputfileb4 
+							v-model="productFile"
+							url="/p/portfolio/productupload.jn/"
+							tokenImagePath="/i/token.png"
+							:listeners="productUploadListeners"
+							:csrfToken="$root._getToken()"
+							:label="$t('app.uploadFile')" id="productfile" ></inputfileb4>
+
+						<div class="mt-3">
+							<span class="small ml-2">{{ noHasProductFileText }}</span>
+							<a class="small ml-2" :href="productFile" target="_blank" v-if="productFile">{{ $t('app.Download') }}</a>
+						</div>
+						
+						<div class="input-group">
+							<input
+								v-model="productFileUrl"
+								class="form-control"
+								readonly
+								@click="$event.target.select()"
+								value="test"
+								type="text">
+						</div>
+
+						<inputb4 v-model="sha256" placeholderlabel="SHA256"></inputb4>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+        <!-- /SHA256 value -->
+
+
+		<div class="mb-3">
 			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
 			<inputfileb4 
 						v-model="poster"
@@ -208,11 +253,30 @@
 						context : this
 					}
 				},
+				/** @property {Object} productUploadListeners Параметры для кастомного слушателя загрузки файла продукта */
+				productUploadListeners: {
+					onSuccess:{
+						f : this.onSuccessUploadProduct,
+						context : this
+					}
+				},
 				/** @property {Boolean} true когда связанный чекбокс выбран */
 				hasSelfSection : false,
 
 				/** @property {Boolean} true когда связанный чекбокс выбран */
-				dontCreatePage : false
+				dontCreatePage : false,
+
+				/** @property {String} productFile url файла работы */
+				productFile: '',
+
+				/** @property {String} defaultNoHasProductFileText надпись о том, что файла нет */
+				defaultNoHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
+
+				/** @property {String} noHasProductFileText */
+				noHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
+
+				/** @property {String} sha256 файла */
+				sha256: '',
 			};
 			return _data;
 		},
@@ -223,6 +287,14 @@
 			},
 			filepath:function() {
 				this.$root.$refs.portfolio.setDataChanges(true);
+			}
+		},
+		computed:{
+			productFileUrl(){
+				if (this.productFile) {
+					return (window.location.protocol + '//' + window.location.host + this.productFile);
+				}
+				return this.productFile;
 			}
 		},
         //
@@ -379,6 +451,22 @@
 							this.$refs[x].setCursorPosition(n + s.length);
 						}, 200);
 					}
+				}
+			},
+			/**
+			 * @description Обработка успешной загрузки файла работы
+            */
+			onSuccessUploadProduct(data) {
+				if (data.path) {
+					this.productFile = data.path;//TODO думать, как там и что
+					this.noHasProductFileText = '';//TODO
+				} else {
+					this.noHasProductFileText = this.defaultNoHasProductFileText;
+					this.productFile = '';
+				}
+
+				if (data.errors && data.errors.file) {
+					this.$root.alert(data.errors.file);
 				}
 			},
 			/**

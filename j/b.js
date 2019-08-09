@@ -27993,6 +27993,7 @@ var locales = {
             "Cancel": "Cancel",
             "Save": "Save",
             "Upload": "Upload",
+            "Download": "Download",
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Are you sure drop the article",
             "Click_Ok_button_for_remove": "Press OK button for remove",
@@ -28040,6 +28041,7 @@ var locales = {
             "Cancel": "Отмена",
             "Save": "Сохранить",
             "Append": "Добавить",
+            "Download": "Скачать",
             "New": "Новая",
             "Edit": "Редактировать",
             "OK": "OK",
@@ -28087,7 +28089,7 @@ var locales = {
             //portfolio logo uploader
             'Logo_url': 'Url лого',
             'Upload_Logo': 'Загрузить лого'
-        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _app)
+        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _defineProperty(_app, 'defaultNoHasProductFileText', 'Нет файла'), _defineProperty(_app, 'uploadFile', 'Загрузить файл'), _app)
     }
 };
 
@@ -45549,7 +45551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				}
 			} else if (d.status == 'error' && d.errors && d.errors.file && String(d.errors.file)) {
 				//this.$root.alert(String(d.errors.file));
-				$emit('uploadapperror', String(d.errors.file));
+				this.$emit('uploadapperror', String(d.errors.file));
 			}
 		},
 		onFail: function onFail() {
@@ -47715,6 +47717,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -47792,11 +47839,30 @@ Vue.component('categorytree', __webpack_require__(79));
 					context: this
 				}
 			},
+			/** @property {Object} productUploadListeners Параметры для кастомного слушателя загрузки файла продукта */
+			productUploadListeners: {
+				onSuccess: {
+					f: this.onSuccessUploadProduct,
+					context: this
+				}
+			},
 			/** @property {Boolean} true когда связанный чекбокс выбран */
 			hasSelfSection: false,
 
 			/** @property {Boolean} true когда связанный чекбокс выбран */
-			dontCreatePage: false
+			dontCreatePage: false,
+
+			/** @property {String} productFile url файла работы */
+			productFile: '',
+
+			/** @property {String} defaultNoHasProductFileText надпись о том, что файла нет */
+			defaultNoHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
+
+			/** @property {String} noHasProductFileText */
+			noHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
+
+			/** @property {String} sha256 файла */
+			sha256: ''
 		};
 		return _data;
 	},
@@ -47807,6 +47873,14 @@ Vue.component('categorytree', __webpack_require__(79));
 		},
 		filepath: function filepath() {
 			this.$root.$refs.portfolio.setDataChanges(true);
+		}
+	},
+	computed: {
+		productFileUrl: function productFileUrl() {
+			if (this.productFile) {
+				return window.location.protocol + '//' + window.location.host + this.productFile;
+			}
+			return this.productFile;
 		}
 	},
 	//
@@ -47978,6 +48052,23 @@ Vue.component('categorytree', __webpack_require__(79));
 						_this3.$refs[x].setCursorPosition(n + s.length);
 					}, 200);
 				}
+			}
+		},
+
+		/**
+   * @description Обработка успешной загрузки файла работы
+           */
+		onSuccessUploadProduct: function onSuccessUploadProduct(data) {
+			if (data.path) {
+				this.productFile = data.path; //TODO думать, как там и что
+				this.noHasProductFileText = ''; //TODO
+			} else {
+				this.noHasProductFileText = this.defaultNoHasProductFileText;
+				this.productFile = '';
+			}
+
+			if (data.errors && data.errors.file) {
+				this.$root.alert(data.errors.file);
 			}
 		},
 
@@ -50798,6 +50889,105 @@ var render = function() {
         }
       }),
       _vm._v(" "),
+      _c("div", { staticClass: "accordion", attrs: { id: "sha256Accord" } }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse",
+              attrs: {
+                id: "collapseSha256",
+                "aria-labelledby": "headingSha256",
+                "data-parent": "#sha256Accord"
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c("inputfileb4", {
+                    attrs: {
+                      url: "/p/portfolio/productupload.jn/",
+                      tokenImagePath: "/i/token.png",
+                      listeners: _vm.productUploadListeners,
+                      csrfToken: _vm.$root._getToken(),
+                      label: _vm.$t("app.uploadFile"),
+                      id: "productfile"
+                    },
+                    model: {
+                      value: _vm.productFile,
+                      callback: function($$v) {
+                        _vm.productFile = $$v
+                      },
+                      expression: "productFile"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-3" }, [
+                    _c("span", { staticClass: "small ml-2" }, [
+                      _vm._v(_vm._s(_vm.noHasProductFileText))
+                    ]),
+                    _vm._v(" "),
+                    _vm.productFile
+                      ? _c(
+                          "a",
+                          {
+                            staticClass: "small ml-2",
+                            attrs: { href: _vm.productFile, target: "_blank" }
+                          },
+                          [_vm._v(_vm._s(_vm.$t("app.Download")))]
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.productFileUrl,
+                          expression: "productFileUrl"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { readonly: "", value: "test", type: "text" },
+                      domProps: { value: _vm.productFileUrl },
+                      on: {
+                        click: function($event) {
+                          return $event.target.select()
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.productFileUrl = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("inputb4", {
+                    attrs: { placeholderlabel: "SHA256" },
+                    model: {
+                      value: _vm.sha256,
+                      callback: function($$v) {
+                        _vm.sha256 = $$v
+                      },
+                      expression: "sha256"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "mb-3" },
@@ -50961,7 +51151,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(0),
+          _vm._m(1),
           _vm._v(" "),
           _c(
             "div",
@@ -51081,7 +51271,7 @@ var render = function() {
             }
           },
           [
-            _vm._m(1),
+            _vm._m(2),
             _vm._v(" "),
             _c("div", { staticClass: "toast-body" }, [
               _vm._v(
@@ -51106,6 +51296,33 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "card-header", attrs: { id: "headingSha256" } },
+      [
+        _c("h5", { staticClass: "mb-0" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-link",
+              attrs: {
+                type: "button",
+                "data-toggle": "collapse",
+                "data-target": "#collapseSha256",
+                "aria-expanded": "true",
+                "aria-controls": "collapseSha256"
+              }
+            },
+            [_vm._v("\n\t\t\t\t\t\tSHA256\n\t\t\t\t\t\t")]
+          )
+        ])
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

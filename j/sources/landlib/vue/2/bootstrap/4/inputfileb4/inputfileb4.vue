@@ -180,7 +180,7 @@
 					}
 				} else if(d.status == 'error' && d.errors && d.errors.file && String(d.errors.file)){
 					//this.$root.alert(String(d.errors.file));
-					$emit('uploadapperror', String(d.errors.file));
+					this.$emit('uploadapperror', String(d.errors.file));
 				}
 			},
 			onFail() {

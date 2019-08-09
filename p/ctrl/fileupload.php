@@ -82,6 +82,7 @@ class FileUpload extends BaseApp {
 		$aInfo = pathinfo($this->_path);
 		$k = $aInfo['extension']; 
 		if (in_array($k, $this->_dangerExtensions)) {
+			$_REQUEST['xhr'] = 1;
 			$report['errors']['file'] = l('file_is_executing_upload_denied');
 			return false;
 		}

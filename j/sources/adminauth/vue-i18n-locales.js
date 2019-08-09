@@ -24,6 +24,7 @@ var locales = {
 			"Cancel": "Cancel",
 			"Save": "Save",
 			"Upload": "Upload",
+			"Download": "Download",
             "OK": "OK",
             "Are_You_Sure_drop_Article": "Are you sure drop the article",
             "Click_Ok_button_for_remove": "Press OK button for remove",
@@ -71,6 +72,7 @@ var locales = {
             "Cancel": "Отмена",
             "Save": "Сохранить",
 			"Append": "Добавить",
+			"Download": "Скачать",
 			"New": "Новая",
 			"Edit": "Редактировать",
 			"OK": "OK",
@@ -123,7 +125,10 @@ var locales = {
 			//portfolio urlpage props checkboxes
 			'dontCreatePage' : 'Не создавать отдельную страницу',
 			'hasSelfSection' : 'Продукт имеет отдельный раздел на сайте',
-			
+			'defaultNoHasProductFileText' : 'Нет файла',
+
+			//portfolio sha256
+			'uploadFile' : 'Загрузить файл'
         }
     }
 }
