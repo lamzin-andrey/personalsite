@@ -119,6 +119,10 @@ var locales = {
 			'Logo_url' : 'Url лого',
 			'Upload_Logo' : 'Загрузить лого',
 			'Upload_Logo' : 'Загрузить лого',
+
+			//portfolio urlpage props checkboxes
+			'dontCreatePage' : 'Не создавать отдельную страницу',
+			'hasSelfSection' : 'Продукт имеет отдельный раздел на сайте',
 			
         }
     }

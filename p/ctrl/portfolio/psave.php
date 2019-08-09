@@ -22,6 +22,9 @@ class ProudctPost extends AdminAuthJson {
 		$this->treq('og_description');
 		$this->treq('og_title');
 		$this->treq('og_image');
+		$this->breq('hasSelfSection', 'has_self_section');
+		$this->breq('dontCreatePage', 'dont_create_page');
+		
 		
 		$errors = [];
 		
@@ -30,10 +33,10 @@ class ProudctPost extends AdminAuthJson {
 		if ($this->_validate($errors)) {
 			$id = ireq('id');
 			$this->_setLogo();
+			$this->_setUrl();
 			$sql = '';
 			if ($id) {
 				$sql = $this->updateQuery(('id = ' . $id), ['updated_at' => now()]);
-				//die($sql);
 			} else {
 				$sql = $this->insertQuery([]);
 			}
@@ -49,7 +52,9 @@ class ProudctPost extends AdminAuthJson {
 				}
 			}
 			//TODO тут на этапе расширения функционала будет наследник
-			$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
+			$comiErr = '';
+			if (!$this->has_self_section && !$this->dont_create_page) {
+				$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
 													$this->description,
 													$this->keywords,
 													$this->og_title,
@@ -57,10 +62,19 @@ class ProudctPost extends AdminAuthJson {
 													$this->og_image,
 													$sDate
 													);
-			$comiErr = $oCompiler->emsg;
+				$comiErr = $oCompiler->emsg;
+			}
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}
 		json_error_arr(['errors' => $errors]);
+	}
+	/**
+	 * @description Если установлен "Не создавать отдельную страницу" (dontCreatePage) очищает поле url
+	*/
+	private function _setUrl() {
+		if ($this->dont_create_page) {
+			$this->url = $this->request['url'] = '';
+		}
 	}
 	/**
 	 * @description Записывает в таблицу logos данные файла, если его там нет. Заменяет $this->logo с пути на logos.id 
@@ -118,5 +132,17 @@ class ProudctPost extends AdminAuthJson {
 		if (!strlen($this->$varname) ) {
 			$errors[$varname] = l('field-required', 0, l($localizeKey, 1));
 		}
+	}
+	public function breq($key, $field = '', $varname = 'REQUEST')
+	{
+		$field = $field ? $field : $key;
+		$s = $this->tsreq($key, $field, $varname);
+		$this->$field = ($s == 'true' ? true : false);
+		if ($this->$field) {
+			$this->request[$field] = $this->$field = 1;
+		} else {
+			$this->request[$field] = $this->$field = 0;
+		}
+		return $this->$field;
 	}
 }

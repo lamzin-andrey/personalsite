@@ -3,6 +3,14 @@
 		<categorytree v-model="category" ref="categorytree"  id="portfolio_category_id" ></categorytree>
 		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
+		<div class="form-check form-check-inline">
+			<input v-model="dontCreatePage" @change="onChangeDontCreatePage" class="form-check-input" type="checkbox"  id="dontCreatePage" value="true">
+			<label class="form-check-label" for="dontCreatePage">{{ $t('app.dontCreatePage') }}</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input v-model="hasSelfSection" @change="onChangeHasSelfSection" class="form-check-input" type="checkbox" id="hasSelfSection" value="true">
+			<label class="form-check-label" for="hasSelfSection">{{ $t('app.hasSelfSection') }}</label>
+		</div>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
         <textareab4 v-model="body" ref="portfoliobody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
         <div class="mb-3">
@@ -199,7 +207,12 @@
 						f : this.onSuccessUploadposter,
 						context : this
 					}
-				}
+				},
+				/** @property {Boolean} true когда связанный чекбокс выбран */
+				hasSelfSection : false,
+
+				/** @property {Boolean} true когда связанный чекбокс выбран */
+				dontCreatePage : false
 			};
 			return _data;
 		},
@@ -230,6 +243,8 @@
 				this.og_title = 'g';
 				this.og_description = 'h';
 				this.og_image = this.defaultSocImage = this.defaultLogoValue;
+				this.dontCreatePage = false;
+				this.hasSelfSection = false;
 				
 				//Fix bug when edit the article more then one time...
 				setTimeout(() => {
@@ -245,6 +260,8 @@
 					this.og_title = data.og_title;
 					this.og_description = data.og_description;
 					this.og_image = this.defaultSocImage = data.og_image;
+					this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
+					this.hasSelfSection =  parseInt(data.has_self_section) ? true : false;
 				}, 1);
 				
 			},
@@ -373,6 +390,24 @@
 					$('#logolink-tab').tab('show');
 				} else {
 					$('#logouploader-tab').tab('show');
+				}
+			},
+			/**
+			 * @description Событие смены значения чекбокса "Продукт имеет отдельный раздел на сайте"
+			 * @param {Event} evt
+			*/
+			onChangeHasSelfSection(evt) {
+				if (this.hasSelfSection) {
+					this.dontCreatePage = false;
+				}
+			},
+			/**
+			 * @description Событие смены значения чекбокса "Не создавать отдельную страницу"
+			 * @param {Event} evt
+			*/
+			onChangeDontCreatePage(evt) {
+				if (this.dontCreatePage) {
+					this.hasSelfSection = false;
 				}
 			}
 			

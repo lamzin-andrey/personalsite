@@ -27963,6 +27963,8 @@ window.LandLibDom = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+var _app;
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var locales = {
@@ -28007,7 +28009,7 @@ var locales = {
         }
     },
     'ru': {
-        'app': _defineProperty({
+        'app': (_app = {
             'example': "Пример",
             "YourName": "Ваше имя",
             "YourSurname": "Ваша фамилия",
@@ -28085,7 +28087,7 @@ var locales = {
             //portfolio logo uploader
             'Logo_url': 'Url лого',
             'Upload_Logo': 'Загрузить лого'
-        }, "Upload_Logo", 'Загрузить лого')
+        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _app)
     }
 };
 
@@ -47705,6 +47707,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -47781,7 +47791,12 @@ Vue.component('categorytree', __webpack_require__(79));
 					f: this.onSuccessUploadposter,
 					context: this
 				}
-			}
+			},
+			/** @property {Boolean} true когда связанный чекбокс выбран */
+			hasSelfSection: false,
+
+			/** @property {Boolean} true когда связанный чекбокс выбран */
+			dontCreatePage: false
 		};
 		return _data;
 	},
@@ -47814,6 +47829,8 @@ Vue.component('categorytree', __webpack_require__(79));
 			this.og_title = 'g';
 			this.og_description = 'h';
 			this.og_image = this.defaultSocImage = this.defaultLogoValue;
+			this.dontCreatePage = false;
+			this.hasSelfSection = false;
 
 			//Fix bug when edit the article more then one time...
 			setTimeout(function () {
@@ -47829,6 +47846,8 @@ Vue.component('categorytree', __webpack_require__(79));
 				_this.og_title = data.og_title;
 				_this.og_description = data.og_description;
 				_this.og_image = _this.defaultSocImage = data.og_image;
+				_this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
+				_this.hasSelfSection = parseInt(data.has_self_section) ? true : false;
 			}, 1);
 		},
 
@@ -47971,6 +47990,26 @@ Vue.component('categorytree', __webpack_require__(79));
 				$('#logolink-tab').tab('show');
 			} else {
 				$('#logouploader-tab').tab('show');
+			}
+		},
+
+		/**
+   * @description Событие смены значения чекбокса "Продукт имеет отдельный раздел на сайте"
+   * @param {Event} evt
+  */
+		onChangeHasSelfSection: function onChangeHasSelfSection(evt) {
+			if (this.hasSelfSection) {
+				this.dontCreatePage = false;
+			}
+		},
+
+		/**
+   * @description Событие смены значения чекбокса "Не создавать отдельную страницу"
+   * @param {Event} evt
+  */
+		onChangeDontCreatePage: function onChangeDontCreatePage(evt) {
+			if (this.dontCreatePage) {
+				this.hasSelfSection = false;
 			}
 		}
 	}, //end methods
@@ -50621,6 +50660,106 @@ var render = function() {
           expression: "url"
         }
       }),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-check form-check-inline" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.dontCreatePage,
+              expression: "dontCreatePage"
+            }
+          ],
+          staticClass: "form-check-input",
+          attrs: { type: "checkbox", id: "dontCreatePage", value: "true" },
+          domProps: {
+            checked: Array.isArray(_vm.dontCreatePage)
+              ? _vm._i(_vm.dontCreatePage, "true") > -1
+              : _vm.dontCreatePage
+          },
+          on: {
+            change: [
+              function($event) {
+                var $$a = _vm.dontCreatePage,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = "true",
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.dontCreatePage = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.dontCreatePage = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.dontCreatePage = $$c
+                }
+              },
+              _vm.onChangeDontCreatePage
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "label",
+          { staticClass: "form-check-label", attrs: { for: "dontCreatePage" } },
+          [_vm._v(_vm._s(_vm.$t("app.dontCreatePage")))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-check form-check-inline" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.hasSelfSection,
+              expression: "hasSelfSection"
+            }
+          ],
+          staticClass: "form-check-input",
+          attrs: { type: "checkbox", id: "hasSelfSection", value: "true" },
+          domProps: {
+            checked: Array.isArray(_vm.hasSelfSection)
+              ? _vm._i(_vm.hasSelfSection, "true") > -1
+              : _vm.hasSelfSection
+          },
+          on: {
+            change: [
+              function($event) {
+                var $$a = _vm.hasSelfSection,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = "true",
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.hasSelfSection = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.hasSelfSection = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.hasSelfSection = $$c
+                }
+              },
+              _vm.onChangeHasSelfSection
+            ]
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "label",
+          { staticClass: "form-check-label", attrs: { for: "hasSelfSection" } },
+          [_vm._v(_vm._s(_vm.$t("app.hasSelfSection")))]
+        )
+      ]),
       _vm._v(" "),
       _c("inputb4", {
         attrs: {
