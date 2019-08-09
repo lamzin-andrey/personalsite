@@ -393,7 +393,7 @@ Request:
 | --- | --- | --- |
 | parent_id | 3 | Yes |
 | _token | 1cdslkjhs4dfjkhs8fdjkhsg | Yes |
-| lang | en | Нет |
+| lang | en | No |
 
 Response:
 
@@ -439,7 +439,7 @@ Request:
 | idList[] | 2413 | Yes |
 | idList[] | 2526 | Yes |
 | _token | 1cdslkjhs4dfjkhs8fdjkhsg | Yes |
-| lang | en | Нет |
+| lang | en | No |
 
 Response:
 
@@ -646,7 +646,7 @@ const i18n = new VueI18n({
 //REST library
 require('../../../j/sources/landlib/net/rest.js');
 
-//Yfi rjvgjytyn
+//Наш компонент
 Vue.component('accordionselecttree', require('../../../j/sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
 
 window.app = new Vue({
@@ -769,7 +769,7 @@ window.app = new Vue({
 data = TreeAlgorithms.buildTreeFromFlatList(data, true);
 ```
 
-Выше фрагмент кода, который строит дерефо из плоского списка. Результатом его работы будет (для нашего примера)
+Выше фрагмент кода, который строит дерево из плоского списка. Результатом его работы будет (для нашего примера)
 
 ```json
 [
