@@ -4,6 +4,9 @@
 
 This vue 2 component combining an accordion and a tree structure for selection.
 
+It is based on the component https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/bootstrap-vue-treeview, which in turn is fork of https://github.com/kamil-lip/bootstrap-vue-treeview
+
+
 Adding, editing and deleting tree elements can be sent to the server immediately if you fill in the attributes `urlCreateNewItem`,` urlUpdateItem`, `urlRemoveItem`.
 
 The model associated with the component contains the id of the selected element.
@@ -348,7 +351,7 @@ This data could immediately come from the server. But the `children` field in th
 ##### node-label-prop (nodeLabelProp)
 
 Similar to nodeParentKeyProp, but for a field that stores the name of the element.
-    The TreeAlgorithms object does not have a similar property, since it does not need it.
+	The TreeAlgorithms object does not have a similar property, since it does not need it.
 	
 ##### nodes-draggable (nodesDraggable)
 
@@ -457,6 +460,8 @@ This is a special object that contains convenient methods for working with tree-
 ## Что это
 
 Компонент vue 2 сочетающий аккордион и древовидную структуру для выбора элемента древовидной структуры.
+
+Базируется на компоненте https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/bootstrap-vue-treeview, который в свою очередь форк проекта https://github.com/kamil-lip/bootstrap-vue-treeview
 
 Добавление, редактирование и удаление элементов дерева немедленно отправляется на url сервера, которые вы можете указать в атрибутах  `urlCreateNewItem`, `urlUpdateItem`, `urlRemoveItem`.
 

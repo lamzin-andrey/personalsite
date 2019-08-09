@@ -3,11 +3,6 @@
 
 <p class="text-warning">Далее (пилю аккордион со списком):</p>
 <ul >
-	<li class="text-warning">Базу от статей очистить и залить на продакшен базу</li>
-	<li class="text-warning">Добиться работы  /portfolio/vue2_editable_tree_view/ на серевере, по идее там кроме базы ничего и не надо</li>
-	<li class="text-warning">Для этой страницы сделать подгрузку данных с сервера.</li>
-	<li class="text-warning">/opt/lampp/htdocs/mh.loc/www/portfolio/vue2_editable_tree_view npm run watch</li>
-	<li class="text-warning">Про Камила не забыть упомянуть всюду</li>
 	<li class="text-warning">Доку переписать, пусть на сайте тоже будет</li>
 	<li class="text-warning">Вероятно поместить её с url куда надо /portfolio/web/components/frontend/vue/</li>
 	<li class="text-warning">В список портфолио добавить</li>
@@ -54,6 +49,7 @@
 <p>Замечания третьего порядка</p>
 <ul>
 	<li>В шаблоне изображения сейчас без ограничения ширины, кажется. И не задействовать ли media?</li>
+	<li>В CacheClient добавить список url которые не должны кэшироваться. Удаляем их из кэша если они там есть, при запросах не добавляем в кэш.</li>
 </ul>
 <p class="text-success">Что не берем из статей:</p>
 <ul class="text-success">
