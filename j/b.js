@@ -27963,6 +27963,8 @@ window.LandLibDom = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var locales = {
     "en": {
         "app": {
@@ -28005,7 +28007,7 @@ var locales = {
         }
     },
     'ru': {
-        'app': {
+        'app': _defineProperty({
             'example': "Пример",
             "YourName": "Ваше имя",
             "YourSurname": "Ваша фамилия",
@@ -28078,9 +28080,12 @@ var locales = {
             'Add_node': 'Добавить категорию',
             'Rename_node': 'Переименовать категорию',
             'Nothing_select': 'Ничего не выбрано',
-            'Add_request_already_sended_wait': 'Запрос на добавление пункта меню уже отправлен, дождитесь его выплолнения'
+            'Add_request_already_sended_wait': 'Запрос на добавление пункта меню уже отправлен, дождитесь его выплолнения',
 
-        }
+            //portfolio logo uploader
+            'Logo_url': 'Url лого',
+            'Upload_Logo': 'Загрузить лого'
+        }, "Upload_Logo", 'Загрузить лого')
     }
 };
 
@@ -47667,6 +47672,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -47785,6 +47823,7 @@ Vue.component('categorytree', __webpack_require__(79));
 				_this.heading = data.heading;
 				_this.body = data.content_block;
 				_this.filepath = _this.defaultLogo = data.logo;
+				_this.changeLogoTab();
 				_this.description = data.description;
 				_this.keywords = data.keywords;
 				_this.og_title = data.og_title;
@@ -47920,6 +47959,18 @@ Vue.component('categorytree', __webpack_require__(79));
 						_this3.$refs[x].setCursorPosition(n + s.length);
 					}, 200);
 				}
+			}
+		},
+
+		/**
+   * @description Если ссылается ли лого на удалённый ресурс, делает активной вкладку таба с лого с полем длЯ ввода ссылки
+  */
+		changeLogoTab: function changeLogoTab() {
+			console.log('this.defaultLogo', this.defaultLogo);
+			if (this.defaultLogo.indexOf('http') == 0) {
+				$('#logolink-tab').tab('show');
+			} else {
+				$('#logouploader-tab').tab('show');
 			}
 		}
 	}, //end methods
@@ -50635,52 +50686,139 @@ var render = function() {
       _vm._v(" "),
       _c("img", { attrs: { src: _vm.defaultLogo } }),
       _vm._v(" "),
-      _c("inputfileb4", {
-        attrs: {
-          url: "/p/articlelogoupload.jn/",
-          immediateleyUploadOff: "true",
-          tokenImagePath: "/i/token.png",
-          progressListener: _vm.progressbarListener,
-          listeners: _vm.fileUploadListeners,
-          uploadButtonLabel: _vm.$t("app.Upload"),
-          csrfToken: _vm.$root._getToken(),
-          sendInputs: ["alpha"],
-          label: _vm.$t("app.SelectLogo"),
-          id: "logotype"
-        },
-        model: {
-          value: _vm.filepath,
-          callback: function($$v) {
-            _vm.filepath = $$v
-          },
-          expression: "filepath"
-        }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "progress" }, [
-        _c(
-          "div",
-          {
-            staticClass: "progress-bar",
-            style: "width: " + _vm.progressValue + "%;",
-            attrs: {
-              role: "progressbar",
-              "aria-valuenow": _vm.progressValue,
-              "aria-valuemin": "0",
-              "aria-valuemax": "100"
-            }
-          },
-          [_vm._v(_vm._s(_vm.progressValue) + "%")]
-        )
+      _c("div", [
+        _c("ul", { staticClass: "nav nav-tabs", attrs: { role: "tablist" } }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link active",
+                attrs: {
+                  id: "logouploader-tab",
+                  "data-toggle": "tab",
+                  href: "#logouploader",
+                  role: "tab",
+                  "aria-controls": "logouploader",
+                  "aria-selected": "true"
+                }
+              },
+              [_vm._v(_vm._s(_vm.$t("app.Upload_Logo")))]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: {
+                  id: "logolink-tab",
+                  "data-toggle": "tab",
+                  href: "#logolink",
+                  role: "tab",
+                  "aria-controls": "profile",
+                  "aria-selected": "false"
+                }
+              },
+              [_vm._v(_vm._s(_vm.$t("app.Logo_url")))]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "tab-content" }, [
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane fade show active",
+              attrs: {
+                id: "logouploader",
+                role: "tabpanel",
+                "aria-labelledby": "list-tab"
+              }
+            },
+            [
+              _c("inputfileb4", {
+                attrs: {
+                  url: "/p/articlelogoupload.jn/",
+                  immediateleyUploadOff: "true",
+                  tokenImagePath: "/i/token.png",
+                  progressListener: _vm.progressbarListener,
+                  listeners: _vm.fileUploadListeners,
+                  uploadButtonLabel: _vm.$t("app.Upload"),
+                  csrfToken: _vm.$root._getToken(),
+                  sendInputs: ["alpha"],
+                  label: _vm.$t("app.SelectLogo"),
+                  id: "logotype"
+                },
+                model: {
+                  value: _vm.filepath,
+                  callback: function($$v) {
+                    _vm.filepath = $$v
+                  },
+                  expression: "filepath"
+                }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "progress" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "progress-bar",
+                    style: "width: " + _vm.progressValue + "%;",
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": _vm.progressValue,
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.progressValue) + "%")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("checkboxb4", {
+                attrs: {
+                  id: "alpha",
+                  label: _vm.$t("app.isMakeTransparentBg"),
+                  value: "true"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane fade",
+              attrs: {
+                id: "logolink",
+                role: "tabpanel",
+                "aria-labelledby": "edit-tab"
+              }
+            },
+            [
+              _c("inputb4", {
+                attrs: {
+                  id: "outerLogo",
+                  type: "text",
+                  label: _vm.$t("app.Logo_url"),
+                  placeholder: _vm.$t("app.Logo_url")
+                },
+                on: { input: _vm.setDataChanges },
+                model: {
+                  value: _vm.defaultLogo,
+                  callback: function($$v) {
+                    _vm.defaultLogo = $$v
+                  },
+                  expression: "defaultLogo"
+                }
+              })
+            ],
+            1
+          )
+        ])
       ]),
-      _vm._v(" "),
-      _c("checkboxb4", {
-        attrs: {
-          id: "alpha",
-          label: _vm.$t("app.isMakeTransparentBg"),
-          value: "true"
-        }
-      }),
       _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
         _c("div", { staticClass: "card" }, [

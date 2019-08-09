@@ -114,6 +114,11 @@ var locales = {
 			'Rename_node' : 'Переименовать категорию',
 			'Nothing_select' : 'Ничего не выбрано',
 			'Add_request_already_sended_wait' : 'Запрос на добавление пункта меню уже отправлен, дождитесь его выплолнения',
+
+			//portfolio logo uploader
+			'Logo_url' : 'Url лого',
+			'Upload_Logo' : 'Загрузить лого',
+			'Upload_Logo' : 'Загрузить лого',
 			
         }
     }

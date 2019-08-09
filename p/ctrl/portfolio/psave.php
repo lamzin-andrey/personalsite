@@ -68,7 +68,7 @@ class ProudctPost extends AdminAuthJson {
 	private function _setLogo()
 	{
 		$s = $this->logo;
-		if (!file_exists(DOC_ROOT . '/' . $s)) {
+		if (!file_exists(DOC_ROOT . '/' . $s) && strpos($s, 'http') !== 0) {
 			return;
 		}
 		$exId = dbvalue("SELECT id FROM logos WHERE path='{$s}'");

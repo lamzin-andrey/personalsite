@@ -16,26 +16,59 @@
 						:label="$t('app.insertImage')" id="poster" ></inputfileb4>
 		</div>
 		<img :src="defaultLogo" >
-		<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
-		<inputfileb4 
-            v-model="filepath"
-            url="/p/articlelogoupload.jn/"
-            immediateleyUploadOff="true"
-            tokenImagePath="/i/token.png"
-            :progressListener="progressbarListener"
-            :listeners="fileUploadListeners"
-			:uploadButtonLabel="$t('app.Upload')"
-            :csrfToken="$root._getToken()"
-            :sendInputs="['alpha']"
-            
-         :label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
-		<div class="progress">
-			<div class="progress-bar" role="progressbar" 
-				:style="'width: ' + progressValue + '%;'" 
-				:aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
-        </div>
-		<checkboxb4  id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
-         
+
+<!-- Logo input -->
+<div>
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" 
+				id="logouploader-tab"
+				data-toggle="tab"
+				href="#logouploader"
+				role="tab"
+				aria-controls="logouploader"
+				aria-selected="true">{{ $t('app.Upload_Logo') }}</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link"
+				id="logolink-tab"
+				data-toggle="tab"
+				href="#logolink"
+				role="tab"
+				aria-controls="profile"
+				aria-selected="false">{{ $t('app.Logo_url') }}</a>
+		</li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane fade show active" id="logouploader" role="tabpanel" aria-labelledby="list-tab">
+			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
+			<inputfileb4 
+				v-model="filepath"
+				url="/p/articlelogoupload.jn/"
+				immediateleyUploadOff="true"
+				tokenImagePath="/i/token.png"
+				:progressListener="progressbarListener"
+				:listeners="fileUploadListeners"
+				:uploadButtonLabel="$t('app.Upload')"
+				:csrfToken="$root._getToken()"
+				:sendInputs="['alpha']"
+				
+			:label="$t('app.SelectLogo')" id="logotype" ></inputfileb4>
+			<div class="progress">
+				<div class="progress-bar" role="progressbar" 
+					:style="'width: ' + progressValue + '%;'" 
+					:aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
+			</div>
+			<checkboxb4  id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
+		</div>
+		
+		<div class="tab-pane fade" id="logolink" role="tabpanel" aria-labelledby="edit-tab">
+			<inputb4 v-model="defaultLogo" @input="setDataChanges" id="outerLogo" type="text" :label="$t('app.Logo_url')" :placeholder="$t('app.Logo_url')"  ></inputb4>
+		</div>
+	</div>
+</div>         
+<!-- /Logo input -->
 
         <div class="accordion" id="seoAccord">
 			<div class="card">
@@ -206,6 +239,7 @@
 					this.heading = data.heading;
 					this.body = data.content_block;
 					this.filepath = this.defaultLogo = data.logo;
+					this.changeLogoTab();
 					this.description = data.description;
 					this.keywords = data.keywords;
 					this.og_title = data.og_title;
@@ -330,6 +364,17 @@
 					}
 				}
 			},
+			/**
+			 * @description Если ссылается ли лого на удалённый ресурс, делает активной вкладку таба с лого с полем длЯ ввода ссылки
+			*/
+			changeLogoTab() {
+				console.log('this.defaultLogo',  this.defaultLogo );
+				if (this.defaultLogo.indexOf('http') == 0) {
+					$('#logolink-tab').tab('show');
+				} else {
+					$('#logouploader-tab').tab('show');
+				}
+			}
 			
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
