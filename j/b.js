@@ -26322,7 +26322,8 @@ window.TreeAlgorithms = {
 		for (nId in aScopes) {
 			oItem = aScopes[nId];
 
-			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]); //it need?
+			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]);
+			oItem[this.parentIdFieldName] = parseInt(oItem[this.parentIdFieldName]);
 
 			//перемещаем вложенные во внутрь
 			if (oItem[this.parentIdFieldName] > 0) {
@@ -27580,6 +27581,10 @@ window.Rest = {
      * @property {String} csrf token, set it from app
     */
     _token: '',
+    /**
+     * @property {String} _lang
+    */
+    _lang: '',
     root: '',
     /**
         * @description ajax post request (FormData)
@@ -27682,6 +27687,9 @@ window.Rest = {
             case 'delete':
                 break;
         }*/
+        if (this._lang && !sendData.lang) {
+            sendData.lang = this._lang;
+        }
         $.ajax({
             method: method,
             data: sendData,
@@ -47659,10 +47667,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -47708,8 +47712,7 @@ Vue.component('categorytree', __webpack_require__(79));
 			progressValue: 0,
 			//Выбранная категория
 			category: 1,
-			//@deprecated!
-			portfolioCategories: [{ id: 1, name: "One" }, { id: 2, name: "Two" }],
+
 			//Идентификатор редактируемой статьи
 			id: 0,
 			//Чтобы передать в textareab4 true пришлось определить
@@ -47742,12 +47745,6 @@ Vue.component('categorytree', __webpack_require__(79));
 				}
 			}
 		};
-		try {
-			var jdata = JSON.parse($('#jdata').val());
-			_data.portfolioCategories = jdata.portfolioCategories;
-		} catch (e) {
-			;
-		}
 		return _data;
 	},
 	watch: {
@@ -48064,10 +48061,11 @@ __webpack_require__(18);
 			data = JSON.parse(data);
 			data = TreeAlgorithms.buildTreeFromFlatList(data.portfolioCategories, true);
 			this.portfolioCategoriesTree[0] = data[0];
-			setTimeout(function () {
-				_this.selectedCategory = 2; //TODO получить категорию работы с сервера в данных. Использовать тик. Попробовать разобраться с реактивностью
+
+			Vue.nextTick(function () {
+				_this.selectedCategory = 0; //TODO  Использовать тик
 				_this.$refs.acctree.selectNodeById(_this.selectedCategory);
-			}, 500);
+			});
 		} catch (e) {}
 
 		this.$refs.acctree.$on('input', function (value) {
@@ -48220,6 +48218,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			type: String,
 			default: ''
 		},
+		accordisopen: {
+			type: Boolean,
+			default: false
+		},
 		//This props will be passed in TreeView
 		treedata: {
 			type: Array,
@@ -48293,6 +48295,17 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 			}
 			if (n != old) {
 				this.selectNodeById(n, false);
+			}
+		}
+	},
+	computed: {
+		isAccordShow: {
+			get: function get() {
+				var s = 'collapse';
+				if (this.accordisopen) {
+					return s + ' show';
+				}
+				return s;
 			}
 		}
 	},
@@ -48517,7 +48530,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__bootstrap_vue_treeview_index__["a" /* defau
 				currObj = _extends({}, nodesData[i]);
 				this.stackremovedItems[currObj[this.nodeKeyProp]] = currObj;
 			}
-			Rest._delete({ idList: idList }, function (data) {
+			Rest._post({ idList: idList }, function (data) {
 				_this4.onSuccessDeleteItem(data);
 			}, this.urlRemoveItem, function (a, b, c) {
 				_this4.onFailDeleteItem(a, b, c);
@@ -50385,7 +50398,7 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass: "collapse",
+            class: _vm.isAccordShow,
             attrs: {
               id: "collapsePortCatTreeAccord",
               "aria-labelledby": _vm.id + "AccordHeading",
@@ -50462,7 +50475,7 @@ var render = function() {
           id: "portfolioCategoriesTree",
           label: _vm.$t("app.Category"),
           treedata: _vm.portfolioCategoriesTree,
-          showIcons: "true",
+          showIcons: true,
           defaultIconClass: "fas fa-box",
           urlCreateNewItem: "/p/portfoliocats/pcsave.jn/",
           urlUpdateItem: "/p/portfoliocats/pcsave.jn/",
@@ -50511,14 +50524,9 @@ var render = function() {
       on: { submit: _vm.onSubmit }
     },
     [
-      _c("selectb4", {
-        attrs: {
-          label: _vm.$t("app.Sections"),
-          id: "category",
-          data: _vm.portfolioCategories,
-          validators: "'required'"
-        },
-        on: { input: _vm.setDataChanges },
+      _c("categorytree", {
+        ref: "categorytree",
+        attrs: { id: "portfolio_category_id" },
         model: {
           value: _vm.category,
           callback: function($$v) {
@@ -50527,47 +50535,6 @@ var render = function() {
           expression: "category"
         }
       }),
-      _vm._v(" "),
-      _c("categorytree", {
-        ref: "categorytree",
-        attrs: { id: "portfolio_category_id" },
-        model: {
-          value: _vm.pcategory,
-          callback: function($$v) {
-            _vm.pcategory = $$v
-          },
-          expression: "pcategory"
-        }
-      }),
-      _vm._v(" "),
-      _c("label", [
-        _vm._v("Form level\n\t\t\t"),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.pcategory,
-              expression: "pcategory"
-            }
-          ],
-          attrs: { type: "text" },
-          domProps: { value: _vm.pcategory },
-          on: {
-            input: [
-              function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.pcategory = $event.target.value
-              },
-              function($event) {
-                return _vm.$emit("input", $event.target.value)
-              }
-            ]
-          }
-        })
-      ]),
       _vm._v(" "),
       _c("inputb4", {
         attrs: {

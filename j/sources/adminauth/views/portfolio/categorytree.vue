@@ -66,10 +66,11 @@
 				data = JSON.parse(data);
 				data = TreeAlgorithms.buildTreeFromFlatList(data.portfolioCategories, true);
 				this.portfolioCategoriesTree[0] = data[0];
-				setTimeout(() =>{
-					this.selectedCategory = 2;//TODO получить категорию работы с сервера в данных. Использовать тик. Попробовать разобраться с реактивностью
+
+				Vue.nextTick(() =>{
+					this.selectedCategory = 0;//TODO  Использовать тик
 					this.$refs.acctree.selectNodeById(this.selectedCategory);
-				}, 500);
+				});
 			} catch(e){}
 
 			this.$refs.acctree.$on('input', (value) => {

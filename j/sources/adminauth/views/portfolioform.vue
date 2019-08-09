@@ -1,10 +1,6 @@
 <template>
     <form class="user" method="POST" action="/p/portfolio/psave.jn/" @submit="onSubmit" novalidate id="portfolioform">
-		<selectb4 v-model="category" @input="setDataChanges" :label="$t('app.Sections')" id="category" :data="portfolioCategories" validators="'required'"></selectb4>
-		<categorytree v-model="pcategory" ref="categorytree"  id="portfolio_category_id" ></categorytree>
-		<label>Form level
-			<input type="text" v-model="pcategory" @input="$emit('input', $event.target.value)">
-		</label>
+		<categorytree v-model="category" ref="categorytree"  id="portfolio_category_id" ></categorytree>
 		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
@@ -139,11 +135,7 @@
 				progressValue : 0,
 				//Выбранная категория
 				category : 1,
-				//@deprecated!
-				portfolioCategories : [
-					{id:1, name:"One"},
-					{id:2, name:"Two"}
-				],
+				
 				//Идентификатор редактируемой статьи
 				id : 0,
 				//Чтобы передать в textareab4 true пришлось определить
@@ -176,10 +168,6 @@
 					}
 				}
 			};
-			try {
-				let jdata = JSON.parse($('#jdata').val());
-				_data.portfolioCategories = jdata.portfolioCategories;
-			} catch(e) {;}
 			return _data;
 		},
 		watch: {
