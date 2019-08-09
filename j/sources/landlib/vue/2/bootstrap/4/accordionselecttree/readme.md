@@ -261,7 +261,7 @@ You can specify the fontawesome icon that will be displayed next to the list ite
 
 ##### show-icons (showIcons)
 
-Shjow icon
+Show icon
 
 ##### label
 

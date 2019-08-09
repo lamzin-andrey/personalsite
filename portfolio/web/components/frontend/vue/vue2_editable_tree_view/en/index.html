@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html xml:lang="en" lang="en">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no"><meta property="og:image" content="/i/64.jpg">
+		<meta name="apptoken" content="1cdslkjhs4dfjkhs8fdjkhsg">
+		<title>Vue 2 component  editable TreeView with immediately send data to server side -|- Andrey Lamzin site</title>
+		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
+		<link rel="stylesheet" href="/s/fontawesome5/all.css" >
+		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
+		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body>
+		<div class="container u-full-width">
+			<header>
+				<div class="row">
+					<div class="col">
+						<div class="text-left u-mainhead">
+							<h1>Andrey's blog </h1>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div>&nbsp;</div>
+			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+			  <a class="navbar-brand" href="/">Home</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item active">
+					<a class="nav-link" href="javascript:;">Portfolio</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="javascript:;">Blog</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/clients/">For clients</a>
+				  </li>
+				</ul>
+			  </div>
+			</nav>
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-12 col-lg-8">
+					<article>
+						<h1>Vue 2 bootstrap 4 editable TreeView - online demo</h1>
+						<time datetime="2019-08-08" class="d-block text-right text-muted small">08.08.2019</time>
+						
+						<div  id="wrapper">
+							
+							<accordionselecttree
+								id="categoriesTree"
+								:accordisopen="true"
+								default-icon-class="fas fa-box"
+								:label="$t('app.Category')"
+								v-model="selectedCategory"
+								:treedata="categoriesTree"
+								url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+								url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+								url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
+								:show-icons="true"
+								ref="treeview"
+							></accordionselecttree>
+							<textarea hidden style="display:none" id="categorydata">[
+	{
+		"id" : 1,
+		"parent_id" : 0,
+		"name" : "All categories"
+	},
+	{
+		"id" : 2,
+		"parent_id" : 1,
+		"name" : "Appliances"
+	},
+	{
+		"id" : 3,
+		"parent_id" : 1,
+		"name" : "Electronics"
+	},
+	{
+		"id" : 4,
+		"parent_id" : 3,
+		"name" : "Cell phones"
+	},
+	{
+		"id" : 5,
+		"parent_id" : 3,
+		"name" : "Notebooks"
+	},
+	{
+		"id" : 6,
+		"parent_id" : 3,
+		"name" : "Tv Sets"
+	}
+]</textarea>
+						</div>
+						
+<h2>About</h2>
+
+<p>This vue 2 component combining an accordion and a tree structure for selection.</p>
+
+<p>It is based on the component <a href="https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/bootstrap-vue-treeview" target="_blank">landlib/bootstrap-vue-treeview</a>, 
+which in turn is fork of <a href="https://github.com/kamil-lip/bootstrap-vue-treeview" target="_blank">bootstrap-vue-treeview</a></p>
+
+<p>Adding, editing and deleting tree elements can be sent to the server immediately if you fill in the attributes 
+<code class="language-javascript">urlCreateNewItem</code>, <code class="language-javascript">urlUpdateItem</code>, <code class="language-javascript">urlRemoveItem</code>.</p>
+
+<p>The model associated with the component contains the id of the selected element.</p>
+
+
+<h2>Dependicies</h2>
+
+<ul class="list-group">
+	<li class="list-group-item active">Libary name</li>
+	<li class="list-group-item">jquery</li>
+	<li class="list-group-item">vue 2</li>
+	<li class="list-group-item">bootstrap4</li>
+	<li class="list-group-item">i18n</li>
+	<li class="list-group-item"><a href="https://github.com/lamzin-andrey/landlib" target="_blank">landlib</a></li>
+</ul>
+<p>&nbsp;</p>
+
+<h2>Installation</h2>
+
+<p><code class="language-json">git clone https://github.com/lamzin-andrey/landlib.git</code></p>
+
+<h2>Usage</h2>
+
+<h3>Server data</h3>
+
+<p>Let on the SQL server exists table `categories` with fields:</p>
+
+<table class="table table-striped table-bordered">
+	<thead>
+	<tr>
+		<th>id</th>
+		<th>parent_id</th>
+		<th>name</th>
+	</tr>
+	</thead>
+	<tr>
+		<td>1</td>
+		<td>0</td>
+		<td>All categories</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>1</td>
+		<td>Appliances</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>1</td>
+		<td>Electrtonics</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>3</td>
+		<td>Mobile cells</td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>3</td>
+		<td>Notebooks</td>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td>3</td>
+		<td>TV Sets</td>
+	</tr>
+</table>
+
+<p>You can display it as tree view and edit it on the web page.</p>
+
+<p>The backend should provide you with the following data:</p>
+
+<pre><code class="language-json">[
+	{
+		"id" : 1,
+		"parent_id" : 0,
+		"name" : "All categories",
+	},
+	{
+		"id" : 2,
+		"parent_id" : 1,
+		"name" : "Appliances",
+	},
+	{
+		"id" : 3,
+		"parent_id" : 1,
+		"name" : "Electrtonics",
+	},
+	{
+		"id" : 4,
+		"parent_id" : 3,
+		"name" : "Mobile cells",
+	},
+	{
+		"id" : 5,
+		"parent_id" : 3,
+		"name" : "Notebooks",
+	},
+	{
+		"id" : 6,
+		"parent_id" : 3,
+		"name" : "TV Sets",
+	}
+]
+</code></pre>
+
+<h3>"Based" application code</h3>
+
+<h4>package.json</h4>
+
+<pre><code class="language-json">{
+	"private": true,
+	"scripts": {
+		"dev": "npm run development",
+		"development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"watch": "npm run development -- --watch",
+		"watch-poll": "npm run watch -- --watch-poll",
+		"prod": "npm run production",
+		"production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"test": "echo 'none'"
+	},
+	"devDependencies": {
+		"jquery": "^3.4.1",
+		"cross-env": "^5.2.0",
+		"laravel-mix": "^2.1.11",
+		"vue": "^2.5.17",
+		"vue-i18n": "^7.0.0"
+	},
+	"dependencies": {
+		"vue-context-menu": "^2.0.6"
+	}
+}
+</code></pre>
+
+<h4>Vue code</h4>
+
+<p>Vue component code for use it in the HTML template (or another vue-component)</p>
+
+<pre><code class="language-html">&lt;accordionselecttree
+	id="categoriesTree"
+	v-model="selectedCategory"
+	default-icon-class="fas fa-box"
+	:show-icons="true"
+	:label="$t('app.Category')"
+	:treedata="categoriesTree"
+	url-create-new-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+	url-update-item="https://andryuxa.ru/p/treedemo/dcatsave.jn/"
+	url-remove-item="https://andryuxa.ru/p/treedemo/dcatdelte.jn/"
+	ref="treeview"
+&gt;&lt;/accordionselecttree&gt;
+&lt;textarea hidden style="display:none" id="categorydata"&gt;[
+	{
+		"id" : 1,
+		"parent_id" : 0,
+		"name" : "All categories"
+	},
+	{
+		"id" : 2,
+		"parent_id" : 1,
+		"name" : "Appliances"
+	},
+	{
+		"id" : 3,
+		"parent_id" : 1,
+		"name" : "Electronics"
+	},
+	{
+		"id" : 4,
+		"parent_id" : 3,
+		"name" : "Cell phones"
+	},
+	{
+		"id" : 5,
+		"parent_id" : 3,
+		"name" : "Notebooks"
+	},
+	{
+		"id" : 6,
+		"parent_id" : 3,
+		"name" : "Tv Sets"
+	}
+]&lt;/textarea&gt;
+</code></pre>
+
+<h4>app.js</h4>
+
+<pre><code class="language-javascript">//Vue and jquery
+window.jQuery = window.jquery = window.$ = require('jquery');
+window.Vue = require('vue');
+
+//Localization
+import VueI18n  from 'vue-i18n';
+import locales  from './vue-i18n-locales';
+
+const i18n = new VueI18n({
+    locale: 'en', // set locale
+    messages:locales, // set locale messages
+});
+//end Localization
+
+
+//Make sure, that path to libraries will be right
+
+//REST library
+require('../../../j/sources/landlib/net/rest.js');
+
+//Our component
+Vue.component('accordionselecttree', require('../../../j/sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
+
+window.app = new Vue({
+	i18n : i18n,
+	el: '#wrapper',
+	
+	data: {
+		/** @property {Number} selectedCategory id selected node */
+		selectedCategory : 3,
+
+		/** @property {Array} categoriesTree tree data */
+		categoriesTree : [{id:1, name:"Loading..."}],
+
+	},
+	methods : {
+		//csrf token for ajax requests
+		//You can use more strong safety, it simple example
+		_getToken() {
+			let ls = document.getElementsByTagName('meta'), i;
+			for (i = 0; i < ls.length; i++) {
+				if (ls[i].getAttribute('name') == 'apptoken') {
+					return ls[i].getAttribute('content');
+				}
+			}
+			return '';
+		}
+	},
+	mounted() {
+		//csrf token for ajax requests 
+		Rest._token = this._getToken();
+		//langugage for server response (optional)
+		Rest._lang = 'en';
+
+		//This data may be got from server, in this example
+		// they in JSON format contents in textarea
+		let data = $('#categorydata').val();
+		try {
+			data = JSON.parse(data);
+			//If server response containts "flat" list, we can build tree ourselves!
+			//		(Object TreeAlgorithms already imported in the our component)
+			data = TreeAlgorithms.buildTreeFromFlatList(data, true);
+			
+			this.categoriesTree = data;
+			//or this.categoriesTree[0] = data[0]; if vue warning
+
+			setTimeout(() =>{
+				//For example we on the web-page some product,
+				 //and server returned for us category tree and category this product
+				this.selectedCategory = 3;
+				//Select it in tree
+				this.$refs.treeview.selectNodeById(this.selectedCategory);
+			}, 500);
+		} catch(e){
+			//console.log(e);
+		}
+	},
+});
+</pre></code>
+
+<h4>Component attributes</h4>
+
+<h5>id</h5>
+
+<p>Every component accordionselecttree create hidden input with attributes `id` and `name` equal this value.
+This is useful if the component is contained inside a form that will be submitted without javascript.</p>
+
+<h5>v-model</h5>
+
+<p>The standard vue directive. The component is reactive, that is, for example, by associating its model with text input, you can enter this data and observe the dynamic selection of the tree element whose id was entered.</p>
+
+<h5>default-icon-class (defaultIconClass)</h5>
+
+<p>You can specify the fontawesome icon that will be displayed next to the list item.</p>
+
+<h5>show-icons (showIcons)</h5>
+
+<p>Show icon</p>
+
+<h5>label</h5>
+
+<p>The text that appears in the title of the accordion.</p>
+
+<h5>treedata</h5>
+
+<p>Pass in this attribute the name of the vue field of the application (or the vue of the component) that will store the tree data.</p>
+
+<h5>url-create-new-item (urlCreateNewItem)</h5>
+
+<p>Specify the url to which data about the parent element to which the new node is added will be sent.
+The node will be added after the server returns the identifier and name of the new element.
+</p>
+<h5>url-update-item (urlUpdateItem)</h5>
+<p>Specify the url to which data about the new name of the renamed element will be sent.
+The request will be executed after the tree element is renamed.</p>
+
+<h5>url-remove-item (urlRemoveItem)</h5>
+<p>
+Specify the url to which data about the deleted node and its descendants will be sent.
+The request will be executed after the node is hidden from the tree. If the server could not process the request, the node and its descendants will be restored in the tree and an error message will be displayed.
+</p>
+<h5>node-parent-key-prop (nodeParentKeyProp)</h5>
+
+<p>If it turned out that in the data returned by the server, the field storing the identifier of the parent element is
+ called not `parent_id`, but otherwise, for example,` parent_node_id`, you can specify its name in this attribute.</p>
+
+<h5>node-key-prop (nodeKeyProp)</h5>
+
+<p>Similar to nodeParentKeyProp, but for a field that stores the identifier of an element.</p>
+
+<p class="ml-5"><code class="language-javascript">A similar property of the TreeAlgorithms object is called `idFieldName`.</code></p>
+			
+<h5>node-сhildren-prop (nodeChildrenProp)</h5>
+
+<p>Similar to nodeParentKeyProp, but for a field that stores the descendants of an element. In our example from this documentation, we assume that the server returned a flat list and build a tree from it.</p>
+<p class="ml-5"><code class="language-javascript">A similar property of the TreeAlgorithms object is called `childsFieldName`.</code></p>
+
+<pre><code class="language-javascript">
+data = TreeAlgorithms.buildTreeFromFlatList(data, true);
+</code></pre>
+
+<p>Above is a piece of code that builds a tree from a flat list. The result of his work will be (for our example)</p>
+
+<pre><code class="language-json">[
+	{
+		"id" : 1,
+		"parent_id" : 0,
+		"name" : "All categories",
+		"children" : [
+			{
+				"id" : 2,
+				"parent_id" : 1,
+				"name" : "Appliances"
+			},
+			{
+				"id" : 3,
+				"parent_id" : 1,
+				"name" : "Electronics",
+				"children" : [
+					{
+						"id" : 4,
+						"parent_id" : 3,
+						"name" : "Cell phones"
+					},
+					{
+						"id" : 5,
+						"parent_id" : 3,
+						"name" : "Notebooks"
+					},
+					{
+						"id" : 6,
+						"parent_id" : 3,
+						"name" : "Tv Sets"
+					}
+				]
+			},
+		] 
+	}
+]
+</code></pre>
+
+<p>This data could immediately come from the server. But the `children` field in this case could be called differently, for example` child_items`. In this case, we can pass `nodeChildrenProp ="child_items"` to ensure the component works.</p>
+<p class="ml-5"><code class="language-javascript">A similar property of the TreeAlgorithms object is called `childsFieldName`.</code></p>
+
+<h5>node-label-prop (nodeLabelProp)</h5>
+
+<p>Similar to nodeParentKeyProp, but for a field that stores the name of the element.</p>
+<p class="ml-5"><code class="language-javascript">The TreeAlgorithms object does not have a similar property, since it does not need it.</code></p>
+	
+<h5>nodes-draggable (nodesDraggable)</h5>
+
+<p>Boolean. Allows you to move the nodes of the tree. Currently not supported by the server side.</p>
+
+<h5>context-menu (contextMenu)</h5>
+
+<p>Boolean. Allows you to enable or disable the context menu.</p>
+
+<h5>rename-node-on-dbl-click (renameNodeOnDblClick)</h5>
+
+<p>Boolean. Allows you to enable or disable the renaming of a property by double-clicking on it.</p>
+
+<h5>default-icon-class (defaultIconClass)</h5>
+
+<p>String. You can specify the name of the fontawesome icon, for example `fas fa-book`</p>
+
+<h5>accordisopen</h5>
+
+<p>Boolean. You can specify whether the accordion should be open or closed by default.</p>
+
+<h3>Server Data Format</h3>
+
+<p>The component automatically sends data to the server after adding, renaming and deleting the element.</p>
+
+<p>Data is sent in the <code class="language-javascript">form-data</code> format.</p>
+
+<p>Request and Response Examples:</p>
+
+<h4>Append node</h4>
+
+<p>Request:</p>
+
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Variable name</th>
+			<th>Example of value</th>
+			<th>Required</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>parent_id</td>
+			<td>3</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>_token</td>
+			<td>1cdslkjhs4dfjkhs8fdjkhsg</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>lang</td>
+			<td>en</td>
+			<td>No</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Response:</p>
+
+<pre><code class="language-json">
+{
+	"status":"ok",
+	"id":2412,
+	"name":"New Item",
+	"parent_id":2410
+}
+</code></pre>
+
+<h4>Rename node</h4>
+
+<p>Request:</p>
+
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Variable name</th>
+			<th>Example of value</th>
+			<th>Required</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>id</td>
+			<td>2412</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>parent_id</td>
+			<td>3</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>_token</td>
+			<td>1cdslkjhs4dfjkhs8fdjkhsg</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>lang</td>
+			<td>en</td>
+			<td>No</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Response:</p>
+
+<pre><code class="language-json">
+{
+	"status":"ok",
+	"id":2412,
+	"name":"Kings and cabbage",
+	"parent_id":2410
+}
+</code></pre>
+
+<h4>Remove node</h4>
+
+<p>Request:</p>
+
+
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>Variable name</th>
+			<th>Example of value</th>
+			<th>Required</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>idList[]</td>
+			<td>2412</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>idList[]</td>
+			<td>2413</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>idList[]</td>
+			<td>2526</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>_token</td>
+			<td>1cdslkjhs4dfjkhs8fdjkhsg</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>lang</td>
+			<td>en</td>
+			<td>No</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Response:</p>
+
+<pre><code class="language-json">{
+	"status":"ok",
+	"msg":"Record was removed",
+	"ids":[2411,2413,2415,2414]
+}
+</code></pre>
+
+<p><strong>It is necessary to transmit a list of identifiers in the server response for the component to work correctly</strong></p>
+
+
+<h2>TreeAlgorithms object</h2>
+
+<p>This is a special object that contains convenient methods for working with tree-like data structures. It does not depend on vue or other libraries and frameworks. A description of it should be found <a href="https://github.com/lamzin-andrey/landlib#treealgorithms" target="_blank">here</a>.</p>
+
+
+
+						
+					</article>
+				</div>
+				<div class="col-12 col-lg-4  u-right-side">
+					<ul class="list-group text-center">
+						<li class="list-group-item">
+							<div><img src="/i/fx.jpg" alt="Fastxampp"></div>
+							<div> <!-- style="border-top-width: 0px;" -->
+								<a href="//fastxampp.org" target="_blank">Утилита для удобного добавления сайтов на localhost</a>
+							</div>
+						</li> 
+						<li class="list-group-item">
+							<div><img src="/i/L.jpg"  alt="cordova online"></div>
+							<div><a target="_blank" href="http://fastxampp.org/compile_android_online_apache_cordova/">Компиляция html5 приложений cordova для android онлайн</a><br>
+								<p>
+									<small>
+									</small>
+								</p>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div>
+								<img src="/i/php2js.jpg" title="" alt="">
+							</div>
+							<div>
+								<a href="http://php2js.ru/" target="_blank">Транслятор php кода в код javascript</a><br>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div><img src="/i/rc.jpg" alt="RedCafe"></div>
+							<div><a href="http://redcafe.ru/">Программа для создания выкроек стильной одежды</a></div>
+							<p>
+								<small>Мой вклад - оффлайн-версия программы для экспорта выкроек в pdf и dxf</small></div>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+			<div class="footer bg-dark text-light">
+				
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								&copy; Андрей Ламзин
+							</div>
+						</div>
+					</div>
+				
+			</div>
+		
+        <script src="/j/jquery-3.3.1.slim.min.js"></script>
+        <script src="/j/bootstrap4.2.1.min.js"></script>
+        <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/prism/0.js"></script>
+        <script src="/portfolio/web/components/frontend/vue/vue2_editable_tree_view/compiled.js"></script>
+        <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+	</body>
+</html>

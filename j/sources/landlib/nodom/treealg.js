@@ -92,8 +92,8 @@ window.TreeAlgorithms = {
 		for (nId in aScopes) {
 			oItem = aScopes[nId];
 			
-			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]); //it need?
-			oItem[this.parentIdFieldName] = parseInt(oItem[this.parentIdFieldName]); //it need?
+			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]);
+			oItem[this.parentIdFieldName] = parseInt(oItem[this.parentIdFieldName]);
 			
 			//перемещаем вложенные во внутрь
 			if (oItem[this.parentIdFieldName] > 0) {
