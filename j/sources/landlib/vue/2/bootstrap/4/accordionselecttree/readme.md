@@ -113,7 +113,7 @@ The backend should provide you with the following data:
 
 ```
 
-#### Vue код
+#### Vue code
 
 Vue component code for use it in the HTML template (or another vue-component)
 
