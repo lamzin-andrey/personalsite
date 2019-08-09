@@ -1106,6 +1106,9 @@ function utils_isXhr() : bool
 	}
 	$aHeaders = getallheaders();
 	$sXHR = a($aHeaders, 'X-Requested-With');
+	if (!$sXHR) {
+		$sXHR = a($aHeaders, 'x-requested-with');
+	}
 	if ($sXHR && $sXHR == 'XMLHttpRequest') {
 		return true;
 	}
