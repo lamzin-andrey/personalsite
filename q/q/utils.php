@@ -38,11 +38,14 @@ function json_ok() {
  die(json_encode($data));
 }
 /**
- * Добавляет в массив элемент 'status' => 'ok' и выдает в поток данные в json формате
+ * @description Добавляет в массив элемент 'status' => 'ok' и выдает в поток данные в json формате
+ * @param array $data
+ * @param bool $bEncodeAsArray = false
 */
-function json_ok_arr($data) {
+function json_ok_arr(array $data, bool $bEncodeAsArray = false)
+{
 	$data['status'] = 'ok';
-	die(json_encode($data));
+	die(json_encode($data, $bEncodeAsArray ));
 }
 /**
  * Добавляет в массив элемент 'status' => 'ok' и выдает в поток данные в json формате

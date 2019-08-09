@@ -39,6 +39,34 @@ window.app = new Vue({
 				}
 			}
 			return '';
+		},
+		onSuccessGetData(data) {
+			if (!this.onFailGetData(data)) {
+				return;
+			}
+			data = TreeAlgorithms.buildTreeFromFlatList(data.list, true);
+			delete data[0].parent_id;
+			this.categoriesTree = data;
+			
+			setTimeout(() =>{
+				this.selectedCategory = 3;
+				this.$refs.treeview.selectNodeById(this.selectedCategory);
+			}, 500);
+		},
+		onFailGetData(data, b, c) {
+			if (data.status && data.status == 'ok') {
+				return true;
+			}
+			this.selectedCategory = 0;
+			if (data.status && data.status == 'error') {
+				if (data.msg) {
+					this.$refs.treeview.showError(data.msg);
+					return false;
+				}
+			} else {
+				this.$refs.treeview.showError(this.$t('app.DefaultError') );
+				return false;
+			}
 		}
 	},
 	/**
@@ -47,21 +75,7 @@ window.app = new Vue({
 	mounted() {
 		//init Rest library
 		Rest._token = this._getToken();
-		Rest._lang = 'en';
-
-		//parse data and set  selected category
-		let data = $('#categorydata').val();
-		//this.selectedCategory = this.value;
-		try {
-			data = JSON.parse(data);
-			data = TreeAlgorithms.buildTreeFromFlatList(data, true);
-			this.categoriesTree[0] = data[0];
-			setTimeout(() =>{
-				this.selectedCategory = 3;
-				this.$refs.treeview.selectNodeById(this.selectedCategory);
-			}, 500);
-		} catch(e){
-			console.log(e);
-		}
+		Rest._lang = (window.applang ? window.applang : 'en');
+		Rest._get((data)=>{this.onSuccessGetData(data);}, '/p/treedemo/tree.jn/', (a, b, c)=>{this.onFailGetData(a, b, c);});
 	},
 });

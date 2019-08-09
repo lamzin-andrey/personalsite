@@ -86,6 +86,11 @@ class Route {
 			require_once $handler;
 			$this->app = new DemoCategoryRemove();
 		}
+		if ($baseUrl == '/p/treedemo/tree.jn/') {
+			$handler = $sCtrlDir . 'dtree.php';
+			require_once $handler;
+			$this->app = new DemoCategoriesList();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/portfoliocats/

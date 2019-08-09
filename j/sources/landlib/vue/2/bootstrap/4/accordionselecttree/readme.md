@@ -225,7 +225,10 @@ window.app = new Vue({
 			//If server response containts "flat" list, we can build tree ourselves!
 			//		(Object TreeAlgorithms already imported in the our component)
 			data = TreeAlgorithms.buildTreeFromFlatList(data, true);
-			this.categoriesTree[0] = data[0];
+			
+			this.categoriesTree = data;
+			//or this.categoriesTree[0] = data[0]; if vue warning
+
 			setTimeout(() =>{
 				this.selectedCategory = 3;	//For example we on the web-page some product,and server returned for us category tree and category this product
 				//Select it in tree
@@ -677,7 +680,8 @@ window.app = new Vue({
 			data = JSON.parse(data);
 			//Если сервер вернул "плоский" список, мы можем построить из него дерево сами
 			data = TreeAlgorithms.buildTreeFromFlatList(data, true);
-			this.categoriesTree[0] = data[0];
+			this.categoriesTree = data;
+			//or this.categoriesTree[0] = data[0]; если vue warning
 			setTimeout(() =>{
 				this.selectedCategory = 3;	//Напрмер мы на странице товара, а сервер вернул нам помимо данных дерева категорий категорию товара
 				this.$refs.treeview.selectNodeById(this.selectedCategory);

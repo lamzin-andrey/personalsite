@@ -93,6 +93,7 @@ window.TreeAlgorithms = {
 			oItem = aScopes[nId];
 			
 			oItem[this.idFieldName] = parseInt(oItem[this.idFieldName]); //it need?
+			oItem[this.parentIdFieldName] = parseInt(oItem[this.parentIdFieldName]); //it need?
 			
 			//перемещаем вложенные во внутрь
 			if (oItem[this.parentIdFieldName] > 0) {
