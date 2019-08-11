@@ -130,14 +130,17 @@
 	Без tags-changed="newTags => tags = newTags" не заполняется tags при вводе тегов
 	Определять newTags в data не обязательно - всё и без него работает
 -->
+<label>{{ $t('app.bindArticle') }}</label>
 <vue-tags-input
 	v-model="tag"
 	:tags="tags"
 	:autocomplete-items="filteredItems"
 	:add-only-from-autocomplete="true"
+	:placeholder="$t('app.bindArticle')"
 	@tags-changed="newTags => tags = newTags"
 	@before-deleting-tag="onDeleteRelationArticle"
 />
+<p>&nbsp;</p>
 <!-- /Articles relations-->
 
         <div class="accordion" id="seoAccord">

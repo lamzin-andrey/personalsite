@@ -131,6 +131,9 @@ var locales = {
 			//portfolio sha256
 			'uploadFile' : 'Загрузить файл',
 			'require_file_path_and_sha256' : 'Необходимо выбрать файл и ввести значение sha256',
+
+			//portfolio articles relations
+			'bindArticle' : 'Связать статью',
         }
     }
 }

@@ -28090,7 +28090,7 @@ var locales = {
             //portfolio logo uploader
             'Logo_url': 'Url лого',
             'Upload_Logo': 'Загрузить лого'
-        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _defineProperty(_app, 'defaultNoHasProductFileText', 'Нет файла'), _defineProperty(_app, 'uploadFile', 'Загрузить файл'), _defineProperty(_app, 'require_file_path_and_sha256', 'Необходимо выбрать файл и ввести значение sha256'), _app)
+        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _defineProperty(_app, 'defaultNoHasProductFileText', 'Нет файла'), _defineProperty(_app, 'uploadFile', 'Загрузить файл'), _defineProperty(_app, 'require_file_path_and_sha256', 'Необходимо выбрать файл и ввести значение sha256'), _defineProperty(_app, 'bindArticle', 'Связать статью'), _app)
     }
 };
 
@@ -47783,6 +47783,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -51356,11 +51359,14 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _c("label", [_vm._v(_vm._s(_vm.$t("app.bindArticle")))]),
+      _vm._v(" "),
       _c("vue-tags-input", {
         attrs: {
           tags: _vm.tags,
           "autocomplete-items": _vm.filteredItems,
-          "add-only-from-autocomplete": true
+          "add-only-from-autocomplete": true,
+          placeholder: _vm.$t("app.bindArticle")
         },
         on: {
           "tags-changed": function(newTags) {
@@ -51376,6 +51382,8 @@ var render = function() {
           expression: "tag"
         }
       }),
+      _vm._v(" "),
+      _c("p", [_vm._v(" ")]),
       _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
         _c("div", { staticClass: "card border-bottom" }, [
