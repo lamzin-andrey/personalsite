@@ -493,7 +493,7 @@
             */
 			onSuccessUploadposter(data) {
 				if (data.path) {
-					let x = 'articlebody', n = this.$refs[x].getCursorPosition(), s, head, tail;
+					let x = 'portfoliobody', n = this.$refs[x].getCursorPosition(), s, head, tail;
 					if (n > -1) {
 						s = this.body;
 						head = s.substring(0, n);

@@ -48101,7 +48101,7 @@ Vue.component('categorytree', __webpack_require__(79));
 			var _this4 = this;
 
 			if (data.path) {
-				var x = 'articlebody',
+				var x = 'portfoliobody',
 				    n = this.$refs[x].getCursorPosition(),
 				    s = void 0,
 				    head = void 0,
