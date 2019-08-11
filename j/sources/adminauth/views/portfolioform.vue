@@ -25,7 +25,7 @@
 		</div>
 		<!-- SHA256 value -->
 		<div class="accordion" id="sha256Accord">
-			<div class="card">
+			<div class="card border-bottom">
 				<div class="card-header" id="headingSha256">
 					<h5 class="mb-0">
 						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSha256"	aria-expanded="true" aria-controls="collapseSha256">
@@ -63,12 +63,13 @@
 						<inputb4 v-model="sha256" placeholderlabel="SHA256"></inputb4>
 						
 					</div>
+					
 				</div>
 			</div>
 		</div>
         <!-- /SHA256 value -->
 
-
+		<p>&nbsp;</p>
 		
 		<img :src="defaultLogo" >
 
@@ -126,14 +127,14 @@
 <!-- /Logo input -->
 
         <div class="accordion" id="seoAccord">
-			<div class="card">
+			<div class="card border-bottom">
 				<div class="card-header" id="headingSeo">
-				<h5 class="mb-0">
-					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSeo" aria-expanded="true" aria-controls="collapseSeo">
-					SEO
-					</button>
-				</h5>
-			</div>
+					<h5 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSeo" aria-expanded="true" aria-controls="collapseSeo">
+						SEO
+						</button>
+					</h5>
+				</div>
 
 			<div id="collapseSeo" class="collapse" aria-labelledby="headingSeo" data-parent="#seoAccord">
 				<div class="card-body">

@@ -47765,6 +47765,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -50603,7 +50604,7 @@ var render = function() {
     }),
     _vm._v(" "),
     _c("div", { staticClass: "accordion", attrs: { id: _vm.id + "Accord" } }, [
-      _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card border-bottom" }, [
         _c(
           "div",
           {
@@ -50977,7 +50978,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "sha256Accord" } }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card border-bottom" }, [
           _vm._m(0),
           _vm._v(" "),
           _c(
@@ -51088,6 +51089,8 @@ var render = function() {
           )
         ])
       ]),
+      _vm._v(" "),
+      _c("p", [_vm._v(" ")]),
       _vm._v(" "),
       _c("img", { attrs: { src: _vm.defaultLogo } }),
       _vm._v(" "),
@@ -51226,7 +51229,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "seoAccord" } }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card border-bottom" }, [
           _vm._m(1),
           _vm._v(" "),
           _c(
@@ -51420,7 +51423,7 @@ var staticRenderFns = [
                 "aria-controls": "collapseSeo"
               }
             },
-            [_vm._v("\n\t\t\t\t\tSEO\n\t\t\t\t\t")]
+            [_vm._v("\n\t\t\t\t\t\tSEO\n\t\t\t\t\t\t")]
           )
         ])
       ]

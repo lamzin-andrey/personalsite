@@ -14,10 +14,10 @@ const i18n = new VueI18n({
 
 
 //REST library
-require('../../../j/sources/landlib/net/rest');
+require('../../../../../../../j/sources/landlib/net/rest');
 
 //Editable Tree view component
-Vue.component('accordionselecttree', require('../../../j/sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
+Vue.component('accordionselecttree', require('../../../../../../../j/sources/landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
 
 window.app = new Vue({
 	i18n : i18n,

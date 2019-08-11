@@ -2,7 +2,7 @@
 	<div>
 		<input	v-model="selectedNodeId"  type="hidden" :id="id" :name="id">
 		<div class="accordion" :id="id + 'Accord'">
-			<div class="card">
+			<div class="card border-bottom">
 				<div class="card-header" :id="id + 'AccordHeading'">
 					<h5 class="mb-0">
 						<label>{{label}}: </label>
