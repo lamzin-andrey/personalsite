@@ -28046,6 +28046,7 @@ var locales = {
             "Edit": "Редактировать",
             "OK": "OK",
             "Upload": "Загрузить",
+            "Remove": "Удалить",
             "SaveCompleted": "Данные успешно сохранены",
 
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
@@ -28089,7 +28090,7 @@ var locales = {
             //portfolio logo uploader
             'Logo_url': 'Url лого',
             'Upload_Logo': 'Загрузить лого'
-        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _defineProperty(_app, 'defaultNoHasProductFileText', 'Нет файла'), _defineProperty(_app, 'uploadFile', 'Загрузить файл'), _app)
+        }, _defineProperty(_app, "Upload_Logo", 'Загрузить лого'), _defineProperty(_app, 'dontCreatePage', 'Не создавать отдельную страницу'), _defineProperty(_app, 'hasSelfSection', 'Продукт имеет отдельный раздел на сайте'), _defineProperty(_app, 'defaultNoHasProductFileText', 'Нет файла'), _defineProperty(_app, 'uploadFile', 'Загрузить файл'), _defineProperty(_app, 'require_file_path_and_sha256', 'Необходимо выбрать файл и ввести значение sha256'), _app)
     }
 };
 
@@ -47762,6 +47763,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 //TODO перерегистрировать локально
 Vue.component('categorytree', __webpack_require__(79));
@@ -47915,6 +47918,7 @@ Vue.component('categorytree', __webpack_require__(79));
 			this.hasSelfSection = false;
 			this.sha256 = '';
 			this.productFile = '';
+			this.id = 0;
 
 			//Fix bug when edit the article more then one time...
 			setTimeout(function () {
@@ -47931,6 +47935,7 @@ Vue.component('categorytree', __webpack_require__(79));
 				_this.og_description = data.og_description;
 				_this.og_image = _this.defaultSocImage = data.og_image;
 				_this.sha256 = data.sha256;
+				_this.id = data.id;
 				_this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
 				_this.hasSelfSection = parseInt(data.has_self_section) ? true : false;
 				_this.productFile = data.product_file;
@@ -47981,12 +47986,42 @@ Vue.component('categorytree', __webpack_require__(79));
 				var formInputValidator = this.$root.formInputValidator;
 				this.id = this.$root.$refs.portfolio.getProductId();
 				this.url = $('#url').val();
+				if (!this._validateSga256Inputs(formInputValidator)) {
+					return false;
+				}
 				this.$root._post(this.$data, function (data) {
 					_this2.onSuccessAddProduct(data, formInputValidator);
 				}, '/p/portfolio/psave.jn/', function (a, b, c) {
 					_this2.onFailAddProduct(a, b, c);
 				});
 			}
+		},
+
+		/**
+   * @description Клик на ссылке удалить файл sha256
+  */
+		onClickRemoveSha256: function onClickRemoveSha256(evt) {
+			var _this3 = this;
+
+			evt.preventDefault();
+			this.$root._post({ path: this.productFile, id: this.id }, function (data) {
+				_this3.onSuccessRemoveSha256File(data);
+			}, '/p/portfolio/sha256remove.jn/', function (a, b, c) {
+				_this3.$root.defaultFailSendFormListener(a, b, c);
+			});
+			return false;
+		},
+
+		/**
+   * @description Успешное удаление файла sha256
+   * @param {Object} data
+  */
+		onSuccessRemoveSha256File: function onSuccessRemoveSha256File(data) {
+			if (!this.$root.defaultFailSendFormListener(data)) {
+				return false;
+			}
+			this.productFile = '';
+			this.sha256 = '';
 		},
 
 		/**
@@ -48002,6 +48037,22 @@ Vue.component('categorytree', __webpack_require__(79));
 				$('#portfolioSaver').toast('show');
 				this.$root.$refs.portfolio.setDataChanges(false);
 			}
+		},
+
+		/**
+   * @description Еслт выбран файл работы, но не заполнено sha256 (или наоборот), укстанавливает ошибку
+   * @param {B421Validators} formInputValidator
+   * @reurn Boolean false если условие не выполнено
+  */
+		_validateSga256Inputs: function _validateSga256Inputs(formInputValidator) {
+			var jEl = $('#productfileFileImmediately');
+			if (this.productFile && !this.sha256 || !this.productFile && this.sha256) {
+				console.log('Detect sha 256 err');
+				formInputValidator.viewSetError(jEl, this.$t('app.require_file_path_and_sha256'));
+				return false;
+			}
+			formInputValidator.viewClearError(jEl);
+			return true;
 		},
 
 		/**
@@ -48046,7 +48097,7 @@ Vue.component('categorytree', __webpack_require__(79));
    * @description Обработка успешной загрузки изображения для вставки в текстовое поле
            */
 		onSuccessUploadposter: function onSuccessUploadposter(data) {
-			var _this3 = this;
+			var _this4 = this;
 
 			if (data.path) {
 				var x = 'articlebody',
@@ -48061,7 +48112,7 @@ Vue.component('categorytree', __webpack_require__(79));
 					s = '[html]<img src="' + data.path + '">[/html]';
 					this.body = head + s + tail;
 					setTimeout(function () {
-						_this3.$refs[x].setCursorPosition(n + s.length);
+						_this4.$refs[x].setCursorPosition(n + s.length);
 					}, 200);
 				}
 			}
@@ -48088,7 +48139,6 @@ Vue.component('categorytree', __webpack_require__(79));
    * @description Если ссылается ли лого на удалённый ресурс, делает активной вкладку таба с лого с полем длЯ ввода ссылки
   */
 		changeLogoTab: function changeLogoTab() {
-			console.log('this.defaultLogo', this.defaultLogo);
 			if (this.defaultLogo.indexOf('http') == 0) {
 				$('#logolink-tab').tab('show');
 			} else {
@@ -50901,6 +50951,31 @@ var render = function() {
         }
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mb-3" },
+        [
+          _c("inputfileb4", {
+            attrs: {
+              url: "/p/articleinlineimageupload.jn/",
+              tokenImagePath: "/i/token.png",
+              listeners: _vm.posterUploadListeners,
+              csrfToken: _vm.$root._getToken(),
+              label: _vm.$t("app.insertImage"),
+              id: "poster"
+            },
+            model: {
+              value: _vm.poster,
+              callback: function($$v) {
+                _vm.poster = $$v
+              },
+              expression: "poster"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("div", { staticClass: "accordion", attrs: { id: "sha256Accord" } }, [
         _c("div", { staticClass: "card" }, [
           _vm._m(0),
@@ -50954,6 +51029,18 @@ var render = function() {
                           },
                           [_vm._v(_vm._s(_vm.$t("app.Download")))]
                         )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.productFile
+                      ? _c(
+                          "a",
+                          {
+                            staticClass: "small ml-2 text-danger",
+                            attrs: { href: "#" },
+                            on: { click: _vm.onClickRemoveSha256 }
+                          },
+                          [_vm._v(_vm._s(_vm.$t("app.Remove")))]
+                        )
                       : _vm._e()
                   ]),
                   _vm._v(" "),
@@ -51001,31 +51088,6 @@ var render = function() {
           )
         ])
       ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "mb-3" },
-        [
-          _c("inputfileb4", {
-            attrs: {
-              url: "/p/articleinlineimageupload.jn/",
-              tokenImagePath: "/i/token.png",
-              listeners: _vm.posterUploadListeners,
-              csrfToken: _vm.$root._getToken(),
-              label: _vm.$t("app.insertImage"),
-              id: "poster"
-            },
-            model: {
-              value: _vm.poster,
-              callback: function($$v) {
-                _vm.poster = $$v
-              },
-              expression: "poster"
-            }
-          })
-        ],
-        1
-      ),
       _vm._v(" "),
       _c("img", { attrs: { src: _vm.defaultLogo } }),
       _vm._v(" "),

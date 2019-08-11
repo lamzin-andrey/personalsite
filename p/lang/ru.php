@@ -66,6 +66,8 @@ $aLang = [
 	'file_is_executing_upload_denied'        => 'Файл может содержать вредоносный программный код, загрузка этого файла невозможна.',
 	'SigninFormLabel'        => 'Авторизация',
 	'Change-password'        => 'Настройки авторизации',
+	'Not found work id or file path'        => 'Не найден id работы или не задан путь к файлу',
+	'Database clear, but unable drop phisical file'        => 'Данные о файле итз базы удалены, но файл удалить не удалось',
 	
 	'Title'        => 'Тайтл страницы',
 	

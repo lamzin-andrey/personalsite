@@ -7,6 +7,9 @@ define('APP_CACHE_FOLDER', __DIR__ . '/cache');
 define('DB_DELTA_NOT_USE_TRIGGER', true);
 define('DEV_MODE', true);
 define('AUTH_COOKIE_NAME', 'bpuid');
+
+define('SQL_EMPTY_STR', '\'\'');
+
 //define('APP_COOKIE_NAME', 'apid');
 
 

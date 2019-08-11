@@ -13,7 +13,17 @@
 		</div>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
         <textareab4 v-model="body" ref="portfoliobody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
-        <!-- SHA256 value -->
+        <div class="mb-3">
+			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
+			<inputfileb4 
+						v-model="poster"
+						url="/p/articleinlineimageupload.jn/"
+						tokenImagePath="/i/token.png"
+						:listeners="posterUploadListeners"
+						:csrfToken="$root._getToken()"
+						:label="$t('app.insertImage')" id="poster" ></inputfileb4>
+		</div>
+		<!-- SHA256 value -->
 		<div class="accordion" id="sha256Accord">
 			<div class="card">
 				<div class="card-header" id="headingSha256">
@@ -37,6 +47,7 @@
 						<div class="mt-3">
 							<span class="small ml-2" v-if="!productFile">{{ noHasProductFileText }}</span>
 							<a class="small ml-2" :href="productFile" target="_blank" v-if="productFile">{{ $t('app.Download') }}</a>
+							<a @click="onClickRemoveSha256" class="small ml-2 text-danger" href="#"  v-if="productFile">{{ $t('app.Remove') }}</a>
 						</div>
 						
 						<div class="input-group">
@@ -58,16 +69,7 @@
         <!-- /SHA256 value -->
 
 
-		<div class="mb-3">
-			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
-			<inputfileb4 
-						v-model="poster"
-						url="/p/articleinlineimageupload.jn/"
-						tokenImagePath="/i/token.png"
-						:listeners="posterUploadListeners"
-						:csrfToken="$root._getToken()"
-						:label="$t('app.insertImage')" id="poster" ></inputfileb4>
-		</div>
+		
 		<img :src="defaultLogo" >
 
 <!-- Logo input -->
@@ -326,6 +328,7 @@
 				this.hasSelfSection = false;
 				this.sha256 = '';
 				this.productFile = '';
+				this.id = 0;
 				
 				//Fix bug when edit the article more then one time...
 				setTimeout(() => {
@@ -342,6 +345,7 @@
 					this.og_description = data.og_description;
 					this.og_image = this.defaultSocImage = data.og_image;
 					this.sha256 = data.sha256;
+					this.id = data.id
 					this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
 					this.hasSelfSection =  parseInt(data.has_self_section) ? true : false;
 					this.productFile = data.product_file;
@@ -386,6 +390,9 @@
 					let formInputValidator = this.$root.formInputValidator;
 					this.id = this.$root.$refs.portfolio.getProductId();
 					this.url = $('#url').val();
+					if (!this._validateSga256Inputs(formInputValidator)) {
+						return false;
+					}
                     this.$root._post(
                         this.$data,
                         (data) => { this.onSuccessAddProduct(data, formInputValidator);},
@@ -393,6 +400,25 @@
                         (a, b, c) => { this.onFailAddProduct(a, b, c);}
                     );
                 }
+			},
+			/**
+			 * @description Клик на ссылке удалить файл sha256
+			*/
+			onClickRemoveSha256(evt){
+				evt.preventDefault();
+				this.$root._post({path:this.productFile, id:this.id}, (data)=>{this.onSuccessRemoveSha256File(data);}, '/p/portfolio/sha256remove.jn/', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c)});
+				return false;
+			},
+			/**
+			 * @description Успешное удаление файла sha256
+			 * @param {Object} data
+			*/
+			onSuccessRemoveSha256File(data){
+				if (!this.$root.defaultFailSendFormListener(data)) {
+					return false;
+				}
+				this.productFile = '';
+				this.sha256 = '';
 			},
 			/**
 			 * @description Успешное добавление статьи
@@ -407,6 +433,21 @@
 					$('#portfolioSaver').toast('show');
 					this.$root.$refs.portfolio.setDataChanges(false);
 				}
+			},
+			/**
+			 * @description Еслт выбран файл работы, но не заполнено sha256 (или наоборот), укстанавливает ошибку
+			 * @param {B421Validators} formInputValidator
+			 * @reurn Boolean false если условие не выполнено
+			*/
+			_validateSga256Inputs(formInputValidator){
+				let jEl = $('#productfileFileImmediately');
+				if ( (this.productFile && !this.sha256) || (!this.productFile && this.sha256) ) {
+					console.log('Detect sha 256 err');
+					formInputValidator.viewSetError(jEl, this.$t('app.require_file_path_and_sha256'));
+					return false;
+				}
+				formInputValidator.viewClearError(jEl);
+				return true;
 			},
 			/**
 			 * @description Неуспешное добавление статьи
@@ -484,7 +525,6 @@
 			 * @description Если ссылается ли лого на удалённый ресурс, делает активной вкладку таба с лого с полем длЯ ввода ссылки
 			*/
 			changeLogoTab() {
-				console.log('this.defaultLogo',  this.defaultLogo );
 				if (this.defaultLogo.indexOf('http') == 0) {
 					$('#logolink-tab').tab('show');
 				} else {

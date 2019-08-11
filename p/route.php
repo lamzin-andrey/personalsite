@@ -182,15 +182,15 @@ class Route {
 			require_once $handler;
 			$this->app = new ProudctPost();
 		}
-		/*if ($baseUrl == '/p/portfolio/inlineimageupload.jn/') {
-			$handler = $sCtrlDir . 'inlineimageupload.php';
-			require_once $handler;
-			$this->app = new PortfolioInlineImageUpload();
-		}*/
 		if ($baseUrl == '/p/portfolio/productupload.jn/') {
 			$handler = $sCtrlDir . 'productupload.php';
 			require_once $handler;
 			$this->app = new PortfolioFileUpload();
+		}
+		if ($baseUrl == '/p/portfolio/sha256remove.jn/') {
+			$handler = $sCtrlDir . 'sha256remove.php';
+			require_once $handler;
+			$this->app = new ProductSha256FileRemove();
 		}
 		
 	}

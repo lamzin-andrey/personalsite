@@ -77,6 +77,7 @@ var locales = {
 			"Edit": "Редактировать",
 			"OK": "OK",
 			"Upload": "Загрузить",
+			"Remove": "Удалить",
 			"SaveCompleted": "Данные успешно сохранены",
 			
             "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
@@ -128,7 +129,8 @@ var locales = {
 			'defaultNoHasProductFileText' : 'Нет файла',
 
 			//portfolio sha256
-			'uploadFile' : 'Загрузить файл'
+			'uploadFile' : 'Загрузить файл',
+			'require_file_path_and_sha256' : 'Необходимо выбрать файл и ввести значение sha256',
         }
     }
 }
