@@ -106,7 +106,10 @@
 						{ 
 							"data": "heading",
 							'render' : function(data, type, row) {
-								return  data;
+								if (row.url) {
+									return  `<a href="${row.url}" target="_blank">${data}</a>`;
+								}
+								return data;
 							}
 						},
 						{
