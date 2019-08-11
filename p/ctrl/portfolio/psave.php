@@ -24,6 +24,7 @@ class ProudctPost extends AdminAuthJson {
 		$this->treq('og_image');
 		$this->treq('sha256');
 		$this->treq('productFile', 'product_file');
+		$this->treq('relatedArticles');
 		$this->breq('hasSelfSection', 'has_self_section');
 		$this->breq('dontCreatePage', 'dont_create_page');
 		
@@ -53,6 +54,7 @@ class ProudctPost extends AdminAuthJson {
 					$sDate = now();
 				}
 			}
+			$this->_saveRelatedArticles($id);
 			//TODO тут на этапе расширения функционала будет наследник
 			$comiErr = '';
 			if (!$this->has_self_section && !$this->dont_create_page) {
@@ -69,6 +71,31 @@ class ProudctPost extends AdminAuthJson {
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}
 		json_error_arr(['errors' => $errors]);
+	}
+	/**
+	 * @description Сохранить данные в таблице portfolio_pages set $this->aRelatedArticles //TODO define it
+	 * TODO тут же создавать фрагмент для вставки в страницу всех работ портфолио
+	*/
+	private function _saveRelatedArticles(int $productId)
+	{
+		$this->aRelatedArticles = json_decode(utils_utf8($this->relatedArticles));
+		
+		if (is_array($this->aRelatedArticles)) {
+			$table = 'portfolio_pages';
+			$aExistsPages = query("SELECT id, page_id FROM {$table} WHERE `work_id` = {$productId}");
+			$aMap = array_column($aExistsPages, 'id', 'page_id');
+			foreach ($this->aRelatedArticles as $oArticleData) {
+				$artId = intval($oArticleData->id);
+				if (isset($aMap[$artId])) {
+					unset($aMap[$artId]);
+				}
+				query("INSERT INTO portfolio_pages (`work_id`, `page_id`) VALUES({$productId}, {$artId}) ON DUPLICATE KEY UPDATE `page_id`=`page_id`");
+			}
+			if (count($aMap)) {
+				$sIdList = join(',', $aMap);
+				query('DELETE FROM ' . $table . ' WHERE id IN(' . $sIdList . ')');
+			}
+		}
 	}
 	/**
 	 * @description Если установлен "Не создавать отдельную страницу" (dontCreatePage) очищает поле url

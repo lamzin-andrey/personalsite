@@ -22,6 +22,16 @@ class Product extends AdminAuthJson {
 		if ($product['og_image'] == '') {
 			$product['og_image'] = DEFAULT_ARTICLE_LOGO;
 		}
+		$product['relatedArticles'] = $this->_getRelatedArticles( $product['id'] );
 		json_ok_arr($product);
+	}
+	
+	/**
+	 * @description Получить идентификаторы связанных статей
+	 * @param int $nProductId
+	*/
+	private function _getRelatedArticles(int $nProductId)
+	{
+		return query("SELECT * FROM portfolio_pages WHERE work_id = {$nProductId}");
 	}
 }

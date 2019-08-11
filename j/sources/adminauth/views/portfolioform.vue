@@ -125,6 +125,20 @@
 	</div>
 </div>         
 <!-- /Logo input -->
+<!-- Articles relations-->
+<!-- 
+	Без tags-changed="newTags => tags = newTags" не заполняется tags при вводе тегов
+	Определять newTags в data не обязательно - всё и без него работает
+-->
+<vue-tags-input
+	v-model="tag"
+	:tags="tags"
+	:autocomplete-items="filteredItems"
+	:add-only-from-autocomplete="true"
+	@tags-changed="newTags => tags = newTags"
+	@before-deleting-tag="onDeleteRelationArticle"
+/>
+<!-- /Articles relations-->
 
         <div class="accordion" id="seoAccord">
 			<div class="card border-bottom">
@@ -182,6 +196,9 @@
 <script>
 	//TODO перерегистрировать локально
     Vue.component('categorytree', require('./portfolio/categorytree.vue'));
+	Vue.component('vuetag', require('@johmun/vue-tags-input'));
+	// import VueTagsInput from '@johmun/vue-tags-input';
+
     
     export default {
         name: 'portfolioform',
@@ -279,7 +296,22 @@
 				noHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
 
 				/** @property {String} sha256 файла */
-				sha256: ''
+				sha256: '',
+
+				/** @property {String} tag */
+				tag: '',
+
+				/** @property {Array} tags */
+				tags: [],
+
+				/** @property {Array} autocompleteItems здесть будут храниться все  */
+				autocompleteItems: [],
+
+				/** @property {String} JSON autocompleteItems представление  */
+				relatedArticles : '',
+
+				/** @property {Array}  relatedArticlesFromServer Для хранения полученных с сервера данных о связанных статьях  */
+				relatedArticlesFromServer : '',
 			};
 			return _data;
 		},
@@ -299,13 +331,21 @@
 				}
 				return this.productFile;
 			},
-			/** @description {String} в зависимости от существования файла работы раскрывает или закрывает аккордион загрузки файла работы */
+			/** @description в зависимости от существования файла работы раскрывает или закрывает аккордион загрузки файла работы
+			 *  @return {String}
+			*/
 			sha256StateCss(){
 				if (this.productFile) {
 					return 'collapse show';
 				}
 				return 'collapse';
-			} 
+			},
+			/** @description Для компонента тагов, передрано из документации http://www.vue-tags-input.com/#/examples/autocomplete */
+			 filteredItems() {
+				return this.autocompleteItems.filter(i => {
+					return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+				});
+			}
 		},
         //
         methods:{
@@ -329,6 +369,9 @@
 				this.hasSelfSection = false;
 				this.sha256 = '';
 				this.productFile = '';
+				this.relatedArticles = '';
+				this.relatedArticlesFromServer = [];
+				this.setRelatedArticles();
 				this.id = 0;
 				
 				//Fix bug when edit the article more then one time...
@@ -350,6 +393,8 @@
 					this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
 					this.hasSelfSection =  parseInt(data.has_self_section) ? true : false;
 					this.productFile = data.product_file;
+					this.relatedArticlesFromServer = data.relatedArticles;
+					this.setRelatedArticles();
 				}, 1);
 				
 			},
@@ -379,7 +424,6 @@
 			 * @description уведомляем приложение, что данные изменились
 			 */
 			setDataChanges() {
-				console.log('articlegor,setDataChanges...');
 				this.$root.$refs.portfolio.setDataChanges(true);
 			},
             /** 
@@ -394,6 +438,7 @@
 					if (!this._validateSga256Inputs(formInputValidator)) {
 						return false;
 					}
+					this.relatedArticles = JSON.stringify(this.tags);
                     this.$root._post(
                         this.$data,
                         (data) => { this.onSuccessAddProduct(data, formInputValidator);},
@@ -443,7 +488,6 @@
 			_validateSga256Inputs(formInputValidator){
 				let jEl = $('#productfileFileImmediately');
 				if ( (this.productFile && !this.sha256) || (!this.productFile && this.sha256) ) {
-					console.log('Detect sha 256 err');
 					formInputValidator.viewSetError(jEl, this.$t('app.require_file_path_and_sha256'));
 					return false;
 				}
@@ -549,13 +593,73 @@
 				if (this.dontCreatePage) {
 					this.hasSelfSection = false;
 				}
-			}
-			
+			},
+			/**
+			 * @description Получение данных о существующих статьях
+			*/
+			onSuccessGetArticlelist(data) {
+				let i;
+				this.autocompleteItems = [];
+				for (i = 0; i < data.data.length; i++) {
+					data.data[i].text = data.data[i].heading;
+					delete data.data[i].heading;
+					this.autocompleteItems.push(data.data[i]);
+				}
+				this.setRelatedArticles();
+			},
+			/** 
+			 * @description Отработает только тогда, когда есть и this.relatedArticles  и this.autocompleteItems
+			*/
+			setRelatedArticles(){
+				if (!this.relatedArticlesFromServer.length || !this.autocompleteItems.length) {
+					this.tags = [];
+					return;
+				}
+				let i, j;
+				for (i = 0; i < this.relatedArticlesFromServer.length; i++) {
+					for (j = 0; j < this.autocompleteItems.length; j++) {
+						if (this.relatedArticlesFromServer[i].page_id == this.autocompleteItems[j].id) {
+							this.tags.push(this.autocompleteItems[j]);
+						}
+					}
+				}
+				if (this.tags.length) {
+					this.relatedArticles = JSON.stringify(this.tags);
+				} else {
+					this.relatedArticles = '';
+				}
+			},
+			/**
+			 * @description Обработка удаления тэга
+			*/
+			onDeleteRelationArticle(evt){
+				let delIndexes = [], i;
+				//TODO try reduce or other new methods
+				for (i = 0; i < this.tags.length; i++) {
+					if (this.tags[i].id == evt.tag.id) {
+						delIndexes.push(i);
+					}
+				}
+				//sort by desc
+				delIndexes.sort((a, b) => {
+					if (a < b) {
+						return 1;
+					}
+					
+				});
+				for (i = 0; i < delIndexes.length; i++) {
+					this.tags.splice(delIndexes[i], 1);
+				}
+			},
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
+			//Настройка live translit url
 			window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/portfolio/', '/');
-            var self = this;
+
+			//Запрос данных наименований статей
+			this.$root._get((data)=>{this.onSuccessGetArticlelist(data);}, '/p/articleslist.jn/?draw=1&start=0&length=1000000', (a, b, c )=>{ this.$root.defaultFailSendFormListener(a, b, c) });
+            
             /*this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';
                 self.isMainMenuVisible  = true;
