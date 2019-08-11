@@ -22,6 +22,8 @@ class ProudctPost extends AdminAuthJson {
 		$this->treq('og_description');
 		$this->treq('og_title');
 		$this->treq('og_image');
+		$this->treq('sha256');
+		$this->treq('productFile', 'product_file');
 		$this->breq('hasSelfSection', 'has_self_section');
 		$this->breq('dontCreatePage', 'dont_create_page');
 		

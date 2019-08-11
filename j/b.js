@@ -47881,6 +47881,14 @@ Vue.component('categorytree', __webpack_require__(79));
 				return window.location.protocol + '//' + window.location.host + this.productFile;
 			}
 			return this.productFile;
+		},
+
+		/** @description {String} в зависимости от существования файла работы раскрывает или закрывает аккордион загрузки файла работы */
+		sha256StateCss: function sha256StateCss() {
+			if (this.productFile) {
+				return 'collapse show';
+			}
+			return 'collapse';
 		}
 	},
 	//
@@ -47905,6 +47913,8 @@ Vue.component('categorytree', __webpack_require__(79));
 			this.og_image = this.defaultSocImage = this.defaultLogoValue;
 			this.dontCreatePage = false;
 			this.hasSelfSection = false;
+			this.sha256 = '';
+			this.productFile = '';
 
 			//Fix bug when edit the article more then one time...
 			setTimeout(function () {
@@ -47920,8 +47930,10 @@ Vue.component('categorytree', __webpack_require__(79));
 				_this.og_title = data.og_title;
 				_this.og_description = data.og_description;
 				_this.og_image = _this.defaultSocImage = data.og_image;
+				_this.sha256 = data.sha256;
 				_this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
 				_this.hasSelfSection = parseInt(data.has_self_section) ? true : false;
+				_this.productFile = data.product_file;
 			}, 1);
 		},
 
@@ -50896,7 +50908,7 @@ var render = function() {
           _c(
             "div",
             {
-              staticClass: "collapse",
+              class: _vm.sha256StateCss,
               attrs: {
                 id: "collapseSha256",
                 "aria-labelledby": "headingSha256",
@@ -50927,9 +50939,11 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("div", { staticClass: "mt-3" }, [
-                    _c("span", { staticClass: "small ml-2" }, [
-                      _vm._v(_vm._s(_vm.noHasProductFileText))
-                    ]),
+                    !_vm.productFile
+                      ? _c("span", { staticClass: "small ml-2" }, [
+                          _vm._v(_vm._s(_vm.noHasProductFileText))
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _vm.productFile
                       ? _c(

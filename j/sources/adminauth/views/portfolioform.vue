@@ -24,7 +24,7 @@
 					</h5>
 				</div>
 
-				<div id="collapseSha256" class="collapse" aria-labelledby="headingSha256" data-parent="#sha256Accord">
+				<div id="collapseSha256" :class="sha256StateCss" aria-labelledby="headingSha256" data-parent="#sha256Accord">
 					<div class="card-body">
 						<inputfileb4 
 							v-model="productFile"
@@ -35,7 +35,7 @@
 							:label="$t('app.uploadFile')" id="productfile" ></inputfileb4>
 
 						<div class="mt-3">
-							<span class="small ml-2">{{ noHasProductFileText }}</span>
+							<span class="small ml-2" v-if="!productFile">{{ noHasProductFileText }}</span>
 							<a class="small ml-2" :href="productFile" target="_blank" v-if="productFile">{{ $t('app.Download') }}</a>
 						</div>
 						
@@ -276,7 +276,7 @@
 				noHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
 
 				/** @property {String} sha256 файла */
-				sha256: '',
+				sha256: ''
 			};
 			return _data;
 		},
@@ -295,7 +295,14 @@
 					return (window.location.protocol + '//' + window.location.host + this.productFile);
 				}
 				return this.productFile;
-			}
+			},
+			/** @description {String} в зависимости от существования файла работы раскрывает или закрывает аккордион загрузки файла работы */
+			sha256StateCss(){
+				if (this.productFile) {
+					return 'collapse show';
+				}
+				return 'collapse';
+			} 
 		},
         //
         methods:{
@@ -317,6 +324,8 @@
 				this.og_image = this.defaultSocImage = this.defaultLogoValue;
 				this.dontCreatePage = false;
 				this.hasSelfSection = false;
+				this.sha256 = '';
+				this.productFile = '';
 				
 				//Fix bug when edit the article more then one time...
 				setTimeout(() => {
@@ -332,8 +341,10 @@
 					this.og_title = data.og_title;
 					this.og_description = data.og_description;
 					this.og_image = this.defaultSocImage = data.og_image;
+					this.sha256 = data.sha256;
 					this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
 					this.hasSelfSection =  parseInt(data.has_self_section) ? true : false;
+					this.productFile = data.product_file;
 				}, 1);
 				
 			},
