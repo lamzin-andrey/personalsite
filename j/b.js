@@ -47277,6 +47277,9 @@ Vue.component('portfolioform', __webpack_require__(77));
 				"columns": [{
 					"data": "heading",
 					'render': function render(data, type, row) {
+						if (row.url) {
+							return '<a href="' + row.url + '" target="_blank">' + data + '</a>';
+						}
 						return data;
 					}
 				}, {
