@@ -63,6 +63,7 @@ $aLang = [
 	'offline'        => 'Не в сети',
 	'user-wrong-password'        => 'Неверный пароль',
 	'user-not-found'        => 'Пользователь с таким email не найден',
+	'User not found'        => 'Пользователь не найден',
 	'file_is_executing_upload_denied'        => 'Файл может содержать вредоносный программный код, загрузка этого файла невозможна.',
 	'SigninFormLabel'        => 'Авторизация',
 	'Change-password'        => 'Настройки авторизации',

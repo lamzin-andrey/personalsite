@@ -21,6 +21,7 @@ class Route {
 		$this->_portfolio();
 		$this->_portfoliocats();
 		$this->_treedemo();
+		$this->_trollkiller();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -65,6 +66,28 @@ class Route {
 			$handler = __dir__ . '/ctrl/logout.php';
 			require_once $handler;
 			$this->app = new Logout();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/trollkiller/
+	*/
+	protected function _trollkiller()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/trollkiller/login.jn/') {
+			$handler = $sCtrlDir . 'tklogin.php';
+			require_once $handler;
+			$this->app = new TrollKillerLogin();
+		}
+		
+		if ($baseUrl == '/p/trollkiller/checkauth.jn/') {
+			$handler = $sCtrlDir . 'tkcheckauth.php';
+			require_once $handler;
+			$this->app = new TrollKillerCheckAuth();
 		}
 	}
 	/**

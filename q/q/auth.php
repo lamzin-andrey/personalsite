@@ -22,7 +22,7 @@ class Auth {
 		 )";
 		$id = query($query);
 		if ($id) {
-			setcookie(AUTH_COOKIE_NAME, $uid, time() + 365 * 24 * 3600, '/');
+			setcookie(AUTH_COOKIE_NAME, $uid, time() + 365 * 24 * 3600, '/', '', true, true);
 		}
 		return $id;
 	}

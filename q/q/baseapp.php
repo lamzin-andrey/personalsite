@@ -37,7 +37,7 @@ class BaseApp {
 			if (
 				$postToken != $token
 				//Для демо-страницы дерева категорий
-				&& !$this->_isNoCsrfPage($postToken)
+				&& !$this->_isNoCsrfPage(strval($postToken))
 			) {
 				die('csrf');
 			}
