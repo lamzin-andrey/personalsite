@@ -313,7 +313,7 @@ function utils_gifResize($srcFilename, $destFilename, $destW, $destH, $defaultTr
  * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
  * @param array of int $color = [0, 0, 0] Цвет бэкграунда. Если переданы bgH и bgW, фон ыне уменьшенного изображения будет залит этим цветом
  * */
-function utils_jpgResize(string $srcFilename, string $destFilename, int $destW, int $destH, int $quality = 80, int $bgW = 0, int $bgH = 0, array $color = [0, 0, 0])
+function utils_jpgResize($srcFilename, $destFilename, $destW, $destH, $quality = 80, $bgW = 0, $bgH = 0, $color = [0, 0, 0])
 {
 	if (!$img = @imagecreatefromjpeg($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
