@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../../q/q/baseapp.php';
 require_once __DIR__ . '/classes/jsongen.php';
 
 if (!function_exists('getallheaders')) {
-	function getallheaders() : array {
+	function getallheaders(){
 		return [];
 	}
 }
