@@ -42,7 +42,7 @@ function json_ok() {
  * @param array $data
  * @param bool $bEncodeAsArray = false
 */
-function json_ok_arr(array $data, bool $bEncodeAsArray = false)
+function json_ok_arr($data, $bEncodeAsArray = false)
 {
 	$data['status'] = 'ok';
 	die(json_encode($data, $bEncodeAsArray ));
