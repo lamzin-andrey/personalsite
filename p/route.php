@@ -95,6 +95,12 @@ class Route {
 			require_once $handler;
 			$this->app = new TrollKillerSaveList();
 		}
+		
+		if ($baseUrl == '/p/trollkiller/createlist.jn/') {
+			$handler = $sCtrlDir . 'tkcreatelist.php';
+			require_once $handler;
+			$this->app = new TrollKillerCreateList();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/portfoliocats/
