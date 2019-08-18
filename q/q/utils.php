@@ -601,7 +601,7 @@ function req($v, $varname = 'REQUEST') {
 /**
  * @desc получить переменную из request
 **/
-function treq($v, $varname = 'REQUEST') : string
+function treq($v, $varname = 'REQUEST')
 {
 	return trim(req($v, $varname));
 }
@@ -806,7 +806,7 @@ function utils_setUrlVar($var, $val) {
 function ireq($key, $scope = 'REQUEST'){
 	return (int)req($key, $scope);
 }
-function breq($key, $scope = 'REQUEST') : bool
+function breq($key, $scope = 'REQUEST')
 {
 	$s = trim(req($key, $scope));
 	$r = ($s == 'true' ? true : false);
@@ -1102,7 +1102,7 @@ function utils_header_utf8()
 /**
  * @description Вернет true если функция вызвана в процессе выполнения ajax запроса
 */
-function utils_isXhr() : bool
+function utils_isXhr()
 {
 	if (isset($_REQUEST['xhr']) || isset($_REQUEST['xhr']) ) {
 		return true;
