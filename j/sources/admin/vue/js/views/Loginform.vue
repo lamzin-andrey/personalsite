@@ -79,7 +79,12 @@
             onSuccessLogin(data, formInputValidator) {
                 if (data.status == 'error') {
                     return this.onFailLogin(data, null, null, formInputValidator);
-                }
+				}
+				let sReferer = this.$root.storage('sReferer');
+				if (sReferer) {
+					window.location.href = sReferer;
+					return;
+				}
                 window.location.href = '/p/';
             },
             /**
@@ -113,7 +118,7 @@
                 self.isHelpWndVisible   = false;
                 self.nStep = self.$root.nStep;
             })/**/
-            //console.log('I mounted!');
+            
         }
     }
 </script>

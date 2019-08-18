@@ -10,9 +10,9 @@ class Signup extends BaseApp {
 	public $isResetform = false;
 	
 	public function __construct() {
-		
 		$this->table = 'ausers';
 		$this->formHeading = 'Register_now';
+		$this->referer = a($_SERVER, 'HTTP_REFERER');
 		parent::__construct();
 		$url = $_SERVER['REQUEST_URI'];
 		if ($url == '/p/signup.jn/' && count($_POST)) {
@@ -68,7 +68,7 @@ class Signup extends BaseApp {
 		} elseif(!utils_isJs()){
 			$id = dbvalue('SELECT id FROM ' . $this->table . ' WHERE email = \'' . $this->email . '\' LIMIT 1');
 			if ($id) {
-				$errors['email'] = l('user-already-exists', l('Email'));
+				$errors['email'] = l('user-already-exists', false, l('Email'));
 			}
 		}
 		if ($this->passwordLC != $this->password) {
@@ -116,19 +116,19 @@ class Signup extends BaseApp {
 			return true;
 		}
 		if (!$this->name) {
-			$errors['name']       = l('field-required', l('First_name'));
+			$errors['name']       = l('field-required', false, l('First_name'));
 		}
 		if (!$this->surname) {
-			$errors['surname']    = l('field-required', l('Last_name'));
+			$errors['surname']    = l('field-required', false, l('Last_name'));
 		}
 		if (!$this->email) {
-			$errors['email']      = l('field-required', l('Email'));
+			$errors['email']      = l('field-required', false, l('Email'));
 		}
 		if (!$this->password) {
-			$errors['passwordL']  = l('field-required', l('Password'));
+			$errors['passwordL']  = l('field-required', false, l('Password'));
 		}
 		if (!$this->passwordLC) {
-			$errors['passwordLC'] = l('field-required', l('Password_repeat'));
+			$errors['passwordLC'] = l('field-required', false, l('Password_repeat'));
 		}
 		if (!$this->agree) {
 			$errors['agree']      = l('agree-required');

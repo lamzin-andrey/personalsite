@@ -170,7 +170,7 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-            //console.log('Regform: I mounted to!');
+            
         }
     }
 </script>

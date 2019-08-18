@@ -28,7 +28,7 @@ class BaseApp {
 		@date_default_timezone_set('Europe/Moscow');
 		$token = sess('autoken');
 		if (!$token) {
-			$token = md5(time() . $_SERVER['HTTP_USER_AGENT'] . uniqid(strval(time()), true));
+			$token = md5(time() . a($_SERVER, 'HTTP_USER_AGENT') . uniqid(strval(time()), true));
 			sess('autoken', $token);
 		}
 		$this->token = $token;
@@ -234,6 +234,26 @@ class BaseApp {
 	{
 		return false;
 	}
+	/**
+	 * @description Удалит записи из $this->table по списку id
+	*/
+	public function deleteByIdList($aIdList, $bDoCheckInt = false) {
+		if ($bDoCheckInt) {
+			$aNew = [];
+			foreach($aIdList as $sId) {
+				$n = intval($sId);
+				if ($n) {
+					$aNew[] = intval($sId);
+				}
+			}
+			$aIdList = $aNew;
+		}
+		if (is_array($aIdList) && count($aIdList)) {
+			$sIdList = join(',', $aIdList);
+			query('DELETE FROM '. $this->table . ' WHERE id IN(' . $sIdList . ')');
+		}
+	}
+	
 	
 }
 

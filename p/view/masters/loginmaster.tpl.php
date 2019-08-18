@@ -19,6 +19,7 @@
   <link href="/s/aauth.css" rel="stylesheet">
   <link href="/p/.css" rel="stylesheet">
 	<script src="/j/swinstall.js"></script>
+	<script>window.sReferer = "<?php echo o($app, 'referer') ?>";</script>
 </head>
 
 <body class="bg-gradient-primary">

@@ -45,9 +45,12 @@ window.app = new Vue({
    /**
     * @description Событие, наступающее после связывания el с этой логикой
    */
-   mounted() {
-    
-   },
+	mounted() {
+		let safeReferer = this.storage('sReferer');
+		if (window.sReferer && !safeReferer) {
+			this.storage('sReferer', window.sReferer);
+		}
+	},
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
