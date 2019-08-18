@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__ . '/../../../q/q/baseapp.php';
+require_once __DIR__ . '/../../../q/q/config.php';
+require_once __DIR__ . '/../../../q/q/mysql.php';
+require_once __DIR__ . '/../../../q/q/utils.php';
 require_once __DIR__ . '/classes/jsongen.php';
 
 if (!function_exists('getallheaders')) {
@@ -11,12 +13,11 @@ if (!function_exists('getallheaders')) {
 /**
  * @class Task_TrollKillerCreateList - генерация JSON файлов для всех пользователей
 */
-class Task_TrollKillerCreateList extends BaseApp {
+class Task_TrollKillerCreateList {
 	public $uid = 0;
 	
 	public function __construct()
 	{
-		parent::__construct();
 		$this->table = 'trollkiller';
 		
 		$aRows = query('SELECT DISTINCT uid FROM ' . $this->table . ' ORDER BY id');
