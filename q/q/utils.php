@@ -225,7 +225,7 @@ function now($ignore_summer_time = false) {
  * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
  * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
-function utils_pngResize(string $srcFilename, string $destFilename, int $destW, int $destH, int $compression = 9, array $defaultTransparentColor = [0, 0, 0], int $bgW = 0, int $bgH = 0, bool $withAlpha = true) {
+function utils_pngResize($srcFilename, $destFilename, $destW, $destH, $compression = 9, $defaultTransparentColor = [0, 0, 0], $bgW = 0, $bgH = 0, $withAlpha = true) {
 	if (!$img = @imagecreatefrompng($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
@@ -270,7 +270,7 @@ function utils_pngResize(string $srcFilename, string $destFilename, int $destW, 
  * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
  * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
-function utils_gifResize(string $srcFilename, string $destFilename, int $destW, int $destH, array $defaultTransparentColor = [0, 0, 0], int $bgW = 0, int $bgH = 0, bool $withAlpha = true) {
+function utils_gifResize($srcFilename, $destFilename, $destW, $destH, $defaultTransparentColor = [0, 0, 0], $bgW = 0, $bgH = 0, $withAlpha = true) {
 	if (!$img = @imagecreatefromgif($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
@@ -350,7 +350,7 @@ function utils_jpgResize(string $srcFilename, string $destFilename, int $destW, 
  * @param array $color [r,g,b]
  * @param bool $withAlpha = true
 */
-function utils_resizeAndAddBg(string $srcPath, string $destPath, int $nWidth, int $nHeight, array $color, bool $withAlpha = true)
+function utils_resizeAndAddBg($srcPath, $destPath, $nWidth, $nHeight, $color, $withAlpha = true)
 {
 	if (!file_exists($srcPath)) {
 		return;
@@ -806,7 +806,7 @@ function utils_setUrlVar($var, $val) {
 function ireq($key, $scope = 'REQUEST'){
 	return (int)req($key, $scope);
 }
-function breq(string $key, string $scope = 'REQUEST') : bool
+function breq($key, $scope = 'REQUEST') : bool
 {
 	$s = trim(req($key, $scope));
 	$r = ($s == 'true' ? true : false);
@@ -819,7 +819,7 @@ function breq(string $key, string $scope = 'REQUEST') : bool
  * @param string $varname = 'REQUEST'
  * @return array
 */
-function areq(string $key, string $functionName = 'strval') :array
+function areq($key, $functionName = 'strval')
 {
 	$a = [];
 	$data = $_REQUEST;
@@ -1066,7 +1066,7 @@ function utils_checkPassword($s) {
  * Если символ не найден в $aPairs но его нижний регистр найден, возвращает yN где N - код в aPairs
  * Если символ не найден в $aPairs возвращает его в utf8
 */
-function utils_cyrcompress(string $s) : string
+function utils_cyrcompress($s)
 {
 	$pairs = '{"pairs":{"0":"\u0430","1":"\u0431","2":"\u0432","3":"\u0433","4":"\u0434","5":"\u0435","6":"\u0451","7":"\u0436","8":"\u0437","9":"\u0438","a":"\u0439","b":"\u043a","c":"\u043b","d":"\u043c","e":"\u043d","f":"\u043e","g":"\u043f","h":"\u0440","i":"\u0441","j":"\u0442","k":"\u0443","l":"\u0444","m":"\u0445","n":"\u0446","o":"\u0447","p":"\u0448","q":"\u0449","r":"\u044a","s":"\u044b","t":"\u044c","u":"\u044d","v":"\u044e","w":"\u044f"}}';
 	$aPairs = json_decode($pairs, true);
