@@ -30,13 +30,13 @@ class Task_TrollKillerCreateList extends BaseApp {
 		}
 	}
 	
-	private function setOffset(int $n)
+	private function setOffset($n)
 	{
 		$file = $this->getOffsetFileName();
 		file_put_contents($file, $n);
 	}
 	
-	private function getOffset() : int
+	private function getOffset()
 	{
 		$file = $this->getOffsetFileName();
 		if (!file_exists($file)) {
@@ -45,7 +45,7 @@ class Task_TrollKillerCreateList extends BaseApp {
 		return intval(file_get_contents($file));
 	}
 	
-	private function getOffsetFileName() : string
+	private function getOffsetFileName()
 	{
 		return __DIR__ . '/cache/offset.txt';
 	}

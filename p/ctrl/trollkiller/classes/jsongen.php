@@ -10,7 +10,7 @@ class JSONGen {
 	 * @description Генерирует json файл для пользователя trollkiller $nUid
 	 * @param int $nUid
 	*/
-	public static function create(int $nUid)
+	public static function create($nUid)
 	{
 		$table = 'trollkiller';
 		$uid = $nUid;
@@ -36,7 +36,7 @@ class JSONGen {
 	 * @return string
 	*/
 
-	private static function _patchSql(string $defaultSql, int $nUid) : string
+	private static function _patchSql($defaultSql, $nUid)
 	{
 		$aRows = query('SELECT subject_id AS id FROM trollkiller_banlists_rel WHERE client_id = ' . $nUid, $nRows);
 		if ($nRows) {
