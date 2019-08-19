@@ -1129,3 +1129,16 @@ function utils_crossOrigin()
 	//header('Access-Control-Allow-Origin: *');
 	header("Access-Control-Allow-Origin: *");
 }
+function utils_createDir($sDir)
+{
+	$a = explode('/', $sDir);
+	$aB = ['/'];
+	foreach ($a as $s) {
+		$aB[] = $s;
+		$sPath = join('', $aB);
+		if (!file_exists($sPath)) {
+			@mkdir($sPath, 755);
+		}
+		$aB[] = '/';
+	}
+}

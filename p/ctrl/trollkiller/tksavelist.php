@@ -10,12 +10,21 @@ class TrollKillerSaveList extends OpenApp {
 		parent::__construct();
 		$this->table = 'trollkiller';
 		$this->treq('d');
+		$this->treq('u');
+		
 		$uid = Auth::getUid();
 		if (!$uid) {
 			json_error('msg', l('Signin'));
 		}
+		
 		$this->d = utils_utf8($this->d);
 		$aData = json_decode($this->d);
+		
+		$this->u = utils_utf8($this->u);
+		$oUserData = json_decode($this->u);
+		
+		$this->_saveUserData($oUserData, $uid);
+		
 		if (!$aData || ( !is_array($aData) && !is_object($aData) ) ) {
 			json_error('msg', l('Invalid data'));
 		}
@@ -56,5 +65,62 @@ class TrollKillerSaveList extends OpenApp {
 		}
 		
 		json_ok('msg', "nSuccess = {$nSuccess}");
+	}
+	
+	private function _saveUserData(StdClass $oUserData, int $uid)
+	{
+		$nAMailId = intval(str_replace(['/profile/id', '/'], ['', ''], $oUserData->link) );
+		$sName   = utils_cp1251($oUserData->name);
+		$sImg = $this->_createImage(strval($oUserData->img), $nAMailId);
+		$sTail = ' `uid` = `uid` ';
+		
+		if ($sImg) {
+			$sTail = ' `imgpath` = \'' . $sImg . '\' ';
+		}
+		
+		$sql = 'INSERT INTO trollkiller_userinfo
+				(`a_mail_id`, `imgpath`, `name`, `uid`) 
+			VALUES
+				(' . $nAMailId . ', \'' . $sImg . '\', \'' . db_safeString($sName) . '\', ' . $uid . ')
+				ON DUPLICATE KEY UPDATE ' . $sTail;
+		query($sql);
+	}
+	/**
+	 * @description
+	 * @param string $sImg
+	 * @return string
+	*/
+	private function _createImage(string $sImg, int $nAMailId) : string
+	{
+		$sImg = trim($sImg);
+		if (!$sImg || !$nAMailId) {
+			return '';
+		}
+		$a = explode(',',  $sImg);
+		if (a($a, 1)) {
+			$data = base64_decode($a[1]);
+			$sDir = DOC_ROOT . '/i/' . date('Y') . '/' . date('m') ;
+			utils_createDir($sDir);
+			$sFilename = $sDir . '/' . $nAMailId . '.tmp' ;
+			file_put_contents($sFilename, $data);
+			$aInfo = getImageSize($sFilename);
+			if ($mime = a($aInfo, 'mime')) {
+				$ext = 'jpg';
+				switch ($mime) {
+					case 'image/png' :
+						$ext = 'png';
+						break;
+					case 'image/gif' :
+						$ext = 'gif';
+						break;
+				}
+				$sDestFile = str_replace('.tmp', ('.' . $ext), $sFilename);
+				rename($sFilename, $sDestFile);
+				return str_replace(DOC_ROOT, '', $sDestFile);
+			} else {
+				@unlink($sFilename);
+			}
+		}
+		return '';
 	}
 }
