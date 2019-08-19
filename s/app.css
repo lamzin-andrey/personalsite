@@ -29,3 +29,24 @@
 .u-ml-6 {
 	margin-left:3.0rem;
 }
+
+
+.u-text-indent-1 {
+	text-indent: 0.25rem;
+}
+
+.u-text-indent-2 {
+	text-indent: 0.5rem;
+}
+
+.u-text-indent-3 {
+	text-indent: 1rem;
+}
+
+.u-text-indent-4 {
+	text-indent: 1.5rem;
+}
+
+.u-text-indent-5 {
+	text-indent: 3.0rem;
+}
