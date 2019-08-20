@@ -21,8 +21,10 @@ class Task_TrollKillerTop10 {
 	
 	public function __construct()
 	{
+		global $sLangDir;
+		$sLangDir = __DIR__ . '/../../lang';
 		$this->table = 'trollkiller';
-		$sql = 'SELECT t.uid, COUNT(t.id) AS cnt, tui.name, tui.imgpath, u.name, u.surname
+		$sql = 'SELECT t.uid, COUNT(t.id) AS cnt, tui.name, tui.imgpath, u.name AS dname, u.surname
 			FROM trollkiller AS t 
 			
 			LEFT JOIN trollkiller_userinfo AS tui ON tui.uid = t.uid
@@ -33,7 +35,8 @@ class Task_TrollKillerTop10 {
 		
 		$aData = query($sql);
 		$oCompiler = new PageTop10Compiler();
-		$oCompiler->compile($aData);
+		$oCompiler->aData = &$aData;
+		$oCompiler->compile();
 	}
 	
 	

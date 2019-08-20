@@ -64,19 +64,7 @@ class Auth {
 			$cname = $_COOKIE[AUTH_COOKIE_NAME];
 			$row = dbrow("SELECT name, surname FROM {$t} WHERE guest_id = '{$cname}'", $nR);
 			if ($nR) {
-				$sName = trim($row['name']);
-				$surname = trim($row['surname']);
-				
-				if ($sName && $surname) {
-					return ($sName . ' ' . $surname);
-				}
-				
-				if ($sName) {
-					return ($sName);
-				}
-				if ($surname) {
-					return ($surname);
-				}
+				return utils_getUserDisplayName($row);
 			}
 		}
 		return '';

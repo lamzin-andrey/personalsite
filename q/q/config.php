@@ -12,8 +12,11 @@ define('SQL_EMPTY_STR', '\'\'');
 
 //define('APP_COOKIE_NAME', 'apid');
 
-
-define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
+if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT']) {
+	define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
+} else {
+	define('DOC_ROOT', __DIR__ . '/../..');
+}
 define('ROOT', '/');
 define('SCHEME', 'http://');
 

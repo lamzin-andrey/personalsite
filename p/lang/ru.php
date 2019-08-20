@@ -1,6 +1,8 @@
 <?php
 $aLang = [
 	'Register_now'         => 'Регистрация',
+	'at'         => 'в',
+	'Updated'         => 'Обновлено',
 	'Signin'         => 'Войдите',
 	'List'         	 => 'Список',
 	'Search for...'	=> 'Поиск',
@@ -86,5 +88,16 @@ $aLang = [
 	// /Article form
 	
 	//demo tree
-	'Owner of the site do not allow for delete  this category.  You can delete only you created  categories.' => 'Владелец сайта не разрешает удалять эту категорию. Вы можете удалить только созданные вами категории.'
+	'Owner of the site do not allow for delete  this category.  You can delete only you created  categories.' => 'Владелец сайта не разрешает удалять эту категорию. Вы можете удалить только созданные вами категории.',
+	
+	//Trollkiller top10 tpl
+	'Top 10 Troll Killers' => 'Top-10 пользователей TrollKiller',
+	'List a most active Troll Killers' => 'Список самых активных пользователей ТrollKiller',
+	'Top 10 active Troll Killers' => 'Топ 10 активных троллькиллеров',
+	
+	//Trollkiller user tpl
+	'Trolls banned by %' => 'Список троллей, забаненых пользователем %',
+	'Users_trolls' => 'Тролли пользователя %',
+	'Trolls banned by user % using TrollKiller' => 'Тролли забаненные пользователем % с помощью TrollKiller',
+	
 ];

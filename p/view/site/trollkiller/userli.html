@@ -1,0 +1,25 @@
+<li class="w100 border-bottom pb-2 mb-2">
+	<div class="media">
+		<img src="/i/troll64.jpg" class="f-left d-inline-block mr-2 rounded-circle">
+		<div class="media-body">
+			<div class="d-inline-block mr-2 float-left">
+				<div>{NAME}</div>
+			</div>
+			<div class="float-right d-inline-block mr-2">
+				<a href="https://otvet.mail.ru/profile/id{MRID}" target="_blank">Смотреть профиль тролля на ответы@mail.ru</a>
+				
+				<p class="mt-3">
+				  <button class="btn btn-danger btn-sm" type="button" data-toggle="collapse" data-target="#reason{ID}" aria-expanded="false" aria-controls="reason">
+					Причина бана (может содержать ненормативную лексику!)
+				  </button>
+				</p>
+				<div class="collapse" id="reason{ID}">
+				  <div class="card card-body">
+					{REASON}
+				  </div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</li>

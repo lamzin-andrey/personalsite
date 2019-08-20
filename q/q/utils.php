@@ -1142,3 +1142,28 @@ function utils_createDir($sDir)
 		$aB[] = '/';
 	}
 }
+/**
+ * @description Вернет имя и фамилию из aRow если оба поля заполнены. Если заполнено только имя, вернет имя, если заполнена только фамилия, вернет фамилию
+ * @param array $aRow
+ * @param string $sNameFieldName = 'name'
+ * @param string $surNameFieldName = 'surname'
+ * @return string
+*/
+function utils_getUserDisplayName($aRow, $sNameFieldName = 'name', $surnameFieldName = 'surname')
+{
+	$sName = trim($row[$sNameFieldName]);
+	$surname = trim($row[$surnameFieldName]);
+	
+	return trim( $sName . ' ' . $surname );
+	/*if ($sName && $surname) {
+		return ($sName . ' ' . $surname);
+	}
+	
+	if ($sName) {
+		return ($sName);
+	}
+	if ($surname) {
+		return ($surname);
+	}
+	return '';*/
+}

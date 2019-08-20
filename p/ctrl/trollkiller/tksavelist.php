@@ -74,6 +74,10 @@ class TrollKillerSaveList extends OpenApp {
 		$sImg = $this->_createImage(strval($oUserData->img), $nAMailId);
 		$sTail = ' `uid` = `uid` ';
 		
+		if (!$nAMailId) {
+			return;
+		}
+		
 		if ($sImg) {
 			$sTail = ' `imgpath` = \'' . $sImg . '\' ';
 		}
