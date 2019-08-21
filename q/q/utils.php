@@ -1151,8 +1151,8 @@ function utils_createDir($sDir)
 */
 function utils_getUserDisplayName($aRow, $sNameFieldName = 'name', $surnameFieldName = 'surname')
 {
-	$sName = trim($row[$sNameFieldName]);
-	$surname = trim($row[$surnameFieldName]);
+	$sName = trim($aRow[$sNameFieldName]);
+	$surname = trim($aRow[$surnameFieldName]);
 	
 	return trim( $sName . ' ' . $surname );
 	/*if ($sName && $surname) {
