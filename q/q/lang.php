@@ -1,6 +1,6 @@
 <?php
-
-function l(string $s, bool $skipConvertEncoding = false) : string
+//PHP 5.6 !
+function l($s, $skipConvertEncoding = false)
 {
 	$lang = 'ru';
 	if (isset($_COOKIE['flang'])) {
