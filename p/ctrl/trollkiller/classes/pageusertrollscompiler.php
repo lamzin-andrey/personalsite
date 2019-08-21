@@ -20,7 +20,7 @@ class PageUserTrollsCompiler extends CPageCompiler {
 	 * @param array $aData
 	 * @return string
 	*/
-	public function compile()
+	public function compile($bSaveNow = true)
 	{
 		$sName = $this->sName;
 		$nUid = $this->nUid;
@@ -31,11 +31,13 @@ class PageUserTrollsCompiler extends CPageCompiler {
 		
 		$aData = query('SELECT * FROM trollkiller WHERE uid = ' . $nUid . ' ORDER BY id DESC');
 		$this->_setContent($aData);
-		$s = parent::compile();
+		$s = parent::compile(false);
 		$s = str_replace('{ALERT}', file_get_contents(DOC_ROOT . '/p/view/site/trollkiller/useralert.html'), $s);
 		$sFolder = DOC_ROOT . '/portfolio/web/userscripts/trollkiller/user/' . $nUid;
-		utils_createDir($sFolder);
-		file_put_contents($sFolder . '/index.html', $s);
+		//utils_createDir($sFolder);
+		//file_put_contents($sFolder . '/index.html', $s);
+		$this->outputFile = $sFolder . '/index.html';
+		$this->_save($s);
 		return $s;
 	}
 	

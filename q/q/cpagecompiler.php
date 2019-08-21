@@ -13,6 +13,7 @@ class CPageCompiler {
 	public $ogDescription = '';
 	public $ogImage = '';
 	public $displayDate = '';
+	public $outputFile = '';
 	/** @property string canonicalUrl  <link rel="canonical" href="scheme://host/$this->canonicalUrl"/>   */
 	public $canonicalUrl = '';//CANONICAL_URL
 	
@@ -24,7 +25,7 @@ class CPageCompiler {
 	 * @return string
 	*/
 
-	public function compile()
+	public function compile($bSaveNow = true)
 	{
 		$s = file_get_contents($this->tpl);
 		$s = str_replace('{TITLE}', $this->title, $s);
@@ -62,6 +63,28 @@ class CPageCompiler {
 		} else {
 			$s = str_replace('<!--OGIMAGE -->', '', $s);
 		}
+		
+		if ($bSaveNow && $this->outputFile) {
+			$this->save_($s);
+		}
+		
 		return $s;
 	}
+	/**
+	 * @description
+	 * @param string $s
+	*/
+	protected function _save($s)
+	{
+		$sp = $this->outputFile . '.tmp';
+		$a = explode('/', $sp);
+		unset($a[count($a) - 1]);
+		$sDir = join('/', $a);
+		if (!file_exists($sDir)) {
+			utils_createDir($sDir);
+		}
+		file_put_contents($sp, $s);
+		rename($sp, $this->outputFile);
+	}
+	
 }

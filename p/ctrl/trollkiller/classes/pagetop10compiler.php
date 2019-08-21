@@ -27,13 +27,14 @@ class PageTop10Compiler extends CPageCompiler {
 	 * @param array $aData
 	 * @return string
 	*/
-	public function compile()
+	public function compile($bSaveNow = true)
 	{
 		$aData = $this->aData;
 		$this->_setContent($aData);
-		$s = parent::compile();
+		$this->outputFile = DOC_ROOT . '/portfolio/web/userscripts/trollkiller/list/index.html';
+		$s = parent::compile(false);
 		$s = str_replace('{ALERT}', '', $s);
-		file_put_contents(DOC_ROOT . '/portfolio/web/userscripts/trollkiller/list/index.html', $s);
+		$this->_save($s);
 		return $s;
 	}
 	

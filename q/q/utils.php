@@ -1127,7 +1127,7 @@ function utils_isXhr()
 function utils_crossOrigin()
 {
 	//header('Access-Control-Allow-Origin: *');
-	header("Access-Control-Allow-Origin: *");
+	header('Access-Control-Allow-Origin: *');
 }
 function utils_createDir($sDir)
 {
