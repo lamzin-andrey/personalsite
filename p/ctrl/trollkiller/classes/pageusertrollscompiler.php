@@ -32,7 +32,7 @@ class PageUserTrollsCompiler extends CPageCompiler {
 		$aData = query('SELECT * FROM trollkiller WHERE uid = ' . $nUid . ' ORDER BY id DESC');
 		$this->_setContent($aData);
 		$s = parent::compile(false);
-		$s = str_replace('{ALERT}', file_get_contents(DOC_ROOT . '/p/view/site/trollkiller/useralert.html'), $s);
+		$s = str_replace('{ALERT}', str_replace('{NAME}', $sName, file_get_contents(DOC_ROOT . '/p/view/site/trollkiller/useralert.html') ), $s);
 		$sFolder = DOC_ROOT . '/portfolio/web/userscripts/trollkiller/user/' . $nUid;
 		//utils_createDir($sFolder);
 		//file_put_contents($sFolder . '/index.html', $s);

@@ -66,15 +66,20 @@ class TrollKillerSaveList extends OpenApp {
 		
 		json_ok('msg', "nSuccess = {$nSuccess}");
 	}
-	
+	/**
+	 * @description
+	 * @param StdClass $oUserData
+	 * @param int $uid
+	*/
 	private function _saveUserData(StdClass $oUserData, int $uid)
 	{
-		$nAMailId = intval(str_replace(['/profile/id', '/'], ['', ''], $oUserData->link) );
+		$nAMailId = intval(str_replace(['/profile/id', 'profile/id', '/'], ['', '', ''], $oUserData->link) );
 		$sName   = utils_cp1251($oUserData->name);
 		$sImg = $this->_createImage(strval($oUserData->img), $nAMailId);
 		$sTail = ' `uid` = `uid` ';
 		
 		if (!$nAMailId) {
+			json_error('msg', 'No mail Id!', 'link', $oUserData->link);
 			return;
 		}
 		
