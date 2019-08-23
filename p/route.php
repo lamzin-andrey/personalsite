@@ -83,6 +83,11 @@ class Route {
 			require_once $handler;
 			$this->app = new TrollKillerLogin();
 		}
+		if ($baseUrl == '/p/trollkiller/logout.jn/') {
+			$handler = $sCtrlDir . 'tklogout.php';
+			require_once $handler;
+			$this->app = new TrollKillerLogout();
+		}
 		
 		if ($baseUrl == '/p/trollkiller/checkauth.jn/') {
 			$handler = $sCtrlDir . 'tkcheckauth.php';
@@ -100,6 +105,16 @@ class Route {
 			$handler = $sCtrlDir . 'tkcreatelist.php';
 			require_once $handler;
 			$this->app = new TrollKillerCreateList();
+		}
+		if ($baseUrl == '/p/trollkiller/addrel.jn/') {
+			$handler = $sCtrlDir . 'tkaddrel.php';
+			require_once $handler;
+			$this->app = new TrollKillerAddRelation();
+		}
+		if ($baseUrl == '/p/trollkiller/delrel.jn/') {
+			$handler = $sCtrlDir . 'tkdelrel.php';
+			require_once $handler;
+			$this->app = new TrollKillerDeleteRelation();
 		}
 	}
 	/**

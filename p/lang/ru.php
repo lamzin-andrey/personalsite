@@ -100,4 +100,7 @@ $aLang = [
 	'Users_trolls' => 'Тролли пользователя %',
 	'Trolls banned by user % using TrollKiller' => 'Тролли забаненные пользователем % с помощью TrollKiller',
 	
+	//TrollKiller add / delete relation
+	'Need auth' => 'Для этого необходимо авторизоваться'
+	
 ];

@@ -33,7 +33,7 @@ class CPageCompiler {
 		$s = str_replace('{HEADING}', $this->heading, $s);
 		
 		$s = str_replace('{CONTENT}', $this->content, $s);
-		$s = str_replace('{DATEENG}', date('Y-m-d H:i"s'), $s);
+		$s = str_replace('{DATEENG}', date('Y-m-d H:i:s'), $s);
 		$s = str_replace('{DATERUS}', $this->displayDate, $s);
 		$s = str_replace('{CANONICAL_URL}', $this->canonicalUrl, $s);
 		

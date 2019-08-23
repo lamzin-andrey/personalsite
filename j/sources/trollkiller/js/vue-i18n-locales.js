@@ -79,18 +79,8 @@ var locales = {
 			"Upload": "Загрузить",
 			"Remove": "Удалить",
 			"SaveCompleted": "Данные успешно сохранены",
-			
-            "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
-            "Click_Ok_button_for_remove": "Нажмите OK для удаления",
-            "Information": "Информация"
-            ,
-            "Passsword": "Пароль",
 
-            //Form articles
             "Title": "Тайтл страницы",
-            "Url": "Путь к файлу статьи",
-            "Heading": "Заголовок статьи",
-            "Content": "Статья",
             "SelectLogo": "Логотип",
 			"isMakeTransparentBg": "Прозрачный фон",
 			"Sections": "Категория",
@@ -98,42 +88,21 @@ var locales = {
 			"Click_Ok_button_for_continue": "Нажмите OK для продолжения",
 			"SelectOgImage": "Соц. сети",
 			"insertImage": "Вставить ссылку на изображение",
-			"Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи",
-
-			//List Articles
-
-			//List Category Articles
-			"Other_category_requested_for_edit": "Уже запрошены для редактирования данные другой категории",
-			"Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию",
-
-			//Portfolio list
-			'Worklist' : 'Список работ',
-			Other_product_requested_for_edit : 'Уже запрошены для редактирования данные другой работы',
-			Are_You_Sure_drop_Product : 'Вы действительно хотите удалить работу',
-
-			//treeview
-			'Delete_node' : 'Удалить категорию',
-			'Add_node' : 'Добавить категорию',
-			'Rename_node' : 'Переименовать категорию',
+			
+            "Are_You_Sure_drop_Article": "Вы действительно хотите удалить статью",
+            "Click_Ok_button_for_remove": "Нажмите OK для удаления",
+            "Information": "Информация",
+			"Passsword": "Пароль",
 			'Nothing_select' : 'Ничего не выбрано',
-			'Add_request_already_sended_wait' : 'Запрос на добавление пункта меню уже отправлен, дождитесь его выплолнения',
-
-			//portfolio logo uploader
-			'Logo_url' : 'Url лого',
-			'Upload_Logo' : 'Загрузить лого',
-			'Upload_Logo' : 'Загрузить лого',
-
-			//portfolio urlpage props checkboxes
-			'dontCreatePage' : 'Не создавать отдельную страницу',
-			'hasSelfSection' : 'Продукт имеет отдельный раздел на сайте',
 			'defaultNoHasProductFileText' : 'Нет файла',
-
-			//portfolio sha256
 			'uploadFile' : 'Загрузить файл',
-			'require_file_path_and_sha256' : 'Необходимо выбрать файл и ввести значение sha256',
+			'ManageLink' : 'Управление',
+			'Unuse_Expiriens' : 'Не использовать этот опыт',
+			'Use_Expiriens' : 'Использовать этот опыт',
+			'Wait_load_Data' : 'Попробуйте ещё раз через секунду',
+			'Need_Auth' : 'Необходимо автоизоваться',
+			
 
-			//portfolio articles relations
-			'bindArticle' : 'Связать статью',
         }
     }
 }
