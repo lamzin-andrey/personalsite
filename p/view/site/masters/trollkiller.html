@@ -13,7 +13,7 @@
 		<link rel="canonical" href="https://andryuxa.ru{CANONICAL_URL}"/>
 	</head>
 	<body>
-		<div class="container u-full-width">
+		<div class="container u-full-width" id="ktapp">
 			<header>
 				<div class="row">
 					<div class="col">
@@ -35,6 +35,9 @@
 				<ul class="navbar-nav mr-auto">
 				  <li class="nav-item active">
 					<a class="nav-link" href="/portfolio/web/userscripts/trollkiller/signup/">Регистрация</a>
+				  </li>
+				  <li class="nav-item active">
+					<a class="nav-link" href="javascript:alert('Сейчас загрузимся...');">Вход</a>
 				  </li>
 				  <li class="nav-item">
 					<a class="nav-link" href="/portfolio/web/userscripts/trollkiller/list/">Топ-10</a>
@@ -124,11 +127,10 @@
 				
 			</div>
 		
-        <script src="/j/jquery-3.3.1.slim.min.js"></script>
+        <!--script src="/j/jquery-3.3.1.slim.min.js"></script--><!-- Try incllude in kt.min.js -->
+        <script src="/j/sources/trollkiller/tk.js"></script>
         <script src="/j/bootstrap4.2.1.min.js"></script>
         <script src="/j/popper1.14.6.min.js"></script>
-        <script src="/j/prism/0.js"></script>
-        <script src="/j/app.js"></script> 
         <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
 	</body>
 </html>
