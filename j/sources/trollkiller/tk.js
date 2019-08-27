@@ -249,6 +249,9 @@ Vue.component('b4confirmdlg', __webpack_require__(16));
 //Компонент вместо стандартного alert  TODO тут просто проверим, чего и как
 Vue.component('b4alertdlg', __webpack_require__(19));
 
+//Компонент для модального логина
+Vue.component('logindlg', __webpack_require__(28));
+
 //Компонент списка троллейбусов, на блэклисты которых подписан пользователь
 Vue.component('relslistblock', __webpack_require__(22));
 
@@ -336,7 +339,6 @@ window.app = new Vue({
 				this.$refs.relsListBlock.setList(this.aRels); //TODO доделать для непустого списка
 				this.setExpiriensButtonLabel(data.l);
 			} else {
-				//TODO
 				//Change link to show popup on click
 				this.uid = 0;
 				this._isUseExpiriens = false;
@@ -353,7 +355,8 @@ window.app = new Vue({
 			if (this.uid) {
 				this.onClickManageLinkAuth(evt);
 			} else {
-				alert('Need Auth!'); //TODO 
+				$('#appLoginDlg').modal('show');
+				//this.alert('Need Auth!');//TODO 
 			}
 		},
 
@@ -25456,6 +25459,7 @@ var locales = {
             "RememberMe": "Запомнить меня",
             "RegisterNow": "Зарегистрироваться",
             "email": "Email",
+            "Login": "Вход",
             "EnterPassword": "Введите пароль",
             "EnterPasswordTwo": "Введите пароль повторно",
             "PasswordsIsDifferent": "Пароли не совпадают",
@@ -26217,6 +26221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'b4alertdlg',
@@ -26451,6 +26456,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'relsListBlock',
@@ -26509,6 +26523,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			Rest._get(function (data) {
 				_this.$root.onSuccessAuthStatus(data);
+				if (data.status == 'ok') {
+					location.reload();
+				}
 			}, '/p/trollkiller/logout.jn/', function (a, b, c) {
 				_this.$root.defaultFailSendFormListener(a, b, c);
 			});
@@ -26527,6 +26544,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             */
 		setIsVisible: function setIsVisible(bVisible) {
 			this.isVisible = bVisible;
+		},
+
+		/**
+            * @description
+   * @param {Event} evt
+           */
+		onClickUnsubscribeInList: function onClickUnsubscribeInList(evt) {
+			var _this2 = this;
+
+			var id = parseInt($(evt.target).attr('data-id'));
+			if (id) {
+				Rest._post({ n: id }, function (dt) {
+					_this2.$root.onSuccessDelRel(dt);
+				}, '/p/trollkiller/delrel.jn/', function (a, b, c) {
+					_this2.$root.defaultFailSendFormListener(a, b, c);
+				});
+			}
 		}
 	}, //end methods
 	//вызывается после data, поля из data видны "напрямую" как this.fieldName
@@ -26656,18 +26690,34 @@ var render = function() {
                                 staticClass: "float-right d-inline-block mr-2"
                               },
                               [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: {
-                                      href:
-                                        "/portfolio/web/userscripts/trollkiller/user/" +
-                                        user.uid +
-                                        "/"
-                                    }
-                                  },
-                                  [_vm._v("Список забаненых троллей")]
-                                )
+                                _c("div", [
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: {
+                                        href:
+                                          "/portfolio/web/userscripts/trollkiller/user/" +
+                                          user.uid +
+                                          "/"
+                                      }
+                                    },
+                                    [_vm._v("Список забаненых троллей")]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-success",
+                                      attrs: { "data-id": user.uid },
+                                      on: {
+                                        click: _vm.onClickUnsubscribeInList
+                                      }
+                                    },
+                                    [_vm._v("Отписаться")]
+                                  )
+                                ])
                               ]
                             ),
                             _vm._v(" "),
@@ -26685,7 +26735,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-primary",
+                    staticClass: "btn btn-primary mb-2",
                     on: { click: _vm.onClickClosePanel }
                   },
                   [_vm._v("\n\t\t\t\t\tЗакрыть панель TrollKIller\n\t\t\t")]
@@ -26694,7 +26744,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-info",
+                    staticClass: "btn btn-info mb-2",
                     on: { click: _vm.onClickLogout }
                   },
                   [_vm._v("\n\t\t\t\t\tВыйти\n\t\t\t")]
@@ -26752,6 +26802,489 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-9d98d548", module.exports)
+  }
+}
+
+/***/ }),
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(29)
+/* template */
+var __vue_template__ = __webpack_require__(30)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "js/views/logindlg.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-90465a82", Component.options)
+  } else {
+    hotAPI.reload("data-v-90465a82", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//Компонент для модального логина
+Vue.component('loginform', __webpack_require__(31));
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'logindlg',
+    //Аргументы извне
+    props: ['id'],
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {};
+    },
+    //
+    methods: {
+        /**
+         * @description En: Click on Ok button
+         * Ru: Обработка клика на "Ok"
+         */
+        onClickOk: function onClickOk() {}
+    }, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {}
+});
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: {
+        id: _vm.id,
+        tabindex: "-1",
+        role: "dialog",
+        "aria-labelledby": "modalLabel",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog", attrs: { role: "document" } }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c(
+              "h5",
+              { staticClass: "modal-title", attrs: { id: "modalLabel" } },
+              [_vm._v(_vm._s(_vm.$t("app.Login")))]
+            ),
+            _vm._v(" "),
+            _vm._m(0)
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-body" }, [_c("loginform")], 1),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-footer" })
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-90465a82", module.exports)
+  }
+}
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(32)
+/* template */
+var __vue_template__ = __webpack_require__(33)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "js/views/loginform.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6f6218d8", Component.options)
+  } else {
+    hotAPI.reload("data-v-6f6218d8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'Loginform',
+    //вызывается раньше чем mounted
+    data: function data() {
+        return {
+            //Значение email
+            email: null,
+            //Значение password
+            password: null
+        };
+    },
+    //
+    methods: {
+        /** 
+         * @description Пробуем отправить форму
+        */
+        onSubmitLoginForm: function onSubmitLoginForm(evt) {
+            var _this = this;
+
+            evt.preventDefault();
+
+            var formInputValidator = this.$root.formInputValidator,
+
+            /** @var {Validator} validator */
+            validator = formInputValidator.getValidator();
+            if (validator.isValidEmail(this.email) && validator.isValidPassword(this.password)) {
+                Rest._post({
+                    l: this.email,
+                    p: this.password
+                }, function (data) {
+                    _this.onSuccessLogin(data, formInputValidator);
+                }, '/p/trollkiller/login.jn/', function (a, b, c) {
+                    _this.onFailLogin(a, b, c, formInputValidator);
+                });
+            }
+        },
+
+        /**
+         * @param {Object} data
+         * @param {B421Validators} formInputValidator
+        */
+        onSuccessLogin: function onSuccessLogin(data, formInputValidator) {
+            if (data.status == 'error') {
+                return this.onFailLogin(data, null, null, formInputValidator);
+            }
+            location.reload();
+        },
+
+        /**
+         * @param {Object} a
+         * @param {Object} b
+         * @param {Object} c
+         * @param {B421Validators} formInputValidator
+        */
+        onFailLogin: function onFailLogin(a, b, c, formInputValidator) {
+            if (a.status == 'error' && a.msg) {
+                this.closeModal();
+                this.$root.alert(a.msg);
+            }
+        },
+        closeModal: function closeModal() {
+            $('#appLoginDlg').modal('hide');
+        }
+    }, //end methods
+    //вызывается после data, поля из data видны "напрямую" как this.fieldName
+    mounted: function mounted() {
+        var self = this;
+        /*this.$root.$on('showMenuEvent', function(evt) {
+            self.menuBlockVisible   = 'block';
+            self.isMainMenuVisible  = true;
+            self.isScrollWndVisible = false;
+            self.isColorWndVisible  = false;
+            self.isHelpWndVisible   = false;
+            self.nStep = self.$root.nStep;
+        })/**/
+    }
+});
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      staticClass: "user",
+      attrs: {
+        id: "signinform",
+        method: "POST",
+        action: "/p/signin.jn/",
+        novalidate: ""
+      },
+      on: { submit: _vm.onSubmitLoginForm }
+    },
+    [
+      _c("div", { staticClass: "form-group" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.email,
+              expression: "email"
+            },
+            {
+              name: "b421validators",
+              rawName: "v-b421validators",
+              value: "required,email",
+              expression: "'required,email'"
+            }
+          ],
+          staticClass: "form-control form-control-user",
+          attrs: {
+            placeholder: _vm.$t("app.EnterEmail"),
+            type: "email",
+            "aria-describedby": "emailHelp",
+            id: "email",
+            name: "email"
+          },
+          domProps: { value: _vm.email },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.email = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "invalid-feedback" }),
+        _vm._v(" "),
+        _c("small", {
+          staticClass: "form-text text-muted",
+          attrs: { id: "emailHelp" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.password,
+              expression: "password"
+            },
+            {
+              name: "b421validators",
+              rawName: "v-b421validators",
+              value: "required,password,length6_128",
+              expression: "'required,password,length6_128'"
+            }
+          ],
+          staticClass: "form-control form-control-user",
+          attrs: {
+            placeholder: _vm.$t("app.EnterPassword"),
+            type: "password",
+            id: "password"
+          },
+          domProps: { value: _vm.password },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.password = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "invalid-feedback" }),
+        _vm._v(" "),
+        _c("small", {
+          staticClass: "form-text text-muted",
+          attrs: { id: "passwordHelp" }
+        })
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary btn-user btn-block",
+          attrs: { type: "submit" }
+        },
+        [
+          _vm._v(
+            "\n            " +
+              _vm._s(_vm.$t("app.LoginFormButtonText")) +
+              "\n        "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary btn-block",
+          attrs: { href: "/portfolio/web/userscripts/trollkiller/signup/" }
+        },
+        [
+          _vm._v(
+            "\n            " + _vm._s(_vm.$t("app.RegisterNow")) + "\n        "
+          )
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6f6218d8", module.exports)
   }
 }
 

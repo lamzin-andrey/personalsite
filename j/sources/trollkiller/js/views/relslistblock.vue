@@ -46,7 +46,16 @@
 								</div>
 							</div>
 							<div class="float-right d-inline-block mr-2">
-								<a :href="'/portfolio/web/userscripts/trollkiller/user/' + user.uid + '/'">Список забаненых троллей</a>
+								<div>
+									<a :href="'/portfolio/web/userscripts/trollkiller/user/' + user.uid + '/'">Список забаненых троллей</a>
+								</div>
+								<div>
+									<button
+										:data-id="user.uid"
+										class="btn btn-success"
+										@click="onClickUnsubscribeInList">Отписаться</button>
+								</div>
+								
 							</div>
 								<div class="clearfix"></div>
 							</div>
@@ -56,10 +65,10 @@
 			</div>
 
 			<div class="text-center">
-				<button @click="onClickClosePanel" class="btn btn-primary">
+				<button @click="onClickClosePanel" class="btn btn-primary mb-2">
 						Закрыть панель TrollKIller
 				</button>
-				<button @click="onClickLogout" class="btn btn-info">
+				<button @click="onClickLogout" class="btn btn-info mb-2">
 						Выйти
 				</button>
 			</div>
@@ -119,7 +128,12 @@
 				location.hash = '';
 			},
 			onClickLogout() {
-				Rest._get((data)=>{this.$root.onSuccessAuthStatus(data);}, '/p/trollkiller/logout.jn/', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c);});
+				Rest._get((data)=>{
+					this.$root.onSuccessAuthStatus(data);
+					if (data.status == 'ok'){
+						location.reload();
+					} 
+				}, '/p/trollkiller/logout.jn/', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c);});
 			},
 			/**
              * @description
@@ -134,6 +148,16 @@
             setIsVisible(bVisible) {
                 this.isVisible = bVisible;
 			},
+			/**
+             * @description
+			 * @param {Event} evt
+            */
+			onClickUnsubscribeInList(evt) {
+				let id = parseInt($(evt.target).attr('data-id'));
+				if (id) {
+					Rest._post({n: id}, (dt) => { this.$root.onSuccessDelRel(dt); }, '/p/trollkiller/delrel.jn/', (a, b, c) =>{this.$root.defaultFailSendFormListener(a, b, c)});
+				}
+			}
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {

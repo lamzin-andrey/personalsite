@@ -49,6 +49,7 @@ var locales = {
             "RememberMe": "Запомнить меня",
             "RegisterNow": "Зарегистрироваться",
             "email": "Email",
+            "Login": "Вход",
             "EnterPassword": "Введите пароль",
             "EnterPasswordTwo": "Введите пароль повторно",
             "PasswordsIsDifferent": "Пароли не совпадают",

@@ -34,6 +34,9 @@ Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'
 //Компонент вместо стандартного alert  TODO тут просто проверим, чего и как
 Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue'));
 
+//Компонент для модального логина
+Vue.component('logindlg', require('./views/logindlg.vue'));
+
 //Компонент списка троллейбусов, на блэклисты которых подписан пользователь
 Vue.component('relslistblock', require('./views/relslistblock.vue'));
 
@@ -112,7 +115,6 @@ window.app = new Vue({
 			this.$refs.relsListBlock.setList(this.aRels);//TODO доделать для непустого списка
 			this.setExpiriensButtonLabel(data.l);
 		} else {
-			//TODO
 			//Change link to show popup on click
 			this.uid = 0;
 			this._isUseExpiriens = false;
@@ -128,7 +130,8 @@ window.app = new Vue({
 		if (this.uid) {
 			this.onClickManageLinkAuth(evt);
 		} else {
-			alert('Need Auth!');//TODO 
+			$('#appLoginDlg').modal('show');
+			//this.alert('Need Auth!');//TODO 
 		}
 	},
 	/**
