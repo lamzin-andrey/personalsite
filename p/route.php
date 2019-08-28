@@ -116,6 +116,11 @@ class Route {
 			require_once $handler;
 			$this->app = new TrollKillerDeleteRelation();
 		}
+		if ($baseUrl == '/p/trollkiller/search.jn/') {
+			$handler = $sCtrlDir . 'tksearch.php';
+			require_once $handler;
+			$this->app = new TrollKillerSearch();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/portfoliocats/

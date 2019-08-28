@@ -121,7 +121,6 @@
             setList(list) {
 				this.isListNoEmpty = (list.length > 0);
 				this.aRels = list;
-				console.log(this.aRels);
 			},
 			onClickClosePanel(){
 				this.isVisible = false;

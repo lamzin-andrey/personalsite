@@ -21,7 +21,7 @@ class TrollKillerDeleteRelation extends OpenApp {
 		query($sql);
 		
 		if ($uid) {
-			json_ok();
+			json_ok('n', $this->subject_id);
 		}
 		json_error('msg', l('Need auth'));
 	}

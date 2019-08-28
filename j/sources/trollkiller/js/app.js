@@ -29,6 +29,8 @@ import B421Validators  from '../../bootstrap421-validators/b421validators';
 // / "Стандартная" валидация полей формы
 
 
+
+
 //Компонент вместо стандартного confirm TODO тут просто проверим, чего и как
 Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'));
 //Компонент вместо стандартного alert  TODO тут просто проверим, чего и как
@@ -40,6 +42,9 @@ Vue.component('logindlg', require('./views/logindlg.vue'));
 //Компонент списка троллейбусов, на блэклисты которых подписан пользователь
 Vue.component('relslistblock', require('./views/relslistblock.vue'));
 
+//Компонент результатов поиска троллейбусов по mail_id или имени и фамилии
+Vue.component('searchblock', require('./views/searchblock.vue'));
+
 window.app = new Vue({
     i18n : i18n,
     el: '#ktapp',
@@ -50,7 +55,8 @@ window.app = new Vue({
    */
    data: {
      //Валидатор для полей ввода формы
-     formInputValidator: B421Validators,
+	 formInputValidator: B421Validators,
+
      /** @property {Object} b4ConfirmDlgParams @see b4confirmdlg.props.params*/
      b4ConfirmDlgParams : {
         title :'Are you sure',
@@ -142,7 +148,6 @@ window.app = new Vue({
 		if (this.isUseExpiriens(list)) {
 			$(this.$refs.bExpiriens).text(this.$t('app.Unuse_Expiriens') );
 		} else {
-			console.log(this.$refs.bExpiriens);
 			$(this.$refs.bExpiriens).text(this.$t('app.Use_Expiriens') );
 		}
 	},
@@ -212,22 +217,24 @@ window.app = new Vue({
 	*/
 	onSuccessAddRel(data){
 		if (!this.defaultFailSendFormListener(data)) {
-			return;
+			return false;
 		}
 		this._isUseExpiriens = true;
 		this.setExpiriensButtonLabel();
 		Rest._get((data)=>{this.onSuccessAuthStatus(data);}, '/p/trollkiller/checkauth.jn/?p=1', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+		return true;
 	},
 	/**
      * @description Обработка успешной отписки от блэклиста пользователя 
 	*/
 	onSuccessDelRel(data){
 		if (!this.defaultFailSendFormListener(data)) {
-			return;
+			return false;
 		}
 		this._isUseExpiriens = false;
 		this.setExpiriensButtonLabel();
 		Rest._get((data)=>{this.onSuccessAuthStatus(data);}, '/p/trollkiller/checkauth.jn/?p=1', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+		return true;
 	},
 	/**
      * @description Обработка клика на ссылке Управление

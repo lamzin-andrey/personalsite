@@ -20,7 +20,7 @@ class TrollKillerAddRelation extends OpenApp {
 		$nId = query($sql);
 		
 		if ($nId) {
-			json_ok();
+			json_ok('n', $this->subject_id);
 		}
 		json_error('msg', l('Need auth'));
 	}
