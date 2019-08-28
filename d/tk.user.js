@@ -1,3 +1,14 @@
+// ==UserScript==
+// @name        KillTroll
+// @namespace   https://otvet.mail.ru*
+// @include     https://otvet.mail.ru/*
+// @include     https://touch.otvet.mail.ru/*
+// @include     https://andryuxa.ru/*
+// @include     http://mh.loc/*
+// @version     1
+// @grant       none
+// ==/UserScript==
+
 window.addEventListener('load',onReady);window.containerCss='pageQuestions';window.itemCss='q--li';window.userLinkCss='q--li--stat';window.userLinkCssOnAnswerPage="author a--author";window.authUserAvatarLinkCss='pm-toolbar__button__inner_avatar';window.touchAuthUserAvatarLinkCss='nav-menu__profile';window.CONTAINER=null;window.KEY='KKTSTRGDATA';window.KEY_SHARED='KKTSTRGDATA_MERGED';window.SERVER_HOST='https://andryuxa.ru';window.SERVER=window.SERVER_HOST+'/p/trollkiller';window.desktopAuthUserImageLoaded=!1;window.desktopAuthUserImage64data='';function onReady(){console.log('Run');if(!isDesktop()){window.authUserAvatarLinkCss=window.touchAuthUserAvatarLinkCss}
 if(location.host.indexOf('otvet.mail.ru')==-1){storage('killtroll',1);return}
 setLinkListener();killTrolls();pureAjax(window.SERVER+'/checkauth.jn/',{},(dt)=>{if(dt.uid){onSuccessLogin(dt);getBanlist();setInterval(getBanlist,120*1000)}else{window.KTKTUID=0;storage('ktktUid',0);setAuthView(!1)}},(a,b,c)=>{},'POST');setInterval(()=>{setLinkListener();killTrolls()},1*1000);parseDesktopImage()}
