@@ -36,12 +36,12 @@ class Signup extends BaseApp {
 		$this->tsreq('passwordLC', 'passwordLC');
 		$this->tsreq('passwordL', 'password');
 		$this->tsreq('agree');
+		$this->tsreq('is_subscribed');
 		if (!$this->_validate($report)) {
 			$report['info'] = 'validate';
 			json_error_arr($report);
 		}
 		if(!utils_isJs()) {
-			
 			//get id by guest_id from auth.js
 			$userId = Auth::getUid();
 			if(!$userId) {
@@ -49,10 +49,8 @@ class Signup extends BaseApp {
 			}
 			//record by id
 			$this->request['password'] = Auth::hash($this->password);
+			$this->request['is_subscribed'] = ($this->request['is_subscribed'] == 'true' ? 1 : 0);
 			$cmd = $this->updateQuery('id = ' . $userId);
-			/*$report['info'] = 'validate';
-			$report['email'] = $cmd;
-			json_error_arr($report);/**/
 			query($cmd, $nR, $aR);
 		}
 		json_ok();
@@ -100,6 +98,9 @@ class Signup extends BaseApp {
 		if ($this->agree != 'true') {
 			$errors['agree'] = l('agree-required');
 		}
+		if ($this->is_subscribed != 'true') {
+			$errors['subscribe'] = l('subscribed-required');
+		}
 		if (count($errors) > 0) {
 			$report['info'] = 'validate';
 			$report['errors'] = $errors;
@@ -112,6 +113,7 @@ class Signup extends BaseApp {
 				&& $this->passwordLC
 				&& $this->password
 				&& $this->agree
+				&& $this->is_subscribed
 		   ) {
 			return true;
 		}
@@ -133,10 +135,11 @@ class Signup extends BaseApp {
 		if (!$this->agree) {
 			$errors['agree']      = l('agree-required');
 		}
+		if (!$this->is_subscribed) {
+			$errors['is_subscribed']      = l('subscribed-required');
+		}
 		$report['errors'] = $errors;
 		json_error_arr($report);
 		return false;
 	}
 }
-//$app = new Signup();
-//$app->run();

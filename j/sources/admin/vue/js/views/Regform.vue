@@ -55,6 +55,19 @@
                 <div class="invalid-feedback"></div>
             </div>
         </div>
+
+		<div class="form-group">
+            <div class="custom-control custom-checkbox small">
+                <input v-model="subscribe" 
+                v-b421validators="'required'"
+                type="checkbox" class="custom-control-input" id="subscribe" value="true">
+                <label class="custom-control-label ml-1" for="subscribe">
+                    {{ $t('app.ISubscribe') }}
+                </label>
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary btn-user btn-block">
             {{ $t('app.RegisterNow') }}
         </button>
@@ -92,7 +105,9 @@
             //Значение повторного ввода пароля
             passwordConfirm:null,
             //Значение поля Я согласен с политикой
-            agree:null,
+			agree:null,
+			//Значение поля Я согласен на рассылку
+            subscribe:null,
             //Если true то будет показан алерт с сообщением что можно идти логиниться
             alertIsVisible : false
         }; },
@@ -112,6 +127,7 @@
                         && validator.isValidPassword(this.password)
                         && validator.isRequired(this.displayName)
                         && validator.isRequired(this.displaySurname)
+                        && validator.isRequired(this.subscribe)
                         && validator.isEquiv(this.password, [this.passwordConfirm])
                    ) {
                     this.$root._post(
@@ -121,6 +137,7 @@
                             passwordLC:this.passwordConfirm,
                             name    :this.displayName,
                             surname :this.displaySurname,
+                            is_subscribed :this.subscribe,
                             agree   :this.agree
                           }, 
                         (data) => { this.onSuccess(data, formInputValidator);},
@@ -143,6 +160,7 @@
                 this.displayName = 
                 this.displaySurname = 
                 this.agree = 
+                this.subscribe = 
                 this.email = '';
                 $('#regForm')[0].reset();
                 this.alertIsVisible = true;
