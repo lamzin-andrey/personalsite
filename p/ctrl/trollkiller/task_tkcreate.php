@@ -29,6 +29,7 @@ class Task_TrollKillerCreateList {
 			}
 			$this->setOffset($i);
 		}
+		$this->setOffset(0);
 	}
 	
 	private function setOffset($n)
