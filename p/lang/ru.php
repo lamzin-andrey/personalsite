@@ -102,6 +102,12 @@ $aLang = [
 	'Trolls banned by user % using TrollKiller' => 'Тролли забаненные пользователем % с помощью TrollKiller',
 	
 	//TrollKiller add / delete relation
-	'Need auth' => 'Для этого необходимо авторизоваться'
+	'Need auth' => 'Для этого необходимо авторизоваться',
+	
+	//TrollKiller registration
+	'Troll Killers Registration' => 'Регистрация в TrollKiller',
+	'Troll Killers Registration heading' => 'Регистрация в приложении TrollKiller для модерации ответов@mail.ru (userscript для Firefox)',
+	'TrollKillers altrnative' => 'TrollKiller - альтернативная модерация ответов@mail.ru',
+	'TrollKillers altrnative in ff' => 'TrollKiller - альтернативная модерация ответов@mail.ru с userscript для FireFox'
 	
 ];

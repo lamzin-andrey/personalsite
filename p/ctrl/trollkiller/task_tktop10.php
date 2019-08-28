@@ -5,7 +5,9 @@ require_once __DIR__ . '/../../../q/q/config.php';
 require_once __DIR__ . '/../../../q/q/mysql.php';
 require_once __DIR__ . '/../../../q/q/utils.php';
 require_once __DIR__ . '/classes/pagetop10compiler.php';
-//require_once __DIR__ . '/classes/pageusercompiler.php';
+require_once __DIR__ . '/classes/registrationcompiler.php';
+require_once __DIR__ . '/classes/mainpagecompiler.php';
+
 
 if (!function_exists('getallheaders')) {
 	function getallheaders(){
@@ -36,6 +38,14 @@ class Task_TrollKillerTop10 {
 		$aData = query($sql);
 		$oCompiler = new PageTop10Compiler();
 		$oCompiler->aData = &$aData;
+		$oCompiler->compile();
+		
+		//Registration page
+		$oCompiler = new RegistrationCompiler();
+		$oCompiler->compile();
+		
+		//Main page
+		$oCompiler = new MainpageCompiler();
 		$oCompiler->compile();
 	}
 	
