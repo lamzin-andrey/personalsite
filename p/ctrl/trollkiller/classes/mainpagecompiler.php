@@ -18,7 +18,15 @@ class MainpageCompiler extends CPageCompiler {
 		$this->heading = l('TrollKillers altrnative');
 		$this->bc = $this->_setBC();
 		$this->displayDate = date('d.m.Y ') . l('at') . date(' H:i');
-		//
+		
+		
+		
+		$this->description = ('TrollKillers description');
+		$this->keywords = l('TrollKillers kw');
+		$this->ogTitle = l('TrollKillers altrnative');
+		$this->ogDescription = 'TrollKillers description';
+		$this->ogImage = '/i/logotroll5.jpg';
+		
 	}
 	/**
 	 * @description

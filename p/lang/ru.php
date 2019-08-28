@@ -104,10 +104,12 @@ $aLang = [
 	//TrollKiller add / delete relation
 	'Need auth' => 'Для этого необходимо авторизоваться',
 	
-	//TrollKiller registration
+	//TrollKiller registration and mainpage
 	'Troll Killers Registration' => 'Регистрация в TrollKiller',
 	'Troll Killers Registration heading' => 'Регистрация в приложении TrollKiller для модерации ответов@mail.ru (userscript для Firefox)',
 	'TrollKillers altrnative' => 'TrollKiller - альтернативная модерация ответов@mail.ru',
-	'TrollKillers altrnative in ff' => 'TrollKiller - альтернативная модерация ответов@mail.ru с userscript для FireFox'
+	'TrollKillers altrnative in ff' => 'TrollKiller - альтернативная модерация ответов@mail.ru с userscript для FireFox',
+	'TrollKillers description' => 'TrollKiller - userscript для самостоятельного удаления вопросов троллей из ленты ответов@mail.ru. Хотите почувствовать себя модератором ответов - установить TrollKiller в свой Firefox и избавляйтесь от нежелательных вопросов в ленте в два клика.',
+	'TrollKillers kw' => 'модератор ответов mail.ru, как стать модератором ответов, альтернативная модерация ответов@mail.ru.'
 	
 ];
