@@ -584,7 +584,7 @@ function onClickGotoBanList(ev){ev.stopImmediatePropagation();ev.preventDefault(
 		</div>
 		`)}
 e4(e('ktktBanlistContainer'),'ktktlist-item-r',(item)=>{item.onclick=(ev)=>{var trg=ev.target,link=attr(trg,'data-link'),name=attr(trg,'data-name'),dName=getDisplayName(name),reason=attr(trg,'data-reason');if(confirm(`Разбанить пользователя ${dName} забаненого за "${reason}"?`)){delete list[link];var itemDiv=trg.parentNode.parentNode;itemDiv.parentNode.removeChild(itemDiv);storage(KEY,list);var shList=getSharedListFromStorage();delete shList[link];storage(KEY_SHARED,shList,!1)}}});e4(e('ktktBanlistContainer'),'ktktlist-item-e',(item)=>{item.onclick=(ev)=>{var trg=ev.target,link=attr(trg,'data-link'),name=attr(trg,'data-name'),reason=attr(trg,'data-reason');showEditForm(link,name,reason)}});return!1}
-function mergeServerAndLocalData(arr){let i,local=getListFromStorage(),co,shared={...local};for(i=0;i<arr.length;i++){co=new Object();co.link='/profile/id'+arr[i].a_mail_id;co.name=arr[i].nick;co.reason=arr[i].reason;if(!shared[co.link]){shared[co.link]=co}}
+function mergeServerAndLocalData(arr){let i,local=getListFromStorage(),co,shared={...local};for(i=0;i<arr.length;i++){co=new Object();co.link='/profile/id'+arr[i].a_mail_id+'/';co.name=arr[i].nick;co.reason=arr[i].reason;if(!shared[co.link]){shared[co.link]=co}}
 storage(window.KEY_SHARED,shared,!1)}
 function count(o){var n=0;for(var i in o){n++}
 return n}
