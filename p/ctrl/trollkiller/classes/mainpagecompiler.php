@@ -21,10 +21,10 @@ class MainpageCompiler extends CPageCompiler {
 		
 		
 		
-		$this->description = ('TrollKillers description');
+		$this->description = l('TrollKillers description');
 		$this->keywords = l('TrollKillers kw');
 		$this->ogTitle = l('TrollKillers altrnative');
-		$this->ogDescription = 'TrollKillers description';
+		$this->ogDescription = l('TrollKillers description');
 		$this->ogImage = '/i/logotroll5.jpg';
 		
 	}
