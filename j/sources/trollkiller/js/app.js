@@ -94,9 +94,11 @@ window.app = new Vue({
 			Rest._get((data)=>{this.onSuccessAuthStatus(data);}, '/p/trollkiller/checkauth.jn/?p=1', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 		}
    },
-   computed:{
-		
-   },
+	computed:{
+		isNotFirefox() {
+			return (!~navigator.userAgent.toLowerCase().indexOf('firefox') );
+		}
+	},
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */

@@ -24,7 +24,7 @@
 а в Chrome под Linux установить скрипт удалось, но связь с сервером Troll Killer пока недоступна из-за CSP политики.</p>
 <p>Ни один userscript не работает в Firefox сам по себе. Вам сначала нужно установить дополнение для Firefox <a target="_blank" href="https://addons.mozilla.org/ru/firefox/addon/greasemonkey/">Greasemonkey</a>, а уже потом пройти по ссылке <a href="http://andryuxa.ru/" target="_blank">TrollKiller</a>. </p>
 <ol>
-	<li><a class="btn btn-primary mt-1" href="https://www.mozilla.org/ru/firefox/download/thanks/" target="_blank">Скачать Firefox</a></li>
+	<li v-if="isNotFirefox"><a class="btn btn-primary mt-1" href="https://www.mozilla.org/ru/firefox/download/thanks/" target="_blank">Скачать Firefox</a></li>
 	<li><a class="btn btn-primary mt-1" href="https://addons.mozilla.org/ru/firefox/addon/greasemonkey/" target="_blank">Страница установки Greasemonkey</a></li>
 	<li><a class="btn btn-primary mt-1" href="http://andryuxa.ru/d/tk.user.js" target="_blank">Страница установки TrollKiller</a></li>
 	<li><a class="btn btn-primary mt-1" href="https://otvet.mail.ru" target="_blank">Вернуться на ответы@mail.ru</a></li>
