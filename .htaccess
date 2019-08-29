@@ -1,7 +1,12 @@
 AddDefaultCharset WINDOWS-1251
 php_value default_charset "WINDOWS-1251"
 
-RewriteEngine off
+#RewriteEngine off
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{HTTP_HOST} ^www\.andryuxa\.ru$ [NC]
+RewriteRule ^(.*)$ https://andryuxa.ru/$1 [R=301,L]
 
 #AddType text/cache-manifest .appcache
 #<IfModule mod_expires.c>
