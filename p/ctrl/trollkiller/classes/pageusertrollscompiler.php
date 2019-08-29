@@ -33,6 +33,11 @@ class PageUserTrollsCompiler extends CPageCompiler {
 		$this->_setContent($aData);
 		$s = parent::compile(false);
 		$s = str_replace('{ALERT}', str_replace('{NAME}', $sName, file_get_contents(DOC_ROOT . '/p/view/site/trollkiller/useralert.html') ), $s);
+		$sUseExpiriensHideCss = '';
+		if (!count($aData)) {
+			$sUseExpiriensHideCss = 'invisible';
+		}
+		$s = str_replace('{HIDE}', $sUseExpiriensHideCss, $s);
 		$sFolder = DOC_ROOT . '/portfolio/web/userscripts/trollkiller/user/' . $nUid;
 		//utils_createDir($sFolder);
 		//file_put_contents($sFolder . '/index.html', $s);
@@ -56,6 +61,9 @@ class PageUserTrollsCompiler extends CPageCompiler {
 			$s = str_replace('{ID}', $aRow['id'], $s);
 			$s = str_replace('{REASON}', $this->_swearFilter($aRow['reason']), $s);;
 			$sUlContent .= $s;
+		}
+		if (!count($aData) ) {
+			$sUlContent = file_get_contents(DOC_ROOT . '/p/view/site/trollkiller/notrolls.html');
 		}
 		$this->content = str_replace('{TOP10LIST}', $sUlContent, $sContentTpl);
 	}

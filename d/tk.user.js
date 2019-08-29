@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        KillTroll
+// @name        TrollKiller
 // @namespace   https://otvet.mail.ru*
 // @include     https://otvet.mail.ru/*
 // @include     https://touch.otvet.mail.ru/*
@@ -18,13 +18,13 @@ try{e4(ee(D,'body')[0],'h5',(item)=>{var href=attr(item,'href');if(href.indexOf(
 var imgList=indexByImg(list);try{e4(ee(D,'body')[0],'user-pic-default',(item)=>{var url=getBgImageSUrl(item),name=item.parentNode.getElementsByClassName('user-name__text')[0];name=name.innerHTML?name.innerHTML.trim():'';if(imgList[url]&&name==imgList[url].name){var comm=item.parentNode.parentNode.parentNode;var prnt=comm.parentNode;if(comm.className=='item '){prnt.removeChild(comm)}}})}catch(e){}
 try{e4(ee(D,'body')[0],'item__header__user-large',(item)=>{var href=attr(item,'href');if(list[href]){var quest=item.parentNode.parentNode;quest.parentNode.removeChild(quest)}})}catch(e){}}
 function setLinkListener(){try{var c=getContainer();e4(c,userLinkCss,(item)=>{var setted=attr(item,'data-ktktsetted');if(!setted&&attr(item,'href').indexOf('/profile/id')==0){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink}})}catch(e){}
+item.onclick=onClickUserlink;item.style.color='#00AA00'}})}catch(e){}
 try{e4(ee(D,'body')[0],userLinkCssOnAnswerPage,(item)=>{var setted=attr(item,'data-ktktsetted');if(!setted){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink}})}catch(e){}
+item.onclick=onClickUserlink;item.style.color='#00AA00'}})}catch(e){}
 try{e4(ee(D,'body')[0],'h5',(item)=>{var setted=attr(item,'data-ktktsetted');var href=attr(item,'href');if(!setted&&href.indexOf('/profile/id')!=-1){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink}})}catch(e){}
+item.onclick=onClickUserlink;item.style.color='#00AA00'}})}catch(e){}
 try{e4(ee(D,'body')[0],'item__header__user-large',(item)=>{var setted=attr(item,'data-ktktsetted');var href=attr(item,'href');if(!setted&&href.indexOf('/profile/id')!=-1){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink}})}catch(e){}}
+item.onclick=onClickUserlink;var namelinks=cs(item,'b-block user-name__text');if(namelinks[0]){namelinks[0].style.color='#00AA00'}}})}catch(e){}}
 function getContainer(){window.CONTAINER=ec(ee(D,'body')[0],window.containerCss)[0];return window.CONTAINER}
 function onClickUserlink(e){e.preventDefault();e.stopImmediatePropagation();var o=e.target,name=o.innerHTML,link=attr(o,'href'),sImgUrl='',aPicTagList;if(!link){link=attr(o.parentNode,'href')}
 if(!link){while(!o||(o.tagName!='A')){o=o.parentNode}
@@ -535,7 +535,7 @@ function onClickGotoHomepage(){window.onClickCloseKtDlg();return!0}
 function onClickLoginBtn(ev){if(ev.keyCode&&ev.keyCode!=13){console.log('ev.keyCode != 13, return true');return!0}
 ev.preventDefault();e('ktktViewErrorWrap').style.display='none';e('ktktViewError').innerHTML='';pureAjax(window.SERVER+'/login.jn/',{l:e('ktktLogin').value,p:e('ktktPassword').value},onSuccessLogin,onFailLogin,'POST');return!0}
 function onSuccessLogin(data){if(!onFailLogin(data)){return}
-if(parseInt(data.uid)){window.KTKTUID=data.uid;storage('ktktUid',data.uid);setAuthView(!0);gotoForm()}}
+if(parseInt(data.uid)){window.KTKTUID=data.uid;storage('ktktUid',data.uid);setAuthView(!0);gotoForm();getBanlist()}}
 function indexByImg(list){var r={},i;for(i in list){if(list[i].img){r[list[i].img]={...list[i]}}}
 return r}
 function setAuthView(bState){if(!e('ktKtMainLogin')){return}

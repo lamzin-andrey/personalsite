@@ -18,7 +18,7 @@ class Task_TrollKillerCreateList {
 	
 	public function __construct()
 	{
-		$this->table = 'trollkiller';
+		$this->table = 'trollkiller_userinfo';
 		
 		$aRows = query('SELECT DISTINCT uid FROM ' . $this->table . ' ORDER BY id');
 		$offset = $this->getOffset();

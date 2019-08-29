@@ -26,10 +26,10 @@ class Task_TrollKillerTop10 {
 		global $sLangDir;
 		$sLangDir = __DIR__ . '/../../lang';
 		$this->table = 'trollkiller';
-		$sql = 'SELECT t.uid, COUNT(t.id) AS cnt, tui.name, tui.imgpath, u.name AS dname, u.surname
-			FROM trollkiller AS t 
+		$sql = 'SELECT tui.uid, COUNT(t.id) AS cnt, tui.name, tui.imgpath, u.name AS dname, u.surname
+			FROM trollkiller_userinfo AS tui 
 			
-			LEFT JOIN trollkiller_userinfo AS tui ON tui.uid = t.uid
+			LEFT JOIN trollkiller AS t ON tui.uid = t.uid
 			
 			LEFT JOIN ausers AS u ON u.id = t.uid
 			

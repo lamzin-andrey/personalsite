@@ -17,7 +17,7 @@ class MainpageCompiler extends CPageCompiler {
 		$this->title = l('TrollKillers altrnative in ff');
 		$this->heading = l('TrollKillers altrnative');
 		$this->bc = $this->_setBC();
-		$this->displayDate = date('d.m.Y ') . l('at') . date(' H:i');
+		$this->displayDate = '29.08.2019 ' . l('at') . ' 11:44';
 		
 		
 		
