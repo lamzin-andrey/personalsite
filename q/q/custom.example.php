@@ -7,4 +7,4 @@ define('DB_PASSWORD', '123456');
 define('DB_NAME', 'b');
 define('DB_ENC_IS_1251', true);
 define('DEFAULT_ARTICLE_LOGO', '/i/64.jpg');
-
+define('SCHEME_HOST', 'https://andryuxa.ru');

@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/../adminauthjson.php';
-include DOC_ROOT . '/q/q/cstaticpagescompiler.php';
+include DOC_ROOT . '/classes/portfoliocompiler.php';
 class ProudctPost extends AdminAuthJson {
 	/** @property string */
 	//public $ = '';
@@ -60,15 +60,19 @@ class ProudctPost extends AdminAuthJson {
 			//TODO тут на этапе расширения функционала будет наследник
 			$comiErr = '';
 			if (!$this->has_self_section && !$this->dont_create_page) {
-				$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
-													$this->description,
-													$this->keywords,
-													$this->og_title,
-													$this->og_description,
-													$this->og_image,
-													$sDate
-													);
-				$comiErr = $oCompiler->emsg;
+				$oCompiler = new PortfolioCompiler();
+				$oCompiler->title = $this->title;
+				$oCompiler->canonicalUrl = SCHEME_HOST . $this->url . '/index.html';
+				$oCompiler->heading = $this->heading;
+				$oCompiler->description = $this->description;
+				$oCompiler->keywords = $this->keywords;
+				$oCompiler->og_title = $this->og_title;
+				$oCompiler->og_description = $this->og_description;
+				$oCompiler->og_image = $this->og_image;
+				$oCompiler->nCategory = $this->category_id;//For bc
+				$oCompiler->compile();
+													
+				//$comiErr = $oCompiler->emsg;
 			}
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}

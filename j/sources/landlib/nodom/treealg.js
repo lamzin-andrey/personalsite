@@ -15,7 +15,7 @@ window.TreeAlgorithms = {
 	 * @description Get all "this.idFieldName" values from node and all node childs (all levels)
 	 * @param {Object} node 
 	 * @return Array of "this.idFieldName" nodes  (all levels)
-	 */
+	*/
 	getBranchIdList(node) {
 		let r = [], part, i, j;
 		r.push(node[this.idFieldName]);
