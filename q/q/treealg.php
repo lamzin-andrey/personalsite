@@ -54,6 +54,7 @@ class TreeAlgorithms {
 		}
 	}
 	/**
+	 * TODO ещё рахз пройти, пусть все будут объектами, сейчас тут явно лажа
 	 * @description build tree from flat list
 	 * @param StdClass aScopesArg array of objects {this.idFieldName, this.parentIdFieldName}
 	 * @param bool bSetChildsAsArray = false if true, all 'children' (this.childsFieldName) property will convert to array
