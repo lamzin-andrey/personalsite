@@ -3,7 +3,7 @@
 		<div class="custom-control custom-checkbox small">
 			<input 
 			:value="value"
-			@input="$emit('input', $event.target.value)"
+			@input="$emit('input', $event.target.checked)"
 			v-b421validators="validators"
 			type="checkbox" 
 			:class="'custom-control-input' + (className ? (' ' + className) : '')"

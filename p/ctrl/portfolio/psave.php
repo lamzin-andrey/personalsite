@@ -16,6 +16,7 @@ class ProudctPost extends AdminAuthJson {
 		$this->treq('heading');
 		$this->treq('defaultLogo', 'logo');
 		$this->ireq('category', 'category_id');
+		$this->ireq('hours');
 		
 		$this->treq('description');
 		$this->treq('keywords');
@@ -27,6 +28,7 @@ class ProudctPost extends AdminAuthJson {
 		$this->treq('relatedArticles');
 		$this->breq('hasSelfSection', 'has_self_section');
 		$this->breq('dontCreatePage', 'dont_create_page');
+		$this->breq('hideFromProductlist', 'hide_from_productlist');
 		
 		
 		$errors = [];

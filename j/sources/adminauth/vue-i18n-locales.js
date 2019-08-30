@@ -134,6 +134,10 @@ var locales = {
 
 			//portfolio articles relations
 			'bindArticle' : 'Связать статью',
+
+			//portfolio form other
+			'Hide_on_portfoli_page' : 'Скрыть работу на странице портфолио',
+			'Time_on_dev' : 'Время, затраченное на разработку',
         }
     }
 }

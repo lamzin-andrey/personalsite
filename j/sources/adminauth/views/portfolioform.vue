@@ -143,6 +143,7 @@
 <p>&nbsp;</p>
 <!-- /Articles relations-->
 
+<!-- SEO -->
         <div class="accordion" id="seoAccord">
 			<div class="card border-bottom">
 				<div class="card-header" id="headingSeo">
@@ -171,8 +172,11 @@
 				</div>
 				</div>
 			</div>
-			
 		</div>
+
+		<checkboxb4 id="iHideFromProductlist" v-model="hideFromProductlist" :label="$t('app.Hide_on_portfoli_page')"></checkboxb4>
+		<inputb4 v-model="hours" :placeholderlabel="$t('app.Time_on_dev')" type="number"></inputb4>
+
 		<div class="float-right ">
 			<div id="portfolioSaver" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
 				<div class="toast-header">
@@ -188,6 +192,8 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
+
+		
 
         <p class="text-right my-3">
             <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
@@ -315,6 +321,12 @@
 
 				/** @property {Array}  relatedArticlesFromServer Для хранения полученных с сервера данных о связанных статьях  */
 				relatedArticlesFromServer : '',
+
+				/** @property {Boolean} hideFromProductlist Скрывать ли на странице портфолио  */
+				hideFromProductlist : false,
+
+				/** @property {Number} hours Время, затраченное на разработку  */
+				hours : 0,
 			};
 			return _data;
 		},
@@ -376,6 +388,7 @@
 				this.relatedArticlesFromServer = [];
 				this.setRelatedArticles();
 				this.id = 0;
+				this.hideFromProductlist = false;
 				
 				//Fix bug when edit the article more then one time...
 				setTimeout(() => {
@@ -397,6 +410,7 @@
 					this.hasSelfSection =  parseInt(data.has_self_section) ? true : false;
 					this.productFile = data.product_file;
 					this.relatedArticlesFromServer = data.relatedArticles;
+					this.hideFromProductlist = parseInt(data.hide_from_productlist) ? true : false;
 					this.setRelatedArticles();
 				}, 1);
 				
