@@ -485,8 +485,8 @@
 			*/
 			selectAndExpandNode(recreatNodeMap = true) {
 				this.selectNodeById(this.value, recreatNodeMap);
-			}        }, //end methods
-        
+			}
+		}, //end methods
         mounted() {
 			this.localizeDefaultMenu();
 			this.initDefaultSelectedNode();

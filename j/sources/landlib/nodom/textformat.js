@@ -85,7 +85,7 @@ window.TextFormat = {
 				subject = subject.replace(search, replace);
 				oCount.n++;
 			}
-			return subject;
+			return subject.toLowerCase();
 		}
 
 		var a = str_replace;

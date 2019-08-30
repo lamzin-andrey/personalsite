@@ -1,6 +1,6 @@
 <template>
     <form class="user" method="POST" action="/p/portfolio/psave.jn/" @submit="onSubmit" novalidate id="portfolioform">
-		<categorytree v-model="category" ref="categorytree"  id="portfolio_category_id" ></categorytree>
+		<categorytree @input="onChangeCategory" v-model="category" ref="categorytree"  id="portfolio_category_id" ></categorytree>
 		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
 		<div class="form-check form-check-inline">
@@ -654,6 +654,14 @@
 					this.tags.splice(delIndexes[i], 1);
 				}
 			},
+			/**
+			 * @description
+			*/
+			onChangeCategory(v){
+				let key = 'urlIsModify', a = this.$refs.categorytree.getBranchNames(v);//['portfolio', 'web', 'componenty', 'vue']
+				window.LandLibDom.liveTransliteSetTokens(key, '/' + a.join('/') + '/');
+				window.LandLibDom.liveTransliteExec(key);
+			}
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {

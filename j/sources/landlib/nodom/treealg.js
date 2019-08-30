@@ -207,5 +207,28 @@ window.TreeAlgorithms = {
 			}
 		}
 		return false;
+	},
+	/**
+	 * @description Return array of nodes from tree root to node with id = nId
+	 * @param {Object} oNode 
+	 * @param {Number} nId 
+	 * @return Array
+	 */
+	getNodesByNodeId(oNode, nId) {
+		let result = [],
+			node = this.findById(oNode, nId);
+		if (node) {
+			result.push(node);
+			while (node[this.parentIdFieldName]) {
+				node = this.findById(oNode, node[this.parentIdFieldName]);
+				if (node) {
+					result.push(node);
+				} else {
+					break;
+				}
+			}
+			return result.reverse(); 
+		}
+		return result;
 	}
 };

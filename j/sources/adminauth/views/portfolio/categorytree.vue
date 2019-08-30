@@ -20,8 +20,8 @@
 </template>
 <script>
 	//TODO перерегистрировать локально
-	Vue.component('accordionselecttree', require('../../../landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree'));
-	require('../../../landlib/nodom/treealg');
+	Vue.component('accordionselecttree', require('../../../landlib/vue/2/bootstrap/4/accordionselecttree/accordionselecttree.vue'));
+	require('../../../landlib/nodom/treealg.js');
     export default {
 		model: {
 			prop: 'value',
@@ -55,7 +55,17 @@
 		computed: {},
         //
         methods:{
-			
+			/**
+			 * @description Возвращает массив имён категорий от корня к категории с id = nId
+			 * @param {Number nId}
+			*/
+			getBranchNames(nId) {
+				let arr = TreeAlgorithms.getNodesByNodeId(this.portfolioCategoriesTree[0], nId);//TODO treeData
+				arr = arr.map((el) =>{
+					return TextFormat.transliteUrl(el.name);
+				});
+				return arr;
+			}
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {

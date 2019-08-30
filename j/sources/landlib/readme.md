@@ -202,6 +202,11 @@ Return null or founded node;
 
 Search node by id (see findById method), search parent node and remove node from parent node.
 
+
+#### getNodesByNodeId(oTree, id)
+
+Return array of nodes from tree root to node with id = id
+
 # Ru
 Тут лежат инструменты не зависящие от vue или других фреймвёрков.
 в nodom только чистая самодостаточная логика, вообще никак не работающая с DOM, 
@@ -400,3 +405,7 @@ let aTrees = TreeAlgorithms.buildTreeFromFlatList(aFlatList);
 #### remove(oTree, id)
 
 Ищет элемент по id используя findById, если он найден ищет для него родительский элемент и удаляет из массива потомков найденный по id элемент.
+
+#### getNodesByNodeId(oTree, id)
+
+Возвращает массив объектов (элементов дерева) от корня до узла с id = id

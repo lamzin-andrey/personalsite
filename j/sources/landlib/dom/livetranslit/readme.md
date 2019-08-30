@@ -43,6 +43,27 @@ $(() => {
 
 It all. All input into input.#heading will translite and set into input.#url
 
+If you want change `prefix` and `suffix` values, you can call
+
+```javascript
+	window.LandLibDom.liveTransliteSetTokens('articleUrlIsModify', '/blog/web-dev/vue', '/');
+
+```
+
+For immediately apply changes you can call 
+
+```javascript
+	window.LandLibDom.liveTransliteExec('articleUrlIsModify');
+```
+
+Default, liveTranslite plugin not changes value in second input, if it was changed manually.
+
+You can force change it wuth:
+
+```javascript
+	window.LandLibDom.liveTransliteExec('articleUrlIsModify', true);
+```
+
 #### No webpack
 
 ```html
@@ -58,6 +79,8 @@ $(() => {
 });
 
 ```
+
+See webpack section for methods `liveTransliteExec` and `liveTransliteSetTokens` examples.
 
 ### Arguments of the liveTranslit method
 
@@ -169,6 +192,30 @@ $(() => {
 
 Это всё. Все вводимые данны в поле с id="heading" будет транслитироваться и вставляться в поле с id="url"
 
+
+Если вы хотите изменить значения `prefix` и `suffix` после того, как плагиин инициализирован, вы можетие вызвать:
+
+```javascript
+	window.LandLibDom.liveTransliteSetTokens('articleUrlIsModify', '/blog/web-dev/vue', '/');
+
+```
+
+Для немедленного применения изменений вы можете вызвать
+
+```javascript
+	window.LandLibDom.liveTransliteExec('articleUrlIsModify');
+```
+
+По умолчанию плагин не изменяет значение во втором поле при изменении в первом, если оно было изменено пользователем вручную (это обычно удобно, если пользователю, заполняющему форму не понравилось значнение транслитированное автоматически и он его подредактировал).
+
+Однако, если вы не хотите давать пользователю такую возможность, вы можете игнорировать пользовательскую
+правку вызвав:
+
+```javascript
+	window.LandLibDom.liveTransliteExec('articleUrlIsModify', true);
+```
+
+
 #### Использование без Webpack
 
 ```html
@@ -184,7 +231,7 @@ $(() => {
 });
 
 ```
-
+Смотрите описание в секции webpack для знакомства с другими доступными методами
 ### Аргументы метода liveTranslit
 
 ```javascript
