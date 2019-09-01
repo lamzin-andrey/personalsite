@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/../adminauthjson.php';
-include DOC_ROOT . '/classes/portfoliocompiler.php';
+include __DIR__ . '/classes/portfoliocompiler.php';
 class ProudctPost extends AdminAuthJson {
 	/** @property string */
 	//public $ = '';
@@ -62,7 +62,11 @@ class ProudctPost extends AdminAuthJson {
 			if (!$this->has_self_section && !$this->dont_create_page) {
 				$oCompiler = new PortfolioCompiler();
 				$oCompiler->title = $this->title;
-				$oCompiler->canonicalUrl = SCHEME_HOST . $this->url . '/index.html';
+				$oCompiler->url = $this->url;
+				$oCompiler->content = $this->content_block;
+				$url = $this->url . '/index.html';
+				$oCompiler->outputFile = DOC_ROOT . $url;
+				$oCompiler->canonicalUrl = $this->url;
 				$oCompiler->heading = $this->heading;
 				$oCompiler->description = $this->description;
 				$oCompiler->keywords = $this->keywords;
@@ -70,8 +74,7 @@ class ProudctPost extends AdminAuthJson {
 				$oCompiler->og_description = $this->og_description;
 				$oCompiler->og_image = $this->og_image;
 				$oCompiler->nCategory = $this->category_id;//For bc
-				$oCompiler->compile();
-													
+				$oCompiler->compile();			
 				//$comiErr = $oCompiler->emsg;
 			}
 			json_ok('id', $id, 'comiErr', $comiErr);

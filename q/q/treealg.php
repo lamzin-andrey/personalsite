@@ -60,15 +60,26 @@ class TreeAlgorithms {
 	 * @param bool bSetChildsAsArray = false if true, all 'children' (this.childsFieldName) property will convert to array
 	 * @return array with root nodes in items
 	*/
-	static public function buildTreeFromFlatList($aScopesArg, $bSetChildsAsArray = false)
+	static public function buildTreeFromFlatList($aScopes, $bSetChildsAsArray = false)
 	{
 		//let aBuf, nId, oItem, sChilds, oParent, a, r = [], i;
 		$r = [];
 		$aBuf = [];
-		foreach ($aScopes as $oItem) {
-			$nId = $oItem[static::$idFieldName];
+		$sIdFieldName = static::$idFieldName;
+		$sChildsFieldName = static::$childsFieldName;
+		$sParentIdFieldName = static::$parentIdFieldName;
+		foreach ($aScopes as $aItem) {
+			if (is_array($aItem)) {
+				$oItem = (object)$aItem;
+			} else {
+				$oItem = &$aItem;
+			}
+			if (!isset($oItem->$sParentIdFieldName)) {
+				$oItem->$sParentIdFieldName = 0;
+			}
+			$nId = $oItem->$sIdFieldName;
 			$aBuf[$nId] = $oItem;
-			$aBuf[$nId][static::$childsFieldName] = [];
+			$aBuf[$nId]->$sChildsFieldName = [];
 		}
 		$aScopes = $aBuf;
 		
@@ -76,15 +87,12 @@ class TreeAlgorithms {
 		$sChilds = static::$childsFieldName;
 		
 		foreach ($aScopes as $nId => $oItem) {
-			$sFieldName = static::$idFieldName;
-			$oItem->$sFieldName = intval($oItem->$sFieldName);
-			$sFieldName = static::$parentIdFieldName;
-			$oItem->$sFieldName = intval($oItem->$sFieldName);
+			$oItem->$sIdFieldName = intval($oItem->$sIdFieldName);
+			$oItem->$sParentIdFieldName = intval($oItem->$sParentIdFieldName);
 			
 			//перемещаем вложенные во внутрь
-			//$sFieldName = static::$parentIdFieldName;
-			if ($oItem->$sFieldName > 0) {
-				$oParent = $aScopes[$oItem->$sFieldName];
+			if ($oItem->$sParentIdFieldName > 0) {
+				$oParent = isset($aScopes[$oItem->$sParentIdFieldName]) ? $aScopes[$oItem->$sParentIdFieldName] : null;
 				if ($oParent) {
 					if (!$oParent->$sChilds) {
 						$oParent->$sChilds = [];
@@ -101,14 +109,14 @@ class TreeAlgorithms {
 		
 		//удаляем из корня ссылки на перемещенные в родителей.
 		foreach ($aScopes as $nId => $oItem) {
-			if ($oItem->isMoved) {
+			if (isset($oItem->isMoved) && $oItem->isMoved) {
 				unset($aScopes[$nId]);
 			}
 		}
 		foreach ($aScopes as $nId => $oItem) {
 			if ($bSetChildsAsArray) {
 				$oCallback = new StdClass();
-				$oCallback->context = static;
+				$oCallback->context = 'TreeAlgorithms';
 				$oCallback->isStatic= true;
 				$oCallback->f = '_convertChildsToArray';
 				static::walkAndExecuteAction($oItem, $oCallback);
@@ -153,5 +161,64 @@ class TreeAlgorithms {
 		}
 		return null;
 	}
-	//TODO next remove
+	/**
+	 * @description Remove node from tree by node id
+	 * @param StdClass tree (or tree)
+	 * @param string id
+	 * @return bool
+	*/
+	static public function remove($tree, $id)
+	{
+		$node = static::findById($tree, $id);
+		if (!$node) {
+			return false;
+		}
+		
+		$sParentIdFieldName = static::$parentIdFieldName;
+		$sIdFieldName        = static::$idFieldName;
+		$sChildsFieldName   = static::$childsFieldName;
+		
+		$parentNode = null;
+		if ($node->$sParentIdFieldName) {
+			$parentNode = static::findById($tree, $node->$sParentIdFieldName);
+		}
+		if (!$parentNode || !$parentNode->$sChildsFieldName) {
+			return false;
+		}
+		foreach ($parentNode->$sChildsFieldName as $i => $oItem) {
+			if ($oItem->$sIdFieldName == $node->$sIdFieldName) {
+				//delete parentNode[this.childsFieldName][i];
+				unset($parentNode->$sChildsFieldName[$i]);
+				//delete node; - in js trow error
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * @description Return array of nodes from tree root to node with id = nId
+	 * @param StdClass oNode 
+	 * @param int nId 
+	 * @return array
+	*/
+	static public function getNodesByNodeId($oNode, $nId)
+	{
+		$sIdFieldName = static::$idFieldName;
+		$sParentIdFieldName = static::$parentIdFieldName;
+		$result = [];
+		$node = static::findById($oNode, $nId);
+		if ($node) {
+			$result[] = $node;
+			while ($node->$sParentIdFieldName) {
+				$node = static::findById($oNode, $node->$sParentIdFieldName);
+				if ($node) {
+					$result[] = $node;
+				} else {
+					break;
+				}
+			}
+			return array_reverse($result); 
+		}
+		return $result;
+	}
 }

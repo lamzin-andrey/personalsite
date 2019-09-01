@@ -17,6 +17,9 @@ class CPageCompiler {
 	/** @property string canonicalUrl  <link rel="canonical" href="scheme://host/$this->canonicalUrl"/>   */
 	public $canonicalUrl = '';//CANONICAL_URL
 	
+	/** @property bool $bPreprocesContent = false if true $this->content надо обработать _preprocess перед сохранением */
+	public $bPreprocesContent = false;
+	
 	public function __construct() {
 		$this->displayDate = date('d.m.Y');
 	}
@@ -32,7 +35,7 @@ class CPageCompiler {
 		$s = str_replace('{BC}', $this->bc, $s);
 		$s = str_replace('{HEADING}', $this->heading, $s);
 		
-		$s = str_replace('{CONTENT}', $this->content, $s);
+		$s = str_replace('{CONTENT}', $this->_preprocessContent(), $s);
 		$s = str_replace('{DATEENG}', date('Y-m-d H:i:s'), $s);
 		$s = str_replace('{DATERUS}', $this->displayDate, $s);
 		$s = str_replace('{CANONICAL_URL}', $this->canonicalUrl, $s);
@@ -65,7 +68,7 @@ class CPageCompiler {
 		}
 		
 		if ($bSaveNow && $this->outputFile) {
-			$this->save_($s);
+			$this->_save($s);
 		}
 		
 		return $s;
@@ -86,5 +89,79 @@ class CPageCompiler {
 		file_put_contents($sp, $s);
 		rename($sp, $this->outputFile);
 	}
+	/**
+	 * @description Учёт тегов [html] и [code]
+	 * @return string
+	*/
+	protected function _preprocessContent()
+	{
+		if ($this->bPreprocesContent) {
+			$this->_processHtmlcode();
+			//$this->content = strip_tags($this->content, "<b><img><p><ul><li><a><br>");Это потом, для НЕадминов
+			$this->content = str_replace("\r", '', $this->content);
+			//$this->content = preg_replace('#onerror|onload\s?=\s?"[^"]*"#', "", $this->content);
+			//$this->content = preg_replace("#onerror|onload\s?=\s?'[^']*'#", "", $this->content);
+			$this->content = str_replace("\n", '</p><p>', $this->content);
+			$this->content = '<p>' . $this->content . '</p>';
+			//$this->content = str_replace("  ", "<br/>", $this->content);
+			$this->content = str_replace([md5('newline'), '[html]', '[/html]', md5('monosp'), md5("\t"), '[code]', '[/code]'], ["\n", '', '', ' ', "\t", '', ''], $this->content);
+		}
+		return $this->content;
+	}
+	/**
+	 * @description 
+	*/
+	protected  function _processHtmlcode()
+    {
+		$s = $this->content;
+    	$inTag = false;
+    	$inCode = false;
+    	$q = '';
+    	$nQuoteCounter = 0;
+    	for ($i = 0; $i < strlen($s); $i++) {
+    		if ($s[$i] == '[' && strpos($s, '[html]', $i) === $i) {
+    			$inTag = 1;
+    		}
+    		if ($s[$i] == '[' && strpos($s, '[/html]', $i) === $i) {
+    			$inTag = 0;
+    		}
+    		
+    		if ($s[$i] == '[' && strpos($s, '[code]', $i) === $i) {
+    			$inCode = 1;
+    		}
+    		if ($s[$i] == '[' && strpos($s, '[/code]', $i) === $i) {
+    			$inCode = 0;
+    		}
+    		
+    		if ($inTag && $s[$i] == "\n") {
+    			$q .= md5('newline');
+    		} elseif($inTag && $s[$i] == ' ') {
+    			$q .= md5('monosp');
+    		} elseif($inTag && $s[$i] == "\t") {
+    			$q .= md5("\t");
+    		} else {
+				
+				if (!$inTag && $s[$i] == '"') {
+					if ($nQuoteCounter == 0) {
+						$nQuoteCounter++;
+						$q .= '&laquo;';
+					} else {
+						$nQuoteCounter--;
+						$q .= '&raquo;';
+					}
+				} else {
+					if($inCode && $s[$i] == '<') {
+						$q .= '&lt;';
+					} else if($inCode && $s[$i] == '>') {
+						$q .= '&gt;';
+					} else {
+						$q .= $s[$i];
+					}
+				}
+    			
+    		}
+    	}
+    	$this->content = $q;
+    }
 	
 }
