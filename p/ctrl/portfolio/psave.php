@@ -1,6 +1,8 @@
 <?php
 include __DIR__ . '/../adminauthjson.php';
 include __DIR__ . '/classes/portfoliocompiler.php';
+include __DIR__ . '/classes/portfoliolistcompiler.php';
+
 class ProudctPost extends AdminAuthJson {
 	/** @property string */
 	//public $ = '';
@@ -12,11 +14,13 @@ class ProudctPost extends AdminAuthJson {
 		
 		$this->treq('title');
 		$this->treq('body', 'content_block');
+		$this->treq('shortdesc');
 		$this->treq('url');
 		$this->treq('heading');
 		$this->treq('defaultLogo', 'logo');
 		$this->ireq('category', 'category_id');
 		$this->ireq('hours');
+		$this->treq('custom_download_content');
 		
 		$this->treq('description');
 		$this->treq('keywords');
@@ -24,6 +28,9 @@ class ProudctPost extends AdminAuthJson {
 		$this->treq('og_title');
 		$this->treq('og_image');
 		$this->treq('sha256');
+		$this->treq('product_file_textlink');
+		$this->treq('outerLink', 'outer_link');
+		$this->treq('outerLinkText', 'outer_link_text');
 		$this->treq('productFile', 'product_file');
 		$this->treq('relatedArticles');
 		$this->breq('hasSelfSection', 'has_self_section');
@@ -74,9 +81,36 @@ class ProudctPost extends AdminAuthJson {
 				$oCompiler->og_description = $this->og_description;
 				$oCompiler->og_image = $this->og_image;
 				$oCompiler->nCategory = $this->category_id;//For bc
-				$oCompiler->compile();			
+				$oCompiler->compile();
 				//$comiErr = $oCompiler->emsg;
 			}
+			
+			if (!$this->hide_from_productlist) {
+				//main portfolio list
+				$oCompiler = new PortfoliolistCompiler();
+				$_REQUEST['noxhr'] = true;
+				$oCompiler->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1');
+				
+				$oCompiler->title = l('Andrey\'s portfolio', true);
+				$oCompiler->url = $this->url;
+				//$url = $this->url . '/index.html';
+				$url = '/portfolio/';
+				$oCompiler->outputFile = DOC_ROOT . '/portfolio/index.html';
+				$oCompiler->canonicalUrl = SCHEME_HOST . $url;
+				$oCompiler->heading = l('My works', true);
+				$oCompiler->og_image = '';
+				$oCompiler->nCategory = $this->category_id;//Helpful, for category list
+				
+				$oCompiler->og_title = '';//TODO
+				$oCompiler->og_description = '';//TODO
+				$oCompiler->compile();
+				
+				//TODO portfolio section list
+				
+				unset($_REQUEST['noxhr']);
+				
+			}
+			
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}
 		json_error_arr(['errors' => $errors]);
@@ -142,6 +176,9 @@ class ProudctPost extends AdminAuthJson {
 	{
 		//title
 		$this->_setRequiredError('title', 'Title', $errors);
+		
+		//shortdesc
+		$this->_setRequiredError('shortdesc', 'Shortdesc', $errors);
 		
 		//heading
 		$this->_setRequiredError('heading', 'Heading Article', $errors);

@@ -131,6 +131,8 @@ var locales = {
 			//portfolio sha256
 			'uploadFile' : 'Загрузить файл',
 			'require_file_path_and_sha256' : 'Необходимо выбрать файл и ввести значение sha256',
+			'SHA256' : 'Файл работы',
+			'custom_download_content' : 'Ссылки на загрузку в html если их более одной',
 
 			//portfolio articles relations
 			'bindArticle' : 'Связать статью',
@@ -138,6 +140,10 @@ var locales = {
 			//portfolio form other
 			'Hide_on_portfoli_page' : 'Скрыть работу на странице портфолио',
 			'Time_on_dev' : 'Время, затраченное на разработку',
+			'OuterLink' : 'Внешняя страница работы (например, googleplay или github)',
+			'ShortDesc' : 'Краткое описание работы',
+			'OuterLinkText' : 'Текст ссылки на внешнюю страницу работы',
+			'product_file_textlink' : 'Текст ссылки на файл работы',
         }
     }
 }

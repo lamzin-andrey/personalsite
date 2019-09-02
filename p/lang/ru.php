@@ -74,6 +74,13 @@ $aLang = [
 	'Database clear, but unable drop phisical file'        => 'Данные о файле итз базы удалены, но файл удалить не удалось',
 	
 	'Title'        => 'Тайтл страницы',
+	'Shortdesc'        => 'Краткое описание работы',
+	
+	'one_hour'   => 'час',
+	'two_hours'  => 'часа',
+	'many_hours' => 'часов',
+	
+	
 	
 	
 	//DataTables
@@ -110,6 +117,11 @@ $aLang = [
 	'TrollKillers altrnative' => 'TrollKiller - альтернативная модерация ответов@mail.ru',
 	'TrollKillers altrnative in ff' => 'TrollKiller - альтернативная модерация ответов@mail.ru с userscript для FireFox',
 	'TrollKillers description' => 'TrollKiller - userscript для самостоятельного удаления вопросов троллей из ленты ответов@mail.ru. Хотите почувствовать себя модератором ответов - установить TrollKiller в свой Firefox и избавляйтесь от нежелательных вопросов в ленте в два клика.',
-	'TrollKillers kw' => 'модератор ответов mail.ru, как стать модератором ответов, альтернативная модерация ответов@mail.ru.'
+	'TrollKillers kw' => 'модератор ответов mail.ru, как стать модератором ответов, альтернативная модерация ответов@mail.ru.',
+	
+	//Portfolio main list
+	'Andrey\'s portfolio' => 'Портфолио Ламзина Андрея',
+	'My works' => 'Мои работы',
+	
 	
 ];

@@ -12,7 +12,10 @@
 			<label class="form-check-label" for="hasSelfSection">{{ $t('app.hasSelfSection') }}</label>
 		</div>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
-        <textareab4 v-model="body" ref="portfoliobody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
+        
+		<textareab4 v-model="shortdesc" ref="portfolioshortdesc" @input="setDataChanges" :counter="counter" :label="$t('app.ShortDesc')"  id="content_preview" rows="12" validators="'required'"></textareab4>
+
+		<textareab4 v-model="body" ref="portfoliobody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12"></textareab4>
         <div class="mb-3">
 			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
 			<inputfileb4 
@@ -23,13 +26,18 @@
 						:csrfToken="$root._getToken()"
 						:label="$t('app.insertImage')" id="poster" ></inputfileb4>
 		</div>
+
+		<textareab4 v-model="custom_download_content" ref="custom_download_content" @input="setDataChanges" :counter="counter" :label="$t('app.custom_download_content')"  id="custom_download_content" rows="12" ></textareab4>
+		<inputb4 v-model="outerLink" @input="setDataChanges" id="outerLink" type="url" :placeholderlabel="$t('app.OuterLink')" ></inputb4>
+		<inputb4 v-model="outerLinkText" @input="setDataChanges" id="outerLinkText" className="mb-3" type="url" :placeholderlabel="$t('app.OuterLinkText')"></inputb4>
+
 		<!-- SHA256 value -->
 		<div class="accordion" id="sha256Accord">
 			<div class="card border-bottom">
 				<div class="card-header" id="headingSha256">
 					<h5 class="mb-0">
 						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseSha256"	aria-expanded="true" aria-controls="collapseSha256">
-						SHA256
+						{{ $t('app.SHA256') }}
 						</button>
 					</h5>
 				</div>
@@ -61,6 +69,7 @@
 						</div>
 
 						<inputb4 v-model="sha256" placeholderlabel="SHA256"></inputb4>
+						<inputb4 v-model="product_file_textlink" :placeholderlabel="$t('app.product_file_textlink')"></inputb4>
 						
 					</div>
 					
@@ -219,6 +228,8 @@
 				title:'',
 				//Значение body
 				body:'',
+				//Краткое описание работы
+				shortdesc:'',
 				//Значение url
 				url:'',
 				//Значение heading
@@ -295,8 +306,17 @@
 				/** @property {Boolean} true когда связанный чекбокс выбран */
 				dontCreatePage : false,
 
+				/** @property {String} custom_download_content Ссылки на загрузку, в том случае, если их более одной */
+				custom_download_content : '',
+
 				/** @property {String} productFile url файла работы */
 				productFile: '',
+
+				/** @property {String} outerLink url файла работы на стороннем сервисе, например google play или github*/
+				outerLink : '',
+
+				/** @property {String} outerLinkText текст ссылки на файл работы на стороннем сервисе, например google play или github*/
+				outerLinkText : '',
 
 				/** @property {String} defaultNoHasProductFileText надпись о том, что файла нет */
 				defaultNoHasProductFileText: this.$t('app.defaultNoHasProductFileText'),
@@ -306,6 +326,9 @@
 
 				/** @property {String} sha256 файла */
 				sha256: '',
+
+				/** @property {String} product_file_textlink Текст ссылки на файл работы */
+				product_file_textlink : '',
 
 				/** @property {String} tag */
 				tag: '',
@@ -374,6 +397,7 @@
 				this.url = 'b';
 				this.heading = 'c';
 				this.body = 'd';
+				this.shortdesc = '';
 				this.filepath = this.defaultLogo = this.defaultLogoValue;
 				this.description = 'e';
 				this.keywords = 'f';
@@ -384,7 +408,11 @@
 				this.hasSelfSection = false;
 				this.sha256 = '';
 				this.productFile = '';
+				this.outerLink = '';
+				this.outerLinkText = '';
 				this.relatedArticles = '';
+				this.product_file_textlink = '';
+				this.custom_download_content = '';
 				this.relatedArticlesFromServer = [];
 				this.setRelatedArticles();
 				this.id = 0;
@@ -397,6 +425,7 @@
 					this.url = data.url;
 					this.heading = data.heading;
 					this.body = data.content_block;
+					this.shortdesc = data.shortdesc;
 					this.filepath = this.defaultLogo = data.logo;
 					this.changeLogoTab();
 					this.description = data.description;
@@ -409,6 +438,10 @@
 					this.dontCreatePage = parseInt(data.dont_create_page) ? true : false;
 					this.hasSelfSection =  parseInt(data.has_self_section) ? true : false;
 					this.productFile = data.product_file;
+					this.outerLink = data.outer_link;
+					this.outerLinkText = data.outer_link_text;
+					this.product_file_textlink = data.product_file_textlink;
+					this.custom_download_content = data.custom_download_content;
 					this.relatedArticlesFromServer = data.relatedArticles;
 					this.hideFromProductlist = parseInt(data.hide_from_productlist) ? true : false;
 					this.setRelatedArticles();

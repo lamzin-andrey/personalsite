@@ -2,12 +2,14 @@
 <html xml:lang="ru" lang="ru">
 	<head>
 		<meta charset="WINDOWS-1251">
-		<link rel="canonical" href="https://andryuxa.ru/portfolio/"/>
-		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no">
-		<title>Портфолио Ламзина Андрея</title>
+		<link rel="canonical" href="https://andryuxa.ruhttps://andryuxa.ru/portfolio/">
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no"><meta name="keywords" content=",,,">
+		<title>Портфолио Ламзина Андрея -|- Сайт Андрея</title>
 		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
+		<!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous"-->
 		<link rel="stylesheet" href="/s/fontawesome5/all.css" >
 		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
 		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
 	</head>
 	<body>
@@ -16,7 +18,7 @@
 				<div class="row">
 					<div class="col">
 						<div class="text-left u-mainhead">
-							<h1>Персональная страница Ламзина Андрея</h1>
+							<h1>Блог Андрея</h1>
 						</div>
 					</div>
 				</div>
@@ -30,117 +32,122 @@
 
 			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item">
+					<a class="nav-link" href="/portfolio/">Портфолио</a>
+				  </li>
 				  <li class="nav-item active">
-					<a class="nav-link" href="javascript:;">Портфолио</a>
+					<a class="nav-link" href="javascript:;">Блог</a>
 				  </li>
 				  <li class="nav-item">
-					<a class="nav-link" href="#">Блог</a>
-				  </li>
-				  <li class="nav-item">
-					<a class="nav-link" href="/clients">Клиентам</a>
+					<a class="nav-link" href="/clients/">Клиентам</a>
 				  </li>
 				</ul>
 			  </div>
 			</nav>
+			
 			<div>&nbsp;</div>
 			<div class="row">
 				<div class="col-12 col-lg-8">
 					<article>
 						<h1>Мои работы</h1>
-						<ul class="list-group">
-							<li class="list-group-item mb-4 border-info">
-								<img class="u-img-left" src="/i/tklogo1.jpg">
-								<h3><a href="/portfolio/web/userscripts/trollkiller/">TrollKiller</a></h3>
-								<div>
-									Модерируй ответы@mail.ru самостоятельно. Теперь каждый пользователь браузера Firefox если захочет, сможет модерировать ответы самостоятельно,
-									с помощью этого userscript-а.
-									Подробности в <a href="/portfolio/web/userscripts/trollkiller/">видео</a>.
-								</div>
-								<div class="clearfix"></div>
-								<div class="download">
-									<div class="border-success border rounded p-2">
-										<div id="fflink"><a href="https://www.mozilla.org/ru/firefox/download/thanks/" target="_blank">Скачать Firefox</a></div>
+						<time datetime="2019-09-02 17:50:04" class="d-block text-right text-muted small">Обновлено 02.09.2019 в 17:50</time>
+						<ul class="list-group"><li class="list-group-item mb-4 border-info">
+	<img class="u-img-left" src="/i/tklogo1.jpg">
+	<h3><a href="/portfolio/web/components/frontend/vue/vue2_editable_tree_view/">TrollKIller</a></h3>
+	<div>
+		Модерируй ответы@mail.ru самостоятельно. Теперь каждый пользователь браузера Firefox если захочет, сможет модерировать ответы самостоятельно, с помощью этого userscript-а. Подробности в <a href="http://mh.loc/portfolio/web/userscripts/trollkiller/">видео</a>.
+	</div>
+	<div class="clearfix"></div>
+	<div class="download">
+		<div class="border-success border rounded p-2"><div id="fflink"><a href="https://www.mozilla.org/ru/firefox/download/thanks/" target="_blank">Скачать Firefox</a></div>
 										<script>
 											if (~navigator.userAgent.toLowerCase().indexOf('firefox')) {
 												document.getElementById('fflink').style.display = 'none';
 											}
 										</script>
 										<div><a href="https://addons.mozilla.org/ru/firefox/addon/greasemonkey/" target="_blank">Установить дополнение Greasemonkey</a></div>
-										<div><a href="http://andryuxa.ru/d/tk.user.js" target="_blank">Установить userscript TrollKiller</a></div>
-									</div>
-								</div>
-								<p class="text-right mt-2">
-									<strong><i class="fa fa-clock text-info">&nbsp;</i>Затраченное время:</strong> 53 часа.
-								</p>
-							</li>
-							<li class="list-group-item mb-4 border-info">
-								<img class="u-img-left" src="https://lh3.googleusercontent.com/MTyf30M1sl_3JFHX0atGJTzDUXRKWr20amjRVD_IQmZjfdaMnYjNmtigx75Jcqzrxg=s180">
-								<h3>Умная яркость</h3>
-								<div>
-									Автоматическая регулировка яркости. Для смартфонов не устанавливающих яркость дисплея в зависимости от освещения. Приложение работает в фоне и запоминает, в какое время вы изменяли яркость дисплея и на какое значение. Анализируя три дня наблюдений оно автоматически устанавливает яркость экрана вашего смартфона в то же время и в то же значение, в которое вы его изменяли в последние трое суток. Например, если вы снизили яркость в 23:30 1 ого мая, в 23:29 15 мая и в 23:20 20 мая (а в промежутках не снижали яркость), все последующие сутки не позже 23:32 приложение снизит яркость экрана вашего смартфона автоматически.
-								</div>
-								
-								<div class="download">
-									<a href="https://play.google.com/store/apps/details?id=land.learn.hw19" target="_blank">Скачать с Google Play для android 9+</a>
-									<div class="border-success border rounded p-2">
-										<a href="/d/SmartBrightness-code30-a2.3.6-2019-08-24.apk" target="_blank">Скачать для 	android 2.3.x+</a>
-										<div>
-											sha256: <span class="border">7c8bf7bc339feed53cdc648becb15d97a63da6aee8f1eb7cf1e851da89405e9e</span>
-										</div>
-										<div>
-											<a href="/blog/dlya_chego_nuzhni_sha256_i_sha1_i_md5/" target="_blank">Для чего нужны sha256, sha1 и md5</a>
-										</div>
-									</div>
-									
-								</div>
-								
-								<div>
-									<strong>Связанные статьи:</strong>
-									<a href="/blog/kak_sozdat_android_prilozhenie_na_php_html_js_css/" class="border">Как создать android приложение на php (+ html + js + css)</a>
-									<a href="/blog/kak_ya_pisal_svoyo_pervoe_umnoe_prilozhenie/" class="border">Как я писал своё первое "умное" приложение</a>
-								</div>
-							</li>
-							
-							<li class="list-group-item mb-4 border-info">
-								<img class="u-img-left" src="/i/cache.jpg">
-								<h3>Модуль кэширования с помощью service worker</h3>
-								<div>
-									<p>Реализация алгоритма &laquo;Если ресурс найден в кэше, берётся из кэша, иначе с сервера&raquo;.</p>
-									<p>Универсальное решение, подходящее для большинства сайтов и progressive web applications.</p>
-									<p>Модуль включает в себя скрипт service worker и клиентский скрипт, обеспечивающий кэширование всех ресурсов, находящихся на странице. Обрабатывая сообщения 
-									от service worker можно вывести приглашение добавить ссылку на сайт
-									на главный экран смартфона или уведомить посетителя сайта о том, что страница обновилась.
-									</p>
-								</div>
-								
-								<div class="download">
-									<a href="https://github.com/lamzin-andrey/land_cache_service_worker" target="_blank">Скачать с Github</a>
-								</div>
-								
-								<div>
-									<strong>Связанные статьи:</strong>
-									<a href="/blog/keshirovanie_s_pomoshyu_service_worker/" class="border">Кэширование с помощью service worker - ещё один мануал</a>
-									<a href="/blog/ispolzovanie_nasledovaniya_i_klassov_v_javascript_s_laravel_mix/" class="border">Использование наследования и классов в javascript с laravel-mix</a>
-								</div>
-							</li>
-							
-							<li class="list-group-item mb-4 border-info">
-								<img class="u-img-left" src="/i/vbt.jpg">
-								<h3><a href="/portfolio/web/components/frontend/vue/vue2_editable_tree_view/">Vue 2 TreeView component</a></h3>
-								<div>
-									<p>Реализация древовидного списка TreeView с немедленной отправкой данных о редактировнии списка на сервер в виде компонента Vue 2.</p>
-									<p>Дерево помещено в аккордион bootstrap 4. Компонент удобен для повторного использования.</p>
-									<p>Входит в состав моей javascript библиотеки landlib.</p>
-								</div>
-								<div class="download">
-									<a href="https://github.com/lamzin-andrey/landlib/" target="_blank">Скачать с Github</a>
-								</div>
-								<div class="download">
-									<a href="https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/accordionselecttree" class="border" target="_blank">Документация на github</a>
-								</div>
-							</li>
-							
-						</ul>
+										<div><a href="http://andryuxa.ru/d/tk.user.js" target="_blank">Установить userscript TrollKiller</a></div></div>
+		
+		
+	</div>
+	
+	
+	<p class="text-right mt-2">
+	<strong><i class="fa fa-clock text-info">&nbsp;</i>Затраченное время:</strong> 53 часа.
+</p>								
+
+</li>
+<li class="list-group-item mb-4 border-info">
+	<img class="u-img-left" src="https://lh3.googleusercontent.com/MTyf30M1sl_3JFHX0atGJTzDUXRKWr20amjRVD_IQmZjfdaMnYjNmtigx75Jcqzrxg=s180">
+	<h3>Умная яркость</h3>
+	<div>
+		Автоматическая регулировка яркости. Для смартфонов не устанавливающих яркость дисплея в зависимости от освещения. Приложение работает в фоне и запоминает, в какое время вы изменяли яркость дисплея и на какое значение. Анализируя три дня наблюдений оно автоматически устанавливает яркость экрана вашего смартфона в то же время и в то же значение, в которое вы его изменяли в последние трое суток. Например, если вы снизили яркость в 23:30 1 ого мая, в 23:29 15 мая и в 23:20 20 мая (а в промежутках не снижали яркость), все последующие сутки не позже 23:32 приложение снизит яркость экрана вашего смартфона автоматически.
+	</div>
+	<div class="clearfix"></div>
+	<div class="download">
+		
+		<a href="https://play.google.com/store/apps/details?id=land.learn.hw19" target="_blank">Скачать с Google Play для android 9+</a>
+
+		<div class="border-success border rounded p-2">
+	<a href="/d/2019/09/2a49ff1cc6af225da08cc98b969a78c1.apk" target="_blank">Скачать для android 2.3.x+</a>
+	<div>
+		sha256: <span class="border">7c8bf7bc339feed53cdc648becb15d97a63da6aee8f1eb7cf1e851da89405e9e</span>
+	</div>
+	<div>
+		<a href="/blog/dlya_chego_nuzhni_sha256_i_sha1_i_md5/" target="_blank">Для чего нужны sha256, sha1 и md5</a>
+	</div>
+</div>
+
+	</div>
+	
+	
+	
+</li>
+<li class="list-group-item mb-4 border-info">
+	<img class="u-img-left" src="http://mh.loc/i/cache.jpg">
+	<h3>Модуль кэширования с помощью service worker</h3>
+	<div>
+		<p>Реализация алгоритма «Если ресурс найден в кэше, берётся из кэша, иначе с сервера».
+</p>
+<p>Универсальное решение, подходящее для большинства сайтов и progressive web applications.
+</p><p>
+Модуль включает в себя скрипт service worker и клиентский скрипт, обеспечивающий кэширование всех ресурсов, находящихся на странице. Обрабатывая сообщения от service worker можно вывести приглашение добавить ссылку на сайт на главный экран смартфона или уведомить посетителя сайта о том, что страница обновилась.
+</p>
+	</div>
+	<div class="clearfix"></div>
+	<div class="download">
+		
+		<a href="https://github.com/lamzin-andrey/land_cache_service_worker" target="_blank">Скачать с Github</a>
+
+		
+	</div>
+	
+	
+	
+</li>
+<li class="list-group-item mb-4 border-info">
+	<img class="u-img-left" src="/i/vbt.jpg">
+	<h3><a href="/portfolio/web/components/frontend/vue/vue2_editable_tree_view/">Vue 2 TreeView component</a></h3>
+	<div>
+		<p>Реализация древовидного списка TreeView с немедленной отправкой данных о редактировнии списка на сервер в виде компонента Vue 2.</p>
+
+<p>Дерево помещено в аккордион bootstrap 4. Компонент удобен для повторного использования.</p>
+
+<p>Входит в состав моей javascript библиотеки landlib.</p>
+	</div>
+	<div class="clearfix"></div>
+	<div class="download">
+		<div class="border-success border rounded p-2">
+<div><a href="https://github.com/lamzin-andrey/landlib/" target="_blank">Скачать с Github</a></div>
+<div><a href="https://github.com/lamzin-andrey/landlib/tree/master/vue/2/bootstrap/4/accordionselecttree/" target="_blank">Документация на github</a></div></div>
+		
+		
+	</div>
+	
+	
+	
+</li>
+</ul>
 					</article>
 				</div>
 				<div class="col-12 col-lg-4  u-right-side">
@@ -195,6 +202,7 @@
         <script src="/j/jquery-3.3.1.slim.min.js"></script>
         <script src="/j/bootstrap4.2.1.min.js"></script>
         <script src="/j/popper1.14.6.min.js"></script>
+        <script src="/j/prism/0.js"></script>
         <script src="/j/app.js"></script> 
         <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
 	</body>

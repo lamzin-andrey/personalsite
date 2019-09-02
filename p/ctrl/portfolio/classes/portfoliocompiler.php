@@ -6,7 +6,6 @@ require_once DOC_ROOT . '/q/q/treealg.php';
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
-require_once DOC_ROOT . '/q/q/treealg.php';
 
 
 class PortfolioCompiler extends CPageCompiler {
