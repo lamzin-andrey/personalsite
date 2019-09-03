@@ -392,7 +392,7 @@
 			 * @param {Object} data @see mysql table fields pages
 			*/
 			setProductData(data) {
-				this.category = 1001;
+				this.category = 0;
 				this.title = 'a';
 				this.url = 'b';
 				this.heading = 'c';
@@ -419,7 +419,7 @@
 				this.hideFromProductlist = false;
 				
 				//Fix bug when edit the article more then one time...
-				setTimeout(() => {
+				Vue.nextTick(() => {
 					let url, categoryId, title;
 					title = this.title = data.title;
 					url = this.url = data.url;
@@ -449,7 +449,7 @@
 					this.relatedArticlesFromServer = data.relatedArticles;
 					this.hideFromProductlist = parseInt(data.hide_from_productlist) ? true : false;
 					this.setRelatedArticles();
-				}, 1);
+				});
 				
 			},
 			/**
@@ -463,7 +463,7 @@
 			 * @description Вставить изображение на место курсора
 			*/
 			onClickInsertImage(){
-				console.log('OI call');
+				
 			},
             /** 
              * @description Кастомный прогресс для загрузкти лого
@@ -745,9 +745,6 @@
                 self.isHelpWndVisible   = false;
                 self.nStep = self.$root.nStep;
 			})/**/
-			
-			
-            //console.log('I mounted!');
         }
     }
 </script>

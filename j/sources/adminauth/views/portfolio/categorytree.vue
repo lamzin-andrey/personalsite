@@ -11,6 +11,7 @@
 			urlCreateNewItem="/p/portfoliocats/pcsave.jn/"
 			urlUpdateItem="/p/portfoliocats/pcsave.jn/"
 			urlRemoveItem="/p/portfoliocats/pcdelte.jn/"
+			:accordisopen="true"
 			ref="acctree"
 		></accordionselecttree>
 		<!--label>CA level
@@ -78,7 +79,7 @@
 				this.portfolioCategoriesTree[0] = data[0];
 
 				Vue.nextTick(() =>{
-					this.selectedCategory = 0;//TODO  Использовать тик
+					this.selectedCategory = 0;
 					this.$refs.acctree.selectNodeById(this.selectedCategory);
 				});
 			} catch(e){}
