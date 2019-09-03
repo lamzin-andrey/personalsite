@@ -50,6 +50,7 @@ class CStaticPagesCompiler {
     	
     	$s = file_get_contents($this->DEST_DOC_ROOT . $masterFile);
         $s = str_replace('{TITLE}', $title, $s);
+        $s = str_replace('{BC}', '', $s);
         $s = str_replace('{HEADING}', $heading, $s);
         
         if ($description) {
