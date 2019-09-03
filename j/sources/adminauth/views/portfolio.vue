@@ -194,6 +194,7 @@
 					return;
 				}
 				this.setProductId(data.id);
+				this.$refs.portfolioform.resetImages();
 				this.$refs.portfolioform.setProductData(data);
 				setTimeout(() => {
 					this.setDataChanges(false);
@@ -325,6 +326,7 @@
 				$('#portfoliolist-tab').tab('show');
 				$('#portfolioform')[0].reset();
 				this.setProductId(0);
+				this.$refs.portfolioform.resetImages();
 				this.setDataChanges(false);
 			},
 			/**

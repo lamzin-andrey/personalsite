@@ -417,6 +417,7 @@
 				this.setRelatedArticles();
 				this.id = 0;
 				this.hideFromProductlist = false;
+				this.hours = 0;
 				
 				//Fix bug when edit the article more then one time...
 				Vue.nextTick(() => {
@@ -448,6 +449,7 @@
 					this.custom_download_content = data.custom_download_content;
 					this.relatedArticlesFromServer = data.relatedArticles;
 					this.hideFromProductlist = parseInt(data.hide_from_productlist) ? true : false;
+					this.hours = data.hours;
 					this.setRelatedArticles();
 				});
 				
@@ -458,6 +460,7 @@
 			resetImages() {
 				this.defaultSocImage = this.filepath =  this.defaultLogo = this.defaultLogoValue;
 				this.og_image = '';
+				this.productFile = '';
 			},
 			/**
 			 * @description Вставить изображение на место курсора
@@ -563,7 +566,7 @@
 					parseInt(this.category) > 0
 					&& String(this.title).length > 0
 					&& String(this.heading).length > 0
-					&& String(this.body).length > 0
+					&& String(this.shortdesc).length > 0
 				);
 			},
             /**

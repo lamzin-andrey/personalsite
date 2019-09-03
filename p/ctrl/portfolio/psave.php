@@ -221,7 +221,7 @@ class ProudctPost extends AdminAuthJson {
 		$this->_setRequiredError('heading', 'Heading Article', $errors);
 		
 		//content_block
-		$this->_setRequiredError('content_block', 'Article', $errors);
+		$this->_setRequiredError('shortdesc', 'Shortdesc', $errors);
 		
 		//category
 		if (!$this->category_id ) {
