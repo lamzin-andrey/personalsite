@@ -138,7 +138,7 @@ $(() => {
 		s;
 	s = '/blog/' + window.TextFormat.transliteUrl(heading) + '/';
 	if (url != s) {
-		window.LandLibDom.articleUrlIsModify = true;
+		window.LandLibDom.liveTransliteSetWasHandEdit('articleUrlIsModify', true);
 	}
 	window.LandLibDom.liveTranslite('#heading', '#url', 'articleUrlIsModify', '/blog/', '/');
 });
@@ -288,7 +288,7 @@ $(() => {
 		s;
 	s = '/blog/' + window.TextFormat.transliteUrl(heading) + '/';
 	if (url != s) {
-		window.LandLibDom.articleUrlIsModify = true;
+		window.LandLibDom.liveTransliteSetWasHandEdit('articleUrlIsModify', true);
 	}
 	window.LandLibDom.liveTranslite('#heading', '#url', 'articleUrlIsModify', '/blog/', '/');
 });

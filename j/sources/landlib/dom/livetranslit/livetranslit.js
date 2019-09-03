@@ -91,12 +91,54 @@ window.LandLibDom  = {
 	 * @param {String} [prefix]
 	 * @param {String} [suffix]
 	*/
-	liveTransliteSetTokens(modifyFlagVariableName, prefix, suffix) {
+	liveTransliteSetTokens:function(modifyFlagVariableName, prefix, suffix) {
 		if (String(prefix) != 'undefined') {
 			window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].prefix = prefix;
 		}
 		if (String(suffix) != 'undefined') {
 			window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].suffix = suffix;
 		}
+	},
+	/**
+	 * @description Получить значение prefix
+	 * @param {String} modifyFlagVariableName 
+	 * @return String prefix
+	*/
+	liveTransliteGetPrefix:function(modifyFlagVariableName) {
+		return window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].prefix;
+	},
+	/**
+	 * @description Получить значение suffix
+	 * @param {String} modifyFlagVariableName 
+	 * @return String suffix
+	*/
+	liveTransliteGetSuffix:function(modifyFlagVariableName) {
+		return window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].suffix;
+	},
+	/**
+	 * @description Получить значение инпута - донора
+	 * @param {String} modifyFlagVariableName 
+	 * @return String value
+	*/
+	liveTransliteGetDonorVal:function(modifyFlagVariableName) {
+		return window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].donor.val();
+	},
+	/**
+	 * @description Получить значение инпута - акцептора
+	 * @param {String} modifyFlagVariableName 
+	 * @return String value
+	*/
+	liveTransliteGetAcceptorVal:function(modifyFlagVariableName) {
+		return window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].acceptor.val();
+	},
+	/**
+	 * @description Установить флаг "Отредактировано вручную", чтобы транслитированное значение (акцептор) больше не изменялось при редактировании исходного значения (донор)
+	 * @param {String} modifyFlagVariableName 
+	 * @param {Boolean} flag
+	*/
+	liveTransliteSetWasHandEdit:function(modifyFlagVariableName, flag) {
+		window.LandLibDom.liveTransliteEntities[modifyFlagVariableName].wasHandEdit = flag;
+		
 	}
+	
 }

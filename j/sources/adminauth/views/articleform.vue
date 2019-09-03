@@ -216,10 +216,14 @@
 				
 				//Fix bug when edit the article more then one time...
 				setTimeout(() => {
+					let url;
 					this.category = data.category_id;
 					this.title = data.title;
-					this.url = data.url;
+					url = this.url = data.url;
 					this.heading = data.heading;
+					Vue.nextTick(() => {
+						this.setUrlWasChanged(url, this.title);
+					});
 					this.body = data.content_block;
 					this.filepath = this.defaultLogo = data.logo;
 					this.description = data.description;
@@ -227,7 +231,6 @@
 					this.og_title = data.og_title;
 					this.og_description = data.og_description;
 					this.og_image = this.defaultSocImage = data.og_image;
-					console.log('I set');
 				}, 1);
 				
 			},
@@ -352,6 +355,21 @@
 					}
 				}
 			},
+			/**
+			 * @description Установить факт того, что url уже редактирован в ручную и не надо его переустанавливать, транслитируя heading
+			 * @param {String} url - сохраненный ранее в базе
+			 * @param {String} heading
+			*/
+			setUrlWasChanged(url, heading){
+				let key = 'urlIsModify',
+					s = window.LandLibDom.liveTransliteGetPrefix(key) + window.TextFormat.transliteUrl(heading) + window.LandLibDom.liveTransliteGetSuffix(key);
+				if (url != s) {
+					window.LandLibDom.liveTransliteSetWasHandEdit(key, true);
+					this.url = url;
+				} else {
+					window.LandLibDom.liveTransliteSetWasHandEdit(key, false);
+				}
+			}
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
