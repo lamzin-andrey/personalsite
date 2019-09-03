@@ -83,6 +83,8 @@ class CPageCompiler {
 		$a = explode('/', $sp);
 		unset($a[count($a) - 1]);
 		$sDir = join('/', $a);
+		
+		
 		if (!file_exists($sDir)) {
 			utils_createDir($sDir);
 		}

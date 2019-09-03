@@ -64,14 +64,17 @@ class ProudctPost extends AdminAuthJson {
 				}
 			}
 			$this->_saveRelatedArticles($id);
-			//TODO тут на этапе расширения функционала будет наследник
+			
 			$comiErr = '';
+			
+			//product page
 			if (!$this->has_self_section && !$this->dont_create_page) {
+				
 				$oCompiler = new PortfolioCompiler();
 				$oCompiler->title = $this->title;
 				$oCompiler->url = $this->url;
 				$oCompiler->content = $this->content_block;
-				$url = $this->url . '/index.html';
+				$url = $this->url . 'index.html';
 				$oCompiler->outputFile = DOC_ROOT . $url;
 				$oCompiler->canonicalUrl = $this->url;
 				$oCompiler->heading = $this->heading;
@@ -85,31 +88,65 @@ class ProudctPost extends AdminAuthJson {
 				//$comiErr = $oCompiler->emsg;
 			}
 			
-			if (!$this->hide_from_productlist) {
-				//main portfolio list
-				$oCompiler = new PortfoliolistCompiler();
+			
+			//main portfolio list
+			$oCompiler = new PortfoliolistCompiler();
+			$_REQUEST['noxhr'] = true;
+			$oCompiler->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1');
+			
+			$oCompiler->title = l('Andrey\'s portfolio', true);
+			
+			$url = '/portfolio/';
+			$oCompiler->outputFile = DOC_ROOT . '/portfolio/index.html';
+			$oCompiler->canonicalUrl = $url;
+			$oCompiler->heading = l('My works', true);
+			$oCompiler->og_image = '';
+			$oCompiler->nCategory = 0;
+			
+			$oCompiler->og_title = '';//TODO
+			$oCompiler->og_description = '';//TODO
+			$oCompiler->compile();
+			
+			//TODO portfolio section list
+			$sCategoryIdList = $this->category_id;
+			$sCompilerUrl = $this->url;
+			$nTopCategory = $this->category_id;
+			
+			while (true) {
 				$_REQUEST['noxhr'] = true;
-				$oCompiler->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1');
+				$oCompiler->aData = query('SELECT * FROM portfolio WHERE category_id IN(' . $sCategoryIdList . ') AND is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
+				$aCategoryData = dbrow('SELECT parent_id, category_name AS cname FROM portfolio_categories WHERE id = ' . $nTopCategory);
 				
-				$oCompiler->title = l('Andrey\'s portfolio', true);
-				$oCompiler->url = $this->url;
-				//$url = $this->url . '/index.html';
-				$url = '/portfolio/';
-				$oCompiler->outputFile = DOC_ROOT . '/portfolio/index.html';
-				$oCompiler->canonicalUrl = SCHEME_HOST . $url;
+				$oCompiler->title = l('Andrey\'s portfolio', true) . (isset($aCategoryData['cname']) ? (' ' . $aCategoryData['cname'] . ' ') : '');
+				$aUrl = explode('/', $sCompilerUrl);
+				unset($aUrl[ count($aUrl) - 1 ]);
+				unset($aUrl[ count($aUrl) - 1 ]);
+				$url = join('/', $aUrl) . '/';
+				//$oCompiler->url = $sCompilerUrl;
+				$oCompiler->outputFile = DOC_ROOT . $url . 'index.html';
+				$oCompiler->canonicalUrl = $url;
 				$oCompiler->heading = l('My works', true);
 				$oCompiler->og_image = '';
-				$oCompiler->nCategory = $this->category_id;//Helpful, for category list
+				$oCompiler->nCategory = $nTopCategory;
 				
 				$oCompiler->og_title = '';//TODO
 				$oCompiler->og_description = '';//TODO
 				$oCompiler->compile();
 				
-				//TODO portfolio section list
+				$sCompilerUrl = $url;
 				
-				unset($_REQUEST['noxhr']);
-				
+				$nParentId = isset($aCategoryData['parent_id']) ? $aCategoryData['parent_id'] : 0;
+				if ($nParentId == 2402 || $nParentId == 0) {
+					break;
+				}
+				$nTopCategory = $nParentId;
+				$aCategories = query('SELECT id FROM portfolio_categories WHERE parent_id = ' . $nParentId);
+				$aCategories = array_column($aCategories, 'id');
+				$sCategoryIdList = join(',', $aCategories) . ',' . $nTopCategory;
 			}
+			
+			unset($_REQUEST['noxhr']);
+			/**/
 			
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}

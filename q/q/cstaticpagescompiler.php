@@ -52,6 +52,7 @@ class CStaticPagesCompiler {
         $s = str_replace('{TITLE}', $title, $s);
         $s = str_replace('{BC}', '', $s);
         $s = str_replace('{HEADING}', $heading, $s);
+        $s = str_replace('{CANONICAL_URL}', $destFilePath, $s);
         
         if ($description) {
 			$s = str_replace('<!--DESCRIPTION -->', '<meta name="description" content="' . $description . '">', $s);

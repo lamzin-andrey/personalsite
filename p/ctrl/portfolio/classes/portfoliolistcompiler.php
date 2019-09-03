@@ -43,10 +43,8 @@ class PortfoliolistCompiler extends CPageCompiler {
 	*/
 	public function compile($bSaveNow = true)
 	{
-		$this->bc = $this->_setBC();//TODO
-		
+		$this->bc = $this->_setBC();
 		$this->_parseList();//content, seo-tags
-		
 		$s = parent::compile();//попробуем так
 		return $s;
 	}
@@ -63,6 +61,7 @@ class PortfoliolistCompiler extends CPageCompiler {
 		$sItemTpl = file_get_contents(DOC_ROOT . '/p/view/site/portfolio/listitem.html');
 		
 		foreach ($aData as $aRow) {
+			$this->url = $aRow['url'];
 			$s = str_replace('{heading}', $this->_parseHeading($aRow['heading'], intval($aRow['dont_create_page']), $this->url), $sItemTpl);
 			$s = str_replace('{shortdesc}', $aRow['shortdesc'], $s);
 			$s = str_replace('{outer_work_link}', $this->_parseOuterWorkLink($aRow['outer_link'], $aRow['outer_link_text'], $aRow['custom_download_content']), $s);
@@ -211,7 +210,10 @@ class PortfoliolistCompiler extends CPageCompiler {
 	*/
 	private function _setBC()
 	{
-		return '';
+		if (!$this->nCategory) {
+			return '';
+		}
+		
 		$aBcData = $this->_getBcData();
 		/*print_r($aBcData);
 		die;/**/
@@ -221,7 +223,7 @@ class PortfoliolistCompiler extends CPageCompiler {
 		$dcItemTpl = file_get_contents( DOC_ROOT . '/p/view/site/bc/bc_item.html' );
 		
 		$aBcStrings = [];
-		$nSz = count($aBcData);
+		$nSz = count($aBcData) - 1;
 		$sLink = '/';
 		$aUrlData = $this->_getUrlArr();
 		
@@ -233,8 +235,9 @@ class PortfoliolistCompiler extends CPageCompiler {
 			$sItem = str_replace('{LINK}', $sLink, $sItem);
 			$aBcStrings[] = $sItem;
 		}
+		$oData = $aBcData[$nSz];
 		$s = str_replace('{BC_ITEMS}', join('', $aBcStrings), $s);
-		$s = str_replace('{MENU_ACTIVE_ITEM}', $this->heading, $s);
+		$s = str_replace('{MENU_ACTIVE_ITEM}', $oData->category_name, $s);
 		return $s;
 	}
 	/**
