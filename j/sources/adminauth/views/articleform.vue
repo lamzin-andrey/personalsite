@@ -290,12 +290,9 @@
 				let id = parseInt(data.id);
 				if (data.status == 'ok' && id) {
 					this.$root.setArticleId(id);
-					/*this.saveSucces = true;
-					setTimeout(() => {
-						this.saveSucces = false;
-					}, 2*1000);*/
 					$('#Saver').toast('show');
 					this.$root.setDataChanges(false);
+					this.$root.dataTable.search('').draw();
 				}
 			},
 			/**

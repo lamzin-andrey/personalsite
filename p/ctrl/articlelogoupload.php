@@ -16,7 +16,7 @@ class ArticleLogoUpload extends AdminAuthFileUpload {
 		if ($this->_validateFile($photo, $errors)) {
 			$success = move_uploaded_file($photo['tmp_name'], $this->_path);
 			if ($success) {
-				utils_resizeAndAddBg($this->_path, $this->_path, 64, 64, [255, 255, 255], breq('alpha'));
+				utils_resizeAndAddBg($this->_path, $this->_path, 190, 190, [255, 255, 255], breq('alpha'));
 				$s = str_replace(DOC_ROOT, '', $this->_path);
 				json_ok('path', $this->_url, 'srcname', $photo['name']);
 				return;

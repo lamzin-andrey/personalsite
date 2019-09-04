@@ -22,27 +22,21 @@ class PortfolioReorder extends AdminAuthJson {
 				$min++;
 			}
 			
-			//TODO recompile
-			
 			//Прекомпилировать для основного листа портфолио
 			//main portfolio list
 			$oCompiler = new PortfoliolistCompiler();
 			$oCompiler->compileMainList();
-			
-			//TODO Перекомпилировать для листов категорий
 			
 			//Получить категории всех переставляемых работ
 			$aRowsData = query('SELECT DISTINCT category_id FROM ' . $this->table . ' WHERE id IN(' . $sIdList . ')' );
 			//$aCategoryIdList = array_column($aRowsData, 'category_id');
 			
 			foreach ($aRowsData as $aRow) {
-				//die('O-O');
 				$oCompiler->compileLevelsLists($aRow['category_id']);
 			}
 			json_ok();
 		}
 		json_error('msg', l('Unable reorder article list: empty data'), 'a', print_r($aIds, 1) );
-		
 		
 	}
 }

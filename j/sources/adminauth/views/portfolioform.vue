@@ -535,6 +535,7 @@
 					this.$root.$refs.portfolio.setProductId(id);
 					$('#portfolioSaver').toast('show');
 					this.$root.$refs.portfolio.setDataChanges(false);
+					this.$root.$refs.portfolio.dataTable.search('').draw();
 				}
 			},
 			/**
