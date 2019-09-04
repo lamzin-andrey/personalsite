@@ -28,14 +28,14 @@
 						<thead>
 							<tr>
 								<th class="u-tabledragcolumn-head"></th>
-								<th>{{ $t('app.Heading') }}</th> 
+								<th>{{ $t('app.HeadingPortfolio') }}</th> 
 								<th>{{ $t('app.Operations') }}</th>
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
 								<th class="u-tabledragcolumn-head"></th>
-								<th>{{ $t('app.Heading') }}</th>
+								<th>{{ $t('app.HeadingPortfolio') }}</th>
 								<th>{{ $t('app.Operations') }}</th>
 							</tr>
 						</tfoot>
