@@ -20,7 +20,7 @@ class TreeAlgorithms {
 		$sField = static::$idFieldName;
 		$r[] = $node->$sField;
 		
-		$sField = static::$childsFieldName;
+		$sFieldName = static::$childsFieldName;
 		if ($node->$sFieldName) {
 			$part = [];
 			foreach ($node->$sFieldName as $oItem) {
@@ -30,7 +30,7 @@ class TreeAlgorithms {
 				}
 			}
 		}
-		return r;
+		return $r;
 	}
 	/**
 	 * @description walking oTree and execute oCallback(currentNode)

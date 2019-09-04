@@ -123,5 +123,8 @@ $aLang = [
 	'Andrey\'s portfolio' => 'Портфолио Ламзина Андрея',
 	'My works' => 'Мои работы',
 	
+	//Portfolio tree view
+	'Category has childs. Renaming unavailable' => 'В категории есть опубликованные работы. Переименование невозможно. (Это вредно для SEO - сайт может вылететь из выдачи)'
+	
 	
 ];

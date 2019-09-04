@@ -38,8 +38,12 @@ import B421Validators  from '../bootstrap421-validators/b421validators';
 //package.json: npm install --save datatables.net-bs4
 //se also https://datatables.net/download/index tab NPM and previous check all variants
 require( 'datatables.net-bs4'); 
+//reorder
+require( 'datatables.net-rowreorder-bs4'); 
 //my patch pagination for extra small view
 import './css/patchdatatablepaginationview.css';
+import './css/datatablefirstcellbg.css';
+import 'datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.min.css';
 // /DataTables
 
 //Центровка прелоадера DataTables по центру (самоделка, но надо оформить как плагин)
@@ -187,10 +191,25 @@ window.app = new Vue({
         let id = '#articles';
         this.isArticlesDataTableInitalized = true;
         this.dataTable =  $(id).DataTable( {
+			'rowReorder': {
+				dataSrc: 'id',
+				update: false,
+			},
             'processing': true,
             'serverSide': true,
             'ajax': "/p/articleslist.jn/",
             "columns": [
+				{ 
+                    "data": "id",
+                    'render' : function(data, type, row) {
+						return  `<i class="fas fa-arrows-alt fa-sm j-dtdrag-icon"></i>
+						<div class="spinner-border spinner-border-sm j-dtrows-spinner sm" role="status" style="display:none">
+							<span class="sr-only">Loading...</span>
+						</div>
+						`;
+					},
+					'class' : 'u-tablerowdragcellbg'
+                },
                 { 
                     "data": "heading",
                     'render' : function(data, type, row) {
@@ -255,8 +274,42 @@ window.app = new Vue({
                     }
                 });
             }
-        });
-        
+        }).on('row-reorder', (e, details, changed) => {
+			let i, a = [];
+			for (i = 0; i < details.length; i++) {
+				a.push(details[i].oldData);
+			}
+			if (!this.reorderRequestSended) {
+				this.reorderRequestSended = true;
+				this.skipCutObjects = true;
+				this.dataTable.rowReorder.disable();
+				$('.u-tablerowdragcellbg').addClass('u-tablerowdragcellbg-cursor-normal');
+				$('.j-dtrows-spinner').css('display', 'inline-block');
+				$('.j-dtdrag-icon').css('display', 'none');
+				this._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, '/p/articlesreorder.jn/', (a, b, c) => {this.onFailReorderData(a, b, c);});
+			}
+		});
+	},
+	/**
+	 * @description Обработка успешного переупорядочивания статей
+	 * @param {Object} data 
+	 */
+	onSuccessReorderData(data) {
+		if (!this.onFailReorderData(data) ) {
+			return;
+		}
+	},
+	/**
+	 * @description Обработка успешного переупорядочивания статей
+	 * @param {Object} data 
+	 */
+	onFailReorderData(a, b, c) {
+		$('.u-tablerowdragcellbg').removeClass('u-tablerowdragcellbg-cursor-normal');
+		$('.j-dtrows-spinner').css('display', 'none');
+		$('.j-dtdrag-icon').css('display', 'inline-block');
+		this.dataTable.rowReorder.enable();
+		this.reorderRequestSended = false;
+		return this.defaultFailSendFormListener(a, b, c);
 	},
 	/**
      * @description Click on button "Edit article"
@@ -467,9 +520,10 @@ window.app = new Vue({
     },
     _restreq(method, data, onSuccess, url, onFail) {
 		let W = window, sendData = {...data}, i;
+		/** @property {Boolean} skipCutObjects false когда true удаления объектов и массивов из data не происходит. Устанавливается в false после каждого запроса */
 		//console.log(sendData);
 		for (i in sendData) {
-			if (i == '__ob__' || (sendData[i] instanceof Object) ) {
+			if (!this.skipCutObjects && (i == '__ob__' || (sendData[i] instanceof Object) ) ) {
 				delete  sendData[i];
 			}
 		}
@@ -498,7 +552,7 @@ window.app = new Vue({
             success:onSuccess,
             error:onFail
         });
-        
+        this.skipCutObjects = false;
 	},
 	/**
      * @description Показ алерта с ошибкой по умолчанию

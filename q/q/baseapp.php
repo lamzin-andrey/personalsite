@@ -16,6 +16,9 @@ class BaseApp {
 	/** @property string $orderDirection */
 	public $orderDirection = 'asc';
 	
+	/** @property string $orderField */
+	public $orderField = 'delta';
+	
 	/** @property string $condition fragment of sql WHERE  */
 	public $condition = '';
 	
@@ -183,7 +186,7 @@ class BaseApp {
 			} else {
 				$offset = $forceOffset;
 			}
-			$command = "SELECT {$sFields} FROM {$this->table} WHERE is_deleted != 1 {$this->condition} ORDER BY id {$this->orderDirection} LIMIT {$offset}, {$perpage}";
+			$command = "SELECT {$sFields} FROM {$this->table} WHERE is_deleted != 1 {$this->condition} ORDER BY {$this->orderField} {$this->orderDirection} LIMIT {$offset}, {$perpage}";
 			//var_dump($command);	die(__file__ . __line__);
 			$rows = query($command);
 			return $rows;

@@ -1,5 +1,6 @@
 <?php
 include __DIR__ . '/../adminauthjson.php';
+include DOC_ROOT . '/q/q/treealg.php';
 
 class ProudctCategoryPost extends AdminAuthJson {
 	/** @property string */
@@ -27,6 +28,27 @@ class ProudctCategoryPost extends AdminAuthJson {
 			//$this->_setLogo();
 			$sql = '';
 			if ($id) {
+				//Запрещаем переименовывать категорию, в которой или внутри которой есть категории с продуктами
+				$aData = query('SELECT * FROM portfolio_categories');
+				$oTree = TreeAlgorithms::buildTreeFromFlatList($aData);
+				$oTree = isset($oTree[0]) ? $oTree[0] : null;
+				if ($oTree) {
+					$oNode = TreeAlgorithms::findById($oTree, $id);
+					if ($oNode) {
+						$aBranchIdList = TreeAlgorithms::getBranchIdList($oNode);
+						if (count($aBranchIdList)) {
+							$sCats = join(',', $aBranchIdList);
+							$nCountChilds = dbvalue('SELECT COUNT(id) AS c FROM portfolio WHERE category_id IN(' . $sCats . ')');
+							if ($nCountChilds) {
+								json_error('msg', l('Category has childs. Renaming unavailable'));
+							}
+						}
+					}
+					
+				}
+				
+				
+				
 				$sql = $this->updateQuery(('id = ' . $id), ['updated_at' => now()]);
 				//die($sql);
 			} else {

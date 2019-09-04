@@ -91,62 +91,10 @@ class ProudctPost extends AdminAuthJson {
 			
 			//main portfolio list
 			$oCompiler = new PortfoliolistCompiler();
-			$_REQUEST['noxhr'] = true;
-			$oCompiler->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1');
+			$oCompiler->compileMainList();
 			
-			$oCompiler->title = l('Andrey\'s portfolio', true);
-			
-			$url = '/portfolio/';
-			$oCompiler->outputFile = DOC_ROOT . '/portfolio/index.html';
-			$oCompiler->canonicalUrl = $url;
-			$oCompiler->heading = l('My works', true);
-			$oCompiler->og_image = '';
-			$oCompiler->nCategory = 0;
-			
-			$oCompiler->og_title = '';//TODO
-			$oCompiler->og_description = '';//TODO
-			$oCompiler->compile();
-			
-			//TODO portfolio section list
-			$sCategoryIdList = $this->category_id;
-			$sCompilerUrl = $this->url;
-			$nTopCategory = $this->category_id;
-			
-			while (true) {
-				$_REQUEST['noxhr'] = true;
-				$oCompiler->aData = query('SELECT * FROM portfolio WHERE category_id IN(' . $sCategoryIdList . ') AND is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
-				$aCategoryData = dbrow('SELECT parent_id, category_name AS cname FROM portfolio_categories WHERE id = ' . $nTopCategory);
-				
-				$oCompiler->title = l('Andrey\'s portfolio', true) . (isset($aCategoryData['cname']) ? (' ' . $aCategoryData['cname'] . ' ') : '');
-				$aUrl = explode('/', $sCompilerUrl);
-				unset($aUrl[ count($aUrl) - 1 ]);
-				unset($aUrl[ count($aUrl) - 1 ]);
-				$url = join('/', $aUrl) . '/';
-				//$oCompiler->url = $sCompilerUrl;
-				$oCompiler->outputFile = DOC_ROOT . $url . 'index.html';
-				$oCompiler->canonicalUrl = $url;
-				$oCompiler->heading = l('My works', true);
-				$oCompiler->og_image = '';
-				$oCompiler->nCategory = $nTopCategory;
-				
-				$oCompiler->og_title = '';//TODO
-				$oCompiler->og_description = '';//TODO
-				$oCompiler->compile();
-				
-				$sCompilerUrl = $url;
-				
-				$nParentId = isset($aCategoryData['parent_id']) ? $aCategoryData['parent_id'] : 0;
-				if ($nParentId == 2402 || $nParentId == 0) {
-					break;
-				}
-				$nTopCategory = $nParentId;
-				$aCategories = query('SELECT id FROM portfolio_categories WHERE parent_id = ' . $nParentId);
-				$aCategories = array_column($aCategories, 'id');
-				$sCategoryIdList = join(',', $aCategories) . ',' . $nTopCategory;
-			}
-			
-			unset($_REQUEST['noxhr']);
-			/**/
+			//portfolio section list - это глючит, не все списки обновляются.
+			$oCompiler->compileLevelsLists($this->category_id);
 			
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}

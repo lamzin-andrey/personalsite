@@ -67,6 +67,7 @@ class Route {
 			require_once $handler;
 			$this->app = new Logout();
 		}
+		
 	}
 	/**
 	 * @description Маршруты для страницы /p/trollkiller/
@@ -247,7 +248,11 @@ class Route {
 			require_once $handler;
 			$this->app = new ProductSha256FileRemove();
 		}
-		
+		if ($baseUrl == '/p/portfolio/reorder.jn/') {
+			$handler = $sCtrlDir . 'reorder.php';
+			require_once $handler;
+			$this->app = new PortfolioReorder();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/
@@ -297,6 +302,11 @@ class Route {
 			$handler = __dir__ . '/ctrl/articleinlineimageupload.php';
 			require_once $handler;
 			$this->app = new ArticleInlineImageUpload();
+		}
+		if ($baseUrl == '/p/articlesreorder.jn/') {
+			$handler = __dir__ . '/ctrl/articlesreorder.php';
+			require_once $handler;
+			$this->app = new ArticlesReorder();
 		}
 	}
 }

@@ -10,6 +10,9 @@
 	  - нашЄл.
 	<p>„то должно быть на форме редактировани€ (не SEO):</p>
 	<ul>
+		<li>—писок всех статей</li>
+		<li>ѕри удалении, перестановке, скрытии статей - надо перекомпилировать список всех статей и меню справа - то есть все страницы</li>
+		
 		<li>Ќе обновл€етс€ url в модели при использовании плагина</li>
 		<li>ј не сделать ли редакцию списка категорий на основе этой страницы?
 		     - Ёто шл€па, потому что не имеет отношени€ к реальной жизни. 
@@ -58,12 +61,14 @@
 	<table id="articles" class="display table table-bordered" style="width:100%">
         <thead>
             <tr>
+                <th class="u-tabledragcolumn-head"><?php echo l(''); ?></th>
                 <th><?php echo l('Heading'); ?></th>
                 <th><?php echo l('Operations'); ?></th>
             </tr>
         </thead>
         <tfoot>
             <tr>
+				<th><?php echo l(''); ?></th>
                 <th><?php echo l('Heading'); ?></th>
                 <th><?php echo l('Operations'); ?></th>
             </tr>

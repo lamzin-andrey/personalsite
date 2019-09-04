@@ -27,12 +27,14 @@
 					<table id="portfoliotable" class="display table table-bordered" style="width:100%">
 						<thead>
 							<tr>
+								<th class="u-tabledragcolumn-head"></th>
 								<th>{{ $t('app.Heading') }}</th> 
 								<th>{{ $t('app.Operations') }}</th>
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
+								<th class="u-tabledragcolumn-head"></th>
 								<th>{{ $t('app.Heading') }}</th>
 								<th>{{ $t('app.Operations') }}</th>
 							</tr>
@@ -99,10 +101,25 @@
 				let id = '#portfoliotable';
 				this.isDataTableInitalized = true;
 				this.dataTable =  $(id).DataTable( {
+					'rowReorder': {
+						dataSrc: 'id',
+						update: false,
+					},
 					'processing': true,
 					'serverSide': true,
 					'ajax': "/p/portfolio/list.jn/",
 					"columns": [
+						{ 
+							"data": "id",
+							'render' : function(data, type, row) {
+								return  `<i class="fas fa-arrows-alt fa-sm j-dtdrag-icon"></i>
+								<div class="spinner-border spinner-border-sm j-dtrows-spinner sm" role="status" style="display:none">
+									<span class="sr-only">Loading...</span>
+								</div>
+								`;
+							},
+							'class' : 'u-tablerowdragcellbg'
+						},
 						{ 
 							"data": "heading",
 							'render' : function(data, type, row) {
@@ -169,8 +186,44 @@
 							}
 						});
 					}
+				}).on('row-reorder', (e, details, changed) => {
+					let i, a = [];
+					for (i = 0; i < details.length; i++) {
+						a.push(details[i].oldData);
+					}
+					if (!this.reorderRequestSended) {
+						this.reorderRequestSended = true;
+						this.$root.skipCutObjects = true;
+						this.dataTable.rowReorder.disable();
+						$('.u-tablerowdragcellbg').addClass('u-tablerowdragcellbg-cursor-normal');
+						$('.j-dtrows-spinner').css('display', 'inline-block');
+						$('.j-dtdrag-icon').css('display', 'none');
+						this.$root._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, '/p/portfolio/reorder.jn/', (a, b, c) => {this.onFailReorderData(a, b, c);});
+					}
 				});
 				
+			},
+			/**
+			 * @description Обработка успешного переупорядочивания статей
+			 * @param {Object} data 
+			 */
+			onSuccessReorderData(data) {
+				if (!this.onFailReorderData(data) ) {
+					return;
+				}
+			},
+			/**
+			 * @description Обработка успешного переупорядочивания статей
+			 * @param {Object} data 
+			 */
+			onFailReorderData(a, b, c) {
+				$('.u-tablerowdragcellbg').removeClass('u-tablerowdragcellbg-cursor-normal');
+				$('.j-dtrows-spinner').css('display', 'none');
+				//$('.j-dtdrag-icon').removeClass('invisible');
+				$('.j-dtdrag-icon').css('display', 'inline-block');
+				this.dataTable.rowReorder.enable();
+				this.reorderRequestSended = false;
+				return this.$root.defaultFailSendFormListener(a, b, c);
 			},
 			/**
 			 * @description Click on button "Edit product"

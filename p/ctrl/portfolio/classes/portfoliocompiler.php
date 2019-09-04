@@ -50,12 +50,12 @@ class PortfolioCompiler extends CPageCompiler {
 		$aBcStrings = [];
 		$nSz = count($aBcData);
 		$sLink = '/';
-		$aUrlData = $this->_getUrlArr();
+		$aUrlData = $this->_getUrlArr();//ODO it need
 		
 		for ($i = 0; $i < $nSz; $i++) {
 			$oData = $aBcData[$i];
 			$sItem = str_replace('{TEXT}', $oData->category_name, $dcItemTpl);
-			$sLinkPart = isset($aUrlData[$i]) ? $aUrlData[$i] : utils_translite_url(utils_utf8($oData->category_name));
+			$sLinkPart = utils_translite_url(utils_utf8($oData->category_name));
 			$sLink = $sLink . $sLinkPart . '/';
 			$sItem = str_replace('{LINK}', $sLink, $sItem);
 			$aBcStrings[] = $sItem;

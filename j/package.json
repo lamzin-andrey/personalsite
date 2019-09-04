@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@johmun/vue-tags-input": "^2.1.0",
 		"datatables.net-bs4": "^1.10.19",
+		"datatables.net-rowreorder-bs4": "^1.2.5",
 		"vue-context-menu": "^2.0.6"
 	}
 }

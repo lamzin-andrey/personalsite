@@ -270,4 +270,102 @@ class PortfoliolistCompiler extends CPageCompiler {
 		}
 		return $aR;
 	}
+	public function compileMainList()
+	{
+		$_REQUEST['noxhr'] = true;
+		$this->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
+		$this->title = l('Andrey\'s portfolio', true);
+		$url = '/portfolio/';
+		$this->outputFile = DOC_ROOT . '/portfolio/index.html';
+		$this->canonicalUrl = $url;
+		$this->heading = l('My works', true);
+		$this->og_image = '';
+		$this->nCategory = 0;
+		
+		$this->og_title = '';//TODO
+		$this->og_description = '';//TODO
+		$this->compile();
+		unset($_REQUEST['noxhr']);
+	}
+	/**
+	 * @description Компилирует списки работ на всех уровнях категорий портфолио, в которые вложена  $nCategoryId
+	 * @param int $nCategoryId
+	*/
+	public function compileLevelsLists($nCategoryId)
+	{
+		$sCategoryIdList = $nCategoryId;
+		$nTopCategory = $nCategoryId;
+		$aCategoryData = query('SELECT id, parent_id, category_name AS cname FROM portfolio_categories');
+		$aTree = TreeAlgorithms::buildTreeFromFlatList($aCategoryData);
+		$oTree = isset($aTree[0]) ? $aTree[0] : null;
+		$aPath = TreeAlgorithms::getNodesByNodeId($oTree, $nCategoryId);
+		$sCompilerUrl = '/';
+		foreach ($aPath as $oItem) {
+			$sCompilerUrl .= utils_translite_url($oItem->cname) . '/';
+		}
+		$sCompilerUrl .= '0/';
+		$allCategories = [$nCategoryId];
+		$oCallback = new StdClass();
+		$this->_aChildList = [];
+		$oCallback->f = 'agregateChildsIdList';
+		$oCallback->context = $this;
+		while (true) {
+			$_REQUEST['noxhr'] = true;
+			$this->aData = query('SELECT * FROM portfolio WHERE category_id IN(' . $sCategoryIdList . ') AND is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
+			file_put_contents('/home/andrey/log.log', print_r($this->aData, true) . "\n", FILE_APPEND);
+			$this->title = l('Andrey\'s portfolio', true) . (isset($aCategoryData['cname']) ? (' ' . $aCategoryData['cname'] . ' ') : '');
+			$aUrl = explode('/', $sCompilerUrl);
+			unset($aUrl[ count($aUrl) - 1 ]);
+			unset($aUrl[ count($aUrl) - 1 ]);
+			$url = join('/', $aUrl) . '/';
+			$this->url = $url;
+			$this->outputFile = DOC_ROOT . $url . 'index.html';
+			file_put_contents('/home/andrey/log.log', 'will save in ' . $this->outputFile . "\n", FILE_APPEND);
+			$this->canonicalUrl = $url;
+			$this->heading = l('My works', true);
+			$this->og_image = '';
+			$this->nCategory = $nTopCategory;
+			
+			$this->og_title = '';//TODO
+			$this->og_description = '';//TODO
+			
+			$this->compile();
+			
+			$oNode = TreeAlgorithms::findById($oTree, $nTopCategory);
+			if ($oNode && isset($oNode->parent_id)) {
+				$nParentId = $oNode->parent_id;
+			} else {
+				$nParentId = 0;
+			}
+			if ($nParentId == 2402 || $nParentId == 0) {
+				break;
+			}
+			
+			$sCompilerUrl = $url;
+			
+			$nTopCategory = $nParentId;
+			$oNode = TreeAlgorithms::findById($oTree, $nParentId);
+			if ($oNode /*&& isset($oNode->children)*/) {
+				TreeAlgorithms::walkAndExecuteAction($oNode, $oCallback);
+				//$aCategories = array_column($oNode->children, 'id');
+				//$allCategories = array_unique( array_merge($allCategories, $aCategories, [$nParentId]) );
+				$allCategories = array_unique( array_merge($allCategories, $this->_aChildList, [$nParentId]) );
+			} else {
+				break;
+			}
+			$sCategoryIdList = join(',', $allCategories);
+			file_put_contents('/home/andrey/log.log', $sCategoryIdList . "\n", FILE_APPEND);
+		}
+		
+		unset($_REQUEST['noxhr']);
+		/**/
+	}
+	/**
+	 * @description Собрать все дочерние компоненты
+	 * @param $oNode
+	*/
+	public function agregateChildsIdList($oNode) 
+	{
+		$this->_aChildList[$oNode->id] = $oNode->id;
+	}
 }

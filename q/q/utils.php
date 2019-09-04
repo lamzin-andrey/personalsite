@@ -453,7 +453,7 @@ function utils_translite_url ($string)  {
 	$string = str_replace("х","h",$string);
 	$string = str_replace("ъ","",$string);
 	$string = str_replace("ф","f",$string);
-	$string = str_replace("ы","i",$string);
+	$string = str_replace("ы","y",$string);
 	$string = str_replace("в","v",$string);
 	$string = str_replace("а","a",$string);
 	$string = str_replace("п","p",$string);
@@ -486,7 +486,7 @@ function utils_translite_url ($string)  {
 	$string = str_replace("Х","H",$string);
 	$string = str_replace("Ъ","",$string);
 	$string = str_replace("Ф","F",$string);
-	$string = str_replace("Ы","I",$string);
+	$string = str_replace("Ы","Y",$string);
 	$string = str_replace("В","V",$string);
 	$string = str_replace("А","A",$string);
 	$string = str_replace("П","P",$string);
