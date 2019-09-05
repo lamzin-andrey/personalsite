@@ -58,7 +58,7 @@ class ArticlesListCompiler extends CPageCompiler {
 			$sContent = $this->_closeHtmlTag( substr($this->content, 0, 248) );
 			
 			
-			$s = str_replace('{shortdesc}', ($sContent . '...'), $s);
+			$s = str_replace('{shortdesc}', ($sContent), $s);
 			$s = str_replace('{logo}', $this->_parseLogo($aRow['logo']), $s);
 			//STOP HERE
 			$s = str_replace('{rating}', $aRow['rating'], $s);
@@ -296,7 +296,7 @@ class ArticlesListCompiler extends CPageCompiler {
 		}
 		if ($inTagBody) {
 			$ts .= '>';
-			$s .= '>';
+			$s .= '>...';
 			$oTagInfo = $this->_extractTagName($ts);
 			$sTagName = $oTagInfo->name;
 			if ($oTagInfo->isOpen) {
@@ -304,6 +304,8 @@ class ArticlesListCompiler extends CPageCompiler {
 			} else {
 				unset($aTagMap[$sTagName]);
 			}
+		} else {
+			$s .= '...';
 		}
 		
 		$aTagMap = array_reverse($aTagMap);
