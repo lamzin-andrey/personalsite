@@ -334,7 +334,8 @@ function onPostMessage(info) {
  */
 function isPersistExcludeUrl(url) {
 	if (self._persistExcludeList instanceof Array) {
-		let i, s, q;
+		let i, s, q, a = url.split('?');
+		url = a[0];
 		for (i = 0; i < self._persistExcludeList.length; i++) {
 			s = self._persistExcludeList[i];
 			if (s.indexOf('*') == 0) {
