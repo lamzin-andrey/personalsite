@@ -18,7 +18,7 @@
   <link href="/p/sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
   <link href="/s/aauth.css" rel="stylesheet">
   <link href="/p/.css" rel="stylesheet">
-	<script src="/j/swinstall.js"></script>
+	<script src="/j/landcacherswinstaller.js"></script>
 	<script>window.sReferer = "<?php echo o($app, 'referer') ?>";</script>
 </head>
 

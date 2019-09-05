@@ -2,6 +2,10 @@ window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 window.slug = require('laravel-slug');
 
+//cache
+require('./classes/cachesw');
+window.cacheClient = new CacheSw();
+
 //For REST request server
 require('../landlib/net/rest.js');
 

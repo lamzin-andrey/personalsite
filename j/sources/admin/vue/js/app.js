@@ -1,6 +1,11 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 
+//cache
+require('../../../adminauth/classes/cachesw');
+window.cacheClient = new CacheSw();
+
+
 //Интернациализация
 import VueI18n  from 'vue-i18n';
 import locales  from './vue-i18n-locales';

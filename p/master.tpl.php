@@ -18,7 +18,7 @@
   
   <!-- Custom styles for this template-->
   <link href="/p/sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
-	<script src="/j/swinstall.js"></script>
+	<script src="/j/landcacherswinstaller.js"></script>
 </head>
 
 <body id="page-top">
