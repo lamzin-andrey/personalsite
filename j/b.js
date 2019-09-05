@@ -23900,7 +23900,6 @@ process.umask = function() { return 0; };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landcache_sources_js_land_cache_client__ = __webpack_require__(13);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23939,6 +23938,8 @@ var CacheSw = function (_LandCacheClient) {
 
 	return CacheSw;
 }(__WEBPACK_IMPORTED_MODULE_0__landcache_sources_js_land_cache_client__["a" /* default */]);
+
+/* harmony default export */ __webpack_exports__["a"] = (CacheSw);
 
 /***/ }),
 /* 13 */
@@ -23988,10 +23989,12 @@ var LandCacheClient = function () {
 			o.verbose = true;
 			//Заполняется url которые есть на странице и указывают на данный сайт. Заполнение происходит в getAllResources
 			o._aUrlMap = {};
-			navigator.serviceWorker.addEventListener('message', function (info) {
-				o.onMessage(info);
-			});
-			o.setExcludeFilter();
+			if (navigator.serviceWorker) {
+				navigator.serviceWorker.addEventListener('message', function (info) {
+					o.onMessage(info);
+				});
+				o.setExcludeFilter();
+			}
 		}
 		/**
    * @description Проверит, не пусто ли _aUrlMap если пуста, вызовет getAllResources
@@ -42319,16 +42322,17 @@ module.exports = __webpack_require__(36);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_patchdatatablepaginationview_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_datatablefirstcellbg_css__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_datatablefirstcellbg_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__css_datatablefirstcellbg_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_datatables_net_rowreorder_bs4_css_rowReorder_bootstrap4_min_css__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_datatables_net_rowreorder_bs4_css_rowReorder_bootstrap4_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_datatables_net_rowreorder_bs4_css_rowReorder_bootstrap4_min_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__classes_cachesw__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vue_i18n_locales__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bootstrap421_validators_b421validators__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_patchdatatablepaginationview_css__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_patchdatatablepaginationview_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__css_patchdatatablepaginationview_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__css_datatablefirstcellbg_css__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__css_datatablefirstcellbg_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__css_datatablefirstcellbg_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_datatables_net_rowreorder_bs4_css_rowReorder_bootstrap4_min_css__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_datatables_net_rowreorder_bs4_css_rowReorder_bootstrap4_min_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_datatables_net_rowreorder_bs4_css_rowReorder_bootstrap4_min_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__landlib_datatables_b4datatablespreloader_js__ = __webpack_require__(18);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 window.jQuery = window.$ = window.jquery = __webpack_require__(1);
@@ -42336,8 +42340,9 @@ window.Vue = __webpack_require__(5);
 window.slug = __webpack_require__(37);
 
 //cache
-__webpack_require__(12);
-window.cacheClient = new CacheSw();
+
+
+window.cacheClient = new __WEBPACK_IMPORTED_MODULE_0__classes_cachesw__["a" /* default */]();
 
 //For REST request server
 __webpack_require__(38);
@@ -42350,9 +42355,9 @@ __webpack_require__(40);
 
 
 
-var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
+var i18n = new __WEBPACK_IMPORTED_MODULE_1_vue_i18n__["a" /* default */]({
     locale: 'ru', // set locale
-    messages: __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__["a" /* default */] // set locale messages
+    messages: __WEBPACK_IMPORTED_MODULE_2__vue_i18n_locales__["a" /* default */] // set locale messages
 });
 //end Интернациализация
 
@@ -42409,13 +42414,13 @@ window.app = new Vue({
     */
     data: {
         //Валидатор для полей ввода формы
-        formInputValidator: __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__["a" /* default */],
+        formInputValidator: __WEBPACK_IMPORTED_MODULE_3__bootstrap421_validators_b421validators__["a" /* default */],
 
         isArticlesDataTableInitalized: false,
 
         //Центрируем прелоадер DataTables и добавляем в него спиннер
         /** @property  {B4DataTablesPreloader} dataTablesPreloader */
-        dataTablesPreloader: new __WEBPACK_IMPORTED_MODULE_6__landlib_datatables_b4datatablespreloader_js__["a" /* default */](),
+        dataTablesPreloader: new __WEBPACK_IMPORTED_MODULE_7__landlib_datatables_b4datatablespreloader_js__["a" /* default */](),
 
         /** @property {DataTables}  dataTable Объект DataTables таблицы со статьями */
         dataTable: null,

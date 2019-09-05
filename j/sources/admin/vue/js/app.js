@@ -2,7 +2,7 @@ window.jQuery = window.$ = window.jquery = require('jquery');
 window.Vue = require('vue');
 
 //cache
-require('../../../adminauth/classes/cachesw');
+import CacheSw from '../../../adminauth/classes/cachesw';
 window.cacheClient = new CacheSw();
 
 

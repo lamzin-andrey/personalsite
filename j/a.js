@@ -23223,7 +23223,6 @@ process.umask = function() { return 0; };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__landcache_sources_js_land_cache_client__ = __webpack_require__(13);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23262,6 +23261,8 @@ var CacheSw = function (_LandCacheClient) {
 
 	return CacheSw;
 }(__WEBPACK_IMPORTED_MODULE_0__landcache_sources_js_land_cache_client__["a" /* default */]);
+
+/* harmony default export */ __webpack_exports__["a"] = (CacheSw);
 
 /***/ }),
 /* 13 */
@@ -23311,10 +23312,12 @@ var LandCacheClient = function () {
 			o.verbose = true;
 			//Заполняется url которые есть на странице и указывают на данный сайт. Заполнение происходит в getAllResources
 			o._aUrlMap = {};
-			navigator.serviceWorker.addEventListener('message', function (info) {
-				o.onMessage(info);
-			});
-			o.setExcludeFilter();
+			if (navigator.serviceWorker) {
+				navigator.serviceWorker.addEventListener('message', function (info) {
+					o.onMessage(info);
+				});
+				o.setExcludeFilter();
+			}
 		}
 		/**
    * @description Проверит, не пусто ли _aUrlMap если пуста, вызовет getAllResources
@@ -25607,23 +25610,24 @@ module.exports = __webpack_require__(24);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_i18n__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__adminauth_classes_cachesw__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_i18n__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vue_i18n_locales__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bootstrap421_validators_b421validators__ = __webpack_require__(16);
 window.jQuery = window.$ = window.jquery = __webpack_require__(1);
 window.Vue = __webpack_require__(5);
 
 //cache
-__webpack_require__(12);
-window.cacheClient = new CacheSw();
+
+window.cacheClient = new __WEBPACK_IMPORTED_MODULE_0__adminauth_classes_cachesw__["a" /* default */]();
 
 //Интернациализация
 
 
 
-var i18n = new __WEBPACK_IMPORTED_MODULE_0_vue_i18n__["a" /* default */]({
+var i18n = new __WEBPACK_IMPORTED_MODULE_1_vue_i18n__["a" /* default */]({
     locale: 'ru', // set locale
-    messages: __WEBPACK_IMPORTED_MODULE_1__vue_i18n_locales__["a" /* default */] // set locale messages
+    messages: __WEBPACK_IMPORTED_MODULE_2__vue_i18n_locales__["a" /* default */] // set locale messages
 });
 //end Интернациализация
 
@@ -25653,7 +25657,7 @@ window.app = new Vue({
     */
     data: {
         //Его будем использовать
-        formInputValidator: __WEBPACK_IMPORTED_MODULE_2__bootstrap421_validators_b421validators__["a" /* default */],
+        formInputValidator: __WEBPACK_IMPORTED_MODULE_3__bootstrap421_validators_b421validators__["a" /* default */],
         //
         show: true
     },

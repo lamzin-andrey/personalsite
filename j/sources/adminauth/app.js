@@ -3,7 +3,8 @@ window.Vue = require('vue');
 window.slug = require('laravel-slug');
 
 //cache
-require('./classes/cachesw');
+import CacheSw from './classes/cachesw';
+
 window.cacheClient = new CacheSw();
 
 //For REST request server

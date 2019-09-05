@@ -13,3 +13,4 @@ class CacheSw extends LandCacheClient {
 		return o;
 	}
 }
+export default CacheSw;
