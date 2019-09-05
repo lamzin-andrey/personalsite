@@ -338,8 +338,11 @@ function isPersistExcludeUrl(url) {
 		for (i = 0; i < self._persistExcludeList.length; i++) {
 			s = self._persistExcludeList[i];
 			if (s.indexOf('*') == 0) {
+				if (self.verbose) console.log('isMask!', s);
 				s = s.replace('*', '');
 				q = url.substr(url.length - s.length, s.length);
+				if (self.verbose) console.log('s', s);
+				if (self.verbose) console.log('q', q);
 				if (q == s) {
 					return true;
 				}
@@ -348,5 +351,6 @@ function isPersistExcludeUrl(url) {
 			}
 		}
 	}
+	if (self.verbose) console.log('return false for url ' + url + ', list:', self._persistExcludeList);
 	return false;
 }
