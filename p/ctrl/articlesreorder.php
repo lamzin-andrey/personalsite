@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/adminauthjson.php';
+include __DIR__ . '/articles/classes/articleslistcompiler.php';
 /**
  * @class ArticlesReorder  - переупорядочивание списка статей на одной странице
 */
@@ -18,6 +19,8 @@ class ArticlesReorder extends AdminAuthJson {
 				query('UPDATE ' . $this->table . ' SET delta = ' . $min . ' WHERE id = ' . $id);
 				$min++;
 			}
+			$oCompilerList = new ArticlesListCompiler();
+			$oCompilerList->compileMainList();
 			json_ok();
 		}
 		json_error('msg', l('Unable reorder article list: empty data'), 'a', print_r($aIds, 1) );

@@ -1,13 +1,11 @@
 <?php
 include __DIR__ . '/adminauthjson.php';
+include __DIR__ . '/articles/classes/articleslistcompiler.php';
 include DOC_ROOT . '/q/q/cstaticpagescompiler.php';
 
-class ArticlePost extends AdminAuthJson {
-	
-	
+class ArticlePost extends AdminAuthJson {	
 	/** @property string */
 	//public $ = '';
-	
 	
 	public function __construct() {
 		parent::__construct();
@@ -26,8 +24,6 @@ class ArticlePost extends AdminAuthJson {
 		$this->treq('og_image');
 		
 		$errors = [];
-		
-		
 		
 		if ($this->_validate($errors)) {
 			$id = ireq('id');
@@ -59,6 +55,10 @@ class ArticlePost extends AdminAuthJson {
 													$sDate
 													);
 			$comiErr = $oCompiler->emsg;
+			
+			$oCompilerList = new ArticlesListCompiler();
+			$oCompilerList->compileMainList();
+			
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}
 		json_error_arr(['errors' => $errors]);
