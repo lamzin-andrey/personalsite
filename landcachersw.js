@@ -308,7 +308,7 @@ function sendMessageAllClients(sType, sUpdUrl) {
 */
 function onPostMessage(info) {
 	if (info.data.type == 'filterlist') {
-		console.log('Set filter ',  info.data.data);
+		if (self.verbose) console.log('Set filter ',  info.data.data);
 		self._persistExcludeList = info.data.data;
 		return;
 	}
