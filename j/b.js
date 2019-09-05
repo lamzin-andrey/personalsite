@@ -42675,7 +42675,7 @@ window.app = new Vue({
             $('#spin' + this.requestedArticleId).toggleClass('d-none');
             this.$root._get(function (d) {
                 _this2.onSuccessGetArticle(d);
-            }, '/p/article/jn/?id=' + this.requestedArticleId, function (a, b, c) {
+            }, '/p/article.jn/?id=' + this.requestedArticleId, function (a, b, c) {
                 _this2.onFailGetArticle(a, b, c);
             });
         },

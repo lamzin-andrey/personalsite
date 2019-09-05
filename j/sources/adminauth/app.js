@@ -327,7 +327,7 @@ window.app = new Vue({
 		}
 		this.requestedArticleId = $(evt.target).attr('data-id');
 		$('#spin' + this.requestedArticleId).toggleClass('d-none');
-		this.$root._get((d) => {this.onSuccessGetArticle(d);}, `/p/article/jn/?id=${this.requestedArticleId}`, (a, b, c) => {this.onFailGetArticle(a, b, c);} );
+		this.$root._get((d) => {this.onSuccessGetArticle(d);}, `/p/article.jn/?id=${this.requestedArticleId}`, (a, b, c) => {this.onFailGetArticle(a, b, c);} );
 	},
 	/**
      * @description Success request article data for edit
