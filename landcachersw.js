@@ -68,7 +68,7 @@ self.verbose = true;
 /**
  * @description Перехватываем запрос
 */
-function onFetch(event) {ъ
+function onFetch(event) {
 	sendMessageAllClients('getmefilter');
 	//Если url входит в список таких, что их не надо кэшировать, не кэшируем
 	if (self.isPersistExcludeUrl(event.request.url)) {
