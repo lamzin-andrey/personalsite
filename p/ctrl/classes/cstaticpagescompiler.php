@@ -1,4 +1,6 @@
 <?php
+require_once DOC_ROOT . '/p/ctrl/articles/classes/articlesrightmenucompiler.php';
+
 class CStaticPagesCompiler {
 	
 	public $DEST_DOC_ROOT =   "";
@@ -89,6 +91,14 @@ class CStaticPagesCompiler {
         $ts = strtotime($dateCreate);
         $s = str_replace('{DATEENG}', date('Y-m-d', $ts), $s);
         $s = str_replace('{DATERUS}', date('d.m.Y', $ts), $s);
+        
+        $sRightMenu = '';
+		$oRightMenuCompiler = new ArticlesRightMenuCompiler();
+		$oRightMenuCompiler->nArticleId = $nId;
+		$oRightMenuCompiler->sFolder = 'articles';
+		$oRightMenuCompiler->loadData();
+		$sRightMenu = $oRightMenuCompiler->compile(false);
+		$s = str_replace('{RIGHT_MENU}', $sRightMenu, $s);
         
         file_put_contents($destFolder . '/index.html', $s);
     }

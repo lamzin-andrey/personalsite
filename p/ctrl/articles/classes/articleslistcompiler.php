@@ -6,6 +6,8 @@ require_once DOC_ROOT . '/q/q/treealg.php';
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
+//require_once DOC_ROOT . '/p/ctrl/articles/classes/articlesrightmenucompiler.php';
+require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';
 
 
 class ArticlesListCompiler extends CPageCompiler {
@@ -167,6 +169,7 @@ class ArticlesListCompiler extends CPageCompiler {
 	}
 	public function compileMainList()
 	{
+		$this->_setRightMenu();
 		$_REQUEST['noxhr'] = true;
 		$this->aData = query('SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 ORDER BY rating DESC, delta ASC');
 		$this->title = l('Andrey\'blog', true);
@@ -339,5 +342,16 @@ class ArticlesListCompiler extends CPageCompiler {
 			}
 		}
 		return $r;
+	}
+	/**
+	 * @description 
+	*/
+	private function _setRightMenu()
+	{
+		$this->rightMenu = '';
+		//$oRightMenuCompiler = new ArticlesRightMenuCompiler();
+		$oRightMenuCompiler = new RightMenuCompiler();
+		$oRightMenuCompiler->loadData();
+		$this->rightMenu = $oRightMenuCompiler->compile(false);
 	}
 }

@@ -272,6 +272,7 @@ class PortfoliolistCompiler extends CPageCompiler {
 	}
 	public function compileMainList()
 	{
+		$this->_setRightMenu();
 		$_REQUEST['noxhr'] = true;
 		$this->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
 		$this->title = l('Andrey\'s portfolio', true);
@@ -367,5 +368,15 @@ class PortfoliolistCompiler extends CPageCompiler {
 	public function agregateChildsIdList($oNode) 
 	{
 		$this->_aChildList[$oNode->id] = $oNode->id;
+	}
+	/**
+	 * @description 
+	*/
+	private function _setRightMenu()
+	{
+		$this->rightMenu = '';
+		$oRightMenuCompiler = new RightMenuCompiler();
+		$oRightMenuCompiler->loadData();
+		$this->rightMenu = $oRightMenuCompiler->compile(false);
 	}
 }

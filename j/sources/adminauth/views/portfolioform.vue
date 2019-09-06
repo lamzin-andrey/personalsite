@@ -165,6 +165,8 @@
 
 			<div id="collapseSeo" class="collapse" aria-labelledby="headingSeo" data-parent="#seoAccord">
 				<div class="card-body">
+					<inputb4 @input="setDataChanges" v-model="right_menu_heading" type="text" :placeholderlabel="$t('app.menu_heading')"  ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="right_menu_secondary_text" type="text" :placeholderlabel="$t('app.right_menu_secondary_text')"  ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="description" type="text" placeholderlabel="meta[name=description]" maxlength="200" id="description"></inputb4>
 					<inputb4 @input="setDataChanges" v-model="keywords" type="text" placeholderlabel="meta[name=keywords]" ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="og_title" type="text" placeholderlabel="og:title"  ></inputb4>
@@ -277,6 +279,10 @@
 				og_description : '',
 				//Содержимое META тега
 				og_image : '',
+				//Заголовок для пункта меню
+				right_menu_heading : '',
+				//Дополнительный текст в пункте меню
+				right_menu_secondary_text : '',
 				//Параметры для кастомного слушателя загрузки og_image
 				ogImageUploadListeners:{
 					onSuccess:{
@@ -418,6 +424,8 @@
 				this.id = 0;
 				this.hideFromProductlist = false;
 				this.hours = 0;
+				this.right_menu_heading = '';
+				this.right_menu_secondary_text = '';
 				
 				//Fix bug when edit the article more then one time...
 				Vue.nextTick(() => {
@@ -450,6 +458,8 @@
 					this.relatedArticlesFromServer = data.relatedArticles;
 					this.hideFromProductlist = parseInt(data.hide_from_productlist) ? true : false;
 					this.hours = data.hours;
+					this.right_menu_heading = data.right_menu_heading;
+					this.right_menu_secondary_text = data.right_menu_secondary_text;
 					this.setRelatedArticles();
 				});
 				

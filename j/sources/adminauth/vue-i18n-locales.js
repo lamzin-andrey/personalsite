@@ -99,6 +99,8 @@ var locales = {
 			"SelectOgImage": "Соц. сети",
 			"insertImage": "Вставить ссылку на изображение",
 			"Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи",
+			"menu_heading": "Заголовок для пункта меню",
+			"right_menu_secondary_text": "Дополнительный текст в пункте меню",
 
 			//List Articles
 

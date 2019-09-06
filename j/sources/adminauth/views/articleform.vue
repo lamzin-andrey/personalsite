@@ -47,10 +47,13 @@
 
 			<div id="collapseSeo" class="collapse" aria-labelledby="headingSeo" data-parent="#seoAccord">
 				<div class="card-body">
+					<inputb4 @input="setDataChanges" v-model="menu_heading" type="text" :placeholderlabel="$t('app.menu_heading')"  ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="right_menu_secondary_text" type="text" :placeholderlabel="$t('app.right_menu_secondary_text')"  ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="description" type="text" placeholderlabel="meta[name=description]" maxlength="200" id="description"></inputb4>
 					<inputb4 @input="setDataChanges" v-model="keywords" type="text" placeholderlabel="meta[name=keywords]" ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="og_title" type="text" placeholderlabel="og:title"  ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="og_description" type="text" placeholderlabel="og:description"  ></inputb4>
+					
 					<img :src="defaultSocImage" style="max-width:100px; max-height:100px;">
 					<inputfileb4 
 						v-model="og_image"
@@ -156,6 +159,10 @@
 				og_description : '',
 				//Содержимое META тега
 				og_image : '',
+				//Заголовок для пункта меню
+				menu_heading : '',
+				//Дополнительный текст в пункте меню
+				right_menu_secondary_text : '',
 				//Параметры для кастомного слушателя загрузки og_image
 				ogImageUploadListeners:{
 					onSuccess:{
@@ -212,10 +219,12 @@
 				this.keywords = 'f';
 				this.og_title = 'g';
 				this.og_description = 'h';
+				this.menu_heading = '';
+				this.right_menu_secondary_text = '';
 				this.og_image = this.defaultSocImage = this.defaultLogoValue;
 				
 				//Fix bug when edit the article more then one time...
-				setTimeout(() => {
+				Vue.nextTick(() => {
 					let url;
 					this.category = data.category_id;
 					this.title = data.title;
@@ -231,7 +240,9 @@
 					this.og_title = data.og_title;
 					this.og_description = data.og_description;
 					this.og_image = this.defaultSocImage = data.og_image;
-				}, 1);
+					this.menu_heading = data.menu_heading;
+					this.right_menu_secondary_text = data.menu_heading;
+				});
 				
 			},
 			/**

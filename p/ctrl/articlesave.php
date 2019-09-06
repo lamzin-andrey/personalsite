@@ -1,7 +1,7 @@
 <?php
 include __DIR__ . '/adminauthjson.php';
 include __DIR__ . '/articles/classes/articleslistcompiler.php';
-include DOC_ROOT . '/q/q/cstaticpagescompiler.php';
+include_once DOC_ROOT . '/p/ctrl/classes/cstaticpagescompiler.php';
 
 class ArticlePost extends AdminAuthJson {	
 	/** @property string */
@@ -22,6 +22,8 @@ class ArticlePost extends AdminAuthJson {
 		$this->treq('og_description');
 		$this->treq('og_title');
 		$this->treq('og_image');
+		$this->tsreq('menu_heading');
+		$this->tsreq('right_menu_secondary_text');
 		
 		$errors = [];
 		
@@ -59,6 +61,8 @@ class ArticlePost extends AdminAuthJson {
 			
 			$oCompilerList = new ArticlesListCompiler();
 			$oCompilerList->compileMainList();
+			
+			
 			
 			json_ok('id', $id, 'comiErr', $comiErr);
 		}
