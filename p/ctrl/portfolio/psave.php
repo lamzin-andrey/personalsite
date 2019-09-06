@@ -72,6 +72,7 @@ class ProudctPost extends AdminAuthJson {
 				
 				$oCompiler = new PortfolioCompiler();
 				$oCompiler->title = $this->title;
+				$oCompiler->nProductId = $id;
 				$oCompiler->url = $this->url;
 				$oCompiler->content = $this->content_block;
 				$url = $this->url . 'index.html';

@@ -14,6 +14,7 @@ class CPageCompiler {
 	public $ogImage = '';
 	public $displayDate = '';
 	public $outputFile = '';
+	public $rightMenu = '';
 	/** @property string canonicalUrl  <link rel="canonical" href="scheme://host/$this->canonicalUrl"/>   */
 	public $canonicalUrl = '';//CANONICAL_URL
 	
@@ -39,6 +40,7 @@ class CPageCompiler {
 		$s = str_replace('{DATEENG}', date('Y-m-d H:i:s'), $s);
 		$s = str_replace('{DATERUS}', $this->displayDate, $s);
 		$s = str_replace('{CANONICAL_URL}', $this->canonicalUrl, $s);
+		$s = str_replace('{RIGHT_MENU}', $this->rightMenu, $s);
 		
 		if ($this->description) {
 			$s = str_replace('<!--DESCRIPTION -->', '<meta name="description" content="' . $this->description . '">', $s);

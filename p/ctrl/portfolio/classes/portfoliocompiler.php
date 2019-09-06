@@ -6,6 +6,7 @@ require_once DOC_ROOT . '/q/q/treealg.php';
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
+require_once __DIR__ . '/rightmenucompiler.php';
 
 
 class PortfolioCompiler extends CPageCompiler {
@@ -13,8 +14,14 @@ class PortfolioCompiler extends CPageCompiler {
 	/** @property int nCategory Идентификатор категории*/
 	public $nCategory;
 	
+	/** @property int nCategory Идентификатор работы */
+	public $nProductId;
+	
 	/** @property bool $bPreprocesContent*/
 	public $bPreprocesContent = true;
+	
+	
+
 
 	public function __construct()
 	{
@@ -29,7 +36,10 @@ class PortfolioCompiler extends CPageCompiler {
 	public function compile($bSaveNow = true)
 	{
 		$this->bc = $this->_setBC();
-		$s = parent::compile();
+		$this->_setRightMenu();
+		$s = parent::compile(false);
+		$s = str_replace('{rid}', $this->nProductId, $s);
+		$this->_save($s);
 		return $s;
 	}
 	
@@ -93,5 +103,16 @@ class PortfolioCompiler extends CPageCompiler {
 			}
 		}
 		return $aR;
+	}
+	/**
+	 * @description 
+	*/
+	private function _setRightMenu()
+	{
+		$this->rightMenu = '';
+		$oRightMenuCompiler = new RightMenuCompiler();
+		$oRightMenuCompiler->nProductId = $this->nProductId;
+		$oRightMenuCompiler->loadData();
+		$this->rightMenu = $oRightMenuCompiler->compile(false);
 	}
 }

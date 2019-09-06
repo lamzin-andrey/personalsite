@@ -11,6 +11,8 @@ let mix = require('laravel-mix');
  |
  */
 //Для неавторизованных пользователей
-mix.js('sources/admin/vue/js/app.js', 'a.js');
+//mix.js('sources/admin/vue/js/app.js', 'a.js');
 //Для авторизованных админов
-mix.js('sources/adminauth/app.js', 'b.js');
+//mix.js('sources/adminauth/app.js', 'b.js');
+//Страницы сайта
+mix.js('sources/site/app.js', 'c.js');

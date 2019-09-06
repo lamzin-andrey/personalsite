@@ -52,7 +52,8 @@ class ArticlePost extends AdminAuthJson {
 													$this->og_title,
 													$this->og_description,
 													$this->og_image,
-													$sDate
+													$sDate,
+													$id
 													);
 			$comiErr = $oCompiler->emsg;
 			

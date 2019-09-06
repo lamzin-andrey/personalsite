@@ -22,6 +22,7 @@ class Route {
 		$this->_portfoliocats();
 		$this->_treedemo();
 		$this->_trollkiller();
+		$this->_stat();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -200,6 +201,23 @@ class Route {
 			$handler = __dir__ . '/ctrl/acategories/categorysave.php';
 			require_once $handler;
 			$this->app = new ArticleCategoryPost();
+		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/stat/
+	*/
+	protected function _stat()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/stat/c.jn/') {
+			//$this->master = __dir__ . '/master.tpl.php';
+			$handler = $sCtrlDir . 'statcount.php';
+			//$this->view    = __dir__ . '/view/portfolio.tpl.php';
+			require_once $handler;
+			$this->app = new StatCount();
 		}
 	}
 	/**

@@ -50,3 +50,7 @@
 .u-text-indent-5 {
 	text-indent: 3.0rem;
 }
+
+.u-right-side li img {
+	max-width:250px;
+}

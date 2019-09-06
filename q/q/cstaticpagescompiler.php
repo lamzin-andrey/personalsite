@@ -7,7 +7,7 @@ class CStaticPagesCompiler {
 	
     public function __construct(int $masterTemplateId, string $destFilePath, string $title, string $heading, string $content, 
 									string $description, string $keywords, string $ogTitle, 
-									string $ogDescription, string $ogImage, string $dateCreate)
+									string $ogDescription, string $ogImage, string $dateCreate, $nId)
     {
     	$this->DEST_DOC_ROOT = DOC_ROOT;
     	$rows = query("SELECT * FROM master_templates WHERE id = {$masterTemplateId}");
@@ -53,6 +53,7 @@ class CStaticPagesCompiler {
         $s = str_replace('{BC}', '', $s);
         $s = str_replace('{HEADING}', $heading, $s);
         $s = str_replace('{CANONICAL_URL}', $destFilePath, $s);
+        $s = str_replace('{rid}', $nId, $s);
         
         if ($description) {
 			$s = str_replace('<!--DESCRIPTION -->', '<meta name="description" content="' . $description . '">', $s);
