@@ -211,7 +211,6 @@ class ArticlesListCompiler extends CPageCompiler {
 		while (true) {
 			$_REQUEST['noxhr'] = true;
 			$this->aData = query('SELECT * FROM portfolio WHERE category_id IN(' . $sCategoryIdList . ') AND is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
-			file_put_contents('/home/andrey/log.log', print_r($this->aData, true) . "\n", FILE_APPEND);
 			$this->title = l('Andrey\'s portfolio', true) . (isset($aCategoryData['cname']) ? (' ' . $aCategoryData['cname'] . ' ') : '');
 			$aUrl = explode('/', $sCompilerUrl);
 			unset($aUrl[ count($aUrl) - 1 ]);
@@ -219,7 +218,6 @@ class ArticlesListCompiler extends CPageCompiler {
 			$url = join('/', $aUrl) . '/';
 			$this->url = $url;
 			$this->outputFile = DOC_ROOT . $url . 'index.html';
-			file_put_contents('/home/andrey/log.log', 'will save in ' . $this->outputFile . "\n", FILE_APPEND);
 			$this->canonicalUrl = $url;
 			$this->heading = l('My works', true);
 			$this->og_image = '';
@@ -253,7 +251,6 @@ class ArticlesListCompiler extends CPageCompiler {
 				break;
 			}
 			$sCategoryIdList = join(',', $allCategories);
-			file_put_contents('/home/andrey/log.log', $sCategoryIdList . "\n", FILE_APPEND);
 		}
 		
 		unset($_REQUEST['noxhr']);
