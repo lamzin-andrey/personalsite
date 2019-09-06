@@ -69,6 +69,16 @@ class Route {
 			$this->app = new Logout();
 		}
 		
+		
+		//временно, пока в консоли php 5
+		if ($baseUrl == '/p/task_recompilemainlists/') {
+			$handler = __dir__ . '/ctrl/articles/task_recompilemainlists.php';
+			require_once $handler;
+			die;
+			//$this->app = new Logout();
+		}
+		///ctrl/articles/task_recompilemainlists.php
+		
 	}
 	/**
 	 * @description Маршруты для страницы /p/trollkiller/
