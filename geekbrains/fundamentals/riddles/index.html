@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+<head>
+	<title>Мои реализация программы Угадайка из курса Основы программирования GeekBrains</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<script>
+		/** @var {Number} rightAnswer */
+		var rightAnswer = parseInt( Math.random() * 100 ),
+			/** @var {String} firstPlayerName Имя первого игрока */
+			firstPlayerName,
+			/** @var {String} firstPlayerName Имя второго игрока */
+			secondPlayerName,
+			/** @var {String} firstPlayerName Имя активного игрока (того, чей ход) */
+			activeUserName,
+			/** @var {Number} j изменяется при переходе хода */
+			i = 1;
+		/**
+		 * @description Считать целое число из поля ввода 
+		*/
+		function readInt() {
+			return parseInt(document.getElementById('userInput').value);
+		}
+		/**
+		 * @description Считать строку из поля ввода 
+		*/
+		function readString() {
+			return document.getElementById('userInput').value;
+		}
+		/**
+		 * @description Очистить поле ввода
+		*/
+		function clearInput() {
+			var input = document.getElementById('userInput');
+			input.value = '';
+			input.focus();
+		}
+		/**
+		 * @description Установить текст вопроса или приглашение к вводу
+		*/
+		function setMessage(s) {
+			document.getElementById('message').innerHTML = s;
+		}
+		/**
+		 * @description Обработка нажатия клавиши при нажатии кнопки в поле ввода
+		*/
+		function onKeyDown(evt) {
+			if (evt.keyCode == 13) {
+				guess();
+			}
+			return true;
+		}
+		/**
+		 * @description Установить в поле ввода текст вопроса-приглашения ввести число с именем активного игрока
+		 * @param {String} prefix - если передан, он следлует перед предложением ввести число. Нужно для сообщения вида "Андрей, ваше сило слишком мало\nСергей, введите число от z до b" 
+		*/
+		function setQuestMessage(prefix) {
+			activeUserName = i % 2 == 0 ? secondPlayerName : firstPlayerName;
+			var quest = `${activeUserName},  введите число от 0 до 100`;
+			if (prefix) {
+				quest = prefix + quest;
+			}
+			setMessage(quest);
+			clearInput();
+		}
+ 		/**
+		 * @description Вызывается при нажатии на кнопку "Ответить" и при нажатии на кнопку Enter при фокусе в поле ввода
+		*/
+		function guess() {
+			if (!firstPlayerName) {
+				var s = readString();
+				if (s.length && String(readInt()) != s) {
+					firstPlayerName = s;
+					setMessage('Введите имя второго игрока');
+					clearInput();
+					return;
+				}
+			}
+			if (!firstPlayerName) {
+				setMessage('Введите имя первого игрока');
+				return;
+			}
+			if (!secondPlayerName) {
+				var s = readString();
+				if (s.length && String(readInt()) != s) {
+					secondPlayerName = s;
+					setQuestMessage();
+					return;
+				}
+			}
+			if (!secondPlayerName) {
+				setMessage('Введите имя второго игрока');
+				return;
+			}
+			var userAnswer, s;
+			userAnswer = readInt();
+			if (userAnswer == rightAnswer) {
+				setMessage(`${activeUserName} победил!<br>`);
+			} else if (userAnswer < rightAnswer) {
+				s = `${activeUserName}, ваше число слишком мало<br>`;
+				i++;
+				setQuestMessage(s);
+			} else {
+				s = `${activeUserName}, ваше число слишком велико<br>`;
+				i++;
+				setQuestMessage(s);
+			}
+		}
+		
+		/**
+		 * Инициализация
+		*/
+		window.onload = function() {
+			clearInput();
+			setMessage('Введите имя первого игрока');
+			document.getElementById('userInput').addEventListener('keydown', onKeyDown, true);
+		}
+		
+	</script>
+</head>
+<body>
+	<div class="navbar">
+		<a href="../">Начало раздела</a>
+		<a href="../puzzle/">Загадки</a>
+		<a href="javascript:;">Угадайка</a>
+		<a href="../password_generator/">Генератор паролей</a>
+		<a href="/">Моя персональная страница</a>
+	</div>
+	<div class="content">
+		<h1>Реализация программы &laquo;Угадайка&raquo; из курса  &laquo;Основы программирования&raquo; GeekBrains для двух игроков</h1>
+		<div class="alert alert-info">
+			
+			<div class="ibox">
+				<label for="userInput" id="message">Введите число от 0 до 100</label>
+				<input type="text" id="userInput">
+			</div>
+			<p class="t-r">
+				<input type="button" id="bAnswer" value="Ответить" onclick="guess()">
+			</p> 
+			
+			<p><a href="../">Начало раздела</a></p>
+			<p><a href="../puzzle/">Загадки</a></p>
+			<p><a href="../password_generator/">Генератор паролей</a></p>
+		</div>
+		<div class="clearfix"></div>
+		
+	</div>
+	<footer>
+		&copy; Андрей Ламзин
+	</footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<meta charset="utf-8">
+<script>
+	document.write(`Это игра "Угадай число". Введите stop для чтобы прекратить игру по желанию.<br>`);
+	var firstPlayerName = prompt('Введите имя первого игрока'),
+		secondPlayerName = prompt('Введите имя второго игрока'),
+		rightAnswer = parseInt( Math.random() * 100 ),
+		userAnswer,
+		activeUserName = 'Неизвестный пользователь',
+		i = 1,
+		immediatelyStop =  false;
+	
+	firstPlayerName = firstPlayerName ? firstPlayerName : activeUserName;
+	secondPlayerName = secondPlayerName ? secondPlayerName : activeUserName;
+	
+	if (firstPlayerName == 'stop' || secondPlayerName == 'stop') {
+		immediatelyStop =  true;
+	}
+	
+	while (true) {
+		if (immediatelyStop) {
+			document.write(`Игра прекращена пользователем ${activeUserName}<br>`);
+			break;
+		}
+		activeUserName = i % 2 == 0 ? secondPlayerName : firstPlayerName;
+		userAnswer = prompt(`${activeUserName},  введите число от 0 до 100`);
+		if (userAnswer == 'stop') {
+			document.write(`Игра прекращена пользователем ${activeUserName}<br>`);
+			break;
+		}
+		userAnswer = +userAnswer;
+		if (userAnswer == rightAnswer) {
+			document.write(`${activeUserName} победил!<br>`);
+			break;
+		} else if (userAnswer < rightAnswer) {
+			document.write(`${activeUserName}, ваше число слишком мало<br>`);
+		} else {
+			document.write(`${activeUserName}, ваше число слишком велико<br>`);
+		}
+		i++;
+	}
+	
+	
+	
+</script>

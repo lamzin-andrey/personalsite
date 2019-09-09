@@ -1,0 +1,63 @@
+<meta charset="utf-8">
+<script>
+	alert('Вас приветствует программа по обучению слепой печати');
+	
+	///
+	 // @descripton Получить число от 0 до n
+	 // @param {Number} n
+	 // @return Number
+	///
+	function randomNumber(n) {
+		return Math.round(Math.random() * n);
+	}
+	///
+	 // @descripton Генерация строки из символов letters длиной length
+	 // @param {Array} letters
+	 // @param {Number} lemgth
+	 // @return String
+	///
+	function generateText(letters, length) {
+		var text = '', i;
+		for (i = 0; i < length; i++) {
+			text += letters[ randomNumber(letters.length - 1) ];
+		}
+		return text;
+	}
+	///
+	 // @descripton Реализация уровня игры лёгкой сложности
+	 // @param {String} rules
+	 // @param {Array} letters
+	 // @param {Number} length
+	///
+	function gameEasyLevel(rules, letters, length) {
+		while (true) {
+			alert(rules);
+			var text = generateText(letters, length);
+			var userText = prompt(text);
+			if (userText == text) {
+				alert('Всё верно!');
+				break;
+			} else {
+				alert('вы ошиблись, попробуйте ещё раз.');
+			}
+		}
+	}
+	
+	
+	gameEasyLevel('Положите 4 пальца левой руки - мизинец, безымянный , средний и указательный - на клавиши ф, ы, в, а.' +  
+				'Запомните, что буква А находится под вашим указательным пальцем, а Ф под мизинцем.\n' + 
+				'Теперь неспеша набирайте текст. Постарайтесь не смотреть на клавиатуру.', ['ф', 'а'], 10);
+				
+	alert('Переход на следующий уровень!');
+	
+	gameEasyLevel('Поставьте мизинец левой руки на букву Ф, безымянный палец — на Ы, средний — на В, указательный — на А.' + 
+		'Мизинец правой руки на букву Ж, безымянный палец — на Д, средний — на Л, указательный — на О.' +
+		'Запомните расположение пальцев. Повторяйте за мной', ['ы', 'в'], 10);
+		
+	alert('Переход на следующий уровень!');
+	
+	gameEasyLevel('Поставьте мизинец левой руки на букву Ф, безымянный палец — на Ы, средний — на В, указательный — на А.'+
+		'Мизинец правой руки на букву Ж, безымянный палец — на Д, средний -— на Л, указательный — на О.'+
+		'Запомните расположение пальцев', ['о', 'ж'], 10);
+	
+</script>

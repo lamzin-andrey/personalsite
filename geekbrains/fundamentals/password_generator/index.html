@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+<head>
+	<title>Мои реализация программы Генератор паролей (домашнее задание из курса Основы программирования GeekBrains)</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<script>
+		/**
+		 * @description Считать целое число из поля ввода 
+		*/
+		function readInt() {
+			return parseInt(document.getElementById('userInput').value);
+		}
+		/**
+		 * @description Очистить поле ввода 
+		*/
+		function clearInput() {
+			document.getElementById('userInput').value = '';
+		}
+		/**
+		 * @description Установить сгенерированный пароль
+		*/
+		function setMessage(s) {
+			document.getElementById('outPassword').innerHTML = s;
+		}
+		/**
+		 * @description Обработка нажатия на клавишу при фокусе в поле ввода
+		*/
+		function onKeyDown(evt) {
+			if (evt.keyCode == 13) {
+				showGeneratedPassword();
+			}
+			return true;
+		}
+		/**
+		 * @description Генерация случайного числа от min до max
+		*/
+		function rand(min, max) {
+			return  Math.round( Math.random() * (max - min) ) + min;
+		}
+		/**
+		 * @description Генерация пароля (было ранее реализовано мной на php, отсюда вызов rand())
+		*/
+		function generatePassword(length) {
+			var L, chars, rate, str, limit, ch;
+				L = 0;
+				chars = 'abcdefghijklmnopqrstuvwxyz';
+				chars += chars.toUpperCase();
+				chars += '1234567890';
+				rate = {};
+				str = '';
+				limit = chars.length - 1;
+			
+			while (L < length) {
+				ch = chars.charAt( rand(1, chars.length - 1) );
+				//Если число символов пароля меньше длины алфавита, пусть они все будут уникальными
+				if (length > chars.length || (!rate[ch] || rate[ch] < 1)) {
+					str += ch;
+					rate[ch] = rate[ch] ? rate[ch] + 1 : 1;
+					L++;
+				}
+				
+			}
+			return str;
+		}
+		/**
+		 * @description Генерация пароля и вывод в поле пароля
+		*/
+		function showGeneratedPassword() {
+			var length = readInt();
+			if (isNaN(length)) {
+				alert('Нужно ввести число - длину пароля');
+				return;
+			}
+			setMessage(generatePassword(length));
+		}
+		
+		window.onload = function() {
+			clearInput();
+			document.getElementById('userInput').addEventListener('keydown', onKeyDown, true);
+		}
+		
+	</script>
+</head>
+<body>
+	<div class="navbar">
+		<a href="../">Начало раздела</a>
+		<a href="../puzzle/">Загадки</a>
+		<a href="../riddles/">Угадайка</a>
+		<a href="javascript:;">Генератор паролей</a>
+		<a href="/">Моя персональная страница</a>
+	</div>
+	<div class="content">
+		<h1>Реализация программы &laquo;Генератор паролей&raquo; из курса  &laquo;Основы программирования&raquo; GeekBrains</h1>
+		<div class="alert alert-info">
+			
+			<div class="ibox">
+				<label for="userInput" id="message">Введите длину пароля</label>
+				<input type="text" id="userInput">
+			</div>
+			<div id="outPassword">password</div>
+			<p class="t-r">
+				<input type="button" id="bAnswer" value="Ответить" onclick="showGeneratedPassword()">
+			</p> 
+			
+			
+			<p><a href="../">Начало раздела</a></p>
+			<p><a href="../puzzle/">Загадки</a></p>
+			<p><a href="../riddles/">Угадайка</a></p>
+			
+		</div>
+		<div class="clearfix"></div>
+		
+	</div>
+	<footer>
+		&copy; Андрей Ламзин
+	</footer>
+</body>
+</html>

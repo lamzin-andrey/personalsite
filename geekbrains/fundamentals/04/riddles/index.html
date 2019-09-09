@@ -1,0 +1,34 @@
+<meta charset="utf-8">
+<script>
+	var quest1 = 'Висит на стенки и стреляет.';
+	document.write(`${quest1}<br>`);
+	var answer1 = 'Полотенце';
+	var userAnswer1 = prompt('Enter a answer');
+	
+	if (answer1.toLowerCase() == userAnswer1.toLowerCase()) {
+		document.write(`You win!<br>`);
+		document.write(`Поздравляю!<br>`);
+	} else {
+		document.write(`You lose!<br>`);
+	}
+	
+	var quests = ['Сидит дед, во сто шуб одет', 'Ни окошек ни дверей, полна горница людей', 'Летит, гремит, когтями машет'];
+	var answers = ['лук', {'огурец':1, 'тыква':1}, 'электрик'];
+	var rightCount = 0;
+	
+	for (var i = 0; i < quests.length; i++) {
+		document.write(`${quests[i]}<br>`);
+		var userAnswer = prompt('Enter a answer');
+		if (typeof(answers[i]) == 'string') {
+			if (answers[i].toLowerCase() == userAnswer.toLowerCase()) {
+				rightCount++;
+			}
+		} else {
+			var s = userAnswer.toLowerCase();
+			if (answers[i][s]) {
+				rightCount++;
+			}
+		}
+	}
+	document.write(`Количество правильных ответов: ${rightCount}<br>`);
+</script>

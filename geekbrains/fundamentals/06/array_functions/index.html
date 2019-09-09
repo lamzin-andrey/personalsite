@@ -1,0 +1,100 @@
+<meta charset="utf-8">
+<script>
+	document.write('Демонстрация функции createArray(n).<br>');
+	var n = +prompt('Введите размерность массива');
+	//
+	 // @description Вернет массив целых чисел с элементами от 1 до n включительно
+	 // @param {Number} n 
+	 // @return Array
+	//
+	function createArray(n) {
+		var result = [], i;
+		for (i = 1; i <= n; i++) {
+			result.push(i);
+		}
+		return result;
+	}
+	///
+	 // @description Сумма элементов массива чисел
+	 // @param {Array} array
+	 // @return Number
+	//
+	function arraySum(array) {
+		var n = 0, i;
+		for (i = 0; i < array.length; i++) {
+			n += array[i];
+		}
+		return n;
+	}
+	//
+	 // @description Максимальное число массива
+	 // @param {Array} array
+	 // @return Number
+	//
+	function arrayMax(array) {
+		//var nMax = 0, i;
+		//for (i = 0; i < array.length; i++) {
+			//if (nMax < array[i]) {
+				//nMax = array[i];
+			//}
+		//}
+		//return nMax;
+		return Math.max.apply(Math, array);
+	}
+	///
+	 // @description Минимальное число массива
+	 // @param {Array} array
+	 // @return Number
+	///
+	function arrayMin(array) {
+		///var nMin = Number.MAX_VALUE, i;
+		//for (i = 0; i < array.length; i++) {
+			//if (nMin > array[i]) {
+				//nMin = array[i];
+			//}
+		//}
+		//return nMin;
+		
+		return Math.min.apply(Math, array);
+	}
+	///
+	 // @description Получить только четные числа из массива
+	 // @param {Array} array
+	 // @return Array
+	///
+	function arrayFilterEven(array) {
+		var aResult = [], i;
+		for (i = 0; i < array.length; i++) {
+			if (array[i] % 2 == 0) {
+				aResult.push(array[i]);
+			}
+		}
+		return aResult;
+	}
+	
+	var result = createArray(n);
+	document.write('createArray(' + n + ') вернула:<br> ' + result + '<br>');
+	
+	var sum = arraySum(result);
+	document.write('arraySum(' + result + ') вернула:<br> ' + sum + '<br>');
+	
+	var nMax = arrayMax(result);
+	document.write('arrayMax(' + result + ') вернула:<br>  ' +  nMax + '<br>');
+	
+	var arr = [2000,10,658, 17];
+	nMax = arrayMax(arr);
+	document.write('arrayMax(' + arr + ') вернула:<br> ' + nMax + '<br>');
+	
+	var nMin = arrayMin(result);
+	document.write('arrayMin(' + result + ') вернула:<br> ' + nMin + '<br>');
+	
+	nMin = arrayMin(arr);
+	document.write(' + arrayMin(' + arr + ') вернула:<br> ' + nMin + '<br>');
+	
+	var aEvenNumbers = arrayFilterEven(result);
+	document.write('arrayFilterEven(' + result + ') вернула:<br> ' + aEvenNumbers + '<br>');
+	
+	aEvenNumbers = arrayFilterEven(arr);
+	document.write('arrayFilterEven(' + arr + ') вернула:<br> ' + aEvenNumbers + '<br>');
+	
+</script>

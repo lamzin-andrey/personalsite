@@ -1,0 +1,18 @@
+<meta charset="utf-8">
+<script>
+	var sum = parseFloat( prompt('Введите сумму вклада') );
+	var percent = parseFloat( prompt('Введите процент') );
+	
+	if (isNaN(sum) || isNaN(percent)) {
+		alert('Введены сумма или процент не число!');
+	} else {
+		for (var i = 0; i < 5; i++) {
+			var bonusSum = percent * (sum / 100);
+			sum += bonusSum;
+			document.write(`Сумма на вашем вкладе через год: ${sum.toFixed(2)}<br>`);
+		}
+	}
+	
+	
+	
+</script>

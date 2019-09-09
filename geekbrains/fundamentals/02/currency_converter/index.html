@@ -1,0 +1,13 @@
+<meta charset="utf-8">
+<script>
+	var dollarRate = 65.6,
+		euroRate = 72.35,
+		roubleSum = parseFloat( prompt('Введите сумму в рублях ', "1"), 1),
+		dollarResult = roubleSum / dollarRate,
+		euroResult = roubleSum / euroRate;
+		
+	alert(`${roubleSum} руб. это:
+${dollarResult.toFixed(2)} $
+${euroResult.toFixed(2)} euro
+`);
+</script>

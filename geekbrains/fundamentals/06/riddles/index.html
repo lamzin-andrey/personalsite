@@ -1,0 +1,30 @@
+<meta charset="utf-8">
+<script>
+	///
+	 // Дублируемых фрагментов тут нет, поэтому просто заверну всё в главную функцию
+	///
+	function riddlesGame() {
+		var words = [
+			['Висит на стенке и стреляет.', ['Полотенце']],
+			['Сидит дед, во сто шуб одет', ['лук']],
+			['Ни окошек ни дверей, полна горница людей', ['огурец', 'тыква']],
+			['Летит, гремит, когтями машет', ['электрик']]
+		];
+		
+		var rightCount = 0;
+		
+		for (var i = 0; i < words.length; i++) {
+			document.write(`Отгадайте загадку: ${words[i][0]}<br>`);
+			var userAnswer = prompt('Введите ответ');
+			for (var j = 0; j < words[i][1].length; j++) {
+				if (words[i][1][j].toLowerCase() == userAnswer.toLowerCase()) {
+					rightCount++;
+				}
+			}
+		}
+		document.write('Количество правильных ответов: ' + rightCount + '<br>');
+	}
+	
+	riddlesGame();
+	
+</script>

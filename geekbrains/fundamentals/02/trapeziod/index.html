@@ -1,0 +1,14 @@
+<meta charset="utf-8">
+<script>
+	var a = parseFloat( prompt('Введите длину основания трапеции a')),
+		b = parseFloat( prompt('Введите длину основания трапеции b')),
+		h = parseFloat( prompt('Введите высоту трапеции h')),
+		result = ( (a + b) / 2) * h;
+	if (isNaN(result)) {
+		alert("Было введено не число как одно из значений оснований или высоты");
+	} else {
+		alert("Площадь трапеции будет равна "  + result);
+	}
+	
+	
+</script>

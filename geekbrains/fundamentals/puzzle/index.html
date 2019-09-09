@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+<head>
+	<title>Мои реализация программы Загадки из курса Основы программирования GeekBrains</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<script>
+		function checkAnswers() {
+			var count = 0,
+				words = [
+				['Висит на стенке и стреляет.', ['Полотенце']],
+				['Сидит дед, во сто шуб одет', ['лук']],
+				['Ни окошек ни дверей, полна горница людей', ['огурец', 'тыква']],
+				['Летит, гремит, когтями машет', ['электрик']]
+			];
+			var inputs = document.getElementsByTagName('input'), i, k, userAnswer;
+			for (i = 0; i < inputs.length; i++) {
+				var input = inputs[i];
+				if (input.type == 'button') {
+					continue;
+				}
+				k = +input.id.replace('w', '');
+				userAnswer = input.value;
+				for (j = 0; j < words[k][1].length; j++) {
+					if (words[k][1][j].toLowerCase() == userAnswer.toLowerCase()) {
+						count++;
+					}
+				}
+			}
+			
+			alert('Количество правильных ответов ' + count);
+			
+		}
+		
+		
+	</script>
+</head>
+<body>
+	<div class="navbar">
+		<a href="../">Начало раздела</a>
+		<a href="javascript:;">Загадки</a>
+		<a href="../riddles/">Угадайка</a>
+		<a href="../password_generator">Генератор паролей</a>
+		<a href="/">Моя персональная страница</a>
+	</div>
+	<div class="content">
+		<h1>Реализация программы &laquo;Загадки&raquo; из курса  &laquo;Основы программирования&raquo; GeekBrains</h1>
+		<div class="alert alert-info">
+			
+			<div class="ibox">
+				<label for="w0">1. Висит на стенке и стреляет.</label>
+				<input type="text" id="w0">
+			</div>
+			<div class="ibox">
+				<label for="w1">2. Сидит дед, во сто шуб одет.</label>
+				<input type="text" id="w1">
+			</div>
+			<div class="ibox">
+				<label for="w2">3. Ни окошек ни дверей, полна горница людей </label>
+				<input type="text" id="w2">
+			</div>
+			<div class="ibox">
+				<label for="w3">4. Летит, гремит, когтями машет </label>
+				<input type="text" id="w3">
+			</div>
+			
+			<p class="t-r">
+				<input type="button" id="bAnswer" value="Ответить" onclick="checkAnswers()">
+			</p>
+			<p><a href="../">Начало раздела</a></p>
+			<p><a href="../riddles">Угадайка</a></p>
+			<p><a href="../password_generator">Генератор паролей</a></p>
+		</div>
+	</div>
+	<footer>
+		&copy; Андрей Ламзин
+	</footer>
+</body>
+</html>
