@@ -5,6 +5,7 @@ require_once DOC_ROOT . '/q/q/cpagecompiler.php';
 require_once DOC_ROOT . '/q/q/treealg.php';
 
 require_once DOC_ROOT . '/p/lang/ru.php';
+require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';
 require_once DOC_ROOT . '/q/q/lang.php';
 
 
@@ -359,7 +360,7 @@ class PortfoliolistCompiler extends CPageCompiler {
 				break;
 			}
 			$sCategoryIdList = join(',', $allCategories);
-			file_put_contents('/home/andrey/log.log', $sCategoryIdList . "\n", FILE_APPEND);
+			//file_put_contents('/home/andrey/log.log', $sCategoryIdList . "\n", FILE_APPEND);
 		}
 		
 		unset($_REQUEST['noxhr']);
