@@ -223,8 +223,9 @@ window.app = new Vue({
                 },
                 {
                      "data": "id",
-                     'render' : function(data, type, row) {
-                        return  `
+                     'render' : function(data, type, row, meta) {
+						console.log('meta', meta);
+                        let r =   `
                             <div class="form-group d-md-inline d-block ">
                                 <button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
                                     <i data-id="${data}" class="fas fa-edit fa-sm"></i>
@@ -235,12 +236,31 @@ window.app = new Vue({
                                     <i data-id="${data}" class="fas fa-trash fa-sm"></i>
                                 </button>
 							</div>
+							`;
+						if (meta.row == 0) {
+							r += `
 							<div class="form-group d-md-inline d-block ">
-								<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
-									<span class="sr-only">Loading...</span>
-								</div>
-                            </div>
-                            `;
+                                <button data-id="${data}" type="button" class="btn btn-primary j-up-btn">
+                                    <i data-id="${data}" class="fas fa-arrow-up fa-sm"></i>
+                                </button>
+							</div>`;
+						}
+						//if (meta.row == (meta.settings._iDisplayStart + meta.settings._iDisplayLength - 1)) {
+						if (meta.row == (meta.settings._iDisplayLength - 1)) {
+							r += `
+							<div class="form-group d-md-inline d-block ">
+                                <button data-id="${data}" type="button" class="btn btn-primary j-down-btn">
+                                    <i data-id="${data}" class="fas fa-arrow-down fa-sm"></i>
+                                </button>
+							</div>`;
+						}
+						r += `
+						<div class="form-group d-md-inline d-block ">
+							<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+						</div>`;
+						return r;
                     }
                 },
                 
@@ -256,7 +276,13 @@ window.app = new Vue({
             });
             $(id + ' .j-rm-btn').click((evt) => {
                 this.onClickRemoveArticle(evt);
-            });
+			});
+			$(id + ' .j-up-btn').click((evt) => {
+                //this.onClickUpArticle(evt);
+			});
+			$(id + ' .j-up-down').click((evt) => {
+                //this.onClickDownArticle(evt);
+			});
         }).on('processing', () => {
             //Preloader
             if (!this.preloaderIsInitalize) {
