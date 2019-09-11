@@ -281,6 +281,11 @@ class Route {
 			require_once $handler;
 			$this->app = new PortfolioReorder();
 		}
+		if ($baseUrl == '/p/portfoio/move.jn/') {
+			$handler = __dir__ . '/ctrl/portfolio/portfoliomovetopage.php';
+			require_once $handler;
+			$this->app = new PortfolioMoveToPage();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/

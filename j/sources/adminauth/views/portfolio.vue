@@ -61,6 +61,9 @@
 	import B4DataTablesPreloader from '../../landlib/datatables/b4datatablespreloader.js';
 	//Конец Центровка прелоадера DataTables по центру (самоделка)
 
+	//Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
+	import DataTableMoveRecord from '../classes/datatablemoverecord';
+
     Vue.component('portfolioform', require('./portfolioform.vue'));
 
     export default {
@@ -85,7 +88,10 @@
 				dataTablesPreloader: new B4DataTablesPreloader(),
 
 				/** @property {Number} productId Идентификатор редактируемой работы */
-	 			categeoryId : 0,
+				categeoryId : 0,
+				 
+				 /** @property {DataTableMoveRecord} объект для добавления кнопок для перемещения записей таблицы на соседние страницы */
+				 oDataTableMoveRecord: null,
 			};
 			return _data;
 		},
@@ -98,7 +104,8 @@
 				if (this.isDataTableInitalized) {
 					return;
 				}
-				let id = '#portfoliotable';
+				this.oDataTableMoveRecord = new DataTableMoveRecord('#portfoliotable', '/p/portfoio/move.jn/', this.$root);
+				let id = '#portfoliotable', self = this;
 				this.isDataTableInitalized = true;
 				this.dataTable =  $(id).DataTable( {
 					'rowReorder': {
@@ -131,8 +138,8 @@
 						},
 						{
 							"data": "id",
-							'render' : function(data, type, row) {
-								return  `
+							'render' : function(data, type, row, meta) {
+								let r =  `
 									<div class="form-group d-md-inline d-block ">
 										<button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
 											<i data-id="${data}" class="fas fa-edit fa-sm"></i>
@@ -142,13 +149,15 @@
 										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn">
 											<i data-id="${data}" class="fas fa-trash fa-sm"></i>
 										</button>
-									</div>
+									</div>`;
+								r = self.oDataTableMoveRecord.setHtml(r, meta.row, meta.settings, data);
+								r += `
 									<div class="form-group d-md-inline d-block ">
 										<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
 											<span class="sr-only">Loading...</span>
 										</div>
-									</div>
-									`;
+									</div>`;
+								return r;
 							}
 						},
 						
@@ -164,6 +173,7 @@
 					$(id + ' .j-rm-btn').click((evt) => {
 						this.onClickRemoveProduct(evt);
 					});
+					self.oDataTableMoveRecord.setListeners();
 				}).on('processing', () => {
 					//Preloader
 					if (!this.preloaderIsInitalize) {

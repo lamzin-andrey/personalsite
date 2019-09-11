@@ -70,6 +70,9 @@ Vue.component('articlesections', require('./views/articlesections.vue'));
 //Компонент страницы просмотра / редактирования работами портфолио
 Vue.component('portfolio', require('./views/portfolio.vue'));
 
+//Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
+import DataTableMoveRecord from './classes/datatablemoverecord';
+
 window.app = new Vue({
     i18n : i18n,
     el: '#wrapper',
@@ -90,7 +93,10 @@ window.app = new Vue({
      dataTablesPreloader: new B4DataTablesPreloader(),
 
      /** @property {DataTables}  dataTable Объект DataTables таблицы со статьями */
-     dataTable : null,
+	 dataTable : null,
+	 
+	 /** @property {DataTableMoveRecord}  oDataTableMoveRecord @see require('./classes/datatablemoverecord'); */
+	 oDataTableMoveRecord:null,
 
      /** @property {Boolean} preloaderIsInitalize true when dataTablesPreloader initalized and watch */
      preloaderIsInitalize : false,
@@ -192,8 +198,9 @@ window.app = new Vue({
     initDataTables() {
         if (this.isArticlesDataTableInitalized) {
             return;
-        }
-        let id = '#articles';
+		}
+		this.oDataTableMoveRecord = new DataTableMoveRecord('#articles', '/p/articles/move.jn/', this);
+        let id = '#articles', self = this;
         this.isArticlesDataTableInitalized = true;
         this.dataTable =  $(id).DataTable( {
 			'rowReorder': {
@@ -236,23 +243,7 @@ window.app = new Vue({
                                 </button>
 							</div>
 							`;
-						if (meta.row == 0) {
-							r += `
-							<div class="form-group d-md-inline d-block ">
-                                <button data-id="${data}" type="button" class="btn btn-primary j-up-btn">
-                                    <i data-id="${data}" class="fas fa-arrow-up fa-sm"></i>
-                                </button>
-							</div>`;
-						}
-						//if (meta.row == (meta.settings._iDisplayStart + meta.settings._iDisplayLength - 1)) {
-						if (meta.row == (meta.settings._iDisplayLength - 1)) {
-							r += `
-							<div class="form-group d-md-inline d-block ">
-                                <button data-id="${data}" type="button" class="btn btn-primary j-down-btn">
-                                    <i data-id="${data}" class="fas fa-arrow-down fa-sm"></i>
-                                </button>
-							</div>`;
-						}
+						r = self.oDataTableMoveRecord.setHtml(r, meta.row, meta.settings, data);
 						r += `
 						<div class="form-group d-md-inline d-block ">
 							<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
@@ -276,12 +267,7 @@ window.app = new Vue({
             $(id + ' .j-rm-btn').click((evt) => {
                 this.onClickRemoveArticle(evt);
 			});
-			$(id + ' .j-up-btn').click((evt) => {
-                this.onClickUpArticle(evt);
-			});
-			$(id + ' .j-down-btn').click((evt) => {
-                this.onClickDownArticle(evt);
-			});
+			self.oDataTableMoveRecord.setListeners();
         }).on('processing', () => {
             //Preloader
             if (!this.preloaderIsInitalize) {
@@ -319,82 +305,6 @@ window.app = new Vue({
 				this._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, '/p/articlesreorder.jn/', (a, b, c) => {this.onFailReorderData(a, b, c);});
 			}
 		});
-	},
-	/**
-	 * @description Обработка клика на кнопке переноса статьи на предыдущую страницу
-	 * @param {Object} data 
-	*/
-	onClickUpArticle(evt) {
-		this.sendMoveRecordToPageRequest($(evt.target).attr('data-id'), 'u');
-	},
-	/**
-	 * @description Обработка клика на кнопке переноса статьи на следующую страницу
-	 * @param {Object} data 
-	*/
-	onClickDownArticle(evt) {
-		this.sendMoveRecordToPageRequest($(evt.target).attr('data-id'), 'd');
-	},
-	/**
-	 * @description Обработка успешного переноса статьи на новую или предыдущую страницу
-	 * @param {Object} data 
-	*/
-	onSuccessMoveRecord(data) {
-		if (!this.onFailMoveRecord(data)) {
-			return;
-		}
-		let s = ('button[data-id=' + data.srcId + ']'), 
-			jButton = $(s).first(),
-			jRow, ls, i, jA, jCell;
-		if (jButton[0]) {
-			//Get Table row
-			jRow = jButton.parents('tr').first();
-			//Set buttons id attribute
-			ls = jRow.find('button,i');
-			for (i = 0; i < ls.length; i++) {
-				if (ls[i].hasAttribute('data-id')) {
-					ls[i].setAttribute('data-id', data.newRec.id);
-				}
-			}
-			//Set table row content
-			jCell = jRow.find('td')[1];
-			if (jCell) {
-				jA = $(jCell).find('a').first();
-				if (jA[0]) {
-					jA.attr('href', data.newRec.url);
-					jA.html(data.newRec.heading);
-				}
-			}
-		}
-	},
-	/**
-	 * @description Обработка неуспешного переноса статьи на новую или предыдущую страницу
-	 * @param {Object} data 
-	*/
-	onFailMoveRecord(data, b, c) {
-		this.bIsMoveRecordRequestSended = 0;
-		//Hide loader
-		$('#spin' + this.bIsMoveRecordRequestSendedRecId).toggleClass('d-none');
-
-		if (data.srcId && !data.newRec) {
-			this.alert(data.msg);
-			return false;
-		}
-		
-		return this.defaultFailSendFormListener(data, b, c);
-	},
-	/**
-	 * @description Отправка запроса на перемещение записи на другую страницу
-	 * @param {Number} recId
-	 * @param {String} direction 'u' - up, 'd' - down 
-	*/
-	sendMoveRecordToPageRequest(recId, direction) {
-		if (!this.bIsMoveRecordRequestSended) {
-			let id = recId;
-			$('#spin' + id).toggleClass('d-none');
-			this.bIsMoveRecordRequestSended = 1;
-			this.bIsMoveRecordRequestSendedRecId = id;
-			this._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, '/p/articles/move.jn/', (a, b, c) => { this.onFailMoveRecord(a, b, c); });
-		}
 	},
 	/**
 	 * @description Обработка успешного переупорядочивания статей (одна страница)
