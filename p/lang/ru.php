@@ -124,7 +124,10 @@ $aLang = [
 	'My works' => 'Мои работы',
 	
 	//Portfolio tree view
-	'Category has childs. Renaming unavailable' => 'В категории есть опубликованные работы. Переименование невозможно. (Это вредно для SEO - сайт может вылететь из выдачи)'
+	'Category has childs. Renaming unavailable' => 'В категории есть опубликованные работы. Переименование невозможно. (Это вредно для SEO - сайт может вылететь из выдачи)',
 	
+	//Move records
+	'Record is top' => 'Запись самая первая',
+	'Record is last' => 'Запись самая последняя',
 	
 ];

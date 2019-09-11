@@ -336,6 +336,11 @@ class Route {
 			require_once $handler;
 			$this->app = new ArticlesReorder();
 		}
+		if ($baseUrl == '/p/articles/move.jn/') {
+			$handler = __dir__ . '/ctrl/articlesmovetopage.php';
+			require_once $handler;
+			$this->app = new ArticlesMoveToPage();
+		}
 	}
 }
 $route = new Route();

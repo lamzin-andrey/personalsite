@@ -224,7 +224,6 @@ window.app = new Vue({
                 {
                      "data": "id",
                      'render' : function(data, type, row, meta) {
-						console.log('meta', meta);
                         let r =   `
                             <div class="form-group d-md-inline d-block ">
                                 <button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
@@ -278,10 +277,10 @@ window.app = new Vue({
                 this.onClickRemoveArticle(evt);
 			});
 			$(id + ' .j-up-btn').click((evt) => {
-                //this.onClickUpArticle(evt);
+                this.onClickUpArticle(evt);
 			});
-			$(id + ' .j-up-down').click((evt) => {
-                //this.onClickDownArticle(evt);
+			$(id + ' .j-down-btn').click((evt) => {
+                this.onClickDownArticle(evt);
 			});
         }).on('processing', () => {
             //Preloader
@@ -322,9 +321,85 @@ window.app = new Vue({
 		});
 	},
 	/**
-	 * @description Обработка успешного переупорядочивания статей
+	 * @description Обработка клика на кнопке переноса статьи на предыдущую страницу
 	 * @param {Object} data 
-	 */
+	*/
+	onClickUpArticle(evt) {
+		this.sendMoveRecordToPageRequest($(evt.target).attr('data-id'), 'u');
+	},
+	/**
+	 * @description Обработка клика на кнопке переноса статьи на следующую страницу
+	 * @param {Object} data 
+	*/
+	onClickDownArticle(evt) {
+		this.sendMoveRecordToPageRequest($(evt.target).attr('data-id'), 'd');
+	},
+	/**
+	 * @description Обработка успешного переноса статьи на новую или предыдущую страницу
+	 * @param {Object} data 
+	*/
+	onSuccessMoveRecord(data) {
+		if (!this.onFailMoveRecord(data)) {
+			return;
+		}
+		let s = ('button[data-id=' + data.srcId + ']'), 
+			jButton = $(s).first(),
+			jRow, ls, i, jA, jCell;
+		if (jButton[0]) {
+			//Get Table row
+			jRow = jButton.parents('tr').first();
+			//Set buttons id attribute
+			ls = jRow.find('button,i');
+			for (i = 0; i < ls.length; i++) {
+				if (ls[i].hasAttribute('data-id')) {
+					ls[i].setAttribute('data-id', data.newRec.id);
+				}
+			}
+			//Set table row content
+			jCell = jRow.find('td')[1];
+			if (jCell) {
+				jA = $(jCell).find('a').first();
+				if (jA[0]) {
+					jA.attr('href', data.newRec.url);
+					jA.html(data.newRec.heading);
+				}
+			}
+		}
+	},
+	/**
+	 * @description Обработка неуспешного переноса статьи на новую или предыдущую страницу
+	 * @param {Object} data 
+	*/
+	onFailMoveRecord(data, b, c) {
+		this.bIsMoveRecordRequestSended = 0;
+		//Hide loader
+		$('#spin' + this.bIsMoveRecordRequestSendedRecId).toggleClass('d-none');
+
+		if (data.srcId && !data.newRec) {
+			this.alert(data.msg);
+			return false;
+		}
+		
+		return this.defaultFailSendFormListener(data, b, c);
+	},
+	/**
+	 * @description Отправка запроса на перемещение записи на другую страницу
+	 * @param {Number} recId
+	 * @param {String} direction 'u' - up, 'd' - down 
+	*/
+	sendMoveRecordToPageRequest(recId, direction) {
+		if (!this.bIsMoveRecordRequestSended) {
+			let id = recId;
+			$('#spin' + id).toggleClass('d-none');
+			this.bIsMoveRecordRequestSended = 1;
+			this.bIsMoveRecordRequestSendedRecId = id;
+			this._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, '/p/articles/move.jn/', (a, b, c) => { this.onFailMoveRecord(a, b, c); });
+		}
+	},
+	/**
+	 * @description Обработка успешного переупорядочивания статей (одна страница)
+	 * @param {Object} data 
+	*/
 	onSuccessReorderData(data) {
 		if (!this.onFailReorderData(data) ) {
 			return;
@@ -620,6 +695,8 @@ window.app = new Vue({
 						this.formInputValidator.viewSetError(jEl, data.errors[i]);
 					}
 				}
+			} else if (data.msg) {
+				this.alert(data.msg);
 			}
 			return false;
 		} else if (data.status != 'ok') {
