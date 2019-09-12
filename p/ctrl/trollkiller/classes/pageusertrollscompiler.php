@@ -27,6 +27,7 @@ class PageUserTrollsCompiler extends CPageCompiler {
 		$this->title = l('Trolls banned by %', false, $sName);
 		$this->canonicalUrl = '/portfolio/web/userscripts/trollkiller/user/' . $nUid . '/';
 		$this->bc = $this->_setBC();
+		$this->_setRightMenu();
 		$this->heading = l('Trolls banned by user % using TrollKiller', false, $sName);
 		
 		$aData = query('SELECT * FROM trollkiller WHERE uid = ' . $nUid . ' ORDER BY id DESC');
@@ -87,5 +88,16 @@ class PageUserTrollsCompiler extends CPageCompiler {
 	{
 		$o = new SwearSword();
 		return $o->sanitize($s);
+	}
+	/**
+	 * @description Set Right Menu Html
+	 * @return string
+	*/
+	private function _setRightMenu()
+	{
+		$this->rightMenu = '';
+		$oRightMenuCompiler = new RightMenuCompiler();
+		$oRightMenuCompiler->loadData();
+		$this->rightMenu = $oRightMenuCompiler->compile(false);
 	}
 }

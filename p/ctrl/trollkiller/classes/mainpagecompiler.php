@@ -36,6 +36,7 @@ class MainpageCompiler extends CPageCompiler {
 	public function compile($bSaveNow = true)
 	{
 		$this->_setContent();
+		$this->_setRightMenu();
 		$this->outputFile = DOC_ROOT . $this->canonicalUrl . 'index.html';
 		$s = parent::compile(false);
 		$s = str_replace('{ALERT}', '', $s);
@@ -63,5 +64,16 @@ class MainpageCompiler extends CPageCompiler {
 		$s = str_replace('{MENU_ACTIVE_ITEM}', l('Troll Killers Registration'), $s);*/
 		$s = '';
 		return $s;
+	}
+	/**
+	 * @description Set Right Menu Html
+	 * @return string
+	*/
+	private function _setRightMenu()
+	{
+		$this->rightMenu = '';
+		$oRightMenuCompiler = new RightMenuCompiler();
+		$oRightMenuCompiler->loadData();
+		$this->rightMenu = $oRightMenuCompiler->compile(false);
 	}
 }

@@ -7,6 +7,7 @@ require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
 
 require_once __DIR__ . '/pageusertrollscompiler.php';
+require_once __DIR__ . '/rightmenucompiler.php';
 
 class PageTop10Compiler extends CPageCompiler {
 
@@ -31,11 +32,24 @@ class PageTop10Compiler extends CPageCompiler {
 	{
 		$aData = $this->aData;
 		$this->_setContent($aData);
+		$this->_setRightMenu();
+		
 		$this->outputFile = DOC_ROOT . '/portfolio/web/userscripts/trollkiller/list/index.html';
 		$s = parent::compile(false);
 		$s = str_replace('{ALERT}', '', $s);
 		$this->_save($s);
 		return $s;
+	}
+	/**
+	 * @description Set Right Menu Html
+	 * @return string
+	*/
+	private function _setRightMenu()
+	{
+		$this->rightMenu = '';
+		$oRightMenuCompiler = new RightMenuCompiler();
+		$oRightMenuCompiler->loadData();
+		$this->rightMenu = $oRightMenuCompiler->compile(false);
 	}
 	
 	/**
