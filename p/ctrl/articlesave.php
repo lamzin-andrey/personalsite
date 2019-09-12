@@ -24,6 +24,8 @@ class ArticlePost extends AdminAuthJson {
 		$this->treq('og_image');
 		$this->tsreq('menu_heading');
 		$this->tsreq('right_menu_secondary_text');
+		$this->breq('hidden_in_list');
+		$this->breq('is_hidden');
 		
 		$errors = [];
 		

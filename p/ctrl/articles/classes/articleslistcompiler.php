@@ -171,7 +171,7 @@ class ArticlesListCompiler extends CPageCompiler {
 	{
 		$this->_setRightMenu();
 		$_REQUEST['noxhr'] = true;
-		$this->aData = query('SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 ORDER BY rating DESC, delta ASC');
+		$this->aData = query('SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 AND hidden_in_list != 1 ORDER BY rating DESC, delta ASC');
 		$this->title = l('Andrey\'blog', true);
 		$url = '/blog/';
 		$this->outputFile = DOC_ROOT . '/blog/index.html';

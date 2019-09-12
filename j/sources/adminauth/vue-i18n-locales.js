@@ -101,6 +101,8 @@ var locales = {
 			"Other_article_requested_for_edit": "Уже запрошены для редактирования данные другой статьи",
 			"menu_heading": "Заголовок для пункта меню",
 			"right_menu_secondary_text": "Дополнительный текст в пункте меню",
+			"articleHiddeninList": "Скрывать в списке статей",
+			"is_hidden": "Скрывать на сайте",
 
 			//List Articles
 

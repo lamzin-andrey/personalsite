@@ -33,6 +33,9 @@
 				:aria-valuenow="progressValue" aria-valuemin="0" aria-valuemax="100">{{ progressValue }}%</div>
         </div>
 		<checkboxb4  id="alpha" :label="$t('app.isMakeTransparentBg')" value="true"></checkboxb4>
+
+		<checkboxb4 id="hiddenInList"  v-model="hidden_in_list" :label="$t('app.articleHiddeninList')" value="true"></checkboxb4>
+		<checkboxb4 id="isHidden" v-model="is_hidden" :label="$t('app.is_hidden')" value="true"></checkboxb4>
          
 
         <div class="accordion" id="seoAccord">
@@ -149,6 +152,11 @@
 				//Чтобы передать в textareab4 true пришлось определить
 				counter: true,
 
+				//Скрывать вообще
+				is_hidden:false,
+				//Скрывать в списке статей
+				hidden_in_list:false,
+
 				//Содержимое META тега
 				description : '',
 				//Содержимое META тега
@@ -222,6 +230,8 @@
 				this.menu_heading = '';
 				this.right_menu_secondary_text = '';
 				this.og_image = this.defaultSocImage = this.defaultLogoValue;
+				this.hidden_in_list = false;
+				this.is_hidden = false;
 				
 				//Fix bug when edit the article more then one time...
 				Vue.nextTick(() => {
@@ -242,8 +252,10 @@
 					this.og_image = this.defaultSocImage = data.og_image;
 					this.menu_heading = data.menu_heading;
 					this.right_menu_secondary_text = data.menu_heading;
+
+					this.hidden_in_list = parseInt(data.hidden_in_list) ? true : false;
+					this.is_hidden = parseInt(data.is_hidden) ? true : false;
 				});
-				
 			},
 			/**
 			 * @description Очистить инпуты изображений
