@@ -23,6 +23,7 @@ class Route {
 		$this->_treedemo();
 		$this->_trollkiller();
 		$this->_stat();
+		$this->_phd();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -79,6 +80,22 @@ class Route {
 		}
 		///ctrl/articles/task_recompilemainlists.php
 		
+	}
+	/**
+	 * @description Маршруты для страницы /p/phd/
+	*/
+	protected function _phd()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/phd/email.jn/') {
+			$handler = $sCtrlDir . 'phdemail.php';
+			require_once $handler;
+			$this->app = new TrollKillerLogin();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/trollkiller/

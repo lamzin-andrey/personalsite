@@ -22,18 +22,23 @@ class Auth {
 		 )";
 		$id = query($query);
 		if ($id) {
-			setcookie(AUTH_COOKIE_NAME, $uid, time() + 365 * 24 * 3600, '/', '', true, true);
+			//setcookie(AUTH_COOKIE_NAME, $uid, time() + 365 * 24 * 3600, '/', '', true, true);
+			static::setCookie($uid);
 		}
 		return $id;
 	}
 	
 	static public function getUid() : int
 	{
-		$id = 0;
+		$id = intval(sess('nuid'));
+		if ($id) {
+			return $id;
+		}
 		if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
 			$t = self::$table;
 			$cname = $_COOKIE[AUTH_COOKIE_NAME];
 			$id = (int)dbvalue("SELECT id FROM {$t} WHERE guest_id = '{$cname}'");
+			sess('nuid', $id);
 		}
 		return $id;
 	}
@@ -129,7 +134,7 @@ class Auth {
 	*/
 	static public function setCookie(string $cookie)
 	{
-		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 365 * 24 * 3600, '/');
+		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 365 * 24 * 3600, '/', '', false, true);
 	}
 	/**
 	 * @description Установить куку на час
@@ -137,6 +142,6 @@ class Auth {
 	*/
 	static public function setCookieShort(string $cookie)
 	{
-		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 3600, '/');
+		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 3600, '/', false, true);
 	}
 }
