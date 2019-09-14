@@ -563,6 +563,7 @@ function o($v, $k) {
  * @desc Работа с сессией
  * **/
 function sess($key, $value = null, $default_value = null) {
+	@session_start();
 	if ($value !== null && $value !== 'unset') {
 		$_SESSION[$key] = $value;
 	}
