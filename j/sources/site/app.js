@@ -1,5 +1,6 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
 
+require('./../../vendor/lazyloadxt1.1.0.min.js');
 
 require('./../../vendor/bootstrap4.2.1.min.js');
 require('./../../vendor/prism/0.js');
