@@ -1,5 +1,17 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
+
+
+require('./../../vendor/bootstrap4.2.1.min.js');
+require('./../../vendor/prism/0.js');
 require('./../landlib/net/rest.js');
+
+//add sticker footer css
+import './../../../s/vendor/bootstrap4_sticky_footer.css';
+//add prism css
+import './../../../j/vendor/prism/0.css';
+
+//s/bootstrap4_sticky_footer.css
+
 window.addEventListener('load', () =>{
 	new App();
 }, false);

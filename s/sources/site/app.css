@@ -1,0 +1,56 @@
+.u-img-left {
+	float:left;
+	padding:0;
+	margin:0 24px 10px 20px;
+}
+.u-warning-icon-border {
+	border-width: 4px !important;
+    border-color: #856404 !important;
+}
+.u-rel-vertical {
+	border-left: 1px solid black;
+	max-height:10px;
+}
+.u-ml-1 {
+	margin-left:0.5rem;
+}
+.u-ml-2 {
+	margin-left:1rem;
+}
+.u-ml-3 {
+	margin-left:1.5rem;
+}
+.u-ml-4 {
+	margin-left:2.0rem;
+}
+.u-ml-5 {
+	margin-left:2.5rem;
+}
+.u-ml-6 {
+	margin-left:3.0rem;
+}
+
+
+.u-text-indent-1 {
+	text-indent: 0.25rem;
+}
+
+.u-text-indent-2 {
+	text-indent: 0.5rem;
+}
+
+.u-text-indent-3 {
+	text-indent: 1rem;
+}
+
+.u-text-indent-4 {
+	text-indent: 1.5rem;
+}
+
+.u-text-indent-5 {
+	text-indent: 3.0rem;
+}
+
+.u-right-side li img {
+	max-width:250px;
+}

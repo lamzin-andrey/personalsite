@@ -16,7 +16,7 @@
 
   <!-- Custom styles for this template-->
   <link href="/p/sbadmin2/css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="/s/aauth.css" rel="stylesheet">
+  <link href="/s/sources/admin/aauth.css" rel="stylesheet">
   <link href="/p/.css" rel="stylesheet">
 	<script src="/j/landcacherswinstaller.js"></script>
 	<script>window.sReferer = "<?php echo o($app, 'referer') ?>";</script>
@@ -97,7 +97,7 @@
   <script src="/p/sbadmin2/js/sb-admin-2.min.js"></script>
   
   
-<link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+<link rel="stylesheet" type="text/css" href="/s/vendor/bootstrap4_sticky_footer.css">
 </body>
 
 </html>

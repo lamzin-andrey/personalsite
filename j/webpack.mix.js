@@ -11,11 +11,17 @@ let mix = require('laravel-mix');
  |
  */
 //Для неавторизованных пользователей
-//mix.js('sources/admin/vue/js/app.js', 'a.js');
+mix.js('sources/admin/vue/js/app.js', 'a.js');
 //Для авторизованных админов
-//mix.js('sources/adminauth/app.js', 'b.js');
+mix.js('sources/adminauth/app.js', 'b.js');
+
 //Страницы сайта
-//mix.js('sources/site/app.js', 'c.js');
+mix.js('sources/site/app.js', 'c.js');
+mix.styles([
+		'./../s/vendor/bootstrap4.2.1.min.css',
+		'./../s/vendor/fontawesome5/all.css',
+		'./../s/sources/site/app.css'
+	], './../s/app.css');
 
 //Конвертер онлайн
-mix.js('sources/phd/js/app.js', 'd.js');
+//mix.js('sources/phd/js/app.js', 'd.js');
