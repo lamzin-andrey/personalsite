@@ -1,4 +1,5 @@
 window.jQuery = window.$ = window.jquery = require('jquery');
+require('./../../../vendor/lazyloadxt1.1.0.min.js');
 window.Vue = require('vue');
 
 //For REST request server
