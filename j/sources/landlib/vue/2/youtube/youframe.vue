@@ -1,6 +1,6 @@
 <template>
    <div style="max-width: 100%;">
-	   <iframe :src="compSrc"
+	   <iframe :src="src"
 	   		:allowfullscreen="allowfullscreen" 
 	   		:style="css" 
 	   		:width="width" 
@@ -9,28 +9,13 @@
 	</div>
 </template>
 <script>
-	require('../../../net/httpquerystring');
     export default {
-		name: 'Youtube',
+		name: 'YoutubeIframe',
 
-		computed: {
-			compSrc() {
-				if (this.autoplay) {
-					let s = HttpQueryString.setVariable(this.src, 'autoplay', '1');
-					console.log('will add ap=1', s);
-					return s;
-				}
-				//let s = HttpQueryString.setVariable(this.src, 'autoplay', 'CMD_UNSET');
-				//return s;
-				console.log('this.src', this.src);
-				return this.src;
-			}
-		},
-
-		//Атрибуты компонента
+		//Component attrtibutes
 		props: {
 			src: {
-				type:String
+				type:String,
 			},
 			//Play immediately
 			autoplay: {
@@ -59,23 +44,14 @@
 				default:'0'
 			}
 		},
-        //вызывается раньше чем mounted
+        //Called earlier than mounted
         data: function(){return {
-            //Значение email
-            email:null,
-            
         }; },
         //
         methods:{
-            /** 
-             * @description TODO Придумай имя
-            */
-            onSubmitLoginForm(evt) {
-                
-            },
            
         }, //end methods
-        //вызывается после data, поля из data видны "напрямую" как this.fieldName
+        //call after data(), fields from data access as this.fieldName
         mounted() {
             
         }

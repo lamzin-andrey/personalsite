@@ -1,13 +1,17 @@
 <template>
 	<div>
-   		<img v-if="noclicked" :src="img" @click="onClickGetVideo" :video="video" :autoplay="autoplay" style="cursor:pointer">
-		<youframe ref="iframe" v-if="!noclicked" :src="compSrc" :autoplay="compAutoplay"></youframe>
+   		<img v-if="noclicked" :src="img" @click="onClickGetVideo" :video="video" :autoplay="autoplay" style="cursor:pointer" :width="width" :height="height">
+		<youframe v-if="!noclicked" :src="compSrc" :autoplay="compAutoplay" 
+			:allowfullscreen="allowfullscreen" 
+			:width="width" 
+			:height="height"
+			:css="css"
+			:frameborder="frameborder"></youframe>
 	</div>
 </template>
 <script>
 	require('../../../net/httpquerystring');
 
-	//TODO добавить все опции iframe из примера
     export default {
 		name: 'YoutubeIframeVideo',
 
@@ -26,23 +30,45 @@
 				type:String,
 				require:true
 			},
-			//Run after click
+			//Run after click if 'true'
 			autoplay: {
 				type:String,
-				default: false
+				default: 'true'
+			},
+
+			//Youtube iframe attributes
+			allowfullscreen: {
+				type:String,
+				default:'allowfullscreen'
+			},
+			width: {
+				type:Number,
+				default:640
+			},
+			height: {
+				type:Number,
+				default:360
+			},
+			css: {
+				type:String,
+				default:'width: 100%;'
+			},
+			frameborder: {
+				type:String,
+				default:'0'
 			}
 		},
 
-        //вызывается раньше чем mounted
+        //Called earlier than mounted
         data: function(){return {
-            //Отвечает за видимость элементов
+            //Manage elements visible
             noclicked:true,
 		}; },
 		
 		computed:{
 			compSrc() {
 				let vid = HttpQueryString._GET('v', null, this.video),
-					sAutoplay = (this.autoplay ? '&autoplay=1' : '');
+					sAutoplay = (this.compAutoplay ? '&autoplay=1' : '');
 				return `https://www.youtube.com/embed/${vid}?ecver=2${sAutoplay}`;
 			},
 			compAutoplay() {
@@ -59,13 +85,13 @@
         //
         methods:{
             /** 
-             * @description Пробуем отправить форму
+             * @description Hide image, add iframe
             */
             onClickGetVideo(evt) {
 				this.noclicked = false;
             },
         }, //end methods
-        //вызывается после data, поля из data видны "напрямую" как this.fieldName
+        //call after data(), fields from data access as this.fieldName
         mounted() {
         }
     }

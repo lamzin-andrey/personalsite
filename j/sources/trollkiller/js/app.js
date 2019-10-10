@@ -46,6 +46,9 @@ Vue.component('relslistblock', require('./views/relslistblock.vue'));
 //Компонент результатов поиска троллейбусов по mail_id или имени и фамилии
 Vue.component('searchblock', require('./views/searchblock.vue'));
 
+//Компонент для SEO безвредной вставки видео
+Vue.component('youtube', require('../../landlib/vue/2/youtube/youtube.vue'));
+
 window.app = new Vue({
     i18n : i18n,
     el: '#ktapp',

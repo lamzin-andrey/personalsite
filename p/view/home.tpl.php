@@ -19,6 +19,7 @@
 <ul>
 	<li>Написать компонент типа youtubelink где src - ссылка на видео, img - ссылка на файл с изображением.
 	11 43 - 12 59 сделал часть 
+	15 00 - 17 57 - сделал ещё часть
 	
 		
 	<youtube src="https://www.youtube.com/watch?v=Q-nDX8R4_B0" img="/i/patch.jpg"></youtube>
