@@ -2,9 +2,9 @@ import LandCacheClient from './../../landcache/sources/js/land_cache_client'
 
 class CacheSw extends LandCacheClient {
 	/**
+	 * @description Не кэшируем запросы, заканчивающиеся на '*.jn/'
 	 * @override in child
-	 * @return Не кэшируем запросы, заканчивающиеся на '*.jn/'
-	 * For progressive web
+	 * @return Object {data:ArrayOfString, type:'filterlist'}
 	*/
 	getExcludeFilterList() {
 		let o = new Object();

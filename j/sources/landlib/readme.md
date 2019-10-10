@@ -65,19 +65,19 @@ Return true if s1 === a[0]
 
 return true if email is valid. It deprecated, use browser validation.
 
-### TreeAlgorithms
+## TreeAlgorithms
 
 This group of methods for work with tree structure. Node of the tree has fields like as `id, parent_id, children`.
 Concrete names of the tree node fields can be configured with TreeAlgorithms properties `idFieldName, parentIdFieldName, childsFieldName`.
 
-#### getBranchIdList(node)
+### getBranchIdList(node)
 
 Resursive walk all children nodes of the node and return array of integer with `TreeAlgorithms.idFieldName` values.
 
 `node[TreeAlgorithms.idFieldName]` containts into result array in the zero position.
 
 
-#### walkAndExecuteAction(oTree, oCallback)
+### walkAndExecuteAction(oTree, oCallback)
 
 Walk all nodes oTree and execute callback for each node. Node pass as argument to the callback.
 
@@ -90,7 +90,7 @@ oCallback must be object
 }
 ```
 
-#### buildTreeFromFlatList(aScopeArgs, bSetChildsAsArray = false)
+### buildTreeFromFlatList(aScopeArgs, bSetChildsAsArray = false)
 
 Build tree from "flat" `Array` argument `aScopeArgs`.
 
@@ -190,7 +190,7 @@ If you pass second argument `TreeAlgorithms.buildTreeFromFlatList(aFlatList, tru
 ]
 ```
 
-#### findById(oTree, id)
+### findById(oTree, id)
 
 Resursive search node in the all childs of the oTree (oNode). Each node will check as 
 
@@ -198,14 +198,168 @@ Resursive search node in the all childs of the oTree (oNode). Each node will che
 
 Return null or founded node;
 
-#### remove(oTree, id)
+### remove(oTree, id)
 
 Search node by id (see findById method), search parent node and remove node from parent node.
 
 
-#### getNodesByNodeId(oTree, id)
+### getNodesByNodeId(oTree, id)
 
 Return array of nodes from tree root to node with id = id
+
+## HttpQueryString
+
+### About
+
+This is tools for comfortable work with query string.
+After load file httpquerystring.js on web page for javascript can acces object window.$_GET like as php $_GET array.
+
+If your query string contains, for example, , 
+
+`http://host.lan?a=1&b=two&c[]=first&c[]=second`
+
+you can get values as:
+
+```javascript
+	let a = window.$_GET['a']; //a == 1
+	let b = window.$_GET['b']; //b == 'two'
+	let c = window.$_GET['c']; //c == ['first', 'second']
+```
+
+Also your can parse any query string:
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	let GET = window.HttpQueryString.parse(s);
+	let ecver = GET['ecver']; //ecver == 2
+	let autoplay = GET['autoplay']; //autoplay == 1
+	let host = HttpQueryString.host(s);// host == 'www.youtube.com'
+	let uri = HttpQueryString.requestUri(s);// uri == '/embed/xqagdM4BmNs?ecver=2?autoplay=1'
+```
+
+If you not want parse all query string variables, because you need one from they, use HttpQueryString._GET method.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	let autoplay = HttpQueryString._GET('autoplay', false, s);//autoplay == 1
+```
+
+Change query string variables values with method setVariable.
+
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	s = HttpQueryString.setVariable(s, 'ecver', 'newvalue');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1#hash'
+```
+
+### parse
+
+If execute code
+
+```javascript
+let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
+let GET = window.HttpQueryString.parse(s);
+```
+
+variable GET will:
+
+
+```json
+{
+	"ecver" : "2",
+	"autoplay":"1",
+	"c": [
+		"first",
+		"second"
+	]
+}
+```
+
+### host 
+
+For string 
+
+`https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash`
+
+return 
+
+`www.youtube.com`
+
+### requestUri
+
+For string 
+
+`https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash`
+
+return 
+
+`/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second`
+
+### _GET
+
+If you not want parse all query string variables, because you need one from they, use HttpQueryString._GET method.
+
+Example 1
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	let autoplay = HttpQueryString._GET('autoplay', false, s);//autoplay == 1
+```
+
+
+Example 2
+
+```javascript
+	let autoplay = HttpQueryString._GET('autoplay', false);//autoplay == false, because in browser address string not containts substring 'autoplay' in query string
+```
+
+#### key argument
+
+This is a variable name.
+
+#### _default argument
+
+This is a default variable value.
+
+#### querystring argument
+
+This is a query string argument
+
+### setVariable(link, varName, value, checkByValue = false, unsetValue = '')
+
+Change variable value in the query string.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
+	s = HttpQueryString.setVariable(s, 'ecver', 'newvalue');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1&c[]=first&c[]=second#hash'
+```
+
+#### link argument
+
+This is a query string argument
+
+#### varName argument
+
+This is a variable name.
+
+#### value argument
+
+This value will set as value variable `varName` in the `link`. Special value `'CMD_UNSET'` will remove variable varName from query string `link`.
+
+
+#### checkByValue argument
+
+If `link` containts array items and you want unset one item of array, set `checkByValue = true` and use `unsetValue` argument. (See `unsetValue` argument example)
+
+#### unsetValue argument
+
+If `link` containts array items and you want unset one item of array, set `checkByValue = true` and set `unsetValue` in a target value.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
+	s = HttpQueryString.setVariable(s, 'ecver', 'CMD_UNSET', true, 'second');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1&c[]=first#hash'
+```
+
 
 # Ru
 Тут лежат инструменты не зависящие от vue или других фреймвёрков.
@@ -409,3 +563,156 @@ let aTrees = TreeAlgorithms.buildTreeFromFlatList(aFlatList);
 #### getNodesByNodeId(oTree, id)
 
 Возвращает массив объектов (элементов дерева) от корня до узла с id = id
+
+
+## HttpQueryString
+
+### Что это
+
+Это набор инструментов для удобной работы со строкой http запроса.
+After load file httpquerystring.js on web page for javascript can acces object window.$_GET like as php $_GET array.
+После загрузки файла httpquerystring.js, javascript страницы получит доступ к объекту window.$_GET похожему на суперглобальный ассоциативный массив php $_GET.
+
+Если ваша строка запроса модержит например,  
+
+`http://host.lan?a=1&b=two&c[]=first&c[]=second`
+
+вы можете получить значения переменных строки запроса как:
+
+```javascript
+	let a = window.$_GET['a']; //a == 1
+	let b = window.$_GET['b']; //b == 'two'
+	let c = window.$_GET['c']; //c == ['first', 'second']
+```
+
+Также вы можете распарсить любую http ссылку:
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	let GET = window.HttpQueryString.parse(s);
+	let ecver = GET['ecver']; //ecver == 2
+	let autoplay = GET['autoplay']; //autoplay == 1
+	let host = HttpQueryString.host(s);// host == 'www.youtube.com'
+	let uri = HttpQueryString.requestUri(s);// uri == '/embed/xqagdM4BmNs?ecver=2?autoplay=1'
+```
+
+Если вам не нужны все переменные строки запроса, например вам нужна только одна, используйте метод HttpQueryString._GET.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	let autoplay = HttpQueryString._GET('autoplay', false, s);//autoplay == 1
+```
+
+Изменяйте значения переменных строки запроса, используя метод setVariable.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	s = HttpQueryString.setVariable(s, 'ecver', 'newvalue');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1#hash'
+```
+
+### parse
+
+Если выполнить код
+
+```javascript
+let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
+let GET = window.HttpQueryString.parse(s);
+```
+
+в переменной GET будет содержаться:
+
+```json
+{
+	"ecver" : "2",
+	"autoplay":"1",
+	"c": [
+		"first",
+		"second"
+	]
+}
+```
+
+### host 
+
+Для строки
+
+`https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash`
+
+вернёт
+
+`www.youtube.com`
+
+### requestUri
+
+Для строки
+
+`https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash`
+
+вернёт
+
+`/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second`
+
+### _GET
+
+Если вам не нужны все переменные строки запроса, например вам нужна только одна, используйте метод HttpQueryString._GET.
+
+Пример 1
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1#hash';
+	let autoplay = HttpQueryString._GET('autoplay', false, s);//autoplay == 1
+```
+
+Пример 2
+
+```javascript
+	let autoplay = HttpQueryString._GET('autoplay', false);//autoplay == false, потому что в адресной строке браузера нет переменной 'autoplay' после знака '?'
+```
+
+#### Аргумент key 
+
+Это имя переменной из строки  запроса.
+
+#### Аргумент _default
+
+Это значение по умолчанию, если переменной нет в строке запроса.
+
+#### Аргумент querystring
+
+Необязательый аргумент, http ссылка. Если не передан, будет использоваться window.location.href.
+
+### setVariable
+
+Изменяйте значения переменных в строке запроса.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
+	s = HttpQueryString.setVariable(s, 'ecver', 'newvalue');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1&c[]=first&c[]=second#hash'
+```
+
+#### Аргумент link
+
+Http ссылка.
+
+#### Аргумент  varName
+
+Имя переменной в ссылке.
+
+#### Аргумент value
+
+This value will set as value variable `varName` in the `link`. Special value `'CMD_UNSET'` will remove variable varName from query string `link`.
+
+Это значение будет установлено как значение переменной `varName` в строке http запроса (или ссылке, что по сути одно и то же) `link`. Специальное значение `'CMD_UNSET'` используется если мы хотим удалить переменную из строки запроса.
+
+#### Аргумент checkByValue
+
+Если `link` содержит массив элеменов и вы хотите исключить один из этих элементов из строки запроса, установите `checkByValue = true` и используйте аргумент `unsetValue`. (Смотрите пример в описании аргумента `unsetValue`)
+
+#### Аргумент unsetValue
+
+Если `link` содержит массив элеменов и вы хотите исключить один из этих элементов из строки запроса, установите  `checkByValue = true`, а `unsetValue` установите в значение удаляемого элемента массива.
+
+```javascript
+	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
+	s = HttpQueryString.setVariable(s, 'ecver', 'CMD_UNSET', true, 'second');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1&c[]=first#hash'
+```
