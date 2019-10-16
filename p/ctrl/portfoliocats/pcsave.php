@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/../adminauthjson.php';
-include DOC_ROOT . '/q/q/treealg/treealg.php';
+include DOC_ROOT . '/q/q/treealg/src/treealgorithms.php';
 
 class ProudctCategoryPost extends AdminAuthJson {
 	/** @property string */
