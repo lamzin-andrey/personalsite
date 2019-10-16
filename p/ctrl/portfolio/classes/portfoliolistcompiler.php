@@ -2,7 +2,7 @@
 //PHP 5.6!
 require_once __DIR__ . '/../../../../q/q/config.php';
 require_once DOC_ROOT . '/q/q/cpagecompiler.php';
-require_once DOC_ROOT . '/q/q/treealg.php';
+require_once DOC_ROOT . '/q/q/treealg/treealg.php';
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';

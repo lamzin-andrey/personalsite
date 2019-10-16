@@ -449,7 +449,7 @@ oCallback должен быть объектом
 
 #### buildTreeFromFlatList(aScopeArgs, bSetChildsAsArray = false)
 
-Получает плоски список `Array`  `aScopeArgs` и строит из него дерево.
+Получает плоский список `Array` из `aScopeArgs` и строит из него дерево.
 
 Например, aScopeArgs может быть таким (обычно это приходит с сервера):
 
