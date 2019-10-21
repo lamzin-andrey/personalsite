@@ -413,9 +413,21 @@ function utils_404($template = null, $masterTemplate = null) {
 	}
 }
 
-function utils_302($location = "/") {
+function utils_302($location = '/') {
 	header("location: $location");
 	exit;
+}
+
+function utils_301($location = '/')
+{
+	header('HTTP/1.1 301 Moved Permanently');
+	header("location: $location");
+	exit;
+}
+
+function utils_moved_permanently($location = '/')
+{
+	utils_301($location);
 }
 
 function utils_getExt($filename){
