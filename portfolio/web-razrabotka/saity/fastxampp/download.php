@@ -131,13 +131,13 @@ if ($lang != 'en/') :
 ?>
 <tr>
 	<td colspan="2" style="text-align:center">
-		<a class="dlink" href="/imagick_so_for_php_7.0.4_linux/<?php echo $lang ?>">Вы также можете скачать libimagick.so для этой версии xampp</a>
+		<a class="dlink" href="<?=WEBROOT ?>/imagick_so_for_php_7.0.4_linux/<?php echo $lang ?>">Вы также можете скачать libimagick.so для этой версии xampp</a>
 	</td>
 </tr>
 <?php else:?>
 <tr>
 	<td colspan="2" style="text-align:center">
-		<a class="dlink" href="/imagick_so_for_php_7.0.4_linux/<?php echo $lang ?>">You also can download libimagick.so for php version 7.0.4</a>
+		<a class="dlink" href="<?=WEBROOT ?>/imagick_so_for_php_7.0.4_linux/<?php echo $lang ?>">You also can download libimagick.so for php version 7.0.4</a>
 	</td>
 </tr>
 <?php endif?>
