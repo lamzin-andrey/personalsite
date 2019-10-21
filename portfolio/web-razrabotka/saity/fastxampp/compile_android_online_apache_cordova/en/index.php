@@ -1,8 +1,9 @@
-<?
-$r = $_SERVER["DOCUMENT_ROOT"];
+<?php
+$r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
+$sAuthorLinkText = 'Author site';
 $ignoreCordovaBanner = 1;
-$title = "Компиляция андроид - приложений в apk онлайн";
-$title = "Online Compilator android applications";
+//$title = "Компиляция андроид - приложений в apk онлайн";
+$title = 'Online Compilator android applications';
 include_once "$r/functions.php";
 ob_start();
 ?>
@@ -91,7 +92,7 @@ with use Apache Cordova. It very simple path.</p>
 	#a{}
 </style>
 <p id="q">>My antivirus make warning, when I download comiling result from your site. Can you attack my device?</p>
-<img src="/img/acord/000.jpg" style="text-align:center;">
+<img src="<?=img('acord/000.jpg')?>" style="text-align:center;">
 <p id="a">You antivirus work! Apk packages, downloaded NOT from Google Play Market is dangerous! We do not create viruses and we NOT want attak your device.
 BUT! Viruses can be added in apk package on recieving! We recomend first run our apk packages in android-emulator, after on your device!</p>
 <p id="q">>Is safely Apk packages from your site?</p>
@@ -105,6 +106,5 @@ We recomend first run our apk packages in android-emulator, after on your device
 
 <?php // /files/fastxampp.1.7.4.tar.gz
 	$text_content = ob_get_clean();
-	$r = $_SERVER["DOCUMENT_ROOT"];
 	include "$r/master.php";
-?>
+
