@@ -18,6 +18,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
 		<title><?php print $baseTitle; if ($title)print "| $title"; ?> </title>
 		<link rel="stylesheet" type="text/css" href="<?=(WEBROOT . '/css/' . $bst . '.css' )?>" />
+		<script>window.rid = 24;</script><?php /* //24 - product */?>
 	</head>
 	<body>
 		<div class="couter">

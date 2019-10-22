@@ -66,14 +66,7 @@
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
-		<li class="text-danger">Сделать редирект с сайта на раздел
-			<ul>
-				<li>Все файлы в корне поправил, иду по каталогам</li>
-				<li>complete kubuntu</li>
-				<li></li>
-			</ul>
-		</li>
-		<li>Скрипт подсчёта статистики в футер fx добавить</li>
+		<li class="text-danger">Скрипт подсчёта статистики в футер fx добавить</li>
 		<li>Базу данных заменить во первых файл на 7</li>
 		<li>Базу данных stat.php там ваще интересно</li>
 		<li>С каталогом p100 аккуратно, зачем он?</li>

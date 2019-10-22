@@ -30,3 +30,17 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 		</tr></table>
 	</div>
 </div>
+<script src="/j/sources/landlib/net/rest.js"></script>
+<script>
+	
+	var id = parseInt(window.rid, 10), o = {};
+	if (isNaN(id)) {
+		console.log('id is NaN');
+		return;
+	}
+	o.id = id;
+	o.url = location.href.split('?')[0];
+	o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
+	Rest._token = 'open';
+	Rest._post(o, function(){}, '/p/stat/c.jn/', function(){});
+</script>
