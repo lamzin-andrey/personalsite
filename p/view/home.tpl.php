@@ -43,8 +43,7 @@
 			<li class="text-warning">В контроллере доступ $this->getParameters('app.records_per_page');</li>
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-success">Вывести тайтл и хедер как на оригинале.</li>
-			<li>Фильтры</li>
+			<li class="text-success">Фильтры и кнопка top</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
@@ -66,11 +65,9 @@
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
-		<li>Базу данных stat.php там ваще интересно</li>
-		<li>С каталогом p100 аккуратно, зачем он?</li>
-		
-		<li>Компиляцию онлайн уже после того как все страницы поправлю</li>
+		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю</li>
 		<li>Ссылка на Компиляцию онлайн с php2js bcghfdbnm</li>
+		<li>Ссылка на fx с ютуба</li>
 		<li>ЯПрокси на газели и торгах поправить</li>
 		<li>Скриншутер ссылку поправить</li>
 		
