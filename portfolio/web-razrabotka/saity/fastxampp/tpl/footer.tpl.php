@@ -36,7 +36,6 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 	var id = parseInt(window.rid, 10), o = {};
 	if (isNaN(id)) {
 		console.log('id is NaN');
-		return;
 	}
 	o.id = id;
 	o.url = location.href.split('?')[0];
