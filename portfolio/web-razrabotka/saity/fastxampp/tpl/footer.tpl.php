@@ -30,6 +30,7 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 		</tr></table>
 	</div>
 </div>
+<script src="/p/sbadmin2/vendor/jquery/jquery.slim.min.js"></script>
 <script src="/j/sources/landlib/net/rest.js"></script>
 <script>
 	
