@@ -1,5 +1,8 @@
-<?
-$r = $_SERVER["DOCUMENT_ROOT"];
+<?php
+
+$r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
+$sAuthorLinkText = 'Author site';
+
 $ignoreCordovaBanner = 1;
 $title = "Компиляция андроид - приложений в apk онлайн";
 $title = "Online Compilator android applications";
@@ -13,6 +16,5 @@ ob_start();
 
 <?php 
 	$text_content = ob_get_clean();
-	$r = $_SERVER["DOCUMENT_ROOT"];
 	include "$r/master.php";
-?>
+
