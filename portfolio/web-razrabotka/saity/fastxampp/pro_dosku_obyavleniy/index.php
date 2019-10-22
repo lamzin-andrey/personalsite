@@ -1,5 +1,8 @@
-<?
-$r = $_SERVER["DOCUMENT_ROOT"];
+<?php
+$r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
+$sAuthorLinkText = 'Author site';
+//$sAuthorLinkText = 'Сайт автора';
+
 $ignoreCordovaBanner = 1;
 $title = 'Про авито, юлу или как продать в интернете не разорившись на досках объявлений';
 include_once "$r/functions.php";
@@ -13,6 +16,6 @@ ob_start();
 		</div>
 <?php // /files/fastxampp.1.7.4.tar.gz
 	$text_content = ob_get_clean();
-	$r = $_SERVER["DOCUMENT_ROOT"];
+
 	include "$r/master.php";
-?>
+

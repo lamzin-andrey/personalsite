@@ -43,12 +43,8 @@
 			<li class="text-warning">В контроллере доступ $this->getParameters('app.records_per_page');</li>
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-success">ДайТелефон</li>
-			<ul>
-				<li>Компонент TextToPng (в vendor) найти или запостить свой</li>
-				<li>Контроллер, маршрут, всё как у людей.</li>
-			</ul>
-			<li>Вывести тайтл и хедер как на оригинале.</li>
+			<li class="text-success">Вывести тайтл и хедер как на оригинале.</li>
+			<li>Фильтры</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
