@@ -14,7 +14,7 @@ class App {
 	*/
 	public function _actionPost() {
 		$token = Auth::getToken();
-		$root = '/f/';
+		$root = '/portfolio/web-razrabotka/saity/fastxampp/f/';
 		$script = '';
 		/*if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
 			$id = (int)dbvalue("SELECT id FROM secure_pad_users WHERE auth_id = '{$_COOKIE['uid']}'");
