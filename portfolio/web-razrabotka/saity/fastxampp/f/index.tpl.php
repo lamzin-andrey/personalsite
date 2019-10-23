@@ -87,9 +87,9 @@
 	</main><!--  end Main -->
 	<?=$script?>
 	<? $v = 8;?>
-	<script src="/f/js/micron.js?v=<?=$v?>"></script>
-	<script src="/f/js/ajax.js?v=<?=$v?>"></script>
-	<script src="/f/js/app.js?v=<?=$v?>"></script>
+	<script src="js/micron.js?v=<?=$v?>"></script>
+	<script src="js/ajax.js?v=<?=$v?>"></script>
+	<script src="js/app.js?v=<?=$v?>"></script>
 	
 </body>
 </html>
