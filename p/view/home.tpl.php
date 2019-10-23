@@ -76,6 +76,7 @@
 					Скорее всего таблицы не перенесены в fx касающиеся этой штуки.
 					Рабочая конфигурация была на firstcode.ru
 				</li>
+				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php</li>
 				<li></li>
 			</ul>
 		</li>
