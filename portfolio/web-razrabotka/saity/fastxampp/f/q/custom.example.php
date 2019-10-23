@@ -8,7 +8,7 @@ define('ADMIN_EMAIL', 'admin@fastxampp.org');*/
 
 
 define('DB_HOST', 'localhost');
-define('DB_USER', '123860');
-define('DB_PASSWORD', 'd8r5E4dF5');
-define('DB_NAME', '123860_fx');
+define('DB_USER', '');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'fx');
 define('ADMIN_EMAIL', 'lamzin.an@gmail.com');/**/

@@ -11,7 +11,8 @@ define('APP_COOKIE_NAME', 'apid');
 
 
 define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
-define('ROOT', '/f/');
+//define('ROOT', '/f/');
+define('ROOT', '/portfolio/web-razrabotka/saity/fastxampp/f/');
 
 
 
