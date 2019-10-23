@@ -65,7 +65,20 @@
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
-		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю</li>
+		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю
+			<ul>
+				<li>В облако readme дописать, что надо поправить 
+					/home/andrey/hdata/programs/my/js/cordova/php/srvconfig.php
+				<br>
+					$sHost = 'http://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f';
+				</li>
+				<li>
+					Скорее всего таблицы не перенесены в fx касающиеся этой штуки.
+					Рабочая конфигурация была на firstcode.ru
+				</li>
+				<li></li>
+			</ul>
+		</li>
 		<li>Ссылка на Компиляцию онлайн с php2js bcghfdbnm</li>
 		<li>Ссылка на fx с ютуба</li>
 		<li>ЯПрокси на газели и торгах поправить</li>
