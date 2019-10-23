@@ -1,0 +1,2 @@
+#! /bin/bash
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore photosharer.keystore android-release-unsigned.apk photosharer
