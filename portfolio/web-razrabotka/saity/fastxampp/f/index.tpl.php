@@ -61,7 +61,7 @@
 					</div>
 					<div>
 						<label for="iFile" class="pbtn"><?=__('Upload')?></label> <span id="hProgView">1%</span>
-						<input class="hide" type="file" id="iFile" data-url="<?=$root?>/upload.php" data-success="onUpload" data-fail="onFailUpload" data-progress="onUploadProgress" data-onselect="onChooseFil">
+						<input class="hide" type="file" id="iFile" data-url="<?=$root?>upload.php" data-success="onUpload" data-fail="onFailUpload" data-progress="onUploadProgress" data-onselect="onChooseFil">
 					</div>
 					<div>
 						<label for="iAppName"><?=__('system-name')?></label>
