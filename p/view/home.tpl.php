@@ -35,15 +35,24 @@
 </ul>
 <h3 >Теория и практика</h3>
 <ul>
-	<li class="text-error">симфони 3. (очень сомнительное, что то структура файлов не похожа на документацию symfony 3.4, 
-				но тем при запуске выодит именно Symfony 3.4)
-				
+	<li class="text-error">симфони 3. (очень сомнительное, что-то структура файлов не похожа на документацию symfony 3.4, 
+				но тем не менее при запуске выодит именно Symfony 3.4)
 		<ul>
-			<li class="text-warning">6326 теперь используем вместо main.city = 0</li>
-			<li class="text-warning">В контроллере доступ $this->getParameters('app.records_per_page');</li>
+			<li class="text-warning">app.city_sero_id теперь используем вместо main.city = 0</li>
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-success">Фильтры и кнопка top</li>
+			<li class="text-success">Фильтры и кнопка top
+				<ul>
+					<li>Сделать страицу регионов второго и третьего если он есть (а он есть!) уровня</li>
+					<li class="text-danger">Почему-то показывается класс у html в списке объявлений. Не должен был!</li>
+					<li class="text-danger">Фильтр people 1 явно игнорируется</li>
+					<li></li>
+					<li>/showfilter - исключить из кэша</li>
+					<li></li>
+				</ul>
+			</li>
+			<li>Показ телефона - сделать обратную совместимость для старых браузеров</li>
+			<li>Выбор населенного пункта - сделать обратную совместимость</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
@@ -67,11 +76,6 @@
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
 		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю
 			<ul>
-				<li>В облако readme дописать, что надо поправить 
-					/home/andrey/hdata/programs/my/js/cordova/php/srvconfig.php
-				<br>
-					$sHost = 'http://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f';
-				</li>
 				<li>
 					Скорее всего таблицы не перенесены в fx касающиеся этой штуки.
 					Рабочая конфигурация была на firstcode.ru

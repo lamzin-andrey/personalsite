@@ -7,7 +7,7 @@ function init(){
 	//все скрины в div.screenWrapper
 	window.W = window;
 	window.D = document;
-	W.root = '/f';
+	W.root = '/portfolio/web-razrabotka/saity/fastxampp/f';
 	initFileInputs();
     
     /** @var HtmlInput iBody текстовое поле  */
