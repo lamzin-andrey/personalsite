@@ -76,7 +76,14 @@
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
 		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю
 			<ul>
-				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php, state.php</li>
+				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php, state.php
+					<ul>
+						<li>Инсталлер необходим, так как нет связи с воркерром!</li>
+						<li>Отладить sw в чистом профиле</li>
+						<li>Как вариант, возможно надо клиент подключать внутри iframe, но это вряд ли</li>
+						
+					</ul>
+				</li>
 				<li>Разобраться с счётчиками freesoft</li>
 				<li></li>
 			</ul>
