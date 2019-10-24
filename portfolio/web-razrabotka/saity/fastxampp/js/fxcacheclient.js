@@ -1,4 +1,4 @@
-import  LandCacheClient from './land_cache_client';
+//import  LandCacheClient from './land_cache_client';
 /***
  * Example customize client functions
  * Пример кастомизации функций клиента кэша
