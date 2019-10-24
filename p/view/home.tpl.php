@@ -43,10 +43,8 @@
 			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
 			<li class="text-success">Фильтры и кнопка top
 				<ul>
-					<li>Сделать страицу регионов второго и третьего если он есть (а он есть!) уровня</li>
-					<li class="text-danger">Почему-то показывается класс у html в списке объявлений. Не должен был!</li>
-					<li class="text-danger">Фильтр people 1 явно игнорируется</li>
-					<li></li>
+					<li>Фильтр по трем типам работает некорректно</li>
+					<li>Переходим к использованию либо Criteria с передачей его в findBy, либо к queryBuilder</li>
 					<li>/showfilter - исключить из кэша</li>
 					<li></li>
 				</ul>
@@ -84,6 +82,7 @@
 						
 					</ul>
 				</li>
+				<li>readme в облаке переправить на https://</li>
 				<li>Разобраться с счётчиками freesoft</li>
 				<li></li>
 			</ul>
