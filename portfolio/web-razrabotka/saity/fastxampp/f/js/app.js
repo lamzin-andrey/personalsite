@@ -38,8 +38,8 @@ function onComplieState(data) {
 		}
 	}
 	if (S(data.ts) != 'undefined') {
-		var n = 60 - data.ts, t;
-		t = n = n <= 0 ? 60 : n;
+		var WAIT_TIME = 30, n = WAIT_TIME - data.ts, t;
+		t = n = n <= 0 ? WAIT_TIME : n;
 		setTimeout(function(){
 			hide(hCountDownWrap);
 			clearInterval(ival);
