@@ -77,6 +77,7 @@
 		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю
 			<ul>
 				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php, state.php</li>
+				<li>Разобраться с счётчиками freesoft</li>
 				<li></li>
 			</ul>
 		</li>
