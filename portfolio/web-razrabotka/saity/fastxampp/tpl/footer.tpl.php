@@ -35,7 +35,7 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 <script src="/portfolio/web-razrabotka/saity/fastxampp/js/land_cache_client.js"></script>
 <script src="/portfolio/web-razrabotka/saity/fastxampp/js/fxcacheclient.js"></script>
 <script>
-	
+	new FxCacheClient();
 	var id = parseInt(window.rid, 10), o = {};
 	if (isNaN(id)) {
 		console.log('id is NaN');
