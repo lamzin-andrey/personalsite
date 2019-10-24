@@ -41,4 +41,3 @@ class FxCacheClient extends LandCacheClient {
 	}
 }
 
-export default ConcreteCacheClientExample;
