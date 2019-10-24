@@ -32,6 +32,8 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 </div>
 <script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
 <script src="/j/sources/landlib/net/rest.js"></script>
+<script src="/j/sources/landcache/sources/js/land_cache_client.js"></script>
+<script src="/portfolio/web-razrabotka/saity/fastxampp/js/fxcacheclient.js"></script>
 <script>
 	
 	var id = parseInt(window.rid, 10), o = {};

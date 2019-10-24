@@ -76,11 +76,7 @@
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
 		<li class="text-danger">Компиляцию онлайн уже после того как все страницы поправлю
 			<ul>
-				<li>
-					Скорее всего таблицы не перенесены в fx касающиеся этой штуки.
-					Рабочая конфигурация была на firstcode.ru
-				</li>
-				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php</li>
+				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php, state.php</li>
 				<li></li>
 			</ul>
 		</li>
