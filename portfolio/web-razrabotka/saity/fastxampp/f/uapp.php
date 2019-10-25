@@ -24,7 +24,7 @@ class UserApp {
 		if ($uid) {
 			$now = now();
 			$table = $this->_table;
-			$appCookie = (int)dbvalue("SELECT max(app_сookie) FROM {$table} WHERE uid = {$uid}");
+			$appCookie = (int)dbvalue("SELECT max(app_cookie) FROM {$table} WHERE uid = {$uid}");
 			$appCookie++;
 			$query = "INSERT INTO {$table}
 			 (
