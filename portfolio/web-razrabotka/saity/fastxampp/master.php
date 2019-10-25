@@ -19,6 +19,7 @@
 		<title><?php print $baseTitle; if ($title)print "| $title"; ?> </title>
 		<link rel="stylesheet" type="text/css" href="<?=(WEBROOT . '/css/' . $bst . '.css' )?>" />
 		<script>window.rid = 24;</script><?php /* //24 - product */?>
+		<script src="/portfolio/web-razrabotka/saity/fastxampp/js/landcacherswinstaller.js"></script>
 	</head>
 	<body>
 		<div class="couter">
