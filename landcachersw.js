@@ -90,6 +90,12 @@ function onFetch(event) {
 
 		//Если url входит в список таких, что их не надо кэшировать, не кэшируем
 		if (self.isPersistExcludeUrl(req.url)) {
+			//Удалим его из кеша
+			//Откроем кэш и вызовем нашу функцию removeByKey
+			caches.open(CACHE).then((cache) => {
+				cache.delete(req);
+			});
+			
 			if (self.verbose) console.log('Skip schedule update url ' + req.url + ' because Persis Filter!');
 			return;
 		}
