@@ -72,7 +72,7 @@ function onFetch(event) {
 	sendMessageAllClients('getmefilter');
 	//Если url входит в список таких, что их не надо кэшировать, не кэшируем
 	if (self.isPersistExcludeUrl(event.request.url)) {
-		if (self.verbose) console.log('skip url ' + event.request.url + ' because Persis Filter!');
+		if (self.verbose) console.log('Skip url ' + event.request.url + ' because Persis Filter!');
 		return;
 	}
 	//Если его не нашли в кэше, значит надо отправить запрос на сервер, то есть кормить собак и ничего не трогать
@@ -87,6 +87,13 @@ function onFetch(event) {
 	//Клонируем запрос, потому что его на момент вызова лямбды может и не существовать
 	let req = event.request.clone();
 	setTimeout(() => {
+
+		//Если url входит в список таких, что их не надо кэшировать, не кэшируем
+		if (self.isPersistExcludeUrl(req.url)) {
+			if (self.verbose) console.log('Skip schedule update url ' + req.url + ' because Persis Filter!');
+			return;
+		}
+
 		//Откроем кэш и вызовем нашу функцию update
 		caches.open(CACHE).then((cache) => {
 			if (self.verbose)  console.log('Schedule update  ' + req.url);
