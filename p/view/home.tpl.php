@@ -40,15 +40,20 @@
 		<ul>
 			<li class="text-warning">app.city_sero_id теперь используем вместо main.city = 0</li>
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
+			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
 			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
 			<li class="text-success">Фильтры и кнопка top
 				<ul>
-					<li>Фильтр по трем типам работает некорректно</li>
-					<li>Переходим к использованию либо Criteria с передачей его в findBy, либо к queryBuilder</li>
+					<li>Vue фильтр. Для города должно появляться поле ввода при нажатии на Изменить. Для фильтра чекбоксы выплывать снизу.</li>
 					<li>/showfilter - исключить из кэша</li>
+					<li>Устранить deprecations-ы</li>
 					<li></li>
 				</ul>
 			</li>
+			<li>Написать Symfony unit-тесты для формы фильтра, галки контролируем/li>
+			<li>Один день просто сидеть и играться с запросами используя критерии и билдеры </li>
+			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
+			<li></li>
 			<li>Показ телефона - сделать обратную совместимость для старых браузеров</li>
 			<li>Выбор населенного пункта - сделать обратную совместимость</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
