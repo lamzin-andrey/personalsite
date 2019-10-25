@@ -6,6 +6,8 @@
 	<meta name="keywords" content="<?=__('keywords')?>" />
 	<meta name="app" content="<?=$token?>" />
 	<link rel="stylesheet" href="./css/main.css?v=1" type="text/css">
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/js/landcacherswinstaller.js"></script>
+	
 	<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height,target-densitydpi=device-dpi, user-scalable=no" />
 </head>
 <body style="overflow:hidden">
@@ -90,6 +92,8 @@
 	<script src="js/micron.js?v=<?=$v?>"></script>
 	<script src="js/ajax.js?v=<?=$v?>"></script>
 	<script src="js/app.js?v=<?=$v?>"></script>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/js/land_cache_client.js"></script>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/js/fxcacheclient.js"></script>
 	
 </body>
 </html>
