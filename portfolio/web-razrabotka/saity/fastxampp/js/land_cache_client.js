@@ -175,6 +175,7 @@ class LandCacheClient {
 				//Чтобы не показывать сообщение 10 раз если обновлены все 10 картинок на странице
 				o.updateMessageIsShowed = true;
 				o.showUpdateMessage();
+				o.setExcludeFilter();
 			}
 		}
 		if (info.data.type == 'firstRunResourcesComplete' && info.data.updUrl == location.href) {
