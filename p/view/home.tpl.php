@@ -76,9 +76,7 @@
 			<ul>
 				<li>Кэш дополнить скип https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/upload.php, state.php
 					<ul>
-						<li>Инсталлер необходим, так как нет связи с воркерром!</li>
-						<li>Отладить sw в чистом профиле</li>
-						<li>Как вариант, возможно надо клиент подключать внутри iframe, но это вряд ли</li>
+						<li>Проверить что apk реально обновляется (править в zip!)</li>
 						
 					</ul>
 				</li>
