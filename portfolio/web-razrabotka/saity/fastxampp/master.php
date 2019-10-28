@@ -1,7 +1,7 @@
 <?php
 	@session_start();
 	$currlang = @$_SESSION["lang"];
-	$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp';
+	$r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 	include_once "$r/style.php";
 	$langtpl = "$r/tpl/lang.tpl.php";
 	$headtpl = "$r/tpl/header.tpl.php";
