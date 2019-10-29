@@ -41,22 +41,42 @@
 			<li class="text-warning">app.city_sero_id теперь используем вместо main.city = 0</li>
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
-			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-success">Фильтры и кнопка top
-				<ul>
-					<li>кнопка top</li>
-					<li></li>
-				</ul>
+			<li class="text-warning">Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
+			<li class="text-success">Один день просто сидеть и играться с запросами используя критерии и билдеры
+			<ul>
+				<li>Создаем специальный контроллер Traning controller</li>
+				<li>В нем по маршрутам /train/{method}</li>
+				<li>Создаём для каждого случая отдельный метод (и для билдера и для критерии</li>
+				<li>SELECT COUNT(id) AS cnt FROM main GROUP BY region </li>
+				<li>SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
+LEFT JOIN cities AS c ON c.id = m.city 
+LEFT JOIN regions AS r ON r.id = m.region 
+WHERE m.is_deleted = 1 LIMIT 10, 10;;
+				</li>
+				<li>SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
+INNER JOIN cities AS c ON c.id = m.city 
+INNER JOIN regions AS r ON r.id = m.region 
+WHERE m.is_deleted = 1 LIMIT 10, 10;</li>
+				<li>SELECT CONCAT(phone, ', ', email) FROM users LIMIT 10; </li>
+				<li>SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM main AS m 
+					GROUP BY (m.phone)
+				 </li>
+				<li>SELECT * FROM `users` ORDER BY RAND() LIMIT 1000</li>
+				<li>как хранить в mysql md5 хеш не как строку а как число
+						"INSERT INTO `mdd` (hash, str) VALUES (UNHEX(md5('x')), md5('x'))"
+						//hash имеет тип данных binary(16)
+					 - а как это будет с Симфони?
+				</li>
+				<li></li>
+			</ul>
 			</li>
-			<li>Устранить deprecations-ы</li>
-			<li>Написать Symfony unit-тесты для формы фильтра, галки контролируем/li>
-			<li>Один день просто сидеть и играться с запросами используя критерии и билдеры </li>
 			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
 			<li></li>
 			<li>Показ телефона - сделать обратную совместимость для старых браузеров</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
+			<li>Не написать ли ещё Symfony func-тесты</li>
 			<li>Разобраться, не появилось ли в S4 что-то вместо бандлов для повторного исползования (Symfony Flex).</li>
 			<li></li>
 		</ul>
