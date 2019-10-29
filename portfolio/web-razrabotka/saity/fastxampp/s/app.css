@@ -1,9 +1,47 @@
 .u-text-orange {
 	color:#F57721;
 }
-.u-fastxampp-header {
-	background: linear-gradient(to right, #d0d0e9, #5555AA);
-}
 .u-fastlogo {
 	max-width:64px;
 }
+
+/** header ubuntu logos customize */
+.u-menu-logo, .u-ku-menu-logo {
+	padding-bottom:3px;
+}
+.u-menu-logo {
+	width:40px;
+}
+.u-ku-menu-logo {
+	width:41px;
+}
+.u-mint-menu-logo {
+	padding-bottom:4px;
+}
+/** /header ubuntu logos customize */
+
+/** header gradient  */
+.u-fastxampp-header-left-lg {
+	background: linear-gradient(to right, #d0d0e9, #5555AA);
+}
+.u-fastxampp-header-center-lg {
+	background-color: rgb(85, 85, 170);
+}
+.u-fastxampp-header-right-lg {
+	background: linear-gradient(to right, #5555AA, #F0F0F0);
+}
+@media(max-width:991px) {
+	.u-fastxampp-header-xs {
+		background: linear-gradient(to right, #d0d0e9, #5555AA);
+	}
+	.u-fastxampp-header-left-lg {
+		background: none;
+	}
+	.u-fastxampp-header-center-lg {
+		background-color: initial;
+	}
+	.u-fastxampp-header-right-lg {
+		background: none;
+	}
+}
+/** /header gradient  */
