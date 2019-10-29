@@ -44,27 +44,16 @@
 			<li>Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
 			<li class="text-success">Фильтры и кнопка top
 				<ul>
-					<li>Vue фильтр. Для города должно появляться поле ввода при нажатии на Изменить. Для фильтра чекбоксы выплывать снизу.
-						<ul>
-							<li>Для города<ul>
-								<li>Сохранять форму в сессии после отправки.</li>
-								<li>Установка выбраной локации в инпуте городов.</li>
-								<li></li>
-							</ul></li>
-							<li>Для фильтров</li>
-						</ul>
-					</li>
-					<li>/showfilter - исключить из кэша</li>
-					<li>Устранить deprecations-ы</li>
+					<li>кнопка top</li>
 					<li></li>
 				</ul>
 			</li>
+			<li>Устранить deprecations-ы</li>
 			<li>Написать Symfony unit-тесты для формы фильтра, галки контролируем/li>
 			<li>Один день просто сидеть и играться с запросами используя критерии и билдеры </li>
 			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
 			<li></li>
 			<li>Показ телефона - сделать обратную совместимость для старых браузеров</li>
-			<li>Выбор населенного пункта - сделать обратную совместимость</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
@@ -89,7 +78,7 @@
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
-		<li class="text-danger">Переверстать с bootstrap. (1 hour)</li>
+		<li class="text-danger">Переверстать с bootstrap. (2 hour)</li>
 		<li>Разобраться с счётчиками freesoft
 			<li>28 10 2019 у них были проблемы с авторизацией. Сбросил пароль на Praga1960 но авторизоваться всё-равно не получается. 
 				Старый пароль есть в Ящике Регистрация, по нему тоже глухо.
