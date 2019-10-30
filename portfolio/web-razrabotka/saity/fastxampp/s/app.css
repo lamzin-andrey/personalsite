@@ -1,3 +1,7 @@
+.u-links-underline a {
+	text-decoration:underline;
+}
+
 .u-text-orange {
 	color:#F57721;
 }
@@ -45,3 +49,26 @@
 	}
 }
 /** /header gradient  */
+
+/** apache cordova banner */
+.u-acord-logo{
+	min-width:96px;
+}
+
+.u-acord-banner-w {
+	width:75%;
+}
+@media(max-width:991px) {
+	.u-acord-banner-w {
+		width:100%;
+	}
+}
+/** /apache cordova banner */
+
+
+/** footer */
+.u-fborder {
+	background-color:#F57721;
+	height: 3px;
+}
+/** /footer */
