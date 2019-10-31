@@ -8,13 +8,13 @@ include_once "$r/functions.php";
 ob_start();
 ?>
 <p style="text-align:center">
-	<a href="http://firstcode.ru/f" class="dlink" id="compileNow">Compile your HTML5 application in  android application online</a>
+	<a href="http://firstcode.ru/f" class="text-success" id="compileNow">Compile your HTML5 application in  android application online</a>
 </p>
 
 <p style="text-align:center">
 	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="/portfolio/web-razrabotka/saity/fastxampp/f/?lang=en" width="300" height="480"></iframe>
 </p>
-<meta name="description" content="Компиляция андроид - приложений в apk онлайн">
+<meta name="description" content="Compile android html5 apps online">
 
 <p>Online compiling android-applications Apache Cordova for android 2.3.3 and highest.</p>
 <p>Here you can сompile source code your HTML5 application to the apk.</p>
