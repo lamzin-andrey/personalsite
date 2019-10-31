@@ -7,11 +7,11 @@ include_once "$r/functions.php";
 ob_start();
 ?>
 <p style="text-align:center">
-	<a href="http://firstcode.ru/f" class="dlink" id="compileNow">Компилировать HTML5 приложение в android приложение</a>
+	<a href="http://firstcode.ru/f" class="text-success" id="compileNow">Компилировать HTML5 приложение в android приложение</a>
 </p>
 
 <p style="text-align:center">
-	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="/portfolio/web-razrabotka/saity/fastxampp/f/?lang=ru" width="370" height="1"></iframe>
+	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="/portfolio/web-razrabotka/saity/fastxampp/f/?lang=ru" width="300" height="480"></iframe>
 </p>
 <meta name="description" content="Компиляция андроид - приложений в apk онлайн">
 
@@ -96,7 +96,7 @@ android приложение на нашем сайте.</p>
 Сейчас доступна компиляция debug - версий, позже на сайте появится авторизация через соц. сети с возможностью создавать подписанные приложения.
 </p>
 <p id="q">>Мой антивирус выдаёт предупреждение, когда я скачиваю результат компиляции с вашего сайта. Вы хотите заразить моё устройством вирусом?</p>
-<img src="<?=img('acord/000.jpg')?>" style="text-align:center;">
+<img src="<?=img('acord/000.jpg')?>" class="mw-100 my-2">
 <p id="a">Ваш антивирус всё делает совершенно правильно. Любые apk пакеты, которые загружены не с Google Play Market не должны внушать доверия. Мы заразить ваши устройства вирусами не хотим, на выходе с машины-компилятора apk пакеты не содержат вирусы.
 Однако это нне значит, что вирусы не могут быть подсажены при передаче. Мы рекомендуем запускать apk сначала на эмуляторе android, а потом уже на вашем реальном телефоне.</p>
 <p id="q">>Безопасны ли apk пакеты которые я загружаю с вашего сайта?</p>

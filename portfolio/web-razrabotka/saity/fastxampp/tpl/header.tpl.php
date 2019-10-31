@@ -1,83 +1,99 @@
-<table cellspacing="0" cellpadding="0" class="header-wr"><tbody><tr>
-	<td class="logoname lef w50" style="background:linear-gradient(to right, #d0d0e9, #5555AA)"><a href="<?=WEBROOT . ($currlang == 'en/' ? '/en/' : '')?>" >
-		<div class="fasttext">FAST</div>
-		<div class="fastimg">
-				<div class="left"><img src="<?=img('xampp.png')?>"></div>
-  		<div style="clear:both"></div>
-				<div class="left mtop1"> XAMPP </div><div class="endfloat"></div>
-		</div></a>
-	</td>
-	<td class="logoname lef w50" style="background-color: rgb(85, 85, 170);">
-		<div style="margin-left: 20px; font-size: 14pt; background-color: rgb(85, 85, 170); color: rgb(255, 255, 255); padding: 1px; width: 209px; text-align: center;">
-			<p>PHP 7.0.[4/8].0 </p>
-			<p><span style="margin-left:61px" class="hbit note b">32 / 64 bit</span></p>
-		</div>
-	</td>
-	<td class="hmenu w50" style="background:linear-gradient(to right, #5555AA,  #F0F0F0)">
-		<table class="w100p">
-			<tbody><tr>
-				<td class="osu ">
-					<a href="<?=WEBROOT?>/ubuntu/<?=$currlang?>">
-						<div class="osuimg h32">
-								<div><img width="40" src="<?=img('ubuntu48.png')?>"></div>
-						</div>
-						<div class="osutext ubuntu m20">Ubuntu</div>
-					</a>
-				</td>
-				
-				<td class="xu ">
-					<a href="<?=WEBROOT?>/xubuntu/<?=$currlang?>">
-						<div class="osxuimg h56">
-								<div><img width="47" src="<?=img('xubuntu48.png')?>"></div>
-						</div>
-						<div class="osxutext xubuntu">Xubuntu</div>
-					</a>
-				</td>
-				
-				<td class="ksu ">
-					<a href="<?=WEBROOT?>/kubuntu/<?=$currlang?>">
-						<div class="oskuimg h32">
-								<div><img width="40" src="<?=img('kubuntu48.png')?>"></div>
-						</div>
-						<div class="oskutext kubuntu m20">Kubuntu</div>
-					</a>
-				</td>
-				
-				<td class="osmi">
-					<a href="<?=WEBROOT?>/mint/<?=$currlang?>">
-						<div class="osmimg h32">
-								<div><img src="<?=img('mint48.png')?>"></div>
-						</div>
-						<div class="osmitext mint m20">Mint</div>
-					</a>
-				</td>
-			</tr>
-		</tbody></table>
-	</td>
-	</tr>
-	<tr>
-		<td style="text-align:center" colspan="3">
-			<style>
-				.av1000{
-					background: linear-gradient(to bottom,white, white,white,white,white,#ccc);
-				}
-			</style>
-			<?php if(!isset($ignoreCordovaBanner)): ?>
-			<div class="elfs">
-				<img src="<?=img('elfs/7.png')?>"> 
-				<img src="<?=img('elfs/6.png')?>"> 
-				<img src="<?=img('elfs/5.png')?>"> 
-				<img src="<?=img('elfs/4.png')?>"> 
-				<img src="<?=img('elfs/3.png')?>"> 
-				<img src="<?=img('elfs/2.png')?>"> 
-				<img src="<?=img('elfs/1.png')?>"> 
-			</div>
-			<?php else: ?>
-			<div class="av1000">
-				<img src="<?=img('acord/al.png')?>"> <img src="<?=img('acord/icon.png')?>"> <img src="<?=img('acord/ar.png')?>">
-			</div>
-			<?php endif ?>
-			
-		</td>
-	</tr>
-</tbody></table>
+<!-- mobile header  -->
+<div class="row u-fastxampp-header-xs">
+    <div class="col-6 col-lg-4 u-fastxampp-header-left-lg">
+        <div class="u-fastlogo">
+            <a href="<?=WEBROOT . (@$currlang == 'en/' ? '/en/' : '')?>" >
+                <div class="text-white text-center">FAST</div>
+                <div>
+                    <img src="<?=img('xampp.png')?>">
+                </div>
+                <div class="text-white text-center">XAMPP</div>
+            </a>
+        </div>
+    </div>
+    <div class="col-6 col-lg-4 d-flex align-items-center u-fastxampp-header-center-lg">
+        <div>
+            <div class="text-white">PHP 7.0.[4/8].0</div>
+            <div class="u-text-orange">32 / 64 bit</div>
+        </div>
+
+    </div>
+    <div class="col-12 col-lg-4 d-flex justify-content-end align-items-end u-fastxampp-header-right-lg">
+        <div class="mx-2">
+            <a href="<?=WEBROOT?>/ubuntu/<?=$currlang?>">
+                <div class="text-center">
+                    <img class="u-menu-logo" src="<?=img('ubuntu48.png')?>">
+                </div>
+                <div class="u-text-orange text-center">
+                    Ubuntu
+                </div>
+            </a>
+        </div>
+        <div class="mx-2">
+            <a href="<?=WEBROOT?>/xubuntu/<?=$currlang?>">
+                <div class="text-center">
+                    <img src="<?=img('xubuntu48.png')?>">
+                </div>
+                <div class="text-center">
+                    Xubuntu
+                </div>
+            </a>
+        </div>
+        <div class="mx-2">
+            <a href="<?=WEBROOT?>/kubuntu/<?=$currlang?>">
+                <div class="text-center">
+                    <img class="u-ku-menu-logo" src="<?=img('kubuntu48.png')?>">
+                </div>
+                <div class="text-dark text-center">
+                    Kubuntu
+                </div>
+            </a>
+        </div>
+        <div class="mx-2">
+            <a href="<?=WEBROOT?>/mint/<?=$currlang?>">
+                <div class="text-center">
+                    <img class="u-mint-menu-logo" src="<?=img('mint48.png')?>">
+                </div>
+                <div class="text-success text-center">
+                    Mint
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- /mobile header  -->
+
+
+<?php if(!isset($ignoreCordovaBanner)): ?>
+    <!-- elephants  -->
+    <div class="row">
+        <div class="col bg-light d-flex align-items-end justify-content-center pb-2">
+            <img src="<?=img('elfs/7.png')?>">
+            <img src="<?=img('elfs/6.png')?>">
+            <img src="<?=img('elfs/5.png')?>">
+            <img src="<?=img('elfs/4.png')?>">
+            <img src="<?=img('elfs/3.png')?>">
+            <img src="<?=img('elfs/2.png')?>">
+            <img src="<?=img('elfs/1.png')?>">
+        </div>
+    </div>
+    <!-- /elephants  -->
+<?php else: /* TODO apache cordova banner css layout */ ?>
+
+    <!--div class="av1000">
+        <img src="<?=img('acord/al.png')?>"> <img src="<?=img('acord/icon.png')?>"> <img src="<?=img('acord/ar.png')?>">
+    </div-->
+
+    <div class="row ">
+        <div class="col bg-white py-3">
+            <div class="d-flex justify-content-center align-items-center av1000">
+                <div class="d-flex align-items-center justify-content-center u-acord-banner-w py-3 text-center">
+                    <div class="u-acord-logo2">
+                        <img src="<?=img('acord/al.png')?>"> <img src="<?=img('acord/icon.png')?>"> <img src="<?=img('acord/ar.png')?>">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /banner  -->
+<?php endif ?>

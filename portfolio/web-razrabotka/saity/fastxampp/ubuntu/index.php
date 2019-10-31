@@ -2,13 +2,10 @@
 $r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp';
 $title="Cписок версий Ubuntu, в которых был протестирован FastXAMPP";
 $sAuthorLinkText = 'Сайт автора';
-
+$sDownloadLinkText = 'Скачать архив с утилитой FastXAMPP';
 include_once "$r/functions.php";
 ob_start();
-?><p class="tright">
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Скачать архив с утилитой FastXAMPP</a>
-</p>
-<p class="x-vers">
+?><p class="x-vers">
     FastXAMPP для XAMPP 1.8.3-3
 </p>
 <div class="osgr">
@@ -205,7 +202,7 @@ ob_start();
 		
 	</div>
 </div>
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Скачать архив с утилитой FastXAMPP</a>
+
 </p>
 <?php // /files/fastxampp.1.7.4.tar.gz
 	$text_content = ob_get_clean();

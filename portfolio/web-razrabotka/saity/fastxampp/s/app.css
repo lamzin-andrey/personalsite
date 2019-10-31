@@ -63,6 +63,14 @@
 		width:100%;
 	}
 }
+
+/** on cordova page  */
+.u-acord-logo2 {
+	min-width:320px;
+}
+.u-acord-logo2 img{
+	max-width:96px;
+}
 /** /apache cordova banner */
 
 
@@ -72,3 +80,59 @@
 	height: 3px;
 }
 /** /footer */
+
+.u-content {
+	font-family: verdana,helvetica!important;
+	font-size: 1rem;
+}
+
+.u-w800p {
+	max-width:800px;
+}
+.x-vers {
+	background-color: orange;
+	color: white;
+}
+.lstnono {
+	list-style-type: none;
+}
+.u-w800p p {
+	text-indent: 7px;
+	line-height: 21pt;
+	font-size: 14pt;
+	margin-top:16px;
+}
+.allright {
+	background-color: #CCFFCB;
+}
+.osgr {
+	border-bottom: dashed gray 1px;
+	padding: 15px 0px;
+}
+.w100p {
+	width: 100%;
+}
+.right {
+	float: right;
+}
+.iso {
+	margin-right: 5px;
+	width: 262px;
+}
+.av1000 {
+	background: linear-gradient(to bottom, white, white,white,white,white,white,white, #ccc, #ccc);
+}
+.tou2 {
+	width: 100%;
+	background-color: white;
+	margin-bottom: 75px;
+}
+.tin2 {
+	max-width: 570px;
+	border:	green solid 1px;
+	min-height: 50px;
+	padding: 10px;
+}
+.b {
+	font-weight:bold;
+}

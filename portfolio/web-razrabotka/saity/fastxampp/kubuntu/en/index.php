@@ -2,6 +2,7 @@
 $r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 $sAuthorLinkText = 'Author site';
 $title = 'List versions of Kubuntu, which was tested FastXAMPP';
+$sDownloadLinkText = 'Download FastXAMPP';
 
 include_once "$r/functions.php";
 ob_start();
@@ -36,7 +37,7 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="allright">Problems are not found</p>
+	<div class="alert alert-success my-2">Problems are not found</div>
 </div>
 
 <div class="osgr">
@@ -66,16 +67,14 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="insttrouble">When operating problems are found, but there is not a critical problem during installation</p>
+	<div class="alert alert-warning my-2">When operating problems are found, but there is not a critical problem during installation</div>
 	<div class="pt12">
 	<p>During installation, a window with the progress bar "hangs" and does not show the progress of the installation. Continues to hang after the installation. This window can be closed easily by yourself.</p>
 	</div>
 </div>
 
 
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Download FastXAMPP</a>
-</p>
-<?php // /files/fastxampp.1.7.4.tar.gz
+<?php
 	$text_content = ob_get_clean();
 	include "$r/master.php";
-?>
+

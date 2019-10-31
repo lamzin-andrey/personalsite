@@ -12,7 +12,7 @@ ob_start();
 </p>
 
 <p style="text-align:center">
-	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="http://firstcode.ru/f?lang=en" width="370" height="1"></iframe>
+	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="/portfolio/web-razrabotka/saity/fastxampp/f?lang=en" width="300" height="480"></iframe>
 </p>
 <meta name="description" content="Компиляция андроид - приложений в apk онлайн">
 
@@ -92,7 +92,7 @@ with use Apache Cordova. It very simple path.</p>
 	#a{}
 </style>
 <p id="q">>My antivirus make warning, when I download comiling result from your site. Can you attack my device?</p>
-<img src="<?=img('acord/000.jpg')?>" style="text-align:center;">
+<img src="<?=img('acord/000.jpg')?>" class="mw-100 my-2">
 <p id="a">You antivirus work! Apk packages, downloaded NOT from Google Play Market is dangerous! We do not create viruses and we NOT want attak your device.
 BUT! Viruses can be added in apk package on recieving! We recomend first run our apk packages in android-emulator, after on your device!</p>
 <p id="q">>Is safely Apk packages from your site?</p>

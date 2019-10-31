@@ -2,11 +2,11 @@
 $r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp';
 $sAuthorLinkText = 'Author site';
 $title="List versions of Ubuntu, which was tested FastXAMPP";
+$sDownloadLinkText = 'Download FastXAMPP';
+
 include_once "$r/functions.php";
 ob_start();
-?><p class="tright">
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Download FastXAMPP</a>
-</p>
+?>
 <div class="osgr">
 	<p class="OS">Ubuntu 12.04.3 LTS</p>
 	<table class="w100p">
@@ -155,14 +155,12 @@ ob_start();
 	</table>
 	<p class="allright">Problems are not found</p>
 	<p class="moreinfo">Additional information:</p>
-	<div class="pt12"><p>
+	<div class="pt12">
 		You can make FastXAMPP use  system tray instead of the panel Unity.
 		Add circuit comprising a whitelist for the system tray, as <a href="http://apricode.blogspot.ru/2013/04/ubuntu-1304-raring-ringtail.html" target="_blank">described herein</a>.
 		Edit the file /home/username/.config/autostart/fastxampp.desktop and /usr/local/fastxampp/fastxampp.sh. Add to the call fastxampp the argument --force-tray.
 	</div>
 </div>
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Download FastXAMPP</a>
-</p>
 <?php // /files/fastxampp.1.7.4.tar.gz
 	$text_content = ob_get_clean();
 	include "$r/master.php";

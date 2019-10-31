@@ -1,4 +1,10 @@
-<div class="lang-margin hide">
-	<a href="<?=@$current_page?>?c=en">English</a>&nbsp;
-	<a href="<?=@$current_page?>?c=ru">Русский</a>&nbsp;
-</div> 
+<!-- Change lang  -->
+<div class="row">
+    <div class="col bg-white">
+        <div class="text-right">
+            <a href="<?=@$current_page?>?c=en" class="text-underline text-dark">English</a>
+            <a href="<?=@$current_page?>?c=ru" class="text-underline text-dark">Русский</a>
+        </div>
+    </div>
+</div>
+<!-- /Change lang  -->

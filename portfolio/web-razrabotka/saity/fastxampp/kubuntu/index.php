@@ -2,12 +2,11 @@
 $r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp';
 $sAuthorLinkText = 'Сайт автора';
 $title="Cписок версий Kubuntu, в которых был протестирован FastXAMPP";
+$sDownloadLinkText = 'Скачать архив с утилитой FastXAMPP';
+
 include_once "$r/functions.php";
 ob_start();
-?><p class="tright">
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Скачать архив с утилитой FastXAMPP</a>
-</p>
-
+?>
 <p class="x-vers">
     FastXAMPP для XAMPP 1.8.3-3
 </p>
@@ -39,7 +38,7 @@ ob_start();
 			</td>
 		</tr>
 	</tbody></table>
-	<p class="trouble">Обнаруженые проблемы:</p>
+	<div class="alert alert-danger my-2">Обнаруженые проблемы:</div>
 	<div class="pt12"><p>
 		Если используется восстановление сеанса пользователя при запуске (в Kubuntu включено по умолчанию), в системном трее могут присутствовать два значка fastXAMPP.
 		</p>
@@ -117,16 +116,12 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="insttrouble">При эксплуатации проблем не обнаружено, есть некритичная проблема при установке</p>
+	<div class="alert alert-warning my-2">При эксплуатации проблем не обнаружено, есть некритичная проблема при установке</div>
 	<div class="pt12">
 	<p>Во время установки окошко с прогресс баром "зависает" и не показывает ход установки. Продолжает висеть после окончания процесса установки. Это окошко можно легко закрыть самостоятельно.</p>
 	</div>
 </div>
 
-
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Скачать архив с утилитой FastXAMPP</a>
-</p>
-<?php // /files/fastxampp.1.7.4.tar.gz
+<?php
 	$text_content = ob_get_clean();
 	include "$r/master.php";
-?>

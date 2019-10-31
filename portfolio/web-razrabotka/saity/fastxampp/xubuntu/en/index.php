@@ -3,11 +3,11 @@ $r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp';
 $sAuthorLinkText = 'Author site';
 //$sAuthorLinkText = 'Сайт автора';
 $title="List versions of Xubuntu, which was tested FastXAMPP";
+$sDownloadLinkText = 'Download FastXAMPP';
+
 include_once "$r/functions.php";
 ob_start();
-?><p class="tright">
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Download FastXAMPP</a>
-</p>
+?>
 <p class="x-vers">
     FastXAMPP for XAMPP 1.8.3-3
 </p>
@@ -111,9 +111,6 @@ ob_start();
 	<p class="allright">Problems are not found</p>
 </div>
 
-
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Download FastXAMPP</a>
-</p>
 <?php // /files/fastxampp.1.7.4.tar.gz
 	$text_content = ob_get_clean();
 	include "$r/master.php";

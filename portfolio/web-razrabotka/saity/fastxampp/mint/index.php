@@ -2,13 +2,11 @@
 $r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 $sAuthorLinkText = 'Сайт автора';
 $title = 'Cписок версий Linux Mint, в которых был протестирован FastXAMPP';
+$sDownloadLinkText = 'Скачать архив с утилитой FastXAMPP';
 
 include_once "$r/functions.php";
 ob_start();
-?><p class="tright">
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Скачать архив с утилитой FastXAMPP</a>
-</p>
-<div class="osgr">
+?><div class="osgr">
 	<p class="OS">Linux Mint 13 (Maya) KDE</p>
 	<table class="w100p">
 		<tr>
@@ -36,7 +34,7 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="trouble">Обнаруженые проблемы:</p>
+	<div class="alert alert-danger my-2">Обнаруженые проблемы:</div>
 	<div class="pt12">
 		<p>В предустановленном в системе Firefox не открываются сайты, добавленные на localhost, если компьютер не подключен к глобальной сети. </p>
 	</div>
@@ -75,7 +73,7 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="trouble">Обнаруженые проблемы:</p>
+	<div class="alert alert-danger my-2">Обнаруженые проблемы:</div>
 	<div class="pt12">
 		<p>1. Нет значка в системном трее. </p>
 	</div>
@@ -115,7 +113,7 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="trouble">Обнаруженые проблемы:</p>
+	<div class="alert alert-danger my-2">Обнаруженые проблемы:</div>
 	<div class="pt12">
 		<p>1. В предустановленном в системе Firefox не открываются сайты, добавленные на localhost, если компьютер не подключен к глобальной сети. </p>
 		<p>2. Нет значка в системном трее. </p>
@@ -156,7 +154,7 @@ ob_start();
 			</td>
 		</tr>
 	</table>
-	<p class="trouble">Обнаруженые проблемы:</p>
+	<div class="alert alert-danger my-2">Обнаруженые проблемы:</div>
 	<div class="pt12">
 		<p>В предустановленном в системе Firefox не открываются сайты, добавленные на localhost, если компьютер не подключен к глобальной сети. </p>
 	</div>
@@ -167,9 +165,7 @@ ob_start();
 
 </div>
 
-<a href="<?=WEBROOT ?>/download.php" class="dlink" >Скачать архив с утилитой FastXAMPP</a>
-</p>
 <?php // /files/fastxampp.1.7.4.tar.gz
 	$text_content = ob_get_clean();
 	include "$r/master.php";
-?>
+

@@ -47,19 +47,21 @@
 				<li>Создаем специальный контроллер Traning controller</li>
 				<li>В нем по маршрутам /train/{method}</li>
 				<li>Создаём для каждого случая отдельный метод (и для билдера и для критерии</li>
-				<li>SELECT COUNT(id) AS cnt FROM main GROUP BY region </li>
-				<li>SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
+				<li class="text-info">SELECT COUNT(id) AS cnt FROM main GROUP BY region *</li>
+				<li class="text-info">SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
 LEFT JOIN cities AS c ON c.id = m.city 
 LEFT JOIN regions AS r ON r.id = m.region 
-WHERE m.is_deleted = 1 LIMIT 10, 10;;
+WHERE m.is_deleted = 1 LIMIT 10, 10;								*
 				</li>
-				<li>SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
+				<li class="text-info">SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
 INNER JOIN cities AS c ON c.id = m.city 
 INNER JOIN regions AS r ON r.id = m.region 
-WHERE m.is_deleted = 1 LIMIT 10, 10;</li>
-				<li>SELECT CONCAT(phone, ', ', email) FROM users LIMIT 10; </li>
+WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
+				<li class="text-info">SELECT CONCAT(phone, ', ', email) FROM users LIMIT 10; *</li>
 				<li>SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM main AS m 
 					GROUP BY (m.phone)
+					-- https://ourcodeworld.com/articles/read/245/how-to-execute-plain-sql-using-doctrine-in-symfony-3
+					-- Очень интересно!
 				 </li>
 				<li>SELECT * FROM `users` ORDER BY RAND() LIMIT 1000</li>
 				<li>как хранить в mysql md5 хеш не как строку а как число
@@ -98,7 +100,13 @@ WHERE m.is_deleted = 1 LIMIT 10, 10;</li>
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
-		<li class="text-danger">Переверстать с bootstrap. (2 hour)</li>
+		<li class="text-danger">
+			Переверстать с bootstrap. (3 hour)
+			<ul>
+				<li>Всё ок, только слоники в ff прикольнее чем в остальных вышли. Подумать, можно ли добиться такого же эффекта для всех</li>
+				<li></li>
+			</ul>
+		</li>
 		<li>Разобраться с счётчиками freesoft
 			<li>28 10 2019 у них были проблемы с авторизацией. Сбросил пароль на Praga1960 но авторизоваться всё-равно не получается. 
 				Старый пароль есть в Ящике Регистрация, по нему тоже глухо.
@@ -121,6 +129,13 @@ WHERE m.is_deleted = 1 LIMIT 10, 10;</li>
 	<li>Если да и это уники, paypal && donate пробовать</li>
 	<li></li>
 	<li>Сайт показывает по неизвестному запросу в гугле страницу Как делать ведроид на пыхе на первой позиции. Почему бы на этом не сосредрточиться?</li>
+	<li>НА главторгах первым делом обновить sw, путь к рандому убрать из кэш.</li>
+	<li>В модерской добавить редактирование тел.</li>
+	<li>Каптчу вообще скрыть.</li>
+	<li>Страницу согласия подавшим хоть раз не показывать.</li>
+	<li>Страницу согласия для а2 выводить вне фрейма.</li>
+	<li>На хомяке кнопку вверх добавить.</li>
+	<li></li>
 	<li></li>
 </ul>
 
