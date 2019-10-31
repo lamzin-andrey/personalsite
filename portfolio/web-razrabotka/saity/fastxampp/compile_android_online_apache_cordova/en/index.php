@@ -12,7 +12,7 @@ ob_start();
 </p>
 
 <p style="text-align:center">
-	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="/portfolio/web-razrabotka/saity/fastxampp/f?lang=en" width="300" height="480"></iframe>
+	<iframe id="compiler" style="border:none;display:none;overflow-y:hidden;" src="/portfolio/web-razrabotka/saity/fastxampp/f/?lang=en" width="300" height="480"></iframe>
 </p>
 <meta name="description" content="Компиляция андроид - приложений в apk онлайн">
 
