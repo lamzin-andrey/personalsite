@@ -6,7 +6,7 @@ function __($s) {
 	}
 	if (isset($_GET['lang'])) {
 		$lang = $_GET['lang'];
-		setcookie('flang', $lang, time() + 365*24*3600, '/f');
+		setcookie('flang', $lang, time() + 365*24*3600);
 	}
 	
 	$target = __DIR__ . '/../lang/' . $lang . '.php';
