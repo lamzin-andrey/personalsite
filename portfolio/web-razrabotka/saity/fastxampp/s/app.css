@@ -136,3 +136,29 @@
 .b {
 	font-weight:bold;
 }
+
+/** Make elefants in no FF as FF */
+@media(max-width:449px) {
+	.u-e7 {
+		max-width: 64.5px;
+	} 
+	.u-e6 {
+		max-width: 58px;
+	} 
+	.u-e5 {
+		max-width: 51.55px;
+	} 
+	.u-e4 {
+		max-width: 38.5px;
+	} 
+	.u-e3 {
+		max-width: 32.22px;
+	} 
+	.u-e2 {
+		max-width: 19.98px;
+	} 
+	.u-e1 {
+		max-width: 14.82px;
+	} 
+}
+/** /Make elefants in no FF as FF */
