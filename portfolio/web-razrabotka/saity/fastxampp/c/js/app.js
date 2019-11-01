@@ -55,7 +55,7 @@ window.onload=init;
 function init(){
 	window.W=window;
 	window.D=document;
-	W.root="/portfolio/web-razrabotka/saity/fastxampp/c/";
+	W.root="/portfolio/web-razrabotka/saity/fastxampp/c";
 	W.app={L:"лопата"};
 	if(W.uid){
 		hideScreens();
