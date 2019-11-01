@@ -22,6 +22,22 @@
 	<div style="margin-bottom:60px;">
 		<a href="/portfolio/">Смотреть другие приложения</a>
 	</div>
+	<script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
+    <script src="/j/sources/landlib/net/rest.js"></script>
+    <!--script src="/portfolio/web-razrabotka/saity/fastxampp/js/land_cache_client.js"></script>
+    <script src="/portfolio/web-razrabotka/saity/fastxampp/a/js/cacheclient.js"></script-->
+    <script>
+        //new CacheClient();
+        
+        var id = 32, o = {}; //product
+        if (isNaN(id)) {
+            console.log('isNaN-ko!');
+        }
+        o.id = id;
+        o.url = location.href.split('?')[0];
+        o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
+        Rest._token = 'open';
+        Rest._post(o, function(){}, '/p/stat/c.jn/', function(){});
 </body>
 
 </html>
