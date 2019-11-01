@@ -79,11 +79,12 @@
         //reload image
         function reloadImage() {
 			var cap = document.getElementById('cap');
+			//cap.setAttribute('src', 'img/random/index.php?');
 			cap.setAttribute('src', 'img/std/ploader.gif');
 			cap.removeAttribute('width');
 			setTimeout(function(){
 				cap.setAttribute('width', 200);
-				cap.setAttribute('src', 'img/random/index.php'); 
+				cap.setAttribute('src', 'img/random/index.php?'  + Math.random()); 
 			}, 1000);
 			return false;
 		}
