@@ -1,0 +1,1 @@
+{"id":{"type":"int","length":11},"uid":{"type":"int","length":11},"is_deleted":{"type":"int","length":11},"date_create":{"type":"datetime","length":19},"delta":{"type":"int","length":11},"title":{"type":"string","length":1536},"body":{"type":"blob","length":196605},"date_update":{"type":"datetime","length":19}}
