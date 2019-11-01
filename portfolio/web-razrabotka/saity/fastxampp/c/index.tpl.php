@@ -400,7 +400,7 @@
 				</form>
 			</div>
 		</div>
-		<div style="margin-bottom:60px;">
+		<div style="margin-bottom:60px; margin-top:30px;">
 			<a href="/portfolio/">Смотреть другие приложения</a>
 		</div>
 	</div><!--  end Main -->
