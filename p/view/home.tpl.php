@@ -101,8 +101,15 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
 		
-		<li>Не забываем про мини приложения в /a /b /c - выносим как отдельные работы</li>
-		<li class="text-danger">Разобраться с счётчиками freesoft
+		<li class="text-danger">Не забываем про мини приложения в /a /b /c - выносим как отдельные работы
+			<ul>
+				<li>Future mail<ul>
+					<li>Добавить в кэш-исключения запрос каптчи, а то ни фига не работает.</li>
+					<li></li>
+				</ul></li>
+			</ul>
+		</li>
+		<li >Разобраться с счётчиками freesoft
 			<li>01 11 2019 у них были проблемы с редактированием раздела.
 				Новый пароль есть в Ящике Регистрация.
 				Там что-то чинят, до 7 ноября не буду им нервы мотать.
