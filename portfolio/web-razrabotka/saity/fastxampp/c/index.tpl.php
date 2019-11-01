@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/js/landcacherswinstaller.js"></script>
 	<title>SecurePad - ваш секретный блокнот, зашифрованый дневник</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="keywords" content="Приложение для секретных записей,тайный дневник,недоступно для просмотра другими" />
