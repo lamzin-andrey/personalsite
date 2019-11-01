@@ -103,6 +103,12 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		
 		<li class="text-danger">Не забываем про мини приложения в /a /b /c - выносим как отдельные работы
 			<ul>
+				<li class="text-info">Future mail<ul>
+					<li>Публикация письма в будущее</li>
+					<li>Проверить, будут ли нотайсы в понедельник 4 ого и в пятницу 8</li>
+					
+					<li></li>
+				</ul></li>
 				
 				<li>Secure pad<ul>
 					<li>Просто взять и перенести</li>
@@ -110,10 +116,7 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 					<li></li>
 				</ul></li>
 				
-				<li class="text-info">Future mail<ul>
-					<li>Проверить, будут ли нотайсы в понедельник 4 ого и в пятницу 8</li>
-					<li></li>
-				</ul></li>
+				
 			</ul>
 		</li>
 		<li >Разобраться с счётчиками freesoft

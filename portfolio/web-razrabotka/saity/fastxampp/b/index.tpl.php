@@ -68,11 +68,10 @@
 			
 		</form>
 	</div>
-	<script>window.rid = '00';</script><?php /* //TODO! */?>
 	<script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
     <script src="/j/sources/landlib/net/rest.js"></script>
     <script src="/portfolio/web-razrabotka/saity/fastxampp/js/land_cache_client.js"></script>
-    <script src="/portfolio/web-razrabotka/saity/fastxampp/b/js/cacheclient.js"></script>TODO
+    <script src="/portfolio/web-razrabotka/saity/fastxampp/b/js/cacheclient.js"></script>
     <script>
         new CacheClient();
         
@@ -89,15 +88,15 @@
 			return false;
 		}
         
-        /*var id = parseInt(window.rid, 10), o = {}; //TODO
+        var id = 37, o = {}; //product
         if (isNaN(id)) {
-            console.log('id is NaN');
+            console.log('isNaN-ko!');
         }
         o.id = id;
         o.url = location.href.split('?')[0];
         o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
         Rest._token = 'open';
-        Rest._post(o, function(){}, '/p/stat/c.jn/', function(){});*/
+        Rest._post(o, function(){}, '/p/stat/c.jn/', function(){});
     </script>
 </body>
 
