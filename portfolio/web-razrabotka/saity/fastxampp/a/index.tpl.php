@@ -19,6 +19,9 @@
 			<?  endforeach?>
 		<? endif?>
 	</div>
+	<div style="margin-bottom:60px;">
+		<a href="/portfolio/">Смотреть другие приложения</a>
+	</div>
 </body>
 
 </html>
