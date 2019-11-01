@@ -1,0 +1,3 @@
+
+35    */2       *       *  * wget https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/b/worker.php -O /dev/null
+
