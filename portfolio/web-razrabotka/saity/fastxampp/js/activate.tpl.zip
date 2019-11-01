@@ -1,0 +1,18 @@
+<div class="page-header">Мои выкройки | Печать</div>
+<div class="content no-padding clearfix">
+
+    <div class="activate-alert text-center">
+        {if $insufficienFunds}
+            <p>Не хватает Redcoin для активации. Пожалуйста, пополните баланс и повторите снова.</p>
+        {else}
+        <p>После активации аккаунта Вы сможете печатать чертежи без ограничений по количеству и бесплатно (с ожиданием). (<a href="/help.php?id=20" style="color: #88C8FF;">подробнее</a>)</p>
+        <form method="post" class="red-box">
+            <p><b>Аккаунт не активен</b></p>
+            <p>Активация действительна 30 дней.<br>Стоимость активации - 3 Redcoin (<a href="/pay.php">пополнить</a>)</p>
+            <p>3 Redcoin в подарок после активации (<a href="/help.php?id=20">подробнее</a>)</p>
+            <button name="activate" value="1" type="submit" class="btn-activate">Активировать</button>
+        </form>
+        {/if}
+    </div>
+
+</div><!-- .content -->
