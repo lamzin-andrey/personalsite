@@ -4,7 +4,7 @@ require_once __DIR__ . '/q/mysql.php';
 require_once __DIR__ . '/q/utils.php';
 require_once __DIR__ . '/q/baseapp.php';
 require_once __DIR__ . '/q/auth.php';
-require_once __DIR__ . '/q/SampleMail.php';
+//require_once __DIR__ . '/q/SampleMail.php';
 require_once __DIR__ . '/uapp.php';
 require_once __DIR__ . '/q/lang.php';
 
@@ -42,15 +42,16 @@ class Save extends BaseApp {
 		$query = $this->updateQuery('id = ' . $apid);
 		query($query, $m, $n);
 		
+		/*Перенесено в то, где статус получен
 		$mail = new SampleMail();
 		$mail->setSubject('Новая компиляция');
 		$mail->setPlainText( 'Кто-то что-то пытается собрать, поздравляю! (' . $oInfo->d . ', id: ' . $this->id . ')');
 		$e = 'lamzin.a.m.d@yandex.ru';//'lamzin80@mail.ru';
 		$mail->setAddressTo([$e => $e]);
-		$ADMIN_EMAIL = 'firstcode.ru@redz.su';//'admin@firstcode.ru';
+		$ADMIN_EMAIL = 'admin@andryuxa.ru';//'admin@firstcode.ru';
 		$mail->setAddressFrom([$ADMIN_EMAIL => $ADMIN_EMAIL]);
 		$r = $mail->send();
-		//file_put_contents(__DIR__ . '/mail.log', print_r($r, 1) . "\n", FILE_APPEND);
+		file_put_contents(__DIR__ . '/mail.log', print_r($r, 1) . "\n", FILE_APPEND);*/
 		json_ok();
 		require_once __DIR__ . '/index.tpl.php';
 	}

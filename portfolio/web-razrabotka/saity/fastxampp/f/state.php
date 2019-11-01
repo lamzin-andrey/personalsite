@@ -6,6 +6,7 @@ require_once __DIR__ . '/q/baseapp.php';
 require_once __DIR__ . '/q/auth.php';
 require_once __DIR__ . '/q/lang.php';
 require_once __DIR__ . '/uapp.php';
+require_once __DIR__ . '/q/SampleMail.php';
 
 class Save extends BaseApp {
 	public function __construct() {
@@ -64,7 +65,17 @@ class Save extends BaseApp {
 		foreach ($list as $f) {
 			$aI = pathinfo($f);
 			if (isset($aI['extension']) && $aI['extension'] == 'apk') {
-				json_ok('msg', __('link-your-application') . ': <a href="' . ROOT . 'u/out/' . $this->id . '/' . $f . '" target="_blank">' . __('Download') . '</a>');
+				$sAppLink = ROOT . 'u/out/' . $this->id . '/' . $f ;
+				$mail = new SampleMail();
+				$mail->setSubject('Новая компиляция');
+				$mail->setPlainText( 'Кто-то что-то собрал, поздравляю! (' . ('http://' . $_SERVER['HTTP_HOST'] . '/' . $sAppLink) . ')');
+				$e = 'lamzin.a.m.d@yandex.ru';//'lamzin80@mail.ru';
+				$mail->setAddressTo([$e => $e]);
+				$ADMIN_EMAIL = 'admin@andryuxa.ru';//'admin@firstcode.ru';
+				$mail->setAddressFrom([$ADMIN_EMAIL => $ADMIN_EMAIL]);
+				$r = $mail->send();
+				
+				json_ok('msg', __('link-your-application') . ': <a href="' . $sAppLink . '" target="_blank">' . __('Download') . '</a>');
 			} else {
 				if ($f == $sErrorLogName || $f == $sLogName) {
 					json_ok('msg', __('compil-error') . '. <a href="' . ROOT . 'u/out/' . $this->id . '/' . $sErrorLogName . '" target="_blank">' . __('Download error log') . '</a> <a href="' . ROOT . 'u/out/' . $this->id . '/' . $sLogName . '" target="_blank">' . __('Скачать stdout компилятора') . '</a>');
