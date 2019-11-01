@@ -402,9 +402,9 @@
 	</div><!--  end Main -->
 	<?=$script?>
 	<? $v = 2;?>
-	<script src="/c/js/micron.min.js?v=<?=$v?>"></script>
-	<script src="/c/js/modelbase.js?v=<?=$v?>"></script>
-	<script src="/c/js/modelposts.js?v=<?=$v?>"></script>
-	<script src="/c/js/app.min.js?v=<?=$v?>"></script>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/micron.min.js?v=<?=$v?>"></script>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/modelbase.js?v=<?=$v?>"></script>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/modelposts.js?v=<?=$v?>"></script>
+	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/app.min.js?v=<?=$v?>"></script>
 </body>
 </html>

@@ -55,7 +55,7 @@ window.onload=init;
 function init(){
 	window.W=window;
 	window.D=document;
-	W.root="/c";
+	W.root="/portfolio/web-razrabotka/saity/fastxampp/c/";
 	W.app={L:"лопата"};
 	if(W.uid){
 		hideScreens();
@@ -70,7 +70,7 @@ function init(){
 	sendRegisterDataBtn.onclick=onSendRegisterDataClick;
 	signInBtn.onclick=onSignInClick;
 	textCommentBtn.onclick=onSendCommentClick;
-	history.pushState(null,null,"/c/");
+	history.pushState(null,null,"/portfolio/web-razrabotka/saity/fastxampp/c/");
 	W.onpopstate=onBackButton;
 }
 function onNewPost(){
