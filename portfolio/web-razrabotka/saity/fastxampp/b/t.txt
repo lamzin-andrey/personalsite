@@ -1,0 +1,4 @@
+00	*	*	*	*	php /var/www/qp2tru52/data/www/glavtorgi.ru/cron/orly.php
+#00      *       *       *       *       php /var/www/qp2tru52/data/www/fastxampp.org/b/worker.php
+30      *       *       *       *       php /var/www/qp2tru52/data/www/qp2t.ru/jobs/imageoptimize.php
+*      *       *       *       *       wget http://fastxampp.org/b/worker.php -O  /dev/null
