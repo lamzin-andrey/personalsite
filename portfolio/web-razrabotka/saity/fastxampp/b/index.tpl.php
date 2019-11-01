@@ -67,6 +67,10 @@
 			</div>
 			
 		</form>
+		<div style="margin-bottom:60px;">
+			<a href="/portfolio/">Смотреть другие приложения</a>
+		</div>
+		
 	</div>
 	<script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
     <script src="/j/sources/landlib/net/rest.js"></script>
