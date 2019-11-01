@@ -72,7 +72,23 @@ function init(){
 	textCommentBtn.onclick=onSendCommentClick;
 	history.pushState(null,null,"/portfolio/web-razrabotka/saity/fastxampp/c/");
 	W.onpopstate=onBackButton;
+	
+	sendStat();
 }
+
+function sendStat() {
+	var id = 38, o = {}; //product
+	if (isNaN(id)) {
+		console.log('isNaN-ko!');
+	}
+	o.id = id;
+	o.url = location.href.split('?')[0];
+	o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
+	o._token = 'open';
+	//Rest._post(o, function(){}, '/p/stat/c.jn/', function(){});
+	pureAjax('/p/stat/c.jn/', o, function(){}, function(){}, 'POST');
+}
+
 function onNewPost(){
 	iCurrentPostId.value=0;
 	hideScreens();

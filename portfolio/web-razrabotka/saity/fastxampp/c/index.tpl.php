@@ -399,6 +399,9 @@
 				</form>
 			</div>
 		</div>
+		<div style="margin-bottom:60px;">
+			<a href="/portfolio/">Смотреть другие приложения</a>
+		</div>
 	</div><!--  end Main -->
 	<?=$script?>
 	<? $v = 2;?>
@@ -406,5 +409,14 @@
 	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/modelbase.js?v=<?=$v?>"></script>
 	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/modelposts.js?v=<?=$v?>"></script>
 	<script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/app.min.js?v=<?=$v?>"></script>
+	
+	<!--script src="/p/sbadmin2/vendor/jquery/jquery.min.js"></script>
+    <script src="/j/sources/landlib/net/rest.js"></script-->
+    <script src="/portfolio/web-razrabotka/saity/fastxampp/js/land_cache_client.js"></script>
+    <script src="/portfolio/web-razrabotka/saity/fastxampp/c/js/cacheclient.js"></script>
+    <script>
+        new CacheClient();
+    </script>
+    
 </body>
 </html>
