@@ -60,7 +60,7 @@
 				<img id="cap" width="200" src="img/random/index.php">
 			</div>
 			<div>
-				<a href="#" onclick="document.getElementById('cap').setAttribute('src', 'img/random/index.php); return false;">Обновить рисунок</a>
+				<a href="#" onclick="document.getElementById('cap').setAttribute('src', 'img/random/index.php'); return false;">Обновить рисунок</a>
 			</div>
 			<div>
 				<input type="text" name="code" autocomplete="off"> <input type="submit" value="Отправить">
