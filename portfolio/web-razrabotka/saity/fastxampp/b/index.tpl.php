@@ -74,8 +74,8 @@
     <script src="/portfolio/web-razrabotka/saity/fastxampp/js/land_cache_client.js"></script>
     <script src="/portfolio/web-razrabotka/saity/fastxampp/b/js/cacheclient.js"></script>TODO
     <script>
-        /*new FxCacheClient(); TODO
-        var id = parseInt(window.rid, 10), o = {};
+        new CacheClient();
+        /*var id = parseInt(window.rid, 10), o = {}; //TODO
         if (isNaN(id)) {
             console.log('id is NaN');
         }
