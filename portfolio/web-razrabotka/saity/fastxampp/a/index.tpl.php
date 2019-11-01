@@ -38,6 +38,7 @@
         o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
         Rest._token = 'open';
         Rest._post(o, function(){}, '/p/stat/c.jn/', function(){});
+    </script>
 </body>
 
 </html>
