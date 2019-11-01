@@ -60,7 +60,7 @@
 				<img id="cap" width="200" src="img/random/index.php">
 			</div>
 			<div>
-				<a href="#" onclick="document.getElementById('cap').setAttribute('src', 'img/random/index.php'); return false;">Обновить рисунок</a>
+				<a href="#" onclick="reloadImage(); return false;">Обновить рисунок</a>
 			</div>
 			<div>
 				<input type="text" name="code" autocomplete="off"> <input type="submit" value="Отправить">
@@ -75,6 +75,19 @@
     <script src="/portfolio/web-razrabotka/saity/fastxampp/b/js/cacheclient.js"></script>TODO
     <script>
         new CacheClient();
+        
+        //reload image
+        function reloadImage() {
+			var cap = document.getElementById('cap');
+			cap.setAttribute('src', 'img/std/ploader.gif');
+			cap.removeAttribute('width');
+			setTimeout(function(){
+				cap.setAttribute('width', 200);
+				cap.setAttribute('src', 'img/random/index.php'); 
+			}, 1000);
+			return false;
+		}
+        
         /*var id = parseInt(window.rid, 10), o = {}; //TODO
         if (isNaN(id)) {
             console.log('id is NaN');
