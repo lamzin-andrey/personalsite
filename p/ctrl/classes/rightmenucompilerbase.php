@@ -117,7 +117,7 @@ class RightMenuCompilerBase extends CPageCompiler {
 		$_REQUEST['noxhr'] = 1;
 		$sql = 'SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 AND hidden_in_list != 1 ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
 		if ($this->nArticleId > 0) {
-			$sql = 'SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 AND id != ' . $this->nArticleId . ' ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
+			$sql = 'SELECT * FROM pages WHERE is_deleted != 1 AND hidden_in_list != 1 AND is_hidden != 1 AND id != ' . $this->nArticleId . ' ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
 		}
 		$this->articlesData = query($sql);
 		

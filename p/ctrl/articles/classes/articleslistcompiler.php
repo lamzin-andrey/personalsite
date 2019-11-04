@@ -186,7 +186,7 @@ class ArticlesListCompiler extends CPageCompiler {
 		unset($_REQUEST['noxhr']);
 	}
 	/**
-	 * TODO это портфолио, перепигшшешь позже
+	 * TODO это портфолио, перепишешь позже
 	 * @description Компилирует списки работ на всех уровнях категорий портфолио, в которые вложена  $nCategoryId
 	 * @param int $nCategoryId
 	*/

@@ -121,6 +121,8 @@ $aLang = [
 	
 	//Portfolio main list
 	'Andrey\'s portfolio' => 'Портфолио Ламзина Андрея',
+	'Andrey\'blog' => 'Блог Ламзина Андрея',
+	'Andrey\'site' => 'Персональная страница Ламзина Андрея',
 	'My works' => 'Мои работы',
 	
 	//Portfolio tree view
