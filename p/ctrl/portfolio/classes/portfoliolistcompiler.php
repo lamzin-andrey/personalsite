@@ -6,6 +6,7 @@ require_once DOC_ROOT . '/q/q/treealg/src/treealgorithms.php';
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';
+require_once DOC_ROOT . '/p/ctrl/portfolio/classes/portfoliocompiler.php';
 require_once DOC_ROOT . '/q/q/lang.php';
 
 
