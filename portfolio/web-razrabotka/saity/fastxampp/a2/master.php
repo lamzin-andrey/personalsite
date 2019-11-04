@@ -2,7 +2,8 @@
 <html>
 <head>
 	<meta charset="WINDOWS-1251">
-    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0.user-scalable=no,target-densitydpi=device-dpi,width=device-width,height=device-height,shrink-to-fit=no">
+	<!-- target-densitydpi=device-dpi - зло или нет? -->
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0.user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no">
     <title><?php print $baseTitle; if ($title)print "| $title"; ?> </title>
     <link rel="stylesheet" type="text/css" href="/portfolio/web-razrabotka/saity/fastxampp/a2/s/bootstrap4shim.css">
     <link rel="stylesheet" type="text/css" href="/portfolio/web-razrabotka/saity/fastxampp/a2/s/app.css">
