@@ -1,0 +1,179 @@
+.u-links-underline a {
+	text-decoration:underline;
+}
+
+.u-text-orange {
+	color:#F57721;
+}
+.u-fastlogo {
+	max-width:64px;
+}
+
+/** header top texts */
+.u-mw-124px{
+	min-width:124px;
+}
+/** /header top texts */
+
+/** header ubuntu logos customize */
+.u-menu-logo, .u-ku-menu-logo {
+	padding-bottom:3px;
+}
+.u-menu-logo {
+	width:40px;
+}
+.u-ku-menu-logo {
+	width:41px;
+}
+.u-mint-menu-logo {
+	padding-bottom:4px;
+}
+.u-cell4 {
+	width:25%;
+}
+/** /header ubuntu logos customize */
+
+/** header gradient  */
+.u-fastxampp-header-xs {
+	background-image: url('./../i/headbg.jpg');
+	background-size: contain;
+	background-color: gray;
+}
+/** /header gradient  */
+
+/** apache cordova banner */
+.u-acord-logo{
+	min-width:104px; /* 96*/
+}
+
+.u-acord-banner-w {
+	width:75%;
+}
+@media(max-width:991px) {
+	.u-acord-banner-w {
+		width:100%;
+	}
+}
+
+/** on cordova page  */
+.u-acord-logo2 {
+	min-width:320px;
+}
+.u-acord-logo2 img{
+	max-width:96px;
+}
+/** /apache cordova banner */
+
+
+/** footer */
+.u-fborder {
+	background-color:#F57721;
+	height: 3px;
+}
+/** /footer */
+
+.u-content {
+	font-family: verdana,helvetica!important;
+	font-size: 1rem;
+}
+
+.u-w800p {
+	max-width:800px;
+}
+.x-vers {
+	background-color: orange;
+	color: white;
+}
+.lstnono {
+	list-style-type: none;
+}
+.u-w800p p {
+	text-indent: 7px;
+	line-height: 21pt;
+	font-size: 14pt;
+	margin-top:16px;
+}
+.allright {
+	background-color: #CCFFCB;
+}
+.osgr {
+	border-bottom: dashed gray 1px;
+	padding: 15px 0px;
+}
+.w100p {
+	width: 100%;
+}
+.right {
+	float: right;
+}
+.iso {
+	margin-right: 5px;
+	width: 262px;
+}
+.av1000 {
+	background: linear-gradient(to bottom, white, white,white,white,white,white,white, #ccc, #ccc);
+}
+.tou2 {
+	width: 100%;
+	background-color: white;
+	margin-bottom: 75px;
+}
+.tin2 {
+	max-width: 570px;
+	border:	green solid 1px;
+	min-height: 50px;
+	padding: 10px;
+}
+.b {
+	font-weight:bold;
+}
+
+/** Make elefants in no FF as FF */
+@media(max-width:449px) {
+	.u-e7 {
+		max-width: 60.5px;
+	} 
+	.u-e6 {
+		max-width: 54px;
+	} 
+	.u-e5 {
+		max-width: 47.55px;
+	} 
+	.u-e4 {
+		max-width: 34.5px;
+	} 
+	.u-e3 {
+		max-width: 28.22px;
+	} 
+	.u-e2 {
+		max-width: 15.98px;
+	} 
+	.u-e1 {
+		max-width: 10.82px;
+	} 
+}
+@media(min-width:450px) and (max-width:527px) {
+	.u-e7 {
+		max-width: 75px;
+	} 
+	.u-e6 {
+		max-width: 67.5px;
+	} 
+	.u-e5 {
+		max-width: 60px;
+	} 
+	.u-e4 {
+		max-width: 45px;
+	} 
+	.u-e3 {
+		max-width: 37.5px;
+	} 
+	.u-e2 {
+		max-width: 30px;
+	} 
+	.u-e1 {
+		max-width: 22.5px;
+	} 
+}
+/** /Make elefants in no FF as FF */
+

@@ -96,26 +96,21 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 
 <h2>Дела текущие</h2>
 <ul >
-	<li class="text-danger">Перенести фастксамп в подраздел хомяка. Не сделать ли хомяком php2js.ru? (в этом году уже поздно, но пусть php2js.ru на всякий случай будет на этом же compileHtml движке.)</li>
+	
+	<li class="text-danger">Старый блог савсэм анонимизировать.</li>
+	<li class="text-info">Перенести фастксамп в подраздел хомяка. Не сделать ли хомяком php2js.ru? (в этом году уже поздно, но пусть php2js.ru на всякий случай будет на этом же compileHtml движке.)</li>
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
 		
-		<li class="text-danger">Не забываем про мини приложения в /a /b /c - выносим как отдельные работы
+		<li class="text-info">Не забываем про мини приложения в /a /b /c - выносим как отдельные работы
 			<ul>
 				<li class="text-info">Future mail<ul>
 					<li>Публикация письма в будущее</li>
 					<li>Проверить, будут ли нотайсы в понедельник 4 ого и в пятницу 8</li>
-					
+
 					<li></li>
 				</ul></li>
-				
-				<li>Secure pad<ul>
-					<li>Просто взять и перенести</li>
-					<li>Все ajax запросы поместить в фильтр</li>
-					<li></li>
-				</ul></li>
-				
 				
 			</ul>
 		</li>
@@ -128,7 +123,6 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		</li>
 		<li></li>
 	</ul>
-	<li>Старый блог савсэм анонимизировать.</li>
 	<li>Ссылку на симтест на утубе поправить на http://симфонитест.рф</li>
 	<li>Статистику, пытаются ли что транслитировать на php2js сделать.</li>
 	<li>Пофиксить глюк с parent.</li>
