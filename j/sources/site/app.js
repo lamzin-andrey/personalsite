@@ -55,6 +55,7 @@ window.app = new Vue({
 		//TODO from old app constructor
 		//send stat
 		let id = parseInt(window.rid, 10), o = {};
+		$('#bttimg').css('display', 'block');
 		if (isNaN(id)) {
 			console.log('id is NaN');
 			return;
@@ -67,7 +68,7 @@ window.app = new Vue({
 		Rest._token = 'open';
 		Rest._post(o, (data) => {this.onSuccessSendStat(data);}, '/p/stat/c.jn/', () => {});
 
-		$('#bttimg').css('display', 'block');
+		
 	},
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
