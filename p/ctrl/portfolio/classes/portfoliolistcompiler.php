@@ -406,10 +406,10 @@ class PortfoliolistCompiler extends CPageCompiler {
 		$oData = (object)$aRow;
 		if (!intval($oData->has_self_section) && !intval($oData->dont_create_page)) {
 			$oCompiler = new PortfolioCompiler();
-			$oCompiler->title = $this->title;
+			$oCompiler->title = $oData->title;
 			$oCompiler->nProductId = $id;
 			$oCompiler->url = $oData->url;
-			$oCompiler->content = $this->content_block;
+			$oCompiler->content = $oData->content_block;
 			$url = $oData->url . 'index.html';
 			$oCompiler->outputFile = DOC_ROOT . $url;
 			$oCompiler->canonicalUrl = $oData->url;
