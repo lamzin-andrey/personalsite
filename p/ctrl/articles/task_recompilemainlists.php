@@ -29,7 +29,7 @@ class Task_RecompileMainLists {
 		
 		//Articles Pages
 		$oCompiler = new ArticlesListCompiler();
-		$oCompiler->compileMainList();
+		$oCompiler->compileMainList(true);
 		
 		//Portfolio pages
 		$oCompiler = new PortfolioListCompiler();

@@ -8,6 +8,7 @@ require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
 //require_once DOC_ROOT . '/p/ctrl/articles/classes/articlesrightmenucompiler.php';
 require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';
+include_once DOC_ROOT . '/p/ctrl/classes/cstaticpagescompiler.php';
 
 
 class ArticlesListCompiler extends CPageCompiler {
@@ -17,6 +18,9 @@ class ArticlesListCompiler extends CPageCompiler {
 	
 	/** @property bool $bPreprocesContent*/
 	public $bPreprocesContent = false;
+	
+	/** @property bool $_compilePagesAction true когда надо скомпилировать таккже листы */
+	private $_compilePagesAction = false;
 	
 
 	public function __construct()
@@ -72,6 +76,11 @@ class ArticlesListCompiler extends CPageCompiler {
 			$sItemsHtml .= $s;
 			$sDescription .= $aRow['description'];
 			$aKeywords[] = $aRow['keywords'];
+			
+			if ($this->_compilePagesAction){
+				$this->_compilePage($aRow);
+			}
+			
 		}
 		$this->bPreprocesContent = $bSourcePreprocessFlag;
 		$sItemsHtml .= '</ul>';
@@ -167,8 +176,9 @@ class ArticlesListCompiler extends CPageCompiler {
 		}
 		return $aR;
 	}
-	public function compileMainList()
+	public function compileMainList($bCompilePages = false)
 	{
+		$this->_compilePagesAction = $bCompilePages;
 		$this->_setRightMenu();
 		$_REQUEST['noxhr'] = true;
 		$this->aData = query('SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 AND hidden_in_list != 1 ORDER BY rating DESC, delta ASC');
@@ -350,5 +360,21 @@ class ArticlesListCompiler extends CPageCompiler {
 		$oRightMenuCompiler = new RightMenuCompiler();
 		$oRightMenuCompiler->loadData();
 		$this->rightMenu = $oRightMenuCompiler->compile(false);
+	}
+	/**
+	 * @description Компилирует отдельную страницу
+	*/
+	private function _compilePage($aRow)
+	{
+		$oCompiler = new CStaticPagesCompiler(1, $aRow['url'], $aRow['title'], $aRow['heading'], $aRow['content_block'],
+													$aRow['description'],
+													$aRow['keywords'],
+													$aRow['og_title'],
+													$aRow['og_description'],
+													$aRow['og_image'],
+													$aRow['created_at'],
+													$aRow['id']
+													);
+		$comiErr = $oCompiler->emsg;
 	}
 }
