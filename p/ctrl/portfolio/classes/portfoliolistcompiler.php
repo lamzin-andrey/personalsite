@@ -31,6 +31,14 @@ class PortfoliolistCompiler extends CPageCompiler {
 	
 	/** @property string $_sTimeHtml шаблон затраченного времени работы */
 	private $_sTimeHtml = '';
+	
+	/** @property bool $_bCompilePages true когда надо скомпилировать не только список но и содержащиеся в списке страницы
+	 * Устанавливается в true только при выполнении фоновой задачи.
+	 * При попытке вызвать compileMainList из web контроллера будет бесконечная рекурсия,
+	 * TODO подумать, как это по нормальному сделать.
+	 * 
+	*/
+	private $_bCompilePages = false;
 
 	public function __construct()
 	{
@@ -74,6 +82,10 @@ class PortfoliolistCompiler extends CPageCompiler {
 			$sItemsHtml .= $s;
 			$sDescription .= $aRow['description'];
 			$aKeywords[] = $aRow['keywords'];
+			
+			if ($this->_bCompilePages) {
+				$this->_compilePage($aRow);
+			}
 		}
 		$sItemsHtml .= '</ul>';
 		$this->content = $sItemsHtml;
@@ -271,8 +283,9 @@ class PortfoliolistCompiler extends CPageCompiler {
 		}
 		return $aR;
 	}
-	public function compileMainList()
+	public function compileMainList($bSavePages = false)
 	{
+		$this->_bCompilePages = $bSavePages;
 		$this->_setRightMenu();
 		$_REQUEST['noxhr'] = true;
 		$this->aData = query('SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1 ORDER BY rating DESC, delta ASC');
@@ -383,5 +396,31 @@ class PortfoliolistCompiler extends CPageCompiler {
 		$oRightMenuCompiler = new RightMenuCompiler();
 		$oRightMenuCompiler->loadData();
 		$this->rightMenu = $oRightMenuCompiler->compile(false);
+	}
+	/**
+	 * @description Компилируем страницу
+	*/
+	private function _compilePage($aRow)
+	{
+		$oData = (object)$aRow;
+		if (!intval($oData->has_self_section) && !intval($oData->dont_create_page)) {
+			$oCompiler = new PortfolioCompiler();
+			$oCompiler->title = $this->title;
+			$oCompiler->nProductId = $id;
+			$oCompiler->url = $oData->url;
+			$oCompiler->content = $this->content_block;
+			$url = $oData->url . 'index.html';
+			$oCompiler->outputFile = DOC_ROOT . $url;
+			$oCompiler->canonicalUrl = $oData->url;
+			$oCompiler->heading = $oData->heading;
+			$oCompiler->description = $oData->description;
+			$oCompiler->keywords = $oData->keywords;
+			$oCompiler->og_title = $oData->og_title;
+			$oCompiler->og_description = $oData->og_description;
+			$oCompiler->og_image = $oData->og_image;
+			$oCompiler->nCategory = $oData->category_id;//For bc
+			$oCompiler->compile();
+			//$comiErr = $oCompiler->emsg;
+		}
 	}
 }

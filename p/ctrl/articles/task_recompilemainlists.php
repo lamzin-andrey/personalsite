@@ -33,7 +33,7 @@ class Task_RecompileMainLists {
 		
 		//Portfolio pages
 		$oCompiler = new PortfolioListCompiler();
-		$oCompiler->compileMainList();
+		$oCompiler->compileMainList(true);
 		$oCompiler->compileLevelsLists(2409);
 	}
 }
