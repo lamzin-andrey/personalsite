@@ -6,7 +6,7 @@ require_once DOC_ROOT . '/q/q/cpagecompiler.php';
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
 
-
+require_once DOC_ROOT . '/p/ctrl/classes/liveinternet.php';
 
 class RegistrationCompiler extends CPageCompiler {
 
@@ -67,5 +67,13 @@ class RegistrationCompiler extends CPageCompiler {
 		$oRightMenuCompiler = new RightMenuCompiler();
 		$oRightMenuCompiler->loadData();
 		$this->rightMenu = $oRightMenuCompiler->compile(false);
+	}
+	/**
+     * @description Вернуть код счетчика liveInternet
+     * @return string
+    */
+    protected function _getLiveinternetCounterHtml()
+    {
+		return Liveinternet::getHtml();
 	}
 }

@@ -9,6 +9,8 @@ require_once DOC_ROOT . '/q/q/lang.php';
 require_once __DIR__ . '/pageusertrollscompiler.php';
 require_once __DIR__ . '/rightmenucompiler.php';
 
+require_once DOC_ROOT . '/p/ctrl/classes/liveinternet.php';
+
 class PageTop10Compiler extends CPageCompiler {
 
 	/** @const SCORE_IMG_LIMIT  Рисуем не более SCORE_IMG_LIMIT "звёздочек" */
@@ -135,5 +137,13 @@ class PageTop10Compiler extends CPageCompiler {
 		$s = str_replace('{BC_ITEMS}', '', $s);
 		$s = str_replace('{MENU_ACTIVE_ITEM}', l('Top 10 active Troll Killers'), $s);
 		return $s;
+	}
+	/**
+     * @description Вернуть код счетчика liveInternet
+     * @return string
+    */
+    protected function _getLiveinternetCounterHtml()
+    {
+		return Liveinternet::getHtml();
 	}
 }
