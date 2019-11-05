@@ -2,16 +2,15 @@
 <html xml:lang="ru" lang="ru">
 	<head>
 		<meta charset="WINDOWS-1251">
-		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=device-dpi,	width=device-width,height=device-height,shrink-to-fit=no">
+		<link rel="canonical" href="https://andryuxa.ru/blog/kak_sozdat_android_prilozhenie_na_php_html_js_css/">
+		<!-- ,target-densitydpi=device-dpi -->
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no"><meta name="description" content="Реализация стандартных функций PHP в JAVA"><meta property="og:image" content="/i/64.jpg">
 		<title>Как создать android приложение на php -|- Сайт Андрея</title>
-		<link rel="stylesheet" type="text/css" href="/s/bootstrap4.2.1.min.css">
 		<link rel="stylesheet" type="text/css" href="/s/app.css">
-		<link rel="stylesheet" type="text/css" href="/j/prism/0.css">
 		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
-		<link rel="canonical" href="https://www.andryuxa.ru/blog/kak_sozdat_android_prilozhenie_na_php_html_js_css/"/>
 	</head>
 	<body>
-		<div class="container u-full-width">
+		<div class="container u-full-width" id="app">
 			<header>
 				<div class="row">
 					<div class="col">
@@ -31,23 +30,27 @@
 			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 				  <li class="nav-item">
-					<a class="nav-link" href="/portfolio">Портфолио</a>
+					<a class="nav-link" href="/portfolio/">Портфолио</a>
 				  </li>
 				  <li class="nav-item active">
-					<a class="nav-link" href="javascript:;">Блог</a>
+					<a class="nav-link" href="/blog/">Блог</a>
 				  </li>
 				  <li class="nav-item">
-					<a class="nav-link" href="/clients">Клиентам</a>
+					<a class="nav-link" href="/clients/">Клиентам</a>
 				  </li>
 				</ul>
 			  </div>
 			</nav>
+			
 			<div>&nbsp;</div>
 			<div class="row">
 				<div class="col-12 col-lg-8">
 					<article>
 						<h1>Как создать android приложение на php (+ html + js + css)</h1>
-						<p>Статья адресована людям, занимающимся разработкой на PHP, у которых возникла необходимость по быстрому сделать android-приложение для личного пользования.</p>
+						<time datetime="2019-09-03" class="d-block text-right text-muted small">03.09.2019</time>
+						<p>
+<youtube video="https://www.youtube.com/watch?v=Q-nDX8R4_B0" img="/i/arttest.jpg" css="border:solid 1px red"></youtube>
+<p>Статья адресована людям, занимающимся разработкой на PHP, у которых возникла необходимость по быстрому сделать android-приложение для личного пользования.</p>
 						<p>Прежде всего хочется обратиться к профессиональным разработчикам android-приложений и к людям не занимающимся вообще никакой разработкой.</p>
 						<p>Это <strong>НЕ</strong> статья о том как профессионально разрабатывать android приложения. Если вы не профессионал и ничего не знаете о профессиональной разработке android приложений, но хотите им стать, <strong>вам не надо это читать</strong>.</p>
 						<p>Если вы профессиональный разработчик android приложений, вы не найдёте здесь ничего интересного.</p>
@@ -151,62 +154,91 @@ public class ServiceDM extends Service{
 var currentTimestamp = PHP.time();
 PHP.file_put_contents('time_of_start.txt', currentTimestamp);
 						</code></pre>
+</p>
 					</article>
 				</div>
 				<div class="col-12 col-lg-4  u-right-side">
-					<ul class="list-group text-center">
-						<li class="list-group-item">
-							<div><img src="/i/fx.jpg" alt="Fastxampp"></div>
-							<div> <!-- style="border-top-width: 0px;" -->
-								<a href="//fastxampp.org" target="_blank">Утилита для удобного добавления сайтов на localhost</a>
-							</div>
-						</li> 
-						<li class="list-group-item">
-							<div><img src="/i/L.jpg"  alt="cordova online"></div>
-							<div><a target="_blank" href="http://fastxampp.org/compile_android_online_apache_cordova/">Компиляция html5 приложений cordova для android онлайн</a><br>
-								<p>
-									<small>
-									</small>
-								</p>
-							</div>
-						</li>
-						<li class="list-group-item">
-							<div>
-								<img src="/i/php2js.jpg" title="" alt="">
-							</div>
-							<div>
-								<a href="http://php2js.ru/" target="_blank">Транслятор php кода в код javascript</a><br>
-							</div>
-						</li>
-						<li class="list-group-item">
-							<div><img src="/i/rc.jpg" alt="RedCafe"></div>
-							<div><a href="http://redcafe.ru/">Программа для создания выкроек стильной одежды</a></div>
-							<p>
-								<small>Мой вклад - оффлайн-версия программы для экспорта выкроек в pdf и dxf</small></div>
-							</p>
-						</li>
+					<ul class="list-group text-center mb-3">
+						<li class="list-group-item bg-light">
+	<p>Популярное в блоге</p>
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/64.jpg" alt="Add7"></div>
+	<div><a href="/blog/add7/">Add7</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/64.jpg" alt="Использование laravel-mix для сборки кода использующего наследование в javascript"></div>
+	<div><a href="/blog/ispolzovanie_nasledovaniya_i_klassov_v_javascript_s_laravel_mix/">Использование laravel-mix для сборки кода использующего наследование в javascript</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/64.jpg" alt="Будущее из-под угла  &copy;"></div>
+	<div><a href="/blog/kak_dobitsya_otobrajeniya_ikonok_fontawsome_v_mozilla_firefox_pri_otkrytii_faila_s_diska/">Будущее из-под угла  &copy;</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/64.jpg" alt="Установка laravel на xubuntu 18.04"></div>
+	<div><a href="/blog/kak_ustanovit_poslednuu_versiu_laravel_v_xubuntu_1804/">Установка laravel на xubuntu 18.04</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/64.jpg" alt="Add8"></div>
+	<div><a href="/blog/add8cuistom/">Add8</a></div>
+	
+</li>
+
+<li class="list-group-item bg-light mt-4">
+	<p>Работы из портфолио</p>
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/64.jpg" alt="Test 1"></div>
+	<div><a href="/portfolio/">Test 1</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/tklogo1.jpg" alt="TrollKIller"></div>
+	<div><a href="/portfolio/web/userscripts/trollkiller/">TrollKIller</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="https://lh3.googleusercontent.com/MTyf30M1sl_3JFHX0atGJTzDUXRKWr20amjRVD_IQmZjfdaMnYjNmtigx75Jcqzrxg=s180" alt="Умная яркость"></div>
+	<div><a href="/portfolio/">Умная яркость</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="http://mh.loc/i/cache.jpg" alt="Модуль кэширования с помощью service worker"></div>
+	<div><a href="/portfolio/">Модуль кэширования с помощью service worker</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/vbt.jpg" alt="Vue 2 TreeView component"></div>
+	<div><a href="/portfolio/web/components/frontend/vue/vue2_editable_tree_view/">Vue 2 TreeView component</a></div>
+	
+</li>
+
+
 					</ul>
 				</div>
 			</div>
+			<back-to-top text="Back to top" visibleoffset="300" right="10px">
+				<img alt="Up" src="/i/up.png" id="bttimg" style="display:none">
+			</back-to-top>
 		</div>
 		
 			<div class="footer bg-dark text-light">
-				
 					<div class="container">
 						<div class="row">
-							<div class="col">
+							<div class="col-2">
+								<img src="/i/e64.png" width="32">
+							</div>
+							<div class="col-4">
 								&copy; Андрей Ламзин
 							</div>
 						</div>
 					</div>
-				
 			</div>
-		
-        <script src="/j/jquery-3.3.1.slim.min.js"></script>
-        <script src="/j/bootstrap4.2.1.min.js"></script>
-        <script src="/j/popper1.14.6.min.js"></script>
-        <script src="/j/prism/0.js"></script>
-        <script src="/j/app.js"></script> 
-        <link rel="stylesheet" type="text/css" href="/s/bootstrap4_sticky_footer.css">
+		<script>var rid = '389';</script>
+        <script src="/j/d.js" async></script>
 	</body>
 </html>

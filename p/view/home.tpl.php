@@ -35,6 +35,16 @@
 </ul>
 <h3 >Теория и практика</h3>
 <ul>
+	<li>Читаем документацию по Симфони. Сегодня 05 11 2019 года, на сайте Symfony.com поддерживается документация версий 3.4, 4.3, 4.4 и 5.0 master. 
+	Читаю перевод официальной документации на сайте symfony.ru.</li>
+	<li><a href="https://symfony.ru/doc/current/forms.html" target="_blank">Forms in Symfony</a></li>
+	<li><a href="https://symfony.ru/doc/current/components/form.html" target="_blank">Forms</a></li>
+	<li><a href="http://symfony.ru/doc/current/form/form_themes.html" target="_blank">Forms themes</a></li>
+</ul>
+<h4>Больше теория</h4>
+
+<h4>Больше практика</h4>
+<ul>
 	<li class="text-error">симфони 3. (очень сомнительное, что-то структура файлов не похожа на документацию symfony 3.4, 
 				но тем не менее при запуске выодит именно Symfony 3.4)
 		<ul>
@@ -98,7 +108,6 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 <ul >
 	
 	<li class="text-danger">Старый блог савсэм анонимизировать.</li>
-	<li class="text-info">Перенести фастксамп в подраздел хомяка. Не сделать ли хомяком php2js.ru? (в этом году уже поздно, но пусть php2js.ru на всякий случай будет на этом же compileHtml движке.)</li>
 	<ul>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
@@ -106,12 +115,9 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		<li class="text-info">Не забываем про мини приложения в /a /b /c - выносим как отдельные работы
 			<ul>
 				<li class="text-info">Future mail<ul>
-					<li>Публикация письма в будущее</li>
-					<li>Проверить, будут ли нотайсы в понедельник 4 ого и в пятницу 8</li>
-
+					<li>Проверить, будут ли нотайсы в пятницу 8</li>
 					<li></li>
 				</ul></li>
-				
 			</ul>
 		</li>
 		<li >Разобраться с счётчиками freesoft

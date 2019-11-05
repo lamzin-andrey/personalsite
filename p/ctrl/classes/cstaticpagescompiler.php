@@ -1,5 +1,6 @@
 <?php
 require_once DOC_ROOT . '/p/ctrl/articles/classes/articlesrightmenucompiler.php';
+require_once DOC_ROOT . '/p/ctrl/classes/liveinternet.php';
 
 class CStaticPagesCompiler {
 	
@@ -56,6 +57,7 @@ class CStaticPagesCompiler {
         $s = str_replace('{HEADING}', $heading, $s);
         $s = str_replace('{CANONICAL_URL}', $destFilePath, $s);
         $s = str_replace('{rid}', $nId, $s);
+        $s = str_replace('{LIVEINTERNET}', Liveinternet::getHtml(), $s);
         
         if ($description) {
 			$s = str_replace('<!--DESCRIPTION -->', '<meta name="description" content="' . $description . '">', $s);

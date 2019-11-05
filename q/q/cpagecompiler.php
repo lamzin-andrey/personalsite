@@ -41,6 +41,7 @@ class CPageCompiler {
 		$s = str_replace('{DATERUS}', $this->displayDate, $s);
 		$s = str_replace('{CANONICAL_URL}', $this->canonicalUrl, $s);
 		$s = str_replace('{RIGHT_MENU}', $this->rightMenu, $s);
+		$s = str_replace('{LIVEINTERNET}', $this->_getLiveinternetCounterHtml(), $s);
 		
 		if ($this->description) {
 			$s = str_replace('<!--DESCRIPTION -->', '<meta name="description" content="' . $this->description . '">', $s);
@@ -167,5 +168,13 @@ class CPageCompiler {
     	}
     	$this->content = $q;
     }
+    /**
+     * @description Вернуть код счетчика liveInternet
+     * @return string
+    */
+    protected function _getLiveinternetCounterHtml() : string
+    {
+		return '';
+	}
 	
 }
