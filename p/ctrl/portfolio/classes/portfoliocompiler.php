@@ -121,7 +121,7 @@ class PortfolioCompiler extends CPageCompiler {
      * @description Вернуть код счетчика liveInternet
      * @return string
     */
-    protected function _getLiveinternetCounterHtml() : string
+    protected function _getLiveinternetCounterHtml()
     {
 		return Liveinternet::getHtml();
 	}
