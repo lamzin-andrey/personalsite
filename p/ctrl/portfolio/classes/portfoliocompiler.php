@@ -8,6 +8,8 @@ require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';
 require_once __DIR__ . '/rightmenucompiler.php';
 
+require_once DOC_ROOT . '/p/ctrl/classes/liveinternet.php';
+
 
 class PortfolioCompiler extends CPageCompiler {
 
@@ -114,5 +116,13 @@ class PortfolioCompiler extends CPageCompiler {
 		$oRightMenuCompiler->nProductId = $this->nProductId;
 		$oRightMenuCompiler->loadData();
 		$this->rightMenu = $oRightMenuCompiler->compile(false);
+	}
+	/**
+     * @description Вернуть код счетчика liveInternet
+     * @return string
+    */
+    protected function _getLiveinternetCounterHtml() : string
+    {
+		return Liveinternet::getHtml();
 	}
 }

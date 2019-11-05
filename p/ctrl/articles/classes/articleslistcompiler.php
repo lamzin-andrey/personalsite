@@ -9,7 +9,7 @@ require_once DOC_ROOT . '/q/q/lang.php';
 //require_once DOC_ROOT . '/p/ctrl/articles/classes/articlesrightmenucompiler.php';
 require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';
 include_once DOC_ROOT . '/p/ctrl/classes/cstaticpagescompiler.php';
-
+require_once DOC_ROOT . '/p/ctrl/classes/liveinternet.php';
 
 class ArticlesListCompiler extends CPageCompiler {
 
@@ -376,5 +376,13 @@ class ArticlesListCompiler extends CPageCompiler {
 													$aRow['id']
 													);
 		$comiErr = $oCompiler->emsg;
+	}
+	/**
+     * @description Вернуть код счетчика liveInternet
+     * @return string
+    */
+    protected function _getLiveinternetCounterHtml() : string
+    {
+		return Liveinternet::getHtml();
 	}
 }
