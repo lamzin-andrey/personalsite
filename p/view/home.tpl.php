@@ -34,14 +34,17 @@
 	<li></li>
 </ul>
 <h3 >Теория и практика</h3>
+<h4>Больше теория</h4>
 <ul>
+	<li class="text-success">Симтест</li>
 	<li>Читаем документацию по Симфони. Сегодня 05 11 2019 года, на сайте Symfony.com поддерживается документация версий 3.4, 4.3, 4.4 и 5.0 master. 
 	Читаю перевод официальной документации на сайте symfony.ru.</li>
+	
 	<li><a href="https://symfony.ru/doc/current/forms.html" target="_blank">Forms in Symfony</a></li>
 	<li><a href="https://symfony.ru/doc/current/components/form.html" target="_blank">Forms</a></li>
 	<li><a href="http://symfony.ru/doc/current/form/form_themes.html" target="_blank">Forms themes</a></li>
 </ul>
-<h4>Больше теория</h4>
+
 
 <h4>Больше практика</h4>
 <ul>
@@ -52,22 +55,27 @@
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
 			<li class="text-warning">Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-success">Один день просто сидеть и играться с запросами используя критерии и билдеры
-			<ul>
+			<li class="text-success">Как создать и использовать свой репозиторий в Symfony?
+				<ul>
+					<li>Это надо добавить в тест по Sym 3. ОТ кого наследоватсья, что передать в род. конструктор.</li>
+				</ul>
+			</li>
+			<li class="text-light">Один день просто сидеть и играться с запросами используя критерии и билдеры
+			<ul >
 				<li>Создаем специальный контроллер Traning controller</li>
 				<li>В нем по маршрутам /train/{method}</li>
 				<li>Создаём для каждого случая отдельный метод (и для билдера и для критерии</li>
-				<li class="text-info">SELECT COUNT(id) AS cnt FROM main GROUP BY region *</li>
-				<li class="text-info">SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
+				<li >SELECT COUNT(id) AS cnt FROM main GROUP BY region *</li>
+				<li >SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
 LEFT JOIN cities AS c ON c.id = m.city 
 LEFT JOIN regions AS r ON r.id = m.region 
 WHERE m.is_deleted = 1 LIMIT 10, 10;								*
 				</li>
-				<li class="text-info">SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
+				<li >SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
 INNER JOIN cities AS c ON c.id = m.city 
 INNER JOIN regions AS r ON r.id = m.region 
 WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
-				<li class="text-info">SELECT CONCAT(phone, ', ', email) FROM users LIMIT 10; *</li>
+				<li >SELECT CONCAT(phone, ', ', email) FROM users LIMIT 10; *</li>
 				<li>SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM main AS m 
 					GROUP BY (m.phone)
 					-- https://ourcodeworld.com/articles/read/245/how-to-execute-plain-sql-using-doctrine-in-symfony-3
@@ -82,14 +90,14 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 				<li></li>
 			</ul>
 			</li>
-			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
-			<li></li>
-			<li>Показ телефона - сделать обратную совместимость для старых браузеров</li>
+			<li>Мемкэш использовать для кеэширования и убедиться, что это дает 0 запросов при входе с др. браузера на ту же страницу.</li>
+			<li>Показ телефона - сделать обратную совместимость для старых браузеров. Вобщем-то, достаточно ссылки на изображение в т-blank</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
 			<li>Не написать ли ещё Symfony func-тесты</li>
 			<li>Разобраться, не появилось ли в S4 что-то вместо бандлов для повторного исползования (Symfony Flex).</li>
+			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
 			<li></li>
 		</ul>
 		
@@ -112,7 +120,7 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
 		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
 		
-		<li class="text-info">Не забываем про мини приложения в /a /b /c - выносим как отдельные работы
+		<li class="text-info">
 			<ul>
 				<li class="text-info">Future mail<ul>
 					<li>Проверить, будут ли нотайсы в пятницу 8</li>
