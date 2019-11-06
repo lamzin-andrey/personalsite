@@ -36,8 +36,8 @@
 <h3 >Теория и практика</h3>
 <h4>Больше теория</h4>
 <ul>
-	<li class="text-success">Симтест</li>
-	<li>Читаем документацию по Симфони. Сегодня 05 11 2019 года, на сайте Symfony.com поддерживается документация версий 3.4, 4.3, 4.4 и 5.0 master. 
+	<li>Симтест</li>
+	<li class="text-success">Читаем документацию по Симфони. Сегодня 05 11 2019 года, на сайте Symfony.com поддерживается документация версий 3.4, 4.3, 4.4 и 5.0 master. 
 	Читаю перевод официальной документации на сайте symfony.ru.</li>
 	
 	<li><a href="https://symfony.ru/doc/current/forms.html" target="_blank">Forms in Symfony</a></li>
@@ -49,18 +49,18 @@
 <h4>Больше практика</h4>
 <ul>
 	<li class="text-error">симфони 3. (очень сомнительное, что-то структура файлов не похожа на документацию symfony 3.4, 
-				но тем не менее при запуске выодит именно Symfony 3.4)
+				но тем не менее при запуске выводит именно Symfony 3.4)
 		<ul>
 			<li class="text-warning">app.city_sero_id теперь используем вместо main.city = 0</li>
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
 			<li class="text-warning">Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-success">Как создать и использовать свой репозиторий в Symfony?
+			<li class="text-light">Как создать и использовать свой репозиторий в Symfony?
 				<ul>
 					<li>Это надо добавить в тест по Sym 3. ОТ кого наследоватсья, что передать в род. конструктор.</li>
 				</ul>
 			</li>
-			<li class="text-light">Один день просто сидеть и играться с запросами используя критерии и билдеры
+			<li class="text-success">Один день просто сидеть и играться с запросами используя критерии и билдеры
 			<ul >
 				<li>Создаем специальный контроллер Traning controller</li>
 				<li>В нем по маршрутам /train/{method}</li>
@@ -90,8 +90,6 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 				<li></li>
 			</ul>
 			</li>
-			<li>Мемкэш использовать для кеэширования и убедиться, что это дает 0 запросов при входе с др. браузера на ту же страницу.</li>
-			<li>Показ телефона - сделать обратную совместимость для старых браузеров. Вобщем-то, достаточно ссылки на изображение в т-blank</li>
 			<li>Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
@@ -115,11 +113,15 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 <h2>Дела текущие</h2>
 <ul >
 	
-	<li class="text-danger">Старый блог савсэм анонимизировать.</li>
+	<li class="text-danger">Старый блог савсэм анонимизировать.
+		<ul>
+			<li>На сервере php 7ю0 попробовать включить, на локале работает сейчас</li>
+			<li>Анонимизируй это!</li>
+			<li></li>
+		</ul>
+	</li>
+	
 	<ul>
-		<li class="text-warning">Для картинок из img используй ?=img('logo.png')?</li>
-		<li class="text-warning">?$r = $_SERVER["DOCUMENT_ROOT"] . '/portfolio/web-razrabotka/saity/fastxampp'; и $sAuthorLinkText = 'Сайт автора'; ? в помощь на всех страницах</li>
-		
 		<li class="text-info">
 			<ul>
 				<li class="text-info">Future mail<ul>
