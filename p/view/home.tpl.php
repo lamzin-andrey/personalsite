@@ -55,9 +55,11 @@
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
 			<li class="text-warning">Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-light">Как создать и использовать свой репозиторий в Symfony?
+			<li class="text-info">Как создать и использовать свой репозиторий в Symfony?
 				<ul>
+					<li>Сравнить вопросы с локала и сервера для 2.6, поправить на сервере опечатки.</li>
 					<li>Это надо добавить в тест по Sym 3. ОТ кого наследоватсья, что передать в род. конструктор.</li>
+					
 				</ul>
 			</li>
 			<li class="text-success">Один день просто сидеть и играться с запросами используя критерии и билдеры
@@ -98,18 +100,16 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 					<li>Как правильно кастомизировать шаблон FOS Users?</li>
 					<li>Как правильно добавить каптчу FOS Users?
 						<ul>
+							<li>Локаль FOSUser почитать как там сделать и локадизовать кнопку Отправить</li>
+							<li>js google только в жанном шаблоне подключать</li>
 							<li></li>
 							<li>https://www.cloudways.com/blog/overriding-default-registration-form-fosuserbundle/</li>
 							Форм нет. У этой формы запроса пароля нет FormType. То есть это облом, по первой ссылке.
 							
-							Начать всё- таки с попытки вызвать FOS\UserBundle\Mailer\Mailer:: sendResettingEmailMessage
-							из своего контроллера.
 							
-							https://stackoverflow.com/questions/48483433/override-a-controller-symfony-3-4-4-0
-							 - вроде оно
 							
-							<li><a href="https://stackoverflow.com/questions/48823663/add-captcha-in-login-of-fosuser-in-symfony-3-4" target="_blank">Восстановление</a></li>
-							<li>https://www.cloudways.com/blog/add-recaptcha-to-symfony-3-forms/</li>
+							<li><a href="https://stackoverflow.com/questions/48823663/add-captcha-in-login-of-fosuser-in-symfony-3-4" target="_blank">Пример каптчи</a></li>
+							<li><a href="https://www.cloudways.com/blog/add-recaptcha-to-symfony-3-forms/" target="_blank">Ещё один пример каптчи</a></li>
 							
 						</ul>
 						
@@ -147,9 +147,11 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 <h2>Дела текущие</h2>
 <ul>
 	<li>Статистику, пытаются ли что транслитировать на php2js сделать.<ul>
+			<li>custom.php on server</li>
 			<li>Убедиться, что со всех страниц отправляется.</li>
 			<li>Таблицы дампнуть с локала на сервер </li>
 			<li>Вообще удивительно, что самый успешный с точки зрения посещаемости сайт до сих пор вне git</li>
+			
 			<li></li>
 		</ul></li>
 	<li>Если да и это уники, paypal && donate пробовать
