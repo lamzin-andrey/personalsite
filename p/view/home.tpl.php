@@ -105,6 +105,9 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 							Начать всё- таки с попытки вызвать FOS\UserBundle\Mailer\Mailer:: sendResettingEmailMessage
 							из своего контроллера.
 							
+							https://stackoverflow.com/questions/48483433/override-a-controller-symfony-3-4-4-0
+							 - вроде оно
+							
 							<li><a href="https://stackoverflow.com/questions/48823663/add-captcha-in-login-of-fosuser-in-symfony-3-4" target="_blank">Восстановление</a></li>
 							<li>https://www.cloudways.com/blog/add-recaptcha-to-symfony-3-forms/</li>
 							
@@ -144,9 +147,9 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 <h2>Дела текущие</h2>
 <ul>
 	<li>Статистику, пытаются ли что транслитировать на php2js сделать.<ul>
-			<li>Таблицы p2j_users и p2j_codes: date, content, uid, url_id,, p2j_urls url, id </li>
-			<li>Базу найти на серваке красной зоны, подумать, какую лучше заюзать. На локале в её аналог запихать таблицы</li>
-			<li>mysql.php на сервере переименовать (там пятёрка). Посмотреть, возможно есть возможность установить 7-ку только для php2js.ru</li>
+			<li>Убедиться, что со всех страниц отправляется.</li>
+			<li>Таблицы дампнуть с локала на сервер </li>
+			<li>Вообще удивительно, что самый успешный с точки зрения посещаемости сайт до сих пор вне git</li>
 			<li></li>
 		</ul></li>
 	<li>Если да и это уники, paypal && donate пробовать
