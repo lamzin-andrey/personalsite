@@ -1,5 +1,5 @@
 <?php
-
+require_once __DIR__ . '/ruslexicon/src/RusLexicon.php';
 /**
  * Внимание! php7 пока в этом файле не применяем, т к cli 5,6.x
 **/
@@ -8,8 +8,7 @@
  * Конвертит win1251 utf8 если строка в windows-1251
  * */
 function utils_utf8($s) {
-	return mb_convert_encoding($s, "UTF-8", "WINDOWS-1251");
-	return $s;
+	return \Landlib\RusLexicon::utf8($s);
 }
 
 /**/
@@ -85,27 +84,7 @@ function json_error() {
  * @returString
  */
  function dbfr_getSuffix($n, $root, $one, $less4, $more19, $dbg = false) {
-         $m = strval($n);
-         if (strlen($m) > 1) {
-             $m =  intval( $m[ strlen($m) - 2 ] . $m[ strlen($m) - 1 ] );
-         }
-         $lex = $root . $less4;
-         if ($m > 20) {
-             $r = strval($n);
-             $i = intval( $r[ strlen($r) - 1 ] );
-             if ($i == 1) {
-                 $lex = $root . $one;
-             } else {
-                 if ($i == 0 || $i > 4) {
-                    $lex = $root . $more19;
-                 }
-             }
-         } else if ($m > 4 || $m == '00') {
-             $lex = $root . $more19;
-         } else if ($m == 1) {
-             $lex = $root . $one;
-         }
-         return $lex;
+     return \Landlib\RusLexicon::getMeasureWordEnd($n, $one, $less4, $more19);
  }
 
  /**
@@ -115,7 +94,7 @@ function json_error() {
  * @return
  **/
  function utils_cp1251($s) {
- 	return mb_convert_encoding($s, "WINDOWS-1251", "UTF-8");
+ 	return \Landlib\RusLexicon::cp1251($s);
  }
  /**
  * @desc 
