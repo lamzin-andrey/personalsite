@@ -1,8 +1,8 @@
 <?php
 class CCaptcha{
-var $keystring;
- function CCaptcha(){
- require(dirname(__FILE__).'/config.php');
+ public $keystring;
+ public function __construct() {
+	require(dirname(__FILE__).'/config.php');
 			while(true){
 				$this->keystring='';
 				for($i=0;$i<$length;$i++)
@@ -120,4 +120,3 @@ function wave_region($img, $x, $y, $width, $height,$amplitude = 4.5,$period = 30
   return $iCanvas;  
 } 
  
-?>
