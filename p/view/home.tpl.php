@@ -65,23 +65,8 @@
 			<li class="text-success">Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
 		FOSUserBundle в статье через composer ставится.
 				<ul>
-					<li>Темизация страница логина, которые не темизированы
-						<ul>
-							<li> Перегрузить теперь ещё контроллер формы profile/edit), так как если текущий пароль не пуст,
-									будем переустанавливать пароль.
-									Если он не верен, для начала попробуй обнулить поля ввода нового, через
-									$request->set()
-									если не прокатит, дальше думай.
-							 </li>
-							<li>При отключеном sw кэшировании работает на ура. Что радует.
-								Кэширование sw включить, пути добавить связанные
-							</li> 
-							<li>Кешер допилить до поддержки маски /a/m/*</li>
-							<li>Исключить из кэша /login</li>
-							<li></li>
-						</ul>
-					</li>
-					<li>Добиваемся ajax рабьоты, добавляем формочку авторизации</li>
+					<li>Форма регистрации неохваченной осталась Не сей делать из неё форму паодачи объявления. 
+						Это должно быть две разных формы, хоть при подаче объявления и создаётся пользователь.</li>
 					<li></li>
 				</ul>
 			</li>
@@ -116,6 +101,13 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 			</ul>
 			</li>
 			
+			<li>Перехват хэндлера
+				<ul>
+					<li>Пытаюсь поймать Form.RequestHandler</li>
+					<li>Начинаю с конфигурации service.yaml</li>
+					<li></li>
+				</ul>
+			</li>
 			<li>Установку uid в before сделать</li>
 			<li>Управление длительностью сессии</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
@@ -140,8 +132,79 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 
 <h2>Дела текущие</h2>
 <ul>
-	<li>Создай userscript для автоматического переключения на gz сжатие при экспорте архива из pma</li>
+	<li>На хомяке учесть, что ленивая загрузка изображений ломает ссылки с хэшами, пример - ссылка на установку троллькиллер со страницы https://andryuxa.ru/portfolio/web-razrabotka/userscripts/kak_sdelat_chtoby_luboi_phpmyadmin_pri_po_umolchaniu_eksportiroval_bazu_so_sjatiem_gzip/</li>
 	<li>Поддержку обратных слешей в статьях на хомяке срочно</li>
+	<li>Секундомер ты почти допилил, надо нарисовать лого, перенести его в хомяк и добавить в портфолио</li>
+	<li>Статистику, пытаются ли что транслитировать на php2js сделать.<ul>
+			<li>
+				Запрос вывода статистики использования 
+				SELECT u.id, COUNT(c.id) AS cnt FROM p2j_users AS u 
+					LEFT JOIN `p2j_codes` AS c ON c.uid = u.id GROUP BY c.uid
+				ORDER BY cnt DESC
+				
+				7 - это я
+			</li>
+			<li>Переверстать с bootstrap 4 / vue2</li>
+			<li>16-ый успешно сконвертил бы, но array_slice нету. Начать с ее добавления в php.js
+			
+//php
+public function sortSpaces($a, $b)
+    {
+        if (isset($a['space']) && isset($b['space'])) {
+            $spaceA = explode('-', $a['space']);
+            $spaceB = explode('-', $b['space']);
+
+            $spaceA = array_slice($spaceA, -4);
+            $spaceB = array_slice($spaceB, -4);
+
+            $order = array(0, 1, 3, 2);
+
+            foreach ($order as $index) {
+                if (isset($spaceA[$index]) && isset($spaceB[$index])) {
+                    if ($spaceA[$index] !== $spaceB[$index]) {
+                        return $spaceA[$index] > $spaceB[$index];
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+//js
+public function sortSpaces($a, $b)
+    {
+        var $spaceA, $spaceB, $order, $index, phpjslocvar_0;
+        if (isset($a, 'space') && isset($b, 'space')) {
+            $spaceA = explode('-', $a['space']);
+            $spaceB = explode('-', $b['space']);
+
+            $spaceA = array_slice($spaceA, -4);
+            $spaceB = array_slice($spaceB, -4);
+
+            $order = [0, 1, 3, 2];
+
+            for (phpjslocvar_0 in $order) { $index = $order[phpjslocvar_0];
+                if (isset($spaceA, $index) && isset($spaceB, $index)) {
+                    if ($spaceA[$index] !== $spaceB[$index]) {
+                        return $spaceA[$index] > $spaceB[$index];
+                    }
+                }
+            }
+        }
+
+        return 0;
+    }
+			</li>
+		</ul></li>
+	</li>
+	<li><b class="text-danger">22 11 2019</b> Посмотреть есть ли новые уники. 14 и 18 числа были вроде уники. Пофиксить глюк с parent. 
+	Paypal && donate -  пока рано, так две три трансляции раз в четыре дня, всего народу пока 9 человек, 
+	в основном несут какой-то бред. Надо написать, что не надо закрывающие и открывающие php тэги вставлять.
+	</li>
+	<li></li>
+	<li><ul>
+	<li>Старый блог добавить счетчик зеркала, а вдруг там колондайк ) </li>
+	<li><b class="text-danger">21 11 2019</b> Жди письма из прошлого, проверка консоли</li>
 	<li>Сделать так чтобы кавычки внутри тегов вообще всегда не заменялись на ёлки-палки.</li>
 	<li>Инструмент для декорирования - 4 часа пытаемся использовать парсер Никитоса,
 		если за это время не успеваем, переписываем на пыху php2js и его используем. </li>
@@ -164,14 +227,7 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		</ul>
 	</li>
 	
-	<li>Статистику, пытаются ли что транслитировать на php2js сделать.<ul>
-			<li>Переверстать с bootstrap 4 / vue2</li>
-			<li></li>
-		</ul></li>
-	</li>
-	<li><b class="text-danger">20 11 2019</b> Если да и это уники, Пофиксить глюк с parent. Paypal && donate пробовать
-	<li></li>
-	<li><ul>
+	
 		<li >Разобраться с счётчиками freesoft
 			
 			<li ><b class="text-danger">24 12 2019</b> Спросить, не появился ли код для счётчиков freesoft.
