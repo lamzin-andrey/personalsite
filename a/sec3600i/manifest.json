@@ -1,0 +1,13 @@
+{
+  "name": "Секундомер S3600i",
+  "short_name": "SecS3600i",
+  "icons": [{
+    "src": "i/128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }],
+  "start_url": "/a/sec3600i/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#3D5455"
+}

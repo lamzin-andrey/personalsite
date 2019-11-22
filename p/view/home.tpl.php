@@ -118,11 +118,14 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 
 <h2>Дела текущие</h2>
 <ul>
-	<li>На хомяке учесть, что ленивая загрузка изображений ломает ссылки с хэшами, пример - ссылка на установку троллькиллер со страницы https://andryuxa.ru/portfolio/web-razrabotka/userscripts/kak_sdelat_chtoby_luboi_phpmyadmin_pri_po_umolchaniu_eksportiroval_bazu_so_sjatiem_gzip/</li>
-	<li>Поддержку обратных слешей в портфолио на хомяке срочно</li>
 	<li>Секундомер ты почти допилил, надо нарисовать лого (ico32 попробуй, он 16 что-то не алё),
 	перенести его в хомяк (всё корме фав иконки вроде как) и добавить в портфолио</li>
-	<li>Статистику, пытаются ли что транслитировать на php2js сделать.<ul>
+	
+	<li>На хомяке учесть, что ленивая загрузка изображений ломает ссылки с хэшами, пример - ссылка на установку троллькиллер со страницы https://andryuxa.ru/portfolio/web-razrabotka/userscripts/kak_sdelat_chtoby_luboi_phpmyadmin_pri_po_umolchaniu_eksportiroval_bazu_so_sjatiem_gzip/</li>
+	<li>Поддержку обратных слешей в портфолио на хомяке срочно</li>
+	
+	<li>php2js<ul>
+			<li> array_slice у меня в процессе</li>
 			<li>
 				Запрос вывода статистики использования 
 				SELECT u.id, COUNT(c.id) AS cnt FROM p2j_users AS u 

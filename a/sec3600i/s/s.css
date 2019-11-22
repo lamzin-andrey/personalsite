@@ -1,0 +1,24 @@
+#bigNum{
+  height: 40vh;
+  font-size: 10vh;
+  line-height: 40vh;
+  vertical-align:center; 
+  background-color: teal;
+}
+#bigNum i{
+  display: inline-block;
+ /* background-color: aqua;*/
+}
+.buttons-wrap {
+  display:table;
+  width:100%;
+  position: absolute;
+  bottom: 2px;
+}
+#mainscr{
+  display: block;
+  position: relative;
+}
+html,body,#mainscr{
+  height: 98.3%;
+}
