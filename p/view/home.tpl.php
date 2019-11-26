@@ -86,9 +86,23 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 			</ul>
 			</li>
 			<li class="text-success">Делаем страницу подачи объявления
-			Try register ad:
-			https://stackoverflow.com/questions/31207416/multiple-registration-form-with-fosuserbundle
+				<ul>
+					<li>Подача с логином и паролем</li>
+					<li>Проверяем и email и номер телефона</li>
+					<li>Если введён email, должен быть и пароль введён. Таких данных в базе не должно быть </li>
+					<li>Номер телефона через try catch не надо проверять, мы позволяем подавать уже существующим пользователям </li>
+					<li>Узкий момент, когда телефон уже в базе есть, а email и пароль другие.
+						Посмотреть как на продакшене, сделать также.
+					 </li>
+					
+					<li>Каптчу сначала проверить в принципе</li>
+					<li>Затем сделать доступными такие же настройки нкак на продакшене (выключена для всех, выключена не для всех)</li>
+					<li></li>
+				</ul>
+				
+				
 			</li>
+			<li>Страница с соглашением</li>
 			<li>
 				Дополнить статью https://andryuxa.ru/blog/symfony_3_4_i__doctrine_2_kak_sdelat_chtoby_odin_i_tot_je_zapros_k_baze_ne_vypolnyalsya_dva_raza_podryad/
 				описанием useCacheResult
