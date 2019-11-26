@@ -55,17 +55,7 @@
 			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
 			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
 			<li class="text-warning">Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li class="text-info">Как создать и использовать свой репозиторий в Symfony?
-				<ul>
-					<li>Сравнить вопросы с локала и сервера для 2.6, поправить на сервере опечатки.</li>
-					<li>Это надо добавить в тест по Sym 3. ОТ кого наследоватсья, что передать в род. конструктор.</li>
-					
-				</ul>
-			</li>
-			<li class="text-success">Прикрутить авторизацию пользователей https://vfac.fr/blog/how-install-fosuserbundle-with-symfony-4
-		FOSUserBundle в статье через composer ставится.
-			</li>
-			<li class="text-light">Один день просто сидеть и играться с запросами используя критерии и билдеры
+			<li class="text-success">Один день просто сидеть и играться с запросами используя критерии и билдеры
 			<ul >
 				<li>Создаем специальный контроллер Traning controller</li>
 				<li>В нем по маршрутам /train/{method}</li>
@@ -95,12 +85,22 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 				<li></li>
 			</ul>
 			</li>
-			<li>Управление длительностью сессии</li>
+			<li class="text-success">Делаем страницу подачи объявления
+			Try register ad:
+			https://stackoverflow.com/questions/31207416/multiple-registration-form-with-fosuserbundle
+			</li>
+			<li>
+				Дополнить статью https://andryuxa.ru/blog/symfony_3_4_i__doctrine_2_kak_sdelat_chtoby_odin_i_tot_je_zapros_k_baze_ne_vypolnyalsya_dva_raza_podryad/
+				описанием useCacheResult
+				При переходе на производительный запрос для списка объявлений использовать
+			кэширование как: <a href="https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/caching.html#result-cache" tagret="_blank" >здесь</a>
+			
+				Может, всё-таки получиться слепить вариант с join используя критерии?	
+			</li>
 			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
 			<li>Не написать ли ещё Symfony func-тесты</li>
 			<li>Разобраться, не появилось ли в S4 что-то вместо бандлов для повторного исползования (Symfony Flex).</li>
 			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
-			<li>При переходе на производительный запрос для списка объявлений использовать кэширование как: <a href="https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/caching.html#result-cache" tagret="_blank" >здесь</a></li>
 			<li></li>
 			<li></li>
 		</ul>
@@ -118,10 +118,9 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 
 <h2>Дела текущие</h2>
 <ul>
-	<li>Секундомер ты почти допилил, надо нарисовать лого (ico32 попробуй, он 16 что-то не алё),
-	перенести его в хомяк (всё корме фав иконки вроде как) и добавить в портфолио</li>
-	
-	<li>На хомяке учесть, что ленивая загрузка изображений ломает ссылки с хэшами, пример - ссылка на установку троллькиллер со страницы https://andryuxa.ru/portfolio/web-razrabotka/userscripts/kak_sdelat_chtoby_luboi_phpmyadmin_pri_po_umolchaniu_eksportiroval_bazu_so_sjatiem_gzip/</li>
+	<li>На хомяке учесть, что ленивая загрузка изображений ломает ссылки с хэшами, 
+		пример - ссылка на установку троллькиллер со страницы 
+		https://andryuxa.ru/portfolio/web-razrabotka/userscripts/kak_sdelat_chtoby_luboi_phpmyadmin_pri_po_umolchaniu_eksportiroval_bazu_so_sjatiem_gzip/</li>
 	<li>Поддержку обратных слешей в портфолио на хомяке срочно</li>
 	
 	<li>php2js<ul>

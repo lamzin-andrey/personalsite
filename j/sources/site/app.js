@@ -52,10 +52,19 @@ window.app = new Vue({
     * @description Событие, наступающее после связывания el с этой логикой
    */
 	mounted() {
-		//TODO from old app constructor
+		Rest._token = 'open';
 		//send stat
 		let id = parseInt(window.rid, 10), o = {};
 		$('#bttimg').css('display', 'block');
+
+		//lazy load hash link fix
+		$('html').bind('lazyload', (evt) => {
+			if (location.hash) {
+				location.href = location.hash;
+			}
+		});
+		
+
 		if (isNaN(id)) {
 			console.log('id is NaN');
 			return;
@@ -65,10 +74,7 @@ window.app = new Vue({
 		//TODO удалить отправку url через год (now 06 09 2019)
 		o.url = o.url.replace(location.protocol + '//' + location.host, '');
 		o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
-		Rest._token = 'open';
 		Rest._post(o, (data) => {this.onSuccessSendStat(data);}, '/p/stat/c.jn/', () => {});
-
-		
 	},
    /**
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
