@@ -118,11 +118,6 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 
 <h2>Дела текущие</h2>
 <ul>
-	<li>На хомяке учесть, что ленивая загрузка изображений ломает ссылки с хэшами, 
-		пример - ссылка на установку троллькиллер со страницы 
-		https://andryuxa.ru/portfolio/web-razrabotka/userscripts/kak_sdelat_chtoby_luboi_phpmyadmin_pri_po_umolchaniu_eksportiroval_bazu_so_sjatiem_gzip/</li>
-	<li>Поддержку обратных слешей в портфолио на хомяке срочно</li>
-	
 	<li>php2js<ul>
 			<li> array_slice у меня в процессе</li>
 			<li>
