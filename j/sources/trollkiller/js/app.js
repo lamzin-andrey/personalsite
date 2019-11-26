@@ -92,6 +92,16 @@ window.app = new Vue({
    */
    mounted() {
 		this.localizeParams();
+
+		//lazy load hash link fix
+		$('html').bind('lazyload', (evt) => {
+			if (location.hash) {
+				setTimeout(() => {
+					location.href = location.hash;
+				}, 1000);
+			}
+		});
+
 		Rest._token = this._getToken();
 		if (!this.checkAuthRequestSend) {
 			this.checkAuthRequestSend = true;
