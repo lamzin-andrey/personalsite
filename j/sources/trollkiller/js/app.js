@@ -96,9 +96,9 @@ window.app = new Vue({
 		//lazy load hash link fix
 		$('html').bind('lazyload', (evt) => {
 			if (location.hash) {
-				setTimeout(() => {
+				//setTimeout(() => {
 					location.href = location.hash;
-				}, 1000);
+				//}, 1000);
 			}
 		});
 
