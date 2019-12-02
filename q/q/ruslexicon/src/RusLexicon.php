@@ -57,7 +57,8 @@ class RusLexicon {
 			$ar = explode(' ', $s);
 			$first = str_replace(
 				array( static::_cp1251('ой '), static::_cp1251('ая '),  static::_cp1251('ое '), static::_cp1251('ый '), static::_cp1251('ие '), static::_cp1251('ые '), static::_cp1251('кий '), static::_cp1251('ий '),  ),
-				array( static::_cp1251('ом '), static::_cp1251('ой '), static::_cp1251('ом '), static::_cp1251('ом '), static::_cp1251('их '), static::_cp1251('ых '), static::_cp1251('ком '),  static::_cp1251('ем ') )
+				array( static::_cp1251('ом '), static::_cp1251('ой '), static::_cp1251('ом '), static::_cp1251('ом '), static::_cp1251('их '), static::_cp1251('ых '), static::_cp1251('ком '),  static::_cp1251('ем ') ),
+				$ar[0]
 			);
 			$second = $ar[ count($ar) - 1];
 			if ($second == static::_cp1251('Яр')) {
