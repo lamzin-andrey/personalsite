@@ -1,5 +1,6 @@
 {
     "name": "landlib/text2png",
+    "version": "1.2.3",
     "keywords": ["text to png image", "text to png image with background", "configurable text ti png"],
     "description": "This is configurable library for create png image from text on the background png image",
     "license": "MIT",

@@ -360,6 +360,36 @@ If `link` containts array items and you want unset one item of array, set `check
 	s = HttpQueryString.setVariable(s, 'ecver', 'CMD_UNSET', true, 'second');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1&c[]=first#hash'
 ```
 
+## Probabiliry
+
+Provided some probability theory formulas.
+
+### placementsCount(Number nPlacementSize, Number nTotal)
+
+Will return the number of placements of nTotal items by nPlacementSize.
+
+```javascript
+	let n = Probability.placementsCount(2, 6); // => 30
+
+```
+
+### replacementsCount(Number nTotal)
+
+Will return the number of replacements of nTotal items
+
+```javascript
+	let n = Probability.replacementsCount(3); // => 6
+
+```
+
+### combinationsCount(Number nSize, Number nTotal)
+
+Will return the number of combinations of nTotal items by nSize.
+
+```javascript
+	let n = Probability.combinationsCount(2, 10); // => 45
+
+```
 
 # Ru
 Тут лежат инструменты не зависящие от vue или других фреймвёрков.
@@ -715,4 +745,40 @@ This value will set as value variable `varName` in the `link`. Special value `'C
 ```javascript
 	let s = 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=2?autoplay=1&c[]=first&c[]=second#hash';
 	s = HttpQueryString.setVariable(s, 'ecver', 'CMD_UNSET', true, 'second');//s == 'https://www.youtube.com/embed/xqagdM4BmNs?ecver=newvalue?autoplay=1&c[]=first#hash'
+```
+
+
+## Probabiliry
+
+Реализует некоторые формулы из теории вероятнойтей.
+
+### placementsCount(Number nPlacementSize, Number nTotal)
+
+Вернёт число размещений nTotal предметов по nPlacementSize.
+
+Размещениями называют комбинации, составленные из n различных элементов по m элементов, которые отличаются либо составом элементов, либо их порядком.
+
+```javascript
+	let n = Probability.placementsCount(2, 6); // => 30
+
+```
+
+### replacementsCount(Number nTotal)
+
+Вернёт число перестановок nTotal предметов
+
+```javascript
+	let n = Probability.replacementsCount(3); // => 6
+
+```
+
+### combinationsCount(Number nSize, Number nTotal)
+
+Вернет число сочетаний nTotal предметов по nPlacementSize.
+
+Сочетаниями называют комбинации, составленные из nTotal различных предметов по nSize элементов, которые отличаются хотя бы одним  элементом.
+
+```javascript
+	let n = Probability.combinationsCount(2, 10); // => 45
+
 ```
