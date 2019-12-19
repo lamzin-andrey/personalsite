@@ -13,8 +13,8 @@
     </div>
     <div class="col-6 align-items-center">
         <div>
-            <div class="text-white u-mw-124px">PHP 7.0.[4/8].0</div>
-            <div class="u-text-orange">32 / 64 bit</div>
+            <div class="text-white u-mw-124px">PHP 7.3.12</div>
+            <div class="u-text-orange">64 bit</div>
             <div class="u-">&nbsp;</div>
         </div>
 
