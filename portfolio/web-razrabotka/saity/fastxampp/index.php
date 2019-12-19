@@ -20,28 +20,35 @@ ob_start();
             <li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 7.3.12,</div><div class="endfloat"></div></div></li>
             <li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 10.4.10-MariaDB,  клиент 5.0.12-dev</div><div class="endfloat"></div></div></li>
         </ul>
+        
+        <p>
+			<a href="#oldVersions" data-toggle="collapse" >Более ранние версии FastXampp</a>
+        </p>
+		
+		<div id="oldVersions" class="collapse">
+			<p class="x-vers">XAMPP 7.0.8-0, это:
+			</p><ul class="lstnono">
+				<li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.4.18,</div><div class="endfloat"></div></div></li>
+				<li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 7.0.8,</div><div class="endfloat"></div></div></li>
+				<li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 10.1.13-MariaDB,  клиент 5.0.12-dev</div><div class="endfloat"></div></div></li>
+			</ul>
 
-        <p class="x-vers">XAMPP 7.0.8-0, это:
-        </p><ul class="lstnono">
-            <li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.4.18,</div><div class="endfloat"></div></div></li>
-            <li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 7.0.8,</div><div class="endfloat"></div></div></li>
-            <li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 10.1.13-MariaDB,  клиент 5.0.12-dev</div><div class="endfloat"></div></div></li>
-        </ul>
+			<p class="x-vers">XAMPP 1.8.3-3, это:
+			</p><ul class="lstnono">
+				<li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.4.7,</div><div class="endfloat"></div></div></li>
+				<li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 5.5.9,</div><div class="endfloat"></div></div></li>
+				<li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 5.6.16,  клиент 5.0.11</div><div class="endfloat"></div></div></li>
+			</ul>
 
-        <p class="x-vers">XAMPP 1.8.3-3, это:
-        </p><ul class="lstnono">
-            <li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.4.7,</div><div class="endfloat"></div></div></li>
-            <li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 5.5.9,</div><div class="endfloat"></div></div></li>
-            <li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 5.6.16,  клиент 5.0.11</div><div class="endfloat"></div></div></li>
-        </ul>
-
-        <p class="x-vers">XAMPP 1.7.4, это:
-        </p><ul class="lstnono">
-            <li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.2.17,</div><div class="endfloat"></div></div></li>
-            <li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 5.3.5,</div><div class="endfloat"></div></div></li>
-            <li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 5.5.8,  клиент 5.0.7</div><div class="endfloat"></div></div></li>
-        </ul>
-        <p></p>
+			<p class="x-vers">XAMPP 1.7.4, это:
+			</p><ul class="lstnono">
+				<li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.2.17,</div><div class="endfloat"></div></div></li>
+				<li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 5.3.5,</div><div class="endfloat"></div></div></li>
+				<li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL сервер 5.5.8,  клиент 5.0.7</div><div class="endfloat"></div></div></li>
+			</ul>
+		</div>
+			
+        
         <p class="fx-vers">FastXAMPP добавляет расширения для указанных версий php
         </p><ul class="lstnono">
             <li><div><div class="left"><img src="<?=img('xdebug_logo.png')?>"></div> <div class="left mtt">Xdebug,</div><div class="endfloat"></div></div></li>
