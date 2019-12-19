@@ -13,6 +13,54 @@ function B4Shim() {
 		o.initDFlex();
 	};
 	o.initDFlex();
+	o.initCollapse();
+}
+/***
+ * @description Реализация collapse
+*/
+B4Shim.prototype.initCollapse = function() {
+	var self = this, lsDivs = $('.collapse'), i, lsA = $('a[data-toggle=collapse], button[data-toggle=collapse], input[data-toggle=collapse]'), j, id, attrName;
+	for (i = 0; i < lsA.length; i++) {
+		id = this.getCollapseId(lsA[i]);
+		if (id) {
+			//$(id).css('display', 'none');
+			$(id).hide();
+			$(lsA[i]).click(function(evt){ self.onClickCollapseElement(evt); });
+		}
+	}
+}
+/**
+ * @description Получить идентификатор элемента collapse
+ * @param {HtmlElement} o
+ * @return String
+*/
+B4Shim.prototype.getCollapseId = function(o) {
+	var attrName = 'href', r;
+	if (o.tagName != 'A') {
+		attrName = 'data-target';
+	}
+	r = $(o).attr(attrName);
+	r = r ? r : '';
+	return r;
+}
+/**
+ * @description Клик на элемнте collapse
+*/
+B4Shim.prototype.onClickCollapseElement = function(evt) {
+	evt.preventDefault();
+	var id = this.getCollapseId(evt.target),
+		elTarget = $(id),
+		ds = 'display', n = 'none', f = 'slideUp', md = 'slow';
+		
+	if (elTarget[0]) {
+		
+		c = elTarget.css(ds);
+		if (c == n) {
+			f = 'slideDown';
+		}
+		elTarget[f](md);
+	}
+	return false;
 }
 /***
  * @description Применяет стили, похожие на flex к элементам с соответствующими bootstrap 4 классами 
