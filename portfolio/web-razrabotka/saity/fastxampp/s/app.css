@@ -165,3 +165,11 @@
 .mw250px {
 	max-width: 250px;
 }
+.sh {
+	/*background-color: #c0c0c0;*/
+	color:#E86A6A;
+	border: solid 1px #A9A9A9;
+}
+.text-small {
+	font-size: 0.85rem!important;
+}

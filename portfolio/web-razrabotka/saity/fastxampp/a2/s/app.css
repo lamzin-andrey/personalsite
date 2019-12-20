@@ -180,3 +180,9 @@
 .mw250px {
 	max-width: 250px;
 }
+.bg-secondary {
+	background-color: #6c757d !important;
+}
+.text-small {
+	font-size: 0.85em;
+}

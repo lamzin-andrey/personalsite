@@ -69,12 +69,23 @@ ob_start();
         <p class="fx-vers">FastXAMPP добавляет в ваш системный трей значок</p><p>
             <img class="mw-100 py-2" src="<?=img('context.png')?>"><br> позволяющий быстро запустить или остановить XAMPP.
         </p>
-        <p>По клику на пункте "Настройки" появляется диалог добавления или удаления сайта на localhost <br>
+        <div>По клику на пункте "Настройки" появляется диалог добавления или удаления сайта на localhost <br>
+            <img class="mw-100 py-2" src="<?=img('kde5_sets.jpg')?>">
+            <p class="text-center text-small">Скриншот настроек FastXAMPP-7.3.12 Kde 5</p>
+        </div>
+        <div>
             <img class="mw-100 py-2" src="<?=img('kde-sets.png')?>">
-        </p>
+            <p class="text-center text-small">Скриншот настроек FastXAMPP-7.0.8.0 Kde 4</p>
+        </div>
         <p>В оболочке рабочего стола Unity из-за проблем с системым треем вместо значка в трее используется диалог с аналогичными пунктами: <br>
             <img class="mw-100 py-2"src="<?=img('unity_small.png')?>">
         </p>
+        <p>
+			Начиная с версии 7.3.12 ubuntu также использует системный трей. Если вы хотите использовать диалог со скриншота, вы можете отредактировать файл</p>
+			<div class="sh">/usr/local/fastxampp/fastxampp.sh</div>
+			и удалить аргумент
+			<div class="sh">--force-tray</div>
+		</p>
 <?php
 	$text_content = ob_get_clean();
 	include "$r/master.php";

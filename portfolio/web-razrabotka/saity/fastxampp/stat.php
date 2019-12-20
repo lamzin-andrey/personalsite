@@ -41,6 +41,7 @@ $res = query($cmd);
 	<th>Ubuntu</th>
 	<th>Kubuntu</th>
 	<th>Kubuntu 16.04</th>
+	<th>php 7.3.12</th>
 	<th>php 7.0.4</th>
 	<th>php 7.0.8</th>
 </tr><?
@@ -54,6 +55,7 @@ foreach  ($res as $row) {?>
 	<td><?=$row['ubuntu']?></td>
 	<td><?=$row['kubuntu']?></td>
 	<td><?=$row['kubuntu1604']?></td>
+	<td><?=$row['php7312']?></td>
 	<td><?=$row['php704']?></td>
 	<td><?=$row['php708']?></td>
 </tr><?

@@ -8,6 +8,45 @@ include_once "$r/functions.php";
 ob_start();
 ?>
 <div class="osgr">
+	<p class="x-vers">Ubuntu 18.04 LTS</p>
+	<table class="w100p">
+		<tr>
+			<td>
+				Name of the file installation image:
+			</td>
+			<td class="right">
+				<table>
+				<tr>
+					<td ><img src="<?=img('gdisc.png')?>" width="18"/></td>
+					<td class="iso">ubuntu-18.04.3-desktop-amd64.iso<td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		
+	</table>
+	<table>
+	<tr>
+			<td>
+				Rating:
+			</td>
+			<td>
+				<?php print stars(4);?>
+			</td>
+		</tr>
+	</table>
+	<div class="alert alert-warning">Do not start with operation system</div>
+	<p class="moreinfo">Additional information:</p>
+	<div class="pt12"><p>
+		Starting from version 7.3.12 ubuntu using system tray. If you want use dialog from screenshot, you can edit file</p>
+		<div class="sh">/usr/local/fastxampp/fastxampp.sh</div>
+		and remove argument
+		<div class="sh">--force-tray</div>
+	</p>
+	</div>
+</div>
+<!-- -->
+<div class="osgr">
 	<p class="OS">Ubuntu 12.04.3 LTS</p>
 	<table class="w100p">
 		<tr>

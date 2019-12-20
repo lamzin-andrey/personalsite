@@ -6,7 +6,47 @@ $sDownloadLinkText = 'Скачать архив с утилитой FastXAMPP';
 
 include_once "$r/functions.php";
 ob_start();
-?><div class="osgr">
+?>
+<p class="x-vers">FastXAMPP для XAMPP 7.3.12</p>
+<div class="osgr">
+	<p class="OS">Linux Mint 19.3 Tricia XFCE/MATE</p>
+	<table class="w100p">
+		<tr>
+			<td>
+				Имя файла, образа установочного диска:
+			</td>
+			<td class="right">
+				<table>
+				<tr>
+					<td ><img src="<?=img('gdisc.png')?>" width="18"/></td>
+					<td class="iso">linuxmint-19.3-xfce-64bit.iso<td>
+				</tr>
+				<tr>
+					<td ><img src="<?=img('gdisc.png')?>" width="18"/></td>
+					<td class="iso">linuxmint-19.3-mate-64bit.iso<td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		
+	</table>
+	<table>
+	<tr>
+			<td>
+				Оценка:
+			</td>
+			<td>
+				<?php print stars(5);?>
+			</td>
+		</tr>
+	</table>
+	<div class="alert alert-success my-2">Проблем не обнаружено</div>
+</div>
+
+
+
+<p class="x-vers">FastXAMPP для XAMPP 1.8.3-3</p>
+<div class="osgr">
 	<p class="OS">Linux Mint 13 (Maya) KDE</p>
 	<table class="w100p">
 		<tr>
