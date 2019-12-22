@@ -41,6 +41,7 @@ $res = query($cmd);
 	<th>Ubuntu</th>
 	<th>Kubuntu</th>
 	<th>Kubuntu 16.04</th>
+	<th>php 7.3.12</th>
 	<th>php 7.0.4</th>
 	<th>php 7.0.8</th>
 </tr><?
@@ -54,6 +55,7 @@ foreach  ($res as $row) {?>
 	<td><?=$row['ubuntu']?></td>
 	<td><?=$row['kubuntu']?></td>
 	<td><?=$row['kubuntu1604']?></td>
+	<td><?=$row['php7312']?></td>
 	<td><?=$row['php704']?></td>
 	<td><?=$row['php708']?></td>
 </tr><?
@@ -84,8 +86,9 @@ function write_stat_v() {
 		$k   = (isset($data[1]) && $data[1] == 'k') ? 1 : 0;
 		$K16 = (isset($data[1]) && $data[1] == 'K') ? 1 : 0;
 		$v = @$data[2] . @$data[3] . @$data[4];
-		$php704 = $v == '704' ? 1 : 0;
-		$php708 = $v == '708' ? 1 : 0;
+		$php704 =  $v == '704' ? 1 : 0;
+		$php708 =  $v == '708' ? 1 : 0;
+		$php7312 = $v == '7312' ? 1 : 0;
 		
 		$ex = (int)dbvalue("SELECT `year` FROM $t WHERE `year` = $year AND `month` = $month");
 		
@@ -99,7 +102,8 @@ function write_stat_v() {
 					kubuntu = kubuntu + $k,
 					kubuntu1604 = kubuntu1604 + $K16,
 					php704 = php704 + $php704,
-					php708 = php708 + $php708
+					php708 = php708 + $php708,
+					php7312 = php7312 + $php7312
 			 WHERE `year` = $year AND `month` = $month";
 			 
 			query($q);

@@ -6,8 +6,44 @@ $sDownloadLinkText = 'Download FastXAMPP';
 
 include_once "$r/functions.php";
 ob_start();
-?><p class="tright">
-	<a href="<?=WEBROOT ?>/download.php" class="dlink" >Download FastXAMPP</a>
+?>
+<p class="x-vers">
+    FastXAMPP for XAMPP 7.3.12
+</p>
+<div class="osgr">
+	<p class="OS">Kubuntu 18.04 LTS</p>
+	<table class="w100p">
+		<tr>
+			<td>
+				Name of the file installation image:
+			</td>
+			<td class="right">
+				<table>
+				<tr>
+					<td ><img src="<?=img('gdisc.png')?>" width="18"/></td>
+					<td class="iso">kubuntu-18.04.3-desktop-amd64.iso<td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		
+	</table>
+	<table>
+	<tr>
+			<td>
+				Rating:
+			</td>
+			<td>
+				<?php print stars(5);?>
+			</td>
+		</tr>
+	</table>
+	<div class="alert alert-success my-2">Problems are not found</div>
+</div>
+
+<!--  -->
+<p class="x-vers">
+    FastXAMPP for XAMPP 1.8.3-3
 </p>
 <div class="osgr">
 	<p class="OS">Kubuntu 12.04 LTS</p>

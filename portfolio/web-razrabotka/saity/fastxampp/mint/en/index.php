@@ -6,7 +6,47 @@ $title = 'List versions of Linux Mint, which was tested FastXAMPP';
 
 include_once "$r/functions.php";
 ob_start();
-?><div class="osgr">
+?>
+<p class="x-vers">FastXAMPP for XAMPP 7.3.12</p>
+<div class="osgr">
+	<p class="OS">Linux Mint 19.3 Tricia XFCE/MATE</p>
+	<table class="w100p">
+		<tr>
+			<td>
+				Name of the file installation image:
+			</td>
+			<td class="right">
+				<table>
+				<tr>
+					<td ><img src="<?=img('gdisc.png')?>" width="18"/></td>
+					<td class="iso">linuxmint-19.3-xfce-64bit.iso<td>
+				</tr>
+				<tr>
+					<td ><img src="<?=img('gdisc.png')?>" width="18"/></td>
+					<td class="iso">linuxmint-19.3-mate-64bit.iso<td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		
+	</table>
+	<table>
+	<tr>
+			<td>
+				Rating:
+			</td>
+			<td>
+				<?php print stars(5);?>
+			</td>
+		</tr>
+	</table>
+	<div class="alert alert-success my-2">Problems have been found</div>
+
+</div>
+
+
+<p class="x-vers">FastXAMPP for XAMPP 1.8.3-3</p>
+<div class="osgr">
 	<p class="OS">Linux Mint 13 (Maya) KDE</p>
 	<table class="w100p">
 		<tr>

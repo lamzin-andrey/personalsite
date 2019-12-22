@@ -1,5 +1,6 @@
 {
     "name": "landlib/ruslexicon",
+    "version": "1.2.3",
     "keywords": ["Русский язык", "единицы измерения", "склонение числительных", "склонение наименования города", "Москва - в Москве"],
     "homepage": "https://github.com/lamzin-andrey/ruslexicon",
     "description": "Набор функций для изменения слов в русском языке",

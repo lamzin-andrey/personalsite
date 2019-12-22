@@ -10,6 +10,12 @@ $linktext = 'Скачайте и распакуйте архив, после чего запустите файл Setup';
 $versionFor = 'Версия для';
 $unit = 'Мб';
 $doNotWork = 'Не работает в';
+
+$warning = 'Внимание';
+$req_run = 'Предварительно необходимо установить';
+$or = ' или ';
+$other_linux = ' установщик xampp для linux amd 64';
+
 if ( @$_SESSION["lang"] == "en/" ) {
 	$linktext = 'Extract this archive, and run the Setup.';
 	$sAuthorLinkText = 'Author site';
@@ -17,8 +23,76 @@ if ( @$_SESSION["lang"] == "en/" ) {
 	$versionFor = 'Version for';
 	$unit = 'Mb';
 	$doNotWork = 'Do not work in ';
+	$warning = 'Warning';
+	$or = ' or ';
+	$req_run = 'Require previous run';
+	$other_linux = 'other xampp-linux-x64 installer';
 }
 ?>
+
+<div>&nbsp;</div>
+<div class="couter tou2"><div class="mx-auto tin2 pt12">
+<p>
+<table><tbody>
+<tr>
+	<td colspan="2" align="right" class="text-success b">
+		FastXAMPP for XAMPP 7.3.12 (linux 64 bit) ~ 42 <?=$unit?>
+	</td>
+</tr>
+<tr>
+		<td>
+			<img src="<?=img('d.png')?>">
+		</td>
+		<td style="padding-bottom:5px">
+			<div class="alert alert-warning">
+				<img src="<?=img('warning-32.png')?>" title="<?=$warning; ?>" class="mr-2"><?=$req_run ?> <a href="https://www.apachefriends.org/xampp-files/7.3.12/xampp-linux-x64-7.3.12-0-installer.run" target="_blank">xampp-linux-x64-7.3.12-0-installer.run</a> <?= $or?> <a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/" target="_blank"><?=$other_linux ?></a>.
+			</div>
+			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/file/d/1GQuKQjkV6Byptun2Kv9ecJkSaQqB5CL2/view?usp=sharing" target="blank" class="text-success"><?=$linktext?>.</a>
+			
+			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+				<span class="py-1">
+					<img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
+					<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 18.04"> 
+					<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 18.04"> 
+					<img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint 19.3"> 
+				</span>
+			</div>
+		</td>
+</tr></tbody></table>
+</p>
+</div></div>
+
+
+<div>&nbsp;</div>
+<div class="couter tou2"><div class="mx-auto tin2 pt12">
+<p>
+<table><tbody>
+<tr>
+	<td colspan="2" align="right" class="text-success b">
+		FastXAMPP with XAMPP 7.3.12 (linux 64 bit) ~ 278 <?=$unit?>
+	</td>
+</tr>
+<tr>
+		<td>
+			<img src="<?=img('d.png')?>">
+		</td>
+		<td style="padding-bottom:5px">
+			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/file/d/12qgogtLfOTp0zC4PeRJQvgwdW7vwndVS/view?usp=sharing" target="blank" class="text-success"><?=$linktext?>.</a>
+			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+				<span class="py-1">
+					<img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
+					<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 18.04"> 
+					<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 18.04"> 
+					<img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint 19.3"> 
+				</span>
+			</div>
+		</td>
+</tr></tbody></table>
+</p>
+</div></div>
+
+
+
 <div>&nbsp;</div>
 <div class="couter tou2"><div class="mx-auto tin2 pt12">
 <p>

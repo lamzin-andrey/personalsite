@@ -382,6 +382,15 @@ Will return the number of replacements of nTotal items
 
 ```
 
+### combinationsCount(Number nSize, Number nTotal)
+
+Will return the number of combinations of nTotal items by nSize.
+
+```javascript
+	let n = Probability.combinationsCount(2, 10); // => 45
+
+```
+
 # Ru
 Тут лежат инструменты не зависящие от vue или других фреймвёрков.
 в nodom только чистая самодостаточная логика, вообще никак не работающая с DOM, 
@@ -760,5 +769,16 @@ This value will set as value variable `varName` in the `link`. Special value `'C
 
 ```javascript
 	let n = Probability.replacementsCount(3); // => 6
+
+```
+
+### combinationsCount(Number nSize, Number nTotal)
+
+Вернет число сочетаний nTotal предметов по nPlacementSize.
+
+Сочетаниями называют комбинации, составленные из nTotal различных предметов по nSize элементов, которые отличаются хотя бы одним  элементом.
+
+```javascript
+	let n = Probability.combinationsCount(2, 10); // => 45
 
 ```

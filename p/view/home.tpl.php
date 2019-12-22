@@ -88,15 +88,25 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 			</li>
 			<li>В первой половине дня больше налегаем на создание инструментов, во второй больше пилим рутину
 				<ul>
-					<li>https://habr.com/ru/post/419451/ - точнее, то что связано с DI из своего бандла в статью допиши</li>
+					<li></li>
 					<li></li>
 				</ul>
 			</li>
 			<li class="text-success">Делаем страницу подачи объявления
 				<ul>
-					
+					<li>ПРри аплоаде файла ajax - ом надо делать имя переменой $oForm->getName() + '[my_customname]'</li>
+					<li>То есть из библиотеки компонентов пока удалить это</li>
+					<li>
+						Это прикольно, но плохо. Написать в блоге про возможность, 
+							но постараться использовать настоящий токен.
+						configureOptions(OptionsResolver $resolver) {
+							$resolver->setDefaults(array(
+								'csrf_protection' => false,
+							));
+						}
+					</li>
 					<li>Надо что-то придумать, чтобы было возможно уйти с формы подачи объявлений с первог ораза
-					Думаюб, что сделал, проверь там</li>
+					Думаю, что сделал, проверь там</li>
 					
 					<li>Каптчу сначала проверить в принципе</li>
 					<li>Затем сделать доступными такие же настройки нкак на продакшене (выключена для всех, выключена не для всех)</li>
@@ -134,77 +144,7 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 
 <h2>Дела текущие</h2>
 <ul>
-	<li>php2js<ul>
-			<li> array_slice у меня в процессе</li>
-			<li>
-				Запрос вывода статистики использования 
-				SELECT u.id, COUNT(c.id) AS cnt FROM p2j_users AS u 
-					LEFT JOIN `p2j_codes` AS c ON c.uid = u.id GROUP BY c.uid
-				ORDER BY cnt DESC
-				
-				7 - это я
-			</li>
-			<li>Переверстать с bootstrap 4 / vue2</li>
-			<li>16-ый успешно сконвертил бы, но array_slice нету. Начать с ее добавления в php.js
-			
-//php
-public function sortSpaces($a, $b)
-    {
-        if (isset($a['space']) && isset($b['space'])) {
-            $spaceA = explode('-', $a['space']);
-            $spaceB = explode('-', $b['space']);
-
-            $spaceA = array_slice($spaceA, -4);
-            $spaceB = array_slice($spaceB, -4);
-
-            $order = array(0, 1, 3, 2);
-
-            foreach ($order as $index) {
-                if (isset($spaceA[$index]) && isset($spaceB[$index])) {
-                    if ($spaceA[$index] !== $spaceB[$index]) {
-                        return $spaceA[$index] > $spaceB[$index];
-                    }
-                }
-            }
-        }
-
-        return 0;
-    }
-//js
-public function sortSpaces($a, $b)
-    {
-        var $spaceA, $spaceB, $order, $index, phpjslocvar_0;
-        if (isset($a, 'space') && isset($b, 'space')) {
-            $spaceA = explode('-', $a['space']);
-            $spaceB = explode('-', $b['space']);
-
-            $spaceA = array_slice($spaceA, -4);
-            $spaceB = array_slice($spaceB, -4);
-
-            $order = [0, 1, 3, 2];
-
-            for (phpjslocvar_0 in $order) { $index = $order[phpjslocvar_0];
-                if (isset($spaceA, $index) && isset($spaceB, $index)) {
-                    if ($spaceA[$index] !== $spaceB[$index]) {
-                        return $spaceA[$index] > $spaceB[$index];
-                    }
-                }
-            }
-        }
-
-        return 0;
-    }
-			</li>
-		<li>Две константы класса testarrayslice а транслируется только одна</li>
-		</ul></li>
-	</li>
-	<li><b class="text-danger">22 11 2019</b> Посмотреть есть ли новые уники. 14 и 18 числа были вроде уники. Пофиксить глюк с parent. 
-	Paypal && donate -  пока рано, так две три трансляции раз в четыре дня, всего народу пока 9 человек, 
-	в основном несут какой-то бред. Надо написать, что не надо закрывающие и открывающие php тэги вставлять.
-	</li>
-	<li></li>
-	<li><ul>
-	<li>Старый блог добавить счетчик зеркала, а вдруг там колондайк ) </li>
+	<li>fastxampp для новой версии php см. process.txt</li>
 	<li>Сделать так чтобы кавычки внутри тегов вообще всегда не заменялись на ёлки-палки.</li>
 	<li>Инструмент для декорирования - 4 часа пытаемся использовать парсер Никитоса,
 		если за это время не успеваем, переписываем на пыху php2js и его используем. </li>
@@ -230,16 +170,21 @@ public function sortSpaces($a, $b)
 	<li>На газели если подать анонимно с правильными паролем и логином 
 		требует подтверждения sms, что неправильно, если аккаунт подтверждён.
 	</li>
-	
-	
-		<li >Разобраться с счётчиками freesoft
-			
-			<li ><b class="text-danger">24 12 2019</b> Спросить, не появился ли код для счётчиков freesoft.
+	<li>php2js<ul>
+			<li>Если в классе две константы, одна теряется и комментарий получается с prop вместо const</li>
+			<li>
+				Запрос вывода статистики использования 
+				SELECT u.id, COUNT(c.id) AS cnt FROM p2j_users AS u 
+					LEFT JOIN `p2j_codes` AS c ON c.uid = u.id GROUP BY c.uid
+				ORDER BY cnt DESC
+				
+				7 - это я
 			</li>
-			<li>Проверить, не удалены ли работы с сайта. (Могут прямые ссылки на файлы сломаться) </li>
-			<li></li>
-		</li>
+			<li>Переверстать с bootstrap 4 / vue2</li>
 		<li></li>
+		</ul></li>
+	</li>
+	<li></li>
 	</ul></li>
 </ul>
 

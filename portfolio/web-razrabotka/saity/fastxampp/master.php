@@ -107,9 +107,9 @@
     </script>
 
 
-    <!--script src="/j/jquery-3.3.1.slim.min.js"></script>
-    <script src="/j/bootstrap4.2.1.min.js"></script>
-    <script src="/j/popper1.14.6.min.js"></script-->
+    <script src="/j/vendor/jquery-3.3.1.slim.min.js"></script>
+    <script src="/j/vendor/bootstrap4.2.1.min.js"></script>
+    <script src="/j/vendor/popper1.14.6.min.js"></script>
     <!--script src="/j/app.js"></script-->
     <!--link rel="stylesheet" type="text/css" href="/s/vendor/bootstrap4_sticky_footer.css"-->
 
