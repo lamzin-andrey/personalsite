@@ -25,7 +25,11 @@
 	<!--script>if(/*navigator.userAgent.indexOf('Android 2') != -1*/true) location.href = location.href.replace('/fastxampp/', '/fastxampp/a2/');</script-->
     <meta charset="WINDOWS-1251">
     <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0.user-scalable=no,target-densitydpi=device-dpi,width=device-width,height=device-height,shrink-to-fit=no">
+    
     <title><?php print $baseTitle; if ($title)print "| $title"; ?> </title>
+    <?php if (isset($description)): ?>
+		<meta name="description" content="<?=$description ?>">
+    <?php endif ?>
     <link rel="stylesheet" type="text/css" href="/s/vendor/bootstrap4.2.1.min.css">
     <link rel="stylesheet" href="/s/vendor/fontawesome5/all.css" >
     <link rel="stylesheet" type="text/css" href="/portfolio/web-razrabotka/saity/fastxampp/s/app.css">

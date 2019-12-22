@@ -1,4 +1,5 @@
 <?php
+$lang = @$_SESSION['lang'];
 $r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 include "$r/functions.php"; 
 $sAuthorLinkText = 'Сайт автора';
@@ -14,7 +15,10 @@ $doNotWork = 'Не работает в';
 $warning = 'Внимание';
 $req_run = 'Предварительно необходимо установить';
 $or = ' или ';
-$other_linux = ' установщик xampp для linux amd 64';
+$other_linux = ' установщик другой версии xampp для linux amd 64';
+
+$imagiktext = 'Вы также можете скачать imagick.so для этой версии xampp';
+
 
 if ( @$_SESSION["lang"] == "en/" ) {
 	$linktext = 'Extract this archive, and run the Setup.';
@@ -27,6 +31,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 	$or = ' or ';
 	$req_run = 'Require previous run';
 	$other_linux = 'other xampp-linux-x64 installer';
+	$imagiktext = 'You also can download imagick.so for this php version';
 }
 ?>
 
@@ -112,7 +117,15 @@ if ( @$_SESSION["lang"] == "en/" ) {
 				<img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 16.04 only"> <span title="kubuntu 16.04 only" style="line-height:24px;vertical-align:top;"><?=$versionFor?> kubuntu 16.04</span>
 			</div>
 		</td>
-</tr></tbody></table>
+</tr>
+
+<tr>
+	<td colspan="2" style="text-align:center">
+		<a class="text-success" href="<?=WEBROOT ?>/imagick_so_for_php_7.0.8_linux/<?php echo $lang ?>"><?php echo $imagiktext ?></a>
+	</td>
+</tr>
+
+</tbody></table>
 </p>
 </div></div>
 
@@ -160,7 +173,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 </tr>
 
 <?php
-$lang = @$_SESSION['lang'];
+
 if ($lang != 'en/') :
 ?>
 <tr>
