@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url><loc>https://andryuxa.ru/portfolio/</loc></url>
    <url><loc>https://andryuxa.ru/blog/</loc></url>
+   
+   <url><loc>https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/extensions_for_php_7.3.12_linux/</loc></url>
+   <url><loc>https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/extensions_for_php_7.3.12_linux/en/</loc></url>
+   <url><loc>https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/download.php</loc></url>
+   
    <url><loc>https://andryuxa.ru/blog/symfony_bundle_for_create_service_decoration/</loc></url>
    <url><loc>https://andryuxa.ru/portfolio/web-razrabotka/komponenty/bekend/symfony/34/symfony_bundle_dlya_dekoracii_kontrollera_iz_konsoli/</loc></url>
    <url><loc>https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#getparameterintwigextension</loc></url>
