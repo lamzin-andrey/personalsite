@@ -16,9 +16,8 @@ $warning = 'Внимание';
 $req_run = 'Предварительно необходимо установить';
 $or = ' или ';
 $other_linux = ' установщик другой версии xampp для linux amd 64';
-
 $imagiktext = 'Вы также можете скачать imagick.so для этой версии xampp';
-
+$extensionstext = 'Вы также можете скачать расширения imagick.so, xdebug.so, memcached.so для PHP версии ';
 
 if ( @$_SESSION["lang"] == "en/" ) {
 	$linktext = 'Extract this archive, and run the Setup.';
@@ -32,6 +31,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 	$req_run = 'Require previous run';
 	$other_linux = 'other xampp-linux-x64 installer';
 	$imagiktext = 'You also can download imagick.so for this php version';
+	$extensionstext = 'Also you can download extensions imagick.so, xdebug.so, memcached.so for PHP version ';
 }
 ?>
 
@@ -63,7 +63,13 @@ if ( @$_SESSION["lang"] == "en/" ) {
 				</span>
 			</div>
 		</td>
-</tr></tbody></table>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:center">
+		<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.3.12_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 7.3.12</a>
+	</td>
+</tr>
+</tbody></table>
 </p>
 </div></div>
 
@@ -92,7 +98,13 @@ if ( @$_SESSION["lang"] == "en/" ) {
 				</span>
 			</div>
 		</td>
-</tr></tbody></table>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:center">
+		<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.3.12_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 7.3.12</a>
+	</td>
+</tr>
+</tbody></table>
 </p>
 </div></div>
 
@@ -135,7 +147,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 7.0.4-0, PHP 7.0.4 (linux 64 bit) ~ 235 <?=$unit?>
+		FastXAMPP, XAMPP 7.0.8, PHP 7.0.8 (linux 64 bit) ~ 235 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -148,7 +160,13 @@ if ( @$_SESSION["lang"] == "en/" ) {
 				<img src="<?=img('warning-32.png')?>" title="Do not work in kubuntu 16.04"> <span title="Do not work in kubuntu 16.04" style="line-height:24px;vertical-align:top;"><?=$doNotWork?> kubuntu 16.04</span>
 			</div>
 		</td>
-</tr></tbody></table>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:center">
+		<a class="text-success" href="<?=WEBROOT ?>/imagick_so_for_php_7.0.8_linux/<?php echo $lang ?>"><?php echo $imagiktext ?></a>
+	</td>
+</tr>
+</tbody></table>
 </p>
 </div></div>
 <?/* end 64 php 7 */?>
