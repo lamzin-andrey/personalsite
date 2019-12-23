@@ -37,6 +37,12 @@ class FxCacheClient extends LandCacheClient {
 			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/f/save.php',
 			'/portfolio/web-razrabotka/saity/fastxampp/f/upload.php',
 			'/portfolio/web-razrabotka/saity/fastxampp/f/state.php',
+			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/extensions_for_php_7.3.12_linux/en/?c=en',
+			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/extensions_for_php_7.3.12_linux/en/?c=ru',
+			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/extensions_for_php_7.3.12_linux/?c=en',
+			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/extensions_for_php_7.3.12_linux/?c=ru',
+			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/download.php?c=ru',
+			'https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/download.php?c=en',
 			'/portfolio/web-razrabotka/saity/fastxampp/f/save.php'
 		];
 		return o;
