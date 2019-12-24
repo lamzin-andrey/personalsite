@@ -52,7 +52,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 			<div class="alert alert-warning">
 				<img src="<?=img('warning-32.png')?>" title="<?=$warning; ?>" class="mr-2"><?=$req_run ?> <a href="https://www.apachefriends.org/xampp-files/7.3.12/xampp-linux-x64-7.3.12-0-installer.run" target="_blank">xampp-linux-x64-7.3.12-0-installer.run</a> <?= $or?> <a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/" target="_blank"><?=$other_linux ?></a>.
 			</div>
-			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/file/d/1GQuKQjkV6Byptun2Kv9ecJkSaQqB5CL2/view?usp=sharing" target="blank" class="text-success"><?=$linktext?>.</a>
+			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/open?id=1V3t3NKFP-mkgRhr2RhQhIz2ZqES6UfB7" target="blank" class="text-success"><?=$linktext?>.</a>
 			
 			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
 				<span class="py-1">
@@ -88,7 +88,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 			<img src="<?=img('d.png')?>">
 		</td>
 		<td style="padding-bottom:5px">
-			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/file/d/12qgogtLfOTp0zC4PeRJQvgwdW7vwndVS/view?usp=sharing" target="blank" class="text-success"><?=$linktext?>.</a>
+			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/open?id=1SJlVYXxPnyDKOLtN8d-9FPFLhOS_Ee6g" target="blank" class="text-success"><?=$linktext?>.</a>
 			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
 				<span class="py-1">
 					<img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
