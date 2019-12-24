@@ -108,7 +108,7 @@ function write_stat_v() {
 			 
 			query($q);
 		} else {
-			$q = "INSERT INTO $t VALUES ($year, $month, $r32, $r64, $xu, $u, $k, $K16, $php704, $php708)";
+			$q = "INSERT INTO $t VALUES ($year, $month, $r32, $r64, $xu, $u, $k, $K16, $php704, $php708, $php7312)";
 			query($q);
 		}
 	}
