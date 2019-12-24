@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/mysql.php');
 $s = 'fx';
 
 define('DB_HOST', 'localhost');
