@@ -71,7 +71,7 @@ foreach ($res as $row) {
 
 
 function write_stat_v() {
-	$mode = ($_GET['mode'] ?? );
+	$mode = ($_GET['mode'] ?? null);
 	$a = explode('_', $mode);
 	$data = isset($a[1]) ? $a[1] : 0;
 	if ($data) {
