@@ -86,7 +86,7 @@ function write_stat_v() {
 		$u   = (isset($data[1]) && $data[1] == 'u') ? 1 : 0;
 		$k   = (isset($data[1]) && $data[1] == 'k') ? 1 : 0;
 		$K16 = (isset($data[1]) && $data[1] == 'K') ? 1 : 0;
-		$v = @$data[2] . @$data[3] . @$data[4];
+		$v = ($data[2] ?? '') . ($data[3] ?? '') . ($data[4] ?? '') . ($data[5] ?? '');
 		$php704 =  $v == '704' ? 1 : 0;
 		$php708 =  $v == '708' ? 1 : 0;
 		$php7312 = $v == '7312' ? 1 : 0;
