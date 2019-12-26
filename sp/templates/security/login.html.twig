@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}
+
+
+    <div class="example-wrapper">
+        <h1>Hello {{  controller_name }}! ?</h1>
+
+        This friendly message is coming from:
+        <ul>
+            <li>
+                {% if error %}
+                    <div>{{  error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+            </li>
+            <li>
+                <form action="{{ path('check_path') }}" method="POST">
+                    <div>
+                        <input type="text" id="login" name="_username" />
+                    </div>
+                    <div>
+                        <input type="password" id="" name="_password" />
+                    </div>
+                    <div style="text-align:right;">
+                        <input type="submit" id="bLogin" value="Enter" />
+                    </div>
+                </form>
+            </li>
+            <li><a href="{{ path('register') }}">Sign Up</a></li>
+        </ul>
+    </div>
+
+{% endblock %}

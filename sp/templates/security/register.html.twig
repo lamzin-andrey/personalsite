@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}
+
+
+    <div class="example-wrapper">
+
+        This friendly message is coming from:
+        <ul>
+            <li>
+                <form action="{{ path('register') }}" method="POST">
+                    <div>
+                        <input type="text" id="login" name="login" />
+                    </div>
+                    <div>
+                        <input type="password" id="" name="password" />
+                    </div>
+                    <div>
+                        <input type="password" id="" name="password2" />
+                    </div>
+                    <div>
+                        <input type="email" id="" name="email" />
+                    </div>
+                    <div style="text-align:right;">
+                        <input type="submit" id="bLogin" value="Enter" />
+                    </div>
+                </form>
+            </li>
+            <li>Your template at <a href="{{ path('login') }}">Sign In</a></li>
+        </ul>
+    </div>
+
+{% endblock %}
