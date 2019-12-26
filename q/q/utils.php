@@ -676,6 +676,7 @@ function utils_dateE2R($date, $deleteSeconds = true) {
 function utils_getFilePath($app_root, $tmp_file, $src_file_name, &$is_image, $dest_file_name = false, $filter_types_on = true) {
 	$is_image = false;
 	$folder = $app_root . date('/Y/m/');
+	utils_createDir($folder);
 	if ($dest_file_name) {
 		return "{$folder}{$dest_file_name}";
 	}
