@@ -1,35 +1,48 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/loginmaster.html.twig' %}
+
+{% trans_default_domain 'loginforms' %}
 
 {% block title %}Hello SecurityController!{% endblock %}
 
-{% block body %}
-
-
-    <div class="example-wrapper">
-        <h1>Hello {{  controller_name }}! ?</h1>
-
-        This friendly message is coming from:
-        <ul>
-            <li>
-                {% if error %}
-                    <div>{{  error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
-            </li>
-            <li>
-                <form action="{{ path('check_path') }}" method="POST">
-                    <div>
-                        <input type="text" id="login" name="_username" />
-                    </div>
-                    <div>
-                        <input type="password" id="" name="_password" />
-                    </div>
-                    <div style="text-align:right;">
-                        <input type="submit" id="bLogin" value="Enter" />
-                    </div>
-                </form>
-            </li>
-            <li><a href="{{ path('register') }}">Sign Up</a></li>
-        </ul>
+{% block content %}
+    <div>
+        {% if error %}
+            <div class="alert alert-danger">{{  error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
     </div>
+<form class="user" id="signinform" method="POST" action="{{ path('check_path') }}" novalidate><!-- TODO try -novalidate -->
+    <div class="form-group">
+        {#v-b421validators="'required,email'" #}
+        <input  placeholder="{{'Enter username'|trans }}"
+                type="text" class="form-control form-control-user"  aria-describedby="emailHelp"  name="_username">
+        <div class="invalid-feedback"></div>
+        <small id="emailHelp" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        {# v-b421validators="'required,password,length6_128'" #}
+        <input
+                placeholder="{{'Password'|trans }}"
+                type="password" class="form-control form-control-user" name="_password">
+        <div class="invalid-feedback"></div>
+        <small id="passwordHelp" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        <div class="custom-control custom-checkbox small">
+            <input type="checkbox" class="custom-control-input" id="rememberMe" value="true">
+            <label class="custom-control-label" for="rememberMe">{{ 'Remember Me'|trans }}</label>
+        </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+    <button type="submit" class="btn btn-primary btn-user btn-block">
+        {{ 'LoginFormButtonText'|trans }}
+    </button>
+    <!--hr>
+    <a href="index.html" class="btn btn-google btn-user btn-block">
+        <i class="fab fa-google fa-fw"></i> Login with Google
+    </a>
+    <a href="index.html" class="btn btn-facebook btn-user btn-block">
+        <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+    </a-->
+</form>
 
 {% endblock %}

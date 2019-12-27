@@ -1,0 +1,38 @@
+Enter username: Введите имя пользователя
+Name: Ваше имя
+Surname: Ваша фамилия
+Password: Пароль
+Password repeat: Пароль повторно
+Password recovery: Восстановление пароля
+Enter: Вход
+Add advertising: Подать объявление
+Your data: Ваши данные
+Exit: Выход
+Reset password: Сброс пароля
+User with phone not found: Не найден пользователь с таким телефоном
+missing-input-response: Необходимо подтвердить, что вы не робот
+Send: Отправить
+Remember Me: Запомнить меня
+LoginFormButtonText: Войти
+Current password is invalid: Текущий пароль введён неверно
+Forgot Password: Не помнишь пароль
+Login: Авторизация
+Edit profile: Редактирование профиля
+Display name was update: Имя или название компании изменено
+Display name: Имя или название компании
+Email was updated: Адрес электронной почты изменен
+Bad credentials.: Недействительные аутентификационные данные
+Region: Регион
+User already exists, but password not valid: |
+  Для этого номера телефона уже задан пароль отличный от того, что вы ввели.
+  Если вы хотите поднять, отредактировать, скрыть или удалить какое-то из раннее поданых объявлений, но не помните пароль, пройдите на <a href="/remind" target="_blank">страницу восстановления пароля</a>.
+  Для публикации объявления сейчас вы также можете оставить поля пароль и email незаполнеными.
+
+Email and Password required if on from these no empty: Необходимо указать пароль или удалить email
+Need select location: Необходимо выбрать населённый пункт
+Location: Населенный пункт
+IHavePolicy: Я согласен с
+Policystr: Политикой конфендициальности
+ISubscribe: Я согласен получать email рассылку от Ламзина Андрея Николаевича, вдруг он ещё что полезное напишет
+gotoLoginPageLink: Вспомнился пароль? Welcome!
+Register Now: Зарегистрироваться

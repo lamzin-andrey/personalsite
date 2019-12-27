@@ -1,35 +1,98 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/loginmaster.html.twig' %}
+{% trans_default_domain 'loginforms' %}
+{% form_theme form with [
+    'form_div_layout.html.twig',
+    'form/layout.html.twig'
+] %}
+{% block title %}Signup{% endblock %}
 
-{% block title %}Hello SecurityController!{% endblock %}
-
-{% block body %}
+{% block content %}
 
 
-    <div class="example-wrapper">
 
-        This friendly message is coming from:
-        <ul>
-            <li>
-                <form action="{{ path('register') }}" method="POST">
-                    <div>
-                        <input type="text" id="login" name="login" />
-                    </div>
-                    <div>
-                        <input type="password" id="" name="password" />
-                    </div>
-                    <div>
-                        <input type="password" id="" name="password2" />
-                    </div>
-                    <div>
-                        <input type="email" id="" name="email" />
-                    </div>
-                    <div style="text-align:right;">
-                        <input type="submit" id="bLogin" value="Enter" />
-                    </div>
-                </form>
-            </li>
-            <li>Your template at <a href="{{ path('login') }}">Sign In</a></li>
-        </ul>
+{#<form id="regForm" TODO check class="user" >#}
+{{ form_start(form, { 'action' : path('register'), 'attr': {'class' : 'user'} }) }}
+    <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            {# v-b421validators="'required'" #}
+            {{ form_widget(form.name, {'attr': {'placeholder': 'Name'|trans, 'class': 'form-control form-control-user'} }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <!-- v-b421validators="'required'" -->
+            {{ form_widget(form.surname, {'attr': {'placeholder': 'Surname'|trans, 'class': 'form-control form-control-user'} }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.surname) }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- v-b421validators="'required,email'" -->
+        {{ form_widget(form.email, {'attr': {'placeholder': 'Email'|trans, 'class': 'form-control form-control-user'} }) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.email) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- v-b421validators="'required'" -->
+        {{ form_widget(form.username, {'attr': {'placeholder': 'Enter username'|trans, 'class': 'form-control form-control-user'} }) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.username) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <!-- v-b421validators="'required,password,length6_128'" -->
+            {{ form_widget(form.passwordRaw, {'attr': {'placeholder': 'Password'|trans, 'class': 'form-control form-control-user'} }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.passwordRaw) }}
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <!-- v-b421validators="'equiv_password'" -->
+            {{ form_widget(form.passwordRepeat, {'attr': {'placeholder': 'Password repeat'|trans, 'class': 'form-control form-control-user'} }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.passwordRepeat) }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="custom-control custom-checkbox small">
+            <!-- v-b421validators="'required'" -->
+            {{ form_widget(form.agree, {'attr': {'class': 'boo custom-control-input'}, 'value':"true" }) }}
+            <label class="custom-control-label ml-1" for="register_form_agree">
+                {{ 'IHavePolicy'|trans }} <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc">{{ 'Policystr'|trans }}</a>
+            </label>
+            <div class="invalid-feedback">
+                {{ form_errors(form.agree) }}
+            </div>
+        </div>
     </div>
 
+    <div class="form-group">
+        <div class="custom-control custom-checkbox small">
+            <!-- v-b421validators="'required'" -->
+            {{ form_widget(form.isSubscribed, {'attr': {'class': 'custom-control-input'}, 'value':"true" }) }}
+            <label class="custom-control-label ml-1" for="register_form_isSubscribed">
+                {{ 'ISubscribe'|trans }}
+            </label>
+            <div class="invalid-feedback">
+                {{ form_errors(form.isSubscribed) }}
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-user btn-block">
+        {{ 'Register Now'|trans }}
+    </button>
+    <!--hr>
+    <a href="index.html" class="btn btn-google btn-user btn-block">
+        <i class="fab fa-google fa-fw"></i> Register with Google
+    </a>
+    <a href="index.html" class="btn btn-facebook btn-user btn-block">
+        <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
+    </a-->
+{{ form_end(form) }}
 {% endblock %}
