@@ -20,7 +20,7 @@
 </template>
 <script>
 	//Компонент для модального логина
-	Vue.component('loginform', require('./loginform.vue'));
+	Vue.component('loginform', require('./loginform.vue').default);
     export default {
         name: 'logindlg',
         //Аргументы извне

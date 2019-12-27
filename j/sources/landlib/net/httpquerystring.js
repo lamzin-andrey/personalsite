@@ -139,3 +139,6 @@ window.addEventListener('load', () => {
 	window.$_SERVER['HTTP_HOST'] = HttpQueryString.host();
 	window.$_SERVER['REQUEST_URI'] = HttpQueryString.requestUri();
 });
+
+
+export default window.HttpQueryString;

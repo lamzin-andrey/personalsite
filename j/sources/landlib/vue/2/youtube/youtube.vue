@@ -16,7 +16,7 @@
 		name: 'YoutubeIframeVideo',
 
 		components:{
-			youframe: require('./youframe.vue')
+			youframe: require('./youframe.vue').default
 		},
 		
 		//Component attributes
@@ -69,7 +69,8 @@
 			compSrc() {
 				let vid = HttpQueryString._GET('v', null, this.video),
 					sAutoplay = (this.compAutoplay ? '&autoplay=1' : '');
-				return `https://www.youtube.com/embed/${vid}?ecver=2${sAutoplay}`;
+				let s =  `https://www.youtube.com/embed/${vid}?ecver=2${sAutoplay}`;
+				return s;
 			},
 			compAutoplay() {
 				if (this.autoplay == 'false') {

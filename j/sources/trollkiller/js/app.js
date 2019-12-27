@@ -17,6 +17,14 @@ const i18n = new VueI18n({
 });
 //end Интернациализация
 
+//Back to top button
+import BackToTop from 'vue-backtotop';
+Vue.use(BackToTop);
+
+//customize btt
+import './../../site/css/backtotop.css'
+// /Back to top button
+
 //"Стандартная" валидация полей формы ?? Need ??
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
 require('../../bootstrap421-validators/b421validatorsdirective');
@@ -33,21 +41,21 @@ import B421Validators  from '../../bootstrap421-validators/b421validators';
 
 
 //Компонент вместо стандартного confirm TODO тут просто проверим, чего и как
-Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'));
+Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue').default);
 //Компонент вместо стандартного alert  TODO тут просто проверим, чего и как
-Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue'));
+Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue').default);
 
 //Компонент для модального логина
-Vue.component('logindlg', require('./views/logindlg.vue'));
+Vue.component('logindlg', require('./views/logindlg.vue').default);
 
 //Компонент списка троллейбусов, на блэклисты которых подписан пользователь
-Vue.component('relslistblock', require('./views/relslistblock.vue'));
+Vue.component('relslistblock', require('./views/relslistblock.vue').default);
 
 //Компонент результатов поиска троллейбусов по mail_id или имени и фамилии
-Vue.component('searchblock', require('./views/searchblock.vue'));
+Vue.component('searchblock', require('./views/searchblock.vue').default);
 
 //Компонент для SEO безвредной вставки видео
-Vue.component('youtube', require('../../landlib/vue/2/youtube/youtube.vue'));
+Vue.component('youtube', require('../../landlib/vue/2/youtube/youtube.vue').default);
 
 window.app = new Vue({
     i18n : i18n,
@@ -107,6 +115,7 @@ window.app = new Vue({
 			this.checkAuthRequestSend = true;
 			Rest._get((data)=>{this.onSuccessAuthStatus(data);}, '/p/trollkiller/checkauth.jn/?p=1', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 		}
+		$('#bttimg').css('display', 'block');
    },
 	computed:{
 		isNotFirefox() {
