@@ -24,3 +24,4 @@ Forgot Password: Не помнишь пароль
 signup: Зарегистрируйтесь
 gotoLoginPageLink: Вспомнился пароль? Welcome!
 Passwords is different: Пароли не совпадают
+User with login or email already exists: Пользователь с таким email или именем пользователя уже зарегистрирован

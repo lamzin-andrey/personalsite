@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\Ausers AS User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Doctrine\Common\Collections\Criteria;
 
 class SecurityController extends AbstractController
 {
@@ -58,16 +59,24 @@ class SecurityController extends AbstractController
 			if ($oForm->isValid()) {
 				$sPassword = $oForm->get('passwordRaw')->getData();
 				$sPassword2 = $oForm->get('passwordRepeat')->getData();
+				$sEmail = $oForm->get('email')->getData();
 				$sUsername = $oForm->get('username')->getData();
 				$oRepository = $this->getDoctrine()->getRepository('App:Ausers');
-				//TODO add unique email check
-				$oExistsUser = $oRepository->findBy(['username' => $sUsername]);
+				$oCriteria = Criteria::create();
+				$oExpr = Criteria::expr();
+				$oCriteria->where(
+					$oExpr->orX(
+						$oExpr->eq('username', $sUsername),
+						$oExpr->eq('email', $sEmail)
+					)
+				);
+				//$oExistsUser = $oRepository->findBy(['username' => $sUsername]);
+				$oExistsUser = $oRepository->matching($oCriteria)->get(0);
 				if ($oExistsUser) {
-					$this->addFlash('notice', $t->trans('User with login already exists'));
-					return $this->redirectToRoute('login');
-				}
-
-				if ($sPassword != $sPassword2) {
+					//$this->addFlash('notice', $t->trans('User with login or email already exists'));
+					$this->addFormError('User with login or email already exists', 'username');
+					//return $this->redirectToRoute('login');
+				} else if ($sPassword != $sPassword2) {
 					$this->addFormError('Passwords is different', 'passwordRaw');
 				} else {
 					//Success
