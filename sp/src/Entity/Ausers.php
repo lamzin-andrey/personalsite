@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints AS Assert;
 
 /**
  * Ausers
@@ -31,15 +32,16 @@ class Ausers implements UserInterface
 
     /**
      * @var string|null
-     *
+	 * @Assert\NotBlank()
+	 * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=64, nullable=true, options={"comment"="email"})
      */
     private $email;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="password", type="string", length=100, nullable=true, options={"comment"="email"})
+	 * @Assert\Regex(pattern = "/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/s", message="Password must containts symbols in upper and lower case and numbers")
+     * @ORM\Column(name="password", type="string", length=100, nullable=true, options={"comment"="password hash"})
      */
     private $password;
 
@@ -52,7 +54,7 @@ class Ausers implements UserInterface
 
 	/**
 	 * @var string|null
-	 *
+	 * @Assert\NotBlank()
 	 * @ORM\Column(name="$username", type="string", length=255, nullable=true, options={"comment"="Имя пользователя для Symfony"})
 	 */
 	private $username;
@@ -101,14 +103,14 @@ class Ausers implements UserInterface
 
     /**
      * @var string|null
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=64, nullable=true, options={"comment"="Имя пользователя"})
      */
     private $name;
 
     /**
      * @var string|null
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="surname", type="string", length=64, nullable=true, options={"comment"="Фамилия пользователя"})
      */
     private $surname;

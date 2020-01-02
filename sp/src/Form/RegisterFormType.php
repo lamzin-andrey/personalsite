@@ -11,9 +11,13 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType AS TType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegisterFormType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,15 +26,33 @@ class RegisterFormType extends AbstractType
             ->add('email', EmailType::class)
             ->add('username', TType::class)
             ->add('passwordRaw', PasswordType::class, [
-            	'mapped' => false
+            	'mapped' => false,
+				'constraints' => [
+					new NotBlank(),
+					new Length([
+						'min' => 6,
+						'max' => 128
+					]),
+					new Regex([
+						'pattern' => "/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/s",
+						'message' => 'Password must containts symbols in upper and lower case and numbers'
+					])
+				]
 			])
 			->add('passwordRepeat', PasswordType::class, [
 				'mapped' => false
 			])
 			->add('agree', CheckboxType::class, [
-				'mapped' => false
+				'mapped' => false,
+				'constraints' => [
+					new NotBlank([
+						'message' => 'Consent to agree to terms of use'
+					])
+				]
 			])
-			->add('isSubscribed', CheckboxType::class)
+			->add('isSubscribed', CheckboxType::class, [
+				'required' => false
+			])
         ;
     }
 

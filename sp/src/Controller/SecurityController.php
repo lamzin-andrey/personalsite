@@ -51,7 +51,8 @@ class SecurityController extends AbstractController
 	public function register(Request $oRequest, UserPasswordEncoderInterface $oEncoder, TranslatorInterface $t)
 	{
 		$oUser = new User();
-		$oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
+		$this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
+		$this->translator = $t;
 		if ($oRequest->getMethod() == 'POST') {
 			$oForm->handleRequest($oRequest);
 			if ($oForm->isValid()) {
@@ -59,7 +60,7 @@ class SecurityController extends AbstractController
 				$sPassword2 = $oForm->get('passwordRepeat')->getData();
 				$sUsername = $oForm->get('username')->getData();
 				$oRepository = $this->getDoctrine()->getRepository('App:Ausers');
-				//TODO add email check
+				//TODO add unique email check
 				$oExistsUser = $oRepository->findBy(['username' => $sUsername]);
 				if ($oExistsUser) {
 					$this->addFlash('notice', $t->trans('User with login already exists'));
@@ -67,18 +68,17 @@ class SecurityController extends AbstractController
 				}
 
 				if ($sPassword != $sPassword2) {
-					$this->addFlash('notice', 'Passwords is different!');
-					return $this->redirectToRoute('register');
+					$this->addFormError('Passwords is different', 'passwordRaw');
+				} else {
+					//Success
+					$sPassword = $oEncoder->encodePassword($oUser, $sPassword);
+					$oUser->setPassword($sPassword);
+					$oEm = $this->getDoctrine()->getManager();
+					$oEm->persist($oUser);
+					$oEm->flush();
+					return $this->redirectToRoute('login');
 				}
-				$sPassword = $oEncoder->encodePassword($oUser, $sPassword);
-				$oUser->setPassword($sPassword);
-				$oEm = $this->getDoctrine()->getManager();
-				$oEm->persist($oUser);
-				$oEm->flush();
-				return $this->redirectToRoute('login');
-			} else {
-				$this->addFlash('notice', $t->trans('some error...'));
-				return $this->redirectToRoute('register');
+
 			}
 		}
 		$aData = $this->_getDefaultViewData();
@@ -115,5 +115,16 @@ class SecurityController extends AbstractController
 	public function reset()
 	{
 
+	}
+
+	/**
+	 * @param string $sError
+	 * @param string $sField
+	 * @param FormInterface $oForm
+	 **/
+	public function addFormError(string $sError, string $sField, ?FormInterface $oForm = null)
+	{
+		$oError = new \Symfony\Component\Form\FormError($this->translator->trans($sError));
+		$this->_oForm->get($sField)->addError($oError);
 	}
 }
