@@ -56,19 +56,19 @@ import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.j
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
 //Компонент вместо стандартного confirm
-Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue'));
+Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue').default);
 //Компонент вместо стандартного alert
-Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue'));
+Vue.component('b4alertdlg', require('./views/b4alertdialog/b4alertdlg.vue').default);
 //Компонент для отображения формы редактирования статьи
-Vue.component('articleform', require('./views/articleform.vue'));
+Vue.component('articleform', require('./views/articleform.vue').default);
 //Компонент для отображения инпута ввода текста bootstrap 4
 //Vue.component('inputb4', require('../landlib/vue/2/bootstrap/4/inputb4.vue'));
 
 //Компонент страницы просмотра / редактирования категорий страниц
-Vue.component('articlesections', require('./views/articlesections.vue'));
+Vue.component('articlesections', require('./views/articlesections.vue').default);
 
 //Компонент страницы просмотра / редактирования работами портфолио
-Vue.component('portfolio', require('./views/portfolio.vue'));
+Vue.component('portfolio', require('./views/portfolio.vue').default);
 
 //Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
 import DataTableMoveRecord from './classes/datatablemoverecord';

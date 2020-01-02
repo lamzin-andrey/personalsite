@@ -64,7 +64,7 @@
 	//Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
 	import DataTableMoveRecord from '../classes/datatablemoverecord';
 
-    Vue.component('portfolioform', require('./portfolioform.vue'));
+    Vue.component('portfolioform', require('./portfolioform.vue').default);
 
     export default {
         name: 'portfolio',

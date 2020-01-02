@@ -18,7 +18,7 @@ const i18n = new VueI18n({
 
 //"Стандартная" валидация полей формы0000
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
-require('../../../bootstrap421-validators/b421validatorsdirective');
+require('../../../bootstrap421-validators/b421validatorsdirective').default;
 
 //класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
 //(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
@@ -28,9 +28,9 @@ import B421Validators  from '../../../bootstrap421-validators/b421validators';
 //Обрати внимание на передачу B421Validators в app.data 
 // / "Стандартная" валидация полей формы
 
-Vue.component('login-form', require('./views/Loginform'));
-Vue.component('reg-form', require('./views/Regform'));
-Vue.component('reset-form', require('./views/Resetpassform'));
+Vue.component('login-form', require('./views/Loginform').default);
+Vue.component('reg-form', require('./views/Regform').default);
+Vue.component('reset-form', require('./views/Resetpassform').default);
 
 window.app = new Vue({
     i18n : i18n,

@@ -215,8 +215,8 @@
 </template>
 <script>
 	//TODO перерегистрировать локально
-    Vue.component('categorytree', require('./portfolio/categorytree.vue'));
-	Vue.component('vuetag', require('@johmun/vue-tags-input'));
+    Vue.component('categorytree', require('./portfolio/categorytree.vue').default);
+	Vue.component('vuetag', require('@johmun/vue-tags-input').default);
 	// import VueTagsInput from '@johmun/vue-tags-input';
 
     

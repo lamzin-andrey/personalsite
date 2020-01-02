@@ -96,11 +96,11 @@
 <script>
 
     //Компонент для отображения инпута ввода текста bootstrap 4
-    Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue'));
-    Vue.component('selectb4', require('../../landlib/vue/2/bootstrap/4/selectb4.vue'));
-    Vue.component('checkboxb4', require('../../landlib/vue/2/bootstrap/4/checkboxb4.vue'));
-    Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue'));
-    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+    Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue').default);
+    Vue.component('selectb4', require('../../landlib/vue/2/bootstrap/4/selectb4.vue').default);
+    Vue.component('checkboxb4', require('../../landlib/vue/2/bootstrap/4/checkboxb4.vue').default);
+    Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue').default);
+    Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue').default);
 
     export default {
         name: 'articleform',
