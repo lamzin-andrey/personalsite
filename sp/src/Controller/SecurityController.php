@@ -5,6 +5,9 @@ namespace App\Controller;
 # use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\RegisterFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +19,10 @@ use App\Entity\Ausers AS User;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Doctrine\Common\Collections\Criteria;
+use App\Form\ResetPasswordFormType;
+
+use Landlib\SimpleMail;
+
 
 class SecurityController extends AbstractController
 {
@@ -24,6 +31,9 @@ class SecurityController extends AbstractController
 	 */
 	public function loginAction(AuthenticationUtils $authenticationUtils, CsrfTokenManagerInterface $oCsrfTokenManager)
 	{
+		if ($this->getUser()) {
+			return $this->redirectToRoute('home');
+		}
 		// сообщение об ошибке аутентификации
 		$error = $authenticationUtils->getLastAuthenticationError();
 		// имя пользователя, которое пытались ввести
@@ -121,11 +131,56 @@ class SecurityController extends AbstractController
 	 * TODO
 	 * @Route("/reset", name="reset")
 	*/
-	public function reset()
+	public function reset(Request $oRequest, TranslatorInterface $t, UserPasswordEncoderInterface $oEncoder)
 	{
+		$this->_oForm = $oForm = $this->createForm(get_class(new ResetPasswordFormType()));
+		$this->translator = $t;
+		$aData = $this->_getDefaultViewData();
+		$aData['sFormBgImageCss'] = 'bg-password-image';
+		$aData['isEmailWasFound'] = 0;
+		$aData['emailHostLink'] = '#';
+		$aData['isResetform'] = 0;
+		$aData['form'] = $oForm->createView();
+		if ($oRequest->getMethod() == 'POST') {
+			$oForm->handleRequest($oRequest);
+			if ($oForm->isValid()) {
+				$sEmail = $oForm->get('email')->getData();
+				$oUserRepository = $this->getDoctrine()->getRepository('App:Ausers');
+				$oUser = $oUserRepository->findOneBy([
+					'email' => $sEmail
+				]);
+				if ($oUser) {
+					$sPasswordRaw = $this->_generatePassword();
+					$sEncodePassword = $oEncoder->encodePassword($oUser, $sPasswordRaw);
+					$oUser->setPassword($sEncodePassword);
+					$oEm = $this->getDoctrine()->getManager();
+					$oEm->persist($oUser);
+					$oEm->flush();
 
+					$siteAdminEmail = $this->getParameter('app.siteAdminEmail');
+					$subject = 'Восстановление пароля в сервисе контроля времени';
+					$sHtml = '<p>Ваш забытый пароль ' . $sPasswordRaw . '</p>';
+					$oMessage = new SimpleMail();
+					$oMessage->setSubject($subject);
+					$oMessage->setFrom($siteAdminEmail);
+					$oMessage->setTo($sEmail);
+					$oMessage->setBody($sHtml, 'text/html', 'UTF-8');
+					$bSuccess = $oMessage->send();
+					if ($bSuccess) {
+						$aData['isEmailWasFound'] = 1;
+						$a = explode('@', $sEmail);
+						$aData['emailHostLink'] = 'https://' . $a[1];
+					} else {
+						$this->addFlash('notice', $t->trans('Unable send email'));
+					}
+
+				} else {
+					$this->addFlash('notice', $t->trans('User with email %email% not found', null, ['%email%' => $sEmail]));
+				}
+			}
+		}
+		return $this->render('security/reset.html.twig', $aData);
 	}
-
 	/**
 	 * @param string $sError
 	 * @param string $sField
@@ -135,5 +190,39 @@ class SecurityController extends AbstractController
 	{
 		$oError = new \Symfony\Component\Form\FormError($this->translator->trans($sError));
 		$this->_oForm->get($sField)->addError($oError);
+	}
+	/**
+	 * Генерирует пароль для пользователя
+	 * @param int $length длина пароля
+	 * @return string
+	 */
+	private function _generatePassword(int $length = 8) : string
+	{
+
+		$chars = 'abcdefghijklmnopqrstuvwxyz';
+		$chars .= strtoupper($chars);
+		$chars .= '1234567890';
+
+		$sPattern =  "/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/s";
+
+		while (true) {
+			$L = 0;
+			$rate = [];//{}
+			$str = '';
+			$limit = strlen($chars) - 1;
+			while ($L < $length) {
+				$ch = $chars[ rand(0, $limit) ];
+				if (!isset($rate[$ch]) || $rate[$ch] < 1) {
+					$str .= $ch;
+					$rate[$ch] = isset($rate[$ch]) ? $rate[$ch] + 1 : 1;
+					$L++;
+				}
+			}
+			if (preg_match($sPattern, $str)) {
+				break;
+			}
+		}
+
+		return $str;
 	}
 }

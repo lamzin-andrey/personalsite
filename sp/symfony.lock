@@ -93,6 +93,9 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "landlib/simplemail": {
+        "version": "dev-master"
+    },
     "monolog/monolog": {
         "version": "2.0.2"
     },

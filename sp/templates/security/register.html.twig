@@ -4,13 +4,10 @@
     'form_div_layout.html.twig',
     'form/layout.html.twig'
 ] %}
-{% block title %}Signup{% endblock %}
+{% block title %}{{ 'Signup'|trans }}{% endblock %}
 
 {% block content %}
 
-
-
-{#<form id="regForm" TODO check class="user" >#}
 {{ form_start(form, { 'action' : path('register'), 'attr': {'class' : 'user'} }) }}
     <div class="form-group row">
         <div class="col-sm-6 mb-3 mb-sm-0">

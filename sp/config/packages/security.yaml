@@ -21,7 +21,9 @@ security:
                 csrf_token_generator: security.csrf.token_manager
             logout: ~
                 # target: /hello/anonymous
-
+            remember_me:
+                secret:   '%kernel.secret%'
+                path:     /
 
 
             # activate different ways to authenticate

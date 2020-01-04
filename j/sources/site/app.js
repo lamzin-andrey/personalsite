@@ -16,7 +16,7 @@ import './../../../s/vendor/bootstrap4_sticky_footer.css';
 //add prism css
 import './../../../j/vendor/prism/0.css';
 
-Vue.component('youtube', require('../landlib/vue/2/youtube/youtube.vue'));
+Vue.component('youtube', require('../landlib/vue/2/youtube/youtube.vue').default);
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';

@@ -1,0 +1,29 @@
+{% extends 'security/loginmaster.html.twig' %}
+{% trans_default_domain 'loginforms' %}
+{% form_theme form with [
+    'form_div_layout.html.twig',
+    'form/layout.html.twig'
+] %}
+{% block title %}{{ 'Reset password'|trans }}{% endblock %}
+
+{% block content %}
+    {{ form_start(form, { 'action' : path('reset'), 'attr': {'class' : 'user'} }) }}
+    <div class="form-group">
+        <!-- v-b421validators="'required,email'" -->
+        {{ form_widget(form.email, {'attr': {'placeholder': 'Email'|trans, 'class': form.email|get_loginform_input_css} }) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.email) }}
+        </div>
+    </div>
+    <button  class="btn btn-primary btn-user btn-block">
+        {{ 'Reset-Password'|trans({'trans_domain' : 'messages'}, 'messages') }}
+    </button>
+    {% if (isEmailWasFound == 1) %}
+        <div  class="alert alert-success mt-3">
+            <p>
+            {{ 'send reset success'|trans }} <a href="{{ emailHostLink }}" target="_blank">Email</a>
+            </p>
+        </div>
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}
