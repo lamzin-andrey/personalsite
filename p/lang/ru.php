@@ -132,4 +132,7 @@ $aLang = [
 	'Record is top' => 'Запись самая первая',
 	'Record is last' => 'Запись самая последняя',
 	
+	'Time control' => 'Учёт времени',
+	'PortfolioVDT' => 'Портфолио (VDT)',
+	
 ];

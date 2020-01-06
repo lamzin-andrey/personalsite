@@ -256,6 +256,15 @@ class Route {
 		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
 		
 		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/portfoliovdt/') {
+			$this->master = __dir__ . '/master.tpl.php';
+			$handler = $sCtrlDir . 'list.php';
+			$this->view    = __dir__ . '/view/portfolio.tpl.php';
+			require_once $handler;
+			$this->app = new ProductsEditor/*PortfolioListVdt*/();
+		}
+		
 		if ($baseUrl == '/p/portfolio/') {
 			$this->master = __dir__ . '/master.tpl.php';
 			$handler = $sCtrlDir . 'list.php'; //from list

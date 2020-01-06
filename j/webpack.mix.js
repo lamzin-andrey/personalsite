@@ -14,10 +14,11 @@ let mix = require('laravel-mix');
 //mix.js('sources/admin/vue/js/app.js', 'a.js');
 //Для авторизованных админов
 //mix.js('sources/adminauth/app.js', 'b.js');
+mix.js('sources/adminauthvdt/app.js', 'e.js');
 
 //Страницы сайта
 //no vue version TODO удалить файл c.js через год после 10 10 2019
-mix.js('sources/site/app.js', 'd.js');//no vue version
+//mix.js('sources/site/app.js', 'd.js');//no vue version
 mix.styles([
 		'./../s/vendor/bootstrap4.2.1.min.css',
 		'./../s/vendor/fontawesome5/all.css',

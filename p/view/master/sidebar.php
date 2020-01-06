@@ -26,6 +26,8 @@
             <?php echo $app->drawMenuItem('/p/', 'Articles') ?>
             <?php echo $app->drawMenuItem('/p/articlecategories/', 'Articles Categories') ?>
             <?php echo $app->drawMenuItem('/p/portfolio/', 'Portfolio') ?>
+            <?php echo $app->drawMenuItem('/p/portfoliovdt/', 'PortfolioVDT') ?>
+            <?php echo $app->drawMenuItem('/sp/public/', 'Time control') ?>
           </div>
         </div>
       </li>
