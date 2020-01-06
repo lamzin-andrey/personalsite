@@ -128,7 +128,6 @@ class SecurityController extends AbstractController
 	}
 
 	/**
-	 * TODO
 	 * @Route("/reset", name="reset")
 	*/
 	public function reset(Request $oRequest, TranslatorInterface $t, UserPasswordEncoderInterface $oEncoder)

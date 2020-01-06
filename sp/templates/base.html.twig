@@ -20,7 +20,6 @@
     <body id="page-top">
 
         {% block body %}
-            {# TODO вниматэльней будь (c), тут конь не валялся #}
             <!-- Page Wrapper -->
             <div id="wrapper">
                 {% if (app.user) %}
@@ -52,8 +51,6 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endfor %}
-                            {#<?php include $route->view;?> TODO I stop here TODO view need defined!#}
-                            {{ include(view) }}
                         </div>
                         <!-- /.container-fluid -->
                     </div>
@@ -102,7 +99,8 @@
         {% block javascripts %}
             {# /j/b.js #}
             <!-- Bootstrap core JavaScript-->
-            <script charset="UTF-8" src="{{ asset('j/b.js') }}"></script>
+            <script charset="UTF-8" src="/j/b.js"></script>
+
             {# Он его два раза что ли тащит? #}
             <script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
             <!-- Core plugin JavaScript-->

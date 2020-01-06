@@ -2,16 +2,30 @@
 namespace App\Twig;
 
 use \Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\TwigFilter;
 
 class AppExtension extends \Twig\Extension\AbstractExtension
 {
 
+	/** @property Request _oRequest */
+	private $_oRequest = null;
+
+	/** @property string _baseUrl */
+	private $_baseUrl = '';
+
 	public function __construct(ContainerInterface $container,  TranslatorInterface $t)
 	{
 		$this->container = $container;
 		$this->translator = $t;
+		$this->_oRequest = $container->get('request_stack')->getCurrentRequest();
+		$oServer = $this->_oRequest->server ?? null;
+
+		if ($oServer) {
+			$url = explode('?', $oServer->get('REQUEST_URI'));
+			$this->_baseUrl = $url[0];
+		}
 	}
 
 	public function getFilters() : array
@@ -20,6 +34,10 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 			new TwigFilter('get_loginform_input_css', array($this, 'getLoginformInputCss')),
 			new TwigFilter('rouble', array($this, 'roubleFilter')),
 			new TwigFilter('translite_url', array($this, 'transliteUrl')),
+			new TwigFilter('draw_menu_item', array($this, 'drawMenuItem')),
+			new TwigFilter('topbar_new_is_read', array($this, 'topbarNewIsRead')),
+			new TwigFilter('topbar_message_is_read', array($this, 'topbarMessageIsRead')),
+			new TwigFilter('get_auth_user_display_name', array($this, 'getAuthUserDisplayName')),
 			new TwigFilter('get_uid', array($this, 'getUid'))
 		];
 	}
@@ -88,5 +106,58 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	{
 		//TODO return $this->_oViewDataService->getUid();
 		return 0;
+	}
+	/**
+	 * Вернёт html строки меню левого сайдбара
+	 * @return string
+	*/
+	public function drawMenuItem(string $href, string $text, string $translationDomain = 'sidebar') : string
+	{
+		return '<a class="collapse-item'. $this->_activeMenuItem($href) . '" href="' . $href . '">' . $this->translator->trans($text, [], $translationDomain) . '</a>';
+	}
+	/**
+	 * @description Вернет строку active если запрошенный url совпадает с запрошеным (для пунктов меню сайдбара)
+	 * @return string
+	*/
+	private function _activeMenuItem(string $href) : string
+	{
+		if ($this->_baseUrl == $href) {
+			return ' active';
+		}
+		return '';
+	}
+	/**
+	 * TODO
+	 * Вернёт true если новость не прочитана
+	 * @param Entity $oNew
+	 * @return string
+	*/
+	public function topbarNewIsRead($oNew) : string
+	{
+		return ($oNew->getIsRead() ? 'small text-gray-500' : 'font-weight-bold');
+	}
+	/**
+	 * Вернёт отображаемое имя польователя
+	 * @param ?Ausers $oUser
+	 * @return string
+	*/
+	public function getAuthUserDisplayName($oUser) : string
+	{
+		if (!$oUser) {
+			return '';
+		}
+		$sName = trim($oUser->getName());
+		$surname = trim($oUser->getSurname());
+		return trim( $sName . ' ' . $surname );
+	}
+	/**
+	 * TODO
+	 * Вернёт true если сообщение не прочитано
+	 * @param Entity $oMessage
+	 * @return string
+	 */
+	public function topbarMessageIsRead($oMessage) : string
+	{
+		return $oMessage->isRead ? '' : 'font-weight-bold';
 	}
 }

@@ -4,3 +4,11 @@ twig:
 
     globals:
         pageHeading: 'ITitle'
+        sCountUnreadNews: ''
+        sCountUnreadMessages: ''
+        totalNewsCount: 0
+        displayInTopListNewsCount: 0
+        totalMessagesCount: 0
+        displayInTopListMessagesCount: 0
+        aNews: []
+        aMessages: []
