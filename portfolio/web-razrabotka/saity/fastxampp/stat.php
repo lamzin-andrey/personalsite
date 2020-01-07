@@ -108,7 +108,7 @@ function write_stat_v() {
 					php704 = php704 + $php704,
 					php708 = php708 + $php708,
 					php7312 = php7312 + $php7312,
-					php7312 = php741 + $php741
+					php741 = php741 + $php741
 			 WHERE `year` = $year AND `month` = $month";
 			 
 			query($q);
