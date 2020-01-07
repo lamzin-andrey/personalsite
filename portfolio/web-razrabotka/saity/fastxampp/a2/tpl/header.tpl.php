@@ -13,7 +13,7 @@
     </div>
     <div class="col-6 align-items-center">
         <div>
-            <div class="text-white u-mw-124px">PHP 7.3.12</div>
+            <div class="text-white u-mw-124px">PHP 7.4.1</div>
             <div class="u-text-orange">64 bit</div>
             <div class="u-">&nbsp;</div>
         </div>

@@ -13,7 +13,7 @@
     </div>
     <div class="col-6 col-lg-4 d-flex align-items-center u-fastxampp-header-center-lg">
         <div>
-            <div class="text-white">PHP 7.3.12</div>
+            <div class="text-white">PHP 7.4.1</div>
             <div class="u-text-orange">64 bit</div>
         </div>
 
