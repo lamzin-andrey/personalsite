@@ -42,6 +42,7 @@ $res = query($cmd);
 	<th>Ubuntu</th>
 	<th>Kubuntu</th>
 	<th>Kubuntu 16.04</th>
+	<th>php 7.4.1</th>
 	<th>php 7.3.12</th>
 	<th>php 7.0.4</th>
 	<th>php 7.0.8</th>
@@ -56,6 +57,7 @@ foreach  ($res as $row) {?>
 	<td><?=$row['ubuntu']?></td>
 	<td><?=$row['kubuntu']?></td>
 	<td><?=$row['kubuntu1604']?></td>
+	<td><?=$row['php741']?></td>
 	<td><?=$row['php7312']?></td>
 	<td><?=$row['php704']?></td>
 	<td><?=$row['php708']?></td>
@@ -90,6 +92,7 @@ function write_stat_v() {
 		$php704 =  $v == '704' ? 1 : 0;
 		$php708 =  $v == '708' ? 1 : 0;
 		$php7312 = $v == '7312' ? 1 : 0;
+		$php741 = $v == '741' ? 1 : 0;
 		
 		$ex = (int)dbvalue("SELECT `year` FROM $t WHERE `year` = $year AND `month` = $month");
 		
@@ -104,12 +107,13 @@ function write_stat_v() {
 					kubuntu1604 = kubuntu1604 + $K16,
 					php704 = php704 + $php704,
 					php708 = php708 + $php708,
-					php7312 = php7312 + $php7312
+					php7312 = php7312 + $php7312,
+					php7312 = php741 + $php741
 			 WHERE `year` = $year AND `month` = $month";
 			 
 			query($q);
 		} else {
-			$q = "INSERT INTO $t VALUES ($year, $month, $r32, $r64, $xu, $u, $k, $K16, $php704, $php708, $php7312)";
+			$q = "INSERT INTO $t VALUES ($year, $month, $r32, $r64, $xu, $u, $k, $K16, $php704, $php708, $php7312, $php741)";
 			query($q);
 		}
 	}
