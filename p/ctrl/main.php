@@ -5,6 +5,7 @@ class ArticleEditor extends AdminAuth {
 	
 	public $pageHeading = 'Articles';
 	
+	
 	/** @property string jsonData Данные для страницы в формате JSON*/
 	public $jsonData = '';
 	
