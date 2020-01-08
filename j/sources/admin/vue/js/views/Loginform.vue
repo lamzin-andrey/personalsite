@@ -81,7 +81,7 @@
                     return this.onFailLogin(data, null, null, formInputValidator);
 				}
 				let sReferer = this.$root.storage('sReferer');
-				if (sReferer) {
+				if (sReferer && data.a != 1) {
 					window.location.href = sReferer;
 					return;
 				}

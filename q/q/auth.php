@@ -46,6 +46,7 @@ class Auth {
 	static public function logout()
 	{
 		unset($_COOKIE[AUTH_COOKIE_NAME]);
+		sess('nuid', 'unset');
 		setcookie(AUTH_COOKIE_NAME, null, -1, '/');
 	}
 	
@@ -135,6 +136,7 @@ class Auth {
 	static public function setCookie(string $cookie)
 	{
 		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 365 * 24 * 3600, '/', '', false, true);
+		$_COOKIE[AUTH_COOKIE_NAME] = $cookie;
 	}
 	/**
 	 * @description Установить куку на час
@@ -142,6 +144,7 @@ class Auth {
 	*/
 	static public function setCookieShort(string $cookie)
 	{
-		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 3600, '/', false, true);
+		setcookie(AUTH_COOKIE_NAME, $cookie, time() + 3600, '/', '', false, true);
+		$_COOKIE[AUTH_COOKIE_NAME] = $cookie;
 	}
 }

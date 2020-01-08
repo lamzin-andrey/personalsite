@@ -153,7 +153,7 @@
             onSuccess(data, formInputValidator) {
                 if (data.status == 'error') {
                     return this.onFail(data, null, null, formInputValidator);
-                }
+				}
                 //show alert You success register! Click and login
                 this.password = 
                 this.passwordConfirm = 
@@ -162,7 +162,11 @@
                 this.agree = 
                 this.subscribe = 
                 this.email = '';
-                $('#regForm')[0].reset();
+				$('#regForm')[0].reset();
+				if (data.r) {
+					location.href = data.r;
+					return;
+				}
                 this.alertIsVisible = true;
             },
             /**

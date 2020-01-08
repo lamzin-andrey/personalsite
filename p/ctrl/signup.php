@@ -12,7 +12,8 @@ class Signup extends BaseApp {
 	public function __construct() {
 		$this->table = 'ausers';
 		$this->formHeading = 'Register_now';
-		$this->referer = a($_SERVER, 'HTTP_REFERER');
+		$this->_setReferer();
+		$this->referer = sess('ref');
 		parent::__construct();
 		$url = $_SERVER['REQUEST_URI'];
 		if ($url == '/p/signup.jn/' && count($_POST)) {
@@ -53,7 +54,7 @@ class Signup extends BaseApp {
 			$cmd = $this->updateQuery('id = ' . $userId);
 			query($cmd, $nR, $aR);
 		}
-		json_ok();
+		json_ok_arr(['r' => $this->referer]);
 	}
 	/**
 	 * @description
@@ -141,5 +142,20 @@ class Signup extends BaseApp {
 		$report['errors'] = $errors;
 		json_error_arr($report);
 		return false;
+	}
+	/**
+	 * Запоминает в сессии реферера, если он не равен станице signup или signin
+	*/
+	private function _setReferer()
+	{
+		$sRef = a($_SERVER, 'HTTP_REFERER');
+		if (!$sRef) {
+			return;
+		}
+		$aRef = parse_url($sRef);
+		$sUrl ??= $aRef['path'];
+		if ($sUrl && $sUrl != '/p/signup/'  && $sUrl != '/p/signin/' ) {
+			sess('ref', $sUrl);
+		}
 	}
 }

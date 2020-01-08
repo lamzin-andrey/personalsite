@@ -47,8 +47,13 @@ class Signin extends BaseApp {
 			} else {
 				if ($this->rememberMe) {
 					Auth::setCookie($pwdData['guest_id']);
+					/*var_dump($_COOKIE);
+					die;/**/
 				} else {
 					Auth::setCookieShort($pwdData['guest_id']);
+				}
+				if (Auth::isAdmin()) {
+					json_ok_arr(['a' => 1]);
 				}
 				json_ok();
 			}
