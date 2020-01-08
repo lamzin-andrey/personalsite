@@ -153,7 +153,8 @@ class Signup extends BaseApp {
 			return;
 		}
 		$aRef = parse_url($sRef);
-		$sUrl ??= $aRef['path'];
+		//$sUrl ??= $aRef['path'];
+		$sUrl = $aRef['path'] ?? '';
 		if ($sUrl && $sUrl != '/p/signup/'  && $sUrl != '/p/signin/' ) {
 			sess('ref', $sUrl);
 		}
