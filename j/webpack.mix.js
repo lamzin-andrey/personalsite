@@ -11,10 +11,10 @@ let mix = require('laravel-mix');
  |
  */
 //Для неавторизованных пользователей
-mix.js('sources/admin/vue/js/app.js', 'a.js');
+//mix.js('sources/admin/vue/js/app.js', 'a.js');
 //Для авторизованных админов
 //mix.js('sources/adminauth/app.js', 'b.js');
-mix.js('sources/adminauthvdt/app.js', 'e.js');
+//mix.js('sources/adminauthvdt/app.js', 'e.js');
 
 //Страницы сайта
 //no vue version TODO удалить файл c.js через год после 10 10 2019
@@ -27,4 +27,4 @@ mix.styles([
 
 
 //Конвертер онлайн
-//mix.js('sources/phd/js/app.js', 'd.js');
+mix.js('sources/phd/js/app.js', 'e.js');
