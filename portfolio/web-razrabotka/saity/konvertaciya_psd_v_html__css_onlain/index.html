@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xml:lang="ru" lang="ru">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<link rel="canonical" href="https://andryuxa.ru/portfolio/web-razrabotka/saity/konvertaciya_psd_v_html__css_onlain/">
+		<!-- ,target-densitydpi=device-dpi -->
+		<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no"><meta name="description" content="Конвертация psd в html ондайн. Не сделает за верстальщика всю работу, но избавит от рутины.">
+		<title>Конвертация psd в html + css онлайн -|- Сайт Андрея</title>
+		<link rel="stylesheet" type="text/css" href="/s/app.css">
+		<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body>
+		<div class="container u-full-width" id="phdapp">
+			<header>
+				<div class="row">
+					<div class="col">
+						<div class="text-left u-mainhead">
+							<h1>Блог Андрея</h1>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div>&nbsp;</div>
+			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+			  <a class="navbar-brand" href="/">Начало</a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			  </button>
+
+			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+				  <li class="nav-item">
+					<a class="nav-link" href="/portfolio/">Портфолио</a>
+				  </li>
+				  <li class="nav-item active">
+					<a class="nav-link" href="/blog/">Блог</a>
+				  </li>
+				  <li class="nav-item">
+					<a class="nav-link" href="/clients/">Клиентам</a>
+				  </li>
+				</ul>
+			  </div>
+			</nav>
+			<nav aria-label="breadcrumb" class="mt-4">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/portfolio/">Портфолио</a></li>
+<li class="breadcrumb-item"><a href="/portfolio/web-razrabotka/">Web-разработка</a></li>
+<li class="breadcrumb-item"><a href="/portfolio/web-razrabotka/saity/">Сайты</a></li>
+
+		<li class="breadcrumb-item active" aria-current="page">Сервис для конвертации psd в html + css онлайн</li>
+	</ol>
+</nav>
+
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-12 col-lg-8">
+					<article>
+						<h1>Сервис для конвертации psd в html + css онлайн</h1>
+						<time datetime="2020-01-13 15:54:29" class="d-block text-right text-muted small">Обновлено 13.01.2020 в 15:54</time>
+						<p>Конвертируйте ваши psd в готовую html5 и css3 верстку.</p><p>Этот сервис вряд ли заменит вам верстальщика, но он поможет верстальщику потратить минимум времени на рутинные операции.</p><p></p><p>Для чего предназначен этот сервис:</p><p>
+<ul class="gist">
+   <li>В первую очередь сервис ориентирован на создание сайтов из несложных дизайн-макетов. Он помогает значительно сократить время и стоимость их создания.</li>
+   <li>При создании верстки сложных страниц сервис быстро сделает нарезку изображений из слоев PSD файла, извлечет тексты с CSS3 стилями, сгенерирует CSS3 стили для слоев с эффектами и сверстает каркас сайта, готовый к дальнейшей доработке.</li>
+   <li>Сервис помогает добиться высокой скорости создания сайтов для вас или ваших заказчиков.</li>
+</ul>
+</p><p>
+Примеры сконвертированных psd:
+<div>
+   <div class="mb-3">
+      <div class="phd-psd-h-lim border border-info rounded mb-3">
+          <img src="/i/phdpreview.jpeg" class="w-100" style="margin-top: -50px">
+      </div>
+      <div class="row">
+          <div class="col-4 text-center"><a href="/d/phdpsd.zip">Скачать архив с версткой</a></div>
+          <div class="col-4 text-center"><a href="/d/phdpsd.psd">Скачать psd</a></div>
+          <div class="col-4 text-center"><a href="/d/phdpsd/" target="_blank">Смотреть  верстку онлайн</a></div>
+      </div>
+  </div>
+</div>
+
+<phdexamples ref="phdexamples"></phdexamples>
+
+<p>&nbsp;</p>
+<div class="text-center" v-if="!workExamplesIsLoaded">
+<div class="spinner-grow text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class="spinner-grow text-success" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class="spinner-grow text-warning" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+</div>
+
+<div class="text-center" v-if="workExamplesIsLoaded && hasUnloadWorks">
+    <button class="btn btn-primary" v-on:click="onClickLoadMoreExamples">Смотреть ещё работы</button>
+</div>
+
+<div class="alert alert-info mt-4">Стоимость конвертации от 50 до 100 рублей</div>
+
+<div class="text-center">
+<div class="spinner-grow text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class="spinner-grow text-success" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class="spinner-grow text-warning" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+</div>
+
+<div class="text-center">
+    <button class="btn btn-primary">Загрузить PSD файл</button>
+</div>
+
+</p><p></p><p><link rel="stylesheet" type="text/css" href="/s/sources/site/phd/phd.css"></p><p></p><p><!--a href="" >Что это</a>.</p><p><a href="https://github.com/lamzin-andrey/symfony-tools-bundle#ru" target="_blank">О SymfonyToolsBundle читайте  гитхаб</a>.</p><p><pre><code class="language-json">CODE)</code></pre></p><p><code class="language-bash"> </code></p><p><a href="" target="_blank"></a--></p>
+					</article>
+				</div>
+				<div class="col-12 col-lg-4  u-right-side">
+					<ul class="list-group text-center mb-3">
+						<li class="list-group-item bg-light">
+	<p>Работы из портфолио</p>
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/fx.jpg" alt="Утилита для удобного добавления сайтов на localhost"></div>
+	<div><a href="/portfolio/web-razrabotka/saity/fastxampp/">Утилита для удобного добавления сайтов на localhost</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="https://andryuxa.ru/i/2019/09/4b473008759a033a0e015f28a1f504d0.png" alt="Компонент vue 2 для безопасной вставки видео с youtube на сайт"></div>
+	<div><a href="/portfolio/web-razrabotka/komponenty/frontend/vue/komponent_vue_2_dlya_vstavki_video_s_youtube_na_sait/">Компонент vue 2 для безопасной вставки видео с youtube на сайт</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/11/159f4e22e5f9cc95959d9c51c77a2d01.png" alt="Приватная записная книжка"></div>
+	<div><a href="/portfolio/web-razrabotka/web-prilojeniya/securepad/">Приватная записная книжка</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/12/c20eb66189ba065476fcdc06d87def24.jpg" alt="Команда для декорирования контроллера в Symfony"></div>
+	<div><a href="/portfolio/web-razrabotka/komponenty/bekend/symfony/34/symfony_bundle_dlya_dekoracii_kontrollera_iz_konsoli/">Команда для декорирования контроллера в Symfony</a></div>
+	<p>
+	<small>Избавляемся от рутины, сосредотачиваемся на главном</small>
+</p>
+
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/11/fd0bba40c44c4a924957a51cab485ec5.jpg" alt="Письмо в будущее"></div>
+	<div><a href="/portfolio/web-razrabotka/web-prilojeniya/email_v_budushee/">Письмо в будущее</a></div>
+	<p>
+	<small>Немедленно связаться с будущим</small>
+</p>
+
+</li>
+
+<li class="list-group-item bg-light mt-4">
+	<p>Популярное в блоге</p>
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/10/3d30bd54fac62ecd9fb8fb16a8093895.jpg" alt="Выбираем бэкенд (и фронтенд) фреймвёрк в 2019-ом году."></div>
+	<div><a href="/blog/kakoi_bekend_freimverk_izuchat_v_2019-om_godu/">Выбираем бэкенд (и фронтенд) фреймвёрк в 2019-ом году.</a></div>
+	<p>
+	<small>Выбираем бэкенд (и фронтенд) фреймвёрк в 2019-ом году.</small>
+</p>
+
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/10/18513c5c7bcad22df8fed1eb2ef63768.jpg" alt="FAQ по работе с Symfony 3 и Symfony 4 на localhost xubuntu 18.04"></div>
+	<div><a href="/blog/faq_po_rabote_s_symfony_3_i_symfony_4_na_localhost_xubuntu_1804/">FAQ по работе с Symfony 3 и Symfony 4 на localhost xubuntu 18.04</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/09/13e7036e0bec5ec2242c083671229397.jpg" alt="Кэширование с помощью service worker - ещё один мануал. Если вы до сих пор не разобрались - вам сюда."></div>
+	<div><a href="/blog/keshirovanie_s_pomoshyu_service_worker/">Кэширование с помощью service worker - ещё один мануал. Если вы до сих пор не разобрались - вам сюда.</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/10/5ac77d47eeb325012c7a775f8217d4db.jpg" alt="FAQ по установке Symfony 3 и Symfony 4 на localhost xubuntu 18.04"></div>
+	<div><a href="/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/">FAQ по установке Symfony 3 и Symfony 4 на localhost xubuntu 18.04</a></div>
+	
+</li>
+<li class="list-group-item">
+	<div><img data-src="/i/2019/09/5c1395f1fe079a2ddfca417cebf7ae54.jpg" alt="Кэширование с помощью service worker при первой загрузке страницы."></div>
+	<div><a href="/blog/keshirovanie_s_pomoshyu_service_worker_s_otslejivaniem_izmeneniy/">Кэширование с помощью service worker при первой загрузке страницы.</a></div>
+	
+</li>
+
+
+					</ul>
+				</div>
+			</div>
+			<back-to-top text="Back to top" visibleoffset="300" right="10px">
+				<img alt="Up" src="/i/up.png" id="bttimg" style="display:none">
+			</back-to-top>
+			<b4alertdlg id="appAlertDlg" v-bind:params="b4AlertDlgParams"></b4alertdlg>
+			<b4confirmdlg id="appAlertDlg" v-bind:params="b4ConfirmDlgParams"></b4confirmdlg>
+		</div>
+		
+		<div class="footer bg-dark text-light">
+			<div class="container">
+				<div class="row">
+					<div class="col ">
+						<span><!--LiveInternet counter--><script type="text/javascript">
+	document.write('<a href="//www.liveinternet.ru/click" '+
+		'target="_blank"><img src="//counter.yadro.ru/hit?t44.2;r'+
+		escape(document.referrer)+((typeof(screen)=='undefined')?'':
+			';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
+			screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
+		';h'+escape(document.title.substring(0,150))+';'+Math.random()+
+		'" alt="" title="LiveInternet" '+
+		'border="0" width="31" height="31"><\/a>')
+</script><!--/LiveInternet-->
+</span>
+						<span>&copy; Андрей Ламзин</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>var rid = '44';</script>
+        <script src="/j/f.js" async charset="UTF-8"></script>
+	</body>
+</html>
