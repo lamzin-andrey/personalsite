@@ -52,7 +52,7 @@ class Portfolio
     /**
      * @var int|null
      *
-     * @ORM\Column(name="is_deleted", type="integer", nullable=true, options={"comment"="Удален или нет"})
+     * @ORM\Column(name="is_deleted", type="integer", nullable=true, options={"default"="0", "comment"="Удален или нет"})
      */
     private $isDeleted = '0';
 
@@ -73,7 +73,7 @@ class Portfolio
     /**
      * @var bool|null
      *
-     * @ORM\Column(name="is_hidden", type="boolean", nullable=true)
+     * @ORM\Column(name="is_hidden", type="boolean", nullable=true, options={"default"="0","comment"="Скрыт или нет"})
      */
     private $isHidden = '0';
 
@@ -163,8 +163,8 @@ class Portfolio
 
     /**
      * @var bool
-     *
-     * @ORM\Column(name="hide_from_productlist", type="boolean", nullable=false, options={"comment"="Показывать ли в спике на странице Портфолио"})
+     *options={"default"="1","comment"="Позиция"}
+     * @ORM\Column(name="hide_from_productlist", type="boolean", nullable=false, options={"default"="0", "comment"="Показывать ли в спике на странице Портфолио"})
      */
     private $hideFromProductlist = '0';
 

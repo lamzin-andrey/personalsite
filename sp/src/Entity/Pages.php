@@ -150,16 +150,16 @@ class Pages
     /**
      * @var int|null
      *
-     * @ORM\Column(name="is_deleted", type="integer", nullable=true, options={"comment"="Удален или нет"})
+     * @ORM\Column(name="is_deleted", type="integer", nullable=true, options={"default"="0", "comment"="Удален или нет"})
      */
-    private $isDeleted = '0';
+    private $isDeleted = 0;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="delta", type="integer", nullable=true, options={"default"="1","comment"="Позиция"})
      */
-    private $delta = '1';
+    private $delta = 1;
 
     /**
      * @var int|null
@@ -248,7 +248,7 @@ class Pages
     /**
      * @var bool
      *
-     * @ORM\Column(name="hidden_in_list", type="boolean", nullable=false, options={"comment"="1 - Скрывать в списке статей"})
+     * @ORM\Column(name="hidden_in_list", type="boolean", nullable=false, options={"default"="0","comment"="1 - Скрывать в списке статей"})
      */
     private $hiddenInList = '0';
 

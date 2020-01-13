@@ -1,0 +1,12 @@
+.gist li {
+    margin-bottom: 8px;
+    padding-left: 25px;
+    background: url(/i/gitem.png) no-repeat left 2px;
+    line-height: 20px;
+    text-align: justify;
+    list-style-type: none;
+}
+.phd-psd-h-lim {
+	max-height: 263px;
+	overflow: hidden;
+}
