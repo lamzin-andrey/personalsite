@@ -7,6 +7,7 @@
 			v-b421validators="validators"
 			:aria-describedby="id + 'FileImmediatelyHelp'"
 			:id="id + 'FileImmediately'" :name="id + 'FileImmediately'"
+			:accept="accept"
 			@change="onSelectFile"
 			>
 			
@@ -23,6 +24,7 @@
 				:class="'custom-file-input' + (className ? (' ' + className) : '')"
 				v-b421validators="validators"
 				:aria-describedby="id + 'FileDefferHelp'"
+				:accept="accept"
 				:id="id + 'FileDeffer'" :name="id + 'FileDeffer'"
 				>
 				<label class="custom-file-label" :for="id + 'FileDeffer'">{{label}}</label>
@@ -66,6 +68,7 @@
 		},
 		props: {
 			'label' : {type:String},
+			'accept' : {type: String, default: '*'},
 			'validators' : {type:String},
 			'url' : {type:String, required:true},
 			'id' : {type:String},
@@ -79,6 +82,7 @@
 			//Кастомная функция {onProgress}. Формат onProgress такой же как у свойств listeners
 			'progressListener' : {type:Object},
 			'csrfToken' : {type:String},
+			'csfrTokenName': {type:String, default: '_token'},
 			'uploadButtonLabel' : {type:String, default : 'Upload'},
 			//Отправляем дополнительно данные перечисленных инпутов
 			'sendInputs' : {type:Array, default : () => { return []; }},
@@ -113,13 +117,20 @@
 			 * @param {InputFile}
 			*/
 			sendFile(iFile) {
-				let xhr = new XMLHttpRequest(), form = new FormData(), t, that = this, i, s, inp;
+				let xhr = new XMLHttpRequest(), form = new FormData(), t, that = this, i, s, inp, csrfTokenName;
 				form.append(iFile.id, iFile.files[0]);
 				//form.append("isFormData", 1);
 				form.append("path", this.url);
 				t = this.csrfToken;
+				csrfTokenName = this.csrfTokenName;
+				if (this.csrfTokenPriority) {
+					t = this.csrfTokenPriority;
+				}
+				if (this.csfrTokenPriorityName) {
+					csrfTokenName = this.csrfTokenPriorityName;
+				}
 				if (t) {
-					form.append("_token", t);
+					form.append(csrfTokenName, t);
 				}
 				if (this.sendInputs && this.sendInputs.length) {
 					for (i = 0; i < this.sendInputs.length; i++) {
@@ -248,7 +259,16 @@
 			*/
 			onClickUploadButton() {
 				this.sendFile( $('#' + this.id + 'FileDeffer')[0] );
-			}
+			},
+			/**
+			 * @description Установить значение CSRF токена
+			 * @param {String} sValue
+			 * @param {String} sName = '_token'
+			*/
+			setCsrfToken(sValue, sName = '_token') {
+				this.csrfTokenPriority = sValue;
+				this.csfrTokenPriorityName = sName;
+			},
            
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName

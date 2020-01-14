@@ -234,9 +234,9 @@ class Pages
     /**
      * @var int
      *
-     * @ORM\Column(name="rating", type="integer", nullable=false, options={"comment"="Количество просмотров статьи"})
+     * @ORM\Column(name="rating", type="integer", nullable=false, options={"default"="0", "comment"="Количество просмотров статьи"})
      */
-    private $rating = '0';
+    private $rating = 0;
 
     /**
      * @var string|null
@@ -255,9 +255,9 @@ class Pages
     /**
      * @var bool
      *
-     * @ORM\Column(name="force_recompiled", type="boolean", nullable=false, options={"comment"="1 когда надо всегода перекомипилировать страницу (например, для главной страницы это очень важно)"})
+     * @ORM\Column(name="force_recompiled", type="boolean", nullable=false, options={"default"="0", "comment"="1 когда надо всегода перекомипилировать страницу (например, для главной страницы это очень важно)"})
      */
-    private $forceRecompiled = '0';
+    private $forceRecompiled = 0;
 
     public function getId(): ?int
     {

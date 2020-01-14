@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * PhdUsers
  *
  * @ORM\Table(name="phd_users")
  * @ORM\Entity
+ * @UniqueEntity(fields={"hash", "email"})
  */
 class PhdUsers
 {
@@ -23,7 +25,6 @@ class PhdUsers
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="hash", type="string", length=64, nullable=true, options={"comment"="md5(IP) + md5(UTIME + ua)"})
      */
     private $hash;
@@ -31,7 +32,7 @@ class PhdUsers
     /**
      * @var string|null
      *
-     * @ORM\Column(name="auth_hash", type="string", length=256, nullable=true, options={"comment"="sha256(md5(IP) + md5(UTIME + ua)) Для авторизауции при переходе по ссылке из письма"})
+     * @ORM\Column(name="auth_hash", type="string", length=256, nullable=true, options={"comment"="sha256(md5(IP) + md5(UTIME + ua)) Для авторизации при переходе по ссылке из письма"})
      */
     private $authHash;
 

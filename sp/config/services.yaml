@@ -6,6 +6,9 @@
 parameters:
     app.siteAdminEmail: "%env(resolve:site_admin_email)%"
 
+    #phd section
+    app.phdusercookiename: phdu
+
 services:
     # default configuration for services in *this* file
     _defaults:

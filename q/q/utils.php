@@ -226,7 +226,7 @@ function utils_gifResize($srcFilename, $destFilename, $destW, $destH, $defaultTr
  * */
 function utils_jpgResize($srcFilename, $destFilename, $destW, $destH, $quality = 80, $bgW = 0, $bgH = 0, $color = [0, 0, 0])
 {
-	if (!$img = @imagecreatefromjpeg($srcFilename)) {
+	if (!$img = imagecreatefromjpeg($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
 	$sz = getImageSize($srcFilename);

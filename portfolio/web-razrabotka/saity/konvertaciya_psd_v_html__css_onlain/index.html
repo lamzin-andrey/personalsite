@@ -99,20 +99,24 @@
 
 <div class="alert alert-info mt-4">Стоимость конвертации от 50 до 100 рублей</div>
 
-<div class="text-center">
-<div class="spinner-grow text-primary" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-success" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
-<div class="spinner-grow text-warning" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
+<div class="text-center" v-if="convertProcessed">
+	<div class="spinner-grow text-primary" role="status">
+	  <span class="sr-only">Loading...</span>
+	</div>
+	<div class="spinner-grow text-success" role="status">
+	  <span class="sr-only">Loading...</span>
+	</div>
+	<div class="spinner-grow text-warning" role="status">
+	  <span class="sr-only">Loading...</span>
+	</div>
 </div>
 
-<div class="text-center">
-    <button class="btn btn-primary">Загрузить PSD файл</button>
+<div class="text-center" v-if="!convertProcessed && !phdFromIsShow ">
+    <button class="btn btn-primary" v-on:click="onClickConvertNow">Конвертировать PSD в HTML</button>
+</div>
+
+<div v-if="phdFromIsShow">
+	<phdform ref="phdform"></phdform>
 </div>
 
 </p><p></p><p><link rel="stylesheet" type="text/css" href="/s/sources/site/phd/phd.css"></p><p></p><p><!--a href="" >Что это</a>.</p><p><a href="https://github.com/lamzin-andrey/symfony-tools-bundle#ru" target="_blank">О SymfonyToolsBundle читайте  гитхаб</a>.</p><p><pre><code class="language-json">CODE)</code></pre></p><p><code class="language-bash"> </code></p><p><a href="" target="_blank"></a--></p>

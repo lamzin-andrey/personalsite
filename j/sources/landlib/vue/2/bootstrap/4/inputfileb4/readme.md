@@ -34,7 +34,7 @@ This vue2 component ajax custom file input with progress bar.
 
 ```javascript
  	//This component
-	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue'));
+	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue').default);
 
 	export default {
 		name: 'editpostform',
