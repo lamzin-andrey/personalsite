@@ -16,6 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PhdController extends AbstractController
 {
+	/** @property string $_subdir подкаталог в который загружаются файлы при аплоаде */
+	private  $_subdir;
+
+	/** @property App\Entit\PhdMessage $_oMessage */
+	private	$_oMessage;
+
 	/**
 	 * Проверяет, установлена ли кука app.phdusercookiename
 	 * @Route("/phdsayhello", name="phdsayhello")
@@ -61,7 +67,7 @@ class PhdController extends AbstractController
 		$this->_subdir = 'd/' . date('Y/m');
 		$this->_oMessage = new PhdMessages();
 
-		$oForm = $this->createForm(get_class(new PsdUploadFormType()), $this->_oMessage, [
+		$oForm = $this->createForm(get_class(new PsdUploadFormType()), null, [
 			'app_service' => $oAppService,
 			'uploaddir' => $this->_subdir
 		]);
@@ -70,7 +76,6 @@ class PhdController extends AbstractController
 			'formToken' => $oForm->createView()->children['_token']->vars['value']
 		];
 
-
 		if ($oPhdUser) {
 			$oSession = $oRequest->getSession();
 			$oSession->set('phd_user', $oPhdUser);
@@ -78,7 +83,55 @@ class PhdController extends AbstractController
 		}
 		return $this->_json($aData);
 	}
-
+	/**
+	 * Загрузка файлов
+	 * @Route("/phdpsdupload.json", name="phdpsdupload")
+	 */
+	public function psdUpload(Request $oRequest, FileUploaderService $oFileUploaderService, AppService $oAppService)
+	{
+		if ($oRequest->getMethod() == 'POST') {
+			$aData =[];
+			$this->_subdir = 'd/' . date('Y/m');
+			$oForm = $this->createForm(get_class(new PsdUploadFormType()), null, [
+				'app_service' => $oAppService,
+				'uploaddir' => $this->_subdir
+			]);
+			//$oForm->handleRequest($oRequest);
+			$oForm->submit([
+				'_token' => $oRequest->get('psd_up_form')['_token'],
+				'psdfileFileImmediately' => $oRequest->files->get('psd_up_form')['psdfileFileImmediately']
+			]);
+			if ($oForm->isSubmitted() && $oForm->isValid()) {
+				//save file
+				$oFile = $oForm['psdfileFileImmediately']->getData();
+				if ($oFile) {
+					$sFileName = $oFileUploaderService->upload($oFile);
+					$s = '/' . $this->_subdir . '/' . $sFileName;
+					$this->_oMessage = new PhdMessages();
+					$this->_oMessage->setPsdLink($s);
+					$oSession = $oRequest->getSession();
+					$oPhdUser = $oSession->get('phd_user');
+					$this->_oMessage->setUid($oPhdUser->getId());
+					$aData['path'] = $s;
+					$oEm = $this->getDoctrine()->getManager();
+					$oEm->persist($this->_oMessage);
+					$oEm->flush();
+				} else {
+					$aData['error'] = 'No file!';
+				}
+				// ...
+			} else {
+				$aData['errors'] = $oAppService->getFormErrorsAsArray($oForm);
+				if (count($aData['errors'])) {
+					$aData['status'] = 'error';
+				}
+				$aData['error_text'] = 'No submit or invalid!';
+			}
+			return $this->_json($aData);
+		} else {
+			return $this->_json(['nopost' => 1]);
+		}
+	}
 	/** @property int _examplesPerPage Количество работ на одной "странице" */
 	private $_examplesPerPage = 3;
 

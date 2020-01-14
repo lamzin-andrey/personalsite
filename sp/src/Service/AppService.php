@@ -336,6 +336,7 @@ class AppService
 		$oFileUploader->setTranslationDomain($sTranslationDomain);
 		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
 		$oFileUploader->addAllowMimetype('image/vnd.adobe.photoshop');
+		//$oFileUploader->addAllowMimetype('image/jpeg');
 		$oFileUploader->setFileInputLabel('Append file!');
 		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
 		//$oFileUploader->addLiipBundleFilter('max_width');
@@ -392,6 +393,9 @@ class AppService
 		}
 		for ($i = 0; $i < $nSz - 1; $i ++) {
 			$oCurrentError = $oForm->getErrors(true)->next();
+			if (!$oCurrentError) {
+				continue;
+			}
 			$sKey = $oCurrentError->getOrigin()->getConfig()->getName();
 			$sMessage = $oCurrentError->getMessage();
 			$aResult[$sKey] = $sMessage;

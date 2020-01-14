@@ -11,7 +11,7 @@ class PsdUploadFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $oBuilder, array $options)
     {
-        $oBuilder
+        /*$oBuilder
             ->add('createdAt')
             ->add('resultLink')
             ->add('psdLink')
@@ -24,16 +24,22 @@ class PsdUploadFormType extends AbstractType
             ->add('state')
             ->add('uid')
             ->add('isPublish')
-        ;
-		$options['app_service']->addPsdField($options['uploaddir'], $oBuilder);
+        ;*/
+        $oBuilder->setMethod('POST');
+		$options['app_service']->addPsdField($options['uploaddir'], $oBuilder, 'psdfileFileImmediately');
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        /*$resolver->setDefaults([
             'data_class' => PhdMessages::class,
-        ]);
+        ]);*/
 		$resolver->setRequired('uploaddir');
 		$resolver->setRequired('app_service');
     }
+
+    public function getName(): string
+	{
+		return 'app.psd_up_form';
+	}
 }

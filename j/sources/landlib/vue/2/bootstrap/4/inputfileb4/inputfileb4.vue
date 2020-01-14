@@ -6,7 +6,8 @@
 			:class="'custom-file-input' + (className ? (' ' + className) : '')"
 			v-b421validators="validators"
 			:aria-describedby="id + 'FileImmediatelyHelp'"
-			:id="id + 'FileImmediately'" :name="id + 'FileImmediately'"
+			:id="idImmediately"
+			:name="idImmediately"
 			:accept="accept"
 			@change="onSelectFile"
 			>
@@ -25,7 +26,7 @@
 				v-b421validators="validators"
 				:aria-describedby="id + 'FileDefferHelp'"
 				:accept="accept"
-				:id="id + 'FileDeffer'" :name="id + 'FileDeffer'"
+				:id="idDeffered" :name="idDeffered"
 				>
 				<label class="custom-file-label" :for="id + 'FileDeffer'">{{label}}</label>
 				<div class="invalid-feedback"></div>
@@ -86,10 +87,24 @@
 			'uploadButtonLabel' : {type:String, default : 'Upload'},
 			//Отправляем дополнительно данные перечисленных инпутов
 			'sendInputs' : {type:Array, default : () => { return []; }},
-			'className' : {type:String}
+			'className' : {type:String},
+			'fieldwrapper': {type:String, default: ''}
 		},
 		name: 'inputb4',
-		
+		computed:{
+			idImmediately() {
+				if (this.fieldwrapper) {
+					return this.fieldwrapper + '[' + this.id + 'FileImmediately]';
+				}
+				return (this.id + 'FileImmediately');
+			},
+			idDeffered() {
+				if (this.fieldwrapper) {
+					return this.fieldwrapper + '[' + this.id + 'FileDeffer]';
+				}
+				return (this.id + 'FileDeffer');
+			}
+		},
         //вызывается раньше чем mounted
         data: function(){return {
             input:null
@@ -120,14 +135,14 @@
 				let xhr = new XMLHttpRequest(), form = new FormData(), t, that = this, i, s, inp, csrfTokenName;
 				form.append(iFile.id, iFile.files[0]);
 				//form.append("isFormData", 1);
-				form.append("path", this.url);
+				//form.append("path", this.url);
 				t = this.csrfToken;
 				csrfTokenName = this.csrfTokenName;
 				if (this.csrfTokenPriority) {
 					t = this.csrfTokenPriority;
 				}
 				if (this.csfrTokenPriorityName) {
-					csrfTokenName = this.csrfTokenPriorityName;
+					csrfTokenName = this.csfrTokenPriorityName;
 				}
 				if (t) {
 					form.append(csrfTokenName, t);

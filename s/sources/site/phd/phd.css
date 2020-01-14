@@ -10,3 +10,20 @@
 	max-height: 263px;
 	overflow: hidden;
 }
+.phd-spinner-count-down-text {
+	position: absolute;
+	top: 0px;
+	z-index: 501;
+	font-size: 0.9rem;
+	line-height: 3rem;
+	text-align: center;
+	width: 3rem;
+}
+.phd-spinner-size {
+	width:  3rem;
+	height: 3rem;
+}
+.phd-spinner-wrap-width {
+	width:  3rem;
+}
+
