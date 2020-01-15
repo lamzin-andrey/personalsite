@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PhdController extends AbstractController
 {
@@ -22,9 +24,12 @@ class PhdController extends AbstractController
 	/** @property App\Entit\PhdMessage $_oMessage */
 	private	$_oMessage;
 
+	/** @property int _examplesPerPage Количество работ на одной "странице" */
+	private $_examplesPerPage = 3;
+
 	/**
 	 * Проверяет, установлена ли кука app.phdusercookiename
-	 * @Route("/phdsayhello", name="phdsayhello")
+	 * @Route("/phdsayhello.json", name="phdsayhello")
 	 */
 	public function sayhello(Request $oRequest)
 	{
@@ -51,18 +56,69 @@ class PhdController extends AbstractController
 		$oResponse->headers->setCookie($oCookie);
 		return $oResponse;
 	}
+
+	/**
+	 * @Route("/phdsaveemail.json", name="phdsaveemail")
+	*/
+	public function phdsaveemail(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
+	{
+		$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		if (!$oPhdUser) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Unauth user')
+			]);
+		}
+		$aData = [];
+		$sEmail = $oRequest->get('e');
+		$nIsChoosed = intval($oRequest->get('choosed'));
+		if ($oAppService->isValidEmail($sEmail)) {
+			$oPhdUser->setEmail($sEmail);
+			$oEm = $this->getDoctrine()->getManager();
+			if ($nIsChoosed) {
+				$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);
+				$oPhdMessage->setIsEmailUser(true);
+				$oEm->persist($oPhdMessage);
+			}
+			$oEm->persist($oPhdUser);
+			$oEm->flush();
+			$aData['id'] = $oPhdUser->getId();
+		} else {
+			$aData['status'] = 'error';
+			$aData['msg'] = $t->trans('Invalid email');
+		}
+		return $this->_json($aData);
+	}
+	/**
+	 * @Route("/phdgetstate.json", name="phdgetstate")
+	*/
+	public function phdstate(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
+	{
+		$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		if (!$oPhdUser) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Unauth user')
+			]);
+		}
+		$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);
+		if (!$oPhdMessage) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Unauth user')
+			]);
+		}
+		return $this->_json([
+			'st' => $oPhdMessage->getState()
+		]);
+	}
 	/**
 	 * Проверяет, установлена ли кука app.phdusercookiename
-	 * @Route("/phdcheckin", name="phdcheckin")
+	 * @Route("/phdcheckin.json", name="phdcheckin")
 	 */
 	public function checkIn(Request $oRequest, FileUploaderService $oFileUploaderService, AppService $oAppService)
 	{
-		$oPhdUser = null;
-		$sCookieName = $this->getParameter('app.phdusercookiename');
-		$sCookieValue = $oRequest->cookies->get($sCookieName, '');
-		if ($sCookieValue) {
-			$oPhdUser = $this->_findByHash($sCookieValue);
-		}
+		$oPhdUser = $this->_getAuthPhdUser($oRequest);
 
 		$this->_subdir = 'd/' . date('Y/m');
 		$this->_oMessage = new PhdMessages();
@@ -86,7 +142,7 @@ class PhdController extends AbstractController
 	/**
 	 * Загрузка файлов
 	 * @Route("/phdpsdupload.json", name="phdpsdupload")
-	 */
+	*/
 	public function psdUpload(Request $oRequest, FileUploaderService $oFileUploaderService, AppService $oAppService)
 	{
 		if ($oRequest->getMethod() == 'POST') {
@@ -132,8 +188,6 @@ class PhdController extends AbstractController
 			return $this->_json(['nopost' => 1]);
 		}
 	}
-	/** @property int _examplesPerPage Количество работ на одной "странице" */
-	private $_examplesPerPage = 3;
 
     /**
 	 * Примеры работ ajax. Возвращает три последних работы, разрешённых к показу.
@@ -198,5 +252,40 @@ class PhdController extends AbstractController
 		$oPhdUser = $oRepository->matching($oCriteria)->get(0);
 		return $oPhdUser;
 	}
+	/**
+	 * @return PhdUsers or null
+	*/
+	private function _getAuthPhdUser(Request $oRequest)
+	{
+		$oPhdUser = null;
+		$sCookieName = $this->getParameter('app.phdusercookiename');
+		$sCookieValue = $oRequest->cookies->get($sCookieName, '');
+		if ($sCookieValue) {
+			$oPhdUser = $this->_findByHash($sCookieValue);
+		}
+		return $oPhdUser;
+	}
 
+	/**
+	 * Вернёт последнюю загруженную пользователем работу
+	 * @param PhdUsers $oPhdUser = null
+	 * @return PhdMessages or null
+	*/
+	private function _getPhdMessage($oRequest, $oPhdUser = null)
+	{
+		if (!$oPhdUser) {
+			$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		}
+		if (!$oPhdUser) {
+			return null;
+		}
+		$oRepository = $this->getDoctrine()->getRepository('App:PhdMessages');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where($e->eq('uid', $oPhdUser->getId()))
+			->orderBy(['id' => Criteria::DESC])
+			->setMaxResults(1);
+		$oPhdMessage = $oRepository->matching($oCriteria)->get(0);
+		return $oPhdMessage;
+	}
 }

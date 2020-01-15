@@ -24,7 +24,8 @@ Forgot Password: Не помнишь пароль
 signup: Зарегистрируйтесь
 gotoLoginPageLink: Вспомнился пароль? Welcome!
 Passwords is different: Пароли не совпадают
+Sections: Разделы
 User with login or email already exists: Пользователь с таким email или именем пользователя уже зарегистрирован
 Reset-Password: Сбросить пароль
+Unauth user: Потеряна кука авторизации. Обновите страницу и попробуйте снова
 forgotPasswordSmallText: Такое, наверное, бывает... &copy; Просто введите свой адрес электронной почты ниже, и я вышлю вам ссылку для сброса пароля.
-Sections: Разделы

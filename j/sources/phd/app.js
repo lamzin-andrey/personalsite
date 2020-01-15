@@ -142,7 +142,7 @@ window.app = new Vue({
 	onClickConvertNow() {
 		this.convertProcessed = true;
 		Rest._post({a: 1}, (data) => {this.onSuccessFirstCheckIn(data);},
-			this.$refs.phdexamples._serverRoot + '/phdcheckin', 
+			this.$refs.phdexamples._serverRoot + '/phdcheckin.json', 
 			(a, b, c) => {this.defaultFailSendFormListener(a, b, c); });
 	},
 	/**

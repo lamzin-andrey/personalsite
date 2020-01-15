@@ -425,4 +425,15 @@ class AppService
 		}
 		return $s;
 	}
+	/**
+	 * Вернет true если email валидный
+	 * @param string $sEmail
+	 * @return bool
+	*/
+	public function isValidEmail(string $sEmail) : bool
+	{
+		$reg = "#^[\w\.]+[^\.]@[\w]+\.[\w]{2,4}#";
+		$n = preg_match($reg, $sEmail, $m);
+		return $n;
+	}
 }

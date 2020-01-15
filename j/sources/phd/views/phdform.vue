@@ -56,7 +56,7 @@
 		
 		<div v-if="step == STEP_FILE_IN_QUEUE">
 			<div class="alert alert-success text-center">
-				Ваш файл поставлен в очередь, ждите не более 
+				{{ fileInQueueWaitScreenMessage }}
 				<div class="position-relative m-auto phd-spinner-wrap-width" >
 					<div class="spinner-border text-info phd-spinner-size" role="status" >
 						<span class="sr-only">Loading...</span>
@@ -65,6 +65,7 @@
 				</div>
 				<div>{{ countDownMeasure }}</div>
 			</div>
+			<button class="btn btn-primary w-100" @click="onClickSendMeResult">{{ $t('app.sendMeResultOnEmail') }}</button>
 		</div>
 
 	</div>
@@ -97,6 +98,8 @@
 			countDownMeasure: 'seconds',
 			//Интервал обратного отсчёта таймера
 			cdT: null,
+			//Сообщение о состоянии процесса на экране  STEP_FILE_IN_QUEUE
+			fileInQueueWaitScreenMessage: '',//$t('app.fileInQueue')
 
 			//модель для загружаемого PSD файла 
 			psdurl: '',
@@ -134,7 +137,63 @@
 			 * Предусмотреть что кука внезапно может потеряться.
 			*/
 			getState() {
-				console.log('Request ');
+				if (!this._requestStateIsSended) {
+					this._requestStateIsSended = 1;
+					Rest._post({a: 1}, (data) => {this.onSuccessGetRequestState(data);}, 
+						this.$root._serverRoot + '/phdgetstate.json', (a, b, c) => {this._requestStateIsSended = 0; });
+				}
+			},
+			/**
+			 * @description Обработка получeния статуса процесса
+            */
+			onSuccessGetRequestState(data) {
+				this._requestStateIsSended = 0;
+				let st = parseInt(data.st);
+				switch(st) {
+					case 1:
+						this.setStateFileIsProcessUploadOnService();
+						break;
+					/*case 2:
+						this.setStateFileIsProcessConvert();
+						break;
+					case 3:
+						this.setStateShowPreview();
+						break;
+					case 4:
+						this.setStateShowEnterEmailState();
+						break;
+					case 5:
+						this.setStateShowDiscountOpportunity();
+						break;
+					case 6:
+						this.setStateShowPayform();
+						break;
+					case 7:
+						this.setStateWaitPayment();
+						break;
+					case 8:
+						this.setStateShowResult();
+						break;
+					case 9:
+						this.setStateLoadAnotherFile();
+						break;*/
+				}
+			},
+			/**
+			 * @description Показать состояние, файл загружается на сервер конвертации
+            */
+			setStateFileIsProcessUploadOnService() {
+				this.fileInQueueWaitScreenMessage = this.$t('app.YourFileIsUploading');
+				this.countDown = this.COUNT_DOWN_INIT;
+			},
+			/**
+			 * @description Клик на кнопке, пришлите мне результат на email. Таймер ставится на паузу, пока вводится email.
+            */
+			onClickSendMeResult() {
+				this.safeStep = this.step;
+				this.cdtPause = true;
+				this.step = this.STEP_SHOW_EMAIL_FORM;
+				this.sendMeResultIsChoosed = 1;
 			},
 			/**
 			 * @description Обработка успешной загрузки PSD файла на сервер
@@ -153,6 +212,9 @@
 					//TODO надо показать экран "Ваш файл в очереди"
 					//и запустить таймер, который каждые пять секунд запрашивает состояние
 					this.cdT = setInterval(() => {
+						if (this.cdtPause) {
+							return;
+						}
 						this.countDown--;
 						this.countDownMeasure = TextFormat.pluralize(this.countDown, this.$root.$t('app.second_one'), this.$root.$t('app.seconds_less_5'), this.$root.$t('app.seconds_more_19'));
 						let diff = this.COUNT_DOWN_INIT - this.countDown;
@@ -191,7 +253,7 @@
             */
 			onClickAcceptWithCookie() {
 				this.$root.setMainSpinnerVisible(true);
-				Rest._post({a: 1}, (data) => {this.onSuccessSendHello(data);}, this.$root._serverRoot + '/phdsayhello', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
+				Rest._post({a: 1}, (data) => {this.onSuccessSendHello(data);}, this.$root._serverRoot + '/phdsayhello.json', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
 			},
 			/** TODO was in app.js!
 			 * @description Обработка успешного запроса установки кук.
@@ -202,7 +264,7 @@
 					return;
 				}
 				if (data.status == 'ok') {
-					Rest._post({a: 1}, (data) => {this.onSuccessCheckIn(data);}, this.$root._serverRoot + '/phdcheckin', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
+					Rest._post({a: 1}, (data) => {this.onSuccessCheckIn(data);}, this.$root._serverRoot + '/phdcheckin.json', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
 				}
 			},
 			/**
@@ -263,18 +325,24 @@
 			 * 
 			*/
 			onClickConvertNow() {
-				this.hideScreens();
-				this.stepHello = true;
+				console.log('Call onClickConvertNow');
 			},
 			sendEmailData() {
-				Rest._post({e:this.email}, (data)=>{ this.onSuccessSendEmail(data);}, '/p/phd/email.jn/', (a, b, c) => { this.onFailSendEmail(); } );
+				let sendData = {e:this.email};
+				if (this.sendMeResultIsChoosed) {//TODO не забыть обнулять его на шаге своевременного показа формы
+					sendData.choosed = 1;
+				}
+				Rest._post(sendData, (data)=>{ this.onSuccessSendEmail(data);}, this.$root._serverRoot + '/phdsaveemail.json', (a, b, c) => { this.onFailSendEmail(); } );
 			},
 			onSuccessSendEmail(data) {
 				if (!this.onFailSendEmail(data)) {
 					return;
 				}
-				this.hideScreens();
-				this.stepUpload = true;
+				this.isEmailIsSet = true;
+				if (this.sendMeResultIsChoosed) {
+					this.cdtPause = 0;
+					this.step = this.safeStep;
+				}
 			},
 			onFailSendEmail(data, b, c) {
 				if (!parseInt(data.id)) {
@@ -293,17 +361,13 @@
 				}
 				
 			},
-			hideScreens() {
-				this.stepUpload = false;
-				this.stepGuest = false;
-				this.stepHello = false;
-			},
 			/**
 			 * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
 			 */
 			localizeParams() {
 				//Текст на кнопках диалога подтверждения действия
 				this.countDownMeasure = this.$t('app.seconds_more_19');
+				this.fileInQueueWaitScreenMessage = this.$t('app.fileInQueue');
 			},
            
         }, //end methods

@@ -280,6 +280,8 @@ Yet not release. Need required validator support. (Wil Depends from bootstrap421
 
 You can set csrf token. It will send in field _token
 
+From vue js code can set it, calling method `setCsrfToken(sValue, sName = '_token')`
+
 ### uploadButtonLabel
 
 Text on upload button (if you use immediateleyUploadOff attribute).
@@ -297,6 +299,17 @@ You can send values one or some html inputs with file data. Use attribute sendIn
 	'alpha' is html input id (input#alpha[type=checkbox|text]).
 
 If you use sendInputs, when this component send file data, it also append values html inputs types text, checkbox ant html textarea.
+
+### fieldwrapper
+
+Wrap input file name. For example, if `fieldwrapper="pdf_upload_form"`, and  `id="pdffile"`
+file wil send in field with name `pdf_upload_form[pdffile]`.
+
+### csfrTokenName
+
+Customize csrf token  field name. By default csrf token send ad `_token`.
+
+From vue js code can set it, calling method `setCsrfToken(sValue, sName = '_token')`
 
 ## Expected server response format
 
@@ -621,12 +634,13 @@ If action not success, component emit event
 
 ### Атрибут validators
 
-Yet not release. Need required validator support. (Wil Depends from bootstrap421-validators)
 Пока не используется. После реализации этот компонент будет зависеть от bootstrap421-validators и использовать значение 'required'.
 
 ### Атрибут csrfToken
 
 Вы можете установить csrf token. Он будет отправлен в переменной _token.
+
+Динамически можно изменить вызвав `setCsrfToken(sValue, sName = '_token')`
 
 ### Атрибут uploadButtonLabel
 
@@ -647,6 +661,16 @@ Unique id for input. Uploaded file url will set in hidden input with it id.
 
 Вместе с данными файла будут переданы значения инпута c id alpha. Поддерживаются текстовые инпуты и чекбоксы.
 
+### Атрибут fieldwrapper
+
+Имя файла будет "обернуто" в это значение. Например, если fieldwrapper="pdf_upload_form", а id передан `pdffile`
+данные файла будут отправлены в поле с именем `pdf_upload_form[pdffile]`.
+
+### Атрибут csfrTokenName
+
+Позволяет изменять имя поля, в котором будет отправлен csrf токен.
+
+Динамически можно изменить вызвав `setCsrfToken(sValue, sName = '_token')`
 
 ## Ожидаемый ответ сервера
 

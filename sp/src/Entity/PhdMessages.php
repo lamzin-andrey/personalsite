@@ -85,9 +85,9 @@ class PhdMessages
     private $isClosed;
 
     /**
-     * @var bool|null
+     * @var int|null
      *
-     * @ORM\Column(name="_state", type="boolean", nullable=true, options={"comment"="0 файл в очереди, 1 файл загружаеься на сервер конвертации,  2 файл конвертируется, 3 показ превью и замнчания, 4 выбор оплаты, как платить, 6 ожидание оплаты, 7 ссылка отправлена на email и показана на странице, 8 вернулся к загрузке нового psd"})
+     * @ORM\Column(name="_state", type="integer", nullable=true, options={"comment"="0 файл в очереди, 1 файл загружается на сервер конвертации, 2 файл конвертируется, 3 показ превью и замечания,	4 ввод email, 5 выбор оплаты, разрешить показывать в примерах работ и получить скидку, 6 как платить, яндекс или киви, 7 ожидание оплаты, 8 ссылка отправлена на email и показана на странице, 9 вернулся к загрузке нового psd"})
      */
     private $state = '0';
 
@@ -97,6 +97,13 @@ class PhdMessages
      * @ORM\Column(name="uid", type="integer", nullable=true, options={"comment"="phd_user.id."})
      */
     private $uid;
+
+	/**
+	 * @var bool|null
+	 *
+	 * @ORM\Column(name="is_email_user", type="boolean", nullable=true, options={"comment"="1 когда пользователь не дождался реакции оператора, но оставил свой email", "default"="0"})
+	 */
+	private $is_email_user;
 
     /**
      * @var bool
@@ -218,17 +225,28 @@ class PhdMessages
         return $this;
     }
 
-    public function getState(): ?bool
+    public function getState(): ?int
     {
         return $this->state;
     }
 
-    public function setState(?bool $state): self
+    public function setState(?int $state): self
     {
         $this->state = $state;
 
         return $this;
     }
+
+	public function getIsEmailUser(): ?bool
+	{
+		return $this->is_email_user;
+	}
+
+	public function setIsEmailUser(?bool $is_email_user): self
+	{
+		$this->is_email_user = $is_email_user;
+		return $this;
+	}
 
     public function getUid(): ?int
     {
