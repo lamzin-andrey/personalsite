@@ -58,6 +58,27 @@ class PhdController extends AbstractController
 	}
 
 	/**
+	 * Установить работу как отмененную (пользователь решил загрузить другой файл)
+	 * @Route("/phdnewpsd.json", name="phdnewpsd")
+	*/
+	public function phdnewpsd(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
+	{
+		$oEm = $this->getDoctrine()->getManager();
+		$oPhdMessage = $this->_getPhdMessage($oRequest);
+		if (!$oPhdMessage) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Unauth user')
+			]);
+		}
+		$oPhdMessage->setState(9);
+		$oEm->persist($oPhdMessage);
+		$oEm->flush();
+		$aData = [];
+		$this->_setPsdUploadFormToken($aData, $oAppService);
+		return $this->_json($aData);
+	}
+	/**
 	 * @Route("/phdsaveemail.json", name="phdsaveemail")
 	*/
 	public function phdsaveemail(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
@@ -108,29 +129,27 @@ class PhdController extends AbstractController
 				'msg' => $t->trans('Unauth user')
 			]);
 		}
-		return $this->_json([
+		$aData = [
 			'st' => $oPhdMessage->getState()
-		]);
+		];
+		if ($oPhdMessage->getState() == 3) {
+			$aData['previewLink'] = $oPhdMessage->getPreviewLink();
+			$aData['notes'] = $oPhdMessage->getServiceNotes();
+			$aData['noticePreviewLink'] = $oPhdMessage->getNoticePreviewLink();
+			$aData['htmlExampleLink'] = $oPhdMessage->getHtmlExampleLink();
+			$aData['cssPreviewLink'] = $oPhdMessage->getCssPreviewLink();
+		}
+		return $this->_json($aData);
 	}
 	/**
 	 * Проверяет, установлена ли кука app.phdusercookiename
 	 * @Route("/phdcheckin.json", name="phdcheckin")
 	 */
-	public function checkIn(Request $oRequest, FileUploaderService $oFileUploaderService, AppService $oAppService)
+	public function checkIn(Request $oRequest, AppService $oAppService)
 	{
 		$oPhdUser = $this->_getAuthPhdUser($oRequest);
-
-		$this->_subdir = 'd/' . date('Y/m');
-		$this->_oMessage = new PhdMessages();
-
-		$oForm = $this->createForm(get_class(new PsdUploadFormType()), null, [
-			'app_service' => $oAppService,
-			'uploaddir' => $this->_subdir
-		]);
-
-		$aData = [
-			'formToken' => $oForm->createView()->children['_token']->vars['value']
-		];
+		$aData = [];
+		$this->_setPsdUploadFormToken($aData, $oAppService);
 
 		if ($oPhdUser) {
 			$oSession = $oRequest->getSession();
@@ -287,5 +306,18 @@ class PhdController extends AbstractController
 			->setMaxResults(1);
 		$oPhdMessage = $oRepository->matching($oCriteria)->get(0);
 		return $oPhdMessage;
+	}
+	/**
+	 * Вернёт последнюю загруженную пользователем работу
+	 * @param array &$aData
+	*/
+	private function _setPsdUploadFormToken(array &$aData, AppService $oAppService) : void
+	{
+		$this->_subdir = 'd/' . date('Y/m');
+		$oForm = $this->createForm(get_class(new PsdUploadFormType()), null, [
+			'app_service' => $oAppService,
+			'uploaddir' => $this->_subdir
+		]);
+		$aData['formToken'] = $oForm->createView()->children['_token']->vars['value'];
 	}
 }

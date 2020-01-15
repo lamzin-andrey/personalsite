@@ -56,6 +56,27 @@ class PhdMessages
      */
     private $previewLink;
 
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="notice_preview_link", type="string", length=255, nullable=true, options={"comment"="Ссылка на превью работы с замечаниями"})
+	 */
+	private $noticePreviewLink;
+
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="css_preview_link", type="string", length=255, nullable=true, options={"comment"="Ссылка на превью css работы "})
+	 */
+	private $cssPreviewLink;
+
+	/**
+	 * @var string|null
+	 *
+	 * @ORM\Column(name="html_example_link", type="string", length=255, nullable=true, options={"comment"="Ссылка на архив с html работы (демо-архив)"})
+	 */
+	private $htmlExampleLink;
+
     /**
      * @var bool|null
      *
@@ -176,6 +197,42 @@ class PhdMessages
 
         return $this;
     }
+
+	public function getCssPreviewLink(): ?string
+	{
+		return $this->cssPreviewLink;
+	}
+
+	public function setCssPreviewLink(?string $cssPreviewLink): self
+	{
+		$this->cssPreviewLink = $cssPreviewLink;
+
+		return $this;
+	}
+
+	public function getHtmlExampleLink(): ?string
+	{
+		return $this->htmlExampleLink;
+	}
+
+	public function setHtmlExampleLink(?string $htmlExampleLink): self
+	{
+		$this->htmlExampleLink = $htmlExampleLink;
+
+		return $this;
+	}
+
+	public function getNoticePreviewLink(): ?string
+	{
+		return $this->noticePreviewLink;
+	}
+
+	public function setNoticePreviewLink(?string $noticePreviewLink): self
+	{
+		$this->noticePreviewLink = $noticePreviewLink;
+
+		return $this;
+	}
 
     public function getIsPayed(): ?bool
     {

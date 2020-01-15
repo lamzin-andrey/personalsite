@@ -70,19 +70,48 @@
 
 		<div v-if="step == STEP_SHOW_PREWIEV">
 			<div class="mb-3">
+				<div class="alert alert-success">
+					{{ $t('app.convertationCompleteSuccessHeader') }}
+				</div>
+				<div v-html="sNotices"></div>
+				<div v-html="$t('app.shortWarning')"></div>
+				
 				<div class="alert alert-info">
-					{{ $t('app.previewBeforePay') }}
+					{{ $t('app.previewLayout') }}
 				</div>
 				<div class="phd-psd-h-lim border border-info rounded mb-3">
-					<img :src="preview" class="w-100" style="margin-top: -50px">
+					<img :src="previewLink" class="w-100" style="margin-top: -50px">
 				</div>
-				<div v-html="notes"></div>
+				<div class="my-3"><a :href="previewLink" target="_blank">{{ $t('app.openFileInNewTab') }}</a></div>
+				
+				<div class="alert alert-info">
+					{{ $t('app.previewNoticeLayout') }}
+				</div>
+				<div class="phd-psd-h-lim border border-info rounded mb-3">
+					<img :src="noticePreviewLink" class="w-100" style="margin-top: -50px">
+				</div>
+				<div class="my-3"><a :href="noticePreviewLink" target="_blank">{{ $t('app.openFileInNewTab') }}</a></div>
+				
+				
+				<div class="alert alert-info">
+					{{ $t('app.htmlDemoLink') }}
+				</div>
+				<div class="my-3"><a :href="htmlExampleLink" target="_blank">{{ $t('app.downloadHtmlDemoZip') }}</a></div>
+				
+				<div class="alert alert-info">
+					{{ $t('app.previewCss') }}
+				</div>
+				<div class="phd-psd-h-lim border border-info rounded mb-3">
+					<img :src="cssPreviewLink" class="w-100" style="margin-top: -50px">
+				</div>
+				<div class="my-3"><a :href="cssPreviewLink" target="_blank">{{ $t('app.openFileInNewTab') }}</a></div>
+				
 				<div class="row">
 					<div class="col" >
-						<button class="btn btn-primary">{{ $t('app.UpdatePsd') }}</button>
+						<button class="btn btn-primary"  @click="onClickUpdatePsdFile">{{ $t('app.updatePSDFile') }}</button>
 					</div>
 					<div class="col" >
-						<button class="btn btn-primary">{{ $t('app.PayAndDownload') }}</button>
+						<button class="btn btn-primary" @click="onClickPaymentAndDownloadFile">{{ $t('app.paymentAndDownload') }}</button>
 					</div>
 				</div>
 			</div>
@@ -137,6 +166,18 @@
 				}
 			},
 
+			//Связанные с показом превью
+			//Ссылка на изображение css верстки
+			cssPreviewLink: '',
+			//Ссылка на изображение вида верстки
+			previewLink: '',
+			//Ссылка на изображение вида верстки с замечаниями
+			noticePreviewLink: '',
+			//Ссылка на архив с html верстки
+			htmlExampleLink: '',
+			//Замечания от сервиса
+			sNotices: '',
+
             //Значение email
             email:null
         }; },
@@ -162,10 +203,10 @@
 				let st = parseInt(data.st);
 				switch(st) {
 					case 1:
-						this.setStateFileIsProcessUploadOnService();
+						this.setStateFileIsProcessUploadOnService(st);
 						break;
 					case 2:
-						this.setStateFileIsProcessConvert();
+						this.setStateFileIsProcessConvert(st);
 						break;
 					case 3:
 						this.setStateShowPreview(data);
@@ -191,6 +232,38 @@
 				}
 			},
 			/**
+			 * @description Обработка клика на кнопке Обновить PSD
+            */
+			onClickUpdatePsdFile() {
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({a: 1}, (data) => {this.onSuccessSetFileAsWrong(data);}, 
+					this.$root._serverRoot + '/phdnewpsd.json',
+					(a, b, c) => {
+						this.$root.setMainSpinnerVisible(false);
+						this.$root.defaultFailSendFormListener(a, b, c); });
+			},
+			/**
+			 * @description 
+            */
+			onSuccessSetFileAsWrong(data) {
+				this.$root.setMainSpinnerVisible(false);
+				this.step = this.STEP_SHOW_UPLOAD_BUTTON;
+				this.previewLink = 
+				this.sNotices    = 
+				this.noticePreviewLink = 
+				this.htmlExampleLink = 
+				this.cssPreviewLink = '';
+				Vue.nextTick(() => {
+					this.setPsdUploaderCsrfToken(data.formToken);
+				});
+			},
+			/**
+			 * @description Обработка клика на Оплатить и скачать
+            */
+			onClickPaymentAndDownloadFile() {
+				//TODO
+			},
+			/**
 			 * @description Показать состояние, файл сконвертирован
 			 * @param {Object} response {preview, notes}
             */
@@ -198,23 +271,34 @@
 				if (this.cdT) {
 					clearInterval(this.cdT);
 				}
-				this.previewLink = response.preview;
-				this.notes = response.notes;
+				this.previewLink = response.previewLink;
+				this.sNotices    = response.notes;
+				this.noticePreviewLink = response.noticePreviewLink;
+				this.htmlExampleLink = response.htmlExampleLink;
+				this.cssPreviewLink = response.cssPreviewLink;
 				this.step = this.STEP_SHOW_PREWIEV;
 			},
 			/**
 			 * @description Показать состояние, файл конвертируется
+			 * @param {Number} state
             */
-			setStateFileIsProcessConvert() {
+			setStateFileIsProcessConvert(state) {
 				this.fileInQueueWaitScreenMessage = this.$t('app.YourFileIsConverting');
-				this.countDown = this.COUNT_DOWN_INIT;
+				if (String(this.previousState) == 'undefined' || this.previousState != state) {
+					this.previousState = state;
+					this.countDown = this.COUNT_DOWN_INIT;
+				}
 			},
 			/**
 			 * @description Показать состояние, файл загружается на сервер конвертации
+			 * @param {Number} state
             */
-			setStateFileIsProcessUploadOnService() {
+			setStateFileIsProcessUploadOnService(state) {
 				this.fileInQueueWaitScreenMessage = this.$t('app.YourFileIsUploading');
-				this.countDown = this.COUNT_DOWN_INIT;
+				if (String(this.previousState) == 'undefined' || this.previousState != state) {
+					this.previousState = state;
+					this.countDown = this.COUNT_DOWN_INIT;
+				}
 			},
 			/**
 			 * @description Клик на кнопке, пришлите мне результат на email. Таймер ставится на паузу, пока вводится email.
@@ -362,6 +446,7 @@
 				if (this.sendMeResultIsChoosed) {//TODO не забыть обнулять его на шаге своевременного показа формы
 					sendData.choosed = 1;
 				}
+				this.$root.setMainSpinnerVisible(true);
 				Rest._post(sendData, (data)=>{ this.onSuccessSendEmail(data);}, this.$root._serverRoot + '/phdsaveemail.json', (a, b, c) => { this.onFailSendEmail(); } );
 			},
 			onSuccessSendEmail(data) {
@@ -375,6 +460,7 @@
 				}
 			},
 			onFailSendEmail(data, b, c) {
+				this.$root.setMainSpinnerVisible(false);
 				if (!parseInt(data.id)) {
 					this.$root.alert(this.$root.$t('app.NeedCokie'));
 					return false;
