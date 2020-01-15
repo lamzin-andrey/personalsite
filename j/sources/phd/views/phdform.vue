@@ -56,7 +56,7 @@
 		
 		<div v-if="step == STEP_FILE_IN_QUEUE">
 			<div class="alert alert-success text-center">
-				{{ fileInQueueWaitScreenMessage }}
+				{{ fileInQueueWaitScreenMessage }}, ждать осталось не более
 				<div class="position-relative m-auto phd-spinner-wrap-width" >
 					<div class="spinner-border text-info phd-spinner-size" role="status" >
 						<span class="sr-only">Loading...</span>
@@ -68,6 +68,25 @@
 			<button class="btn btn-primary w-100" @click="onClickSendMeResult">{{ $t('app.sendMeResultOnEmail') }}</button>
 		</div>
 
+		<div v-if="step == STEP_SHOW_PREWIEV">
+			<div class="mb-3">
+				<div class="alert alert-info">
+					{{ $t('app.previewBeforePay') }}
+				</div>
+				<div class="phd-psd-h-lim border border-info rounded mb-3">
+					<img :src="preview" class="w-100" style="margin-top: -50px">
+				</div>
+				<div v-html="notes"></div>
+				<div class="row">
+					<div class="col" >
+						<button class="btn btn-primary">{{ $t('app.UpdatePsd') }}</button>
+					</div>
+					<div class="col" >
+						<button class="btn btn-primary">{{ $t('app.PayAndDownload') }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
@@ -89,6 +108,8 @@
 			STEP_HOW_COOKIES_ON: 4,
 			//Экран с сообщением о том, что файл поставлен в очередь
 			STEP_FILE_IN_QUEUE: 5,
+			//Экран с показом превью и текстом замечаний
+			STEP_SHOW_PREWIEV: 6,
 
 			//Ждём ответа от оператора пять минут, потом показываем диалог ввода email
 			COUNT_DOWN_INIT: 600,
@@ -96,7 +117,7 @@
 			countDown: 600,
 			//Секунда, секунды, секунд
 			countDownMeasure: 'seconds',
-			//Интервал обратного отсчёта таймера
+			//Интервал (ресурс для clearInterval) обратного отсчёта таймера
 			cdT: null,
 			//Сообщение о состоянии процесса на экране  STEP_FILE_IN_QUEUE
 			fileInQueueWaitScreenMessage: '',//$t('app.fileInQueue')
@@ -117,17 +138,7 @@
 			},
 
             //Значение email
-            email:null,
-            //Значение password
-			password:null,
-			//Самый первый экран кнопка конверитровать
-			stepGuest: true,
-			//Экран ввода формы email
-			stepHello: false,
-			//Экран ввода формы загрузки psd
-			stepPSD: false,
-			//Имя куки авторизации TODO проверить в чистом профиле, там кажется косяк с чтением
-			AUTH_COOKIE_NAME: 'bpuid',
+            email:null
         }; },
         //
         methods:{
@@ -153,13 +164,13 @@
 					case 1:
 						this.setStateFileIsProcessUploadOnService();
 						break;
-					/*case 2:
+					case 2:
 						this.setStateFileIsProcessConvert();
 						break;
 					case 3:
-						this.setStateShowPreview();
+						this.setStateShowPreview(data);
 						break;
-					case 4:
+					/*case 4:
 						this.setStateShowEnterEmailState();
 						break;
 					case 5:
@@ -178,6 +189,25 @@
 						this.setStateLoadAnotherFile();
 						break;*/
 				}
+			},
+			/**
+			 * @description Показать состояние, файл сконвертирован
+			 * @param {Object} response {preview, notes}
+            */
+			setStateShowPreview(response) {
+				if (this.cdT) {
+					clearInterval(this.cdT);
+				}
+				this.previewLink = response.preview;
+				this.notes = response.notes;
+				this.step = this.STEP_SHOW_PREWIEV;
+			},
+			/**
+			 * @description Показать состояние, файл конвертируется
+            */
+			setStateFileIsProcessConvert() {
+				this.fileInQueueWaitScreenMessage = this.$t('app.YourFileIsConverting');
+				this.countDown = this.COUNT_DOWN_INIT;
 			},
 			/**
 			 * @description Показать состояние, файл загружается на сервер конвертации

@@ -124,8 +124,12 @@ var locales = {
 			seconds_less_5: 'секунды',
 			seconds_more_19: 'секунд',
 			sendMeResultOnEmail: 'Прислать мне результат на email, когда будет готово',
-			fileInQueue: 'Ваш файл поставлен в очередь, ждать осталось не более',
+			fileInQueue: 'Ваш файл поставлен в очередь',
+			previewBeforePay: 'Предварительный просмотр',
+			UpdatePsd: 'Обновить файл',
+			PayAndDownload: 'Оплатить и скачать файл',
 			YourFileIsUploading: 'Ваш файл загружается на сервер конвертации',
+			YourFileIsConverting: 'Ваш файл конвертируется',
 			Fail_load_Examples: 'Не могу загрузить примеры конвертаций, попробуйте позже'
         }
     }
