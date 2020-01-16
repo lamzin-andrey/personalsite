@@ -140,50 +140,46 @@
 		<div v-if="step == STEP_SHOW_PAY_FORM">
 			<div class="alert alert-info">Выберите способ оплаты</div>
 				<div class="col-lg-6 text-left mx-auto border  border-info mb-5 p-3">
-					<form method="POST" action="/">
-						<div class="form-check" checked>
-							<input class="form-check-input" type="radio" name="paymentType" id="ms" value="MC" checked>
-							<label class="form-check-label" for="ms">
-								Qiwi
-							</label>
-						</div>
-						
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="paymentType" id="bs" value="AC">
-							<label class="form-check-label" for="bs">
-								Банковской картой
-							</label>
-						</div>
-						
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="paymentType" id="ps" value="PC">
-							<label class="form-check-label" for="ps">
-								Яндекс.Кошелёк
-							</label>
-						</div>
-						
-						
-						<div class="text-right">
-							<input type="submit" id="subm"  class="btn btn-primary" value="Перевести">
-						</div>
-						
-						
+					
+					<div class="form-check" checked>
+						<input v-model="paymentType" class="form-check-input" type="radio" id="ms" value="MC" checked>
+						<label class="form-check-label" for="ms">
+							Qiwi
+						</label>
+					</div>
 
-					</form>
+					<div class="form-check">
+						<input v-model="paymentType" class="form-check-input" type="radio" id="bs" value="AC">
+						<label class="form-check-label" for="bs">
+							Банковской картой
+						</label>
+					</div>
+
+					<div class="form-check">
+						<input v-model="paymentType" class="form-check-input" type="radio" id="ps" value="PC">
+						<label class="form-check-label" for="ps">
+							Яндекс.Кошелёк
+						</label>
+					</div>
+
+					<div class="text-right">
+						<input @click="onClickSendMoney" type="submit" class="btn btn-primary" value="Перевести">
+					</div>
+					
 					
 					<div class="text-right alert-success p-2 m-1" hidden id="lastDescription">
 						<span class="font-weight-bold" id="lastDescriptionText"></span>
 					</div>
 					
-					<form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml" id="yaform" style="display:none;" target="blank">
-						<input type="hidden" name="receiver" id="rec" value="410014426382768">
-						<input type="hidden" name="formcomment" id="comment" value="Оплата услуг: Программирование 4 часа, 5шт. Программирование 3 минуты, 9шт">
-						<input type="hidden" name="label" id="label" value="<?=sess('email') . '|' . date('Y-m-dH:i:s') ?>">
+					<form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml" id="yaform" style="display:none;" target="_blank">
+						<input v-model="yacache" type="hidden" name="receiver" id="rec" >
+						<input type="hidden" name="formcomment" id="comment" value="Payment for converting PSD to HTML + CSS">
+						<input v-model="tid" type="hidden" name="label" >
 						<input type="hidden" name="quickpay-form" value="shop">
-						<input type="hidden" name="targets" id="transactionId" value="0">
-						<input type="hidden" id="sumForPay" name="sum" value="0" data-type="number">
-						<input type="hidden" name="comment" id="comment2" value="Оплата услуг: Программирование 4 часа, 5шт. Программирование 3 минуты, 9шт">
-						<input  type="hidden" name="paymentType" id="paytype" value="">
+						<input v-model="tid" type="hidden" name="targets" >
+						<input v-model="paysum" type="hidden"  name="sum" data-type="number">
+						<input type="hidden" name="comment" id="comment2" value="Payment for converting PSD to HTML + CSS (c2)">
+						<input v-model="paymentType" type="hidden" name="paymentType" id="paytype" >
 						<div class="text-right">
 							<button type="submit" class="btn btn-primary" hidden>Перевести</button>
 						</div>
@@ -262,6 +258,14 @@
 			//связанные с формой скидки
 			paysum: 100,
 
+			//связанные с формой оплаты
+			//Чем платить
+			paymentType: 'MC',//MC (qiwi), AC (ya-bank-card), PC(ya-cache)
+			//Идентификатор транзакции из таблицы operations ('582 phd')
+			tid: '',
+			//Номер яндекс-кошелька
+			yacache: '',
+
             //Значение email
             email:null
         }; },
@@ -316,6 +320,28 @@
 				}
 			},
 			/**
+			 * @description Обработка клика на кнопке Перевести (деньги)
+            */
+			onClickSendMoney(evt) {
+				evt.preventDefault();
+				this.$root.setMainSpinnerVisible(true);
+				//TODO должны получить id из таблицы pay_transactions
+				//в operations main_id это будет phd_messages.id
+				Rest._post({sum:this.paysum, method: this.paymentType}, (data) => { this.onSuccessStartPayTransaction(data);}, this.$root._serverRoot + '/phdstarttransaction.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Обработка получения с сервера tid, чтобы отправить его на сервер paysystem
+			*/
+			onSuccessStartPayTransaction(data) {
+				if (!this.defaultFailSendFormListener(data)) {
+					return;
+				}
+				this.tid = data.id + 'phd';
+				Vue.nextTick(() => {
+					$('#yaform').submit();
+				});
+			},
+			/**
 			 * @description Обработка клика на кнопке Продолжить формы предложения скидки
             */
 			onClickShowPayform(){
@@ -329,6 +355,8 @@
 				if (!this.defaultFailSendFormListener(data)) {
 					return;
 				}
+				this.paysum = data.sum;
+				this.yacache = data.yc;
 				this.step = this.STEP_SHOW_PAY_FORM;
 			},
 			/**

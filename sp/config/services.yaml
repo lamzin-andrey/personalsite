@@ -9,6 +9,8 @@ parameters:
     #phd section
     app.phdusercookiename: phdu
 
+    app.yacache: "%env(resolve:YANDEX_CACHE)%"
+
 services:
     # default configuration for services in *this* file
     _defaults:

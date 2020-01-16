@@ -6,6 +6,7 @@ use App\Entity\PhdMessages;
 use App\Entity\PhdUsers;
 use App\Form\PsdUploadFormType;
 use App\Service\AppService;
+use App\Service\PayService;
 use App\Service\FileUploaderService;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,9 @@ class PhdController extends AbstractController
 	/** @const Полная сумма за конвертацию */
 	const SUM_FULL = 100;
 
+	/** @const Полная сумма за конвертацию, по которой определяется, какой вариант выбрал пользователь (со скидкой или без) */
+	const SUM_FULL_NOMINAL = 100;
+
 	/** @const Сумма за конвертацию со скидкой */
 	const SUM_DISCOUNT = 50;
 
@@ -34,9 +38,30 @@ class PhdController extends AbstractController
 	private $_examplesPerPage = 3;
 
 	/**
+	 * Добавить запись в pay_transaction и вернуть идентификатор записи
+	 * @Route("/phdstarttransaction.json", name="phdstarttransaction")
+	*/
+	public function phdstarttransaction(Request $oRequest, PayService $oPayService, TranslatorInterface $t)
+	{
+		$oEm = $this->getDoctrine()->getManager();
+		$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		if (!$oPhdUser) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Unauth user')
+			]);
+		}
+		$oPayService->setPayTransactionEntityClassName('App\Entity\PhdPayTransaction');
+		$nTransactionId = $oPayService->createTransaction($oPhdUser->getId());
+		$aData = [
+			'id' => $nTransactionId
+		];
+		return $this->_json($aData);
+	}
+	/**
 	 * Установить факт, что работу можно показывать в примерах
 	 * @Route("/phddiscount.json", name="phddiscount")
-	 */
+	*/
 	public function phddiscount(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
 	{
 		$oEm = $this->getDoctrine()->getManager();
@@ -47,11 +72,15 @@ class PhdController extends AbstractController
 				'msg' => $t->trans('Unauth user')
 			]);
 		}
-		$bVal = $oRequest->get('sum') == static::SUM_FULL ? false : true;
+		$bVal = $oRequest->get('sum') == static::SUM_FULL_NOMINAL ? false : true;
+		$nSum = $oRequest->get('sum') == static::SUM_FULL_NOMINAL ? static::SUM_FULL : static::SUM_DISCOUNT;
 		$oPhdMessage->setIsPublish($bVal);
 		$oEm->persist($oPhdMessage);
 		$oEm->flush();
-		$aData = [];
+		$aData = [
+			'sum' => $nSum,
+			'yc' => $this->getParameter('app.yacache')
+		];
 		return $this->_json($aData);
 	}
 	/**
