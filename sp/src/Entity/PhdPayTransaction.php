@@ -60,7 +60,7 @@ class PhdPayTransaction
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="created", type="datetime", nullable=true, options={"comment"="Время операции"})
+     * @ORM\Column(name="created", type="datetime", nullable=true, options={"comment"="Время операции", "default"="CURRENT_TIMESTAMP"})
      */
     private $created;
 

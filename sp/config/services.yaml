@@ -8,8 +8,13 @@ parameters:
 
     #phd section
     app.phdusercookiename: phdu
+    #Код операции, которая записывается в operations по умолчанию при успешной оплате
+    rupayservices.operation_code_id: 4
 
     app.yacache: "%env(resolve:YANDEX_CACHE)%"
+    app.yasecretkey: "%env(resolve:YANDEX_SECRET_KEY)%"
+
+
 
 services:
     # default configuration for services in *this* file

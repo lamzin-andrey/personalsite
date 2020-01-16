@@ -43,6 +43,7 @@ class PhdController extends AbstractController
 	*/
 	public function phdstarttransaction(Request $oRequest, PayService $oPayService, TranslatorInterface $t)
 	{
+		$sLogDir = $this->get('kernel')->getLogDir();
 		$oEm = $this->getDoctrine()->getManager();
 		$oPhdUser = $this->_getAuthPhdUser($oRequest);
 		if (!$oPhdUser) {
@@ -54,7 +55,8 @@ class PhdController extends AbstractController
 		$oPayService->setPayTransactionEntityClassName('App\Entity\PhdPayTransaction');
 		$nTransactionId = $oPayService->createTransaction($oPhdUser->getId());
 		$aData = [
-			'id' => $nTransactionId
+			'id' => $nTransactionId,
+			'sLogDir' => $sLogDir
 		];
 		return $this->_json($aData);
 	}
