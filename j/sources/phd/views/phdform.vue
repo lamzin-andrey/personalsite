@@ -56,7 +56,7 @@
 		
 		<div v-if="step == STEP_FILE_IN_QUEUE">
 			<div class="alert alert-success text-center">
-				{{ fileInQueueWaitScreenMessage }}, ждать осталось не более
+				{{ fileInQueueWaitScreenMessage }}{{ fileInQueueSecondsMessageFragment }}
 				<div class="position-relative m-auto phd-spinner-wrap-width" >
 					<div class="spinner-border text-info phd-spinner-size" role="status" >
 						<span class="sr-only">Loading...</span>
@@ -116,6 +116,79 @@
 				</div>
 			</div>
 		</div>
+
+		<div v-if="step == STEP_SHOW_DISCOUNT_FORM">
+			<div class="alert alert-info">Получите скидку</div>
+			<div class="col-lg-6 text-left mx-auto border  border-info mb-5 p-3">
+				<div class="form-check" checked>
+					<input class="form-check-input" type="radio" name="paymentSum" id="sum100" value="100" checked>
+					<label class="form-check-label" for="sum100">Оплатить 100 рублей</label>
+				</div>
+				<div class="form-check" checked>
+					<input class="form-check-input" type="radio" name="paymentSum" id="sum50" value="50">
+					<label class="form-check-label" for="sum50">Разрешить показывать ваш psd и верстку в примерах и получить скидку 50 рублей</label>
+				</div>
+				
+				<div class="text-right mt-2">
+					<input type="submit" id="subm"  class="btn btn-primary" value="Продолжить">
+				</div>
+			</div>
+		</div>
+
+		<div v-if="step == STEP_SHOW_PAY_FORM">
+			<div class="alert alert-info">Выберите способ оплаты</div>
+				<div class="col-lg-6 text-left mx-auto border  border-info mb-5 p-3">
+					<form method="POST" action="/">
+						<div class="form-check" checked>
+							<input class="form-check-input" type="radio" name="paymentType" id="ms" value="MC" checked>
+							<label class="form-check-label" for="ms">
+								Qiwi
+							</label>
+						</div>
+						
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="paymentType" id="bs" value="AC">
+							<label class="form-check-label" for="bs">
+								Банковской картой
+							</label>
+						</div>
+						
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="paymentType" id="ps" value="PC">
+							<label class="form-check-label" for="ps">
+								Яндекс.Кошелёк
+							</label>
+						</div>
+						
+						
+						<div class="text-right">
+							<input type="submit" id="subm"  class="btn btn-primary" value="Перевести">
+						</div>
+						
+						
+
+					</form>
+					
+					<div class="text-right alert-success p-2 m-1" hidden id="lastDescription">
+						<span class="font-weight-bold" id="lastDescriptionText"></span>
+					</div>
+					
+					<form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml" id="yaform" style="display:none;" target="blank">
+						<input type="hidden" name="receiver" id="rec" value="410014426382768">
+						<input type="hidden" name="formcomment" id="comment" value="Оплата услуг: Программирование 4 часа, 5шт. Программирование 3 минуты, 9шт">
+						<input type="hidden" name="label" id="label" value="<?=sess('email') . '|' . date('Y-m-dH:i:s') ?>">
+						<input type="hidden" name="quickpay-form" value="shop">
+						<input type="hidden" name="targets" id="transactionId" value="0">
+						<input type="hidden" id="sumForPay" name="sum" value="0" data-type="number">
+						<input type="hidden" name="comment" id="comment2" value="Оплата услуг: Программирование 4 часа, 5шт. Программирование 3 минуты, 9шт">
+						<input  type="hidden" name="paymentType" id="paytype" value="">
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary" hidden>Перевести</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
@@ -139,6 +212,10 @@
 			STEP_FILE_IN_QUEUE: 5,
 			//Экран с показом превью и текстом замечаний
 			STEP_SHOW_PREWIEV: 6,
+			//Экран оплаты
+			STEP_SHOW_PAY_FORM: 7,
+			//Экран скидки
+			STEP_SHOW_DISCOUNT_FORM: 8,
 
 			//Ждём ответа от оператора пять минут, потом показываем диалог ввода email
 			COUNT_DOWN_INIT: 600,
@@ -150,6 +227,8 @@
 			cdT: null,
 			//Сообщение о состоянии процесса на экране  STEP_FILE_IN_QUEUE
 			fileInQueueWaitScreenMessage: '',//$t('app.fileInQueue')
+			//Фрагмент сообщения о том, сколько времени осталось ждать. Сообщение о состоянии процесса на экране  STEP_FILE_IN_QUEUE
+			fileInQueueSecondsMessageFragment: '',//$t('app.fileInQueueSecondsMessageFragment')
 
 			//модель для загружаемого PSD файла 
 			psdurl: '',
@@ -262,6 +341,13 @@
             */
 			onClickPaymentAndDownloadFile() {
 				//TODO
+				if (this.isEmailIsSet) {
+					this.step = this.STEP_SHOW_DISCOUNT_FORM;
+				} else {
+					this.sendMeResultIsChoosed = 0;
+					this.safeStep = this.STEP_SHOW_DISCOUNT_FORM;
+					this.step = this.STEP_SHOW_EMAIL_FORM;
+				}
 			},
 			/**
 			 * @description Показать состояние, файл сконвертирован
@@ -322,8 +408,8 @@
 				}
 				if (path && this.step != this.STEP_FILE_IN_QUEUE) {
 					this.countDown = this.COUNT_DOWN_INIT;
-					this.step = this.STEP_FILE_IN_QUEUE;
-					//TODO надо показать экран "Ваш файл в очереди"
+					this.safeStep = this.step = this.STEP_FILE_IN_QUEUE;
+					//показать экран "Ваш файл в очереди"
 					//и запустить таймер, который каждые пять секунд запрашивает состояние
 					this.cdT = setInterval(() => {
 						if (this.cdtPause) {
@@ -337,6 +423,8 @@
 						}
 						if (this.countDown <= 0) {
 							clearInterval(this.cdT);
+							this.fileInQueueWaitScreenMessage = this.$t('app.SorryQueueIsBig');
+							this.fileInQueueSecondsMessageFragment = '';
 							this.step = this.STEP_SHOW_EMAIL_FORM;
 						}
 					}, 1000);
@@ -454,10 +542,10 @@
 					return;
 				}
 				this.isEmailIsSet = true;
-				if (this.sendMeResultIsChoosed) {
-					this.cdtPause = 0;
-					this.step = this.safeStep;
-				}
+				this.cdtPause = 0;
+				this.fileInQueueWaitScreenMessage = this.$t('app.ByeMessage');
+				console.log('Set step ad current', this.step);
+				this.step = this.safeStep;
 			},
 			onFailSendEmail(data, b, c) {
 				this.$root.setMainSpinnerVisible(false);
@@ -484,6 +572,7 @@
 				//Текст на кнопках диалога подтверждения действия
 				this.countDownMeasure = this.$t('app.seconds_more_19');
 				this.fileInQueueWaitScreenMessage = this.$t('app.fileInQueue');
+				this.fileInQueueSecondsMessageFragment = this.$t('app.fileInQueueSecondsMessageFragment');
 			},
            
         }, //end methods
