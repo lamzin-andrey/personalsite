@@ -120,17 +120,19 @@
 		<div v-if="step == STEP_SHOW_DISCOUNT_FORM">
 			<div class="alert alert-info">Получите скидку</div>
 			<div class="col-lg-6 text-left mx-auto border  border-info mb-5 p-3">
-				<div class="form-check" checked>
-					<input class="form-check-input" type="radio" name="paymentSum" id="sum100" value="100" checked>
-					<label class="form-check-label" for="sum100">Оплатить 100 рублей</label>
-				</div>
-				<div class="form-check" checked>
-					<input class="form-check-input" type="radio" name="paymentSum" id="sum50" value="50">
-					<label class="form-check-label" for="sum50">Разрешить показывать ваш psd и верстку в примерах и получить скидку 50 рублей</label>
-				</div>
+				<form method="POST" action="/">
+					<div class="form-check" checked>
+						<input v-model="paysum" class="form-check-input" type="radio"  value="100" checked id="sum100">
+						<label class="form-check-label" for="sum100">Оплатить 100 рублей</label>
+					</div>
+					<div class="form-check">
+						<input v-model="paysum" class="form-check-input" type="radio" value="50" id="sum50">
+						<label class="form-check-label" for="sum50">Разрешить показывать ваш psd и верстку в примерах и получить скидку 50 рублей</label>
+					</div>
+				</form>
 				
 				<div class="text-right mt-2">
-					<input type="submit" id="subm"  class="btn btn-primary" value="Продолжить">
+					<input type="submit" @click="onClickShowPayform"  class="btn btn-primary" value="Продолжить">
 				</div>
 			</div>
 		</div>
@@ -257,6 +259,9 @@
 			//Замечания от сервиса
 			sNotices: '',
 
+			//связанные с формой скидки
+			paysum: 100,
+
             //Значение email
             email:null
         }; },
@@ -311,6 +316,22 @@
 				}
 			},
 			/**
+			 * @description Обработка клика на кнопке Продолжить формы предложения скидки
+            */
+			onClickShowPayform(){
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({sum:this.paysum}, (data) => { this.onSuccessSaveSum(data);}, this.$root._serverRoot + '/phddiscount.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description
+			*/
+			onSuccessSaveSum(data) {
+				if (!this.defaultFailSendFormListener(data)) {
+					return;
+				}
+				this.step = this.STEP_SHOW_PAY_FORM;
+			},
+			/**
 			 * @description Обработка клика на кнопке Обновить PSD
             */
 			onClickUpdatePsdFile() {
@@ -340,7 +361,6 @@
 			 * @description Обработка клика на Оплатить и скачать
             */
 			onClickPaymentAndDownloadFile() {
-				//TODO
 				if (this.isEmailIsSet) {
 					this.step = this.STEP_SHOW_DISCOUNT_FORM;
 				} else {
@@ -567,14 +587,21 @@
 			},
 			/**
 			 * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
-			 */
+			*/
 			localizeParams() {
 				//Текст на кнопках диалога подтверждения действия
 				this.countDownMeasure = this.$t('app.seconds_more_19');
 				this.fileInQueueWaitScreenMessage = this.$t('app.fileInQueue');
 				this.fileInQueueSecondsMessageFragment = this.$t('app.fileInQueueSecondsMessageFragment');
 			},
-           
+			/**
+			 * @description Обработка ответа сервера на ajax запрос по умолчанию
+			 * @params see this.$root.defaultFailSendFormListener
+			*/
+			defaultFailSendFormListener(a, b, c) {
+				this.$root.setMainSpinnerVisible(false);
+				return this.$root.defaultFailSendFormListener(a, b, c);
+			}
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {

@@ -18,6 +18,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PhdController extends AbstractController
 {
+	/** @const Полная сумма за конвертацию */
+	const SUM_FULL = 100;
+
+	/** @const Сумма за конвертацию со скидкой */
+	const SUM_DISCOUNT = 50;
+
 	/** @property string $_subdir подкаталог в который загружаются файлы при аплоаде */
 	private  $_subdir;
 
@@ -27,6 +33,27 @@ class PhdController extends AbstractController
 	/** @property int _examplesPerPage Количество работ на одной "странице" */
 	private $_examplesPerPage = 3;
 
+	/**
+	 * Установить факт, что работу можно показывать в примерах
+	 * @Route("/phddiscount.json", name="phddiscount")
+	 */
+	public function phddiscount(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
+	{
+		$oEm = $this->getDoctrine()->getManager();
+		$oPhdMessage = $this->_getPhdMessage($oRequest);
+		if (!$oPhdMessage) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Unauth user')
+			]);
+		}
+		$bVal = $oRequest->get('sum') == static::SUM_FULL ? false : true;
+		$oPhdMessage->setIsPublish($bVal);
+		$oEm->persist($oPhdMessage);
+		$oEm->flush();
+		$aData = [];
+		return $this->_json($aData);
+	}
 	/**
 	 * Проверяет, установлена ли кука app.phdusercookiename
 	 * @Route("/phdsayhello.json", name="phdsayhello")
