@@ -192,25 +192,18 @@ class PhdController extends AbstractController
 		$aData = [
 			'st' => $oPhdMessage->getState()
 		];
-		if ($oPhdMessage->getState() == 3) {
-			$aData['previewLink'] = $oPhdMessage->getPreviewLink();
-			$aData['notes'] = $oPhdMessage->getServiceNotes();
-			$aData['noticePreviewLink'] = $oPhdMessage->getNoticePreviewLink();
-			$aData['htmlExampleLink'] = $oPhdMessage->getHtmlExampleLink();
-			$aData['cssPreviewLink'] = $oPhdMessage->getCssPreviewLink();
-		}
-		if ($oPhdMessage->getState() == 8) {
-			$aData['resultLink'] = $this->getParameter('app.siteUrlBegin') . $oPhdMessage->getResultLink();
-		}
+		$this->_setShowPreviewVariables($aData, $oPhdMessage);
+		$this->_setResultLinkVariables($aData, $oPhdMessage);
 		return $this->_json($aData);
 	}
 	/**
 	 * Проверяет, установлена ли кука app.phdusercookiename
 	 * @Route("/phdcheckin.json", name="phdcheckin")
-	 */
+	*/
 	public function checkIn(Request $oRequest, AppService $oAppService)
 	{
 		$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);
 		$aData = [];
 		$this->_setPsdUploadFormToken($aData, $oAppService);
 
@@ -218,6 +211,11 @@ class PhdController extends AbstractController
 			$oSession = $oRequest->getSession();
 			$oSession->set('phd_user', $oPhdUser);
 			$aData['cookieFound'] = 1;
+			if ($oPhdMessage) {
+				$aData['st'] = $oPhdMessage->getState();
+				$this->_setShowPreviewVariables($aData, $oPhdMessage);
+				$this->_setResultLinkVariables($aData, $oPhdMessage);
+			}
 		}
 		return $this->_json($aData);
 	}
@@ -382,5 +380,31 @@ class PhdController extends AbstractController
 			'uploaddir' => $this->_subdir
 		]);
 		$aData['formToken'] = $oForm->createView()->children['_token']->vars['value'];
+	}
+	/**
+	 * Установить переменные необходимые для показа экрана превью работы
+	 * @param array &$aData
+	 * @param PhdMessages $oPhdMessage
+	*/
+	private function _setShowPreviewVariables(array &$aData, PhdMessages $oPhdMessage)
+	{
+		if ($oPhdMessage->getState() == 3 || $oPhdMessage->getState() == 7) {
+			$aData['previewLink'] = $oPhdMessage->getPreviewLink();
+			$aData['notes'] = $oPhdMessage->getServiceNotes();
+			$aData['noticePreviewLink'] = $oPhdMessage->getNoticePreviewLink();
+			$aData['htmlExampleLink'] = $oPhdMessage->getHtmlExampleLink();
+			$aData['cssPreviewLink'] = $oPhdMessage->getCssPreviewLink();
+		}
+	}
+	/**
+	 * Установить переменные необходимые для показа экрана с сылкой на результат
+	 * @param array &$aData
+	 * @param PhdMessages $oPhdMessage
+	*/
+	private function _setResultLinkVariables(array &$aData, PhdMessages $oPhdMessage)
+	{
+		if ($oPhdMessage->getState() == 8) {
+			$aData['resultLink'] = $this->getParameter('app.siteUrlBegin') . $oPhdMessage->getResultLink();
+		}
 	}
 }

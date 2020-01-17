@@ -299,6 +299,39 @@
         //
         methods:{
 			/**
+			 * @description Установить соответствующий экран при входе на страницу
+			 * @param {Object} oData
+			*/
+			setPsdState(oData) {
+				console.log( 'setPhdState: I Call' );
+				let nState = parseInt(oData.st);
+				console.log( 'setPhdState: nState = ',  nState);
+				if (!isNaN(nState) ) {
+					switch(nState) {
+						case 0:
+							this.startCountDownTimer();
+							break;
+						case 1:
+							this.startCountDownTimer();  
+							this.setStateFileIsProcessUploadOnService(nState);
+							break;
+						case 2:
+							this.startCountDownTimer();
+							this.setStateFileIsProcessConvert(nState);
+							break;
+						case 3:
+						case 7:
+							console.log( 'before call setStateShowPreview' );
+							this.setStateShowPreview(oData);
+							break;
+						case 8:
+							this.setStateShowResult(oData);
+							break;
+					}
+					this.onSuccessGetRequestState(oData);
+				}
+			},
+			/**
 			 * @description Запрашивает данные о состоянии файла. Все файлы получаются исключательно по id 
 			 * пользователя. Последний загруженный файл и есть тот, который нам нужен
 			 * Предусмотреть что кука внезапно может потеряться.
@@ -314,6 +347,9 @@
 			 * @description Обработка получeния статуса процесса
             */
 			onSuccessGetRequestState(data) {
+				if (!this.$root.defaultFailSendFormListener(data)) {
+					return;
+				}
 				this._requestStateIsSended = 0;
 				let st = parseInt(data.st);
 				switch(st) {
@@ -324,26 +360,11 @@
 						this.setStateFileIsProcessConvert(st);
 						break;
 					case 3:
-						this.setStateShowPreview(data);
+						this.setStateShowPreview(data); 
 						break;
-					/*case 4:
-						this.setStateShowEnterEmailState();
-						break;
-					case 5:
-						this.setStateShowDiscountOpportunity();
-						break;
-					case 6:
-						this.setStateShowPayform();
-						break;
-					case 7:
-						this.setStateWaitPayment();
-						break;*/
 					case 8:
 						this.setStateShowResult(data);//TODO send pewview link if state == 8
 						break;
-					/*case 9:
-						this.setStateLoadAnotherFile();
-						break;*/
 				}
 			},
 			setStateShowResult(data) {
@@ -516,29 +537,35 @@
 					}
 				}
 				if (path && this.step != this.STEP_FILE_IN_QUEUE) {
-					this.countDown = this.COUNT_DOWN_INIT;
-					this.safeStep = this.step = this.STEP_FILE_IN_QUEUE;
-					//показать экран "Ваш файл в очереди"
-					//и запустить таймер, который каждые пять секунд запрашивает состояние
-					this.cdT = setInterval(() => {
-						if (this.cdtPause) {
-							return;
-						}
-						this.countDown--;
-						this.countDownMeasure = TextFormat.pluralize(this.countDown, this.$root.$t('app.second_one'), this.$root.$t('app.seconds_less_5'), this.$root.$t('app.seconds_more_19'));
-						let diff = this.COUNT_DOWN_INIT - this.countDown;
-						if (diff % 5 == 0) {
-							this.getState();
-						}
-						if (this.countDown <= 0) {
-							clearInterval(this.cdT);
-							this.cdT = null;
-							this.fileInQueueWaitScreenMessage = this.$t('app.SorryQueueIsBig');
-							this.fileInQueueSecondsMessageFragment = '';
-							this.step = this.STEP_SHOW_EMAIL_FORM;
-						}
-					}, 1000);
+					this.startCountDownTimer();
 				}
+			},
+			/**
+			 * @description Запуск таймера обратнрого отсчёта
+            */
+			startCountDownTimer() {
+				this.countDown = this.COUNT_DOWN_INIT;
+				this.safeStep = this.step = this.STEP_FILE_IN_QUEUE;
+				//показать экран "Ваш файл в очереди"
+				//и запустить таймер, который каждые пять секунд запрашивает состояние
+				this.cdT = setInterval(() => {
+					if (this.cdtPause) {
+						return;
+					}
+					this.countDown--;
+					this.countDownMeasure = TextFormat.pluralize(this.countDown, this.$root.$t('app.second_one'), this.$root.$t('app.seconds_less_5'), this.$root.$t('app.seconds_more_19'));
+					let diff = this.COUNT_DOWN_INIT - this.countDown;
+					if (diff % 5 == 0) {
+						this.getState();
+					}
+					if (this.countDown <= 0) {
+						clearInterval(this.cdT);
+						this.cdT = null;
+						this.fileInQueueWaitScreenMessage = this.$t('app.SorryQueueIsBig');
+						this.fileInQueueSecondsMessageFragment = '';
+						this.step = this.STEP_SHOW_EMAIL_FORM;
+					}
+				}, 1000);
 			},
 			/**
 			 * @description Обработка неуспешной загрузки PSD файла на сервер

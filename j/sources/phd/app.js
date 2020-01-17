@@ -116,13 +116,8 @@ window.app = new Vue({
 		this.localizeParams();
 		Rest._token = this._getToken();
 		this.setSiteDomain();
-		//Получаем список работ, авторы которых дали доро на.
-		//Rest._get((data)=>{this.onSuccessAuthStatus(data);}, '/p/trollkiller/checkauth.jn/?p=1', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
-		/* if (!this.checkAuthRequestSend) {
-			this.checkAuthRequestSend = true;
-			Rest._get((data)=>{this.onSuccessAuthStatus(data);}, '/p/trollkiller/checkauth.jn/?p=1', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
-		}*/
-
+		//Получаем актуальное состояние формы конвертации файла
+		this.getActualState();
 
 		//Префикс запросов к серверу
 		this._serverRoot = '/sp/public';
@@ -140,20 +135,34 @@ window.app = new Vue({
 	 * @description Клик на кнопке Конвертировать PSD в HTML
 	*/
 	onClickConvertNow() {
+		this.getActualState();
+	},
+	/**
+	 * Получаем актуальное состояние формы конвертации файла 
+	*/
+	getActualState() {
+		if (this.convertProcessed) {
+			return;
+		}
+		this.setMainSpinnerVisible(true);
 		this.convertProcessed = true;
 		Rest._post({a: 1}, (data) => {this.onSuccessFirstCheckIn(data);},
 			this.$refs.phdexamples._serverRoot + '/phdcheckin.json', 
-			(a, b, c) => {this.defaultFailSendFormListener(a, b, c); });
+			(a, b, c) => {
+				this.convertProcessed = false;
+				this.setMainSpinnerVisible(false);
+				this.defaultFailSendFormListener(a, b, c);
+			});
 	},
 	/**
 	 * @description Проверка, не установлена ли кука при первом клике на кнопку "Конвертировать PSD в HTML"
 	*/
 	onSuccessFirstCheckIn(data) {
 		this.convertProcessed = false;
+		this.setMainSpinnerVisible(false);
 		if (!this.defaultFailSendFormListener(data)) {
 			return;
 		}
-
 		//Показать форму
 		this.phdFromIsShow = true;
 		Vue.nextTick(() => {
@@ -162,8 +171,8 @@ window.app = new Vue({
 				this.$refs.phdform.step = this.$refs.phdform.STEP_SHOW_UPLOAD_BUTTON;
 			}
 			this.$refs.phdform.setPsdUploaderCsrfToken(data.formToken);
+			this.$refs.phdform.setPsdState(data);
 		});
-		
 	},
 	/**
      * @description Клик на кнопке "Смотреть ещё работы"
