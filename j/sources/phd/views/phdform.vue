@@ -386,7 +386,7 @@
 				Rest._post({sum:this.paysum, method: this.paymentType}, (data) => { this.onSuccessStartPayTransaction(data);}, this.$root._serverRoot + '/phdstarttransaction.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			onClickLoadNewPsd() {
-				//TODO onClickLoadNewPsd
+				this.step = this.STEP_SHOW_UPLOAD_BUTTON;
 			},
 			/**
 			 * @description Обработка получения с сервера tid, чтобы отправить его на сервер paysystem
@@ -464,18 +464,30 @@
 				this.cssPreviewLink = '';
 				Vue.nextTick(() => {
 					this.setPsdUploaderCsrfToken(data.formToken);
+					this.resetScrollY();
 				});
 			},
 			/**
 			 * @description Обработка клика на Оплатить и скачать
             */
 			onClickPaymentAndDownloadFile() {
+				this.resetScrollY();
 				if (this.isEmailIsSet) {
 					this.step = this.STEP_SHOW_DISCOUNT_FORM;
 				} else {
 					this.sendMeResultIsChoosed = 0;
 					this.safeStep = this.STEP_SHOW_DISCOUNT_FORM;
 					this.step = this.STEP_SHOW_EMAIL_FORM;
+				}
+			},
+			/**
+			 * @description Восстановить состояние прокрутки
+            */
+			resetScrollY() {
+				if (this.scrollYValue) {
+					window.scrollTo(0, this.scrollYValue);
+				} else {
+					location.href = '#psdform';
 				}
 			},
 			/**
@@ -493,6 +505,7 @@
 				this.htmlExampleLink = response.htmlExampleLink;
 				this.cssPreviewLink = response.cssPreviewLink;
 				this.step = this.STEP_SHOW_PREWIEV;
+				this.scrollYValue = window.pageYOffset;
 			},
 			/**
 			 * @description Показать состояние, файл конвертируется

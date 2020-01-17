@@ -117,7 +117,7 @@ var locales = {
 			'ConvertNow' : 'Конвертировать',
 			'Continue' : 'Продолжить',
 			NeedCokie: 'Вероятно, у вас отключены куки, включите, чтобы продолжить',
-			AcceptUseCookieAndContinue: 'Я согласен',
+			AcceptUseCookieAndContinue: 'Я согласен сконвертировать PSD в верстку на этих условиях',
 			UploadPSD: 'Загрузить PSD файл',
 			tryAgainOrReloadPage: 'Не удалось загрузить PSD файл, попробуйте ещё раз',
 			second_one: 'секунда',
