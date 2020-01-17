@@ -1,5 +1,19 @@
 <template>
 	<div>
+		<form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml" id="yaform" style="display:none;" target="_blank">
+			<input v-model="yacache" type="hidden" name="receiver" id="rec" >
+			<input type="hidden" name="formcomment" id="comment" value="Payment for converting PSD to HTML + CSS">
+			<input v-model="tid" type="hidden" name="label" >
+			<input type="hidden" name="quickpay-form" value="shop">
+			<input v-model="tid" type="hidden" name="targets" >
+			<input v-model="paysum" type="hidden"  name="sum" data-type="number">
+			<input type="hidden" name="comment" id="comment2" value="Payment for converting PSD to HTML + CSS (c2)">
+			<input v-model="paymentType" type="hidden" name="paymentType" id="paytype" >
+			<div class="text-right">
+				<button type="submit" class="btn btn-primary" hidden>Перевести</button>
+			</div>
+		</form>
+
 		<div v-if="step == STEP_WE_USE_COOKIE">
 			<p>
 				Работая с сайтом {{ $root.siteDomain}}, вы принимаете условия использования файлов cookies.
@@ -54,7 +68,10 @@
 			</p>
 		</div>
 		
-		<div v-if="step == STEP_FILE_IN_QUEUE">
+		<div v-if="step == STEP_FILE_IN_QUEUE || step == STEP_WAIT_PAYMENT">
+			<div class="alert alert-warning" v-if="step == STEP_WAIT_PAYMENT">
+				{{ $t('app.PayformInNewWndBegin') }} {{ paysystemName }} {{ $t('app.PayformInNewWndEnd') }} {{ $t('app.tryPayAgain') }}
+			</div>
 			<div class="alert alert-success text-center">
 				{{ fileInQueueWaitScreenMessage }}{{ fileInQueueSecondsMessageFragment }}
 				<div class="position-relative m-auto phd-spinner-wrap-width" >
@@ -65,7 +82,17 @@
 				</div>
 				<div>{{ countDownMeasure }}</div>
 			</div>
+			<div class="my-2">
+				<button v-if="step == STEP_WAIT_PAYMENT" class="btn btn-primary w-100" @click="onClickSendMoney">{{ $t('app.tryPayAgain') }}</button>
+			</div>
 			<button class="btn btn-primary w-100" @click="onClickSendMeResult">{{ $t('app.sendMeResultOnEmail') }}</button>
+		</div>
+
+		<div v-if="step == STEP_SHOW_RESULT">
+			<div class="alert alert-success" >
+				<a :href="resultLink" target="_blank">{{ $t('app.DownloadResult') }}</a>
+			</div>
+			<button class="btn btn-primary w-100" @click="onClickLoadNewPsd">{{ $t('app.uploadNewPSDFile') }}</button>
 		</div>
 
 		<div v-if="step == STEP_SHOW_PREWIEV">
@@ -171,22 +198,12 @@
 						<span class="font-weight-bold" id="lastDescriptionText"></span>
 					</div>
 					
-					<form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml" id="yaform" style="display:none;" target="_blank">
-						<input v-model="yacache" type="hidden" name="receiver" id="rec" >
-						<input type="hidden" name="formcomment" id="comment" value="Payment for converting PSD to HTML + CSS">
-						<input v-model="tid" type="hidden" name="label" >
-						<input type="hidden" name="quickpay-form" value="shop">
-						<input v-model="tid" type="hidden" name="targets" >
-						<input v-model="paysum" type="hidden"  name="sum" data-type="number">
-						<input type="hidden" name="comment" id="comment2" value="Payment for converting PSD to HTML + CSS (c2)">
-						<input v-model="paymentType" type="hidden" name="paymentType" id="paytype" >
-						<div class="text-right">
-							<button type="submit" class="btn btn-primary" hidden>Перевести</button>
-						</div>
-					</form>
 				</div>
 			</div>
 		</div>
+
+
+		
 	</div>
 </template>
 <script>
@@ -214,6 +231,10 @@
 			STEP_SHOW_PAY_FORM: 7,
 			//Экран скидки
 			STEP_SHOW_DISCOUNT_FORM: 8,
+			//Экран ожидания оплаты
+			STEP_WAIT_PAYMENT: 9,
+			//Экран ссылки на результат
+			STEP_SHOW_RESULT: 10,
 
 			//Ждём ответа от оператора пять минут, потом показываем диалог ввода email
 			COUNT_DOWN_INIT: 600,
@@ -266,6 +287,12 @@
 			//Номер яндекс-кошелька
 			yacache: '',
 
+			//связанные с экраном ожидания оплаты
+			paysystemName: '',
+
+			//связанные с экраном ссылки на результат
+			resultLink: '',
+
             //Значение email
             email:null
         }; },
@@ -310,14 +337,22 @@
 						break;
 					case 7:
 						this.setStateWaitPayment();
-						break;
+						break;*/
 					case 8:
-						this.setStateShowResult();
+						this.setStateShowResult(data);//TODO send pewview link if state == 8
 						break;
-					case 9:
+					/*case 9:
 						this.setStateLoadAnotherFile();
 						break;*/
 				}
+			},
+			setStateShowResult(data) {
+				if (this.cdT) {
+					clearInterval(this.cdT);
+					this.cdT = null;
+				}
+				this.resultLink = data.resultLink;
+				this.step = this.STEP_SHOW_RESULT;
 			},
 			/**
 			 * @description Обработка клика на кнопке Перевести (деньги)
@@ -329,6 +364,9 @@
 				//в operations main_id это будет phd_messages.id
 				Rest._post({sum:this.paysum, method: this.paymentType}, (data) => { this.onSuccessStartPayTransaction(data);}, this.$root._serverRoot + '/phdstarttransaction.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
+			onClickLoadNewPsd() {
+				//TODO onClickLoadNewPsd
+			},
 			/**
 			 * @description Обработка получения с сервера tid, чтобы отправить его на сервер paysystem
 			*/
@@ -337,8 +375,30 @@
 					return;
 				}
 				this.tid = data.id + 'phd';
+				//TODO Показать информацию о новой вкладке
+				this.countDown = '...';
+				this.fileInQueueWaitScreenMessage = this.$t('app.waitPaymentMessage');
+				this.fileInQueueSecondsMessageFragment = '';
+				this.countDownMeasure = '';
+				
 				Vue.nextTick(() => {
 					$('#yaform').submit();
+
+					this.step = this.STEP_WAIT_PAYMENT;
+				
+					let m = 0;
+					if (!this.cdT) {
+						this.cdT = setInterval(() => {
+							if (this.cdtPause) {
+								return;
+							}
+							m++;
+							if (m % 5 == 0) {
+								this.getState();
+							}
+						}, 1000);
+					}
+					
 				});
 			},
 			/**
@@ -404,6 +464,7 @@
 			setStateShowPreview(response) {
 				if (this.cdT) {
 					clearInterval(this.cdT);
+					this.cdT = null;
 				}
 				this.previewLink = response.previewLink;
 				this.sNotices    = response.notes;
@@ -471,6 +532,7 @@
 						}
 						if (this.countDown <= 0) {
 							clearInterval(this.cdT);
+							this.cdT = null;
 							this.fileInQueueWaitScreenMessage = this.$t('app.SorryQueueIsBig');
 							this.fileInQueueSecondsMessageFragment = '';
 							this.step = this.STEP_SHOW_EMAIL_FORM;

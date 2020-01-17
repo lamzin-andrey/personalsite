@@ -54,6 +54,9 @@ class PhdController extends AbstractController
 		$oPayService->setPayTransactionEntityClassName('App\Entity\PhdPayTransaction');
 		$oPayService->setOperationEntityClassName('App\Entity\PhdOperations');
 		$nTransactionId = $oPayService->createTransaction($oPhdMessage->getUid(), $oPhdMessage->getId());
+		$oPhdMessage->setState(7);
+		$oEm->persist($oPhdMessage);
+		$oEm->flush();
 		$aData = [
 			'id' => $nTransactionId
 		];
@@ -195,6 +198,9 @@ class PhdController extends AbstractController
 			$aData['noticePreviewLink'] = $oPhdMessage->getNoticePreviewLink();
 			$aData['htmlExampleLink'] = $oPhdMessage->getHtmlExampleLink();
 			$aData['cssPreviewLink'] = $oPhdMessage->getCssPreviewLink();
+		}
+		if ($oPhdMessage->getState() == 8) {
+			$aData['resultLink'] = $this->getParameter('app.siteUrlBegin') . $oPhdMessage->getResultLink();
 		}
 		return $this->_json($aData);
 	}

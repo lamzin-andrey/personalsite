@@ -48,7 +48,7 @@ class YamoneyNoticeRecieverController extends AbstractController
 				$sEmail = $oUser->getEmail();
 			}
 			$oService = $this->_oAppService;
-			if ($oService->isValidEmail($sEmail)) {
+			if ($oService->isValidEmail($sEmail) && $this->getParameter('app.sendemailoff') == 1) {
 				$subject = 'Ваша верстка ждёт вас';
 				$siteName = $this->getParameter('app.siteName');
 				$siteUrlBegin = $this->getParameter('app.siteUrlBegin');

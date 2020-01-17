@@ -9,6 +9,8 @@ parameters:
     app.siteUrlBegin:  "%env(resolve:SITE_URL_BEGIN)%"
     app.phdAdminEmail: "%env(resolve:PHD_ADMIN_EMAIL)%"
 
+    app.sendemailoff: 0
+
     #phd section
     app.phdusercookiename: phdu
     #Код операции, которая записывается в operations по умолчанию при успешной оплате
