@@ -5,6 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.siteAdminEmail: "%env(resolve:site_admin_email)%"
+    app.siteName: "%env(resolve:SITE_NAME)%"
+    app.siteUrlBegin:  "%env(resolve:SITE_URL_BEGIN)%"
+    app.phdAdminEmail: "%env(resolve:PHD_ADMIN_EMAIL)%"
 
     #phd section
     app.phdusercookiename: phdu
@@ -13,7 +16,6 @@ parameters:
 
     app.yacache: "%env(resolve:YANDEX_CACHE)%"
     app.yasecretkey: "%env(resolve:YANDEX_SECRET_KEY)%"
-
 
 
 services:

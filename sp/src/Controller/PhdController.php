@@ -43,20 +43,19 @@ class PhdController extends AbstractController
 	*/
 	public function phdstarttransaction(Request $oRequest, PayService $oPayService, TranslatorInterface $t)
 	{
-		$sLogDir = $this->get('kernel')->getLogDir();
 		$oEm = $this->getDoctrine()->getManager();
-		$oPhdUser = $this->_getAuthPhdUser($oRequest);
-		if (!$oPhdUser) {
+		$oPhdMessage = $this->_getPhdMessage($oRequest);
+		if (!$oPhdMessage) {
 			return $this->_json([
 				'status' => 'error',
 				'msg' => $t->trans('Unauth user')
 			]);
 		}
 		$oPayService->setPayTransactionEntityClassName('App\Entity\PhdPayTransaction');
-		$nTransactionId = $oPayService->createTransaction($oPhdUser->getId());
+		$oPayService->setOperationEntityClassName('App\Entity\PhdOperations');
+		$nTransactionId = $oPayService->createTransaction($oPhdMessage->getUid(), $oPhdMessage->getId());
 		$aData = [
-			'id' => $nTransactionId,
-			'sLogDir' => $sLogDir
+			'id' => $nTransactionId
 		];
 		return $this->_json($aData);
 	}
