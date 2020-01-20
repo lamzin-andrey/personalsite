@@ -6,6 +6,6 @@ require_once __DIR__ . '/pgetdomain.php';
 
 $r = new Request();
 //'http://gazel.me/pcf'
-$r = $r->execute($domain . '/pcf', $_POST);
+$r = $r->execute($domain . $path, $_POST);
 //print_r($r);
 echo $r->responseText;
