@@ -1,4 +1,7 @@
 {
+    "curl/curl": {
+        "version": "1.9.3"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -134,6 +137,9 @@
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "qiwi/bill-payments-php-sdk": {
+        "version": "0.1.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

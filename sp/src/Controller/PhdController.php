@@ -53,13 +53,22 @@ class PhdController extends AbstractController
 		}
 		$oPayService->setPayTransactionEntityClassName('App\Entity\PhdPayTransaction');
 		$oPayService->setOperationEntityClassName('App\Entity\PhdOperations');
-		$nTransactionId = $oPayService->createTransaction($oPhdMessage->getUid(), $oPhdMessage->getId());
+		$oTransactionData = $oPayService->createTransaction($oPhdMessage->getUid(), $oPhdMessage->getId());
+		$nTransactionId = $oTransactionData->nPayTransactionId;
+		$sPayUrl = $oTransactionData->sPayUrl;
 		$oPhdMessage->setState(7);
 		$oEm->persist($oPhdMessage);
 		$oEm->flush();
 		$aData = [
-			'id' => $nTransactionId
+			'id' => $nTransactionId,
+			'ops' => $oTransactionData->nBillId,
+			'url' => $sPayUrl
 		];
+
+		if ($oTransactionData->sError) {
+			$aData['status'] = 'error';
+			$aData['msg'] = $oTransactionData->sError;
+		}
 		return $this->_json($aData);
 	}
 	/**

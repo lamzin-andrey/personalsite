@@ -171,8 +171,9 @@
 					<div class="form-check" checked>
 						<input v-model="paymentType" class="form-check-input" type="radio" id="ms" value="MC" checked>
 						<label class="form-check-label" for="ms">
-							Qiwi
+							Со счёта мобильного (МТС или Теле 2)
 						</label>
+						<input v-model="phone" type="number" placeholder="Номер телефона" class="form-control form-control-user">
 					</div>
 
 					<div class="form-check">
@@ -286,6 +287,8 @@
 			tid: '',
 			//Номер яндекс-кошелька
 			yacache: '',
+			//Номер телефона для оплаты
+			phone: '',
 
 			//связанные с экраном ожидания оплаты
 			paysystemName: '',
@@ -383,7 +386,7 @@
 				this.$root.setMainSpinnerVisible(true);
 				//TODO должны получить id из таблицы pay_transactions
 				//в operations main_id это будет phd_messages.id
-				Rest._post({sum:this.paysum, method: this.paymentType}, (data) => { this.onSuccessStartPayTransaction(data);}, this.$root._serverRoot + '/phdstarttransaction.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+				Rest._post({sum:this.paysum, method: this.paymentType, phone: this.phone}, (data) => { this.onSuccessStartPayTransaction(data);}, this.$root._serverRoot + '/phdstarttransaction.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			onClickLoadNewPsd() {
 				this.step = this.STEP_SHOW_UPLOAD_BUTTON;
@@ -403,7 +406,12 @@
 				this.countDownMeasure = '';
 				
 				Vue.nextTick(() => {
-					$('#yaform').submit();
+					/*if (data.url) {
+						window.open(data.url);
+					} else {*/
+						$('#yaform').submit();
+					//}
+					
 
 					this.step = this.STEP_WAIT_PAYMENT;
 				
