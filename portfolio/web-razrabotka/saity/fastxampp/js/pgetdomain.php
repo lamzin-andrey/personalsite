@@ -6,7 +6,7 @@ if ($label) {
 	$n = intval($label);
 	$f = str_replace(strval($n), '', $label);
 	if ($f == 'q') {
-		$domain = 'http://qp2t.ru';
+		$domain = 'http://glavtorgi.ru';
 	}
 	if ($f == 'phd') {
 		$domain = 'http://andryuxa.ru';
