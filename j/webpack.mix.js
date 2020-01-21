@@ -29,3 +29,6 @@ mix.styles([
 
 //Конвертер онлайн
 mix.js('sources/phd/app.js', 'f.js'); //phd
+
+//Конвертер онлайн - админка
+mix.js('sources/phdadmin/app.js', 'g.js'); //phd

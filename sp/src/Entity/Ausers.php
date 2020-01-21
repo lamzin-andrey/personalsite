@@ -118,7 +118,7 @@ class Ausers implements UserInterface
     /**
      * @var int|null
      *
-     * @ORM\Column(name="role", type="integer", nullable=true, options={"comment"="Роль пользователя 0 - пользователь 1 - модератор - 2 - админ"})
+     * @ORM\Column(name="role", type="integer", nullable=true, options={"comment"="Роль пользователя 0 - пользователь 1 - модератор  2 - админ 3 - админ раздела конвертация psd в html+css", "default"="0"})
      */
     private $role = '0';
 

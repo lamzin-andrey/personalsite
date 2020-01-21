@@ -14,7 +14,8 @@ parameters:
     app.qiwi_public_key: "%env(resolve:QIWI_PUBLIC_KEY)%"
     app.qiwi_secret_key: "%env(resolve:QIWI_SECRET_KEY)%"
 
-    app.sendemailoff: 0
+    #Тут антилогика: сейчас, когда off = 1 - должно письмо отправляться. TODO избавиться от антилогики
+    app.sendemailoff: "%env(resolve:SEND_EMAIL_ON)%"
 
     app.http_request_cache_ttl: 0
 

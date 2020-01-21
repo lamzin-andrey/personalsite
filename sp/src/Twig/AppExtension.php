@@ -121,6 +121,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	*/
 	private function _activeMenuItem(string $href) : string
 	{
+		$href = preg_replace("#/$#", '', $href);
 		if ($this->_baseUrl == $href) {
 			return ' active';
 		}
