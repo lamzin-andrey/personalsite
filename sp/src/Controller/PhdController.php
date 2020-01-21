@@ -188,7 +188,7 @@ class PhdController extends AbstractController
 		if (!$oPhdUser) {
 			return $this->_json([
 				'status' => 'error',
-				'msg' => $t->trans('Unauth user')
+				'msg' => $t->trans('Unauth user 1')
 			]);
 		}
 		$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);

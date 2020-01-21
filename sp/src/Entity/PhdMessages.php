@@ -94,16 +94,16 @@ class PhdMessages
     /**
      * @var int|null
      *
-     * @ORM\Column(name="operator_id", type="integer", nullable=true, options={"comment"="ausers.id - Оператор, обработавший конвертацию"})
-     */
-    private $operatorId;
+     * @ORM\Column(name="operator_id", type="integer", nullable=true, options={"comment"="ausers.id - Оператор, обработавший конвертацию", "default"="0"})
+    */
+    private $operatorId = '0';
 
     /**
      * @var bool|null
      *
-     * @ORM\Column(name="is_closed", type="boolean", nullable=true, options={"comment"="1 когда тикет закрыт оператором (оплачено и отправлено)"})
+     * @ORM\Column(name="is_closed", type="boolean", nullable=true, options={"comment"="1 когда тикет закрыт оператором (оплачено и отправлено)", "default"="0"})
      */
-    private $isClosed;
+    private $isClosed = false;
 
     /**
      * @var int|null
@@ -132,6 +132,14 @@ class PhdMessages
      * @ORM\Column(name="is_publish", type="boolean", nullable=false, options={"comment"="Разрешить публиковать работу в примерах работ"})
      */
     private $isPublish = '0';
+
+	/**
+	 * @var PhdUsers
+	 * @ORM\ManyToOne(targetEntity="PhdUsers", inversedBy="phdMessages")
+	 * @ORM\JoinColumn(name="uid", referencedColumnName="id")
+	*/
+	private $phdUser;
+
 
     public function getId(): ?int
     {
@@ -329,5 +337,9 @@ class PhdMessages
         return $this;
     }
 
+	public function getPhdUser()
+	{
+		return $this->phdUser;
+	}
 
 }
