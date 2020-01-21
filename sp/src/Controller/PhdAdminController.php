@@ -53,6 +53,9 @@ class PhdAdminController extends AbstractController
 	 */
 	public function phpadminRequest($requestId)
 	{
+		if (!$this->_hasPermissions()) {
+			return $this->redirectToRoute('home');
+		}
 		return $this->render('phd_admin/index.html.twig', [
 			'controller_name' => 'PhdAdminController',
 		]);
