@@ -258,6 +258,7 @@ class PhdController extends AbstractController
 					$s = '/' . $this->_subdir . '/' . $sFileName;
 					$this->_oMessage = new PhdMessages();
 					$this->_oMessage->setPsdLink($s);
+					$this->_oMessage->setCreatedAt($oAppService->now());
 					$oPhdUser = $this->_getAuthPhdUser($oRequest);
 					//$this->_oMessage->setUid($oPhdUser->getId());
 					$this->_oMessage->setPhdUser($oPhdUser);

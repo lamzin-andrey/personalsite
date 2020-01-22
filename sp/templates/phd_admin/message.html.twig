@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Заявки на конвертацию{% endblock %}
+
+{% block content %}
+<div id="phdapp">
+    <div class="alert alert-info" v-if="staticStateMessageIsVisible">
+        {{ 'Message state'|trans }}: {{ messageState }}
+    </div>
+
+    {% if (payed == 0) %}
+        <div class="alert alert-danger" v-if="staticPayStateMessageIsVisible">
+            {{ 'Unpayed'|trans }}
+        </div>
+    {% else %}
+        <div class="alert alert-success" v-if="staticPayStateMessageIsVisible">
+            {{ 'Payed'|trans }}
+            {% if ( sPayinfo is defined ) %}
+                <p>{{ sPayinfo }}</p>
+            {% endif %}
+
+            {% if ( sPaysum is defined ) %}
+                <p>{{ sPaysum }}</p>
+            {% endif %}
+
+            {% if ( sPaydatetime is defined ) %}
+                <p>{{ sPaydatetime }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <phdadminform ref="phdadminform"></phdadminform>
+    <b4alertdlg id="appAlertDlg" v-bind:params="b4AlertDlgParams"></b4alertdlg>
+</div>
+{% endblock %}

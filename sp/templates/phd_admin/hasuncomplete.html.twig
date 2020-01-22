@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'You have uncomoleted order'|trans }}{% endblock %}
+
+{% block content %}
+<div id="phdapp" class="alert alert-danger">
+    {{ 'You have uncomoleted order'|trans }}. <a href="{{ path('phdadmin_request', {'requestId' : nUncompleteId}) }}" target="_blank">{{ 'Link to uncomplete order'|trans }}</a>
+</div>
+{% endblock %}

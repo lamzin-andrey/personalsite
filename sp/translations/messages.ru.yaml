@@ -30,3 +30,24 @@ Reset-Password: Сбросить пароль
 Unauth user: Потеряна кука авторизации. Обновите страницу и попробуйте снова
 forgotPasswordSmallText: Такое, наверное, бывает... &copy; Просто введите свой адрес электронной почты ниже, и я вышлю вам ссылку для сброса пароля.
 Check browser notifies: Проверить уведомления
+You have uncomoleted order:  У вас есть недоделанная работа
+Link to uncomplete order:  Ссылка на заявку
+Take order:  Забрать себе
+Message state:  Состояние задачи
+Order not found: Не найден заказ
+Wait processing: Ожидает обработки, никем не обрабатывается
+Wait payment: Ожидает оплаты
+Other processing: Обрабатывается другим оператором
+Order datetime: Время подачи заявки
+Your processing: Обрабатывается вами
+Upload process: Загружается на сервер
+Convert process: Файл конвертируется
+Preview_showed: Превью показано пользователю
+Link sended: Ссылка отправлена на email и показана на странице
+Canceled: Отменено пользователем, он решшил загрузить другой файл
+Message processed operator: Сообщение обрабатывается оператором
+Payed: Оплачено
+Unpayed: Не оплачено
+Yandex mobile commerce: Оплата со счёта мобильного через Яндекс - деньги
+Yandex card: Оплата банковской картой через Яндекс - деньги
+Yandex cache: Оплата через Яндекс - кошелёк

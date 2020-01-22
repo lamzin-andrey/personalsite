@@ -437,4 +437,13 @@ class AppService
 		$n = preg_match($reg, $sEmail, $m);
 		return $n;
 	}
+
+	/**
+	 *
+	 * @return \DateTime
+	*/
+	public function now() : \DateTime
+	{
+		return new \DateTime();
+	}
 }
