@@ -1,6 +1,11 @@
 <template>
 	<div>
 		<div v-if="state == STATE_HELLO_SCREEN">
+
+			<div class="alert alert-info" v-if="vueStatusMessageVisible">
+				{{ $t('app.MessageState') }}: {{ statusMessage }}
+			</div>
+
 			<div class="my-1">
 				<button v-on:click="onClickTakeOrder" class="btn btn-primary">{{ $t('app.TakeOrder')}}</button>
 			</div>			
@@ -171,13 +176,22 @@
 				</div>
 				
 			</div>
+
+
 			<div class="my-1">
-				<button v-on:click="onClickSetAsClosed" class="btn btn-primary">{{ $t('app.SetAsClosed')}}</button>
+				<button v-on:click="onClickSendPreview" class="btn btn-primary">{{ $t('app.SendPreview')}}</button>
 			</div>
 
 			<div class="my-1">
 				<button v-on:click="onClickSendResult" class="btn btn-primary">{{ $t('app.SendResult')}}</button>
 			</div>
+
+
+			<div class="my-1">
+				<button v-on:click="onClickSetAsClosed" class="btn btn-primary">{{ $t('app.SetAsClosed')}}</button>
+			</div>
+
+			
 		</div>
 		
 		
@@ -267,8 +281,8 @@
 				}
 			},
 
-			//Upload notice preview listeners
-			previewNoticeUploadListeners: {
+			//Upload  preview listeners
+			previewUploadListeners: {
 				onSuccess:{
 					f:this.onSuccessUploadPreview,
 					context:this
@@ -278,6 +292,25 @@
 					context:this
 				}
 			},
+
+			//Upload notice preview listeners
+			previewNoticeUploadListeners: {
+				onSuccess:{
+					f:this.onSuccessUploadPreviewNotice,
+					context:this
+				},
+				onFail: {
+					f:this.onFailUploadPreviewNotice,
+					context:this
+				}
+			},
+
+			//Отвечает за отображение блока со статусом заявки
+			vueStatusMessageVisible: false,
+
+			//Сообщение со статусом заказа
+			statusMessage: '',
+
 			
         }; },
         //
@@ -466,6 +499,12 @@
 
 			},
 			onClickSendResult(data) {
+
+			},
+			/**
+			 * @description Обработка клика на кнопке Отправить превью и замечания
+            */
+			onClickSendPreview(data) { 
 
 			},
 			/**
@@ -659,10 +698,57 @@
 				$('#appLoginDlg').modal('hide');
 			},
 			/**
-			 * 
+			 * @description Клик на кнопке "Забрать заказ"
 			*/
-			onClickTakeOrder() {
-				
+			onClickTakeOrder(evt) {
+				evt.preventDefault();
+				this.$root.setMainSpinnerVisible(true);
+				let a = location.href.split('?'), nRequestId;
+				a = a[0].split('/');
+				nRequestId = parseInt( a[ a.length - 1 ] );
+				Rest._post({'id':nRequestId}, (data) => { this.onSuccessSetOperator(data);}, 
+					this.$root._serverRoot + '/phdadmintakeorder.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 *  @description Обработка успешной или неуспешной установки оператора заказа
+			*/
+			onSuccessSetOperator(data) {
+				if (!this.defaultFailSendFormListener(data)) {
+					return;
+				}
+				this.setStateMessage(data.statusMessage);
+			},
+			/**
+			 * @param {String} statusMessage
+			*/
+			setStateMessage(statusMessage) {
+				this.statusMessage = statusMessage;
+				this.$root.hideStatusMessage();
+				this.vueStatusMessageVisible = true;//TODO
+			},
+			/**
+			 *  
+			*/
+			onClickSetNotices() {
+
+			},
+			/**
+			 *  
+			*/
+			onClickSetPreviewLink() {
+
+			},
+			/**
+			 *  
+			*/
+			onClickSetCssLink() {
+
+			},
+			/**
+			 *  
+			*/
+			onClickSetNoticePreviewLink() {
+
 			},
 			sendEmailData() {
 				let sendData = {e:this.email};

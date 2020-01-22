@@ -22,6 +22,17 @@ const i18n = new VueI18n({
 //end Интернациализация
 
 
+//"Стандартная" валидация полей формы ?? Need ??
+//Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)
+require('../bootstrap421-validators/b421validatorsdirective').default;
+
+//класс с методами валидации. При использовании более ранних (или более поздних) версий bootstrap 
+//(или если поля ввода вашей формы будет иметь иную верстку чем в документации бутстрап 4.2.1)
+//надо наследоваться от этого класса и перегружать view* - методы (методы, начинающиеся со слова view)
+//импортировать в этом случае конечно надо наследник, а не родитель
+import B421Validators  from '../bootstrap421-validators/b421validators';
+//Обрати внимание на передачу B421Validators в app.data 
+// / "Стандартная" валидация полей формы
 
 //Компонент вместо стандартного confirm TODO тут просто проверим, чего и как
 Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue').default);
@@ -110,6 +121,12 @@ window.app = new Vue({
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
    methods:{
+	/**
+	 * @description Скрыть "статическое"  сообщение о статусе процесса
+	*/
+	hideStatusMessage(){
+		this.staticStateMessageIsVisible = false;
+	},
 	/**
 	 * @description Проверка уведомления
 	*/

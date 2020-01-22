@@ -4,6 +4,17 @@
 
 {% block content %}
 <div id="phdapp">
+
+    <p>
+        Email: {{ email }}
+    </p>
+
+    {% if (phone is defined) %}
+        <p>
+            Phone: {{ phone }}
+        </p>
+    {% endif %}
+
     <div class="alert alert-info" v-if="staticStateMessageIsVisible">
         {{ 'Message state'|trans }}: {{ messageState }}
     </div>

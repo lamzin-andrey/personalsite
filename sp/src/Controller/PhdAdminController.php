@@ -20,6 +20,9 @@ class PhdAdminController extends AbstractController
 	/** @property string $_sOtherOperatorEmail  Заполняется email оператора, взявшего себе заявку ва том случае если не совпадает с текущим оператором */
 	private $_sOtherOperatorEmail = '';
 
+	/** @property string $_sPhdUserEmail  Email на который должны быть отправлены данные о конвертации */
+	private $_sPhdUserEmail = '';
+
 	/** @property \DateTime $_sMessageDatetime  Заполняется временем подачи заявки */
 	private $_sMessageDatetime = '';
 
@@ -31,6 +34,43 @@ class PhdAdminController extends AbstractController
 	private $_oMessage;
 
 
+	/**
+	 * @Route("/phdadmintakeorder.json", name="phdadmintakeorder")
+	 * @param $
+	 * @return
+	*/
+	public function takeorder(Request $oRequest, TranslatorInterface $t)
+	{
+		if (!$this->_hasPermissions()) {
+			return $this->_json([]);
+		}
+		$nRequestId = intval($oRequest->get('id'));
+		$aData = [];
+		if ($this->_hasNotCompletedOperation($nRequestId) ) {
+			$aData['status'] = 'error';
+			$aData['msg'] = $t->trans('Unable take new order  while you have uncomplete order');
+			return $this->_json($aData);
+		}
+		$oPhdMessage = $this->_getMessageRepository()->find($nRequestId);
+		if (!$oPhdMessage) {
+			$aData['status'] = 'error';
+			$aData['msg'] = $t->trans('Message not found');
+			return $this->_json($aData);
+		}
+
+		if ($oPhdMessage->getOperatorId() != $this->getUser()->getId() && $oPhdMessage->getOperatorId() != 0) {
+			$aData['status'] = 'error';
+			$aData['msg'] = $t->trans('Unable take alien order!');
+			return $this->_json($aData);
+		}
+
+		$oPhdMessage->setOperatorId($this->getUser()->getId() );
+		$oEm = $this->getDoctrine()->getManager();
+		$oEm->persist($oPhdMessage);
+		$oEm->flush();
+		$aData['statusMessage'] = $t->trans('Your processing');
+		return $this->_json($aData);
+	}
 	/**
 	 * @Route("/phdagetmessages.json", name="phdagetmessages")
 	*/
@@ -69,7 +109,7 @@ class PhdAdminController extends AbstractController
 	/**
 	 * @Route("/phdadmin/request/{requestId}", name="phdadmin_request")
 	 */
-	public function phpadminRequest(int $requestId, TranslatorInterface $t)
+	public function phpadminRequest(int $requestId, TranslatorInterface $t, AppService $oAppService)
 	{
 		if (!$this->_hasPermissions()) {
 			return $this->redirectToRoute('home');
@@ -89,9 +129,10 @@ class PhdAdminController extends AbstractController
 		$aData = [
 			'messageState' => $sMessageState,
 			'payed' => $this->_oMessage->getIsPayed(),
+			'email' => $this->_sPhdUserEmail,
 			'pageHeading' => $t->trans('Order datetime') . ': ' . $this->_sMessageDatetime->format('Y-m-d H:i'),
 		];
-		$this->_setPayInfo($aData, $t);
+		$this->_setPayInfo($aData, $t, $oAppService);
 		return $this->render('phd_admin/message.html.twig', $aData);
 	}
     /**
@@ -196,37 +237,48 @@ class PhdAdminController extends AbstractController
 		if (!$oMessage) {
 			return $t->trans('Order not found');
 		}
+
+		$oPhdUser = $oMessage->getPhdUser();
+		if ($oPhdUser) {
+			$this->_sPhdUserEmail = $oPhdUser->getEmail();
+		}
+
 		$this->_sMessageDatetime = $oMessage->getCreatedAt();
+		$sProcessor = '';
+
+		if ($oMessage->getOperatorId() == 0) {
+			$sProcessor = ', ' . $t->trans('Wait processing');
+		}
+		if ($oMessage->getOperatorId() != $this->getUser()->getId() && $oMessage->getOperatorId() != 0) {
+			$this->_sOtherOperatorEmail = $this->getUser()->getEmail();
+			$this->_bOtherOperator = true;
+			$sProcessor = ', ' .  $t->trans('Other processing');
+		} else if ($oMessage->getOperatorId() == $this->getUser()->getId()) {
+			$sProcessor = ', ' .  $t->trans('Your processing');
+		}
+
 		switch ($oMessage->getState()) {
 			case 0:
-				if ($oMessage->getOperatorId() == 0) {
-					return $t->trans('Wait processing');
-				}
-				if ($oMessage->getOperaitorId() != $this->getUser()->getId()) {
-					$this->_sOtherOperatorEmail = $this->getUser()->getEmail();
-					$this->_bOtherOperator = true;
-					return $t->trans('Other processing');
-				}
-				return $t->trans('Your processing');
+				return $t->trans('Wait processing');
 			case 1:
-				return $t->trans('Upload process');
+				return $t->trans('Upload process') . $sProcessor;
 			case 2:
-				return $t->trans('Convert process');
+				return $t->trans('Convert process') . $sProcessor;
 			case 3:
-				return $t->trans('Preview_showed');
+				return $t->trans('Preview_showed') . $sProcessor;
 			case 7:
-				return $t->trans('Wait payment');
+				return $t->trans('Wait payment') . $sProcessor;
 			case 8:
-				return $t->trans('Link sended');
+				return $t->trans('Link sended') . $sProcessor;
 			case 9:
-				return $t->trans('Canceled');
+				return $t->trans('Canceled') . $sProcessor;
 		}
 	}
 	/**
 	 * Установить переменые связанные со способом оплаты
 	 * @param array &$aData
 	*/
-	private function _setPayInfo(array &$aData, TranslatorInterface $t) : void
+	private function _setPayInfo(array &$aData, TranslatorInterface $t, AppService $oAppService) : void
 	{
 		if (!$this->_oMessage) {
 			return;
@@ -238,10 +290,11 @@ class PhdAdminController extends AbstractController
 		}
 		$aData['sPayinfo'] = '';
 		$aData['sPaysum'] = $operation->getSum();
-		//TODO время прибытия нотайса - добавить обязательно добавить поле в pay_transaction.
-		$aData['sPaydatetime'] = 'TODO';
+
+		$aData['sPaydatetime'] = '';
 		$oRepository = $this->getDoctrine()->getRepository('App:PhdPayTransaction');
 		$oTransaction = $oRepository->find($operation->getPayTransactionId() );
+		$aData['sPaydatetime'] = $t->trans('Payed at') . ' ' . $oTransaction->getNotifyDatetime()->format('Y-m-d H:i:s');
 		if ($oTransaction) {
 			switch($oTransaction->getMethod()) {
 				case 'ms':
@@ -253,6 +306,10 @@ class PhdAdminController extends AbstractController
 				case 'bs':
 					$aData['sPayinfo'] = $t->trans('Yandex card');
 					break;
+			}
+			$this->_sPhdPhone = trim($oTransaction->getPhone());
+			if ($this->_sPhdPhone) {
+				$aData['phone'] = $oAppService->formatPhone($this->_sPhdPhone);
 			}
 		}
 	}

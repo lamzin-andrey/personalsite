@@ -84,6 +84,7 @@ class PayService
 				$oPayTransaction->setIsConfirmed(true);
 				$oPayTransaction->setYaHttpNoticeId($yaRequestLogId);
 				$oPayTransaction->setRealSum($withdraw_amount);
+				$oPayTransaction->setNotifyDatetime(new \DateTime());
 				$oEm->persist($oPayTransaction);
 				//Записываем данные в operations
 				$aData = $this->_getEmailData($label, $withdraw_amount, $yaRequestLogId);
