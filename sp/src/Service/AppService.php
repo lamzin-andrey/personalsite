@@ -355,6 +355,64 @@ class AppService
 		$aOptions['translation_domain'] = $sTranslationDomain;
 		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
 	}
+
+	/**
+	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
+	 */
+	public function addZipFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
+	{
+		$sTranslationDomain = 'Psdform';//TODO create file from gz Adform.ru.yml
+		$oFileUploader = $this->getFileUploaderService();
+		$oFileUploader->setTranslationDomain($sTranslationDomain);
+		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
+		$oFileUploader->addAllowMimetype('application/zip');
+		$oFileUploader->setFileInputLabel('Append file!');
+		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
+		$oFileUploader->setMaxFileSize(102400);
+
+		$subdir = $sUploadDirectory;
+		$sTargetDirectory = $oRequest->server->get('DOCUMENT_ROOT') . '/' . $subdir;
+
+		$oFileUploader->setTargetDirectory($sTargetDirectory);
+
+		$aOptions = $oFileUploader->getFileTypeOptions();
+
+		$aOptions['translation_domain'] = $sTranslationDomain;
+		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
+	}
+	/**
+	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
+	 */
+	public function addBigImageFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
+	{
+		$sTranslationDomain = 'Psdform';
+		/** @var \App\Service\FileUploaderService $oFileUploader */
+		$oFileUploader = $this->getFileUploaderService();
+		$oFileUploader->setTranslationDomain($sTranslationDomain);
+		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
+		$oFileUploader->addAllowMimetype('image/png');
+		$oFileUploader->addAllowMimetype('image/jpeg');
+		$oFileUploader->setFileInputLabel('Append file!');
+		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
+		$oFileUploader->setMaxFileSize(102400);
+		$oFileUploader->setMaxImageHeight(1024000000);
+		$oFileUploader->setMaxImageWidth(1024000000);
+		//$oFileUploader->addLiipBundleFilter('max_width');
+
+		$subdir = $sUploadDirectory;
+		$sTargetDirectory = $oRequest->server->get('DOCUMENT_ROOT') . '/' . $subdir;
+
+		$oFileUploader->setTargetDirectory($sTargetDirectory);
+
+		$aOptions = $oFileUploader->getFileTypeOptions();
+		/*$aOptions['attr'] = [
+			'style' => 'width:173px;',
+			'v-if'  => '!vueFileInputIsEnabled'
+		];*/
+		$aOptions['translation_domain'] = $sTranslationDomain;
+		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
+	}
+
 	/**
 	 * @param string $sError
 	 * @param string $sField

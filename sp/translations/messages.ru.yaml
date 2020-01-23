@@ -42,7 +42,7 @@ Order datetime: Время подачи заявки
 Your processing: Обрабатывается вами
 Upload process: Загружается на сервер
 Convert process: Файл конвертируется
-Preview_showed: Превью показано пользователю
+Preview showed: Превью показано пользователю
 Link sended: Ссылка отправлена на email и показана на странице
 Canceled: Отменено пользователем, он решшил загрузить другой файл
 Message processed operator: Сообщение обрабатывается оператором
@@ -54,3 +54,6 @@ Yandex cache: Оплата через Яндекс - кошелёк
 Payed at: Оплачено
 Unable take new order while you have uncomplete order: Невозможно принять новый заказ, пока у вас есть неполный заказ
 Message not found: Заказ не найден
+Alien order: Нельзя обрабатывать чужой заказ
+Unable load image file from remote server: Невозможно загрузить файл с удалённого сервера
+Unable get current order id: Невозможно получить идентификатор текущей заявки

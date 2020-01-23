@@ -99,6 +99,10 @@ window.app = new Vue({
 		Rest._token = this._getToken();
 		this.setSiteDomain();
 
+		if (this.$refs.phdadminform) {
+			this.setAtributesAsValues();
+		}
+
 		if (this.$refs.phdnotifier) {
 			//Получаем список заказанных на конвертацию файлов
 			if (!this.ivalGetMsgs) {
@@ -338,6 +342,19 @@ window.app = new Vue({
 		if (w) {
 			$('#accordionSidebar').removeClass('toggled');
 		}
+	},
+	/**
+	 * TODO сделать потом по фэн-шую
+	 * @description Устанавливает данные в поля ввода связанные с моделями
+	*/
+	setAtributesAsValues() {
+		this.$refs.phdadminform.setServiceNotices($('#hiddenNotices').val() );
+		this.$refs.phdadminform.setPreviewLink($('#hiddenpreviewlink').val() );
+		this.$refs.phdadminform.setNoticePreviewLink($('#hiddennoticepreviewlink').val() );
+		this.$refs.phdadminform.setCssPreviewLink($('#hiddencsspreviewlink').val() );
+		this.$refs.phdadminform.setHtmlExampleLink($('#hiddenhtmlexamplelink').val() );
+		this.$refs.phdadminform.setResultLink($('#hiddenresultlink').val() );
+		this.$refs.phdadminform.setFormToken($('#hiddenformtoken').val() );
 	}
    }//end methods
 

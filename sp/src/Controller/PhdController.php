@@ -384,7 +384,7 @@ class PhdController extends AbstractController
 		return $oPhdMessage;
 	}
 	/**
-	 * Вернёт последнюю загруженную пользователем работу
+	 * Установка токена формы
 	 * @param array &$aData
 	*/
 	private function _setPsdUploadFormToken(array &$aData, AppService $oAppService) : void

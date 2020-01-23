@@ -17,7 +17,7 @@
 			</div>
 			<h3>{{ $t('app.ResultFileds') }}</h3>
 			<div class="previewFields">
-				<div class="uploadResultBlock">
+				<div class="uploadResultBlock" v-if="resultLink">
 					<div class="alert alert-success">
 						{{ $t('app.resultLink') }}
 					</div>
@@ -47,8 +47,9 @@
 					</div>
 
 					<div class="my-2">
-						<textareab4 placeholder="<div..." :label="$t('app.SetNotices')" id="setNotices"></textareab4>
+						<textareab4 v-model="htmlNotices" placeholder="<div..." :label="$t('app.SetNotices')" id="setNotices"></textareab4>
 						<div class="my-1">
+							<checkboxb4 v-model="isPlainText" id="isplaintext" :label="$t('app.isPlainTextLabel')"></checkboxb4>
 							<button v-on:click="onClickSetNotices" class="btn btn-primary">{{ $t('app.Save')}}</button>
 						</div>
 					</div>
@@ -63,7 +64,7 @@
 						<img :src="previewLink" class="w-100" style="margin-top: -50px">
 					</div>
 					<div class="my-2">
-						<inputb4 placeholder="http(s)://" :label="$t('app.SetLinkForRemoteDownload')" id="setLinkForRemoteDownload"></inputb4>
+						<inputb4 v-model="previewRLink" placeholder="http(s)://" :label="$t('app.SetLinkForRemoteDownload')" id="setLinkForRemoteDownload"></inputb4>
 						<div class="my-1">
 							<button v-on:click="onClickSetPreviewLink" class="btn btn-primary">{{ $t('app.Download')}}</button>
 						</div>
@@ -94,9 +95,9 @@
 					</div>
 
 					<div class="my-2">
-						<inputb4 placeholder="http(s)://" :label="$t('app.SetLinkForRemoteDownload')" id="setLinkForRemoteDownload"></inputb4>
+						<inputb4 v-model="noticePreviewRLink" placeholder="http(s)://" :label="$t('app.SetLinkForRemoteDownload')" id="setLinkForRemoteDownloadWN"></inputb4>
 						<div class="my-1">
-							<button v-on:click="onClickSetNoticePreviewLink" class="btn btn-primary">{{ $t('app.Download')}}</button>
+							<button  @click="onClickSetNoticePreviewLink" class="btn btn-primary">{{ $t('app.Download')}}</button>
 						</div>
 					</div>
 
@@ -110,7 +111,7 @@
 							:label="$t('app.UploadPreviewNotice')" 
 							id="previewnoticefile"
 							fieldwrapper="preview_up_form"
-							ref="previewuploader"
+							ref="previewnoticeuploader"
 						>
 						</inputfileb4>
 					</div>
@@ -132,7 +133,7 @@
 							csrfToken="lalala"
 							:listeners="htmlExampleUploadListeners"
 							:label="$t('app.UploadHtmlExample')" 
-							id="previewfile"
+							id="htmlexample"
 							fieldwrapper="preview_up_form"
 							ref="htmlexampleuploader"
 						>
@@ -151,7 +152,7 @@
 					</div>
 
 					<div class="my-2">
-						<inputb4 placeholder="http(s)://" :label="$t('app.SetLinkForRemoteDownload')" id="setLinkForRemoteDownloadCss"></inputb4>
+						<inputb4 v-model="cssPreviewRLink" placeholder="http(s)://" :label="$t('app.SetLinkForRemoteDownload')" id="setLinkForRemoteDownloadCss"></inputb4>
 						<div class="my-1">
 							<button v-on:click="onClickSetCssLink" class="btn btn-primary">{{ $t('app.Download')}}</button>
 						</div>
@@ -165,7 +166,7 @@
 							csrfToken="lalala"
 							:listeners="previewCssUploadListeners"
 							:label="$t('app.UploadPreview')" 
-							id="previewcssfile"
+							id="previewcss"
 							fieldwrapper="preview_up_form"
 							ref="previewcssuploader"
 						>
@@ -209,6 +210,8 @@
 	Vue.component('inputb4', require('../../landlib/vue/2/bootstrap/4/inputb4.vue').default);
 	//Компонент bootstrap 4 textarea
 	Vue.component('textareab4', require('../../landlib/vue/2/bootstrap/4/textareab4.vue').default);
+	//Компонент bootstrap 4 checkbox
+	Vue.component('checkboxb4', require('../../landlib/vue/2/bootstrap/4/checkboxb4.vue').default);
     export default {
         name: 'PhdAdminMainForm',
         //вызывается раньше чем mounted
@@ -223,10 +226,25 @@
 			//Связанные с показом превью
 			//Ссылка на изображение css верстки
 			cssPreviewLink: '',
+
+			//Ссылка на удалённое изображение вида css верстки
+			cssPreviewRLink: '',
+			
 			//Ссылка на изображение вида верстки
 			previewLink: '',
+
+			//Ссылка на удалённое изображение вида верстки
+			previewRLink: '',
+
+			//Ссылка на результат
+			resultLink: '',
+
 			//Ссылка на изображение вида верстки с замечаниями
 			noticePreviewLink: '',
+			
+			//Ссылка на удалённое изображение вида верстки с замечаниями
+			noticePreviewRLink: '',
+
 			//Ссылка на архив с html верстки
 			htmlExampleLink: '',
 
@@ -242,8 +260,11 @@
 			//модель для загружаемого скрина css
 			previewcssurl: '',
 
-			//модель для загружаемого результата
-			resultLink: '',
+			//модель для текста замечаний
+			htmlNotices: '',
+
+			//модель для галочки "Замечания отправлены как plain/text"
+			isPlainText: false,
 
 			//Upload result listeners
 			resultUploadListeners: {
@@ -315,154 +336,6 @@
         }; },
         //
         methods:{
-			/**
-			 * @description Установить соответствующий экран при входе на страницу
-			 * @param {Object} oData
-			*/
-			setPsdState(oData) {
-				console.log( 'setPhdState: I Call' );
-				let nState = parseInt(oData.st);
-				console.log( 'setPhdState: nState = ',  nState);
-				if (!isNaN(nState) ) {
-					switch(nState) {
-						case 0:
-							break;
-						case 1:
-							this.setStateFileIsProcessUploadOnService(nState);
-							break;
-						case 2:
-							this.setStateFileIsProcessConvert(nState);
-							break;
-						case 3:
-						case 7:
-							console.log( 'before call setStateShowPreview' );
-							this.setStateShowPreview(oData);
-							break;
-						case 8:
-							this.setStateShowResult(oData);
-							break;
-					}
-					this.onSuccessGetRequestState(oData);
-				}
-			},
-			/**
-			 * @description Запрашивает данные о состоянии файла. Все файлы получаются исключательно по id 
-			 * пользователя. Последний загруженный файл и есть тот, который нам нужен
-			 * Предусмотреть что кука внезапно может потеряться.
-			*/
-			getState() {
-				if (!this._requestStateIsSended) {
-					this._requestStateIsSended = 1;
-					Rest._post({a: 1}, (data) => {this.onSuccessGetRequestState(data);}, 
-						this.$root._serverRoot + '/phdgetstate.json', (a, b, c) => {this._requestStateIsSended = 0; });
-				}
-			},
-			/**
-			 * @description Обработка получeния статуса процесса
-            */
-			onSuccessGetRequestState(data) {
-				if (!this.$root.defaultFailSendFormListener(data)) {
-					return;
-				}
-				this._requestStateIsSended = 0;
-				let st = parseInt(data.st);
-				switch(st) {
-					case 1:
-						this.setStateFileIsProcessUploadOnService(st);
-						break;
-					case 2:
-						this.setStateFileIsProcessConvert(st);
-						break;
-					case 3:
-						this.setStateShowPreview(data); 
-						break;
-					case 8:
-						this.setStateShowResult(data);//TODO send pewview link if state == 8
-						break;
-				}
-			},
-			setStateShowResult(data) {
-				if (this.cdT) {
-					clearInterval(this.cdT);
-					this.cdT = null;
-				}
-				this.resultLink = data.resultLink;
-				this.step = this.STEP_SHOW_RESULT;
-			},
-			/**
-			 * @description Обработка клика на кнопке Перевести (деньги)
-            */
-			onClickSendMoney(evt) {
-				evt.preventDefault();
-				this.$root.setMainSpinnerVisible(true);
-				//TODO должны получить id из таблицы pay_transactions
-				//в operations main_id это будет phd_messages.id
-				Rest._post({sum:this.paysum, method: this.paymentType, phone: this.phone}, (data) => { this.onSuccessStartPayTransaction(data);}, this.$root._serverRoot + '/phdstarttransaction.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
-			},
-			onClickSetConvertingState() {
-				evt.preventDefault();
-				this.$root.setMainSpinnerVisible(true);
-				Rest._post({state:2}, (data) => { this.onSuccessSetConvertingState(data);}, 
-					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
-			},
-			/**
-			 * @description Обработка получения с сервера tid, чтобы отправить его на сервер paysystem
-			*/
-			onSuccessStartPayTransaction(data) {
-				if (!this.defaultFailSendFormListener(data)) {
-					return;
-				}
-				this.tid = data.id + 'phd';
-				//TODO Показать информацию о новой вкладке
-				this.countDown = '...';
-				this.fileInQueueWaitScreenMessage = this.$t('app.waitPaymentMessage');
-				this.fileInQueueSecondsMessageFragment = '';
-				this.countDownMeasure = '';
-				
-				Vue.nextTick(() => {
-					/*if (data.url) {
-						window.open(data.url);
-					} else {*/
-						$('#yaform').submit();
-					//}
-					
-
-					this.step = this.STEP_WAIT_PAYMENT;
-				
-					let m = 0;
-					if (!this.cdT) {
-						this.cdT = setInterval(() => {
-							if (this.cdtPause) {
-								return;
-							}
-							m++;
-							if (m % 5 == 0) {
-								this.getState();
-							}
-						}, 1000);
-					}
-					
-				});
-			},
-			/**
-			 * @description Обработка клика на кнопке Продолжить формы предложения скидки
-            */
-			onClickShowPayform(){
-				this.$root.setMainSpinnerVisible(true);
-				Rest._post({sum:this.paysum}, (data) => { this.onSuccessSaveSum(data);}, this.$root._serverRoot + '/phddiscount.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
-			},
-			/**
-			 * @description
-			*/
-			onSuccessSaveSum(data) {
-				if (!this.defaultFailSendFormListener(data)) {
-					return;
-				}
-				this.paysum = data.sum;
-				this.yacache = data.yc;
-				this.step = this.STEP_SHOW_PAY_FORM;
-			},
-
 			onSuccessUploadNoticePreview(data) {
 				if (!this.defaultFailSendFormListener(data)) {
 					return;
@@ -508,56 +381,6 @@
 
 			},
 			/**
-			 * @description Обработка клика на кнопке Обновить PSD
-            */
-			onClickUpdatePsdFile() {
-				this.$root.setMainSpinnerVisible(true);
-				Rest._post({a: 1}, (data) => {this.onSuccessSetFileAsWrong(data);}, 
-					this.$root._serverRoot + '/phdnewpsd.json',
-					(a, b, c) => {
-						this.$root.setMainSpinnerVisible(false);
-						this.$root.defaultFailSendFormListener(a, b, c); });
-			},
-			/**
-			 * @description 
-            */
-			onSuccessSetFileAsWrong(data) {
-				this.$root.setMainSpinnerVisible(false);
-				this.step = this.STEP_SHOW_UPLOAD_BUTTON;
-				this.previewLink = 
-				this.sNotices    = 
-				this.noticePreviewLink = 
-				this.htmlExampleLink = 
-				this.cssPreviewLink = '';
-				Vue.nextTick(() => {
-					this.setPsdUploaderCsrfToken(data.formToken);
-					this.resetScrollY();
-				});
-			},
-			/**
-			 * @description Обработка клика на Оплатить и скачать
-            */
-			onClickPaymentAndDownloadFile() {
-				this.resetScrollY();
-				if (this.isEmailIsSet) {
-					this.step = this.STEP_SHOW_DISCOUNT_FORM;
-				} else {
-					this.sendMeResultIsChoosed = 0;
-					this.safeStep = this.STEP_SHOW_DISCOUNT_FORM;
-					this.step = this.STEP_SHOW_EMAIL_FORM;
-				}
-			},
-			/**
-			 * @description Восстановить состояние прокрутки
-            */
-			resetScrollY() {
-				if (this.scrollYValue) {
-					window.scrollTo(0, this.scrollYValue);
-				} else {
-					location.href = '#psdform';
-				}
-			},
-			/**
 			 * @description Показать состояние, файл сконвертирован
 			 * @param {Object} response {preview, notes}
             */
@@ -574,103 +397,40 @@
 				this.step = this.STEP_SHOW_PREWIEV;
 				this.scrollYValue = window.pageYOffset;
 			},
-			/**
-			 * @description Показать состояние, файл конвертируется
-			 * @param {Number} state
-            */
-			setStateFileIsProcessConvert(state) {
-				this.fileInQueueWaitScreenMessage = this.$t('app.YourFileIsConverting');
-				if (String(this.previousState) == 'undefined' || this.previousState != state) {
-					this.previousState = state;
-					this.countDown = this.COUNT_DOWN_INIT;
-				}
-			},
-			/**
-			 * @description Показать состояние, файл загружается на сервер конвертации
-			 * @param {Number} state
-            */
-			setStateFileIsProcessUploadOnService(state) {
-				this.fileInQueueWaitScreenMessage = this.$t('app.YourFileIsUploading');
-				if (String(this.previousState) == 'undefined' || this.previousState != state) {
-					this.previousState = state;
-					this.countDown = this.COUNT_DOWN_INIT;
-				}
-			},
-			/**
-			 * @description Клик на кнопке, пришлите мне результат на email. Таймер ставится на паузу, пока вводится email.
-            */
-			onClickSendMeResult() {
-				this.safeStep = this.step;
-				this.cdtPause = true;
-				this.step = this.STEP_SHOW_EMAIL_FORM;
-				this.sendMeResultIsChoosed = 1;
-			},
-			/**
-			 * TODO
-			 * @description Обработка успешной загрузки PSD файла на сервер
-            */
-			onSuccessUploadPreview(data) {
-
-				if (!this.defaultFailSendFormListener(data)) {
-					return;
-				}
-				let path = data;
-				if (data instanceof Object) {
-					path = data.path;
-					if (!this.onFailUploadPsd(data)) {
-						return;
-					}
-				}
-			},
-			/**
-			 * TODO
-			 * @description Обработка неуспешной загрузки PSD файла на сервер
-            */
-			onFailUploadPreview(data) {
-				if (data.status == 'error') {
-					if (data.errors) {
-						let i, jEl, a = [];
-						for (i in data.errors) {
-							a.push(data.errors[i]);
-						}
-						this.$root.alert('<p>' + a.join('</p><p>') + '</p>');
-					} else if (data.msg){
-						this.$root.alert(data.msg);
-					}
-					return false;
-				} else if (data.status != 'ok') {
-					this.$root.defaultError();
-				}
-				return true;
-			},
+			
 			/**
 			 * @description Клик на кнопке Ваш файл загружается на сервер конвертации
             */
 			onClickSetUploadingState() {
 				this.$root.setMainSpinnerVisible(true);
-				Rest._post({a: 1}, (data) => {this.onSuccessSetUploadingState(data);}, 
+				Rest._post({s: 1, id: this.getRequestId()}, (data) => {this.onSuccessSetUploadingState(data);}, 
 					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c); });
 			},
-			/** TODO was in app.js!
-			 * @description Обработка успешного запроса установки кук.
+			/**
+			 * @description Обработка успешной установки статуса файла
 			 * @param {Object} data
 			*/
 			onSuccessSetUploadingState(data) {
-				if (!this.$root.defaultFailSendFormListener(data)) {
+				if (!this.defaultFailSendFormListener(data)) {
 					return;
 				}
-				this.setStateMessage('app.UploadProcess');//TODO
+				this.setStateMessage(data.statusMessage);
 			},
 			/**
-			 * 
+			 * @description Клик на кнопке Ваш файл конвертируется
+            */
+			onClickSetConvertingState(evt) {
+				evt.preventDefault();
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({s: 2, id: this.getRequestId()}, (data) => { this.onSuccessSetConvertingState(data);}, 
+					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Обработка успешной установки статуса файла
+			 * @param {Object} data
 			*/
-			setPsdUploaderCsrfToken(formToken){
-				let ival = setInterval(() => {
-					if (this.$refs.psduploader) {
-						this.$refs.psduploader.setCsrfToken(formToken, 'psd_up_form[_token]');
-						clearInterval(ival);
-					}
-				}, 200);
+			onSuccessSetConvertingState(data) {
+				this.onSuccessSetUploadingState(data);
 			},
             /**
              * @param {Object} data
@@ -703,11 +463,17 @@
 			onClickTakeOrder(evt) {
 				evt.preventDefault();
 				this.$root.setMainSpinnerVisible(true);
+				Rest._post({'id': this.getRequestId()}, (data) => { this.onSuccessSetOperator(data);}, 
+					this.$root._serverRoot + '/phdadmintakeorder.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Получить requestId из строки браузера
+			*/
+			getRequestId() {
 				let a = location.href.split('?'), nRequestId;
 				a = a[0].split('/');
 				nRequestId = parseInt( a[ a.length - 1 ] );
-				Rest._post({'id':nRequestId}, (data) => { this.onSuccessSetOperator(data);}, 
-					this.$root._serverRoot + '/phdadmintakeorder.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+				return nRequestId;
 			},
 			/**
 			 *  @description Обработка успешной или неуспешной установки оператора заказа
@@ -724,32 +490,83 @@
 			setStateMessage(statusMessage) {
 				this.statusMessage = statusMessage;
 				this.$root.hideStatusMessage();
-				this.vueStatusMessageVisible = true;//TODO
+				this.vueStatusMessageVisible = true;
 			},
 			/**
-			 *  
+			 *  @description Отправка текстовых замечаний на сервер
 			*/
 			onClickSetNotices() {
-
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({'id': this.getRequestId(), 't': this.htmlNotices, 'isplain': this.isPlainText},
+					(data) => { this.onSuccessSaveNotice(data);}, 
+					this.$root._serverRoot + '/phdadminsavenotices.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			/**
-			 *  
+			 *  @description Обработка успешной или неуспешной установки оператора заказа
+			*/
+			onSuccessSaveNotice(data) {
+				if (!this.defaultFailSendFormListener(data)) {
+					return;
+				}
+				if (data.status == 'ok') {
+					this.alert(this.$t('app.SaveCompleted'));
+				}
+			},
+			/**
+			 * @description Отправить запрос на скачивание ресурса с удаленного сервера (превью вёрстки)
 			*/
 			onClickSetPreviewLink() {
-
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({'id': this.getRequestId(), 'h': this.previewRLink, 'm': 'previewLink'},
+					(data) => { this.onSuccessRemoteDownload(data);}, 
+					this.$root._serverRoot + '/phdadminsetremoteresource.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			/**
-			 *  
-			*/
-			onClickSetCssLink() {
-
-			},
-			/**
-			 *  
+			 * @description Отправить запрос на скачивание ресурса с удаленного сервера (превью вёрстки с замиечаниями)
 			*/
 			onClickSetNoticePreviewLink() {
-
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({'id': this.getRequestId(), 'h': this.noticePreviewRLink, 'm': 'noticePreviewLink'},
+					(data) => { this.onSuccessRemoteDownload(data);}, 
+					this.$root._serverRoot + '/phdadminsetremoteresource.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
+			/**
+			 * @description Отправить запрос на скачивание ресурса с удаленного сервера (превью css)  
+			*/
+			onClickSetCssLink() {
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({'id': this.getRequestId(), 'h': this.cssPreviewRLink, 'm': 'cssPreviewLink'},
+					(data) => { this.onSuccessRemoteDownload(data);}, 
+					this.$root._serverRoot + '/phdadminsetremoteresource.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 *  @description Обработка загрузки ресурса
+			*/
+			onSuccessRemoteDownload(data) {
+				if (!this.defaultFailSendFormListener(data)) {
+					return;
+				}
+				if (data.status == 'ok' && data.path) {
+					this[data.m] = data.path;
+					this.alert(this.$t('app.SaveCompleted'));
+				}
+				if (!data.path) {
+					this.alert(this.$t('app.unableLoadFromRemoteServer'));
+				}
+			},
+			/**
+			 *  @description Обработка успешного аплоада файла превью
+			*/
+			onSuccessUploadPreview(data){
+				this.onSuccessRemoteDownload(data);
+			},
+			/**
+			 *  @description Обработка успешного аплоада файла превью
+			*/
+			onFailUploadPreview(data){
+				this.alert(this.$t('app.UnabeUploadFile'));
+			},
+			
 			sendEmailData() {
 				let sendData = {e:this.email};
 				if (this.sendMeResultIsChoosed) {//TODO не забыть обнулять его на шаге своевременного показа формы
@@ -791,9 +608,7 @@
 			*/
 			localizeParams() {
 				//Текст на кнопках диалога подтверждения действия
-				this.countDownMeasure = this.$t('app.seconds_more_19');
-				this.fileInQueueWaitScreenMessage = this.$t('app.fileInQueue');
-				this.fileInQueueSecondsMessageFragment = this.$t('app.fileInQueueSecondsMessageFragment');
+				//this.fileInQueueSecondsMessageFragment = this.$t('app.fileInQueueSecondsMessageFragment');
 			},
 			/**
 			 * @description Обработка ответа сервера на ajax запрос по умолчанию
@@ -802,7 +617,61 @@
 			defaultFailSendFormListener(a, b, c) {
 				this.$root.setMainSpinnerVisible(false);
 				return this.$root.defaultFailSendFormListener(a, b, c);
-			}
+			},
+			/**
+			 * @description 
+			 * @params {String} s
+			*/
+			alert(s) {
+				this.$root.alert(s);
+			},
+			setServiceNotices(s) {
+				this.htmlNotices = s;
+			},
+			setPreviewLink(s) {
+				this.previewLink = s;
+			},
+			setNoticePreviewLink(s) {
+				this.noticePreviewLink = s;
+			},
+			setCssPreviewLink(s) {
+				this.cssPreviewLink = s;
+			},
+			setHtmlExampleLink(s) {
+				this.htmlExampleLink = s;
+			},
+			setResultLink(s) {
+				this.resultLink = s;
+			},
+			setFormToken(s) {
+				this.setFormTokenOneInput('previewcssuploader', 0, s);
+				this.setFormTokenOneInput('resultuploader', 1, s);
+				this.setFormTokenOneInput('previewuploader', 2, s);
+				this.setFormTokenOneInput('previewnoticeuploader', 3, s);
+				this.setFormTokenOneInput('htmlexampleuploader', 4, s);
+//				this.setFormTokenOneInput('', , s);
+
+				
+/*
+				let ival01 = setInterval(() => {
+					if (this.$refs.previewcssuploader && this.$refs.previewcssuploader.setCsrfToken) {
+						this.$refs.resultuploader.setCsrfToken(s);
+						this.$refs.previewuploader.setCsrfToken(s);
+						this.$refs.previewnoticeuploader.setCsrfToken(s);
+						this.$refs.htmlexampleuploader.setCsrfToken(s);
+						this.$refs.previewcssuploader.setCsrfToken(s);
+						clearInterval(ival);
+					}
+				}, 200);*/
+			},
+			setFormTokenOneInput(ref, i, s) {
+				this['ival' + i] = setInterval(() => {
+					if (this.$refs[ref] && this.$refs[ref].setCsrfToken) {
+						this.$refs[ref].setCsrfToken(s, 'preview_up_form[_token]');
+						clearInterval(this['ival' + i]);
+					}
+				}, 200);
+			},			
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {

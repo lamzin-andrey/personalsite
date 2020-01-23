@@ -143,8 +143,9 @@ var locales = {
 			SetNotices: 'Вставьте в поле html код замечаний или хотя бы просто замечания',
 			MessageState: 'Состояние задачи',
 			SendPreview: 'Отправить превью и замечания',
-			x: '',
-			x: '',
+			isPlainTextLabel: 'Замечания отправлены как plain/text',
+			unableLoadFromRemoteServer: 'Не удалось скачать ресурс с удалённого сервера',
+			UnabeUploadFile: 'Не удалось загрузить файл',
 			x: '',
 			x: '',
 			Fail_load_Examples: 'Не могу загрузить примеры конвертаций, попробуйте позже'
