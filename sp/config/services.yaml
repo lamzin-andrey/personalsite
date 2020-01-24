@@ -9,6 +9,8 @@ parameters:
     app.siteName: "%env(resolve:SITE_NAME)%"
     app.siteUrlBegin:  "%env(resolve:SITE_URL_BEGIN)%"
     app.phdAdminEmail: "%env(resolve:PHD_ADMIN_EMAIL)%"
+    app.appPageUrl: "%env(resolve:APP_PAGE_URL)%"
+    app.phdAdminRoot: "%env(resolve:PHD_ADMIN_ROOT)%"
 
     app.qiwi_phone: "%env(resolve:QIWI_PHONE)%"
     app.qiwi_public_key: "%env(resolve:QIWI_PUBLIC_KEY)%"

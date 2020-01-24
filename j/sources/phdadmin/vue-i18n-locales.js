@@ -132,6 +132,7 @@ var locales = {
 			UpdatePsd: 'Обновить файл',
 			SetLinkForRemoteDownload: 'Установить ссылку для удалённой загрузки',
 			UploadPreview: 'Загрузить перевью',
+			UploadCssPreview: 'Загрузить перевью css',
 			UploadPreviewNotice: 'Загрузить перевью с замечаниями',
 			UploadHtmlExample: 'Загрузить zip архив с html кодом',
 			resultLink: 'Ссылка на результат',
@@ -146,6 +147,9 @@ var locales = {
 			isPlainTextLabel: 'Замечания отправлены как plain/text',
 			unableLoadFromRemoteServer: 'Не удалось скачать ресурс с удалённого сервера',
 			UnabeUploadFile: 'Не удалось загрузить файл',
+			UnableSendPreviewEmailBegin: 'Не удалось отправить письмо на адрес',
+			UnableSendPreviewEmailEnd: 'Если вы видите email пользователя вверху этой страницы, скорее всего отправка email отключена в .env файле. Добавьте строку SEND_EMAIL_ON=1',
+			Payedwork: 'Работа оплачена но не отправлена!',
 			x: '',
 			x: '',
 			Fail_load_Examples: 'Не могу загрузить примеры конвертаций, попробуйте позже'

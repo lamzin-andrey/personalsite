@@ -28,6 +28,7 @@
 			<p class="text-center">
 				<inputfileb4 
 					v-model="psdurl"
+					accept=".psd"
 					url="/sp/public/phdpsdupload.json"
 					tokenImagePath="/i/token.png"
 					csrfToken="lalala"
@@ -71,6 +72,9 @@
 		<div v-if="step == STEP_FILE_IN_QUEUE || step == STEP_WAIT_PAYMENT">
 			<div class="alert alert-warning" v-if="step == STEP_WAIT_PAYMENT">
 				{{ $t('app.PayformInNewWndBegin') }} {{ paysystemName }} {{ $t('app.PayformInNewWndEnd') }} {{ $t('app.tryPayAgain') }}
+
+				Если вы оплатили работу, но ссылка на архив не показывается и не приходит на ваш email, 
+					пишите на  {{ phd_admin_email }}. Укажите дату и время платежа.
 			</div>
 			<div class="alert alert-success text-center">
 				{{ fileInQueueWaitScreenMessage }}{{ fileInQueueSecondsMessageFragment }}
@@ -91,6 +95,10 @@
 		<div v-if="step == STEP_SHOW_RESULT">
 			<div class="alert alert-success" >
 				<a :href="resultLink" target="_blank">{{ $t('app.DownloadResult') }}</a>
+			</div>
+			<div class="alert alert-warning" >
+				Если вы оплатили работу, но ссылка на архив не открывается и не приходит на ваш email, 
+					пишите на  {{ phd_admin_email }} Укажите дату и время платежа.
 			</div>
 			<button class="btn btn-primary w-100" @click="onClickLoadNewPsd">{{ $t('app.uploadNewPSDFile') }}</button>
 		</div>
@@ -298,7 +306,11 @@
 
             //Значение email
             email:null
-        }; },
+		}; },
+		
+		props: [
+			'phd_admin_email'
+		],
         //
         methods:{
 			/**

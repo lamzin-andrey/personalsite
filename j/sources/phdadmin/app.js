@@ -174,6 +174,7 @@ window.app = new Vue({
 			return;
 		}
 		this.$refs.phdnotifier.setItems(data.list);
+		this.$refs.phdnotifier.setHotItems(data.hotlinks);
 	},
 	/**
 	 * @description Установка названия домена сайта

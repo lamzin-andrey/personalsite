@@ -8,6 +8,7 @@ use App\Service\AppService;
 use App\Service\FileUploaderService;
 use App\Service\PayService;
 use Doctrine\Common\Collections\Criteria;
+use Landlib\SimpleMail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,10 +80,40 @@ class PhdAdminController extends AbstractController
 			]);
 			if ($oForm->isSubmitted() && $oForm->isValid()) {
 				//save file
-				$oFile = $oForm['previewfileFileImmediately']->getData();
-				//TODO тут будет определение, какой файл загрузили
-				$sMethod = 'setPreviewLink';
-				$sModel = 'previewLink';
+				//определение, какой файл загрузили
+				$sMethod = '';
+				$sModel = '';
+				$oFile = null;
+				$oPreviewFile = $oForm['previewfileFileImmediately']->getData();
+				if ($oPreviewFile) {
+					$oFile = $oPreviewFile;
+					$sMethod = 'setPreviewLink';
+					$sModel = 'previewLink';
+				}
+				$oResultFile = $oForm['resultfileFileImmediately']->getData();
+				if ($oResultFile) {
+					$oFile = $oResultFile;
+					$sMethod = 'setResultLink';
+					$sModel = 'resultLink';
+				}
+				$oNoticePreviewFile = $oForm['previewnoticefileFileImmediately']->getData();
+				if ($oNoticePreviewFile) {
+					$oFile = $oNoticePreviewFile;
+					$sMethod = 'setNoticePreviewLink';
+					$sModel = 'noticePreviewLink';
+				}
+				$oExampleHtmlFile = $oForm['htmlexampleFileImmediately']->getData();
+				if ($oExampleHtmlFile) {
+					$oFile = $oExampleHtmlFile;
+					$sMethod = 'setHtmlExampleLink';
+					$sModel = 'htmlExampleLink';
+				}
+				$oPreviewCssFile = $oForm['previewcssFileImmediately']->getData();
+				if ($oPreviewCssFile) {
+					$oFile = $oPreviewCssFile;
+					$sMethod = 'setCssPreviewLink';
+					$sModel = 'cssPreviewLink';
+				}
 				if ($oFile) {
 					$sFileName = $oFileUploaderService->upload($oFile);
 					$s = '/' . $this->_subdir . '/' . $sFileName;
@@ -221,7 +252,11 @@ class PhdAdminController extends AbstractController
 			return $this->_json($aData);
 		}
 		$nState = intval($oRequest->get('s') );
-		$this->_oMessage->setState($nState);
+		if ($nState != 200 ) {
+			$this->_oMessage->setState($nState);
+		} else {
+			$this->_oMessage->setIsClosed(true);
+		}
 		$this->_saveMessage();
 		switch ($nState) {
 			case 1:
@@ -231,7 +266,23 @@ class PhdAdminController extends AbstractController
 				$aData['statusMessage'] = $t->trans('Convert process') . ', ' .  $t->trans('Your processing');
 				break;
 			case 3:
+				$sEmail = '';
+				$bSendStatus = $this->_sendNoticeAboutPreview($oAppService, $sEmail, $t);
 				$aData['statusMessage'] = $t->trans('Preview showed') . ', ' .  $t->trans('Your processing');
+				$aData['emailSended'] = intval($bSendStatus);
+				$aData['email'] = $sEmail;
+				$aData['isEmailUser'] = intval($this->_oMessage->getIsEmailUser() );
+				break;
+			case 8:
+				$sEmail = '';
+				$bSendStatus = $this->_sendNoticeAboutDone($oAppService, $sEmail, $t);
+				$aData['statusMessage'] = $t->trans('Result showed');
+				$aData['emailSended'] = intval($bSendStatus);
+				$aData['email'] = $sEmail;
+				$aData['isEmailUser'] = intval($this->_oMessage->getIsEmailUser() );
+			break;
+			case 200:
+				$aData['statusMessage'] = $t->trans('Message Closed');
 				break;
 		}
 		return $this->_json($aData);
@@ -305,8 +356,10 @@ class PhdAdminController extends AbstractController
 			];
 			$aResult[$oItem->getId()] = $aItem;
 		}
+		$aData = ['list' => $aResult];
+		$this->_setPayedButNotSended($aData);
 
-		return $this->_json(['list' => $aResult]);
+		return $this->_json($aData);
 	}
 
 	/**
@@ -462,21 +515,26 @@ class PhdAdminController extends AbstractController
 			$sProcessor = ', ' .  $t->trans('Your processing');
 		}
 
+		$sClosedTail = '';
+		if ($oMessage->getIsClosed() ) {
+			$sClosedTail = ', ' . $t->trans('Message Closed');
+		}
+
 		switch ($oMessage->getState()) {
 			case 0:
-				return $t->trans('Wait processing');
+				return $t->trans('Wait processing') . $sClosedTail;
 			case 1:
-				return $t->trans('Upload process') . $sProcessor;
+				return $t->trans('Upload process') . $sProcessor . $sClosedTail;
 			case 2:
-				return $t->trans('Convert process') . $sProcessor;
+				return $t->trans('Convert process') . $sProcessor . $sClosedTail;
 			case 3:
-				return $t->trans('Preview showed') . $sProcessor;
+				return $t->trans('Preview showed') . $sProcessor . $sClosedTail;
 			case 7:
-				return $t->trans('Wait payment') . $sProcessor;
+				return $t->trans('Wait payment') . $sProcessor . $sClosedTail;
 			case 8:
-				return $t->trans('Link sended') . $sProcessor;
+				return $t->trans('Link sended') . $sProcessor . $sClosedTail;
 			case 9:
-				return $t->trans('Canceled') . $sProcessor;
+				return $t->trans('Canceled') . $sProcessor . $sClosedTail;
 		}
 	}
 	/**
@@ -604,5 +662,165 @@ class PhdAdminController extends AbstractController
 			'uploaddir' => $this->_subdir
 		]);
 		$aData['formToken'] = $oForm->createView()->children['_token']->vars['value'];
+	}
+
+	/**
+	 * Отправляет письмо пользователю о том, что показано превью
+	 * @param AppService $oAppService
+	 * @param string &$sEmail
+	 * @param TranslatorInterface $t
+	 * @return bool если письмо отправлено
+	*/
+	private function _sendNoticeAboutPreview(AppService $oAppService, string &$sEmail, TranslatorInterface $t) : bool
+	{
+		if ($this->getParameter('app.sendemailoff') == 0) {
+			return false;
+		}
+		$sEmail = '';
+		$oPhdUser = null;
+		if ($this->_oMessage) {
+
+			if ($this->_oMessage->getIsEmailUser() == false) {
+				return false;
+			}
+
+			$oPhdUser = $this->_oMessage->getPhdUser();
+			if ($oPhdUser) {
+				$sEmail = $oPhdUser->getEmail();
+				if (!$oAppService->isValidEmail($sEmail)) {
+					$sEmail = '';
+				}
+			}
+		}
+		if ($sEmail) {
+			$sender = $this->getParameter('app.phdAdminEmail');
+			$siteName = $this->getParameter('app.siteName');
+			$oMailer = new SimpleMail();
+			$oMailer->setAddressTo([$sEmail => $sEmail]);
+			$oMailer->setFrom($sender, $sender);
+			$oMailer->setSubject($t->trans('Preview done'));
+
+			$siteUrlBegin = $this->getParameter('app.siteUrlBegin');
+			$sPhdAdminRoot = $this->getParameter('app.phdAdminRoot');
+			$sAuthLink = $siteUrlBegin . $sPhdAdminRoot . '/phdusreau?ah=' . $oPhdUser->getAuthHash();
+
+			$sBody = $t->trans('Mail preview body', [
+				'%siteName%' => $siteName,
+				'%sAuthLink%' => $sAuthLink,
+			]);
+
+			$oMailer->setBody($sBody, 'text/html', 'UTF-8');
+			return $oMailer->send();
+		}
+		return false;
+	}
+	/**
+	 * Отправляет письмо пользователю о том, что ссылка на результат загруженна
+	 * @param AppService $oAppService
+	 * @param string &$sEmail
+	 * @param TranslatorInterface $t
+	 * @return bool если письмо отправлено
+	 */
+	private function _sendNoticeAboutDone(AppService $oAppService, string &$sEmail, TranslatorInterface $t) : bool
+	{
+		if ($this->getParameter('app.sendemailoff') == 0) {
+			return false;
+		}
+		$sEmail = '';
+		$oPhdUser = null;
+		if ($this->_oMessage) {
+
+			if ($this->_oMessage->getIsEmailUser() == false) {
+				return false;
+			}
+
+			$oPhdUser = $this->_oMessage->getPhdUser();
+			if ($oPhdUser) {
+				$sEmail = $oPhdUser->getEmail();
+				if (!$oAppService->isValidEmail($sEmail)) {
+					$sEmail = '';
+				}
+			}
+		}
+		if ($sEmail) {
+			$sender = $this->getParameter('app.phdAdminEmail');
+			$siteName = $this->getParameter('app.siteName');
+			$oMailer = new SimpleMail();
+			$oMailer->setAddressTo([$sEmail => $sEmail]);
+			$oMailer->setFrom($sender, $sender);
+			$oMailer->setSubject($t->trans('Result done'));
+
+			$siteUrlBegin = $this->getParameter('app.siteUrlBegin');
+			$sPhdAdminRoot = $this->getParameter('app.phdAdminRoot');
+			$sAuthLink = $siteUrlBegin . $sPhdAdminRoot . '/phdusreau?ah=' . $oPhdUser->getAuthHash();
+			$sDwnLink = $siteUrlBegin . $this->_oMessage->getResultLink();
+
+			$sBody = $t->trans('Mail complete body', [
+				'%siteName%' => $siteName,
+				'%sAuthLink%' => $sAuthLink,
+				'%sDwnLink%' => $sDwnLink,
+			]);
+
+			$oMailer->setBody($sBody, 'text/html', 'UTF-8');
+			return $oMailer->send();
+		}
+		return false;
+	}
+	/**
+	 * Добавляет поле только если у заказа не установлена ссылка и статус не соответствует "Ссылка показана и отправлена на email"
+	 * @param array &$aData
+	 * @return
+	*/
+	private function _setPayedButNotSended(array &$aData) : void
+	{
+		$oRepository = $this->getDoctrine()->getRepository('App:PhdMessages');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where(
+			$e->andX(
+				$e->eq('isPayed', true),
+				$e->orX(
+					$e->neq('state', 8),
+					$e->isNull('resultLink'),
+					$e->eq('resultLink', '')
+				)
+			)
+		);
+		$aMessages = $oRepository->matching($oCriteria)->toArray();
+
+
+		if ($aMessages) {
+			$aLinks = [];
+			$oEm = $this->getDoctrine()->getManager();
+
+			foreach ($aMessages as $oPhdMessage) {
+				$oPhdMessage->setIsClosed(false);
+				$oEm->persist($oPhdMessage);
+				$sLink = $this->getParameter('app.siteUrlBegin')
+					.  $this->getParameter('app.phdAdminRoot') . '/phdadmin/request/' . $oPhdMessage->getId();
+				$aLinks[] = $sLink;
+			}
+			$oEm->flush();
+			$aData['hotlinks'] = $aLinks;
+
+			//Это вообще-то не надо. $this->_sendPayedNotice();
+		}
+	}
+
+	/**
+	 * TODO перенести в крон-скрипт
+	 * Отправить админу, что есть оплаченные но не отправленные пользователю уведомления.
+	 * @param $
+	 * @return
+	*/
+	private function _sendPayedNotice() : void
+	{
+		return;
+		$oMailer = new SimpleMail();
+		$oMailer->setFrom( $this->getParameter('app.siteAdminEmail'),  $this->getParameter('app.siteAdminEmail'));
+		$oMailer->setTo( $this->getParameter('app.phdAdminEmail'),  $this->getParameter('app.phdAdminEmail'));
+		$oMailer->setSubject('Непорядок в phd');
+		$oMailer->setHtmlText('<p>Деньги вложены, а процесс не идёт! Проверь, что там за кавардак.</p>');
+		$oMailer->send();
 	}
 }

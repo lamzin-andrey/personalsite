@@ -16,9 +16,9 @@ class PhdAdminUploaderFormType extends AbstractType
 		$oBuilder->setMethod('POST');
 		//*
 		$options['app_service']->addZipFileField($options['uploaddir'], $oBuilder, 'resultfileFileImmediately');
+		$options['app_service']->addZipFileField($options['uploaddir'], $oBuilder, 'htmlexampleFileImmediately');
 		$options['app_service']->addBigImageFileField($options['uploaddir'], $oBuilder, 'previewfileFileImmediately');
 		$options['app_service']->addBigImageFileField($options['uploaddir'], $oBuilder, 'previewnoticefileFileImmediately');
-		$options['app_service']->addZipFileField($options['uploaddir'], $oBuilder, 'htmlexampleFileImmediately');
 		$options['app_service']->addBigImageFileField($options['uploaddir'], $oBuilder, 'previewcssFileImmediately');
 
     }

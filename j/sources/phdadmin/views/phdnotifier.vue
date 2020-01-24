@@ -1,5 +1,13 @@
 <template>
 <div>
+	
+	<div class="alert alert-danger" v-for="link in aHotLinks">
+		<p >
+			<a :href="link" target="_blank">{{$t('app.Payedwork')}}</a>
+		</p>
+	</div>
+	
+
 	<div class="list" v-for="n in list">
 		<div class="media bg-white py-2 px-1 my-3">
 			<img src="/i/psd.jpg" class="mr-3 ml-1 u-psd-icon " alt="PSD order">
@@ -37,6 +45,8 @@
 				}/**/
 			},
 
+			aHotLinks: [],
+
 			//
 			serverRoot : '...',
 
@@ -55,8 +65,27 @@
 				}
 				this.list = list;
 				if (needNotice) {
-					//TODO
-						SimpleNotice.show('Пользователь ' + list[noticeId].email + ' оставил заявку на конвертацию.', 'New PSD', this.defaultImage);
+					
+					SimpleNotice.show('Пользователь ' + list[noticeId].email + ' оставил заявку на конвертацию.', 'New PSD', this.defaultImage);
+				}
+
+			},
+			/** Устанавливает список ссылок на сообщения, которые опачены, но не отданы */
+			setHotItems(aHotlinks) {
+				if (!aHotlinks) {
+					this.aHotLinks = [];
+					return;
+				}
+				let needNotify = 0;
+				if (this.aHotLinks.length != aHotlinks.length) {
+					needNotify = 1;
+				}
+				this.aHotLinks = aHotlinks;
+				
+				if (needNotify) {
+					setTimeout(() => {
+						SimpleNotice.show('Есть оплаченные работы', 'Payed PSD!', '/i/w64-1.png');
+					}, 1000);
 				}
 			},
         }, //end methods

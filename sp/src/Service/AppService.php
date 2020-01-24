@@ -361,7 +361,7 @@ class AppService
 	 */
 	public function addZipFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
 	{
-		$sTranslationDomain = 'Psdform';//TODO create file from gz Adform.ru.yml
+		$sTranslationDomain = 'Zipform';//TODO create file from gz Adform.ru.yml
 		$oFileUploader = $this->getFileUploaderService();
 		$oFileUploader->setTranslationDomain($sTranslationDomain);
 		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();

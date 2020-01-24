@@ -17,19 +17,21 @@
 			</div>
 			<h3>{{ $t('app.ResultFileds') }}</h3>
 			<div class="previewFields">
-				<div class="uploadResultBlock" v-if="resultLink">
-					<div class="alert alert-success">
-						{{ $t('app.resultLink') }}
+				<div class="uploadResultBlock">
+					<div v-if="resultLink">
+						<div class="alert alert-success">
+							{{ $t('app.resultLink') }}
+						</div>
+						<div class="my-3"><a :href="resultLink" target="_blank">{{ $t('app.downloadResultZip') }}</a></div>
 					</div>
-					<div class="my-3"><a :href="resultLink" target="_blank">{{ $t('app.downloadResultZip') }}</a></div>
-
 					<div class="my-2">
 						<inputfileb4 
 							v-model="resultLink"
-							url="/sp/public/phdadminresultupload.json"
+							url="/sp/public/phdadminpreviewupload.json"
 							tokenImagePath="/i/token.png"
 							csrfToken="lalala"
-							:listeners="resultUploadListeners"
+							:listeners="uniUploadListeners"
+							accept=".zip"
 							:label="$t('app.UploadResult')" 
 							id="resultfile"
 							fieldwrapper="preview_up_form"
@@ -76,9 +78,10 @@
 							url="/sp/public/phdadminpreviewupload.json"
 							tokenImagePath="/i/token.png"
 							csrfToken="lalala"
-							:listeners="previewUploadListeners"
+							:listeners="uniUploadListeners"
 							:label="$t('app.UploadPreview')" 
 							id="previewfile"
+							accept=".jpg,.jpeg,.png,.jpe"
 							fieldwrapper="preview_up_form"
 							ref="previewuploader"
 						>
@@ -104,10 +107,11 @@
 					<div class="my-2">
 						<inputfileb4 
 							v-model="previewnoticeurl"
-							url="/sp/public/phdadminpreviewnoticeupload.json"
+							url="/sp/public/phdadminpreviewupload.json"
 							tokenImagePath="/i/token.png"
 							csrfToken="lalala"
-							:listeners="previewNoticeUploadListeners"
+							:listeners="uniUploadListeners"
+							accept=".jpg,.jpeg,.png,.jpe"
 							:label="$t('app.UploadPreviewNotice')" 
 							id="previewnoticefile"
 							fieldwrapper="preview_up_form"
@@ -128,13 +132,14 @@
 					<div class="my-2">
 						<inputfileb4 
 							v-model="htmlexampleurl"
-							url="/sp/public/phdadminexampleupload.json"
+							url="/sp/public/phdadminpreviewupload.json"
 							tokenImagePath="/i/token.png"
 							csrfToken="lalala"
-							:listeners="htmlExampleUploadListeners"
+							:listeners="uniUploadListeners"
 							:label="$t('app.UploadHtmlExample')" 
 							id="htmlexample"
 							fieldwrapper="preview_up_form"
+							accept=".zip"
 							ref="htmlexampleuploader"
 						>
 						</inputfileb4>
@@ -161,13 +166,14 @@
 					<div class="my-2">
 						<inputfileb4 
 							v-model="previewcssurl"
-							url="/sp/public/phdadminpreviewcssupload.json"
+							url="/sp/public/phdadminpreviewupload.json"
 							tokenImagePath="/i/token.png"
 							csrfToken="lalala"
-							:listeners="previewCssUploadListeners"
-							:label="$t('app.UploadPreview')" 
+							:listeners="uniUploadListeners"
+							:label="$t('app.UploadCssPreview')" 
 							id="previewcss"
 							fieldwrapper="preview_up_form"
+							accept=".jpg,.jpeg,.png,.jpe"
 							ref="previewcssuploader"
 						>
 						</inputfileb4>
@@ -278,6 +284,18 @@
 				}
 			},
 
+			//Upload result listeners
+			uniUploadListeners: {
+				onSuccess:{
+					f:this.onSuccessRemoteDownload,
+					context:this
+				},
+				onFail: {
+					f:this.onFailUploadPreview,
+					context:this
+				}
+			},
+
 			//Upload css preview listeners
 			previewCssUploadListeners: {
 				onSuccess:{
@@ -368,18 +386,8 @@
 					return;
 				}
 			},
-			onClickSetAsClosed(data) {
-
-			},
-			onClickSendResult(data) {
-
-			},
-			/**
-			 * @description Обработка клика на кнопке Отправить превью и замечания
-            */
-			onClickSendPreview(data) { 
-
-			},
+			
+			
 			/**
 			 * @description Показать состояние, файл сконвертирован
 			 * @param {Object} response {preview, notes}
@@ -412,9 +420,10 @@
 			*/
 			onSuccessSetUploadingState(data) {
 				if (!this.defaultFailSendFormListener(data)) {
-					return;
+					return false;
 				}
 				this.setStateMessage(data.statusMessage);
+				return true;
 			},
 			/**
 			 * @description Клик на кнопке Ваш файл конвертируется
@@ -424,6 +433,63 @@
 				this.$root.setMainSpinnerVisible(true);
 				Rest._post({s: 2, id: this.getRequestId()}, (data) => { this.onSuccessSetConvertingState(data);}, 
 					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Обработка клика на кнопке Отправить превью и замечания
+            */
+			onClickSendPreview(evt) { 
+				evt.preventDefault();
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({s: 3, id: this.getRequestId()}, (data) => { this.onSuccessSetPreviewState(data);}, 
+					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Обработка клика на кнопке Показать результат
+            */
+			onClickSendResult(evt) { 
+				evt.preventDefault();
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({s: 8, id: this.getRequestId()}, (data) => { this.onSuccessSetResultState(data);}, 
+					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Обработка клика на кнопке Закрыть заказ
+            */
+			onClickSetAsClosed(evt) { 
+				evt.preventDefault();
+				this.$root.setMainSpinnerVisible(true);
+				Rest._post({s: 200, id: this.getRequestId()}, (data) => { this.onSuccessSetResultState(data);}, 
+					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+			},
+			/**
+			 * @description Обработка успешной установки статуса Результат показан пользователю
+			 * @param {Object} data
+			*/
+			onSuccessSetResultState(data) {
+				if(this.onSuccessSetUploadingState(data)) {
+					if (data.emailSended == '0' && data.isEmailUser == '1') {
+						let sMsg = this.$t('app.UnableSendPreviewEmailBegin') + ' ' + data.email;
+						if (!data.email) {
+							sMsg += ' ' + this.$t('app.UnableSendPreviewEmailEnd');
+						}
+						this.alert(sMsg);
+					}
+				}
+			},
+			/**
+			 * @description Обработка успешной установки статуса Превью показано пользователю
+			 * @param {Object} data
+			*/
+			onSuccessSetPreviewState(data) {
+				if(this.onSuccessSetUploadingState(data)) {
+					if (data.emailSended == '0' && data.isEmailUser == '1') {
+						let sMsg = this.$t('app.UnableSendPreviewEmailBegin') + ' ' + data.email;
+						if (!data.email) {
+							sMsg += ' ' + this.$t('app.UnableSendPreviewEmailEnd');
+						}
+						this.alert(sMsg);
+					}
+				}
 			},
 			/**
 			 * @description Обработка успешной установки статуса файла

@@ -12,3 +12,4 @@ twig:
         displayInTopListMessagesCount: 0
         aNews: []
         aMessages: []
+        phdAdminEmail: '%app.phdAdminEmail%'
