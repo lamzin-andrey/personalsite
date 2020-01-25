@@ -25,7 +25,7 @@ class YamoneyNoticeRecieverController extends AbstractController
         return $oService->processYandexNotice($this, 'setWorkAsPayed');
     }
 	/**
-	 * @param array $aInfo  {user_id, sum, email, phone, order_id} - можно использовать например  для отправки письма
+	 * @param array $aInfo  {user_id, sum, email, phone, order_id, operation_id} - можно использовать например  для отправки письма
 	*/
     public function setWorkAsPayed(array $aInfo)
 	{
@@ -35,6 +35,7 @@ class YamoneyNoticeRecieverController extends AbstractController
 		$oMessage = $oRepository->find($aInfo['order_id']);
 		if ($oMessage) {
 			$oMessage->setIsPayed(true);
+			$oMessage->setOperationId($aInfo['operation_id']);
 			//TODO только если загружен уже архив!
 			if ( strlen($oMessage->getResultLink() ) ) {
 				$oMessage->setState(8);

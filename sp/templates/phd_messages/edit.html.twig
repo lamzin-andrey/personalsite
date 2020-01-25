@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PhdMessages{% endblock %}
+
+{% block body %}
+    <h1>Edit PhdMessages</h1>
+
+    {{ include('phd_messages/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('phd_messages_index') }}">back to list</a>
+
+    {{ include('phd_messages/_delete_form.html.twig') }}
+{% endblock %}

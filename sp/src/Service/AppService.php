@@ -504,4 +504,18 @@ class AppService
 	{
 		return new \DateTime();
 	}
+
+	public function createDir(string $sDir)
+	{
+		$a = explode('/', $sDir);
+		$aB = ['/'];
+		foreach ($a as $s) {
+			$aB[] = $s;
+			$sPath = join('', $aB);
+			if (!file_exists($sPath)) {
+				@mkdir($sPath, 755);
+			}
+			$aB[] = '/';
+		}
+	}
 }

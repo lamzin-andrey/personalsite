@@ -56,7 +56,7 @@ class PhdAdminController extends AbstractController
 			$aData['msg'] = $t->trans('Unable get current order id');
 			return $this->_json($aData);
 		}
-		$bRequestIdError = $this->_setRequestIdError($oRequest, $oAppService, $t, $aData, $nRequestId);//TODO add arg
+		$bRequestIdError = $this->_setRequestIdError($oRequest, $oAppService, $t, $aData, $nRequestId);
 		if ($bRequestIdError) {
 			return $this->_json($aData);
 		}
@@ -160,7 +160,7 @@ class PhdAdminController extends AbstractController
 		$sHtmlFolder = '/i/' . date('Y/m') . '/';
 		$sFolder = $oRequest->server->get('DOCUMENT_ROOT') . $sHtmlFolder;
 		$sSavedPath = $sFolder . $this->getUser()->getId() . '.img';
-		//TODO create folder
+		$oAppService->createDir($sFolder);
 		file_put_contents($sSavedPath, $fileData);
 		$aInfo = getimagesize($sSavedPath);
 		if ($aInfo['mime'] != 'image/jpeg' && $aInfo['mime'] != 'image/png') {
@@ -200,6 +200,7 @@ class PhdAdminController extends AbstractController
 			$sFilename = $sBasefilename . '.png';
 		}
 		copy($sSavedPath, $sFolder . $sFilename);
+		@unlink($sSavedPath);
 		$sFileLink = $sHtmlFolder . $sFilename;
 
 		$this->_oMessage->$sMethodName($sFileLink);

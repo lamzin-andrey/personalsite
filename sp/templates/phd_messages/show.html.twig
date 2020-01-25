@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PhdMessages{% endblock %}
+
+{% block body %}
+    <h1>PhdMessages</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ phd_message.id }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ phd_message.createdAt ? phd_message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ResultLink</th>
+                <td>{{ phd_message.resultLink }}</td>
+            </tr>
+            <tr>
+                <th>PsdLink</th>
+                <td>{{ phd_message.psdLink }}</td>
+            </tr>
+            <tr>
+                <th>ServiceNotes</th>
+                <td>{{ phd_message.serviceNotes }}</td>
+            </tr>
+            <tr>
+                <th>PreviewLink</th>
+                <td>{{ phd_message.previewLink }}</td>
+            </tr>
+            <tr>
+                <th>NoticePreviewLink</th>
+                <td>{{ phd_message.noticePreviewLink }}</td>
+            </tr>
+            <tr>
+                <th>CssPreviewLink</th>
+                <td>{{ phd_message.cssPreviewLink }}</td>
+            </tr>
+            <tr>
+                <th>HtmlExampleLink</th>
+                <td>{{ phd_message.htmlExampleLink }}</td>
+            </tr>
+            <tr>
+                <th>IsPayed</th>
+                <td>{{ phd_message.isPayed ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>OperationId</th>
+                <td>{{ phd_message.operationId }}</td>
+            </tr>
+            <tr>
+                <th>OperatorId</th>
+                <td>{{ phd_message.operatorId }}</td>
+            </tr>
+            <tr>
+                <th>IsClosed</th>
+                <td>{{ phd_message.isClosed ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ phd_message.state }}</td>
+            </tr>
+            <tr>
+                <th>Uid</th>
+                <td>{{ phd_message.uid }}</td>
+            </tr>
+            <tr>
+                <th>Is_email_user</th>
+                <td>{{ phd_message.isEmailUser ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsPublish</th>
+                <td>{{ phd_message.isPublish ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('phd_messages_index') }}">back to list</a>
+
+    <a href="{{ path('phd_messages_edit', {'id': phd_message.id}) }}">edit</a>
+
+    {{ include('phd_messages/_delete_form.html.twig') }}
+{% endblock %}

@@ -274,12 +274,12 @@ class PayService
 	}
 	/**
 	 * Результат может использоваться например для отправки письма
-	 * @return array ['sum' => float, 'user_id' => int, 'email' => string, 'phone' => string, 'order_id']
+	 * @return array ['sum' => float, 'user_id' => int, 'email' => string, 'phone' => string, 'order_id', 'operation_id']
 	*/
 	private function _getEmailData(string $label, string $withdraw_amount, string $yaRequestLogId) : array
 	{
 		//TODO ad relation OneToOne
-		$aResult = ['sum' => 0, 'user_id' => 0, 'email' => '', 'phone' => '', 'order_id' => ''];
+		$aResult = ['sum' => 0, 'user_id' => 0, 'email' => '', 'phone' => '', 'order_id' => '', 'operation_id' => ''];
 		$nSum = intval($withdraw_amount);
 		$oLog = $this->_oLog;
 		$aCtx = ['context' => 'payment'];
@@ -301,6 +301,7 @@ class PayService
 			$aResult['user_id'] = $userId = intval( $oPayTransaction->getUserId() );
 			$aResult['sum'] = $userId = floatval( $oPayTransaction->getSum() );
 			$aResult['order_id'] = $operation->getMainId();
+			$aResult['operation_id'] = $operation->getId();
 			$oUserRepository = $this->_oContainer->get('doctrine')->getRepository($this->_sPayUserClass);
 			$oUser = $oUserRepository->find($userId);
 			if ($oUser) {

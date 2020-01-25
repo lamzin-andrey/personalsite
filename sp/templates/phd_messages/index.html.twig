@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PhdMessages index{% endblock %}
+
+{% block body %}
+    <h1>PhdMessages index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CreatedAt</th>
+                <th>ResultLink</th>
+                <th>PsdLink</th>
+                <th>ServiceNotes</th>
+                <th>PreviewLink</th>
+                <th>NoticePreviewLink</th>
+                <th>CssPreviewLink</th>
+                <th>HtmlExampleLink</th>
+                <th>IsPayed</th>
+                <th>OperationId</th>
+                <th>OperatorId</th>
+                <th>IsClosed</th>
+                <th>State</th>
+                <th>Uid</th>
+                <th>Is_email_user</th>
+                <th>IsPublish</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for phd_message in phd_messages %}
+            <tr>
+                <td>{{ phd_message.id }}</td>
+                <td>{{ phd_message.createdAt ? phd_message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {% if (phd_message.resultLink) %}
+                        <a href="{{ phd_message.resultLink }}" target="_blank">Result</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if (phd_message.psdLink) %}
+                        <a href="{{ phd_message.psdLink }}" target="_blank">PSD source</a>
+                    {% endif %}
+                </td>
+                <td>
+
+                    <div class="accordion" id="accordionExample{{ phd_message.id }}">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        serviceNotes
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample{{ phd_message.id }}">
+                                <div class="card-body">
+                                    {{ phd_message.serviceNotes }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </td>
+                <td>
+                    {% if (phd_message.previewLink) %}
+                        <a href="{{ phd_message.previewLink }}" target="_blank">Preview</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if (phd_message.noticePreviewLink) %}
+                        <a href="{{ phd_message.noticePreviewLink }}" target="_blank">Preview with notice</a>
+                    {% endif %}
+                </td>
+                <td><a href="{{ phd_message.cssPreviewLink }}" target="_blank">CSS Preview</a></td>
+                <td>
+                    <a href="{{ phd_message.htmlExampleLink }}" target="_blank">ZIP with html code</a>
+                </td>
+                <td>{{ phd_message.isPayed ? 'Yes' : 'No' }}</td>
+                <td>{{ phd_message.operationId }}</td>
+                <td>{{ phd_message.operatorId }}</td>
+                <td>{{ phd_message.isClosed ? 'Yes' : 'No' }}</td>
+                <td>{{ phd_message.state }}</td>
+                <td>{{ phd_message.uid }}</td>
+                <td>{{ phd_message.isEmailUser ? 'Yes' : 'No' }}</td>
+                <td>{{ phd_message.isPublish ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('phd_messages_show', {'id': phd_message.id}) }}">show</a>
+                    <a href="{{ path('phd_messages_edit', {'id': phd_message.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if (bOnlyPayed == 1) %}
+        <a href="{{ path('phd_messages_index') }}">Только неоплаченные</a>
+    {% else %}
+        <a href="{{ path('phd_messages_index') }}?payed=1">Только оплаченные</a>
+    {% endif %}
+{% endblock %}
