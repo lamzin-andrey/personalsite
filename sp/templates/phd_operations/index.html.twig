@@ -30,7 +30,6 @@
                 <td>{{ phd_operation.payTransactionId }}</td>
                 <td>
                     <a href="{{ path('phd_operations_show', {'id': phd_operation.id}) }}">show</a>
-                    <a href="{{ path('phd_operations_edit', {'id': phd_operation.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -41,5 +40,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('phd_operations_new') }}">Create new</a>
+    <a href="{{ path('phd_messages_index') }}">Messages</a>
 {% endblock %}

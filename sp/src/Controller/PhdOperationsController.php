@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\PhdOperations;
 use App\Form\PhdOperationsType;
+use App\Service\AppService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,20 +61,27 @@ class PhdOperationsController extends AbstractController
     /**
      * @Route("/{id}", name="phd_operations_show", methods={"GET"})
      */
-    public function show(PhdOperations $phdOperation): Response
+    public function show(PhdOperations $phdOperation, AppService $oAppService): Response
     {
 		if (!$this->_hasPermissions()) {
 			return $this->redirectToRoute('home');
 		}
+		$oTransaction = $this->getDoctrine()->getRepository('App:PhdPayTransaction')
+			->find($phdOperation->getPayTransactionId());
+		$sPhone = '';
+		if ($oTransaction) {
+			$sPhone = $oAppService->formatPhone($oTransaction->getPhone() );
+		}
         return $this->render('phd_operations/show.html.twig', [
             'phd_operation' => $phdOperation,
+			'sPhone' => $sPhone
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="phd_operations_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, PhdOperations $phdOperation): Response
+    /*public function edit(Request $request, PhdOperations $phdOperation): Response
     {
 		if (!$this->_hasPermissions()) {
 			return $this->redirectToRoute('home');
@@ -91,7 +99,7 @@ class PhdOperationsController extends AbstractController
             'phd_operation' => $phdOperation,
             'form' => $form->createView(),
         ]);
-    }
+    }*/
 
     /**
      * @Route("/{id}", name="phd_operations_delete", methods={"DELETE"})

@@ -9,6 +9,8 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>OperationId</th>
+                <th>Email</th>
                 <th>CreatedAt</th>
                 <th>ResultLink</th>
                 <th>PsdLink</th>
@@ -18,7 +20,7 @@
                 <th>CssPreviewLink</th>
                 <th>HtmlExampleLink</th>
                 <th>IsPayed</th>
-                <th>OperationId</th>
+
                 <th>OperatorId</th>
                 <th>IsClosed</th>
                 <th>State</th>
@@ -32,6 +34,16 @@
         {% for phd_message in phd_messages %}
             <tr>
                 <td>{{ phd_message.id }}</td>
+                <td>
+                    {% if (phd_message.operationId) %}
+                        <a href="{{ path('phd_operations_show', {'id' : phd_message.operationId}) }}" target="_blank">Show</a>
+                    {% else %}
+                         -
+                    {% endif %}
+                </td>
+                <td>
+                    {{ phd_message.phdUser.email }}
+                </td>
                 <td>{{ phd_message.createdAt ? phd_message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     {% if (phd_message.resultLink) %}
@@ -81,7 +93,6 @@
                     <a href="{{ phd_message.htmlExampleLink }}" target="_blank">ZIP with html code</a>
                 </td>
                 <td>{{ phd_message.isPayed ? 'Yes' : 'No' }}</td>
-                <td>{{ phd_message.operationId }}</td>
                 <td>{{ phd_message.operatorId }}</td>
                 <td>{{ phd_message.isClosed ? 'Yes' : 'No' }}</td>
                 <td>{{ phd_message.state }}</td>
@@ -105,4 +116,7 @@
     {% else %}
         <a href="{{ path('phd_messages_index') }}?payed=1">Только оплаченные</a>
     {% endif %}
+
+    <a href="{{ path('phd_operations_index') }}">Операции</a>
+
 {% endblock %}

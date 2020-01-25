@@ -136,6 +136,7 @@ class PhdMessages
 	/**
 	 * @var PhdUsers
 	 * //Эта красота ломает работу метода PhdMessages->setUid($nId); Ошибки не происходит, но и значение не сохраняется.
+	 * //Поэтому надо вместо  PhdMessages->setUid($nId) использовать PhdMessages->setPhdUser($oPhdUser);
 	 * @ORM\ManyToOne(targetEntity="PhdUsers", inversedBy="phdMessages")
 	 * @ORM\JoinColumn(name="uid", referencedColumnName="id")
 	*/
