@@ -213,9 +213,9 @@ class Portfolio
     /**
      * @var int
      *
-     * @ORM\Column(name="rating", type="integer", nullable=false, options={"comment"="Количество просмотров страницы работы"})
+     * @ORM\Column(name="rating", type="integer", nullable=false, options={"comment"="Количество просмотров страницы работы", "default"="0"})
      */
-    private $rating;
+    private $rating = '0';
 
     /**
      * @var string
