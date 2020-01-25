@@ -38,6 +38,45 @@ class PhdController extends AbstractController
 	private $_examplesPerPage = 3;
 
 	/**
+	 * @Route("/phducheck", name="phducheck")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @return Response
+	*/
+	public function phducheck(Request $oRequest, TranslatorInterface $t)
+	{
+		$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		if ($oPhdUser) {
+			header('location: ' . $this->getParameter('app.appPageUrl') );
+			exit;
+		}
+		$aData = [];
+		$aData ['pageHeading'] = 'Authentication, step #2';
+		$aData['sError'] = $t->trans('Possible your cookie is disabled, or user not found');
+		$aData['isPhducheck'] = 1;
+		return $this->render('phd/eauth.html.twig', $aData);
+	}
+	/**
+	 * Авторизация по ссылке в email
+	 * @Route("/phdusreau", name="phdusreau")
+	*/
+	public function phduseremailauth(Request $oRequest, TranslatorInterface $t)
+	{
+		$sAuthHash = $oRequest->get('ah', '');
+		$oPhdUser = $this->getDoctrine()->getRepository('App:PhdUsers')->findOneBy(['authHash' => $sAuthHash]);
+		$aData = [];
+		$aData ['pageHeading'] = 'Authentication, step #1';
+		if ($oPhdUser) {
+			$oCookie = $this->_createPhdClientCookie($oPhdUser->getHash());
+			$oResponse = $this->render('phd/eauth.html.twig', $aData);
+			$oResponse->headers->setCookie($oCookie);
+			return $oResponse;
+		}
+		$aData['sError'] = $t->trans('User not found');
+		return $this->render('phd/eauth.html.twig', $aData);
+	}
+
+	/**
 	 * Добавить запись в pay_transaction и вернуть идентификатор записи
 	 * @Route("/phdstarttransaction.json", name="phdstarttransaction")
 	*/
@@ -119,9 +158,8 @@ class PhdController extends AbstractController
 		$oEm->flush();
 		$aData = [];
 		$oResponse = $this->_json($aData);
-		$sCookieName = $this->getParameter('app.phdusercookiename');
 		/** @var \Symfony\Component\HttpFoundation\Cookie $oCookie */
-		$oCookie = Cookie::create($sCookieName, $sCookieValue, time() + 31536000);
+		$oCookie = $this->_createPhdClientCookie($sCookieValue);
 		$oResponse->headers->setCookie($oCookie);
 		return $oResponse;
 	}
@@ -422,4 +460,15 @@ class PhdController extends AbstractController
 			$aData['resultLink'] = $this->getParameter('app.siteUrlBegin') . $oPhdMessage->getResultLink();
 		}
 	}
+	/**
+	 * Установить куку авторизации клиента 
+	 * @param string  $sCookieValue
+	 * @param Cookie
+	*/
+	private function _createPhdClientCookie(string $sCookieValue)
+	{
+		$sCookieName = $this->getParameter('app.phdusercookiename');
+		return Cookie::create($sCookieName, $sCookieValue, time() + 31536000);
+	}
+		
 }

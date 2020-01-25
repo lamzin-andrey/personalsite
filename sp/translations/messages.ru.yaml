@@ -55,11 +55,14 @@ Payed at: Оплачено
 Unable take new order while you have uncomplete order: Невозможно принять новый заказ, пока у вас есть неполный заказ
 Message not found: Заказ не найден
 Message Closed: Заявка закрыта
+Authorization by hash: Авторизация по ссылке из письма
 Alien order: Нельзя обрабатывать чужой заказ
 Unable load image file from remote server: Невозможно загрузить файл с удалённого сервера
 Unable get current order id: Невозможно получить идентификатор текущей заявки
 Preview done: Ваша вёрстка ждёт вас
 Result done: Ссылка на архив с версткой
+Few seconds: Несколько секунд
+Possible your cookie is disabled, or user not found: Возможно у вас отключены cookies. Пользователь не найден в базе данных.
 Result showed: Сылка на результат показана на странице и отправлена по email
 Mail preview body: |
   <p>Здравствуйте!</p><p>Вы получили это письмо, потому что заказывали конвертацию

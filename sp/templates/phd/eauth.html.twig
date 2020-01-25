@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authentication...{% endblock %}
+
+{% block content %}
+    {% if (sError is defined ) %}
+        <div class="alert alert-danger" >
+            {{ sError }}
+        </div>
+    {% else %}
+        <div class="alert alert-success" >
+            {{ 'Few seconds'|trans }}...
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+    {% if ( (isPhducheck is not defined) and (sError is not defined) )  %}
+        <script charset="UTF-8">
+            setTimeout(function(){
+                location.href = '{{ path('phducheck') }}';
+            }, 1000);
+        </script>
+    {% endif %}
+
+    <script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+{% endblock %}
