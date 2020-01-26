@@ -694,7 +694,7 @@ class PhdAdminController extends AbstractController
 			}
 		}
 		if ($sEmail) {
-			$sender = $this->getParameter('app.phdAdminEmail');
+			$sender = $this->getParameter('app.siteAdminEmail');
 			$siteName = $this->getParameter('app.siteName');
 			$oMailer = new SimpleMail();
 			$oMailer->setAddressTo([$sEmail => $sEmail]);
@@ -744,7 +744,7 @@ class PhdAdminController extends AbstractController
 			}
 		}
 		if ($sEmail) {
-			$sender = $this->getParameter('app.phdAdminEmail');
+			$sender = $this->getParameter('app.siteAdminEmail');
 			$siteName = $this->getParameter('app.siteName');
 			$oMailer = new SimpleMail();
 			$oMailer->setAddressTo([$sEmail => $sEmail]);
