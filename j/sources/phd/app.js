@@ -126,6 +126,29 @@ window.app = new Vue({
 
 		//Префикс запросов к серверу
 		this._serverRoot = '/sp/public';
+
+		//Статистика, ленивая загрузка каринок
+		Rest._token = 'open';
+		//send stat
+		let id = parseInt(window.rid, 10), o = {};
+		
+		//lazy load hash link fix
+		$('html').bind('lazyload', (evt) => {
+			if (location.hash) {
+				//setTimeout(() => {
+					location.href = location.hash;
+				//}, 1000);
+			}
+		});
+		
+
+		if (isNaN(id)) {
+			console.log('id is NaN');
+			return;
+		}
+		o.id = id;
+		o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
+		Rest._post(o, (data) => {this.onSuccessSendStat(data);}, '/p/stat/c.jn/', () => {});
    },
 	computed:{
 		/*isNotFirefox() {
