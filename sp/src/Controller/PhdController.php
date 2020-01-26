@@ -224,7 +224,6 @@ class PhdController extends AbstractController
 	{
 		$oPhdUser = $this->_getAuthPhdUser($oRequest);
 		if (!$oPhdUser) {
-			file_put_contents('/home/andrey/log.log', "phdstate: User NOT found \n", FILE_APPEND);
 			return $this->_json([
 				'status' => 'error',
 				'msg' => $t->trans('Unauth user 1')
@@ -232,7 +231,6 @@ class PhdController extends AbstractController
 		}
 		$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);
 		if (!$oPhdMessage) {
-			file_put_contents('/home/andrey/log.log', "phdstate: Message NOT found \n", FILE_APPEND);
 			return $this->_json([
 				'status' => 'error',
 				'msg' => $t->trans('Unauth user')
@@ -251,7 +249,6 @@ class PhdController extends AbstractController
 	*/
 	public function checkIn(Request $oRequest, AppService $oAppService)
 	{
-		file_put_contents('/home/andrey/log.log', "Call checkIn\n");
 		$oPhdUser = $this->_getAuthPhdUser($oRequest);
 		$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);
 		$aData = [];
@@ -260,7 +257,6 @@ class PhdController extends AbstractController
 		if ($oPhdUser) {
 			$oSession = $oRequest->getSession();
 			$oSession->set('phd_user', $oPhdUser);
-			file_put_contents('/home/andrey/log.log', "User found and set in session, it hash: {$oPhdUser->getHash()}\n", FILE_APPEND);
 			$aData['cookieFound'] = 1;
 			if ($oPhdMessage) {
 				$aData['st'] = $oPhdMessage->getState();
