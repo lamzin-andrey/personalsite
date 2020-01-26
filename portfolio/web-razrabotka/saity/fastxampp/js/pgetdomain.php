@@ -10,6 +10,6 @@ if ($label) {
 	}
 	if ($f == 'phd') {
 		$domain = 'https://andryuxa.ru';
-		$path = '/public/sp/yamoney/notice/reciever';
+		$path = '/sp/public/yamoney/notice/reciever';
 	}
 }
