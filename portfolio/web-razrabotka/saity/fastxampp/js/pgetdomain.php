@@ -9,7 +9,7 @@ if ($label) {
 		$domain = 'http://glavtorgi.ru';
 	}
 	if ($f == 'phd') {
-		$domain = 'http://andryuxa.ru';
+		$domain = 'https://andryuxa.ru';
 		$path = '/public/sp/yamoney/notice/reciever';
 	}
 }
