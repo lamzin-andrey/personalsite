@@ -21,6 +21,10 @@ const i18n = new VueI18n({
 });
 //end Интернациализация
 
+//cache
+import CacheSw from '../adminauth/classes/cachesw';
+window.cacheClient = new CacheSw();
+
 
 //"Стандартная" валидация полей формы ?? Need ??
 //Включить директиву, определённую во внешнем файле (в файле b421validatorsdirective.js директива b421validators определяется глобально)

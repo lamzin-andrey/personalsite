@@ -6,6 +6,11 @@ require('./../../vendor/bootstrap4.2.1.min.js');
 //For REST request server
 require('../landlib/net/rest.js');
 
+//cache
+import CacheSw from '../adminauth/classes/cachesw';
+window.cacheClient = new CacheSw();
+
+
 //Компонент TextFormat для всяких штук с текстом
 require('../landlib/nodom/textformat');
 
