@@ -334,19 +334,7 @@ class PhdAdminController extends AbstractController
 		if (!$this->_hasPermissions()) {
 			return $this->_json([]);
 		}
-		$oRepository = $this->_getMessageRepository();
-		$oCriteria = Criteria::create();
-		$ex = Criteria::expr();
-		/*
-		 * SELECT * FROM phd_messages WHERE
-		 * 		is_closed != 1
-		 *     AND (operatior_id = 0 OR operatior_id = Im)
-		 * ORDER BY id
-		*/
-		$nId = $this->getUser()->getId();
-		$oCriteria->where( $ex->andX( $ex->neq('isClosed', 1), $ex->orX( $ex->eq('operatorId', 0), $ex->eq('operatorId', $nId) )  ) )
-			->orderBy(['id' => 'ASC']);
-		$aList = $oRepository->matching($oCriteria)->toArray();
+		$aList = $oAppService->getUnprocessedPhdMessages();
 		$aResult = [];
 		foreach ($aList as $oItem) {
 			$aItem = [

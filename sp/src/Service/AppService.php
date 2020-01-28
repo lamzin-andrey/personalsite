@@ -518,4 +518,44 @@ class AppService
 			$aB[] = '/';
 		}
 	}
+	/**
+	 * bool $isConsole = false
+	*/
+	public function getUnprocessedPhdMessages(bool $isConsole = false) : array
+	{
+		$oRepository = $this->oContainer->get('doctrine')->getRepository('App:PhdMessages');
+		$oCriteria = Criteria::create();
+		$ex = Criteria::expr();
+
+		if ($isConsole){
+			/*
+			 * SELECT * FROM phd_messages WHERE
+			 * 		is_closed != 1
+			 * ORDER BY id
+			*/
+			$oCriteria->where( $ex->neq('isClosed', 1) );
+			return $oRepository->matching($oCriteria)->toArray();
+		}
+		/*
+		 * SELECT * FROM phd_messages WHERE
+		 * 		is_closed != 1
+		 *     AND (operatior_id = 0 OR operatior_id = Im)
+		 * ORDER BY id
+		*/
+		$oUser = null;
+		$oToken = $this->oContainer->get('security.token_storage')->getToken();
+		if ($oToken) {
+			$oUser = $oToken->getUser();
+		}
+		if (!$oUser || is_string($oUser)) {
+			var_dump( $this->oContainer->getParameter('kernel.environment') );
+			//if (isConsole)
+			return [];
+		}
+
+		$nId = $oUser->getId();
+		$oCriteria->where( $ex->andX( $ex->neq('isClosed', 1), $ex->orX( $ex->eq('operatorId', 0), $ex->eq('operatorId', $nId) )  ) )
+			->orderBy(['id' => 'ASC']);
+		return $oRepository->matching($oCriteria)->toArray();
+	}
 }
