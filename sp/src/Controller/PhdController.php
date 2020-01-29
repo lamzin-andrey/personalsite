@@ -37,6 +37,45 @@ class PhdController extends AbstractController
 	/** @property int _examplesPerPage Количество работ на одной "странице" */
 	private $_examplesPerPage = 3;
 
+
+	/**
+	 * @Route("/phdcheckcsrf.json", name="phdcheckcsrf")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param $
+	 * @return
+	 */
+	public function phdcheckcsrf (Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		if ($oRequest->getMethod() == 'POST') {
+			$aData =[];
+			$oForm = $this->createForm(get_class(new PsdUploadFormType()), null, [
+				'app_service' => $oAppService,
+				'uploaddir' => ''
+			]);
+			//$oForm->handleRequest($oRequest);
+			$oForm->submit([
+				'_token' => $oRequest->get('psd_up_form')['_token'],
+				'csrfup' => $oRequest->get('psd_up_form')['_csrfup'],
+				//'psdfileFileDeffer' => 'dd'
+			]);
+
+			if ($oForm->isSubmitted() && $oForm->isValid()) {
+				return $this->_json([]);
+			} else {
+				$aData['errors'] = $oAppService->getFormErrorsAsArray($oForm);
+				if (count($aData['errors'])) {
+					$aData['status'] = 'error';
+				}
+				$aData['error_text'] = 'No submit or invalid!';
+			}
+			return $this->_json($aData);
+		} else {
+			return $this->_json(['nopost' => 1]);
+		}
+	}
+
+
 	/**
 	 * @Route("/phducheck", name="phducheck")
 	 * @param Request $oRequest
@@ -280,13 +319,14 @@ class PhdController extends AbstractController
 				'uploaddir' => $this->_subdir
 			]);
 			//$oForm->handleRequest($oRequest);
+			$sFileName = 'psdfileFileDeffer';
 			$oForm->submit([
 				'_token' => $oRequest->get('psd_up_form')['_token'],
-				'psdfileFileImmediately' => $oRequest->files->get('psd_up_form')['psdfileFileImmediately']
+				$sFileName => $oRequest->files->get('psd_up_form')[$sFileName]
 			]);
 			if ($oForm->isSubmitted() && $oForm->isValid()) {
 				//save file
-				$oFile = $oForm['psdfileFileImmediately']->getData();
+				$oFile = $oForm[$sFileName]->getData();
 				if ($oFile) {
 					$sFileName = $oFileUploaderService->upload($oFile);
 					$s = '/' . $this->_subdir . '/' . $sFileName;

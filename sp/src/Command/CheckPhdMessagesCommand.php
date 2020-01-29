@@ -41,7 +41,6 @@ class CheckPhdMessagesCommand extends Command
 			$oMailer->setFrom($siteAdmin);
 			$oMailer->setTo($sPhdAdmin);
 			$s = $oMailer->send();
-			var_dump($s);die;
 		}
 
 		return 0;

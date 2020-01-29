@@ -440,7 +440,9 @@
 			onClickSendPreview(evt) { 
 				evt.preventDefault();
 				this.$root.setMainSpinnerVisible(true);
-				Rest._post({s: 3, id: this.getRequestId()}, (data) => { this.onSuccessSetPreviewState(data);}, 
+				Rest._post({s: 3, id: this.getRequestId()}, (data) => { 
+						this.onSuccessSetPreviewState(data);
+					}, 
 					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			/**
@@ -449,8 +451,11 @@
 			onClickSendResult(evt) { 
 				evt.preventDefault();
 				this.$root.setMainSpinnerVisible(true);
-				Rest._post({s: 8, id: this.getRequestId()}, (data) => { this.onSuccessSetResultState(data);}, 
-					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
+				Rest._post({s: 8, id: this.getRequestId()}, (data) => {
+						this.onSuccessSetResultState(data);
+						this.alert(this.$t('app.SaveCompleted'));
+					}, 
+						this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			/**
 			 * @description Обработка клика на кнопке Закрыть заказ
@@ -458,7 +463,10 @@
 			onClickSetAsClosed(evt) { 
 				evt.preventDefault();
 				this.$root.setMainSpinnerVisible(true);
-				Rest._post({s: 200, id: this.getRequestId()}, (data) => { this.onSuccessSetResultState(data);}, 
+				Rest._post({s: 200, id: this.getRequestId()}, (data) => {
+						this.onSuccessSetResultState(data);
+						this.alert(this.$t('app.SaveCompleted'));
+					}, 
 					this.$root._serverRoot + '/phdadminchangestate.json', (a, b, c) => {this.defaultFailSendFormListener(a, b, c);});
 			},
 			/**
@@ -488,6 +496,8 @@
 							sMsg += ' ' + this.$t('app.UnableSendPreviewEmailEnd');
 						}
 						this.alert(sMsg);
+					} else {
+						this.alert(this.$t('app.SaveCompleted'));
 					}
 				}
 			},

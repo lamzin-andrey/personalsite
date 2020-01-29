@@ -25,7 +25,7 @@
 		</div>
 		<div v-if="step == STEP_SHOW_UPLOAD_BUTTON">
 			<!--  accept=".psd" -->
-			<p class="text-center">
+			<p class="text-center iFileWrapper">
 				<inputfileb4 
 					v-model="psdurl"
 					accept=".psd"
@@ -36,6 +36,9 @@
 					:label="$t('app.UploadPSD')" 
 					id="psdfile"
 					fieldwrapper="psd_up_form"
+					immediateleyUploadOff="true"
+					:uploadButtonLabel="$t('app.Upload')"
+					@selectdeffered="onSelectPsdFile"
 					ref="psduploader"
 				>
 				</inputfileb4>
@@ -216,6 +219,8 @@
 	</div>
 </template>
 <script>
+	import '../css/phd.css';
+
 	//Компонент для аплоадла файлов
 	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue').default);
     export default {
@@ -389,6 +394,28 @@
 				}
 				this.resultLink = data.resultLink;
 				this.step = this.STEP_SHOW_RESULT;
+			},
+			/**
+			 * @description Обработка выбора PSD файла (предотвращаем устаревание PSD токена)
+            */
+			onSelectPsdFile(inputfileb4, inputfile) {
+				//Отправить запрос.
+				Rest._post({'psd_up_form[_csrfup]' : 1, 'psd_up_form[_token]' : inputfileb4.getScfrfToken() }, 
+				(data) => {
+					if (data.status == 'ok') {
+						inputfileb4.sendFile(inputfile);
+					} else {
+						this.ib4 = inputfileb4;
+						this.ifile = inputfile;
+						this.bNeedUploadAfterGetToken = true;
+						this.sendCheckin();
+					}
+				}, this.$root._serverRoot + '/phdcheckcsrf.json', () => {
+					this.ib4 = inputfileb4;
+					this.ifile = inputfile;
+					this.bNeedUploadAfterGetToken = true;
+					this.sendCheckin();
+				}, true);
 			},
 			/**
 			 * @description Обработка клика на кнопке Перевести (деньги)
@@ -636,8 +663,11 @@
 					return;
 				}
 				if (data.status == 'ok') {
-					Rest._post({a: 1}, (data) => {this.onSuccessCheckIn(data);}, this.$root._serverRoot + '/phdcheckin.json', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
+					this.sendCheckin();
 				}
+			},
+			sendCheckin() {
+				Rest._post({a: 1}, (data) => {this.onSuccessCheckIn(data);}, this.$root._serverRoot + '/phdcheckin.json', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
 			},
 			/**
 			 * @description Обработка успешного запроса установки кук.
@@ -652,6 +682,10 @@
 					this.step = this.STEP_SHOW_UPLOAD_BUTTON;
 					Vue.nextTick(() => {
 						this.setPsdUploaderCsrfToken(data.formToken);
+						if (this.bNeedUploadAfterGetToken) {
+							this.bNeedUploadAfterGetToken = false;
+							this.ib4.sendFile(this.ifile);
+						}
 					});
 				} else {
 					this.step = this.STEP_HOW_COOKIES_ON;

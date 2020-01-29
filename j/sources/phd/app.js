@@ -147,8 +147,8 @@ window.app = new Vue({
 			return;
 		}
 		o.id = id;
-		o.type = o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
-		Rest._post(o, (data) => {this.onSuccessSendStat(data);}, '/p/stat/c.jn/', () => {});
+		o.type = 1; //o.url.indexOf('/portfolio/') == -1 ? 2 : 1;
+		Rest._post(o, (data) => {}, '/p/stat/c.jn/', () => {});
    },
 	computed:{
 		/*isNotFirefox() {
