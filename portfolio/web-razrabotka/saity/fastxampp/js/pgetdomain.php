@@ -12,4 +12,8 @@ if ($label) {
 		$domain = 'https://andryuxa.ru';
 		$path = '/sp/public/yamoney/notice/reciever';
 	}
+	if ($f == 'gzw') {
+		$domain = 'https://gazel.website';
+		$path = '/yamoney/notice/reciever';
+	}
 }
