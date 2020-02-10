@@ -22,7 +22,8 @@ security:
             logout: ~
                 # target: /hello/anonymous
             remember_me:
-                secret:   '%kernel.secret%'
+                #secret:   '%kernel.secret%'
+                key: '%secret%'
                 path:     /
                 lifetime: 604800 # 1 week in secondslifetime: 604800 # 1 week in seconds
 
