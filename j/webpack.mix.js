@@ -15,6 +15,10 @@ let mix = require('laravel-mix');
 //Для авторизованных админов
 //mix.js('sources/adminauth/app.js', 'b.js');
 //mix.js('sources/adminauthvdt/app.js', 'e.js');
+//Конвертер онлайн
+//mix.js('sources/phd/app.js', 'f.js'); //phd
+//Конвертер онлайн - админка
+//mix.js('sources/phdadmin/app.js', 'g.js'); //phd
 
 
 //Страницы сайта
@@ -26,9 +30,5 @@ mix.styles([
 		'./../s/sources/site/app.css'
 	], './../s/app.css');
 
-
-//Конвертер онлайн
-mix.js('sources/phd/app.js', 'f.js'); //phd
-
-//Конвертер онлайн - админка
-mix.js('sources/phdadmin/app.js', 'g.js'); //phd
+//Учёт времени - админка
+mix.js('sources/cronfrnd/app.js', 'h.js'); //crn
