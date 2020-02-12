@@ -1,0 +1,57 @@
+---- --- -- 
+Тут хороши бы теги, например, Яндекс-деньги, Симфони, Симфони 3.4, vuejs, Изучение нового.
+
+Хотя нет, Я-деньги - это название задачи скорее, которая имеет свою надзадачу (сайт с Газелями).
+Значит, в поиске должно быть одно поле для запроса и ещё одно для ввода тегов через запятую.
+
+Задача может быть приватной или публичной.
+И этим сервисом должны уметь пользоваться все зарегистрированные люди.
+Они не должны видеть остальные пункты меню. Тут неплохо бы ROLES поправить.
+
+При запуске или остановке ищется для пользователя заддача с is_executed == 1 для данного пользователя.
+Она останавливается (все интервалы правятся).
+И запускается новая.
+
+Так как нужно как можно быстрее, теги при поиске прикрутим хоть через сессию.
+
+
+
+
+Структура таблиц.
+CREATE TABLE IF NOT EXISTS crn_tasks
+(  id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT 'Таблица для хранения наименования задачи. В rel подях хранится время учитывающее только реально затраченные на работу часы.',
+   name VARCHAR(255) COMMENT 'Полное наименование задачи, например Оплата возможности поднятий объявления с помощью Я-денег или Сайт для подачи объявлений о грузоперевозках',
+   description VARCHAR(4096) COMMENT 'Описание, на всякий пожарный',
+   codename VARCHAR(255) COMMENT 'Кодовое имя задачи для более быстрого поиска. Например gzs для сайта о перевозках на газели написанного на Symfony 3.4',
+   start_datetime DATETIME COMMENT 'время, когда всё началось.',
+   end_datetime DATETIME COMMENT 'время, когда все закончилось (обновляется по мере изменений в crn_intervals)',
+   parent_id INTEGER COMMENT 'Ссылка на родительскую задачу, например для Форма оплаты через Я-деньги может быть родителем Сайт про газели',
+   rel_years INTEGER COMMENT 'Общее количество затраченных лет',
+   rel_months INTEGER COMMENT 'количество затраченных месяцев после количества лет',
+   rel_weeks INTEGER COMMENT 'количество затраченных недель после количества месяцев',
+   rel_days INTEGER COMMENT 'количество затраченных суток после количества недель',
+   rel_hours INTEGER COMMENT 'количество затраченных часов после количества суток',
+   total_hours INTEGER COMMENT 'Общее количество затраченных часов',
+   is_executed TINYINT DEFAULT 0 COMMENT '1 когда задача выполняется. такая для одного пользователя должна быть одна и только одна',
+   is_public TINYINT DEFAULT 0  COMMENT '1 когда задача публичная и доступна для всеобщего поиска (вдруг народ захочет сравнить)',
+   ausers_id INTEGER COMMENT 'ausers.id'
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+
+
+CREATE TABLE IF NOT EXISTS crn_intervals
+(  id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT 'Таблица для хранения интервалов работы над задачей',
+   start_datetime DATETIME COMMENT 'Начало интервала',
+   end_datetime DATETIME COMMENT 'Окончание интервала',
+   task_id INTEGER COMMENT 'crn_tasks.id'
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+
+CREATE TABLE IF NOT EXISTS crn_tags
+(  id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT 'Таблица для хранения тегов',
+   name VARCHAR(255) COMMENT 'Полное наименование тега, например "Symfony" или "Symfony 3.4" или "vuejs" или "Изучение нового"'
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+
+CREATE TABLE IF NOT EXISTS crn_task_tags
+(  id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT 'Таблица для хранения связей задачи и тегов',
+   task_id INTEGER COMMENT 'crn_tasks.id',
+   tag_id INTEGER COMMENT 'crn_tags.id'
+) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
