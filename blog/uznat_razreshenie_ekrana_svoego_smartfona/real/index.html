@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=device-dpi">
 	<title>Узнать разрешение экрана вашего смартфона</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 </head>
@@ -14,7 +14,7 @@
 	<p style="text-align:center; border: 1px solid #9DC5FF" id="hResolution">...x...</p>
 	<script>
 		var output = document.getElementById('hResolution');
-		output.innerHTML = screen.availWidth + 'x' + screen.availHeight + '<br>пикселей';
+		output.innerHTML = screen.width + 'x' + screen.height + '<br>пикселей';
 		output.style.fontSize = Math.round(screen.height / 10) + 'px';
 	</script>
 
