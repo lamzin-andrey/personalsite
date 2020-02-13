@@ -1,12 +1,12 @@
 <template>
-    <form class="user" method="POST" action="/p/portfolio/psave.jn/" @submit="onSubmit" novalidate id="portfolioform">
-		<categorytree @input="onChangeCategory" v-model="category" ref="categorytree"  id="portfolio_category_id" ></categorytree>
-		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
-        <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
-		<div class="form-check form-check-inline">
-			<input v-model="dontCreatePage" @change="onChangeDontCreatePage" class="form-check-input" type="checkbox"  id="dontCreatePage" value="true">
-			<label class="form-check-label" for="dontCreatePage">{{ $t('app.dontCreatePage') }}</label>
-		</div>
+    <form class="user" method="POST" action="/sp/public/tasks/save.json" @submit="onSubmit" novalidate id="taskcreateform">
+		<inputb4 v-model="name" @input="setDataChanges" type="text" :placeholder="$t('app.name')" :label="$t('app.HeadingPortfolio')" id="name" validators="'required'"></inputb4>
+        <inputb4 v-model="codename"  @input="setDataChanges"  type="text" :label="$t('app.codename')" :placeholder="$t('app.codename')" id="codename" ></inputb4>
+		<!-- 
+removes models
+dontCreatePage
+onChangeDontCreatePage
+		-->
 		<div class="form-check form-check-inline">
 			<input v-model="hasSelfSection" @change="onChangeHasSelfSection" class="form-check-input" type="checkbox" id="hasSelfSection" value="true">
 			<label class="form-check-label" for="hasSelfSection">{{ $t('app.hasSelfSection') }}</label>
@@ -20,7 +20,7 @@
 			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
 			<inputfileb4 
 						v-model="poster"
-						url="/p/articleinlineimageupload.jn/"
+						codename="/p/articleinlineimageupload.jn/"
 						tokenImagePath="/i/token.png"
 						:listeners="posterUploadListeners"
 						:csrfToken="$root._getToken()"
@@ -28,8 +28,8 @@
 		</div>
 
 		<textareab4 v-model="custom_download_content" ref="custom_download_content" @input="setDataChanges" :counter="counter" :label="$t('app.custom_download_content')"  id="custom_download_content" rows="12" ></textareab4>
-		<inputb4 v-model="outerLink" @input="setDataChanges" id="outerLink" type="url" :placeholderlabel="$t('app.OuterLink')" ></inputb4>
-		<inputb4 v-model="outerLinkText" @input="setDataChanges" id="outerLinkText" className="mb-3" type="url" :placeholderlabel="$t('app.OuterLinkText')"></inputb4>
+		<inputb4 v-model="outerLink" @input="setDataChanges" id="outerLink" type="codename" :placeholderlabel="$t('app.OuterLink')" ></inputb4>
+		<inputb4 v-model="outerLinkText" @input="setDataChanges" id="outerLinkText" className="mb-3" type="codename" :placeholderlabel="$t('app.OuterLinkText')"></inputb4>
 
 		<!-- SHA256 value -->
 		<div class="accordion" id="sha256Accord">
@@ -46,7 +46,7 @@
 					<div class="card-body">
 						<inputfileb4 
 							v-model="productFile"
-							url="/p/portfolio/productupload.jn/"
+							codename="/p/portfolio/productupload.jn/"
 							tokenImagePath="/i/token.png"
 							:listeners="productUploadListeners"
 							:csrfToken="$root._getToken()"
@@ -60,7 +60,7 @@
 						
 						<div class="input-group">
 							<input
-								v-model="productFileUrl"
+								v-model="productFilecodename"
 								class="form-control"
 								readonly
 								@click="$event.target.select()"
@@ -101,7 +101,7 @@
 				href="#logolink"
 				role="tab"
 				aria-controls="profile"
-				aria-selected="false">{{ $t('app.Logo_url') }}</a>
+				aria-selected="false">{{ $t('app.Logo_codename') }}</a>
 		</li>
 	</ul>
 
@@ -110,7 +110,7 @@
 			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
 			<inputfileb4 
 				v-model="filepath"
-				url="/p/articlelogoupload.jn/"
+				codename="/p/articlelogoupload.jn/"
 				immediateleyUploadOff="true"
 				tokenImagePath="/i/token.png"
 				:progressListener="progressbarListener"
@@ -129,7 +129,7 @@
 		</div>
 		
 		<div class="tab-pane fade" id="logolink" role="tabpanel" aria-labelledby="edit-tab">
-			<inputb4 v-model="defaultLogo" @input="setDataChanges" id="outerLogo" type="text" :label="$t('app.Logo_url')" :placeholder="$t('app.Logo_url')"  ></inputb4>
+			<inputb4 v-model="defaultLogo" @input="setDataChanges" id="outerLogo" type="text" :label="$t('app.Logo_codename')" :placeholder="$t('app.Logo_codename')"  ></inputb4>
 		</div>
 	</div>
 </div>         
@@ -169,13 +169,13 @@
 					<inputb4 @input="setDataChanges" v-model="right_menu_secondary_text" type="text" :placeholderlabel="$t('app.right_menu_secondary_text')"  ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="description" type="text" placeholderlabel="meta[name=description]" maxlength="200" id="description"></inputb4>
 					<inputb4 @input="setDataChanges" v-model="keywords" type="text" placeholderlabel="meta[name=keywords]" ></inputb4>
-					<inputb4 @input="setDataChanges" v-model="og_title" type="text" placeholderlabel="og:title"  ></inputb4>
+					<inputb4 @input="setDataChanges" v-model="og_name" type="text" placeholderlabel="og:name"  ></inputb4>
 					<inputb4 @input="setDataChanges" v-model="og_description" type="text" placeholderlabel="og:description"  ></inputb4>
 					<img :src="defaultSocImage" style="max-width:100px; max-height:100px;">
 					<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
 					<inputfileb4 
 						v-model="og_image"
-						url="/p/articleogimageupload.jn/"
+						codename="/p/articleogimageupload.jn/"
 						tokenImagePath="/i/token.png"
 						:listeners="ogImageUploadListeners"
 						:csrfToken="$root._getToken()"
@@ -221,19 +221,19 @@
 
     
     export default {
-        name: 'portfolioform',
+        name: 'taskcreateform',
         //вызывается раньше чем mounted
         data: function(){
 			let _data  = {
 				pcategory: 2222,
-				//Значение title
-				title:'',
+				//Значение name
+				name:'',
 				//Значение body
 				body:'',
 				//Краткое описание работы
 				shortdesc:'',
-				//Значение url
-				url:'',
+				//Значение codename
+				codename:'',
 				//Значение heading
 				heading:'',
 				//Путь к загруженному логотипу
@@ -274,7 +274,7 @@
 				//Содержимое META тега
 				keywords : '',
 				//Содержимое META тега
-				og_title : '',
+				og_name : '',
 				//Содержимое META тега
 				og_description : '',
 				//Содержимое META тега
@@ -315,10 +315,10 @@
 				/** @property {String} custom_download_content Ссылки на загрузку, в том случае, если их более одной */
 				custom_download_content : '',
 
-				/** @property {String} productFile url файла работы */
+				/** @property {String} productFile codename файла работы */
 				productFile: '',
 
-				/** @property {String} outerLink url файла работы на стороннем сервисе, например google play или github*/
+				/** @property {String} outerLink codename файла работы на стороннем сервисе, например google play или github*/
 				outerLink : '',
 
 				/** @property {String} outerLinkText текст ссылки на файл работы на стороннем сервисе, например google play или github*/
@@ -369,7 +369,7 @@
 			}
 		},
 		computed:{
-			productFileUrl(){
+			productFilecodename(){
 				if (this.productFile) {
 					return (window.location.protocol + '//' + window.location.host + this.productFile);
 				}
@@ -397,17 +397,17 @@
 			 * @description Установитрь данные статьи для редактирования
 			 * @param {Object} data @see mysql table fields pages
 			*/
-			setProductData(data) {
+			setTaskData(data) {
 				this.category = 0;
-				this.title = 'a';
-				this.url = 'b';
+				this.name = 'a';
+				this.codename = 'b';
 				this.heading = 'c';
 				this.body = 'd';
 				this.shortdesc = '';
 				this.filepath = this.defaultLogo = this.defaultLogoValue;
 				this.description = 'e';
 				this.keywords = 'f';
-				this.og_title = 'g';
+				this.og_name = 'g';
 				this.og_description = 'h';
 				this.og_image = this.defaultSocImage = this.defaultLogoValue;
 				this.dontCreatePage = false;
@@ -429,13 +429,13 @@
 				
 				//Fix bug when edit the article more then one time...
 				Vue.nextTick(() => {
-					let url, categoryId, title;
-					title = this.title = data.title;
-					url = this.url = data.url;
+					let codename, categoryId, name;
+					name = this.name = data.name;
+					codename = this.codename = data.codename;
 					this.heading = data.heading;
 					categoryId = this.category = data.category_id;
 					Vue.nextTick(() => {
-						this.setUrlWasChanged(url, title);
+						this.setcodenameWasChanged(codename, name);
 					});
 					this.body = data.content_block;
 					this.shortdesc = data.shortdesc;
@@ -443,7 +443,7 @@
 					this.changeLogoTab();
 					this.description = data.description;
 					this.keywords = data.keywords;
-					this.og_title = data.og_title;
+					this.og_name = data.og_name;
 					this.og_description = data.og_description;
 					this.og_image = this.defaultSocImage = data.og_image;
 					this.sha256 = data.sha256;
@@ -501,7 +501,7 @@
                 if (this.allRequiredFilled()) {
 					let formInputValidator = this.$root.formInputValidator;
 					this.id = this.$root.$refs.portfolio.getProductId();
-					this.url = $('#url').val();
+					this.codename = $('#codename').val();
 					if (!this._validateSga256Inputs(formInputValidator)) {
 						return false;
 					}
@@ -575,7 +575,7 @@
 			allRequiredFilled(){
 				return (
 					parseInt(this.category) > 0
-					&& String(this.title).length > 0
+					&& String(this.name).length > 0
 					&& String(this.heading).length > 0
 					&& String(this.shortdesc).length > 0
 				);
@@ -723,21 +723,21 @@
 			 * @description
 			*/
 			onChangeCategory(v){
-				let key = 'urlIsModify', a = this.$refs.categorytree.getBranchNames(v);//['portfolio', 'web', 'componenty', 'vue']
+				let key = 'codenameIsModify', a = this.$refs.categorytree.getBranchNames(v);//['portfolio', 'web', 'componenty', 'vue']
 				window.LandLibDom.liveTransliteSetTokens(key, '/' + a.join('/') + '/');
 				window.LandLibDom.liveTransliteExec(key);
-				this.url = window.LandLibDom.liveTransliteGetAcceptorVal(key);
+				this.codename = window.LandLibDom.liveTransliteGetAcceptorVal(key);
 			},
 			/**
-			 * @description Установить факт того, что url уже редактирован в ручную и не надо его переустанавливать, транслитируя heading
-			 * @param {String} url - сохраненный ранее в базе
+			 * @description Установить факт того, что codename уже редактирован в ручную и не надо его переустанавливать, транслитируя heading
+			 * @param {String} codename - сохраненный ранее в базе
 			 * @param {String} heading
 			*/
-			setUrlWasChanged(url, heading){
-				let key = 'urlIsModify', s = window.LandLibDom.liveTransliteGetPrefix(key) + window.TextFormat.transliteUrl(heading) + window.LandLibDom.liveTransliteGetSuffix(key);
-				if (url != s) {
+			setcodenameWasChanged(codename, heading){
+				let key = 'codenameIsModify', s = window.LandLibDom.liveTransliteGetPrefix(key) + window.TextFormat.translitecodename(heading) + window.LandLibDom.liveTransliteGetSuffix(key);
+				if (codename != s) {
 					window.LandLibDom.liveTransliteSetWasHandEdit(key, true);
-					this.url = url;
+					this.codename = codename;
 				} else {
 					window.LandLibDom.liveTransliteSetWasHandEdit(key, false);
 				}
@@ -745,8 +745,8 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-			//Настройка live translit url
-			window.LandLibDom.liveTranslite('#title', '#url', 'urlIsModify', '/portfolio/', '/');
+			//Настройка live translit codename
+			window.LandLibDom.liveTranslite('#name', '#codename', 'codenameIsModify', '/portfolio/', '/');
 
 			//Запрос данных наименований статей
 			this.$root._get((data)=>{this.onSuccessGetArticlelist(data);}, '/p/articleslist.jn/?draw=1&start=0&length=1000000', (a, b, c )=>{ this.$root.defaultFailSendFormListener(a, b, c) });

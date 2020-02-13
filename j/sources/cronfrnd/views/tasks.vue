@@ -3,32 +3,32 @@
 <ul class="nav nav-tabs" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link" 
-				id="portfoliolist-tab"
-				href="#portfoliolist"
+				id="tasklist-tab"
+				href="#tasklist"
 				role="tab"
 				aria-controls="home"
 				aria-selected="true">{{ $t('app.List') }}</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link active"
-				id="editportfolio-tab"
+				id="edittask-tab"
 				data-toggle="tab"
-				href="#editportfolio"
+				href="#edittask"
 				role="tab"
 				aria-controls="profile"
 				aria-selected="false"> {{ formTabTitle }} </a>
 		</li>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane fade " id="portfoliolist" role="tabpanel" aria-labelledby="list-tab">
+		<div class="tab-pane fade " id="tasklist" role="tabpanel" aria-labelledby="list-tab">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ $t('app.Worklist') }}</h5>
-					<table id="portfoliotable" class="display table table-bordered" style="width:100%">
+					<table id="taskstable" class="display table table-bordered" style="width:100%">
 						<thead>
 							<tr>
 								<th class="u-tabledragcolumn-head"></th>
-								<th>{{ $t('app.HeadingPortfolio') }}</th> 
+								<th>{{ $t('app.HeadingTask') }}</th> 
 								<th>{{ $t('app.Operations') }}</th>
 							</tr>
 						</thead>
@@ -44,11 +44,11 @@
 			</div>
 		</div>
 		
-		<div class="tab-pane fade show active" id="editportfolio" role="tabpanel" aria-labelledby="edit-tab">
+		<div class="tab-pane fade show active" id="edittask" role="tabpanel" aria-labelledby="edit-tab">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"> {{ newEdit }} </h5>
-					<portfolioform ref="portfolioform"></portfolioform>
+					<taskcreateform ref="taskcreateform"></taskcreateform>
 				</div>
 			</div>
 		</div>
@@ -64,15 +64,15 @@
 	//Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
 	import DataTableMoveRecord from '../classes/datatablemoverecord';
 
-    Vue.component('portfolioform', require('./portfolioform.vue').default);
+    Vue.component('taskcreateform', require('./taskcreateform.vue').default);
 
     export default {
-        name: 'portfolio',
+        name: 'tasks',
         //вызывается раньше чем mounted
         data: function(){
 			let _data  = {
-				/** @property {Number}  Переменная для хранения id работы запрошенной для редактирования */
-				requestedProductId : 0,
+				/** @property {Number}  Переменная для хранения id задачи запрошенной для редактирования */
+				requestedTaskId : 0,
 				
 				/** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования  */
 				 newEdit : 'app.New',
@@ -87,8 +87,8 @@
 				/** @property  {B4DataTablesPreloader} dataTablesPreloader */
 				dataTablesPreloader: new B4DataTablesPreloader(),
 
-				/** @property {Number} productId Идентификатор редактируемой работы */
-				categeoryId : 0,
+				/** @property {Number} taskId Идентификатор редактируемой задачи */
+				taskId : 0,
 				 
 				 /** @property {DataTableMoveRecord} объект для добавления кнопок для перемещения записей таблицы на соседние страницы */
 				 oDataTableMoveRecord: null,
@@ -98,14 +98,15 @@
         //
         methods:{
 			/**
-			 * @description инициализация DataTables с данными статей
+			 * @description инициализация DataTables с данными задач
 			*/
 			initDataTables() {
 				if (this.isDataTableInitalized) {
 					return;
 				}
-				this.oDataTableMoveRecord = new DataTableMoveRecord('#portfoliotable', '/p/portfoio/move.jn/', this.$root);
-				let id = '#portfoliotable', self = this;
+				//TODO set this.serverRoot in mounted
+				this.oDataTableMoveRecord = new DataTableMoveRecord('#taskstable', this.serverRoot + '/tasks/move.json', this.$root);
+				let id = '#taskstable', self = this;
 				this.isDataTableInitalized = true;
 				this.dataTable =  $(id).DataTable( {
 					'rowReorder': {
@@ -114,7 +115,7 @@
 					},
 					'processing': true,
 					'serverSide': true,
-					'ajax': "/p/portfolio/list.jn/",
+					'ajax': this.serverRoot + "/tasks.json",
 					"columns": [
 						{ 
 							"data": "id",
@@ -168,10 +169,10 @@
 				} ).on('draw', () => {
 					//Когда всё отрисовано устанавливаем обработчики событий кликов на кнопках
 					$(id + ' .j-edit-btn').click((evt) => {
-						this.onClickEditProduct(evt);
+						this.onClickEditTask(evt);
 					});
 					$(id + ' .j-rm-btn').click((evt) => {
-						this.onClickRemoveProduct(evt);
+						this.onClickRemoveTask(evt);
 					});
 					self.oDataTableMoveRecord.setListeners();
 				}).on('processing', () => {
@@ -208,7 +209,7 @@
 						$('.u-tablerowdragcellbg').addClass('u-tablerowdragcellbg-cursor-normal');
 						$('.j-dtrows-spinner').css('display', 'inline-block');
 						$('.j-dtdrag-icon').css('display', 'none');
-						this.$root._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, '/p/portfolio/reorder.jn/', (a, b, c) => {this.onFailReorderData(a, b, c);});
+						this.$root._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, this.serverRoot + '/tasks/reorder.json', (a, b, c) => {this.onFailReorderData(a, b, c);});
 					}
 				});
 				
@@ -239,50 +240,50 @@
 			 * @description Click on button "Edit product"
 			 * @param {Event} evt
 			*/
-			onClickEditProduct(evt) {
-				if (this.requestedProductId > 0) {
+			onClickEditTask(evt) {
+				if (this.requestedTaskId > 0) {
 					this.alert(this.$t('app.Other_product_requested_for_edit'));
 					return;
 				}
-				this.requestedProductId = $(evt.target).attr('data-id');
-				$('#spin' + this.requestedProductId).toggleClass('d-none');
-				this.$root._get((d) => {this.onSuccessGetProduct(d);}, `/p/portfolio/product.jn/?id=${this.requestedProductId}`, (a, b, c) => {this.onFailGetProduct(a, b, c);} );
+				this.requestedTaskId = $(evt.target).attr('data-id');
+				$('#spin' + this.requestedTaskId).toggleClass('d-none');
+				this.$root._get((d) => {this.onSuccessGetTask(d);}, `${this.serverRoot}/tasks/task.json?id=${this.requestedTaskId}`, (a, b, c) => {this.onFailGetTask(a, b, c);} );
 			},
 			/**
 			 * @description Success request product data for edit
 			 * @param {Object} data
 			*/
-			onSuccessGetProduct(data) {
-				if (!this.onFailGetProduct(data)) {
+			onSuccessGetTask(data) {
+				if (!this.onFailGetTask(data)) {
 					return;
 				}
-				this.setProductId(data.id);
-				this.$refs.portfolioform.resetImages();
-				this.$refs.portfolioform.setProductData(data);
+				this.setTaskId(data.id);
+				this.$refs.taskcreateform.resetImages();
+				this.$refs.taskcreateform.setTaskData(data);
 				setTimeout(() => {
 					this.setDataChanges(false);
 				}, 1000);
-				$('#editportfolio-tab').tab('show');
+				$('#edittask-tab').tab('show');
 			},
 			/**
 			 * @description Failed request product data for edit
 			 * @return Boolean
 			*/
-			onFailGetProduct(data, b ,c) {
-				$('#spin' + this.requestedProductId).toggleClass('d-none');
-				this.requestedProductId = 0;
+			onFailGetTask(data, b ,c) {
+				$('#spin' + this.requestedTaskId).toggleClass('d-none');
+				this.requestedTaskId = 0;
 				return this.$root.defaultFailSendFormListener(data, b ,c);
 			},
 			/**
 			 * @description Click on button "Remove product"
 			 * @param {Event} evt
 			*/
-			onClickRemoveProduct(evt) {
+			onClickRemoveTask(evt) {
 				this.$root.confirmDialogArticleArgs  = {i:$(evt.target).attr('data-id')};
 				this.$root.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_drop_Product') + '?';
 				this.$root.b4ConfirmDlgParams.body = this.$t('app.Click_Ok_button_for_remove');
 				this.$root.b4ConfirmDlgParams.onOk = {
-					f : this.onClickConfirmRemoveProduct,
+					f : this.onClickConfirmRemoveTask,
 					context:this
 				};
 				this.$root.setConfirmDlgVisible(true);
@@ -291,9 +292,9 @@
 			 * @description Click on button "OK" on confirm dialog Remove article
 			 * @param {Event} evt
 			*/
-			onClickConfirmRemoveProduct() {
+			onClickConfirmRemoveTask() {
 				let args = this.$root.confirmDialogArticleArgs;
-				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, '/p/portfolio/removeproduct.jn/', (data) => {this.onFailRemove(data);})
+				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, this.serverRoot + '/tasks/removetask.json', (data) => {this.onFailRemove(data);})
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
@@ -303,7 +304,7 @@
 			onSuccessRemove(data) {
 				if (data.status == 'ok') {
 					if (data.id) {
-						let tr = $(`#portfoliotable button[data-id=${data.id}]`).first().parents('tr').first();
+						let tr = $(`#taskstable button[data-id=${data.id}]`).first().parents('tr').first();
 						tr.remove();
 					}
 				} else {
@@ -325,8 +326,8 @@
 			 * @description Установить id редактируемой категории
 			 * @param {Number} id 
 			*/
-			setProductId(id) {
-				this.productId = id;
+			setTaskId(id) {
+				this.taskId = id;
 				let key = 'app.New',
 					key2 = 'app.Append';
 				
@@ -337,11 +338,11 @@
 				this.formTabTitle = this.$root.$t(key2);
 			},
 			/**
-			 * @description Получить id редактируемого товара
+			 * @description Получить id редактируемой задачи
 			 * @return Number
 			*/
-			getProductId() {
-				return this.productId;
+			gettaskId() {
+				return this.taskId;
 			},
 			/**
 			 * @see isChange
@@ -354,7 +355,7 @@
 			 * @description Добавляем инициализацию табов
 			 */
 			initSeotab() {
-				$('#portfoliolist-tab').on('click', (ev) => {
+				$('#tasklist-tab').on('click', (ev) => {
 					ev.preventDefault();
 					if (this.isChange) {
 						//Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
@@ -367,10 +368,10 @@
 						//Покажем диалог
 						this.$root.setConfirmDlgVisible(true);
 					} else {
-						this.gotoProductsListTab();
+						this.gotoTasksListTab();
 					}
 				});
-				$('#editportfolio-tab').on('shown.bs.tab', (ev) => {
+				$('#edittask-tab').on('shown.bs.tab', (ev) => {
 					this.setDataChanges(false);
 				});
 			},
@@ -378,18 +379,18 @@
 			 * @description Обработка OK на диалоге подтверждения переключения между вкладками
 			*/
 			onClickConfirmLeaveEditTab() {
-				this.gotoProductsListTab();
+				this.gotoTasksListTab();
 				//Скроем диалог
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
 			 * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
 			*/
-			gotoProductsListTab() {
-				$('#portfoliolist-tab').tab('show');
-				$('#portfolioform')[0].reset();
-				this.setProductId(0);
-				this.$refs.portfolioform.resetImages();
+			gotoTasksListTab() {
+				$('#tasklist-tab').tab('show');
+				$('#taskcreateform')[0].reset();
+				this.setTaskId(0);
+				this.$refs.taskcreateform.resetImages();
 				this.setDataChanges(false);
 			},
 			/**
@@ -406,6 +407,7 @@
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();
+			this.serverRoot = '/sp/public';
             
             /*this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';
