@@ -5,8 +5,7 @@ use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-
-
+use Symfony\Component\HttpFoundation\Response;
 //use App\Entity\Main;
 //use \Landlib\Text2Png;
 use Doctrine\Common\Collections\Criteria;
@@ -557,5 +556,16 @@ class AppService
 		$oCriteria->where( $ex->andX( $ex->neq('isClosed', 1), $ex->orX( $ex->eq('operatorId', 0), $ex->eq('operatorId', $nId) )  ) )
 			->orderBy(['id' => 'ASC']);
 		return $oRepository->matching($oCriteria)->toArray();
+	}
+	/**
+	 *
+	 * @param array $aData
+	 * @return  Response
+	*/
+	public function json (array $aData)
+	{
+		$oResponse = new Response( json_encode($aData) );
+		$oResponse->headers->set('Content-Type', 'application/json');
+		return $oResponse;
 	}
 }

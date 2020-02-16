@@ -144,14 +144,19 @@ window.app = new Vue({
     * @property methods эти методы можно указывать непосредственно в @ - атрибутах
    */
    methods:{
+    //TODO
+    _getToken() {
+        return 'open';
+    },
 	/**
 	 * @description Установить для md+ экранов состояние сайдбара "развернут", а для более медких - свёрнут
-	*initSidebar() {
+    */
+    initSidebar() {
 		let w = $('#sidebarToggle')[0].offsetWidth;
 		if (w) {
 			$('#accordionSidebar').removeClass('toggled');
 		}
-	},*/
+	},
 	/**
 	 * @description Установить id редактируемой статьи
 	 * @param {Number} id 

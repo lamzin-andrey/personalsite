@@ -209,7 +209,7 @@
 						$('.u-tablerowdragcellbg').addClass('u-tablerowdragcellbg-cursor-normal');
 						$('.j-dtrows-spinner').css('display', 'inline-block');
 						$('.j-dtdrag-icon').css('display', 'none');
-						this.$root._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, this.serverRoot + '/tasks/reorder.json', (a, b, c) => {this.onFailReorderData(a, b, c);});
+						Rest._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, this.serverRoot + '/tasks/reorder.json', (a, b, c) => {this.onFailReorderData(a, b, c);});
 					}
 				});
 				
@@ -247,7 +247,7 @@
 				}
 				this.requestedTaskId = $(evt.target).attr('data-id');
 				$('#spin' + this.requestedTaskId).toggleClass('d-none');
-				this.$root._get((d) => {this.onSuccessGetTask(d);}, `${this.serverRoot}/tasks/task.json?id=${this.requestedTaskId}`, (a, b, c) => {this.onFailGetTask(a, b, c);} );
+				Rest._get((d) => {this.onSuccessGetTask(d);}, `${this.serverRoot}/tasks/task.json?id=${this.requestedTaskId}`, (a, b, c) => {this.onFailGetTask(a, b, c);} );
 			},
 			/**
 			 * @description Success request product data for edit
@@ -294,7 +294,7 @@
 			*/
 			onClickConfirmRemoveTask() {
 				let args = this.$root.confirmDialogArticleArgs;
-				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, this.serverRoot + '/tasks/removetask.json', (data) => {this.onFailRemove(data);})
+				Rest._post(args, (data) => {this.onSuccessRemove(data);}, this.serverRoot + '/tasks/removetask.json', (data) => {this.onFailRemove(data);})
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
@@ -404,10 +404,11 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
+			this.serverRoot = '/sp/public';
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();
-			this.serverRoot = '/sp/public';
+			
             
             /*this.$root.$on('showMenuEvent', function(evt) {
                 self.menuBlockVisible   = 'block';

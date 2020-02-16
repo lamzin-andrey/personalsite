@@ -138,16 +138,18 @@ var locales = {
 			'custom_download_content' : 'Ссылки на загрузку в html если их более одной',
 
 			//tasks articles relations
-			'bindArticle' : 'Связать статью',
+			'relationTags' : 'Теги',
 
 			//tasks form other
-			'Hide_on_portfoli_page' : 'Скрыть работу на странице портфолио',
-			'Time_on_dev' : 'Время, затраченное на разработку',
+			'IsPublic' : 'Сделать данные задачи доступными другим пользователям',
+            'Time_on_dev_total' : 'Всего часов',
+            ParentTask: 'Волжена в задачу',
 			'OuterLink' : 'Внешняя страница работы (например, googleplay или github)',
 			'ShortDesc' : 'Краткое описание работы',
 			'OuterLinkText' : 'Текст ссылки на внешнюю страницу работы',
 			'product_file_textlink' : 'Текст ссылки на файл работы',
 			'codename' : 'Кодовое имя для удобного поиска',
+			'codename' : 'Описание',
 			'HeadingPortfolio' : 'Наименование задачи'
         }
     }
