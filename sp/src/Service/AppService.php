@@ -580,4 +580,20 @@ class AppService
 	{
 		return $this->oContainer->get('doctrine')->getRepository($id);
 	}
+	/**
+	 * Сохраняет модели в базе
+	 * Аргументы - оюбъекты Entity
+	*/
+	public function save()
+	{
+		$oEm = $this->oContainer->get('doctrine')->getManager();
+		$nSz = func_num_args();
+		for ($i = 0; $i < $nSz; $i++) {
+			$o = func_get_arg($i);
+			if ($o) {
+				$oEm->persist($o);
+			}
+		}
+		$oEm->flush();
+	}
 }

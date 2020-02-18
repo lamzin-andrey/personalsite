@@ -48,7 +48,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"> {{ newEdit }} </h5>
-					<taskcreateform ref="taskcreateform"></taskcreateform>
+					<taskcreateform ref="taskcreateform" :token="token"></taskcreateform>
 				</div>
 			</div>
 		</div>
@@ -67,7 +67,12 @@
     Vue.component('taskcreateform', require('./taskcreateform.vue').default);
 
     export default {
-        name: 'tasks',
+		name: 'tasks',
+		props: {
+			token: {
+				type: String,
+			}
+		},
         //вызывается раньше чем mounted
         data: function(){
 			let _data  = {

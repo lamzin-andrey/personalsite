@@ -3,12 +3,17 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 /**
  * CrnTaskTags
  *
- * @ORM\Table(name="crn_task_tags")
+ * @ORM\Table(name="crn_task_tags", uniqueConstraints={
+ *        @UniqueConstraint(name="tagtask_unique",
+ *            columns={"tag_id", "task_id"})
+ *    })
  * @ORM\Entity
+ * @UniqueEntity(fields={"taskId", "tagId"})
  */
 class CrnTaskTags
 {

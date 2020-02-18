@@ -3,12 +3,19 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * CrnTags
  *
- * @ORM\Table(name="crn_tags")
+ * @ORM\Table(name="crn_tags", uniqueConstraints={
+ *        @UniqueConstraint(name="name_unique",
+ *            columns={"name"})
+ *    })
  * @ORM\Entity
+ *
+ * @UniqueEntity(fields={"name"})
  */
 class CrnTags
 {

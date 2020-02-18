@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\TaskManagerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,8 +17,10 @@ class DefaultController extends AbstractController
     	if (!$this->getUser()) {
     		return $this->redirectToRoute('login');
 		}
+		$oForm = $this->createForm(TaskManagerType::class);
     	$aData = [
-    		'pageHeading' => $t->trans('Add task', [], 'tasks')
+    		'pageHeading' => $t->trans('Add task', [], 'tasks'),
+			'token' => $oForm->createView()->children['_token']->vars['value']
 		];
         return $this->render('default/index.html.twig', $aData);
     }

@@ -79,6 +79,11 @@
 			};
 			return _data;
 		},
+		props: {
+			token: {
+				type: String,
+			}
+		},
 		watch: {
 			
 		},
@@ -131,15 +136,29 @@
 					this.codename = $('#codename').val();
 					
 					this.relatedTags = JSON.stringify(this.tags);
-					let data = {...this.$data};
-					data.tags = this.$refs.tags.getSelectedTags();
+					let data = {}, i;
+					for (i in this.$data) {
+						data[this.wrap(i)] = this.$data[i];
+					}
+					data[this.wrap('tags')] = JSON.stringify(this.$refs.tags.getSelectedTags() );
+					data[this.wrap('_token')] = this.token;
+					delete data[this.wrap('counter')];
                     Rest._post(
                         data,
                         (data) => { this.onSuccessAddTask(data, formInputValidator);},
                         this.serverRoot +  '/savetask.json',
-                        (a, b, c) => { this.onFailAddTask(a, b, c);}
+						(a, b, c) => { this.onFailAddTask(a, b, c);},
+						true
                     );
                 }
+			},
+			/**
+			 * @description Заворачивает строку в crn_tasks_form[]
+			 * @param {String} s
+			 * @return String
+			*/
+			wrap(s){
+				return `crn_tasks_form[${s}]`;
 			},
 			/**
 			 * @description Успешное добавление задачи
