@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\AppService;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,7 @@ class TasksCronController extends AbstractController
     */
     public function tags(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
     {
+
 		$this->_oAppService = $oAppService;
 		$aResult = [
 			'recordsTotal' => 0,
@@ -49,5 +51,25 @@ class TasksCronController extends AbstractController
     private function _json(array $aData)
 	{
     	return $this->_oAppService->json($aData);
+	}
+
+	/**
+	 * @Route("/savetask.json", name="savetask")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService  $oAppService
+	 * @return Response
+	*/
+	public function savetask(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		$this->_oAppService = $oAppService;
+
+		$aResult = [
+			'recordsTotal' => 0,
+			'recordsFiltered' => 0,
+			'draw' => $oRequest->get('draw'),
+			'data' => []
+		];
+		return $this->_json($aResult);
 	}
 }

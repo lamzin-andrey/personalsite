@@ -341,7 +341,7 @@
 			 * @description Получить id редактируемой задачи
 			 * @return Number
 			*/
-			gettaskId() {
+			getTaskId() {
 				return this.taskId;
 			},
 			/**

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\Criteria;
 //use Landlib\RusLexicon;
 use App\Service\FileUploaderService;
+use Doctrine\ORM\EntityRepository;
 
 class AppService
 {
@@ -564,8 +565,19 @@ class AppService
 	*/
 	public function json (array $aData)
 	{
+		if (!isset($aData['status'])) {
+			$aData['status'] = 'ok';
+		}
 		$oResponse = new Response( json_encode($aData) );
 		$oResponse->headers->set('Content-Type', 'application/json');
 		return $oResponse;
+	}
+	/**
+	 * @param string $id for example 'App:Users'
+	 * @return ?ServiceEntityRepositoryInterface
+	 */
+	public function repository(string $id) : ?EntityRepository
+	{
+		return $this->oContainer->get('doctrine')->getRepository($id);
 	}
 }

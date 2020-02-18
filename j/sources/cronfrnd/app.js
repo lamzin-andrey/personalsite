@@ -176,7 +176,7 @@ window.app = new Vue({
 	 * @description Получить id редактируемой статьи
 	 * @return Number
 	*/
-	gettaskId() {
+	getTaskId() {
 		return this.taskId;
 	},
 	/**

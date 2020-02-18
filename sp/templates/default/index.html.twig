@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
+{% trans_default_domain 'tasks' %}
 
-
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}{{'Add task'|trans}}{% endblock %}
 
 {% block content %}
     <taskeditor ref="tasks"></taskeditor>

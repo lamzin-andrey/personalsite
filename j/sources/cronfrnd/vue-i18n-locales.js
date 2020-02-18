@@ -143,13 +143,14 @@ var locales = {
 			//tasks form other
 			'IsPublic' : 'Сделать данные задачи доступными другим пользователям',
             'Time_on_dev_total' : 'Всего часов',
-            ParentTask: 'Волжена в задачу',
-			'OuterLink' : 'Внешняя страница работы (например, googleplay или github)',
+            ParentTask: 'Вложена в задачу',
+            'name' : 'Наименование задачи',
+            'OuterLink' : 'Внешняя страница работы (например, googleplay или github)',
 			'ShortDesc' : 'Краткое описание работы',
 			'OuterLinkText' : 'Текст ссылки на внешнюю страницу работы',
 			'product_file_textlink' : 'Текст ссылки на файл работы',
 			'codename' : 'Кодовое имя для удобного поиска',
-			'codename' : 'Описание',
+			'description' : 'Описание',
 			'HeadingPortfolio' : 'Наименование задачи'
         }
     }

@@ -108,15 +108,16 @@ window.Rest = {
 		}*/
 		if (this._lang && !sendData.lang) {
 			sendData.lang = this._lang;
-		}
-        $.ajax({
+        }
+        let conf = {
             method: method,
             data:sendData,
             url:url,
             dataType:'json',
             success:onSuccess,
             error:onFail
-        });
+        };
+        $.ajax(conf);
         
 	},
 };
