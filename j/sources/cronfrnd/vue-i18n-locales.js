@@ -151,6 +151,7 @@ var locales = {
 			'product_file_textlink' : 'Текст ссылки на файл работы',
 			'codename' : 'Кодовое имя для удобного поиска',
 			'description' : 'Описание',
+			'SaveAndRun' : 'Сохранить и запустить',
 			'HeadingPortfolio' : 'Наименование задачи'
         }
     }

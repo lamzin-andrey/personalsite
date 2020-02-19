@@ -16,10 +16,15 @@ class TaskManagerType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('codename')
-            ->add('parentId')
             ->add('isPublic')
             ->add('id')
 			->add('tags', TextType::class, [
+				'mapped' => false
+			])
+			->add('parentIdData', TextType::class, [
+				'mapped' => false
+			])
+			->add('actionType', TextType::class, [
 				'mapped' => false
 			])
         ;

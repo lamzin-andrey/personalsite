@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\CrnTasks;
 use App\Form\TaskManagerType;
 use App\Service\AppService;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +31,22 @@ class TasksCronController extends AbstractController
 		];
         return $this->_json($aResult);
     }
-
+	/**
+	 * @Route("/parenttasks.json", name="parenttasks")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param $
+	 * @return  
+	*/
+	public function parenttasks(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		$this->_oAppService = $oAppService;
+		$aData = [
+			'tags' => $this->_getTasks($oRequest->get('s')),
+			'status' => 'ok'
+		];
+		return $this->_json($aData);
+	}
     /**
      * @Route("/taglist.json", name="task_tags")
      * @param Request $oRequest
@@ -82,9 +98,17 @@ class TasksCronController extends AbstractController
 				if ($aFormData['isPublic'] == 'false') {
 					$oTask->setIsPublic(false);
 				}
+				$this->_setParentId($oTask, ($aFormData['parentIdData'] ?? ''));
+				$sAction = ($aFormData['actionType'] ?? '');
+				if ($sAction == 'saveAndRun') {
+					$oAppService->runTask($oTask, $this->getUser()->getId());
+				}
 				$oAppService->save($oTask);
 				$this->_saveTags(($aFormData['tags'] ?? ''), $oTask->getId());
 				$aResult['id'] = $oTask->getId();
+				if ($sAction == 'saveAndRun') {
+					$oAppService->runTask($oTask, $this->getUser()->getId());
+				}
 			} else {
 				$aErrors = $oAppService->getFormErrorsAsArray($oForm);
 				$aResult['formErrors'] = $aErrors;
@@ -149,6 +173,19 @@ class TasksCronController extends AbstractController
 		}
 	}
 	/**
+	 * @param CrnTasks $oTask
+	 * @param string $sParentTaskData
+	*/
+	private function _setParentId(CrnTasks $oTask, string $sParentTaskData) : void
+	{
+		$aData = json_decode($sParentTaskData);
+		if (!is_array($aData) || !isset($aData[0]) || !isset($aData[0]->id)) {
+			$oTask->setParentId(0);
+			return;
+		}
+		$oTask->setParentId($aData[0]->id);
+	}
+	/**
 	 * @param string $sText
 	 * @return  int id вставленного тега
 	*/
@@ -165,5 +202,22 @@ class TasksCronController extends AbstractController
 			return $oTag->getId();
 		}
 		return 0;
+	}
+	/**
+	 * @param string $s Подстрока для поискаs
+	 * @return array [id => name]
+	 */
+	private function _getTasks(string $s) : array
+	{
+		$oRepository = $this->_oAppService->repository('App:CrnTasks');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
+		$aRaw = $oRepository->matching($oCriteria)->toArray();
+		$a = [];
+		foreach ($aRaw as $oTag) {
+			$a[$oTag->getId()] = $oTag->getName() . ' ' . $oTag->getCodename();
+		}
+		return $a;
 	}
 }

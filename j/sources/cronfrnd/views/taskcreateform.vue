@@ -5,23 +5,31 @@
 
         <textareab4 v-model="description" ref="description" @input="setDataChanges" :counter="counter" :label="$t('app.description')"  id="content_preview" rows="12" validators="'required'"></textareab4>
 
-		<!-- TODO tags base -->
-		<inputb4 v-model="parentId" :placeholderlabel="$t('app.ParentTask')" type="number"></inputb4>
-
 		
+		<p>&nbsp;</p>
 		<label>{{ $t('app.relationTags') }}</label>
 		<landvuetag
 			ref="tags"
-			:min_limit_for_start_ajax="3"
+			:min_limit_for_start_ajax="2"
 			ajaxurl="/sp/public/tags.json"
 			:placeholder="$t('app.relationTags')"
+		/>
+		<p>&nbsp;</p>
+		<label>{{ $t('app.ParentTask') }}</label>
+		<landvuetag
+			ref="parentIdData"
+			:min_limit_for_start_ajax="2"
+			:max_tags="1"
+			:add_only_from_autocomplete="true"
+			ajaxurl="/sp/public/parenttasks.json"
+			:placeholder="$t('app.ParentTask')"
 		/>
 		<p>&nbsp;</p>
 		<p><input type="button" @click="onClickDbgBtn"></p>
 		<p>&nbsp;</p>
 		<!-- /Task tags relations-->
 
-<checkboxb4 id="isPublic" v-model="isPublic" :label="$t('app.IsPublic')"></checkboxb4>
+		<checkboxb4 id="isPublic" v-model="isPublic" :label="$t('app.IsPublic')"></checkboxb4>
 
 
 		<div class="float-right">
@@ -41,7 +49,8 @@
 		<div class="clearfix"></div>
 
         <p class="text-right my-3">
-            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
+            <button  class="btn btn-success" name="saveAndRun">{{ $t('app.SaveAndRun') }}</button>
+            <button  class="btn btn-primary" name="save">{{ $t('app.Save') }}</button>
         </p>
         
     </form>
@@ -65,8 +74,6 @@
 				codename:'',
 				//Значение description
 				description:'',
-				//Родительская задача (Задача, в которую вложена данная)
-				parentId: 0,
 				
 				//Идентификатор редактируемой задачи
 				id : 0,
@@ -128,10 +135,10 @@
              * @description Пробуем отправить форму
             */
             onSubmit(evt) {
-                evt.preventDefault();
+				evt.preventDefault();
                 if (this.allRequiredFilled()) {
 					let formInputValidator = this.$root.formInputValidator;
-					console.log(this.$root.$refs.tasks.getTaskId, this.$root.$refs.tasks);
+					//console.log(this.$root.$refs.tasks.getTaskId, this.$root.$refs.tasks);
 					this.id = this.$root.$refs.tasks.getTaskId();
 					this.codename = $('#codename').val();
 					
@@ -141,7 +148,9 @@
 						data[this.wrap(i)] = this.$data[i];
 					}
 					data[this.wrap('tags')] = JSON.stringify(this.$refs.tags.getSelectedTags() );
+					data[this.wrap('parentIdData')] = JSON.stringify(this.$refs.parentIdData.getSelectedTags() );
 					data[this.wrap('_token')] = this.token;
+					data[this.wrap('actionType')] = evt.explicitOriginalTarget.name;
 					delete data[this.wrap('counter')];
                     Rest._post(
                         data,

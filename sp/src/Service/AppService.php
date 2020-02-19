@@ -1,6 +1,9 @@
 <?php
 namespace App\Service;
 
+use App\Entity\CrnIntervals;
+use App\Entity\CrnTasks;
+use Doctrine\ORM\EntityManager;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormInterface;
@@ -595,5 +598,131 @@ class AppService
 			}
 		}
 		$oEm->flush();
+	}
+
+	/**
+	 * Останавливает текущую задачу пользователя и запускает переданную
+	 * @param CrnTask $oTask
+	 * @param int $nUserId
+	 * @param bool $bImmediatleSave = false
+	 */
+	public function runTask(CrnTasks $oTask, int $nUserId, bool $bImmediatleSave = false)
+	{
+		//Найти задачу пользователя с executing = 1
+		/** @var EntityManager $oEm */
+		$oRepository = $this->repository('App:CrnTasks');
+		$oRunnedTask = $oRepository->findOneBy(['ausersId' => $nUserId, 'isExecuted' => true]);
+		$oInterval = null;
+		if ($oRunnedTask) {
+			if ($oRunnedTask->getId() == $oTask->getId()) {
+				return;
+			}
+			//TODO test it
+			//Найти последний интервал этой задачи с start != null and end == null
+			$oRepository = $this->repository('App:CrnIntervals');
+			$oQueryBuilder = $oRepository->createQueryBuilder('i');
+			$e = $oQueryBuilder->expr();
+			$oQueryBuilder
+				->where($e->eq('i.taskId', $oRunnedTask->getId()))
+				->andWhere($e->isNotNull('i.startDatetime'))
+				->andWhere($e->isNull('i.endDatetime'))
+				->setMaxResults(1)
+				->orderBy('i.id', 'DESC');
+			//var_dump($oQueryBuilder->getQuery());die;
+
+			$aIntervals = $oQueryBuilder->getQuery()->execute();
+
+
+			//установить end задачи в текущее время
+			$oInterval = ($aIntervals[0] ?? null);
+			if ($oInterval) {
+				//Тут надо сделать по-любому так, чтобы были объекты а не массивы
+				$oInterval->setEndDatetime($this->now());
+			}
+			//установить найденной задаче executing = 0
+			$oRunnedTask->setIsExecuted(false);
+		}
+		//установить переданной задаче executing = 1
+		$oTask->setIsExecuted(true);
+
+		//Вставить в intervals запись с переданной задачей и start = now
+		$oNewInterval = new CrnIntervals();
+		$oNewInterval->setTaskId($oTask->getId());
+		$oNewInterval->setStartDatetime($this->now());
+		//TODO вернуть true если транзакция завершилась успешно
+		if ($bImmediatleSave) {
+			$this->save($oTask, $oNewInterval, $oInterval, $oRunnedTask);
+		} else {
+			$this->save($oNewInterval, $oInterval, $oRunnedTask);
+		}
+	}
+
+	/**
+	 *  Я - недоверчивый, пусть пока полежит
+	 * Останавливает текущую задачу пользователя и запускает переданную
+	 * @param CrnTask $oTask
+	 * @param int $nUserId
+	 * @param bool $bImmediatleSave = false
+	*/
+	public function _____runTask(CrnTasks $oTask, int $nUserId, bool $bImmediatleSave = false)
+	{
+		//Найти задачу пользователя с executing = 1
+		/** @var EntityManager $oEm */
+		$oEm = $this->oContainer->get('doctrine')->getManager();
+		$oQueryBuilder = $oEm->createQueryBuilder();
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder
+			->select('t.id')
+			->from('App:CrnTasks', 't')
+			->where($e->eq('t.ausersId', $nUserId))
+			->andWhere($e->eq('t.isExecuted', true))
+			->setMaxResults(1);
+
+		$aData = $oQueryBuilder->getQuery()->execute();
+		$oEm->beginTransaction();
+		if (isset($aData[0])) {
+			//TODO test it
+			$aRunnedTask = $aData[0];
+			//Найти последний интервал этой задачи с start != null and end == null
+			$oQueryBuilder = $oEm->createQueryBuilder();
+			$oQueryBuilder
+				->select('i.id')
+				->from('App:CrnIntervals', 'i')
+				->where($e->eq('i.taskId', $aRunnedTask['id']))
+				->andWhere($e->isNotNull('i.startDatetime'))
+				->andWhere($e->isNull('i.endDatetime'))
+				->setMaxResults(1)
+				->orderBy('i.id DESC');
+			$aIntervals = $oQueryBuilder->getQuery()->execute();
+			//установить end задачи в текущее время
+			if (isset($aIntervals[0])) {
+				$oQueryBuilder = $oEm->createQueryBuilder();
+				$oQueryBuilder
+					->update('App:CrnIntervals', 'i')
+					->set('i.endDatetime', $this->now())
+					->where($e->eq('i.id', $aIntervals[0]['id']));
+				$oQueryBuilder->getQuery()->execute();
+			}
+			//установить найденной задаче executing = 0
+			$oQueryBuilder = $oEm->createQueryBuilder();
+			$oQueryBuilder
+				->update('App:CrnTasks', 't')
+				->set('i.isExecuted', false)
+				->where($e->eq('t.id', $aRunnedTask['id']));
+			$oQueryBuilder->getQuery()->execute();
+		}
+		//установить переданной задаче executing = 1
+		$oTask->setIsExecuted(true);
+		if ($bImmediatleSave) {
+			$this->save($oTask);
+		}
+		//Вставить в intervals запись с переданной задачей и start = now
+		$oQueryBuilder = $oEm->createQueryBuilder();
+		$oQueryBuilder
+			//->('App:CrnTasks', 't')
+			->set('i.isExecuted', false)
+			->where($e->eq('t.id', $aRunnedTask['id']));
+		$oQueryBuilder->getQuery()->execute();
+		//вернуть true если транзакция завершилась успешно
 	}
 }
