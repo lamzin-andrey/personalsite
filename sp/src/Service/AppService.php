@@ -639,8 +639,10 @@ class AppService
 				//Тут надо сделать по-любому так, чтобы были объекты а не массивы
 				$oInterval->setEndDatetime($this->now());
 			}
-			//установить найденной задаче executing = 0
+			//установить найденой задаче executing = 0
 			$oRunnedTask->setIsExecuted(false);
+			//Обновить поля найденой задачи
+			$this->_recalculateTaskTime($oRunnedTask, $oInterval);
 		}
 		//установить переданной задаче executing = 1
 		$oTask->setIsExecuted(true);
@@ -724,5 +726,125 @@ class AppService
 			->where($e->eq('t.id', $aRunnedTask['id']));
 		$oQueryBuilder->getQuery()->execute();
 		//вернуть true если транзакция завершилась успешно
+	}
+	/**
+	 *
+	 * @param string $sRepositoryId
+	 * @param int $nEntityId
+	*/
+	public function deleteEntity(string $sRepositoryId, int $nEntityId)
+	{
+		$oRepository = $this->repository($sRepositoryId);
+		if ($oRepository) {
+			$oEntity = $oRepository->find($nEntityId);
+			if ($oEntity) {
+				$oEm = $this->oContainer->get('doctrine')->getManager();
+				/** @var EntityManager $oEm */
+				$oEm->remove($oEntity);
+				$oEm->flush();
+			}
+		}
+	}
+	/**
+	 * Обновить поля времени, затраченного на задачу
+	 * @param CrnTasks $oRunnedTask
+	 * @param CrnIntervals $oInterval последний на момент выполнения интервал задачи, его поле end ещё не сохранено в базе данных, ноу уже установлено в этом аргументе
+	*/
+	private function _recalculateTaskTime(CrnTasks $oRunnedTask, CrnIntervals $oInterval) : void
+	{
+		//Обновить поля переданной в аргументе задачи
+		$nSecondsTime = $this->_getAllTaskIntervalsAsSeconds($oRunnedTask, $oInterval);
+		$this->_setTaskTimeIntervalDisplayFields($oRunnedTask, $nSecondsTime);
+		//Обновить поля её родительской задачи
+		// - Дойти до вершины дерева
+		$this->_setParentTasksTimeIntervalsRecursive($oRunnedTask);
+	}
+	/**
+	 *
+	 * @param CrnTasks $oRunnedTask
+	*/
+	private function _setParentTasksTimeIntervalsRecursive(CrnTasks $oTask) : void
+	{
+		$nParentId = $oTask->getParentId();
+		if ($nParentId == 0) {
+			return;
+		}
+		$oRepository = $this->repository('App:CrnTasks');
+		$oParentTask = $oRepository->find($nParentId);
+		if (!$oParentTask) {
+			return;
+		}
+		//Найти родительскую задачу и все вложенные в неё зачачи (кроме аргумента, так как он может быть ещё не сохранен)
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where( $e->eq('parentId', $oTask->getParentId()), $e->neq('id', $oTask->getId()) );
+		$aTasks = $oRepository->matching($oCriteria)->toArray();
+		//суммировать totalHours, перевести в секунды
+		$nHours = $oTask->getTotalHours();
+		if ($aTasks) {
+			foreach ($aTasks as $o) {
+				$nHours += $o->getTotalHours();
+			}
+		}
+		$nSeconds = $nHours * 3600;
+		//суммировать интервалы parentTask, добавить к предыдущему
+		$nSeconds += $this->_getAllTaskIntervalsAsSeconds($oParentTask);
+		//Заполнить родительскую задачу, сохранить, вызвать _setParentTasksTimeIntervalsRecursive передав родительскую
+		$this->_setTaskTimeIntervalDisplayFields($oParentTask, $nSeconds);
+		$this->save($oParentTask);
+		$this->_setParentTasksTimeIntervalsRecursive($oParentTask);
+	}
+	/**
+	 * Получить все интервалы задачи в секундах
+	 * @param CrnTasks $oParentTask
+	 * @param ?CrnIntervals $oInterval = null "крайний" интервал задачи, может быть не передан
+	 * @return int
+	*/
+	private function _getAllTaskIntervalsAsSeconds(CrnTasks $oTask, ?CrnIntervals $oInterval = null) : int
+	{
+		$oRepository = $this->repository('App:CrnIntervals');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		if ($oInterval) {
+			$oCriteria->where($e->eq('taskId', $oTask->getId()), $e->neq('id', $oInterval->getId()));
+		} else {
+			$oCriteria->where($e->eq('taskId', $oTask->getId() ) );
+		}
+		$aIntervals = $oRepository->matching($oCriteria)->toArray();
+		$nSecondsTime = 0;
+		if ($aIntervals) {
+			/** @var CrnIntervals $o */
+			foreach ($aIntervals as $o) {
+				$nSecondsTime += ( strtotime($o->getEndDatetime()->format('Y-m-d H:i:s'))  - strtotime($o->getStartDatetime()->format('Y-m-d H:i:s')));
+			}
+		}
+		if ($oInterval) {
+			$nSecondsTime += ( strtotime($oInterval->getEndDatetime()->format('Y-m-d H:i:s'))  - strtotime($oInterval->getStartDatetime()->format('Y-m-d H:i:s')));
+		}
+		return $nSecondsTime;
+	}
+	/**
+	 * Установить поля rel... и totlaHours $oRunnedTask
+	 * @param CrnTasks $oRunnedTask
+	 * @param int $nSecondsTime время в секундах (получено сложением всех интервалов задачи)
+	*/
+	private function _setTaskTimeIntervalDisplayFields(CrnTasks $oRunnedTask, int $nSecondsTime) : void
+	{
+		$nYears = floor($nSecondsTime / (3600 * 24 * 365) );
+		$oRunnedTask->setRelYears($nYears);
+		$nMonths = $nSecondsTime - ($nYears * 3600 * 24 * 365);
+		$nMonths = floor($nMonths / (3600 * 24 * 30) );
+		$oRunnedTask->setRelMonths($nMonths);
+		$nWeeks = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30);
+		$nWeeks = floor($nWeeks / (3600 * 24 * 7) );
+		$oRunnedTask->setRelWeeks($nWeeks);
+		$nDays = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7);
+		$nDays = floor($nDays / (3600 * 24) );
+		$oRunnedTask->setRelDays($nDays);
+		$nHours = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7) - ($nDays * 3600 * 24);
+		$nHours = floor($nHours / 3600 );
+		$oRunnedTask->setRelHours($nHours);
+		$nTotalHours = floor($nSecondsTime / 3600 );
+		$oRunnedTask->setTotalHours($nTotalHours);
 	}
 }

@@ -10,12 +10,29 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TasksCronController extends AbstractController
 {
 	/** @property AppService $_oAppService */
 	private $_oAppService;
+	
+	/**
+	 * @Route("/tasks/removetask.json", name="removetask")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService $oAppService
+	*/
+	public function removetask(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		$this->_oAppService = $oAppService;
+		$nId = intval($oRequest->get('i'));
+		$oAppService->deleteEntity('App:CrnTasks', $nId );
+		return $this->_json(['id' => $nId]);
+	}
     /**
      * @Route("/tasks.json", name="tasks_list")
     */
@@ -24,10 +41,10 @@ class TasksCronController extends AbstractController
     	$this->_oAppService = $oAppService;
 
 		$aResult = [
-			'recordsTotal' => 0,
-			'recordsFiltered' => 0,
+			'recordsTotal' => $this->_getTaskListCount(),
+			'recordsFiltered' => $this->_getTaskListFiltredCount( $oRequest->get('search')['value'] ),
 			'draw' => $oRequest->get('draw'),
-			'data' => []
+			'data' => $this->_getTaskList( $oRequest->get('search')['value'] )
 		];
         return $this->_json($aResult);
     }
@@ -100,9 +117,7 @@ class TasksCronController extends AbstractController
 				}
 				$this->_setParentId($oTask, ($aFormData['parentIdData'] ?? ''));
 				$sAction = ($aFormData['actionType'] ?? '');
-				if ($sAction == 'saveAndRun') {
-					$oAppService->runTask($oTask, $this->getUser()->getId());
-				}
+				
 				$oAppService->save($oTask);
 				$this->_saveTags(($aFormData['tags'] ?? ''), $oTask->getId());
 				$aResult['id'] = $oTask->getId();
@@ -204,9 +219,10 @@ class TasksCronController extends AbstractController
 		return 0;
 	}
 	/**
+	 * Запрос для инпута выбора родительской задачи
 	 * @param string $s Подстрока для поискаs
 	 * @return array [id => name]
-	 */
+	*/
 	private function _getTasks(string $s) : array
 	{
 		$oRepository = $this->_oAppService->repository('App:CrnTasks');
@@ -220,4 +236,59 @@ class TasksCronController extends AbstractController
 		}
 		return $a;
 	}
+	/**
+	 * Запрос для списка задач
+	 * @param string $s Подстрока для поискаs
+	 * @return array [id => name]
+	*/
+	private function _getTaskList(string $s) : array
+	{
+		//TODO per page
+		$oRepository = $this->_oAppService->repository('App:CrnTasks');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
+		$aRaw = $oRepository->matching($oCriteria)->toArray();
+		$a = [];
+		//TODO try serialize array
+		$encoders = [new JsonEncoder()];
+		$normalizers = [new ObjectNormalizer()];
+		$oSerializer = new Serializer($normalizers, $encoders);
+		foreach ($aRaw as $oTag) {
+			$a[] = json_decode($oSerializer->serialize($oTag, 'json'));
+		}
+		return $a;
+	}
+
+	/**
+	 * Запрос для получения количества отфильтррованных записей
+	 * @param string $s Подстрока для поискаs
+	 * @return array [id => name]
+	 */
+	private function _getTaskListFiltredCount(string $s) : int
+	{
+		$oRepository = $this->_oAppService->repository('App:CrnTasks');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
+		$aRaw = $oRepository->matching($oCriteria)->count();
+		return $aRaw;
+	}
+
+	/**
+	 * Запрос для получения количества отфильтррованных записей
+	 * @param string $s Подстрока для поискаs
+	 * @return array [id => name]
+	 */
+	private function _getTaskListCount() : int
+	{
+		$oRepository = $this->_oAppService->repository('App:CrnTasks');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		//$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
+		$aRaw = $oRepository->matching($oCriteria)->count();
+		return $aRaw;
+	}
+
+
 }

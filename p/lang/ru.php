@@ -133,6 +133,7 @@ $aLang = [
 	'Record is last' => 'Запись самая последняя',
 	
 	'Time control' => 'Учёт времени',
+	'filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total' => '', //'отфильтровано _MAX_ записи',
 	'PortfolioVDT' => 'Портфолио (VDT)',
 	
 ];

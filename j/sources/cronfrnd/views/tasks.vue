@@ -2,25 +2,25 @@
 <div>
 <ul class="nav nav-tabs" role="tablist">
 		<li class="nav-item">
-			<a class="nav-link" 
+			<a class="nav-link active" 
 				id="tasklist-tab"
 				href="#tasklist"
 				role="tab"
 				aria-controls="home"
-				aria-selected="true">{{ $t('app.List') }}</a>
+				aria-selected="false">{{ $t('app.List') }}</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link active"
+			<a class="nav-link "
 				id="edittask-tab"
 				data-toggle="tab"
 				href="#edittask"
 				role="tab"
 				aria-controls="profile"
-				aria-selected="false"> {{ formTabTitle }} </a>
+				aria-selected="true"> {{ formTabTitle }} </a>
 		</li>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane fade " id="tasklist" role="tabpanel" aria-labelledby="list-tab">
+		<div class="tab-pane fade show active" id="tasklist" role="tabpanel" aria-labelledby="list-tab">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ $t('app.Worklist') }}</h5>
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 		
-		<div class="tab-pane fade show active" id="edittask" role="tabpanel" aria-labelledby="edit-tab">
+		<div class="tab-pane fade " id="edittask" role="tabpanel" aria-labelledby="edit-tab">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"> {{ newEdit }} </h5>
@@ -134,7 +134,7 @@
 							'class' : 'u-tablerowdragcellbg'
 						},
 						{ 
-							"data": "heading",
+							"data": "name",
 							'render' : function(data, type, row) {
 								if (row.url) {
 									return  `<a href="${row.url}" target="_blank">${data}</a>`;
@@ -263,7 +263,7 @@
 					return;
 				}
 				this.setTaskId(data.id);
-				this.$refs.taskcreateform.resetImages();
+				//this.$refs.taskcreateform.resetImages();
 				this.$refs.taskcreateform.setTaskData(data);
 				setTimeout(() => {
 					this.setDataChanges(false);
@@ -395,7 +395,7 @@
 				$('#tasklist-tab').tab('show');
 				$('#taskcreateform')[0].reset();
 				this.setTaskId(0);
-				this.$refs.taskcreateform.resetImages();
+				//this.$refs.taskcreateform.resetImages();
 				this.setDataChanges(false);
 			},
 			/**
