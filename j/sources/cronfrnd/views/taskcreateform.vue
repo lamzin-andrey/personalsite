@@ -1,5 +1,6 @@
 <template>
     <form class="user" method="POST" action="/sp/public/tasks/save.json" @submit="onSubmit" novalidate id="taskcreateform">
+		<p v-if="hiddenIsDisplayDataExists"><span :class="hiddenExecutedCss">{{ hiddenTaskState }}</span>. Затрачено: <span v-html="hiddenRelDisplayTime"></span>. Всего <span v-html="hiddenTotalHours"></span>.</p>
 		<inputb4 v-model="name" @input="setDataChanges" type="text" :placeholder="$t('app.name')" :label="$t('app.name')" id="name" validators="'required'"></inputb4>
         <inputb4 v-model="codename"  @input="setDataChanges"  type="text" :label="$t('app.codename')" :placeholder="$t('app.codename')" id="codename" ></inputb4>
 
@@ -24,8 +25,6 @@
 			ajaxurl="/sp/public/parenttasks.json"
 			:placeholder="$t('app.ParentTask')"
 		/>
-		<p>&nbsp;</p>
-		<p><input type="button" @click="onClickDbgBtn"></p>
 		<p>&nbsp;</p>
 		<!-- /Task tags relations-->
 
@@ -57,6 +56,8 @@
 
 </template>
 <script>
+	import './../../landlib/nodom/textformat';
+
 	Vue.component('landvuetag', require('./../../landlib/vue/2/tagsinput/tagsinput').default);
 	Vue.component('inputb4', require('./../../landlib/vue/2/bootstrap/4/inputb4').default);
 	Vue.component('textareab4', require('./../../landlib/vue/2/bootstrap/4/textareab4').default);
@@ -83,6 +84,16 @@
 				/** @property {Boolean} isPublic Скрывать ли на странице портфолио  */
 				isPublic : false,
 
+				hiddenExecutedCss: 'text-success',
+
+				hiddenRelDisplayTime: '<b>1</b> год, 3 месяца, 2 недели, 25 дней, 7 часов',
+
+				hiddenTotalHours: '5 часов',
+
+				hiddenTaskState: this.$t('app.Executing'),
+
+				hiddenIsDisplayDataExists : false
+
 			};
 			return _data;
 		},
@@ -107,9 +118,6 @@
 				this.name = 'a';
 				this.codename = 'b';
 				this.description = 'c';
-				this.relatedTags = '';
-				this.relatedTagsFromServer = [];
-				this.setRelatedTags();
 				this.id = 0;
 				
 				//Fix bug when edit the article more then one time...
@@ -119,15 +127,64 @@
 					codename = this.codename = data.codename;
 					this.description = data.description;
 					this.id = data.id
-					this.relatedTagsFromServer = data.relatedTags;
-					this.isPublic = parseInt(data.hide_from_productlist) ? true : false;
-					this.setRelatedTags();
+					this.isPublic = parseInt(data.isPublic) ? true : false;
+					this.setDisplayTimeValues(data);
+					this.$refs.tags.setTags(data.tags);
+					this.$refs.parentIdData.setTags(data.parentTaskData);
 				});
 				
 			},
 			/**
+			 * @description Установка полей времени и статуса выполнения задачи
+			*/
+			setDisplayTimeValues(data) {
+				this.hiddenIsDisplayDataExists = true;
+				this.hiddenExecutedCss = (data.isExecuted ? 'text-success' : '');
+				this.hiddenTaskState = (data.isExecuted ? this.$t('app.Executing') : this.$t('app.Waiting'));
+				this.hiddenRelDisplayTime = '';
+				let y = this.toi(data.relYears);
+				if (y) {
+					this.hiddenRelDisplayTime = this.pluralizeDisplayTimePart(y, 'Year') + ', ';
+				}
+				y = this.toi(data.relMonths);
+				if (y) {
+					this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Month') + ', ';
+				}
+				y = this.toi(data.relDays);
+				if (y) {
+					this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Day') + ', ';
+				}
+				y = this.toi(data.relWeeks);
+				if (y) {
+					this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Week') + ', ';
+				}
+				y = this.toi(data.relHours);
+				this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Hour');
+				this.hiddenTotalHours = this.pluralizeDisplayTimePart(this.toi(data.totalHours), 'Hour');
+			},
+			/**
+			 * @param y
+			 * @description 
+			*/
+			pluralizeDisplayTimePart(y, wordRoot, wrapValue = true) {
+				let v = this.toi(y);
+				if (wrapValue) {
+					v = `<b>${v}</b>`;
+				}
+				return v + ' ' + TextFormat.pluralize(this.toi(y), this.$t('app.one' + wordRoot), this.$t('app.two' + wordRoot + 's'), this.$t('app.five' + wordRoot + 's') );
+			},
+			/**
+			 * @param n
+			 * @description Приводим объект к целому без NaN
+			*/
+			toi(n) {
+				n  = parseInt(n);
+				n = isNaN(n) ? 0 : n;
+				return n;
+			},
+			/**
 			 * @description уведомляем приложение, что данные изменились
-			 */
+			*/
 			setDataChanges() {
 				this.$root.$refs.tasks.setDataChanges(true);
 			},
@@ -145,7 +202,9 @@
 					this.relatedTags = JSON.stringify(this.tags);
 					let data = {}, i;
 					for (i in this.$data) {
-						data[this.wrap(i)] = this.$data[i];
+						if (i.indexOf('hidden') != 0) {
+							data[this.wrap(i)] = this.$data[i];
+						}
 					}
 					data[this.wrap('tags')] = JSON.stringify(this.$refs.tags.getSelectedTags() );
 					data[this.wrap('parentIdData')] = JSON.stringify(this.$refs.parentIdData.getSelectedTags() );
@@ -202,9 +261,6 @@
 					
 				);
 			},
-			onClickDbgBtn(){
-				console.log( this.$refs.tags.getSelectedTags() );
-			}
 			
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName

@@ -6,6 +6,7 @@ use App\Entity\CrnTasks;
 use App\Form\TaskManagerType;
 use App\Service\AppService;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,29 @@ class TasksCronController extends AbstractController
 {
 	/** @property AppService $_oAppService */
 	private $_oAppService;
-	
+
+	/**
+	 * @Route("/tasks/task.json", name="task")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService $oAppService
+	 * @return
+	*/
+	public function task(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		$this->_oAppService = $oAppService;
+		$oTask = $oAppService->repository('App:CrnTasks')->find( intval($oRequest->get('id')) );
+		$aData = [];
+		if ($oTask) {
+			$encoders = [new JsonEncoder()];
+			$normalizers = [new ObjectNormalizer()];
+			$oSerializer = new Serializer($normalizers, $encoders);
+			$aData = json_decode($oSerializer->serialize([$oTask], 'json'), true)[0];
+			$aData['tags'] = $this->_loadTagsByTaskId($oTask->getId());
+			$aData['parentTaskData'] = $this->_loadParentTaskByTaskId($oTask->getParentId());
+		}
+		return $this->_json($aData);
+	}
 	/**
 	 * @Route("/tasks/removetask.json", name="removetask")
 	 * @param Request $oRequest
@@ -117,7 +140,7 @@ class TasksCronController extends AbstractController
 				}
 				$this->_setParentId($oTask, ($aFormData['parentIdData'] ?? ''));
 				$sAction = ($aFormData['actionType'] ?? '');
-				
+
 				$oAppService->save($oTask);
 				$this->_saveTags(($aFormData['tags'] ?? ''), $oTask->getId());
 				$aResult['id'] = $oTask->getId();
@@ -289,6 +312,41 @@ class TasksCronController extends AbstractController
 		$aRaw = $oRepository->matching($oCriteria)->count();
 		return $aRaw;
 	}
+	/**
+	 * @param int $nTaskId
+	 * @return array
+	*/
+	private function _loadTagsByTaskId(int $nTaskId) : array
+	{
+		$oRepository = $this->_oAppService->repository('App:CrnTaskTags');
+		$oQueryBuilder = $oRepository->createQueryBuilder('t');
+		/** @var QueryBuilder  $oQueryBuilder */
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->where( $e->eq('t.taskId', $nTaskId) );
+		$oQueryBuilder->andWhere( $e->neq('tt.id', 0) );
+		$oQueryBuilder->andWhere( $e->isNotNull('tt.id') );
+		$oQueryBuilder->leftJoin('App:CrnTags', 'tt', 'WITH', $e->eq('t.tagId', 'tt.id'));
+		$oQueryBuilder->select('tt.id, tt.name');
 
+		$aRaw = $oQueryBuilder->getQuery()->execute();
+
+		return $aRaw;
+	}
+	/**
+	 *
+	 * @param int $nTaskId
+	 * @return array
+	*/
+	private function _loadParentTaskByTaskId(int $nTaskId) : array
+	{
+		$oRepository = $this->_oAppService->repository('App:CrnTasks');
+		$oQueryBuilder = $oRepository->createQueryBuilder('t');
+		/** @var QueryBuilder  $oQueryBuilder */
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->where( $e->eq('t.id', $nTaskId) );
+		$oQueryBuilder->select('t.id, t.name');
+		$aRaw = $oQueryBuilder->getQuery()->execute();
+		return $aRaw;
+	}
 
 }

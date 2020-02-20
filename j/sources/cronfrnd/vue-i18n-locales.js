@@ -143,6 +143,30 @@ var locales = {
 			//tasks form other
 			'IsPublic' : 'Сделать данные задачи доступными другим пользователям',
             'Time_on_dev_total' : 'Всего часов',
+            
+            'oneYear' : 'год',
+            'twoYears' : 'года',
+            'fiveYears' : 'лет',
+
+            'oneMonth' : 'месяц',
+            'twoMonths' : 'месяца',
+            'fiveMonths' : 'месяцев',
+
+            'oneWeek' : 'неделя',
+            'twoWeeks' : 'недели',
+            'fiveWeeks' : 'недель',
+
+            'oneDay' : 'день',
+            'twoDays' : 'дня',
+            'fiveDays' : 'дней',
+
+            'oneHour' : 'час',
+            'twoHours' : 'часа',
+            'fiveHours' : 'часов',
+
+            
+
+
             ParentTask: 'Вложена в задачу',
             'name' : 'Наименование задачи',
             'OuterLink' : 'Внешняя страница работы (например, googleplay или github)',
@@ -152,7 +176,9 @@ var locales = {
 			'codename' : 'Кодовое имя для удобного поиска',
 			'description' : 'Описание',
 			'SaveAndRun' : 'Сохранить и запустить',
-			'HeadingPortfolio' : 'Наименование задачи'
+			'Executing' : 'Выполняется',
+			'Waiting' : 'Не выполняется',
+			'HeadingTask' : 'Наименование задачи'
         }
     }
 }

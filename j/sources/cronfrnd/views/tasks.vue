@@ -35,7 +35,7 @@
 						<tfoot>
 							<tr>
 								<th class="u-tabledragcolumn-head"></th>
-								<th>{{ $t('app.HeadingPortfolio') }}</th>
+								<th>{{ $t('app.HeadingTask') }}</th>
 								<th>{{ $t('app.Operations') }}</th>
 							</tr>
 						</tfoot>
