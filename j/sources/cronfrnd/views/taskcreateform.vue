@@ -58,7 +58,7 @@
 <script>
 	import './../../landlib/nodom/textformat';
 
-	Vue.component('landvuetag', require('./../../landlib/vue/2/tagsinput/tagsinput').default);
+	
 	Vue.component('inputb4', require('./../../landlib/vue/2/bootstrap/4/inputb4').default);
 	Vue.component('textareab4', require('./../../landlib/vue/2/bootstrap/4/textareab4').default);
 	Vue.component('checkboxb4', require('./../../landlib/vue/2/bootstrap/4/checkboxb4').default);

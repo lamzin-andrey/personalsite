@@ -1,5 +1,6 @@
 <template>
 <div>
+
 <ul class="nav nav-tabs" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link active" 
@@ -23,6 +24,23 @@
 		<div class="tab-pane fade show active" id="tasklist" role="tabpanel" aria-labelledby="list-tab">
 			<div class="card">
 				<div class="card-body">
+					<p>&nbsp;</p>
+					<label>{{ $t('app.searchTags') }}</label>
+					<div>
+						<div class="float-left">
+							<landvuetag
+								ref="searchtags"
+								:min_limit_for_start_ajax="2"
+								ajaxurl="/sp/public/tags.json"
+								:placeholder="$t('app.relationTags')"
+							/>
+						</div>
+						<div class="float-left">
+							<button @click="onClickSaveUserTags" class="btn btn-primary">{{ $t('app.Save') }}</button>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<p>&nbsp;</p>
 					<h5 class="card-title">{{ $t('app.Worklist') }}</h5>
 					<table id="taskstable" class="display table table-bordered" style="width:100%">
 						<thead>
@@ -64,6 +82,7 @@
 	//Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
 	import DataTableMoveRecord from '../classes/datatablemoverecord';
 
+	Vue.component('landvuetag', require('./../../landlib/vue/2/tagsinput/tagsinput').default);
     Vue.component('taskcreateform', require('./taskcreateform.vue').default);
 
     export default {
@@ -102,6 +121,12 @@
 		},
         //
         methods:{
+			/**
+			 * @description инициализация DataTables с данными задач
+			*/
+			onClickSaveUserTags() {
+				alert('Will save');
+			},
 			/**
 			 * @description инициализация DataTables с данными задач
 			*/

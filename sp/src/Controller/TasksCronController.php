@@ -21,6 +21,9 @@ class TasksCronController extends AbstractController
 	/** @property AppService $_oAppService */
 	private $_oAppService;
 
+
+
+
 	/**
 	 * @Route("/tasks/move.json", name="tasks_move")
 	 * @param Request $oRequest
@@ -168,7 +171,6 @@ class TasksCronController extends AbstractController
     public function index(Request $oRequest, AppService $oAppService)
     {
     	$this->_oAppService = $oAppService;
-
 		$aResult = [
 			'recordsTotal' => $this->_getTaskListCount(),
 			'recordsFiltered' => $this->_getTaskListFiltredCount( $oRequest->get('search')['value'] ),

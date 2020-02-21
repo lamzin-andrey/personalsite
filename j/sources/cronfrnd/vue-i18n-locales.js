@@ -178,6 +178,7 @@ var locales = {
 			'SaveAndRun' : 'Сохранить и запустить',
 			'Executing' : 'Выполняется',
 			'Waiting' : 'Не выполняется',
+			'searchTags' : 'Теги для поиска',
 			'HeadingTask' : 'Наименование задачи'
         }
     }
