@@ -21,6 +21,42 @@ class TasksCronController extends AbstractController
 	/** @property AppService $_oAppService */
 	private $_oAppService;
 
+
+	/**
+	 * @Route("/tasks/reorder.json", name="tasks_reorder")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService $oAppService
+	 * @param $
+	 * @return
+	*/
+	public function reorder(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		$this->_oAppService = $oAppService;
+		$aResult = [];
+		if (!$this->_accessControl()) {
+			$aResult['msg'] = $t->trans('You have not access to this task');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		$a = $oRequest->get('a', []);
+		$oRepository = $oAppService->repository('App:CrnTasks');
+		$oQueryBuilder = $oRepository->createQueryBuilder('t');
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->select('MIN(t.delta) AS m')
+			->where($e->in('t.id', $a));
+		$aMinInfo = $oQueryBuilder->getQuery()->getSingleResult();
+		$nMin = ($aMinInfo['m'] ?? 0);
+		foreach ($a as $nId) {
+			$oQueryBuilder = $oRepository->createQueryBuilder('t');
+			$oQueryBuilder->update()->set('t.delta', $nMin)
+						  ->where( $e->eq('t.id', $nId) )
+						  ->getQuery()->execute();
+			$nMin++;
+		}
+		return $this->_json($aResult);
+	}
+
 	/**
 	 * @Route("/tasks/task.json", name="task")
 	 * @param Request $oRequest
@@ -141,6 +177,8 @@ class TasksCronController extends AbstractController
 				$this->_setParentId($oTask, ($aFormData['parentIdData'] ?? ''));
 				$sAction = ($aFormData['actionType'] ?? '');
 
+				$oAppService->save($oTask);
+				$oTask->setDelta( $oTask->getId() );
 				$oAppService->save($oTask);
 				$this->_saveTags(($aFormData['tags'] ?? ''), $oTask->getId());
 				$aResult['id'] = $oTask->getId();
@@ -271,6 +309,7 @@ class TasksCronController extends AbstractController
 		$oCriteria = Criteria::create();
 		$e = Criteria::expr();
 		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
+		$oCriteria->orderBy(['delta' => 'ASC']);
 		$aRaw = $oRepository->matching($oCriteria)->toArray();
 		$a = [];
 		//TODO try serialize array

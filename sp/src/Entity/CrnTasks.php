@@ -126,6 +126,13 @@ class CrnTasks
      */
     private $ausersId;
 
+	/**
+	 * @var int|null
+	 *
+	 * @ORM\Column(name="delta", type="integer", nullable=true, options={"comment"="Позиция"})
+	 */
+	private $delta;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -292,6 +299,17 @@ class CrnTasks
 
         return $this;
     }
+
+	public function getDelta(): ?int
+	{
+		return $this->delta;
+	}
+
+	public function setDelta(?int $n): self
+	{
+		$this->delta = $n;
+		return $this;
+	}
 
     public function getIsPublic(): ?bool
     {
