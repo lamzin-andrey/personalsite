@@ -10,3 +10,6 @@
 .u-tabledragcolumn-head {
 	background-color:#FFF!important;
 }
+.u-tablecell-name {
+	max-width: 550px;
+}

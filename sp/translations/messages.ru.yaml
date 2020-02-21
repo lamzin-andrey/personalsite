@@ -76,3 +76,6 @@ Mail complete body: |
   PSD файла в HTML и CSS верстку на сайте %siteName% </p>
   <p>Вы можете скачать результат конвертации <a href="%sDwnLink%">здесь</a>.</p>
   <p>Или для этого можно пройти по <a href="%sAuthLink%">ссылке</a></p>
+Record is top: Запись первая
+Record is last: Запись последняя
+Unknown error: Неизвестная ошибка

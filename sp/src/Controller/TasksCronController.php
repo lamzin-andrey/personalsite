@@ -21,7 +21,77 @@ class TasksCronController extends AbstractController
 	/** @property AppService $_oAppService */
 	private $_oAppService;
 
+	/**
+	 * @Route("/tasks/move.json", name="tasks_move")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService $oAppService
+	 * @return Response
+	*/
+	public function move(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+	{
+		$this->_oAppService = $oAppService;
+		$aResult = [];
+		if (!$this->_accessControl()) {
+			$aResult['msg'] = $t->trans('You have not access to this task');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		$nId = intval($oRequest->get('id') );
+		$sDirect = trim( strip_tags($oRequest->get('d')) );
+		$aResult = [
+			'srcId' => $nId,
+		];
+		if ($nId && ($sDirect == 'u' || $sDirect == 'd')) {
+			//$nPos = dbvalue('SELECT delta FROM ' . $this->table . ' WHERE id = ' . $nId . ' LIMIT 1');
+			$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+			$e = $oQueryBuilder->expr();
+			$oQueryBuilder->select('t.delta');
+			$aDelta = $oQueryBuilder->where( $e->eq('t.id', $nId) )->getQuery()->getSingleResult();
+			$nPos = intval($aDelta['delta']);
 
+			$sOperation = $sDirect == 'd' ? '>=' : '<=';
+			$sDirection = $sDirect == 'd' ? 'ASC' : 'DESC';
+			//$aRows = query('SELECT id, url, heading, delta FROM ' . $this->table .
+			// ' WHERE delta ' . $sOperation .  ' ' . $nPos . ' AND is_deleted != 1 ' .
+			// ' ORDER BY '. $this->orderField . ' ' . $sDirection  . ' LIMIT 2', $nRows);
+			$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+			$oQueryBuilder->where( 't.delta ' . $sOperation .  ' ' . $nPos );
+			$oQueryBuilder->select('t.id, t.name, t.delta');
+			$oQueryBuilder->orderBy('t.delta', $sDirection);
+			$oQueryBuilder->setMaxResults(2);
+
+			$aRows = $oQueryBuilder->getQuery()->getResult();
+
+			//var_dump($aRows);die;
+
+			$nRows = count($aRows);
+			if ($nRows == 2) {
+				$aRows = array_column($aRows, null, 'id');
+				$aMovingRow = ($aRows[$nId] ?? []);
+				unset($aRows[$nId]);
+				$aRow = current($aRows);//it next or prew row
+				if ($aMovingRow['delta'] == $aRow['delta']) {
+					if ($sDirect == 'd') {
+						$aMovingRow['delta']++;
+					} else {
+						$aRow['delta']++;
+					}
+				}
+				$this->_swapRecords($nId, $aMovingRow['delta'], $aRow['id'], $aRow['delta']);
+				$aResult['newRec'] = $aRow;
+				return $this->_json($aResult);
+			} else {
+				//TODO localize
+				$aResult['msg'] = $t->trans('Record is ' . ($sDirect == 'd' ? 'last' : 'top'));
+				$aResult['status'] = 'error';
+				return $this->_json($aResult);
+			}
+		}
+		$aResult['msg'] = $t->trans('Unknown error');
+		$aResult['status'] = 'error';
+		return $this->_json($aResult);
+	}
 	/**
 	 * @Route("/tasks/reorder.json", name="tasks_reorder")
 	 * @param Request $oRequest
@@ -103,7 +173,7 @@ class TasksCronController extends AbstractController
 			'recordsTotal' => $this->_getTaskListCount(),
 			'recordsFiltered' => $this->_getTaskListFiltredCount( $oRequest->get('search')['value'] ),
 			'draw' => $oRequest->get('draw'),
-			'data' => $this->_getTaskList( $oRequest->get('search')['value'] )
+			'data' => $this->_getTaskList( $oRequest->get('search')['value'], intval($oRequest->get('start')), intval( $oRequest->get('length', $this->getParameter('app.tasks_per_page') ) ) )
 		];
         return $this->_json($aResult);
     }
@@ -300,9 +370,11 @@ class TasksCronController extends AbstractController
 	/**
 	 * Запрос для списка задач
 	 * @param string $s Подстрока для поискаs
+	 * @param int $nOffset
+	 * @param int $nLength
 	 * @return array [id => name]
 	*/
-	private function _getTaskList(string $s) : array
+	private function _getTaskList(string $s, int $nOffset, int $nLength) : array
 	{
 		//TODO per page
 		$oRepository = $this->_oAppService->repository('App:CrnTasks');
@@ -310,6 +382,8 @@ class TasksCronController extends AbstractController
 		$e = Criteria::expr();
 		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
 		$oCriteria->orderBy(['delta' => 'ASC']);
+		$oCriteria->setFirstResult($nOffset);
+		$oCriteria->setMaxResults( $nLength );
 		$aRaw = $oRepository->matching($oCriteria)->toArray();
 		$a = [];
 		//TODO try serialize array
@@ -387,5 +461,27 @@ class TasksCronController extends AbstractController
 		$aRaw = $oQueryBuilder->getQuery()->execute();
 		return $aRaw;
 	}
-
+	/**
+	 *  Меняет позиции двух записей
+	 * @param int $nId1
+	 * @param int $nPos1
+	 * @param int $nId2
+	 * @param int $nPos2
+	 */
+	private function _swapRecords(int $nId1, int $nPos1, int $nId2, int $nPos2)
+	{
+		//$sql = 'UPDATE ' . $this->table . ' SET delta = ' . $nPos2 . ' WHERE id = ' . $nId1;
+		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->update();
+		$oQueryBuilder->set('t.delta', $nPos2);
+		$oQueryBuilder->where( $e->eq('t.id', $nId1) );
+		$oQueryBuilder->getQuery()->execute();
+		//$sql = 'UPDATE ' . $this->table . ' SET delta = ' . $nPos1 . ' WHERE id = ' . $nId2;
+		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+		$oQueryBuilder->update();
+		$oQueryBuilder->set('t.delta', $nPos1);
+		$oQueryBuilder->where( $e->eq('t.id', $nId2) );
+		$oQueryBuilder->getQuery()->execute();
+	}
 }

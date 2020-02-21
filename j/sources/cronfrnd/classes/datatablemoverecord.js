@@ -4,7 +4,7 @@
 */
 class DataTableMoveRecord {
 	constructor(sTableId, sUrl, context) {
-		/** @property context Ссылка на объект приложения. Неолбходимы его методы _post, alert, defaultFailSendFormListener */
+		/** @property context Ссылка на объект приложения. Неолбходимы его методы alert, defaultFailSendFormListener */
 		this.context = context;
 		/** @property {String} sTableId  - идентификатор таблицы DataTables */
 		this.sTableId = sTableId;
@@ -28,7 +28,7 @@ class DataTableMoveRecord {
 		if (nRow == 0) {
 			sHtml += `
 			<div class="form-group d-md-inline d-block ">
-				<button data-id="${nId}" type="button" class="btn btn-primary j-up-btn">
+				<button data-id="${nId}" type="button" class="j-up-btn mt-2 btn btn-primary">
 					<i data-id="${nId}" class="fas fa-arrow-up fa-sm"></i>
 				</button>
 			</div>`;
@@ -36,7 +36,7 @@ class DataTableMoveRecord {
 		if (nRow == (oSettings._iDisplayLength - 1)) {
 			sHtml += `
 			<div class="form-group d-md-inline d-block ">
-				<button data-id="${nId}" type="button" class="btn btn-primary j-down-btn">
+				<button data-id="${nId}" type="button" class="j-down-btn mt-2 btn btn-primary">
 					<i data-id="${nId}" class="fas fa-arrow-down fa-sm"></i>
 				</button>
 			</div>`;
@@ -91,9 +91,9 @@ class DataTableMoveRecord {
 			jCell = jRow.find('td')[1];
 			if (jCell) {
 				jCell = $(jCell);
-				if (data.newRec.url) {
+				if (data.newRec.name) {
 					jCell.html('');
-					jCell.append( $(`<a href="${data.newRec.url}" target="nblank">${data.newRec.heading}</a>`) );
+					jCell.append( $('<span>' + data.newRec.name + '</span>') );
 				} else {
 					jCell.text(data.newRec.heading);
 				}
@@ -128,7 +128,7 @@ class DataTableMoveRecord {
 			$('#spin' + id).toggleClass('d-none');
 			this.bIsMoveRecordRequestSended = 1;
 			this.bIsMoveRecordRequestSendedRecId = id;
-			this.context._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, this.sUrl, (a, b, c) => { this.onFailMoveRecord(a, b, c); });
+			Rest._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, this.sUrl, (a, b, c) => { this.onFailMoveRecord(a, b, c); });
 		}
 	}
 }

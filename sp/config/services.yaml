@@ -29,6 +29,8 @@ parameters:
     app.yacache: "%env(resolve:YANDEX_CACHE)%"
     app.yasecretkey: "%env(resolve:YANDEX_SECRET_KEY)%"
 
+    #crn friend section
+    app.tasks_per_page: 10
 
 services:
     # default configuration for services in *this* file

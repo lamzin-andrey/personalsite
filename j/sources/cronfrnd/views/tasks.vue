@@ -140,19 +140,20 @@
 									return  `<a href="${row.url}" target="_blank">${data}</a>`;
 								}
 								return data;
-							}
+							},
+							'class' : 'u-tablecell-name'
 						},
 						{
 							"data": "id",
 							'render' : function(data, type, row, meta) {
 								let r =  `
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
+										<button data-id="${data}" type="button" class="j-edit-btn btn btn-primary  mt-2">
 											<i data-id="${data}" class="fas fa-edit fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn">
+										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn mt-2">
 											<i data-id="${data}" class="fas fa-trash fa-sm"></i>
 										</button>
 									</div>`;
