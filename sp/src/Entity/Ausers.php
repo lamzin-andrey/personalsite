@@ -224,8 +224,15 @@ class Ausers implements UserInterface
      * @var bool
      *
      * @ORM\Column(name="is_subscribed", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен получать письма от ЛАНд-а"})
-     */
+    */
     private $isSubscribed = '0';
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="bsettings", type="integer", nullable=false, options={"comment"="Настройки типа bool. Хранятся в битах числа. Бит 0: бот в чате Полиглот 0 - выключен, 1 - включен","default"="0"})
+    */
+    private $bsettings = 0;
 
     public function getId(): ?int
     {
@@ -300,6 +307,18 @@ class Ausers implements UserInterface
     public function setIsDeleted(?int $isDeleted): self
     {
         $this->isDeleted = $isDeleted;
+
+        return $this;
+    }
+    
+    public function getBSettings(): ?int
+    {
+        return $this->bsettings;
+    }
+
+    public function setBSettings(?int $v): self
+    {
+        $this->bsettings = $v;
 
         return $this;
     }
