@@ -98,12 +98,26 @@ class CrnTasks
      */
     private $relHours;
 
+	/**
+	 * @var int|null
+	 *
+	 * @ORM\Column(name="rel_minutes", type="integer", nullable=true, options={"comment"="количество затраченных минут после количества часов"})
+	 */
+	private $relMinutes;
+
     /**
      * @var int|null
      *
      * @ORM\Column(name="total_hours", type="integer", nullable=true, options={"comment"="Общее количество затраченных часов"})
      */
     private $totalHours;
+
+	/**
+	 * @var int|null
+	 *
+	 * @ORM\Column(name="total_seconds", type="integer", nullable=true, options={"comment"="Общее количество затраченных секунд"})
+	 */
+	private $totalSeconds;
 
     /**
      * @var bool|null
@@ -276,6 +290,17 @@ class CrnTasks
         return $this;
     }
 
+	public function getRelMinutes(): ?int
+	{
+		return $this->relMinutes;
+	}
+
+	public function setRelMinutes(?int $rel): self
+	{
+		$this->relMinutes = $rel;
+		return $this;
+	}
+
     public function getTotalHours(): ?int
     {
         return $this->totalHours;
@@ -287,6 +312,18 @@ class CrnTasks
 
         return $this;
     }
+
+	public function getTotalSeconds(): ?int
+	{
+		return $this->totalSeconds;
+	}
+
+	public function setTotalSeconds(?int $n): self
+	{
+		$this->totalSeconds = $n;
+		return $this;
+	}
+
 
     public function getIsExecuted(): ?bool
     {

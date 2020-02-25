@@ -200,10 +200,18 @@
 						{
 							"data": "id",
 							'render' : function(data, type, row, meta) {
-								let r =  `
+								let stateBtnClass = (row.isExecuted ? 'btn-primary' : 'btn-success'),
+									stateBtnIcon = (row.isExecuted ? 'fa-pause' : 'fa-play'),
+									stateBtnId = (row.isExecuted ? 'j-stop-btn' : 'j-run-btn'),
+									r =  `
 									<div class="form-group d-md-inline d-block ">
 										<button data-id="${data}" type="button" class="j-edit-btn btn btn-primary  mt-2">
 											<i data-id="${data}" class="fas fa-edit fa-sm"></i>
+										</button>
+									</div>
+									<div class="form-group d-md-inline d-block ">
+										<button data-id="${data}" type="button" class="${stateBtnId} btn ${stateBtnClass}  mt-2">
+											<i data-id="${data}" class="fas ${stateBtnIcon} fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
@@ -233,6 +241,12 @@
 					});
 					$(id + ' .j-rm-btn').click((evt) => {
 						this.onClickRemoveTask(evt);
+					});
+					$(id + ' .j-run-btn').click((evt) => {
+						this.onClickRunStopTask(evt);
+					});
+					$(id + ' .j-stop-btn').click((evt) => {
+						this.onClickRunStopTask(evt);
 					});
 					self.oDataTableMoveRecord.setListeners();
 				}).on('processing', () => {
@@ -383,6 +397,94 @@
 				this.$root.alert($t('DefaultFail'));
 			},
 			/**
+			 * @description Обработка клика на кнопке запуска или остановке задачи
+			 * @param {Number} id 
+			*/
+			onClickRunStopTask(evt) {
+				if ($(evt.currentTarget).hasClass('j-run-btn')) {
+					this.onClickRunTask(evt);
+				} else {
+					this.onClickStopTask(evt);
+				}
+			},
+			/**
+			 * @description Обработка клика на кнопке запуска задачи
+			 * @param {Number} id 
+			*/
+			onClickRunTask(evt) {
+				if (this.requestedTaskId > 0) {
+					this.alert(this.$t('app.Other_product_requested_for_execute'));
+					return;
+				}
+				this.requestedTaskId = $(evt.target).attr('data-id');
+				$('#spin' + this.requestedTaskId).toggleClass('d-none');
+				Rest._token = this.listtoken;
+				Rest._post({id: this.requestedTaskId}, (d) => {this.onSuccessRunTask(d);}, `${this.serverRoot}/tasks/taskrun.json`, (a, b, c) => {this.onFailRunTask(a, b, c);} );
+			},
+			/**
+			 * @description Success run task
+			 * @param {Object} data
+			*/
+			onSuccessRunTask(data) {
+				if (!this.onFailRunTask(data)) {
+					return;
+				}
+				//Данные для сервера
+				//stoppedTask = 0 | 11
+				//runnedTask = 1
+				if (data.stoppedTask) {
+					this.setTaskViewStopped(data.stoppedTask);
+				}
+				$('button[data-id=' + data.runnedTask + '].j-run-btn').first()
+					.removeClass('btn-success').addClass('btn-primary')
+					.removeClass('j-run-btn').addClass('j-stop-btn')
+					.find('i').first().removeClass('fa-play').addClass('fa-pause');
+				
+			},
+			/**
+			 * @description Failed runtask
+			 * @return Boolean
+			*/
+			onFailRunTask(data, b ,c) {
+				$('#spin' + this.requestedTaskId).toggleClass('d-none');
+				this.requestedTaskId = 0;
+				return this.$root.defaultFailSendFormListener(data, b, c);
+			},
+			/**
+			 * @description Обработка клика на кнопке остановки задачи
+			 * @return Boolean
+			*/
+			onClickStopTask(evt) {
+				if (this.requestedTaskId > 0) {
+					this.alert(this.$t('app.Other_product_requested_for_execute'));
+					return;
+				}
+				this.requestedTaskId = $(evt.target).attr('data-id');
+				$('#spin' + this.requestedTaskId).toggleClass('d-none');
+				Rest._post({id: this.requestedTaskId}, (d) => {this.onSuccessStopTask(d);}, `${this.serverRoot}/tasks/taskstop.json`, (a, b, c) => {this.onFailRunTask(a, b, c);} );
+			},
+			/**
+			 * @description Success stop task
+			 * @param {Object} data
+			*/
+			onSuccessStopTask(data) {
+				if (!this.onFailRunTask(data)) {
+					return;
+				}
+				if (data.stoppedTask) {
+					this.setTaskViewStopped(data.stoppedTask);
+				}
+			},
+			/**
+			 * @description Установить запущенной задаче вид Доступна для запуска
+			*/
+			setTaskViewStopped(taskId) {
+				$('button[data-id=' + taskId + '].j-stop-btn').first()
+					.removeClass('btn-primary').addClass('btn-success')
+					.removeClass('j-stop-btn').addClass('j-run-btn')
+					.find('i').first().removeClass('fa-pause').addClass('fa-play');
+			},
+			/**
 			 * @description Установить id редактируемой категории
 			 * @param {Number} id 
 			*/
@@ -465,7 +567,7 @@
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
 			this.serverRoot = '/sp/public';
-			Rest._token = this.token;
+			Rest._token = this.listtoken;
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();

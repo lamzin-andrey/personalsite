@@ -113,6 +113,7 @@ var locales = {
 			//Portfolio list
 			'Worklist' : 'Задачи',
 			Other_product_requested_for_edit : 'Уже запрошены для редактирования данные другой задачи',
+			Other_product_requested_for_execute : 'Уже запрошен запуск другой задачи',
 			Are_You_Sure_drop_Product : 'Вы действительно хотите удалить задачу',
 
 			//treeview
@@ -163,6 +164,10 @@ var locales = {
             'oneHour' : 'час',
             'twoHours' : 'часа',
             'fiveHours' : 'часов',
+
+            'oneMinute' : 'минута',
+            'twoMinutes' : 'минуты',
+            'fiveMinutes' : 'минут',
 
             
 

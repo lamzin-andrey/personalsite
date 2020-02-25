@@ -605,9 +605,13 @@ class AppService
 	 * @param CrnTask $oTask
 	 * @param int $nUserId
 	 * @param bool $bImmediatleSave = false
-	 */
-	public function runTask(CrnTasks $oTask, int $nUserId, bool $bImmediatleSave = false)
+	 * @return StdClass {stoppedTask:int, runnedTask:int}
+	*/
+	public function runTask(CrnTasks $oTask, int $nUserId, bool $bImmediatleSave = false) : \StdClass
 	{
+		$oResult = new \StdClass();
+		$oResult->stoppedTask = 0;
+		$oResult->runnedTask = $oTask->getId();
 		//Найти задачу пользователя с executing = 1
 		/** @var EntityManager $oEm */
 		$oRepository = $this->repository('App:CrnTasks');
@@ -615,34 +619,10 @@ class AppService
 		$oInterval = null;
 		if ($oRunnedTask) {
 			if ($oRunnedTask->getId() == $oTask->getId()) {
-				return;
+				return $oResult;
 			}
-			//TODO test it
-			//Найти последний интервал этой задачи с start != null and end == null
-			$oRepository = $this->repository('App:CrnIntervals');
-			$oQueryBuilder = $oRepository->createQueryBuilder('i');
-			$e = $oQueryBuilder->expr();
-			$oQueryBuilder
-				->where($e->eq('i.taskId', $oRunnedTask->getId()))
-				->andWhere($e->isNotNull('i.startDatetime'))
-				->andWhere($e->isNull('i.endDatetime'))
-				->setMaxResults(1)
-				->orderBy('i.id', 'DESC');
-			//var_dump($oQueryBuilder->getQuery());die;
-
-			$aIntervals = $oQueryBuilder->getQuery()->execute();
-
-
-			//установить end задачи в текущее время
-			$oInterval = ($aIntervals[0] ?? null);
-			if ($oInterval) {
-				//Тут надо сделать по-любому так, чтобы были объекты а не массивы
-				$oInterval->setEndDatetime($this->now());
-			}
-			//установить найденой задаче executing = 0
-			$oRunnedTask->setIsExecuted(false);
-			//Обновить поля найденой задачи
-			$this->_recalculateTaskTime($oRunnedTask, $oInterval);
+			$this->stopTask($oRunnedTask, $oInterval);
+			$oResult->stoppedTask = $oRunnedTask->getId();
 		}
 		//установить переданной задаче executing = 1
 		$oTask->setIsExecuted(true);
@@ -657,6 +637,7 @@ class AppService
 		} else {
 			$this->save($oNewInterval, $oInterval, $oRunnedTask);
 		}
+		return $oResult;
 	}
 
 	/**
@@ -779,14 +760,13 @@ class AppService
 		$e = Criteria::expr();
 		$oCriteria->where( $e->eq('parentId', $oTask->getParentId()), $e->neq('id', $oTask->getId()) );
 		$aTasks = $oRepository->matching($oCriteria)->toArray();
-		//суммировать totalHours, перевести в секунды
-		$nHours = $oTask->getTotalHours();
+
+		$nSeconds = $oTask->getTotalHours();
 		if ($aTasks) {
 			foreach ($aTasks as $o) {
-				$nHours += $o->getTotalHours();
+				$nSeconds += $o->getTotalSeconds();
 			}
 		}
-		$nSeconds = $nHours * 3600;
 		//суммировать интервалы parentTask, добавить к предыдущему
 		$nSeconds += $this->_getAllTaskIntervalsAsSeconds($oParentTask);
 		//Заполнить родительскую задачу, сохранить, вызвать _setParentTasksTimeIntervalsRecursive передав родительскую
@@ -844,7 +824,49 @@ class AppService
 		$nHours = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7) - ($nDays * 3600 * 24);
 		$nHours = floor($nHours / 3600 );
 		$oRunnedTask->setRelHours($nHours);
+		$nMinutes = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7) - ($nDays * 3600 * 24) - ($nHours * 3600);
+		$nMinutes = floor($nMinutes / 60 );
+		$oRunnedTask->setRelMinutes($nMinutes);
 		$nTotalHours = floor($nSecondsTime / 3600 );
 		$oRunnedTask->setTotalHours($nTotalHours);
+		$oRunnedTask->setTotalSeconds($nSecondsTime);
+	}
+	/**
+	 * Остановить задачу
+	 * @param CrnTasks $oRunnedTask
+	 * @param ?CrnIntervals &$oInterval
+	 * @param bool $bImmedateSave = false
+	*/
+	public function stopTask(CrnTasks $oRunnedTask, ?CrnIntervals &$oInterval, bool $bImmedateSave = false) : void
+	{
+		//TODO test it
+		//Найти последний интервал этой задачи с start != null and end == null
+		$oRepository = $this->repository('App:CrnIntervals');
+		$oQueryBuilder = $oRepository->createQueryBuilder('i');
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder
+			->where($e->eq('i.taskId', $oRunnedTask->getId()))
+			->andWhere($e->isNotNull('i.startDatetime'))
+			->andWhere($e->isNull('i.endDatetime'))
+			->setMaxResults(1)
+			->orderBy('i.id', 'DESC');
+		//var_dump($oQueryBuilder->getQuery());die;
+
+		$aIntervals = $oQueryBuilder->getQuery()->execute();
+
+
+		//установить end задачи в текущее время
+		$oInterval = ($aIntervals[0] ?? null);
+		if ($oInterval) {
+			//Тут надо сделать по-любому так, чтобы были объекты а не массивы
+			$oInterval->setEndDatetime($this->now());
+		}
+		//установить найденой задаче executing = 0
+		$oRunnedTask->setIsExecuted(false);
+		//Обновить поля найденой задачи
+		$this->_recalculateTaskTime($oRunnedTask, $oInterval);
+		if ($bImmedateSave) {
+			$this->save($oRunnedTask, $oInterval);
+		}
 	}
 }

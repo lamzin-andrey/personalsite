@@ -19,6 +19,81 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TasksCronController extends AppBaseController
 {
 	/**
+	 * @Route("/tasks/taskstop.json", name="taskstop")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService $oAppService
+	 * @return Response
+	 */
+	public function taskstop(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+	{
+		$this->_oAppService = $oAppService;
+		$aResult = [];
+		if (!$this->_accessControl()) {
+			$aResult['msg'] = $t->trans('You have not access to this task');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		if (!$this->isCsrfTokenValid('list', $oRequest->get('_token'))) {
+			$aResult['msg'] = $t->trans('Invalid token');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		$nId = $oRequest->get('id');
+		if (!$nId) {
+			$aResult['msg'] = $t->trans('Task id not found');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		$oTask = $oAppService->repository('App:CrnTasks')->find($nId);
+		if (!$oTask) {
+			$aResult['msg'] = $t->trans('Task  not found');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		$oInterval = null;
+		$oAppService->stopTask($oTask, $oInterval, true);
+		$aResult['stoppedTask'] = $oTask->getId();
+		return $this->_json($aResult);
+	}
+	/**
+	 * @Route("/tasks/taskrun.json", name="taskrun")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param AppService $oAppService
+	 * @return Response
+	*/
+	public function taskrun(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+	{
+	    $this->_oAppService = $oAppService;
+	    $aResult = [];
+	    if (!$this->_accessControl()) {
+	        $aResult['msg'] = $t->trans('You have not access to this task');
+	        $aResult['status'] = 'error';
+	        return $this->_json($aResult);
+	    }
+	    if (!$this->isCsrfTokenValid('list', $oRequest->get('_token'))) {
+			$aResult['msg'] = $t->trans('Invalid token');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+	    $nId = $oRequest->get('id');
+	    if (!$nId) {
+			$aResult['msg'] = $t->trans('Task id not found');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+	    $oTask = $oAppService->repository('App:CrnTasks')->find($nId);
+		if (!$oTask) {
+			$aResult['msg'] = $t->trans('Task  not found');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		$oResult = $oAppService->runTask($oTask, $this->getUserId(), true);
+		$aResult = (array)$oResult;
+		return $this->_json($aResult);
+	}
+	/**
 	 * @Route("/tasks/move.json", name="tasks_move")
 	 * @param Request $oRequest
 	 * @param TranslatorInterface $t
@@ -228,9 +303,11 @@ class TasksCronController extends AppBaseController
 		if ($oRequest->getMethod() == 'POST') {
 			$aFormData = $oRequest->get('crn_tasks_form');
 			$oTask = new CrnTasks();
+			$bSetDelta = true;
 			if ($nId = intval($aFormData['id'])) {
 				$oRepository = $this->_oAppService->repository('App:CrnTasks');
 				$oTask = $oRepository->find($nId);
+				$bSetDelta = false;
 			}
 			$oForm = $this->createForm(TaskManagerType::class, $oTask);
 			$oForm->submit($aFormData);
@@ -244,8 +321,10 @@ class TasksCronController extends AppBaseController
 				$sAction = ($aFormData['actionType'] ?? '');
 
 				$oAppService->save($oTask);
-				$oTask->setDelta( $oTask->getId() );
-				$oAppService->save($oTask);
+				if ($bSetDelta) {
+					$oTask->setDelta( $oTask->getId() );
+					$oAppService->save($oTask);
+				}
 				$this->_saveTags(($aFormData['tags'] ?? ''), $oTask->getId());
 				$aResult['id'] = $oTask->getId();
 				if ($sAction == 'saveAndRun') {

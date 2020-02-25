@@ -135,7 +135,6 @@ window.app = new Vue({
         //this.initSeotab();
         //this.initDataTables();
 		this.localizeParams();
-		Rest._token = this._getToken();
    },
    computed:{
 		
@@ -146,7 +145,7 @@ window.app = new Vue({
    methods:{
     //TODO
     _getToken() {
-        return 'open';
+        return 'openair';
     },
 	/**
 	 * @description Установить для md+ экранов состояние сайдбара "развернут", а для более медких - свёрнут

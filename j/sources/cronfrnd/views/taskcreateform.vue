@@ -159,7 +159,9 @@
 					this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Week') + ', ';
 				}
 				y = this.toi(data.relHours);
-				this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Hour');
+				this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Hour') + ', ';
+				y = this.toi(data.relMinutes);
+				this.hiddenRelDisplayTime += this.pluralizeDisplayTimePart(y, 'Minute');
 				this.hiddenTotalHours = this.pluralizeDisplayTimePart(this.toi(data.totalHours), 'Hour');
 			},
 			/**
