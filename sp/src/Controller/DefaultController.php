@@ -20,7 +20,7 @@ class DefaultController extends AbstractController
 		$oForm = $this->createForm(TaskManagerType::class);
     	$aData = [
     		'pageHeading' => $t->trans('Add task', [], 'tasks'),
-			'token' => $oForm->createView()->children['_token']->vars['value']
+			'formtoken' => $oForm->createView()->children['_token']->vars['value']
 		];
         return $this->render('default/index.html.twig', $aData);
     }

@@ -66,7 +66,7 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"> {{ newEdit }} </h5>
-					<taskcreateform ref="taskcreateform" :token="token"></taskcreateform>
+					<taskcreateform ref="taskcreateform" :token="formtoken"></taskcreateform>
 				</div>
 			</div>
 		</div>
@@ -88,7 +88,12 @@
     export default {
 		name: 'tasks',
 		props: {
-			token: {
+			/** @property {String} formtoken - токен формы */
+			formtoken: {
+				type: String,
+			},
+			/** @property {String} token - токен использующийся при удалении, перемещении, сохранении тегов поиска */
+			listtoken: {
 				type: String,
 			}
 		},
@@ -125,7 +130,27 @@
 			 * @description инициализация DataTables с данными задач
 			*/
 			onClickSaveUserTags() {
-				alert('Will save');
+				let tagData = this.$refs.searchtags.getSelectedTags(),
+					sendData = {
+						tags: JSON.stringify(tagData)
+					};
+				Rest._token = this.listtoken;
+				//data, onSuccess, url, onFail, noSetToken
+				Rest._post(sendData, (data) => { this.onSuccessSaveUserTags(data); }, this.serverRoot + '/tasks/setusertags.json', (xhr, code, error) => { this.onFailSaveUserTags( xhr, code, error ); });
+			},
+			/**
+			 * @description Обработка успешного сохранения тэгов для поиска
+			*/
+			onSuccessSaveUserTags(data){
+				if (!this.onFailSaveUserTags(data)) {
+					return;
+				}
+			},
+			/**
+			 * @description Обработка неуспешного сохранения тэгов для поиска
+			*/
+			onFailSaveUserTags( xhr, code, error ) {
+				return this.defaultFailSendFormListener(xhr, code, error);
 			},
 			/**
 			 * @description инициализация DataTables с данными задач
@@ -436,6 +461,7 @@
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
 			this.serverRoot = '/sp/public';
+			Rest._token = this.token;
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();

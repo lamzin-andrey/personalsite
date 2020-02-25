@@ -16,14 +16,8 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TasksCronController extends AbstractController
+class TasksCronController extends AppBaseController
 {
-	/** @property AppService $_oAppService */
-	private $_oAppService;
-
-
-
-
 	/**
 	 * @Route("/tasks/move.json", name="tasks_move")
 	 * @param Request $oRequest
@@ -266,31 +260,13 @@ class TasksCronController extends AbstractController
 
 		return $this->_json($aResult);
 	}
-
-    private function _json(array $aData)
-	{
-    	return $this->_oAppService->json($aData);
-	}
-	/**
-	 *
-	 * @return bool true если пользователь авторизован
-	*/
-	private function _accessControl() : bool
-	{
-		if (!$this->getUser()) {
-			return false;
-		}
-		return true;
-	}
 	/**
 	 * Сохраняет в crn_task_tags связи с тегами
 	 * @param string $jsonData
 	 * @param int $nTaskId
 	*/
 	private function _saveTags(string $jsonData, int $nTaskId) : void
-	{
-
-		//Тут не смог отказать себе в удовольствии использовать ON DUPLICATE
+	{	//Тут не смог отказать себе в удовольствии использовать ON DUPLICATE
 
 		$aData = json_decode($jsonData);
 		//Получить id новых тегов.
