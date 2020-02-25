@@ -6,6 +6,8 @@ use App\Entity\CrnTasks;
 use App\Form\TaskManagerType;
 use App\Service\AppService;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Expression;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -426,22 +428,54 @@ class TasksCronController extends AppBaseController
 	}
 	/**
 	 * Запрос для списка задач
-	 * @param string $s Подстрока для поискаs
+	 * @param string $s Подстрока для поиска
 	 * @param int $nOffset
 	 * @param int $nLength
 	 * @return array [id => name]
 	*/
 	private function _getTaskList(string $s, int $nOffset, int $nLength) : array
 	{
-		//TODO per page
-		$oRepository = $this->_oAppService->repository('App:CrnTasks');
-		$oCriteria = Criteria::create();
-		$e = Criteria::expr();
-		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
-		$oCriteria->orderBy(['delta' => 'ASC']);
-		$oCriteria->setFirstResult($nOffset);
-		$oCriteria->setMaxResults( $nLength );
-		$aRaw = $oRepository->matching($oCriteria)->toArray();
+		/*
+		 * SELECT tag_id FROM user_tags AS ut WHERE uid = UID;
+		 *
+		 * -- USER_TASK_ID_LIST получаем как сейчас, с учётом фильтра и надо туда добавитьб учёт пользователя
+		 * SELECT task_id FROM task_tags WHERE task_id IN (USER_TASK_ID_LIST) AND  tag_id IN (TAGS_ID_LIST);
+		 *
+		 *
+		 * SELECT * FROM tasks AS t
+		 * WHERE task_id IN (ID_LIST)
+		 *
+		*/
+		//Получаем без учёта тегов поиска
+		/** @var QueryBuilder $oQueryBuilder */
+		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+		/** @var Expr $e */
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->where( $e->eq('t.ausersId', $this->getUserId()) );
+		$oQueryBuilder->andWhere( $e->orX( $e->like('t.name', '\'%' . $s . '%\''), $e->like('t.codename', '\'%' . $s . '%\'') ) );
+
+
+		//тут смотрим, есть ли у пользователя теги поиска.
+		$aUserTags = $this->_loadUserTagsId();//TODO
+		if (!$aUserTags) {
+			$oQueryBuilder->orderBy('t.delta', 'ASC');
+			$oQueryBuilder->setFirstResult($nOffset);
+			$oQueryBuilder->setMaxResults( $nLength );
+			$aRaw = $oQueryBuilder->getQuery()->execute();
+		} else {
+			$oQueryBuilder->select('t.id');
+			$aTaskIdData = $oQueryBuilder->getQuery()->getResult();
+			//SELECT task_id FROM task_tags WHERE task_id IN (USER_TASK_ID_LIST) AND  tag_id IN (TAGS_ID_LIST);
+			$aTaskIdWithTagData = $this->_loadTaskIdByTaskIdAndTagId($aTaskIdData, $aUserTags);//TODO
+			/** @var QueryBuilder $oQueryBuilder */
+			$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+			$oQueryBuilder->where( $e->in('t.id', $aTaskIdWithTagData) );
+			$oQueryBuilder->orderBy(['delta' => 'ASC']);
+			$oQueryBuilder->setFirstResult($nOffset);
+			$oQueryBuilder->setMaxResults( $nLength );
+			$aRaw = $oQueryBuilder->getQuery()->execute();
+		}
+
 		$a = [];
 		//TODO try serialize array
 		$encoders = [new JsonEncoder()];
@@ -540,5 +574,24 @@ class TasksCronController extends AppBaseController
 		$oQueryBuilder->set('t.delta', $nPos1);
 		$oQueryBuilder->where( $e->eq('t.id', $nId2) );
 		$oQueryBuilder->getQuery()->execute();
+	}
+	/**
+	 *
+	 * @return array of integer  
+	*/
+	private function _loadUserTagsId() : array
+	{
+		//SELECT tag_id FROM user_tags AS ut WHERE uid = UID;
+		return [];
+	}
+	/**
+	 *
+	 * @param array $aTaskIdData
+	 * @param array $aUserTagsIdData
+	 * @return  array of integer
+	*/
+	private function loadTaskIdByTaskIdAndTagId(array $aTaskIdData, array $aUserTagsIdData) : array
+	{
+		return [];
 	}
 }
