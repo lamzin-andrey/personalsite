@@ -95,6 +95,10 @@
 			/** @property {String} token - токен использующийся при удалении, перемещении, сохранении тегов поиска */
 			listtoken: {
 				type: String,
+			},
+			/** @property {String} searchtags - JSON данные поиска */
+			searchtags: {
+				type: String,
 			}
 		},
         //вызывается раньше чем mounted
@@ -465,17 +469,7 @@
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();
-			
-            
-            /*this.$root.$on('showMenuEvent', function(evt) {
-                self.menuBlockVisible   = 'block';
-                self.isMainMenuVisible  = true;
-                self.isScrollWndVisible = false;
-                self.isColorWndVisible  = false;
-                self.isHelpWndVisible   = false;
-                self.nStep = self.$root.nStep;
-            })/**/
-            //console.log('I mounted!');
+			this.$refs.searchtags.setTags( JSON.parse(this.searchtags) );
         }
     }
 </script>

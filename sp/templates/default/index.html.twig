@@ -4,7 +4,7 @@
 {% block title %}{{'Add task'|trans}}{% endblock %}
 
 {% block content %}
-    <taskeditor ref="tasks" formtoken="{{ formtoken }}" listtoken="{{ csrf_token('list') }}"></taskeditor>
+    <taskeditor searchtags="{{ searchtags }}" ref="tasks" formtoken="{{ formtoken }}" listtoken="{{ csrf_token('list') }}"></taskeditor>
 {% endblock %}
 
 
