@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Export Task Intervals{% endblock %}
+
+{% block content %}
+<pre style="background-color:white">
+	{{ sDate }}
+	{% for aInterval in aIntervals %}
+{{  aInterval|render_interval(oTree, oTask) }}
+	{% endfor %}
+</pre>
+{% endblock %}

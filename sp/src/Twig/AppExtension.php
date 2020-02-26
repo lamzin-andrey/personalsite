@@ -1,6 +1,8 @@
 <?php
 namespace App\Twig;
 
+use App\Entity\CrnTasks;
+use App\Entity\CrnTaskTags;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,6 +33,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	public function getFilters() : array
 	{
 		return [
+			new TwigFilter('render_interval', array($this, 'renderInterval')),
 			new TwigFilter('get_loginform_input_css', array($this, 'getLoginformInputCss')),
 			new TwigFilter('rouble', array($this, 'roubleFilter')),
 			new TwigFilter('translite_url', array($this, 'transliteUrl')),
@@ -172,4 +175,39 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	{
 		return $oMessage->isRead ? '' : 'font-weight-bold';
 	}
+	/**
+	 * @param array $aIntervalInfo
+	 * @param StdClass $oTree
+	 * @param CrnTasks $oTask
+	 * @return string
+	*/
+	public function renderInterval(array $aIntervalInfo, $oTree, CrnTasks $oTask) : string
+	{
+		/** @var \DateTime $oStartDate */
+		$oStartDate = ($aIntervalInfo['startDatetime'] ?? null);
+		/** @var \DateTime  $oEndDate*/
+		$oEndDate = ($aIntervalInfo['endDatetime'] ?? null);
+		$start = '';
+		if (!$oStartDate) {
+			$start = '*';
+		} else {
+			$start = $oStartDate->format('H i');
+		}
+		$sEnd = '';
+		if (!$oEndDate) {
+			$sEnd = '*';
+		} else {
+			$sEnd = $oEndDate->format('H i');
+		}
+		$sTaskInfo = '';
+		if ($oTree) {
+			$oTaskInfo = \TreeAlgorithms::findById($oTree, ($aIntervalInfo['taskId'] ?? 0) );
+			$sTaskInfo = $oTaskInfo->codename . ' ' . $oTaskInfo->name;
+		} else {
+			$sTaskInfo = $oTask->getCodename() . ' ' . $oTask->getName();
+		}
+
+		return $start . ' - ' . $sEnd . ' ' . $sTaskInfo;
+	}
+
 }

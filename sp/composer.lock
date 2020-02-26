@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98048f1d868bcbc058a5015182677189",
+    "content-hash": "28291e3b8ae829c3b526bc0a3e38a8d3",
     "packages": [
         {
             "name": "curl/curl",
@@ -1353,6 +1353,49 @@
                 "Send email with PHP mail function and attachment."
             ],
             "time": "2020-01-03T09:49:25+00:00"
+        },
+        {
+            "name": "landlib/treealgorithms",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lamzin-andrey/treealgorithms.git",
+                "reference": "9e98887d5fceeafbd173d45986fd070ccc82752d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lamzin-andrey/treealgorithms/zipball/9e98887d5fceeafbd173d45986fd070ccc82752d",
+                "reference": "9e98887d5fceeafbd173d45986fd070ccc82752d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4 || ^7.0 || ^7.1 || ^7.2. || ^7.2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrey Lamzin",
+                    "email": "lamzin.an@gmail.com",
+                    "homepage": "https://github.com/lamzin-andrey",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This group of methods for work with tree structure. Provide methods build tree from flat array, find node in the tree by id, walk tree and execulte callback function for each node. Node of the tree has fields like as id, parent_id, children. Concrete names of the tree node fields can be configured with TreeAlgorithms properties idFieldName, parentIdFieldName, childsFieldName. Also exists javascript release, search lamzin-andrey/landlib on github.",
+            "homepage": "https://github.com/lamzin-andrey/treealgorithms",
+            "keywords": [
+                "search in tree",
+                "walk tree"
+            ],
+            "time": "2019-12-03T08:45:51+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6881,7 +6924,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "landlib/simplemail": 20
+        "landlib/simplemail": 20,
+        "landlib/treealgorithms": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
