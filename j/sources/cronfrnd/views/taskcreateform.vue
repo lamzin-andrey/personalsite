@@ -48,8 +48,8 @@
 		<div class="clearfix"></div>
 
         <p class="text-right my-3">
-            <button  class="btn btn-success" name="saveAndRun">{{ $t('app.SaveAndRun') }}</button>
-            <button  class="btn btn-primary" name="save">{{ $t('app.Save') }}</button>
+            <button  @click="onClickSaveAndRun" class="btn btn-success" name="saveAndRun">{{ $t('app.SaveAndRun') }}</button>
+            <button  @click="onClickSave" class="btn btn-primary" name="save">{{ $t('app.Save') }}</button>
         </p>
         
     </form>
@@ -110,7 +110,21 @@
         //
         methods:{
 			/**
-			 * @description Установитрь данные статьи для редактирования
+			 * @description Клик на кнопке Сохранить и запустить
+			*/
+			onClickSaveAndRun(){
+				this.clickedSubmit = 'saveAndRun';
+				return true;
+			},
+			/**
+			 * @description Клик на кнопке Сохранить
+			*/
+			onClickSave(){
+				this.clickedSubmit = 'save';
+				return true;
+			},
+			/**
+			 * @description Установить данные статьи для редактирования
 			 * @param {Object} data @see mysql table fields pages
 			*/
 			setTaskData(data) {
@@ -211,7 +225,12 @@
 					data[this.wrap('tags')] = JSON.stringify(this.$refs.tags.getSelectedTags() );
 					data[this.wrap('parentIdData')] = JSON.stringify(this.$refs.parentIdData.getSelectedTags() );
 					data[this.wrap('_token')] = this.token;
-					data[this.wrap('actionType')] = evt.explicitOriginalTarget.name;
+					if (evt.explicitOriginalTarget && evt.explicitOriginalTarget.name) {
+						data[this.wrap('actionType')] = evt.explicitOriginalTarget.name;
+					} else {
+						data[this.wrap('actionType')] = this.clickedSubmit;
+					}
+					
 					delete data[this.wrap('counter')];
                     Rest._post(
                         data,

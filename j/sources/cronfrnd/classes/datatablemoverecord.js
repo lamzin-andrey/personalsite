@@ -26,20 +26,10 @@ class DataTableMoveRecord {
 	*/
 	setHtml(sHtml, nRow, oSettings, nId) {
 		if (nRow == 0) {
-			sHtml += `
-			<div class="form-group d-md-inline d-block ">
-				<button data-id="${nId}" type="button" class="j-up-btn mt-2 btn btn-primary">
-					<i data-id="${nId}" class="fas fa-arrow-up fa-sm"></i>
-				</button>
-			</div>`;
+			sHtml += this._getUpButtonHtml(nId);
 		}
 		if (nRow == (oSettings._iDisplayLength - 1)) {
-			sHtml += `
-			<div class="form-group d-md-inline d-block ">
-				<button data-id="${nId}" type="button" class="j-down-btn mt-2 btn btn-primary">
-					<i data-id="${nId}" class="fas fa-arrow-down fa-sm"></i>
-				</button>
-			</div>`;
+			sHtml += this._getDownButtonHtml(nId);
 		}
 		return sHtml;
 	}
@@ -130,6 +120,50 @@ class DataTableMoveRecord {
 			this.bIsMoveRecordRequestSendedRecId = id;
 			Rest._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, this.sUrl, (a, b, c) => { this.onFailMoveRecord(a, b, c); });
 		}
+	}
+	/***
+	 * @description Это надо вызывать после переупорядочивания записей в пределах одной страницы.
+	 * Удаляет из таблицы все кнопки с классами  j-up-btn j-down-btn
+	 * Добавляет в первую и последнюю строки таблицы строку
+	*/
+	resetArrowButtons() {
+		$(this.sTableId + ' .j-up-btn, ' + this.sTableId + ' .j-down-btn').each((i, j) => {
+			$(j).remove();
+		});
+		let firstRowCell = $(this.sTableId + ' tbody tr').first().find('td').last(),
+			lastRowCell = $(this.sTableId + ' tbody tr').last().find('td').last(),
+			nUpId = firstRowCell.find('button').first().attr('data-id'),
+			nDownId = lastRowCell.find('button').first().attr('data-id');
+		
+		firstRowCell.append($(this._getUpButtonHtml(nUpId)));
+		lastRowCell.append($(this._getDownButtonHtml(nDownId)));
+		this.setListeners();
+	}
+	/**
+	 * @description Получить html кнопки "Вверх"
+	 * @param {*} nId 
+	 */
+	_getUpButtonHtml(nId){
+		return this._getUpDownButtonHtml(nId, 'j-up-btn', 'fa-arrow-up');
+	}
+	/**
+	 * @description Получить html кнопки "Вверх"
+	 * @param {*} nId 
+	 */
+	_getDownButtonHtml(nId){
+		return this._getUpDownButtonHtml(nId, 'j-down-btn', 'fa-arrow-down');
+	}
+	/**
+	 * @description Получить html кнопки "Вверх" или "Вниз"
+	 * @param {*} nId 
+	*/
+	_getUpDownButtonHtml(nId, sCssAction = 'j-down-btn', sCssIcon = 'fa-arrow-down' ){
+		return `
+		<div class="form-group d-md-inline d-block ">
+			<button data-id="${nId}" type="button" class="${sCssAction} mt-2 btn btn-primary">
+				<i data-id="${nId}" class="fas ${sCssIcon} fa-sm"></i>
+			</button>
+		</div>`;
 	}
 }
 

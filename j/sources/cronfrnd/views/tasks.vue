@@ -149,12 +149,13 @@
 				if (!this.onFailSaveUserTags(data)) {
 					return;
 				}
+				this.dataTable.search('').draw();
 			},
 			/**
 			 * @description Обработка неуспешного сохранения тэгов для поиска
 			*/
 			onFailSaveUserTags( xhr, code, error ) {
-				return this.defaultFailSendFormListener(xhr, code, error);
+				return this.$root.defaultFailSendFormListener(xhr, code, error);
 			},
 			/**
 			 * @description инициализация DataTables с данными задач
@@ -213,6 +214,11 @@
 										<button data-id="${data}" type="button" class="${stateBtnId} btn ${stateBtnClass}  mt-2">
 											<i data-id="${data}" class="fas ${stateBtnIcon} fa-sm"></i>
 										</button>
+									</div>
+									<div class="form-group d-md-inline d-block ">
+										<a href="${self.serverRoot}/exporttask?id=${data}" class="j-export-btn btn btn-warning  mt-2">
+											<i data-id="${data}" class="fas fa-list fa-sm"></i>
+										</a>
 									</div>
 									<div class="form-group d-md-inline d-block ">
 										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn mt-2">
@@ -296,6 +302,7 @@
 				if (!this.onFailReorderData(data) ) {
 					return;
 				}
+				this.oDataTableMoveRecord.resetArrowButtons();
 			},
 			/**
 			 * @description Обработка успешного переупорядочивания статей
@@ -535,6 +542,10 @@
 				});
 				$('#edittask-tab').on('shown.bs.tab', (ev) => {
 					this.setDataChanges(false);
+				});
+				$('#edittask-tab').on('click', (ev) => {
+					this.$refs.taskcreateform.$refs.tags.setTags([]);
+					this.$refs.taskcreateform.$refs.tags.setTags([]);
 				});
 			},
 			/**

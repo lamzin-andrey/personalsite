@@ -431,9 +431,54 @@ class TasksCronController extends AppBaseController
 	 * @param string $s Подстрока для поиска
 	 * @param int $nOffset
 	 * @param int $nLength
-	 * @return array [id => name]
+	 * @return array
 	*/
 	private function _getTaskList(string $s, int $nOffset, int $nLength) : array
+	{
+		$oQueryBuilder = $this->_getQueryBuilderForTaskList($s);
+		$oQueryBuilder->orderBy('t.delta', 'ASC');
+		$oQueryBuilder->setFirstResult($nOffset);
+		$oQueryBuilder->setMaxResults( $nLength );
+		$aRaw = $oQueryBuilder->getQuery()->execute();
+		$encoders = [new JsonEncoder()];
+		$normalizers = [new ObjectNormalizer()];
+		$oSerializer = new Serializer($normalizers, $encoders);
+		return json_decode($oSerializer->serialize($aRaw, 'json'));
+	}
+	/**
+	 * Запрос для получения количества отфильтрованных записей
+	 * @param string $s Подстрока для поискаs
+	 * @return int
+	 */
+	private function _getTaskListFiltredCount(string $s) : int
+	{
+		$oQueryBuilder = $this->_getQueryBuilderForTaskList($s);
+		$oQueryBuilder->select('COUNT(t.id) AS cnt');
+
+
+		$n = intval($oQueryBuilder->getQuery()->getSingleScalarResult() );
+		return $n;
+	}
+	/**
+	 * Запрос для получения общего количества записей
+	 * @param string $s Подстрока для поискаs
+	 * @return array [id => name]
+	*/
+	private function _getTaskListCount() : int
+	{
+		$oRepository = $this->_oAppService->repository('App:CrnTasks');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$aRaw = $oRepository->matching($oCriteria)->count();
+		return $aRaw;
+	}
+	/**
+	 * Создает QueryBuilder к которому применяет условия поиска.
+	 * @see  _getTaskList, _getTaskListCount
+	 * @param string $s Подстрока для поиска
+	 * @return QueryBuilder
+	*/
+	private function _getQueryBuilderForTaskList(string $s) : QueryBuilder
 	{
 		/*
 		 * SELECT tag_id FROM user_tags AS ut WHERE uid = UID;
@@ -454,67 +499,22 @@ class TasksCronController extends AppBaseController
 		$oQueryBuilder->where( $e->eq('t.ausersId', $this->getUserId()) );
 		$oQueryBuilder->andWhere( $e->orX( $e->like('t.name', '\'%' . $s . '%\''), $e->like('t.codename', '\'%' . $s . '%\'') ) );
 
-
 		//тут смотрим, есть ли у пользователя теги поиска.
-		$aUserTags = $this->_loadUserTagsId();//TODO
+		$aUserTags = $this->_loadUserTagsId();
 		if (!$aUserTags) {
-			$oQueryBuilder->orderBy('t.delta', 'ASC');
-			$oQueryBuilder->setFirstResult($nOffset);
-			$oQueryBuilder->setMaxResults( $nLength );
-			$aRaw = $oQueryBuilder->getQuery()->execute();
-		} else {
-			$oQueryBuilder->select('t.id');
-			$aTaskIdData = $oQueryBuilder->getQuery()->getResult();
-			//SELECT task_id FROM task_tags WHERE task_id IN (USER_TASK_ID_LIST) AND  tag_id IN (TAGS_ID_LIST);
-			$aTaskIdWithTagData = $this->_loadTaskIdByTaskIdAndTagId($aTaskIdData, $aUserTags);//TODO
-			/** @var QueryBuilder $oQueryBuilder */
-			$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
-			$oQueryBuilder->where( $e->in('t.id', $aTaskIdWithTagData) );
-			$oQueryBuilder->orderBy(['delta' => 'ASC']);
-			$oQueryBuilder->setFirstResult($nOffset);
-			$oQueryBuilder->setMaxResults( $nLength );
-			$aRaw = $oQueryBuilder->getQuery()->execute();
+			return $oQueryBuilder;
 		}
-
-		$a = [];
-		//TODO try serialize array
-		$encoders = [new JsonEncoder()];
-		$normalizers = [new ObjectNormalizer()];
-		$oSerializer = new Serializer($normalizers, $encoders);
-		foreach ($aRaw as $oTag) {
-			$a[] = json_decode($oSerializer->serialize($oTag, 'json'));
+		$oQueryBuilder->select('t.id');
+		$aTaskIdData = array_column($oQueryBuilder->getQuery()->getResult(), 'id');
+		//SELECT task_id FROM task_tags WHERE task_id IN (USER_TASK_ID_LIST) AND  tag_id IN (TAGS_ID_LIST);
+		$aTaskIdWithTagData = $this->_loadTaskIdByTaskIdAndTagId($aTaskIdData, $aUserTags);
+		if (!$aTaskIdWithTagData) {
+			$aTaskIdWithTagData = [0];
 		}
-		return $a;
-	}
-
-	/**
-	 * Запрос для получения количества отфильтррованных записей
-	 * @param string $s Подстрока для поискаs
-	 * @return array [id => name]
-	 */
-	private function _getTaskListFiltredCount(string $s) : int
-	{
-		$oRepository = $this->_oAppService->repository('App:CrnTasks');
-		$oCriteria = Criteria::create();
-		$e = Criteria::expr();
-		$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
-		$aRaw = $oRepository->matching($oCriteria)->count();
-		return $aRaw;
-	}
-
-	/**
-	 * Запрос для получения количества отфильтррованных записей
-	 * @param string $s Подстрока для поискаs
-	 * @return array [id => name]
-	 */
-	private function _getTaskListCount() : int
-	{
-		$oRepository = $this->_oAppService->repository('App:CrnTasks');
-		$oCriteria = Criteria::create();
-		$e = Criteria::expr();
-		//$oCriteria->where( $e->orX( $e->contains('name', $s),  $e->contains('codename', $s)) );
-		$aRaw = $oRepository->matching($oCriteria)->count();
-		return $aRaw;
+		/** @var QueryBuilder $oQueryBuilder */
+		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
+		$oQueryBuilder->where( $e->in('t.id', $aTaskIdWithTagData) );
+		return $oQueryBuilder;
 	}
 	/**
 	 * @param int $nTaskId
@@ -582,7 +582,12 @@ class TasksCronController extends AppBaseController
 	private function _loadUserTagsId() : array
 	{
 		//SELECT tag_id FROM user_tags AS ut WHERE uid = UID;
-		return [];
+		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnUserTags')->createQueryBuilder('t');
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->select('t.tagId');
+		$oQueryBuilder->where( $e->eq('t.ausersId', $this->getUserId()) );
+		$a = $oQueryBuilder->getQuery()->getResult();
+		return array_column($a, 'tagId');
 	}
 	/**
 	 *
@@ -590,8 +595,16 @@ class TasksCronController extends AppBaseController
 	 * @param array $aUserTagsIdData
 	 * @return  array of integer
 	*/
-	private function loadTaskIdByTaskIdAndTagId(array $aTaskIdData, array $aUserTagsIdData) : array
+	private function _loadTaskIdByTaskIdAndTagId(array $aTaskIdData, array $aUserTagsIdData) : array
 	{
-		return [];
+		//SELECT task_id FROM task_tags WHERE task_id IN (USER_TASK_ID_LIST) AND  tag_id IN (TAGS_ID_LIST);
+		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTaskTags')
+			->createQueryBuilder('t');
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder->select('DISTINCT t.taskId');
+		$oQueryBuilder->where( $e->in('t.taskId', $aTaskIdData) );
+		$oQueryBuilder->andWhere( $e->in('t.tagId', $aUserTagsIdData) );
+		$a = array_column( $oQueryBuilder->getQuery()->getResult(), 'taskId' );
+		return $a;
 	}
 }

@@ -109,11 +109,20 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	}
 	/**
 	 * Вернёт html строки меню левого сайдбара
+	 * @param string $href
+	 * @param string $text
+	 * @param string $translationDomain = 'sidebar'
+	 * @param array $access = [2] кодлы допустимых уровней доступа
 	 * @return string
 	*/
-	public function drawMenuItem(string $href, string $text, string $translationDomain = 'sidebar') : string
+	public function drawMenuItem(string $href, string $text, string $translationDomain = 'sidebar', array $access = [2]) : string
 	{
-		return '<a class="collapse-item'. $this->_activeMenuItem($href) . '" href="' . $href . '">' . $this->translator->trans($text, [], $translationDomain) . '</a>';
+		$s =  '<a class="collapse-item'. $this->_activeMenuItem($href) . '" href="' . $href . '">' . $this->translator->trans($text, [], $translationDomain) . '</a>';
+		$oUser = $this->container->get('security.token_storage')->getToken()->getUser();
+		if (in_array($oUser->getRole(), $access)) {
+			return $s;
+		}
+		return '';
 	}
 	/**
 	 * @description Вернет строку active если запрошенный url совпадает с запрошеным (для пунктов меню сайдбара)
