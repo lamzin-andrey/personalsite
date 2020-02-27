@@ -80,6 +80,13 @@ class Ausers implements UserInterface
      */
     private $isDeleted = '0';
 
+	/**
+	 * @var int|null
+	 *
+	 * @ORM\Column(name="logotype_id", type="integer", nullable=false, options={"comment"="Логотип user_media.id","default"="0"})
+	 */
+	private $logotypeId = '0';
+
     /**
      * @var \DateTime|null
      *
@@ -310,6 +317,17 @@ class Ausers implements UserInterface
 
         return $this;
     }
+	public function getLogotypeId(): ?int
+	{
+		return $this->logotypeId;
+	}
+
+	public function setLogotypeId(?int $logotypeId): self
+	{
+		$this->logotypeId = $logotypeId;
+		return $this;
+	}
+
     
     public function getBSettings(): ?int
     {

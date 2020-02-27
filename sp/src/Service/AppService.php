@@ -385,6 +385,34 @@ class AppService
 	}
 	/**
 	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
+	*/
+	public function addUserLogoFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
+	{
+		$sTranslationDomain = 'profileform';
+		/** @var \App\Service\FileUploaderService $oFileUploader */
+		$oFileUploader = $this->getFileUploaderService();
+		$oFileUploader->setTranslationDomain($sTranslationDomain);
+		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
+		$oFileUploader->addAllowMimetype('image/png');
+		$oFileUploader->addAllowMimetype('image/jpeg');
+		$oFileUploader->setFileInputLabel('Select logotype');//TODO
+		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
+		$oFileUploader->setMaxFileSize(4096);
+		$oFileUploader->setMaxImageHeight(400);
+		$oFileUploader->setMaxImageWidth(400);
+		//$oFileUploader->addLiipBundleFilter('max_width');
+
+		$subdir = $sUploadDirectory;
+		$sTargetDirectory = $oRequest->server->get('DOCUMENT_ROOT') . '/' . $subdir;
+
+		$oFileUploader->setTargetDirectory($sTargetDirectory);
+
+		$aOptions = $oFileUploader->getFileTypeOptions();
+		$aOptions['translation_domain'] = $sTranslationDomain;
+		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
+	}
+	/**
+	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
 	 */
 	public function addBigImageFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
 	{
