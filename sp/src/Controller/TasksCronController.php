@@ -436,7 +436,9 @@ class TasksCronController extends AppBaseController
 	private function _getTaskList(string $s, int $nOffset, int $nLength) : array
 	{
 		$oQueryBuilder = $this->_getQueryBuilderForTaskList($s);
-		$oQueryBuilder->orderBy('t.delta', 'ASC');
+		$oQueryBuilder->addOrderBy('t.isExecuted', 'DESC');
+		$oQueryBuilder->addOrderBy('t.delta', 'DESC');
+		$oQueryBuilder->addOrderBy('t.id', 'DESC');
 		$oQueryBuilder->setFirstResult($nOffset);
 		$oQueryBuilder->setMaxResults( $nLength );
 		$aRaw = $oQueryBuilder->getQuery()->execute();

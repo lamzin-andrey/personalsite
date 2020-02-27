@@ -4,7 +4,7 @@
 		<inputb4 v-model="name" @input="setDataChanges" type="text" :placeholder="$t('app.name')" :label="$t('app.name')" id="name" validators="'required'"></inputb4>
         <inputb4 v-model="codename"  @input="setDataChanges"  type="text" :label="$t('app.codename')" :placeholder="$t('app.codename')" id="codename" ></inputb4>
 
-        <textareab4 v-model="description" ref="description" @input="setDataChanges" :counter="counter" :label="$t('app.description')"  id="content_preview" rows="12" validators="'required'"></textareab4>
+        <textareab4 v-model="description" ref="description" @input="setDataChanges" :counter="counter" :label="$t('app.description')"  id="content_preview" rows="12"></textareab4>
 
 		
 		<p>&nbsp;</p>
@@ -278,7 +278,6 @@
 				return (
 					String(this.name).length > 0
 					&& String(this.codename).length > 0
-					&& String(this.description).length > 0
 					
 				);
 			},
