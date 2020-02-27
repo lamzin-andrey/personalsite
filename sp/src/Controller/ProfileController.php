@@ -53,10 +53,21 @@ class ProfileController  extends AppBaseController
 				//Обновляем пароль
 				$sRawActualPassword = trim($oForm['currentPassword']->getData());
 				if ($sRawActualPassword ) {
-					if ( $oEncoder->isPasswordValid($oUser, $sRawActualPassword) ) {
-
+					$sNew = trim($oForm['newPassword']->getData());
+					if ( $sNew && $oEncoder->isPasswordValid($oUser, $sRawActualPassword) ) {
+						$sRepeat = $oForm['repeatPassword']->getData();
+						if ($sNew == $sRepeat) {
+							$sNewHash = $oEncoder->encodePassword($oUser, $sNew );
+							$oUser->setPassword($sNewHash);
+						} else {
+							$this->addFlash('notice', $t->trans('Passwords is different'));
+						} 
 					} else {
-						$this->addFlash('Notice', $t->trans('Invalid password'));
+						if (!$sNew) {
+							$this->addFlash('notice', $t->trans('Empty password'));
+						} else {
+							$this->addFlash('notice', $t->trans('Invalid password'));
+						}
 					}
 				}
 				//Сохранение
