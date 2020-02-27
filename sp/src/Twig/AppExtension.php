@@ -178,10 +178,10 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	/**
 	 * @param array $aIntervalInfo
 	 * @param StdClass $oTree
-	 * @param CrnTasks $oTask
+	 * @param ?CrnTasks $oTask
 	 * @return string
 	*/
-	public function renderInterval(array $aIntervalInfo, $oTree, CrnTasks $oTask) : string
+	public function renderInterval(array $aIntervalInfo, $oTree, $oTask = null) : string
 	{
 		/** @var \DateTime $oStartDate */
 		$oStartDate = ($aIntervalInfo['startDatetime'] ?? null);
@@ -203,7 +203,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 		if ($oTree) {
 			$oTaskInfo = \TreeAlgorithms::findById($oTree, ($aIntervalInfo['taskId'] ?? 0) );
 			$sTaskInfo = $oTaskInfo->codename . ' ' . $oTaskInfo->name;
-		} else {
+		} else if($oTask) {
 			$sTaskInfo = $oTask->getCodename() . ' ' . $oTask->getName();
 		}
 

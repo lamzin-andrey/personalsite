@@ -22,7 +22,7 @@ class TreeAlgorithms {
 		$r[] = $node->$sField;
 		
 		$sFieldName = static::$childsFieldName;
-		if ($node->$sFieldName) {
+		if (isset($node->$sFieldName)) {
 			$part = [];
 			foreach ($node->$sFieldName as $oItem) {
 				$part = static::getBranchIdList($oItem);
@@ -48,7 +48,7 @@ class TreeAlgorithms {
 			$oCallback->context->$sFunction($oTree);
 		}
 		$sFieldName = static::$childsFieldName;
-		if ($oTree->$sFieldName) {
+		if (isset($oTree->$sFieldName)) {
 			foreach ($oTree->$sFieldName as $oItem) {
 				static::walkAndExecuteAction($oItem, $oCallback);
 			}

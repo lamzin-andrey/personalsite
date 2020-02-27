@@ -55,6 +55,12 @@ import 'datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.min.css';
 import B4DataTablesPreloader from '../landlib/datatables/b4datatablespreloader.js';
 //Конец Центровка прелоадера DataTables по центру (самоделка)
 
+//Импорт pure-js плагина длая календаря
+import '../landlib/dom/pjs-calendar/lang.js';
+import '../landlib/dom/pjs-calendar/script.js';
+import '../landlib/dom/pjs-calendar/style.css';
+
+
 //Компонент вместо стандартного confirm
 Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue').default);
 //Компонент вместо стандартного alert
@@ -132,8 +138,6 @@ window.app = new Vue({
    */
    mounted() {
 		this.initSidebar();
-        //this.initSeotab();
-        //this.initDataTables();
 		this.localizeParams();
    },
    computed:{

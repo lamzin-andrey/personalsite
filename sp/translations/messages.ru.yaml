@@ -20,6 +20,10 @@ Get SMS: Получить смс
 Data saved: Данные сохранены
 You have not access to this advert: У вас нет доступа к этому объявлению
 You have not access to this task: У вас нет доступа к этой задаче
+Apply: Применить
+Save:  Сохранить
+Update: Обновить
+Edit: Редактировать
 
 Forgot Password: Не помнишь пароль
 signup: Зарегистрируйтесь
@@ -80,3 +84,7 @@ Record is top: Запись первая
 Record is last: Запись последняя
 Unknown error: Неизвестная ошибка
 Invalid token: Неверный токен
+Show times for task: Показывать время для задачи
+Select a Date: Выбор даты
+Invalid date: Некорректная дата
+Export Task Intervals: Экспорт времени выполнения задачи для отчёта

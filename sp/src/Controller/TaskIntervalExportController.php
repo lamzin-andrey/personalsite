@@ -19,36 +19,55 @@ class TaskIntervalExportController extends AppBaseController
     		return $this->redirectToRoute('login');
 		}
     	$nTaskId = intval($oRequest->get('id', 0) );
-    	$oTask = $oAppService->repository('App:CrnTasks')->findOneBy([
-    		'id' => $nTaskId,
-			'ausersId' => $this->getUserId()
-		]);
-    	$aData = [
-			'pageHeading' => 'Export Task Intervals',
+		$aData = [
+			'pageHeading' => $t->trans('Export Task Intervals'),
 			'sDate' => '',
 			'aIntervals' => []
 		];
-    	if (!$oTask) {
-    		$this->addFlash('notice', $t->trans('You have not access to this task'));
+    	if ($nTaskId) {
+			$oTask = $oAppService->repository('App:CrnTasks')->findOneBy([
+				'id' => $nTaskId,
+				'ausersId' => $this->getUserId()
+			]);
+			if (!$oTask) {
+				$this->addFlash('notice', $t->trans('You have not access to this task'));
+				return $this->render('task_interval_export/index.html.twig', $aData);
+			}
+			$aData['oTask'] = $oTask;
+		}
+		$sDate = $oRequest->get('pc-calindar-date', date('Y-m-d'));
+    	$sDate = trim($sDate) ?? date('Y-m-d');
+    	//TODO validate date!
+		if (!preg_match("#^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$#", $sDate)) {
+			$this->addFlash('notice', $t->trans('Invalid date'));
 			return $this->render('task_interval_export/index.html.twig', $aData);
 		}
-		$sDate = $oRequest->get('date', date('Y-m-d'));
-    	//TODO validate date!
+
 
 		$oQueryBuilder = $this->getDoctrine()->getRepository('App:CrnTasks')->createQueryBuilder('t');
 		$e = $oQueryBuilder->expr();
 		$oQueryBuilder->where( $e->eq('t.ausersId', $this->getUserId()) );
 		$oQueryBuilder->select('t.id, t.parentId, t.name, t.codename, t.description');
 		$aUserTasks = $oQueryBuilder->getQuery()->getResult();
+
+
 		\TreeAlgorithms::$parentIdFieldName = 'parentId';
 		$aTrees = \TreeAlgorithms::buildTreeFromFlatList($aUserTasks);
-		$oTree = $aTrees[0];
-		$oBranch =\TreeAlgorithms::findById($oTree, $nTaskId);
+		$oRoot = new \StdClass();
+		$oRoot->id = 0;
+		$oRoot->parentId = -1;
+		$oRoot->name = 'Root';
+		$oRoot->codename = 'root';
+		$oRoot->children = $aTrees;
+		$oBranch = $oTree = $oRoot;
+		if ($nTaskId) {
+			$oBranch = \TreeAlgorithms::findById($oTree, $nTaskId);
+		}
 
 		$this->_aChildTasks = [];
 		$oCallback = new \StdClass();
 		$oCallback->context = $this;
-		$oCallback->f = 'addChildTask';//TODO $this->>_aChildTasks[$oArg0];
+		$oCallback->f = 'addChildTask';
 		$oCallback->isStatic = false;
 		\TreeAlgorithms::walkAndExecuteAction($oBranch, $oCallback);
 		$aTaskIdList = array_column($this->_aChildTasks, 'id');
@@ -68,7 +87,7 @@ class TaskIntervalExportController extends AppBaseController
     	$aData['aIntervals'] = $oQueryBuilder->getQuery()->getResult();
 		$aData['sDate'] = $sDate;
 		$aData['oTree'] = $oBranch;
-		$aData['oTask'] = $oTask;
+
         return $this->render('task_interval_export/index.html.twig', $aData);
     }
     /**
