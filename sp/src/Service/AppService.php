@@ -22,7 +22,7 @@ class AppService
 	/** @property FormInterface $_oForm Сюда можно передать форму для более простой работы с ними */
 	private $_oForm;
 
-	public function __construct(ContainerInterface $container, ViewDataService $oViewDataService, FileUploaderService $oFileUploaderService)
+	public function __construct(ContainerInterface $container, ?ViewDataService $oViewDataService = null, ?FileUploaderService $oFileUploaderService = null)
 	{
 		$this->oContainer = $container;
 		$this->translator = $container->get('translator');
@@ -822,7 +822,11 @@ class AppService
 		$oCriteria = Criteria::create();
 		$e = Criteria::expr();
 		if ($oInterval) {
-			$oCriteria->where($e->eq('taskId', $oTask->getId()), $e->neq('id', $oInterval->getId()));
+			$oCriteria->where(
+				$e->andX(
+					$e->eq('taskId', $oTask->getId()), $e->neq('id', $oInterval->getId())
+				)
+			);
 		} else {
 			$oCriteria->where($e->eq('taskId', $oTask->getId() ) );
 		}
@@ -894,7 +898,6 @@ class AppService
 		//установить end задачи в текущее время
 		$oInterval = ($aIntervals[0] ?? null);
 		if ($oInterval) {
-			//Тут надо сделать по-любому так, чтобы были объекты а не массивы
 			$oInterval->setEndDatetime($this->now());
 		}
 		//установить найденой задаче executing = 0
