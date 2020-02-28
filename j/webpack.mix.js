@@ -31,6 +31,6 @@ mix.styles([
 	], './../s/app.css');
 
 //Учёт времени - админка
-mix.js('sources/cronfrnd/app.js', 'h.js'); //crn
+//mix.js('sources/cronfrnd/app.js', 'h.js'); //crn
 //Страница логина второй уровень (там только конфиг для cache service worker)
-mix.js('sources/sploginpagecacheclient/app.js', 'i.js');
+//mix.js('sources/sploginpagecacheclient/app.js', 'i.js');
