@@ -31,7 +31,7 @@ class CrnTags
     /**
      * @var string|null
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true, options={"comment"="Полное наименование тега, например ""Symfony"" или ""Symfony 3.4"" или ""vuejs"" или ""Изучение нового"""})
+     * @ORM\Column(name="name", type="string", length=127, nullable=true, options={"comment"="Полное наименование тега, например ""Symfony"" или ""Symfony 3.4"" или ""vuejs"" или ""Изучение нового"""})
      */
     private $name;
 
