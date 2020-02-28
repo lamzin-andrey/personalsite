@@ -221,6 +221,11 @@
 										</a>
 									</div>
 									<div class="form-group d-md-inline d-block ">
+										<button data-id="${data}" type="button" class="j-clone-btn btn btn-primary  mt-2">
+											<i data-id="${data}" class="fas fa-copy fa-sm"></i>
+										</button>
+									</div>
+									<div class="form-group d-md-inline d-block ">
 										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn mt-2">
 											<i data-id="${data}" class="fas fa-trash fa-sm"></i>
 										</button>
@@ -250,6 +255,10 @@
 					});
 					$(id + ' .j-run-btn').click((evt) => {
 						this.onClickRunStopTask(evt);
+					});
+					$(id + ' .j-clone-btn').click((evt) => {
+						this.isCloneAction = 1;
+						this.onClickEditTask(evt);
 					});
 					$(id + ' .j-stop-btn').click((evt) => {
 						this.onClickRunStopTask(evt);
@@ -338,6 +347,8 @@
 				if (!this.onFailGetTask(data)) {
 					return;
 				}
+				data.id = this.isCloneAction ? 0 : data.id;
+				data.isExecuted = this.isCloneAction ? 0 : data.isExecuted;
 				this.setTaskId(data.id);
 				//this.$refs.taskcreateform.resetImages();
 				this.$refs.taskcreateform.setTaskData(data);
