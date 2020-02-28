@@ -9,7 +9,12 @@ class CacheSw extends LandCacheClient {
 	getExcludeFilterList() {
 		let o = new Object();
 		o.type = 'filterlist';
-		o.data = ['*.jn/', '*.jn', '*.json'];
+		o.data = ['*.jn/', '*.jn', '*.json', 
+			this.schemeHost() + '/sp/public/saveprofiledata',
+			this.schemeHost() + '/sp//public/profile',
+			this.schemeHost() + '/sp/public/login',
+			this.schemeHost() + '/sp/public/login_check'
+		];
 		return o;
 	}
 	/**

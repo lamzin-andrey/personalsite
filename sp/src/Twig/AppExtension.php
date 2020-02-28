@@ -3,6 +3,7 @@ namespace App\Twig;
 
 use App\Entity\CrnTasks;
 use App\Entity\CrnTaskTags;
+use App\Service\AppService;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -17,12 +18,13 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	/** @property string _baseUrl */
 	private $_baseUrl = '';
 
-	public function __construct(ContainerInterface $container,  TranslatorInterface $t)
+	public function __construct(ContainerInterface $container,  TranslatorInterface $t, AppService $oAppService)
 	{
 		$this->container = $container;
 		$this->translator = $t;
 		$this->_oRequest = $container->get('request_stack')->getCurrentRequest();
 		$oServer = $this->_oRequest->server ?? null;
+		$this->_oAppService = $oAppService;
 
 		if ($oServer) {
 			$url = explode('?', $oServer->get('REQUEST_URI'));
@@ -41,6 +43,8 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 			new TwigFilter('topbar_new_is_read', array($this, 'topbarNewIsRead')),
 			new TwigFilter('topbar_message_is_read', array($this, 'topbarMessageIsRead')),
 			new TwigFilter('get_auth_user_display_name', array($this, 'getAuthUserDisplayName')),
+			new TwigFilter('user_avatar', array($this, 'getAuthUserAvatarImgSrc')),
+			new TwigFilter('sidebar_heading', array($this, 'getSidebarHeading')),
 			new TwigFilter('get_uid', array($this, 'getUid'))
 		];
 	}
@@ -208,6 +212,26 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 		}
 
 		return $start . ' - ' . $sEnd . ' ' . $sTaskInfo;
+	}
+	/**
+	 *
+	 * @return  string
+	*/
+	public function getAuthUserAvatarImgSrc() : string
+	{
+		return $this->_oAppService->getUserAvartarImageSrc();
+	}
+	/**
+	 * Возвращает загловок для сайдбара в зависимотси от роли пользователя
+	 * @return  srting
+	*/
+	public function getSidebarHeading() : string
+	{
+		$oUser = $this->_oAppService->getAuthUser();
+		if ($oUser->getRole() == 2) {
+			return 'ADMIN PANEL';
+		}
+		return 'FRIEND CRON';
 	}
 
 }

@@ -612,6 +612,14 @@ class AppService
 		return $this->oContainer->get('doctrine')->getRepository($id);
 	}
 	/**
+	 *
+	 * @return Request
+	*/
+	public function request() : Request
+	{
+		return $this->oContainer->get('request_stack')->getCurrentRequest();
+	}
+	/**
 	 * Сохраняет модели в базе
 	 * Аргументы - оюбъекты Entity
 	*/
@@ -896,5 +904,31 @@ class AppService
 		if ($bImmedateSave) {
 			$this->save($oRunnedTask, $oInterval);
 		}
+	}
+	/**
+	 * @return string
+	*/
+	public function getUserAvartarImageSrc() : string
+	{
+		$oUser = $this->getAuthUser();
+		$nLogoId = $oUser->getLogotypeId();
+		if ($nLogoId) {
+			$oLogoInfo = $this->repository('App:UserMedia')->find($nLogoId);
+			if ($oLogoInfo) {
+				if (file_exists($this->request()->server->get('DOCUMENT_ROOT') . $oLogoInfo->getPath())) {
+					return $oLogoInfo->getPath();
+				}
+			}
+		}
+		return $this->getParameter('app.default_cron_friend_logo');
+	}
+
+	/**
+	 * @param string $sParameterName
+	 * @return  string
+	*/
+	public function getParameter(string $sParameterName) : string
+	{
+		return $this->oContainer->getParameter($sParameterName);
 	}
 }
