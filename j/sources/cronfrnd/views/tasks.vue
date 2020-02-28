@@ -513,6 +513,7 @@
 				
 				if (id > 0) {
 					key2 = key =  'app.Edit';
+					$('#pHead').text(this.$t('app.editTask'));
 				}
 				this.newEdit = this.$root.$t(key);
 				this.formTabTitle = this.$root.$t(key2);
