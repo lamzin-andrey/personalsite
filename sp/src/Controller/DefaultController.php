@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
 		}
 		$oForm = $this->createForm(TaskManagerType::class);
     	$aData = [
-    		'pageHeading' => $t->trans('Add task', [], 'tasks'),
+    		'pageHeading' => $t->trans('Task list', [], 'tasks'),
 			'formtoken' => $oForm->createView()->children['_token']->vars['value'],
 			'searchtags' => $this->_getSearchTagsData()
 		];

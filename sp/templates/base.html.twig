@@ -41,7 +41,7 @@
                         <div class="container-fluid">
 
                             <!-- Page Heading -->
-                            <h1 class="h3 mb-4 text-gray-800">{{ pageHeading }}</h1>
+                            <h1 class="h3 mb-4 text-gray-800" id="pHead">{{ pageHeading }}</h1>
                             {#  TODO это может и во view переехать, надо посмотреть как там в вёрстке #}
                             {% block vuepageerror %}{% endblock %}
                             {% for label, messages in app.flashes %}

@@ -184,6 +184,8 @@ var locales = {
 			'Executing' : 'Выполняется',
 			'Waiting' : 'Не выполняется',
 			'searchTags' : 'Теги для поиска',
+			'taskList' : 'Список задач',
+			'addTask' : 'Добавить задачу',
 			'HeadingTask' : 'Наименование задачи'
         }
     }

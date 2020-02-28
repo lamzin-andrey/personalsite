@@ -537,6 +537,7 @@
 			initSeotab() {
 				$('#tasklist-tab').on('click', (ev) => {
 					ev.preventDefault();
+					$('#pHead').text(this.$t('app.taskList'));
 					if (this.isChange) {
 						//Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
 						this.$root.b4ConfirmDlgParams.title = this.$t('app.Are_You_Sure_Stop_Edit_Article') + '?';
@@ -555,6 +556,7 @@
 					this.setDataChanges(false);
 				});
 				$('#edittask-tab').on('click', (ev) => {
+					$('#pHead').text(this.$t('app.addTask'));
 					this.$refs.taskcreateform.$refs.tags.setTags([]);
 					this.$refs.taskcreateform.$refs.tags.setTags([]);
 				});
