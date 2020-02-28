@@ -230,7 +230,7 @@ class Ausers implements UserInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_subscribed", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен получать письма от ЛАНд-а"})
+     * @ORM\Column(name="is_subscribed", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен получать письма от ЛАНд-а","default"="0"})
     */
     private $isSubscribed = '0';
     
