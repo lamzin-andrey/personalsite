@@ -45464,7 +45464,9 @@ window.app = new Vue({
      * @return String данные отчёта в текстовом виде, фактически содержимое textarea
     */
     getIntervalStrData: function getIntervalStrData() {
-      return $('#rawReportData').val();
+      var s = $('#rawReportData').val();
+      s = s ? s : '';
+      return s;
     },
 
     /***

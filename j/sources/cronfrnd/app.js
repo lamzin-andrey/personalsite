@@ -208,7 +208,9 @@ window.app = new Vue({
      * @return String данные отчёта в текстовом виде, фактически содержимое textarea
     */
     getIntervalStrData() {
-        return $('#rawReportData').val();
+        let s = $('#rawReportData').val();
+        s = s ? s : '';
+        return s;
     },
     /***
      * Callback для класса TimeReport, отрисовывающий данные о количестве часов на экране
