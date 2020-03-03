@@ -206,27 +206,27 @@
 									stateBtnId = (row.isExecuted ? 'j-stop-btn' : 'j-run-btn'),
 									r =  `
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="j-edit-btn btn btn-primary  mt-2">
+										<button data-id="${data}" type="button" class="j-edit-btn btn btn-primary  mt-2" title="${self.$t('app.Edit')}">
 											<i data-id="${data}" class="fas fa-edit fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="${stateBtnId} btn ${stateBtnClass}  mt-2">
+										<button data-id="${data}" type="button" class="${stateBtnId} btn ${stateBtnClass}  mt-2" title="${self.$t('app.RunOrStopTask')}">
 											<i data-id="${data}" class="fas ${stateBtnIcon} fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<a href="${self.serverRoot}/exporttask?id=${data}" class="j-export-btn btn btn-warning  mt-2">
+										<a href="${self.serverRoot}/exporttask?id=${data}" class="j-export-btn btn btn-warning  mt-2" title="${self.$t('app.ExportTask')}">
 											<i data-id="${data}" class="fas fa-list fa-sm"></i>
 										</a>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="j-clone-btn btn btn-primary  mt-2">
+										<button data-id="${data}" type="button" class="j-clone-btn btn btn-primary  mt-2" title="${self.$t('app.CloneTask')}">
 											<i data-id="${data}" class="fas fa-copy fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn mt-2">
+										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn mt-2"  title="${self.$t('app.Remove')}">
 											<i data-id="${data}" class="fas fa-trash fa-sm"></i>
 										</button>
 									</div>`;

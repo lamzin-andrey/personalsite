@@ -144,7 +144,7 @@ class DataTableMoveRecord {
 	 * @param {*} nId 
 	 */
 	_getUpButtonHtml(nId){
-		return this._getUpDownButtonHtml(nId, 'j-up-btn', 'fa-arrow-up');
+		return this._getUpDownButtonHtml(nId, 'j-up-btn', 'fa-arrow-up', 'moveToPrevPage');
 	}
 	/**
 	 * @description Получить html кнопки "Вверх"
@@ -157,10 +157,10 @@ class DataTableMoveRecord {
 	 * @description Получить html кнопки "Вверх" или "Вниз"
 	 * @param {*} nId 
 	*/
-	_getUpDownButtonHtml(nId, sCssAction = 'j-down-btn', sCssIcon = 'fa-arrow-down' ){
+	_getUpDownButtonHtml(nId, sCssAction = 'j-down-btn', sCssIcon = 'fa-arrow-down', sHint = 'moveToNextPage' ){
 		return `
 		<div class="form-group d-md-inline d-block ">
-			<button data-id="${nId}" type="button" class="${sCssAction} mt-2 btn btn-primary">
+			<button data-id="${nId}" type="button" class="${sCssAction} mt-2 btn btn-primary" title="${this.context.$t('app.' + sHint)}">
 				<i data-id="${nId}" class="fas ${sCssIcon} fa-sm"></i>
 			</button>
 		</div>`;
