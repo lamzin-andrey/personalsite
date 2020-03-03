@@ -571,7 +571,7 @@
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
-			 * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
+			 * @description Показать список задач, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
 			*/
 			gotoTasksListTab() {
 				$('#tasklist-tab').tab('show');
@@ -579,6 +579,7 @@
 				this.setTaskId(0);
 				//this.$refs.taskcreateform.resetImages();
 				this.setDataChanges(false);
+				this.formTabTitle = this.$root.$t('app.taskList');
 			},
 			/**
 			 * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации

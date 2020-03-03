@@ -255,13 +255,14 @@
 			/**
 			 * @description Успешное добавление задачи
 			*/
-			onSuccessAddTask(data, formInputValidator){
+			onSuccessAddTask(data, formInputValidator) {
 				if (!this.onFailAddTask(data)) {
 					return;
 				}
 				let id = parseInt(data.id);
 				if (data.status == 'ok' && id) {
-					this.$root.$refs.tasks.setTaskId(id);
+					//this.$root.$refs.tasks.setTaskId(id);
+					this.$root.$refs.tasks.gotoTasksListTab();
 					$('#taskSaver').toast('show');
 					this.$root.$refs.tasks.setDataChanges(false);
 					this.$root.$refs.tasks.dataTable.search('').draw();
