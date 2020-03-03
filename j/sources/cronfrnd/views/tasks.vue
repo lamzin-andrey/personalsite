@@ -579,7 +579,7 @@
 				this.setTaskId(0);
 				//this.$refs.taskcreateform.resetImages();
 				this.setDataChanges(false);
-				this.formTabTitle = this.$root.$t('app.taskList');
+				this.formTabTitle = this.$root.$t('app.addTask');
 			},
 			/**
 			 * @description Тут локализация некоторых параметров, которые не удается локализовать при инициализации
