@@ -208,7 +208,10 @@
              * @description Пробуем отправить форму
             */
             onSubmit(evt) {
-				evt.preventDefault();
+				if (evt.preventDefault) {
+					evt.preventDefault();
+				}
+				
                 if (this.allRequiredFilled()) {
 					let formInputValidator = this.$root.formInputValidator;
 					//console.log(this.$root.$refs.tasks.getTaskId, this.$root.$refs.tasks);
@@ -269,6 +272,16 @@
 			 * @return Boolean false если существует data.status == 'error'
 			*/
 			onFailAddTask(data, b, c){
+				let i;
+				if (data.token && data.formErrors) {
+					for (i in data.formErrors) {
+						if (formErrors[i].indexOf('csrf') != false) {
+							this.token = data.token;
+							this.onSubmit({});
+							return;
+						}
+					}
+				}
 				return this.$root.defaultFailSendFormListener(data,b, c);
 			},
 			/**

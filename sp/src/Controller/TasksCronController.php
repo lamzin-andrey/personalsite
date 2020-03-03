@@ -336,6 +336,7 @@ class TasksCronController extends AppBaseController
 				$aErrors = $oAppService->getFormErrorsAsArray($oForm);
 				$aResult['formErrors'] = $aErrors;
 				$aResult['status'] = 'error';
+				$aResult['token'] = $this->_getFormToken();
 			}
 		}
 
@@ -608,5 +609,14 @@ class TasksCronController extends AppBaseController
 		$oQueryBuilder->andWhere( $e->in('t.tagId', $aUserTagsIdData) );
 		$a = array_column( $oQueryBuilder->getQuery()->getResult(), 'taskId' );
 		return $a;
+	}
+	/**
+	 * Возвращает токен формы Создания / редактирования задачи
+	 * @return  string
+	*/
+	private function _getFormToken() : string
+	{
+		$oForm = $this->createForm(TaskManagerType::class);
+		return $oForm->createView()->children['_token']->vars['value'];
 	}
 }
