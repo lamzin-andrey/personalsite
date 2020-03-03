@@ -60,6 +60,9 @@ import '../landlib/dom/pjs-calendar/lang.js';
 import '../landlib/dom/pjs-calendar/script.js';
 import '../landlib/dom/pjs-calendar/style.css';
 
+//Импорт класса TimeReprt
+import TimeReport from './classes/timereport';
+
 
 //Компонент вместо стандартного confirm
 Vue.component('b4confirmdlg', require('./views/b4confirmdialog/b4confirmdlg.vue').default);
@@ -71,6 +74,7 @@ Vue.component('taskeditor', require('./views/tasks.vue').default);
 
 window.app = new Vue({
     i18n : i18n,
+    delimiters : ['[[', ']]'],
     el: '#wrapper',
 
    // router,
@@ -110,8 +114,8 @@ window.app = new Vue({
             context : window.app
         }
      },
-     /** @property {Object} b4AlertDlgParams @see b4alertdlg.props.params*/
-     b4AlertDlgParams : {
+    /** @property {Object} b4AlertDlgParams @see b4alertdlg.props.params*/
+    b4AlertDlgParams : {
         title :'Are you sure',
         body  :'Press Ok button for confirm it action',
         btnOkText     : 'OK',
@@ -119,26 +123,30 @@ window.app = new Vue({
             f : () => {},
             context : window.app
         }
-     },
-     //TODO это скорее всего не надо
-	 /** @property {Number} taskId Идентификатор редактируемой задачи TODO это скорее всего не надо */
-	 taskId : 0,
-	 /** @property {Boolean} isChange Принимает true когда данные задачи изменены, но не сохранены */
-	 isChange : false,
-	 /** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования задачи */
-	 newEdit : 'app.New',
-	 /** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования статьи */
-	 formTabTitle : 'app.Append',
-	 /** @property {Number}  Переменная для хранения id статьи запрошенной для редактирования */
-     requestedtaskId : 0,
-     // END TODO это скорее всего не надо
+    },
+    /** @property {String} totalTimeInfo данные об общем количестве часов по задачам за сутки, */
+    totalTimeInfo: '',
+
+    //TODO это скорее всего не надо
+	/** @property {Number} taskId Идентификатор редактируемой задачи TODO это скорее всего не надо */
+	taskId : 0,
+	/** @property {Boolean} isChange Принимает true когда данные задачи изменены, но не сохранены */
+	isChange : false,
+	/** @property {String} newEdit Переменная для Заголовка формы Добавления/ редактирования задачи */
+	newEdit : 'app.New',
+	/** @property {String} formTabTitle Переменная для надписи на табе формы Добавления/ редактирования статьи */
+	formTabTitle : 'app.Append',
+	/** @property {Number}  Переменная для хранения id статьи запрошенной для редактирования */
+    requestedtaskId : 0,
+    // END TODO это скорее всего не надо
    },
    /**
     * @description Событие, наступающее после связывания el с этой логикой
    */
    mounted() {
 		this.initSidebar();
-		this.localizeParams();
+        this.localizeParams();
+        this.initTimereport();
    },
    computed:{
 		
@@ -188,7 +196,27 @@ window.app = new Vue({
 	 */
 	setDataChanges(isChange) {
 		this.isChange = isChange;
-	},
+    },
+    /**
+     * 
+    */
+    initTimereport() {
+        let oTimeReport = new TimeReport( () => { return this.getIntervalStrData();}, (s)=>{ this.renderTimeReport(s); } );
+        oTimeReport.calculate();
+    },
+    /**
+     * @return String данные отчёта в текстовом виде, фактически содержимое textarea
+    */
+    getIntervalStrData() {
+        return $('#rawReportData').val();
+    },
+    /***
+     * Callback для класса TimeReport, отрисовывающий данные о количестве часов на экране
+     * @param {String} s данные 
+    */
+    renderTimeReport(s) {
+        this.totalTimeInfo = s;
+    },
     /**
      * @description Show or hide confirm dlg
      * @param {Boolean} isVisible

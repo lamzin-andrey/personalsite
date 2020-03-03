@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<textarea rows="15" readonly style="width:99%; background-color:white;">
+<textarea id="rawReportData" rows="15" readonly style="width:99%; background-color:white;">
 {{ sDate }}
 {% for aInterval in aIntervals %}
 {% if (oTask is defined) %}
@@ -14,6 +14,8 @@
 {% endif %}
 {% endfor %}
 </textarea>
+	<p>{{ 'Total time for each task'|trans }}</p>
+<p v-html="totalTimeInfo"></p>
 <div>
 	<form mathod="GET" action="{{ path('task_interval_export') }}">
 		<label for="date" class="d-block">{{ 'Select a Date'|trans }}:</label>
