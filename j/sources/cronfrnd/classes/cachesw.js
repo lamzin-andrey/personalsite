@@ -12,6 +12,7 @@ class CacheSw extends LandCacheClient {
 		o.data = ['*.jn/', '*.jn', '*.json', 
 			this.schemeHost() + '/sp/public/saveprofiledata',
 			this.schemeHost() + '/sp//public/profile',
+			this.schemeHost() + '/sp/public/exporttask',
 			this.schemeHost() + '/sp/public/login',
 			this.schemeHost() + '/sp/public/login_check'
 		];
