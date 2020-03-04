@@ -165,9 +165,8 @@ window.app = new Vue({
 			(a, b, c) => {
 				this.getMesagesProcessed = false;
 				this.setMainSpinnerVisible(false);
-				if (!this.defaultFailSendFormListener(a, b, c) ) {
-					location.reload();
-				}
+				this.defaultFailSendFormListener(a, b, c);
+				location.reload();
 			});
 	},
 	/**
@@ -177,6 +176,7 @@ window.app = new Vue({
 		this.getMesagesProcessed = false;
 		this.setMainSpinnerVisible(false);
 		if (!this.defaultFailSendFormListener(data)) {
+			location.reload();
 			return;
 		}
 		this.$refs.phdnotifier.setItems(data.list);
