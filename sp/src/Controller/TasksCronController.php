@@ -36,11 +36,6 @@ class TasksCronController extends AppBaseController
 			$aResult['status'] = 'error';
 			return $this->_json($aResult);
 		}
-		if (!$this->isCsrfTokenValid('list', $oRequest->get('_token'))) {
-			$aResult['msg'] = $t->trans('Invalid token');
-			$aResult['status'] = 'error';
-			return $this->_json($aResult);
-		}
 		$nId = $oRequest->get('id');
 		if (!$nId) {
 			$aResult['msg'] = $t->trans('Task id not found');
@@ -74,11 +69,6 @@ class TasksCronController extends AppBaseController
 	        $aResult['status'] = 'error';
 	        return $this->_json($aResult);
 	    }
-	    if (!$this->isCsrfTokenValid('list', $oRequest->get('_token'))) {
-			$aResult['msg'] = $t->trans('Invalid token');
-			$aResult['status'] = 'error';
-			return $this->_json($aResult);
-		}
 	    $nId = $oRequest->get('id');
 	    if (!$nId) {
 			$aResult['msg'] = $t->trans('Task id not found');

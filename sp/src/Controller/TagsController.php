@@ -29,11 +29,6 @@ class TagsController extends AppBaseController
 	        $aResult['status'] = 'error';
 	        return $this->_json($aResult);
 	    }
-	    if (!$this->isCsrfTokenValid('list', $oRequest->get('_token'))) {
-			$aResult['msg'] = $t->trans('Invalid token');
-			$aResult['status'] = 'error';
-			return $this->_json($aResult);
-		}
 		$this->_saveTags( $oRequest->get('tags', '') );
 		return $this->_json([]);
 	}

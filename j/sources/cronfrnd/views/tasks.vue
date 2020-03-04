@@ -465,6 +465,7 @@
 			*/
 			onFailRunTask(data, b ,c) {
 				$('#spin' + this.requestedTaskId).toggleClass('d-none');
+
 				this.requestedTaskId = 0;
 				return this.$root.defaultFailSendFormListener(data, b, c);
 			},
