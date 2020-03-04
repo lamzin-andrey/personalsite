@@ -52,8 +52,8 @@ class TimeReport {
 		mTotal = mTotal - hTotal * 60;
 		a = {s: '<b>' + hTotal + '</b> ч. <b>' + mTotal + '</b> м.', src:buf};
 		a.hoursCeil = 'max <b>' + hTotal + ',' + Math.ceil(mTotal / 6) + '</b> ч. ';
-        a.hoursFloor = 'min <b>' + h + ',' + Math.floor(mTotal / 6) + '</b> ч. ';
-        words.push('<p>Общее время:</p><p>' + a.s + '\t' + a.hoursCeil + '\t' + a.hoursFloor + '</p>');
+        a.hoursFloor = 'min <b>' + hTotal + ',' + Math.floor(mTotal / 6) + '</b> ч. ';
+        words.push('<p>Общее время на все задачи:</p><p>' + a.s + '\t' + a.hoursCeil + '\t' + a.hoursFloor + '</p>');
 
 		if (this.bSetStringForExcel) {
             buf = ['self', 'uncle', 'free', 'learn', 'free_learn', 'offline', 'dumml', 'family', 'journal'];
