@@ -165,7 +165,9 @@ window.app = new Vue({
 			(a, b, c) => {
 				this.getMesagesProcessed = false;
 				this.setMainSpinnerVisible(false);
-				this.defaultFailSendFormListener(a, b, c);
+				if (!this.defaultFailSendFormListener(a, b, c) ) {
+					location.reload();
+				}
 			});
 	},
 	/**
