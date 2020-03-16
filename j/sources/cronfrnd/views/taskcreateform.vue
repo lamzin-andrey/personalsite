@@ -276,7 +276,7 @@
 				let i;
 				if (data.token && data.formErrors) {
 					for (i in data.formErrors) {
-						if (data.formErrors[i].toLowerCase().indexOf('csrf') != false) {
+						if (data.formErrors[i].toLowerCase().indexOf('csrf') != -1) {
 							this.token = data.token;
 							this.onSubmit({});
 							return;
