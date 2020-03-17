@@ -16,7 +16,7 @@ let mix = require('laravel-mix');
 //mix.js('sources/adminauth/app.js', 'b.js');
 //mix.js('sources/adminauthvdt/app.js', 'e.js');
 //Конвертер онлайн
-//mix.js('sources/phd/app.js', 'f.js'); //phd
+//mix.js('sources/phd/app.js', 'f.js'); //phd - тут протеряли css файл 
 //Конвертер онлайн - админка
 //mix.js('sources/phdadmin/app.js', 'g.js'); //phd
 
@@ -31,7 +31,7 @@ mix.styles([
 	], './../s/app.css');
 
 //Учёт времени - админка
-mix.js('sources/cronfrnd/app.js', 'h.js'); //crn
+//mix.js('sources/cronfrnd/app.js', 'h.js'); //crn
 
 //Страница логина второй уровень (там только конфиг для cache service worker)
 //mix.js('sources/sploginpagecacheclient/app.js', 'i.js');
