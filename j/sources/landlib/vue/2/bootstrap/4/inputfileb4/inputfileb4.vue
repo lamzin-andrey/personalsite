@@ -84,7 +84,7 @@
 			//Кастомная функция {onProgress}. Формат onProgress такой же как у свойств listeners
 			'progressListener' : {type:Object},
 			'csrfToken' : {type:String},
-			'csfrTokenName': {type:String, default: '_token'},
+			'csrfTokenName': {type:String, default: '_token'},
 			'uploadButtonLabel' : {type:String, default : 'Upload'},
 			//Отправляем дополнительно данные перечисленных инпутов
 			'sendInputs' : {type:Array, default : () => { return []; }},
