@@ -1,6 +1,9 @@
 <?php
 namespace App\Twig;
 
+use App\Entity\CrnTasks;
+use App\Entity\CrnTaskTags;
+use App\Service\AppService;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,12 +18,13 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	/** @property string _baseUrl */
 	private $_baseUrl = '';
 
-	public function __construct(ContainerInterface $container,  TranslatorInterface $t)
+	public function __construct(ContainerInterface $container,  TranslatorInterface $t, AppService $oAppService)
 	{
 		$this->container = $container;
 		$this->translator = $t;
 		$this->_oRequest = $container->get('request_stack')->getCurrentRequest();
 		$oServer = $this->_oRequest->server ?? null;
+		$this->_oAppService = $oAppService;
 
 		if ($oServer) {
 			$url = explode('?', $oServer->get('REQUEST_URI'));
@@ -31,6 +35,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	public function getFilters() : array
 	{
 		return [
+			new TwigFilter('render_interval', array($this, 'renderInterval')),
 			new TwigFilter('get_loginform_input_css', array($this, 'getLoginformInputCss')),
 			new TwigFilter('rouble', array($this, 'roubleFilter')),
 			new TwigFilter('translite_url', array($this, 'transliteUrl')),
@@ -38,6 +43,8 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 			new TwigFilter('topbar_new_is_read', array($this, 'topbarNewIsRead')),
 			new TwigFilter('topbar_message_is_read', array($this, 'topbarMessageIsRead')),
 			new TwigFilter('get_auth_user_display_name', array($this, 'getAuthUserDisplayName')),
+			new TwigFilter('user_avatar', array($this, 'getAuthUserAvatarImgSrc')),
+			new TwigFilter('sidebar_heading', array($this, 'getSidebarHeading')),
 			new TwigFilter('get_uid', array($this, 'getUid'))
 		];
 	}
@@ -109,11 +116,20 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	}
 	/**
 	 * Вернёт html строки меню левого сайдбара
+	 * @param string $href
+	 * @param string $text
+	 * @param string $translationDomain = 'sidebar'
+	 * @param array $access = [2] кодлы допустимых уровней доступа
 	 * @return string
 	*/
-	public function drawMenuItem(string $href, string $text, string $translationDomain = 'sidebar') : string
+	public function drawMenuItem(string $href, string $text, string $translationDomain = 'sidebar', array $access = [2]) : string
 	{
-		return '<a class="collapse-item'. $this->_activeMenuItem($href) . '" href="' . $href . '">' . $this->translator->trans($text, [], $translationDomain) . '</a>';
+		$s =  '<a class="collapse-item'. $this->_activeMenuItem($href) . '" href="' . $href . '">' . $this->translator->trans($text, [], $translationDomain) . '</a>';
+		$oUser = $this->container->get('security.token_storage')->getToken()->getUser();
+		if (in_array($oUser->getRole(), $access)) {
+			return $s;
+		}
+		return '';
 	}
 	/**
 	 * @description Вернет строку active если запрошенный url совпадает с запрошеным (для пунктов меню сайдбара)
@@ -121,6 +137,9 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	*/
 	private function _activeMenuItem(string $href) : string
 	{
+		$href = preg_replace("#/$#", '', $href);
+		$this->_baseUrl = preg_replace("#/$#", '', $this->_baseUrl);
+
 		if ($this->_baseUrl == $href) {
 			return ' active';
 		}
@@ -160,4 +179,59 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	{
 		return $oMessage->isRead ? '' : 'font-weight-bold';
 	}
+	/**
+	 * @param array $aIntervalInfo
+	 * @param StdClass $oTree
+	 * @param ?CrnTasks $oTask
+	 * @return string
+	*/
+	public function renderInterval(array $aIntervalInfo, $oTree, $oTask = null) : string
+	{
+		/** @var \DateTime $oStartDate */
+		$oStartDate = ($aIntervalInfo['startDatetime'] ?? null);
+		/** @var \DateTime  $oEndDate*/
+		$oEndDate = ($aIntervalInfo['endDatetime'] ?? null);
+		$start = '';
+		if (!$oStartDate) {
+			$start = '*';
+		} else {
+			$start = $oStartDate->format('H i');
+		}
+		$sEnd = '';
+		if (!$oEndDate) {
+			$sEnd = '*';
+		} else {
+			$sEnd = $oEndDate->format('H i');
+		}
+		$sTaskInfo = '';
+		if ($oTree) {
+			$oTaskInfo = \TreeAlgorithms::findById($oTree, ($aIntervalInfo['taskId'] ?? 0) );
+			$sTaskInfo = $oTaskInfo->codename . ' ' . $oTaskInfo->name;
+		} else if($oTask) {
+			$sTaskInfo = $oTask->getCodename() . ' ' . $oTask->getName();
+		}
+
+		return $start . ' - ' . $sEnd . ' ' . $sTaskInfo;
+	}
+	/**
+	 *
+	 * @return  string
+	*/
+	public function getAuthUserAvatarImgSrc() : string
+	{
+		return $this->_oAppService->getUserAvartarImageSrc();
+	}
+	/**
+	 * Возвращает загловок для сайдбара в зависимотси от роли пользователя
+	 * @return  srting
+	*/
+	public function getSidebarHeading() : string
+	{
+		$oUser = $this->_oAppService->getAuthUser();
+		if ($oUser->getRole() == 2) {
+			return 'ADMIN PANEL';
+		}
+		return 'FRIEND CRON';
+	}
+
 }

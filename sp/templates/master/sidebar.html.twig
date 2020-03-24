@@ -2,12 +2,12 @@
  <!-- Sidebar -->
 	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
 		<!-- Sidebar - Brand -->
-		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/p/">
+		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/sp/public/">
 			<div class="sidebar-brand-icon rotate-n-15">
 				<!--i class="fas fa-laugh-wink"></i-->
 				<img src="{{ asset('i/0.jpg') }}" style="max-width: 40px;">
 			</div>
-			<div class="sidebar-brand-text mx-3">Admin panel</div>
+			<div class="sidebar-brand-text mx-3">{{ ''|sidebar_heading }}</div>
 		</a>
 
 		<!-- Divider -->
@@ -21,7 +21,11 @@
 			</a>
 			<div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					{{ '/sp/public/'|draw_menu_item('Time manager')|raw }}
+					{{ '/sp/public/phdadmin/'|draw_menu_item('Phd Admin')|raw }}
+					{{ '/sp/public/phd/messages/'|draw_menu_item('Phd Admin messages')|raw }}
+					{{ '/sp/public/'|draw_menu_item('Time manager', 'sidebar', [0, 1, 2])|raw }}
+					{{ '/sp/public/exporttask'|draw_menu_item('Time manager export', 'sidebar', [0, 1, 2])|raw }}
+					{{ '/sp/public/help'|draw_menu_item('Time manager help', 'sidebar', [0, 1, 2])|raw }}
 					{{ '/p/'|draw_menu_item('Articles')|raw }}
 					{{ '/p/articlecategories/'|draw_menu_item('Articles Categories')|raw }}
 					{{ '/p/portfolio/'|draw_menu_item('Portfolio')|raw }}

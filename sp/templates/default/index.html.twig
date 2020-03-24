@@ -1,21 +1,22 @@
 {% extends 'base.html.twig' %}
+{% trans_default_domain 'tasks' %}
 
-
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}{{'Add task'|trans}}{% endblock %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <taskeditor searchtags="{{ searchtags }}" ref="tasks" formtoken="{{ formtoken }}" listtoken="{{ csrf_token('list') }}"></taskeditor>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-    <a href="{{ path('login') }}">Login</a>
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/opt/lampp/htdocs/mh.loc/www/sp/src/Controller/DefaultController.php'|file_link(0) }}">src/Controller/DefaultController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/opt/lampp/htdocs/mh.loc/www/sp/templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code></li>
-    </ul>
-</div>
+
+{% block javascripts %}
+    {# /j/b.js #}
+    <!-- Bootstrap core JavaScript-->
+    <script charset="UTF-8" src="/j/h.js"></script>
+
+    {# Он его два раза что ли тащит? #}
+    <script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
 {% endblock %}

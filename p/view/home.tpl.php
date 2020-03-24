@@ -8,7 +8,7 @@
 <h2 class="text-danger">Фронтенд</h2>
 <h3>Недоделки</h3>
 <ul>
-	<li>Посмотреть в последнем хроме, есть ли там горизонтальный скролл на Добро пожаловать. Если есть, то почему?</li>
+	<li>Svelta</li>
 	<li></li>
 </ul>
 <h3>Теория и практика</h3>
@@ -36,13 +36,7 @@
 <h3 >Теория и практика</h3>
 <h4>Больше теория</h4>
 <ul>
-	<li>Симтест</li>
-	<li class="text-success">Читаем документацию по Симфони. Сегодня 05 11 2019 года, на сайте Symfony.com поддерживается документация версий 3.4, 4.3, 4.4 и 5.0 master. 
-	Читаю перевод официальной документации на сайте symfony.ru.</li>
-	
-	<li><a href="https://symfony.ru/doc/current/forms.html" target="_blank">Forms in Symfony</a></li>
-	<li><a href="https://symfony.ru/doc/current/components/form.html" target="_blank">Forms</a></li>
-	<li><a href="http://symfony.ru/doc/current/form/form_themes.html" target="_blank">Forms themes</a></li>
+	<li></li>
 </ul>
 
 
@@ -50,95 +44,12 @@
 <ul>
 	<li class="text-error">симфони 3. (очень сомнительное, что-то структура файлов не похожа на документацию symfony 3.4, 
 				но тем не менее при запуске выводит именно Symfony 3.4)
-		<ul>
-			<li class="text-warning">app.city_sero_id теперь используем вместо main.city = 0</li>
-			<li class="text-warning">https://symfony.ru/doc/current/service_container/3.3-di-changes.html#controllers-are-registered-as-services - это далеко не выбрасывается, важно</li>
-			<li class="text-warning">Фильтр перестал запоминаться - скорее всего глюк встроенного сервера, который не всегда может читать файлы сессий</li>
-			<li class="text-warning">Библиотечные функции, годные для повторного использования  оформляем как composer пакеты или если для публикации не готовы, то просто кидаем в vendor пригнудительно поместив под контроль git. <a href="https://andryuxa.ru/blog/faq_po_ustanovke_symfony_3_i_symfony_4_na_localhost_xubuntu_1804_v_oktyabre_2019_ogo_goda/#autoload" target="_blank">тут</a></li>
-			<li >Один день просто сидеть и играться с запросами используя <i class="text-success">критерии</i> и билдеры
-			<ul class="d-none">
-				<li>Создаем специальный контроллер Traning controller</li>
-				<li>В нем по маршрутам /train/{method}</li>
-				<li>Создаём для каждого случая отдельный метод (и для билдера и для критерии</li>
-				<li >SELECT COUNT(id) AS cnt FROM main GROUP BY region *</li>
-				<li >SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
-LEFT JOIN cities AS c ON c.id = m.city 
-LEFT JOIN regions AS r ON r.id = m.region 
-WHERE m.is_deleted = 1 LIMIT 10, 10;								*
-				</li>
-				<li >SELECT m.title, c.city_name, r.region_name, r.is_city FROM main AS m
-INNER JOIN cities AS c ON c.id = m.city 
-INNER JOIN regions AS r ON r.id = m.region 
-WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
-				<li >SELECT CONCAT(phone, ', ', email) FROM users LIMIT 10; *</li>
-				<li>SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM main AS m 
-					GROUP BY (m.phone)
-					-- https://ourcodeworld.com/articles/read/245/how-to-execute-plain-sql-using-doctrine-in-symfony-3
-					-- Очень интересно!
-				 </li>
-				<li>SELECT * FROM `users` ORDER BY RAND() LIMIT 1000</li>
-				
-				<li>как хранить в mysql md5 хеш не как строку а как число
-						"INSERT INTO `mdd` (hash, str) VALUES (UNHEX(md5('x')), md5('x'))"
-						//hash имеет тип данных binary(16)
-					 - а как это будет с Симфони?
-				</li>
-				<li></li>
-			</ul>
-			</li>
-			<li>В первой половине дня больше налегаем на создание инструментов, во второй больше пилим рутину
-				<ul>
-					<li></li>
-					<li></li>
-				</ul>
-			</li>
-			<li class="text-success">Делаем страницу подачи объявления
-				<ul>
-					<li>ПРри аплоаде файла ajax - ом надо делать имя переменой $oForm->getName() + '[my_customname]'</li>
-					<li>То есть из библиотеки компонентов пока удалить это</li>
-					<li>
-						Это прикольно, но плохо. Написать в блоге про возможность, 
-							но постараться использовать настоящий токен.
-						configureOptions(OptionsResolver $resolver) {
-							$resolver->setDefaults(array(
-								'csrf_protection' => false,
-							));
-						}
-					</li>
-					<li>Надо что-то придумать, чтобы было возможно уйти с формы подачи объявлений с первог ораза
-					Думаю, что сделал, проверь там</li>
-					
-					<li>Каптчу сначала проверить в принципе</li>
-					<li>Затем сделать доступными такие же настройки нкак на продакшене (выключена для всех, выключена не для всех)</li>
-					<li></li>
-				</ul>
-			</li>
-			<li>Страница с соглашением</li>
-			<li>
-				Дополнить статью https://andryuxa.ru/blog/symfony_3_4_i__doctrine_2_kak_sdelat_chtoby_odin_i_tot_je_zapros_k_baze_ne_vypolnyalsya_dva_raza_podryad/
-				описанием useCacheResult
-				При переходе на производительный запрос для списка объявлений использовать
-			кэширование как: <a href="https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/caching.html#result-cache" tagret="_blank" >здесь</a>
-				Может, всё-таки получиться слепить вариант с join используя критерии?	
-			</li>
-			<li>https://github.com/hwi/HWIOAuthBundle - это через соц-сети, для общего развития.</li>
-			<li>Не написать ли ещё Symfony func-тесты</li>
-			<li>Разобраться, не появилось ли в S4 что-то вместо бандлов для повторного исползования (Symfony Flex).</li>
-			<li>Добиться работы qb->leftJoin как обещали симфонисты (используя аннотации).</li>
-			<li>Изучить команды make:</li>
-			<li></li>
-			<li></li>
-		</ul>
-		
 	 </li>
+	 <li>Самый продвинутый бандл - с командой декорирования и зависимостью от liip - надо выпилить эту зависимость.</li>
+	 <li>Бандл оплаты, черновик - надо добить с киви будет</li>
+	 <li>И наконец надо создать свой бандл с авторизацией, который я смогу использовать в Sym 4 и 5</li>
+	 <li>А к нему прикрутить эту старую историю с авторизацией</li>
 	 <li></li>
-	<li>Короче, один вариант сайта пилишь на симфони 3, второй на laravel.</li>
-	<li>Симфони - там всё делаешь через готовые бандлы. Можно приколоться, идти параллельно в 2 3 4 и 5. https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/index.rst - кажется, что-то готовое для организации пользователей. </li>
-	<li>Стоит ли перетаскивать бэкенд этого сайта на фреймвёрк?  - ДА!
-	У него чистый html на выдаче, поэтому он классный.
-	Но это не проблема, наверное.
-	Если удасться оставить html по прямым ссылкам, админку переносим на Симфони.
-	</li>
 </ul>
 
 
@@ -146,8 +57,7 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 <ul>
 	<li>fastxampp для новой версии php см. process.txt</li>
 	<li>Сделать так чтобы кавычки внутри тегов вообще всегда не заменялись на ёлки-палки.</li>
-	<li>Инструмент для декорирования - 4 часа пытаемся использовать парсер Никитоса,
-		если за это время не успеваем, переписываем на пыху php2js и его используем. </li>
+	
 	<li>php2js - добавляем поддержку namespace и use инструкций и переписываем на php/</li>
 	<li>НА главторгах первым делом обновить sw, путь к рандому убрать из кэш.
 		<ul>
@@ -160,15 +70,10 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 	</li>
 	<li>Сайт показывает по неизвестному запросу в гугле страницу 
 		Как делать ведроид на пыхе на первой позиции. Почему бы на этом не сосредоточиться?
+		 - Это было давно, что теперь?
 		<ul>
-			<li class="text-danger">Это делаем не каждый день, перемещаем вниз.</li>
-			<li>Первым делом дорабатываем методы работы с файлами</li>
 			<li></li>
 		</ul>
-	</li>
-	
-	<li>На газели если подать анонимно с правильными паролем и логином 
-		требует подтверждения sms, что неправильно, если аккаунт подтверждён.
 	</li>
 	<li>php2js<ul>
 			<li>Если в классе две константы, одна теряется и комментарий получается с prop вместо const</li>
@@ -185,7 +90,7 @@ WHERE m.is_deleted = 1 LIMIT 10, 10; *</li>
 		</ul></li>
 	</li>
 	<li></li>
-	</ul></li>
+</ul>
 </ul>
 
 <h2>Прочее самообразование</h2>

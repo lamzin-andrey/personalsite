@@ -9,12 +9,15 @@ parameters:
     app.siteName: "%env(resolve:SITE_NAME)%"
     app.siteUrlBegin:  "%env(resolve:SITE_URL_BEGIN)%"
     app.phdAdminEmail: "%env(resolve:PHD_ADMIN_EMAIL)%"
+    app.appPageUrl: "%env(resolve:APP_PAGE_URL)%"
+    app.phdAdminRoot: "%env(resolve:PHD_ADMIN_ROOT)%"
 
     app.qiwi_phone: "%env(resolve:QIWI_PHONE)%"
     app.qiwi_public_key: "%env(resolve:QIWI_PUBLIC_KEY)%"
     app.qiwi_secret_key: "%env(resolve:QIWI_SECRET_KEY)%"
 
-    app.sendemailoff: 0
+    #Тут антилогика: сейчас, когда off = 1 - должно письмо отправляться. TODO избавиться от антилогики
+    app.sendemailoff: "%env(resolve:SEND_EMAIL_ON)%"
 
     app.http_request_cache_ttl: 0
 
@@ -26,6 +29,9 @@ parameters:
     app.yacache: "%env(resolve:YANDEX_CACHE)%"
     app.yasecretkey: "%env(resolve:YANDEX_SECRET_KEY)%"
 
+    #crn friend section
+    app.tasks_per_page: 10
+    app.default_cron_friend_logo: /i/u64.png
 
 services:
     # default configuration for services in *this* file

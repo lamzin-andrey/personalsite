@@ -99,6 +99,9 @@
     "landlib/simplemail": {
         "version": "dev-master"
     },
+    "landlib/treealgorithms": {
+        "version": "dev-master"
+    },
     "monolog/monolog": {
         "version": "2.0.2"
     },

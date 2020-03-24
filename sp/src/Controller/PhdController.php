@@ -37,6 +37,84 @@ class PhdController extends AbstractController
 	/** @property int _examplesPerPage Количество работ на одной "странице" */
 	private $_examplesPerPage = 3;
 
+
+	/**
+	 * @Route("/phdcheckcsrf.json", name="phdcheckcsrf")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @param $
+	 * @return
+	 */
+	public function phdcheckcsrf (Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	{
+		if ($oRequest->getMethod() == 'POST') {
+			$aData =[];
+			$oForm = $this->createForm(get_class(new PsdUploadFormType()), null, [
+				'app_service' => $oAppService,
+				'uploaddir' => ''
+			]);
+			//$oForm->handleRequest($oRequest);
+			$oForm->submit([
+				'_token' => $oRequest->get('psd_up_form')['_token'],
+				'csrfup' => $oRequest->get('psd_up_form')['_csrfup'],
+				//'psdfileFileDeffer' => 'dd'
+			]);
+
+			if ($oForm->isSubmitted() && $oForm->isValid()) {
+				return $this->_json([]);
+			} else {
+				$aData['errors'] = $oAppService->getFormErrorsAsArray($oForm);
+				if (count($aData['errors'])) {
+					$aData['status'] = 'error';
+				}
+				$aData['error_text'] = 'No submit or invalid!';
+			}
+			return $this->_json($aData);
+		} else {
+			return $this->_json(['nopost' => 1]);
+		}
+	}
+
+
+	/**
+	 * @Route("/phducheck", name="phducheck")
+	 * @param Request $oRequest
+	 * @param TranslatorInterface $t
+	 * @return Response
+	*/
+	public function phducheck(Request $oRequest, TranslatorInterface $t)
+	{
+		$oPhdUser = $this->_getAuthPhdUser($oRequest);
+		if ($oPhdUser) {
+			header('location: ' . $this->getParameter('app.appPageUrl') );
+			exit;
+		}
+		$aData = [];
+		$aData ['pageHeading'] = 'Authentication, step #2';
+		$aData['sError'] = $t->trans('Possible your cookie is disabled, or user not found');
+		$aData['isPhducheck'] = 1;
+		return $this->render('phd/eauth.html.twig', $aData);
+	}
+	/**
+	 * Авторизация по ссылке в email
+	 * @Route("/phdusreau", name="phdusreau")
+	*/
+	public function phduseremailauth(Request $oRequest, TranslatorInterface $t)
+	{
+		$sAuthHash = $oRequest->get('ah', '');
+		$oPhdUser = $this->getDoctrine()->getRepository('App:PhdUsers')->findOneBy(['authHash' => $sAuthHash]);
+		$aData = [];
+		$aData ['pageHeading'] = 'Authentication, step #1';
+		if ($oPhdUser) {
+			$oCookie = $this->_createPhdClientCookie($oPhdUser->getHash());
+			$oResponse = $this->render('phd/eauth.html.twig', $aData);
+			$oResponse->headers->setCookie($oCookie);
+			return $oResponse;
+		}
+		$aData['sError'] = $t->trans('User not found');
+		return $this->render('phd/eauth.html.twig', $aData);
+	}
+
 	/**
 	 * Добавить запись в pay_transaction и вернуть идентификатор записи
 	 * @Route("/phdstarttransaction.json", name="phdstarttransaction")
@@ -119,9 +197,8 @@ class PhdController extends AbstractController
 		$oEm->flush();
 		$aData = [];
 		$oResponse = $this->_json($aData);
-		$sCookieName = $this->getParameter('app.phdusercookiename');
 		/** @var \Symfony\Component\HttpFoundation\Cookie $oCookie */
-		$oCookie = Cookie::create($sCookieName, $sCookieValue, time() + 31536000);
+		$oCookie = $this->_createPhdClientCookie($sCookieValue);
 		$oResponse->headers->setCookie($oCookie);
 		return $oResponse;
 	}
@@ -188,7 +265,7 @@ class PhdController extends AbstractController
 		if (!$oPhdUser) {
 			return $this->_json([
 				'status' => 'error',
-				'msg' => $t->trans('Unauth user')
+				'msg' => $t->trans('Unauth user 1')
 			]);
 		}
 		$oPhdMessage = $this->_getPhdMessage($oRequest, $oPhdUser);
@@ -242,21 +319,23 @@ class PhdController extends AbstractController
 				'uploaddir' => $this->_subdir
 			]);
 			//$oForm->handleRequest($oRequest);
+			$sFileName = 'psdfileFileDeffer';
 			$oForm->submit([
 				'_token' => $oRequest->get('psd_up_form')['_token'],
-				'psdfileFileImmediately' => $oRequest->files->get('psd_up_form')['psdfileFileImmediately']
+				$sFileName => $oRequest->files->get('psd_up_form')[$sFileName]
 			]);
 			if ($oForm->isSubmitted() && $oForm->isValid()) {
 				//save file
-				$oFile = $oForm['psdfileFileImmediately']->getData();
+				$oFile = $oForm[$sFileName]->getData();
 				if ($oFile) {
 					$sFileName = $oFileUploaderService->upload($oFile);
 					$s = '/' . $this->_subdir . '/' . $sFileName;
 					$this->_oMessage = new PhdMessages();
 					$this->_oMessage->setPsdLink($s);
-					$oSession = $oRequest->getSession();
-					$oPhdUser = $oSession->get('phd_user');
-					$this->_oMessage->setUid($oPhdUser->getId());
+					$this->_oMessage->setCreatedAt($oAppService->now());
+					$oPhdUser = $this->_getAuthPhdUser($oRequest);
+					//$this->_oMessage->setUid($oPhdUser->getId());
+					$this->_oMessage->setPhdUser($oPhdUser);
 					$aData['path'] = $s;
 					$oEm = $this->getDoctrine()->getManager();
 					$oEm->persist($this->_oMessage);
@@ -336,6 +415,7 @@ class PhdController extends AbstractController
 		$oRepository = $this->getDoctrine()->getRepository('App:PhdUsers');
 		$oCriteria = Criteria::create();
 		$e = Criteria::expr();
+
 		$oCriteria->where( $e->eq('hash', $sCookieValue));
 		$oCriteria->setMaxResults(1);
 		$oPhdUser = $oRepository->matching($oCriteria)->get(0);
@@ -378,7 +458,7 @@ class PhdController extends AbstractController
 		return $oPhdMessage;
 	}
 	/**
-	 * Вернёт последнюю загруженную пользователем работу
+	 * Установка токена формы
 	 * @param array &$aData
 	*/
 	private function _setPsdUploadFormToken(array &$aData, AppService $oAppService) : void
@@ -416,4 +496,15 @@ class PhdController extends AbstractController
 			$aData['resultLink'] = $this->getParameter('app.siteUrlBegin') . $oPhdMessage->getResultLink();
 		}
 	}
+	/**
+	 * Установить куку авторизации клиента 
+	 * @param string  $sCookieValue
+	 * @param Cookie
+	*/
+	private function _createPhdClientCookie(string $sCookieValue)
+	{
+		$sCookieName = $this->getParameter('app.phdusercookiename');
+		return Cookie::create($sCookieName, $sCookieValue, time() + 31536000);
+	}
+		
 }

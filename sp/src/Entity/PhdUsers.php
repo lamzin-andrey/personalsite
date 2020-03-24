@@ -36,6 +36,13 @@ class PhdUsers
      */
     private $authHash;
 
+	/**
+	 * @var array|null
+	 *
+	 * @ORM\OneToMany(targetEntity="PhdMessages", mappedBy="phdUser")
+	 */
+	private $phdMessages;
+
     /**
      * @var string|null
      *
@@ -84,5 +91,8 @@ class PhdUsers
         return $this;
     }
 
-
+	public function getPhdMessages(): ?array
+	{
+		return $this->phdMessages;
+	}
 }

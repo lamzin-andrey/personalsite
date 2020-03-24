@@ -25,9 +25,10 @@
 		</div>
 		<div v-if="step == STEP_SHOW_UPLOAD_BUTTON">
 			<!--  accept=".psd" -->
-			<p class="text-center">
+			<p class="text-center iFileWrapper">
 				<inputfileb4 
 					v-model="psdurl"
+					accept=".psd"
 					url="/sp/public/phdpsdupload.json"
 					tokenImagePath="/i/token.png"
 					csrfToken="lalala"
@@ -35,6 +36,9 @@
 					:label="$t('app.UploadPSD')" 
 					id="psdfile"
 					fieldwrapper="psd_up_form"
+					immediateleyUploadOff="true"
+					:uploadButtonLabel="$t('app.Upload')"
+					@selectdeffered="onSelectPsdFile"
 					ref="psduploader"
 				>
 				</inputfileb4>
@@ -71,6 +75,9 @@
 		<div v-if="step == STEP_FILE_IN_QUEUE || step == STEP_WAIT_PAYMENT">
 			<div class="alert alert-warning" v-if="step == STEP_WAIT_PAYMENT">
 				{{ $t('app.PayformInNewWndBegin') }} {{ paysystemName }} {{ $t('app.PayformInNewWndEnd') }} {{ $t('app.tryPayAgain') }}
+
+				Если вы оплатили работу, но ссылка на архив не показывается и не приходит на ваш email, 
+					пишите на  {{ phd_admin_email }}. Укажите дату и время платежа.
 			</div>
 			<div class="alert alert-success text-center">
 				{{ fileInQueueWaitScreenMessage }}{{ fileInQueueSecondsMessageFragment }}
@@ -91,6 +98,10 @@
 		<div v-if="step == STEP_SHOW_RESULT">
 			<div class="alert alert-success" >
 				<a :href="resultLink" target="_blank">{{ $t('app.DownloadResult') }}</a>
+			</div>
+			<div class="alert alert-warning" >
+				Если вы оплатили работу, но ссылка на архив не открывается и не приходит на ваш email, 
+					пишите на  {{ phd_admin_email }} Укажите дату и время платежа.
 			</div>
 			<button class="btn btn-primary w-100" @click="onClickLoadNewPsd">{{ $t('app.uploadNewPSDFile') }}</button>
 		</div>
@@ -171,7 +182,7 @@
 					<div class="form-check" checked>
 						<input v-model="paymentType" class="form-check-input" type="radio" id="ms" value="MC" checked>
 						<label class="form-check-label" for="ms">
-							Со счёта мобильного (МТС или Теле 2)
+							Со счёта мобильного МТС
 						</label>
 						<input v-model="phone" type="number" placeholder="Номер телефона" class="form-control form-control-user">
 					</div>
@@ -208,6 +219,8 @@
 	</div>
 </template>
 <script>
+	import '../css/phd.css';
+
 	//Компонент для аплоадла файлов
 	Vue.component('inputfileb4', require('../../landlib/vue/2/bootstrap/4/inputfileb4/inputfileb4.vue').default);
     export default {
@@ -298,7 +311,11 @@
 
             //Значение email
             email:null
-        }; },
+		}; },
+		
+		props: [
+			'phd_admin_email'
+		],
         //
         methods:{
 			/**
@@ -377,6 +394,28 @@
 				}
 				this.resultLink = data.resultLink;
 				this.step = this.STEP_SHOW_RESULT;
+			},
+			/**
+			 * @description Обработка выбора PSD файла (предотвращаем устаревание PSD токена)
+            */
+			onSelectPsdFile(inputfileb4, inputfile) {
+				//Отправить запрос.
+				Rest._post({'psd_up_form[_csrfup]' : 1, 'psd_up_form[_token]' : inputfileb4.getScfrfToken() }, 
+				(data) => {
+					if (data.status == 'ok') {
+						inputfileb4.sendFile(inputfile);
+					} else {
+						this.ib4 = inputfileb4;
+						this.ifile = inputfile;
+						this.bNeedUploadAfterGetToken = true;
+						this.sendCheckin();
+					}
+				}, this.$root._serverRoot + '/phdcheckcsrf.json', () => {
+					this.ib4 = inputfileb4;
+					this.ifile = inputfile;
+					this.bNeedUploadAfterGetToken = true;
+					this.sendCheckin();
+				}, true);
 			},
 			/**
 			 * @description Обработка клика на кнопке Перевести (деньги)
@@ -624,8 +663,11 @@
 					return;
 				}
 				if (data.status == 'ok') {
-					Rest._post({a: 1}, (data) => {this.onSuccessCheckIn(data);}, this.$root._serverRoot + '/phdcheckin.json', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
+					this.sendCheckin();
 				}
+			},
+			sendCheckin() {
+				Rest._post({a: 1}, (data) => {this.onSuccessCheckIn(data);}, this.$root._serverRoot + '/phdcheckin.json', (a, b, c) => {this.$root.defaultFailSendFormListener(a, b, c); });
 			},
 			/**
 			 * @description Обработка успешного запроса установки кук.
@@ -640,6 +682,10 @@
 					this.step = this.STEP_SHOW_UPLOAD_BUTTON;
 					Vue.nextTick(() => {
 						this.setPsdUploaderCsrfToken(data.formToken);
+						if (this.bNeedUploadAfterGetToken) {
+							this.bNeedUploadAfterGetToken = false;
+							this.ib4.sendFile(this.ifile);
+						}
 					});
 				} else {
 					this.step = this.STEP_HOW_COOKIES_ON;

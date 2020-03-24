@@ -14,11 +14,14 @@ window.Rest = {
      * @param {Function} onSuccess
      * @param {String} url 
      * @param {Function} onFail 
+     * @param {Boolean} noSetToken = false
      */
-    _post(data, onSuccess, url, onFail) {
+    _post(data, onSuccess, url, onFail, noSetToken = false) {
         let t = this._getToken();
         if (t) {
-            data._token = t;
+			if (!noSetToken) {
+				data._token = t;
+			}
             this._restreq('post', data, onSuccess, url, onFail)
         }
 	},
@@ -105,15 +108,16 @@ window.Rest = {
 		}*/
 		if (this._lang && !sendData.lang) {
 			sendData.lang = this._lang;
-		}
-        $.ajax({
+        }
+        let conf = {
             method: method,
             data:sendData,
             url:url,
             dataType:'json',
             success:onSuccess,
             error:onFail
-        });
+        };
+        $.ajax(conf);
         
 	},
 };

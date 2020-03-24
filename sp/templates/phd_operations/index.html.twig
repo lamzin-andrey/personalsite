@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PhdOperations index{% endblock %}
+
+{% block body %}
+    <h1>PhdOperations index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>UserId</th>
+                <th>OpCodeId</th>
+                <th>MainId</th>
+                <th>Created</th>
+                <th>Sum</th>
+                <th>PayTransactionId</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for phd_operation in phd_operations %}
+            <tr>
+                <td>{{ phd_operation.id }}</td>
+                <td>{{ phd_operation.userId }}</td>
+                <td>{{ phd_operation.opCodeId }}</td>
+                <td>{{ phd_operation.mainId }}</td>
+                <td>{{ phd_operation.created ? phd_operation.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ phd_operation.sum }}</td>
+                <td>{{ phd_operation.payTransactionId }}</td>
+                <td>
+                    <a href="{{ path('phd_operations_show', {'id': phd_operation.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('phd_messages_index') }}">Messages</a>
+{% endblock %}

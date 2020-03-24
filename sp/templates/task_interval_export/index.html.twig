@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Export Task Intervals{% endblock %}
+
+{% block content %}
+
+<textarea id="rawReportData" rows="15" readonly style="width:99%; background-color:white;">
+{{ sDate }}
+{% for aInterval in aIntervals %}
+{% if (oTask is defined) %}
+{{aInterval|render_interval(oTree, oTask) }}
+{% else %}
+{{aInterval|render_interval(oTree, 0) }}
+{% endif %}
+{% endfor %}
+</textarea>
+	<p>{{ 'Total time for each task'|trans }}</p>
+<p v-html="totalTimeInfo"></p>
+<div>
+	<form mathod="GET" action="{{ path('task_interval_export') }}">
+		<label for="date" class="d-block">{{ 'Select a Date'|trans }}:</label>
+		<input class="pjs-calendar" value="{{ sDate }}" id="date" name="date">
+		{% if (oTask is defined) %}
+		<div class="alert alert-warning alert-dismissible fade show">
+			<strong>{{ 'Show times for task'|trans }}:</strong>
+			{{ oTask.name }}
+			<input type="hidden" name="id" value="{{ oTask.id }}">
+			<button class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+		</div>
+		{% endif %}
+		<p class="text-right">
+			<button class="btn-primary btn" type="submit">{{ 'Apply'|trans }}</button>
+		</p>
+	</form>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+	{# /j/b.js #}
+	<!-- Bootstrap core JavaScript-->
+	<script charset="UTF-8" src="/j/h.js"></script>
+
+	{# Он его два раза что ли тащит? #}
+	<script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+	<!-- Core plugin JavaScript-->
+	<script src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+	<!-- Custom scripts for all pages-->
+	<script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
+{% endblock %}

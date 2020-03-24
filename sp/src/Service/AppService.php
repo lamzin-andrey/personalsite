@@ -1,17 +1,20 @@
 <?php
 namespace App\Service;
 
+use App\Entity\CrnIntervals;
+use App\Entity\CrnTasks;
+use Doctrine\ORM\EntityManager;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-
-
+use Symfony\Component\HttpFoundation\Response;
 //use App\Entity\Main;
 //use \Landlib\Text2Png;
 use Doctrine\Common\Collections\Criteria;
 //use Landlib\RusLexicon;
 use App\Service\FileUploaderService;
+use Doctrine\ORM\EntityRepository;
 
 class AppService
 {
@@ -19,7 +22,7 @@ class AppService
 	/** @property FormInterface $_oForm Сюда можно передать форму для более простой работы с ними */
 	private $_oForm;
 
-	public function __construct(ContainerInterface $container, ViewDataService $oViewDataService, FileUploaderService $oFileUploaderService)
+	public function __construct(ContainerInterface $container, ?ViewDataService $oViewDataService = null, ?FileUploaderService $oFileUploaderService = null)
 	{
 		$this->oContainer = $container;
 		$this->translator = $container->get('translator');
@@ -355,6 +358,92 @@ class AppService
 		$aOptions['translation_domain'] = $sTranslationDomain;
 		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
 	}
+
+	/**
+	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
+	 */
+	public function addZipFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
+	{
+		$sTranslationDomain = 'Zipform';//TODO create file from gz Adform.ru.yml
+		$oFileUploader = $this->getFileUploaderService();
+		$oFileUploader->setTranslationDomain($sTranslationDomain);
+		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
+		$oFileUploader->addAllowMimetype('application/zip');
+		$oFileUploader->setFileInputLabel('Append file!');
+		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
+		$oFileUploader->setMaxFileSize(102400);
+
+		$subdir = $sUploadDirectory;
+		$sTargetDirectory = $oRequest->server->get('DOCUMENT_ROOT') . '/' . $subdir;
+
+		$oFileUploader->setTargetDirectory($sTargetDirectory);
+
+		$aOptions = $oFileUploader->getFileTypeOptions();
+
+		$aOptions['translation_domain'] = $sTranslationDomain;
+		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
+	}
+	/**
+	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
+	*/
+	public function addUserLogoFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
+	{
+		$sTranslationDomain = 'profileform';
+		/** @var \App\Service\FileUploaderService $oFileUploader */
+		$oFileUploader = $this->getFileUploaderService();
+		$oFileUploader->setTranslationDomain($sTranslationDomain);
+		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
+		$oFileUploader->addAllowMimetype('image/png');
+		$oFileUploader->addAllowMimetype('image/jpeg');
+		$oFileUploader->setFileInputLabel('Select logotype');//TODO
+		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
+		$oFileUploader->setMaxFileSize(4096);
+		$oFileUploader->setMaxImageHeight(400);
+		$oFileUploader->setMaxImageWidth(400);
+		//$oFileUploader->addLiipBundleFilter('max_width');
+
+		$subdir = $sUploadDirectory;
+		$sTargetDirectory = $oRequest->server->get('DOCUMENT_ROOT') . '/' . $subdir;
+
+		$oFileUploader->setTargetDirectory($sTargetDirectory);
+
+		$aOptions = $oFileUploader->getFileTypeOptions();
+		$aOptions['translation_domain'] = $sTranslationDomain;
+		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
+	}
+	/**
+	 * Добавляет $oBuilder поле для загрузки файла со всеми необходимыми параметрами
+	 */
+	public function addBigImageFileField(string $sUploadDirectory, FormBuilder $oBuilder, string $sFieldName = 'imagefile')
+	{
+		$sTranslationDomain = 'Psdform';
+		/** @var \App\Service\FileUploaderService $oFileUploader */
+		$oFileUploader = $this->getFileUploaderService();
+		$oFileUploader->setTranslationDomain($sTranslationDomain);
+		$oRequest = $this->oContainer->get('request_stack')->getCurrentRequest();
+		$oFileUploader->addAllowMimetype('image/png');
+		$oFileUploader->addAllowMimetype('image/jpeg');
+		$oFileUploader->setFileInputLabel('Append file!');
+		$oFileUploader->setMimeWarningMessage('Choose allowed file type');
+		$oFileUploader->setMaxFileSize(102400);
+		$oFileUploader->setMaxImageHeight(1024000000);
+		$oFileUploader->setMaxImageWidth(1024000000);
+		//$oFileUploader->addLiipBundleFilter('max_width');
+
+		$subdir = $sUploadDirectory;
+		$sTargetDirectory = $oRequest->server->get('DOCUMENT_ROOT') . '/' . $subdir;
+
+		$oFileUploader->setTargetDirectory($sTargetDirectory);
+
+		$aOptions = $oFileUploader->getFileTypeOptions();
+		/*$aOptions['attr'] = [
+			'style' => 'width:173px;',
+			'v-if'  => '!vueFileInputIsEnabled'
+		];*/
+		$aOptions['translation_domain'] = $sTranslationDomain;
+		$oBuilder->add($sFieldName, \Symfony\Component\Form\Extension\Core\Type\FileType::class, $aOptions);
+	}
+
 	/**
 	 * @param string $sError
 	 * @param string $sField
@@ -436,5 +525,413 @@ class AppService
 		$reg = "#^[\w\.]+[^\.]@[\w]+\.[\w]{2,4}#";
 		$n = preg_match($reg, $sEmail, $m);
 		return $n;
+	}
+
+	/**
+	 *
+	 * @return \DateTime
+	*/
+	public function now() : \DateTime
+	{
+		return new \DateTime();
+	}
+
+	public function createDir(string $sDir)
+	{
+		$a = explode('/', $sDir);
+		$aB = ['/'];
+		foreach ($a as $s) {
+			$aB[] = $s;
+			$sPath = join('', $aB);
+			if (!file_exists($sPath)) {
+				@mkdir($sPath, 755);
+			}
+			$aB[] = '/';
+		}
+	}
+	/**
+	 * bool $isConsole = false
+	*/
+	public function getUnprocessedPhdMessages(bool $isConsole = false) : array
+	{
+		$oRepository = $this->oContainer->get('doctrine')->getRepository('App:PhdMessages');
+		$oCriteria = Criteria::create();
+		$ex = Criteria::expr();
+
+		if ($isConsole){
+			/*
+			 * SELECT * FROM phd_messages WHERE
+			 * 		is_closed != 1
+			 * ORDER BY id
+			*/
+			$oCriteria->where( $ex->neq('isClosed', 1) );
+			return $oRepository->matching($oCriteria)->toArray();
+		}
+		/*
+		 * SELECT * FROM phd_messages WHERE
+		 * 		is_closed != 1
+		 *     AND (operatior_id = 0 OR operatior_id = Im)
+		 * ORDER BY id
+		*/
+		$oUser = null;
+		$oToken = $this->oContainer->get('security.token_storage')->getToken();
+		if ($oToken) {
+			$oUser = $oToken->getUser();
+		}
+		if (!$oUser || is_string($oUser)) {
+			var_dump( $this->oContainer->getParameter('kernel.environment') );
+			//if (isConsole)
+			return [];
+		}
+
+		$nId = $oUser->getId();
+		$oCriteria->where( $ex->andX( $ex->neq('isClosed', 1), $ex->orX( $ex->eq('operatorId', 0), $ex->eq('operatorId', $nId) )  ) )
+			->orderBy(['id' => 'ASC']);
+		return $oRepository->matching($oCriteria)->toArray();
+	}
+	/**
+	 *
+	 * @param array $aData
+	 * @return  Response
+	*/
+	public function json (array $aData)
+	{
+		if (!isset($aData['status'])) {
+			$aData['status'] = 'ok';
+		}
+		$oResponse = new Response( json_encode($aData) );
+		$oResponse->headers->set('Content-Type', 'application/json');
+		return $oResponse;
+	}
+	/**
+	 * @param string $id for example 'App:Users'
+	 * @return ?ServiceEntityRepositoryInterface
+	 */
+	public function repository(string $id) : ?EntityRepository
+	{
+		return $this->oContainer->get('doctrine')->getRepository($id);
+	}
+	/**
+	 *
+	 * @return Request
+	*/
+	public function request() : Request
+	{
+		return $this->oContainer->get('request_stack')->getCurrentRequest();
+	}
+	/**
+	 * Сохраняет модели в базе
+	 * Аргументы - оюбъекты Entity
+	*/
+	public function save()
+	{
+		$oEm = $this->oContainer->get('doctrine')->getManager();
+		$nSz = func_num_args();
+		for ($i = 0; $i < $nSz; $i++) {
+			$o = func_get_arg($i);
+			if ($o) {
+				$oEm->persist($o);
+			}
+		}
+		$oEm->flush();
+	}
+
+	/**
+	 * Останавливает текущую задачу пользователя и запускает переданную
+	 * @param CrnTask $oTask
+	 * @param int $nUserId
+	 * @param bool $bImmediatleSave = false
+	 * @return StdClass {stoppedTask:int, runnedTask:int}
+	*/
+	public function runTask(CrnTasks $oTask, int $nUserId, bool $bImmediatleSave = false) : \StdClass
+	{
+		$oResult = new \StdClass();
+		$oResult->stoppedTask = 0;
+		$oResult->runnedTask = $oTask->getId();
+		//Найти задачу пользователя с executing = 1
+		/** @var EntityManager $oEm */
+		$oRepository = $this->repository('App:CrnTasks');
+		$oRunnedTask = $oRepository->findOneBy(['ausersId' => $nUserId, 'isExecuted' => true]);
+		$oInterval = null;
+		if ($oRunnedTask) {
+			if ($oRunnedTask->getId() == $oTask->getId()) {
+				return $oResult;
+			}
+			$this->stopTask($oRunnedTask, $oInterval);
+			$oResult->stoppedTask = $oRunnedTask->getId();
+		}
+		//установить переданной задаче executing = 1
+		$oTask->setIsExecuted(true);
+
+		//Вставить в intervals запись с переданной задачей и start = now
+		$oNewInterval = new CrnIntervals();
+		$oNewInterval->setTaskId($oTask->getId());
+		$oNewInterval->setStartDatetime($this->now());
+		//TODO вернуть true если транзакция завершилась успешно
+		if ($bImmediatleSave) {
+			$this->save($oTask, $oNewInterval, $oInterval, $oRunnedTask);
+		} else {
+			$this->save($oNewInterval, $oInterval, $oRunnedTask);
+		}
+		return $oResult;
+	}
+
+	/**
+	 *  Я - недоверчивый, пусть пока полежит
+	 * Останавливает текущую задачу пользователя и запускает переданную
+	 * @param CrnTask $oTask
+	 * @param int $nUserId
+	 * @param bool $bImmediatleSave = false
+	*/
+	public function _____runTask(CrnTasks $oTask, int $nUserId, bool $bImmediatleSave = false)
+	{
+		//Найти задачу пользователя с executing = 1
+		/** @var EntityManager $oEm */
+		$oEm = $this->oContainer->get('doctrine')->getManager();
+		$oQueryBuilder = $oEm->createQueryBuilder();
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder
+			->select('t.id')
+			->from('App:CrnTasks', 't')
+			->where($e->eq('t.ausersId', $nUserId))
+			->andWhere($e->eq('t.isExecuted', true))
+			->setMaxResults(1);
+
+		$aData = $oQueryBuilder->getQuery()->execute();
+		$oEm->beginTransaction();
+		if (isset($aData[0])) {
+			//TODO test it
+			$aRunnedTask = $aData[0];
+			//Найти последний интервал этой задачи с start != null and end == null
+			$oQueryBuilder = $oEm->createQueryBuilder();
+			$oQueryBuilder
+				->select('i.id')
+				->from('App:CrnIntervals', 'i')
+				->where($e->eq('i.taskId', $aRunnedTask['id']))
+				->andWhere($e->isNotNull('i.startDatetime'))
+				->andWhere($e->isNull('i.endDatetime'))
+				->setMaxResults(1)
+				->orderBy('i.id DESC');
+			$aIntervals = $oQueryBuilder->getQuery()->execute();
+			//установить end задачи в текущее время
+			if (isset($aIntervals[0])) {
+				$oQueryBuilder = $oEm->createQueryBuilder();
+				$oQueryBuilder
+					->update('App:CrnIntervals', 'i')
+					->set('i.endDatetime', $this->now())
+					->where($e->eq('i.id', $aIntervals[0]['id']));
+				$oQueryBuilder->getQuery()->execute();
+			}
+			//установить найденной задаче executing = 0
+			$oQueryBuilder = $oEm->createQueryBuilder();
+			$oQueryBuilder
+				->update('App:CrnTasks', 't')
+				->set('i.isExecuted', false)
+				->where($e->eq('t.id', $aRunnedTask['id']));
+			$oQueryBuilder->getQuery()->execute();
+		}
+		//установить переданной задаче executing = 1
+		$oTask->setIsExecuted(true);
+		if ($bImmediatleSave) {
+			$this->save($oTask);
+		}
+		//Вставить в intervals запись с переданной задачей и start = now
+		$oQueryBuilder = $oEm->createQueryBuilder();
+		$oQueryBuilder
+			//->('App:CrnTasks', 't')
+			->set('i.isExecuted', false)
+			->where($e->eq('t.id', $aRunnedTask['id']));
+		$oQueryBuilder->getQuery()->execute();
+		//вернуть true если транзакция завершилась успешно
+	}
+	/**
+	 *
+	 * @param string $sRepositoryId
+	 * @param int $nEntityId
+	*/
+	public function deleteEntity(string $sRepositoryId, int $nEntityId)
+	{
+		$oRepository = $this->repository($sRepositoryId);
+		if ($oRepository) {
+			$oEntity = $oRepository->find($nEntityId);
+			if ($oEntity) {
+				$oEm = $this->oContainer->get('doctrine')->getManager();
+				/** @var EntityManager $oEm */
+				$oEm->remove($oEntity);
+				$oEm->flush();
+			}
+		}
+	}
+	/**
+	 * Обновить поля времени, затраченного на задачу
+	 * @param CrnTasks $oRunnedTask
+	 * @param CrnIntervals $oInterval последний на момент выполнения интервал задачи, его поле end ещё не сохранено в базе данных, ноу уже установлено в этом аргументе
+	*/
+	private function _recalculateTaskTime(CrnTasks $oRunnedTask, CrnIntervals $oInterval) : void
+	{
+		//Обновить поля переданной в аргументе задачи
+		$nSecondsTime = $this->_getAllTaskIntervalsAsSeconds($oRunnedTask, $oInterval);
+		$this->_setTaskTimeIntervalDisplayFields($oRunnedTask, $nSecondsTime);
+		//Обновить поля её родительской задачи
+		// - Дойти до вершины дерева
+		$this->_setParentTasksTimeIntervalsRecursive($oRunnedTask);
+	}
+	/**
+	 *
+	 * @param CrnTasks $oRunnedTask
+	*/
+	private function _setParentTasksTimeIntervalsRecursive(CrnTasks $oTask) : void
+	{
+		$nParentId = $oTask->getParentId();
+		if ($nParentId == 0) {
+			return;
+		}
+		$oRepository = $this->repository('App:CrnTasks');
+		$oParentTask = $oRepository->find($nParentId);
+		if (!$oParentTask) {
+			return;
+		}
+		//Найти родительскую задачу и все вложенные в неё зачачи (кроме аргумента, так как он может быть ещё не сохранен)
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where( $e->eq('parentId', $oTask->getParentId()), $e->neq('id', $oTask->getId()) );
+		$aTasks = $oRepository->matching($oCriteria)->toArray();
+
+		$nSeconds = $oTask->getTotalHours();
+		if ($aTasks) {
+			foreach ($aTasks as $o) {
+				$nSeconds += $o->getTotalSeconds();
+			}
+		}
+		//суммировать интервалы parentTask, добавить к предыдущему
+		$nSeconds += $this->_getAllTaskIntervalsAsSeconds($oParentTask);
+		//Заполнить родительскую задачу, сохранить, вызвать _setParentTasksTimeIntervalsRecursive передав родительскую
+		$this->_setTaskTimeIntervalDisplayFields($oParentTask, $nSeconds);
+		$this->save($oParentTask);
+		$this->_setParentTasksTimeIntervalsRecursive($oParentTask);
+	}
+	/**
+	 * Получить все интервалы задачи в секундах
+	 * @param CrnTasks $oParentTask
+	 * @param ?CrnIntervals $oInterval = null "крайний" интервал задачи, может быть не передан
+	 * @return int
+	*/
+	private function _getAllTaskIntervalsAsSeconds(CrnTasks $oTask, ?CrnIntervals $oInterval = null) : int
+	{
+		$oRepository = $this->repository('App:CrnIntervals');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		if ($oInterval) {
+			$oCriteria->where(
+				$e->andX(
+					$e->eq('taskId', $oTask->getId()), $e->neq('id', $oInterval->getId())
+				)
+			);
+		} else {
+			$oCriteria->where($e->eq('taskId', $oTask->getId() ) );
+		}
+		$aIntervals = $oRepository->matching($oCriteria)->toArray();
+		$nSecondsTime = 0;
+		if ($aIntervals) {
+			/** @var CrnIntervals $o */
+			foreach ($aIntervals as $o) {
+				$nSecondsTime += ( strtotime($o->getEndDatetime()->format('Y-m-d H:i:s'))  - strtotime($o->getStartDatetime()->format('Y-m-d H:i:s')));
+			}
+		}
+		if ($oInterval) {
+			$nSecondsTime += ( strtotime($oInterval->getEndDatetime()->format('Y-m-d H:i:s'))  - strtotime($oInterval->getStartDatetime()->format('Y-m-d H:i:s')));
+		}
+		return $nSecondsTime;
+	}
+	/**
+	 * Установить поля rel... и totlaHours $oRunnedTask
+	 * @param CrnTasks $oRunnedTask
+	 * @param int $nSecondsTime время в секундах (получено сложением всех интервалов задачи)
+	*/
+	private function _setTaskTimeIntervalDisplayFields(CrnTasks $oRunnedTask, int $nSecondsTime) : void
+	{
+		$nYears = floor($nSecondsTime / (3600 * 24 * 365) );
+		$oRunnedTask->setRelYears($nYears);
+		$nMonths = $nSecondsTime - ($nYears * 3600 * 24 * 365);
+		$nMonths = floor($nMonths / (3600 * 24 * 30) );
+		$oRunnedTask->setRelMonths($nMonths);
+		$nWeeks = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30);
+		$nWeeks = floor($nWeeks / (3600 * 24 * 7) );
+		$oRunnedTask->setRelWeeks($nWeeks);
+		$nDays = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7);
+		$nDays = floor($nDays / (3600 * 24) );
+		$oRunnedTask->setRelDays($nDays);
+		$nHours = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7) - ($nDays * 3600 * 24);
+		$nHours = floor($nHours / 3600 );
+		$oRunnedTask->setRelHours($nHours);
+		$nMinutes = $nSecondsTime - ($nYears * 3600 * 24 * 365) - ($nMonths * 3600 * 24 * 30) - ($nWeeks * 3600 * 24 * 7) - ($nDays * 3600 * 24) - ($nHours * 3600);
+		$nMinutes = floor($nMinutes / 60 );
+		$oRunnedTask->setRelMinutes($nMinutes);
+		$nTotalHours = floor($nSecondsTime / 3600 );
+		$oRunnedTask->setTotalHours($nTotalHours);
+		$oRunnedTask->setTotalSeconds($nSecondsTime);
+	}
+	/**
+	 * Остановить задачу
+	 * @param CrnTasks $oRunnedTask
+	 * @param ?CrnIntervals &$oInterval
+	 * @param bool $bImmedateSave = false
+	*/
+	public function stopTask(CrnTasks $oRunnedTask, ?CrnIntervals &$oInterval, bool $bImmedateSave = false) : void
+	{
+		//TODO test it
+		//Найти последний интервал этой задачи с start != null and end == null
+		$oRepository = $this->repository('App:CrnIntervals');
+		$oQueryBuilder = $oRepository->createQueryBuilder('i');
+		$e = $oQueryBuilder->expr();
+		$oQueryBuilder
+			->where($e->eq('i.taskId', $oRunnedTask->getId()))
+			->andWhere($e->isNotNull('i.startDatetime'))
+			->andWhere($e->isNull('i.endDatetime'))
+			->setMaxResults(1)
+			->orderBy('i.id', 'DESC');
+		//var_dump($oQueryBuilder->getQuery());die;
+
+		$aIntervals = $oQueryBuilder->getQuery()->execute();
+
+
+		//установить end задачи в текущее время
+		$oInterval = ($aIntervals[0] ?? null);
+		if ($oInterval) {
+			$oInterval->setEndDatetime($this->now());
+		}
+		//установить найденой задаче executing = 0
+		$oRunnedTask->setIsExecuted(false);
+		//Обновить поля найденой задачи
+		$this->_recalculateTaskTime($oRunnedTask, $oInterval);
+		if ($bImmedateSave) {
+			$this->save($oRunnedTask, $oInterval);
+		}
+	}
+	/**
+	 * @return string
+	*/
+	public function getUserAvartarImageSrc() : string
+	{
+		$oUser = $this->getAuthUser();
+		$nLogoId = $oUser->getLogotypeId();
+		if ($nLogoId) {
+			$oLogoInfo = $this->repository('App:UserMedia')->find($nLogoId);
+			if ($oLogoInfo) {
+				if (file_exists($this->request()->server->get('DOCUMENT_ROOT') . $oLogoInfo->getPath())) {
+					return $oLogoInfo->getPath();
+				}
+			}
+		}
+		return $this->getParameter('app.default_cron_friend_logo');
+	}
+
+	/**
+	 * @param string $sParameterName
+	 * @return  string
+	*/
+	public function getParameter(string $sParameterName) : string
+	{
+		return $this->oContainer->getParameter($sParameterName);
 	}
 }

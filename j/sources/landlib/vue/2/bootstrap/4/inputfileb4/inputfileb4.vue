@@ -27,6 +27,7 @@
 				:aria-describedby="id + 'FileDefferHelp'"
 				:accept="accept"
 				:id="idDeffered" :name="idDeffered"
+				@change="onSelectDefferedFile"
 				>
 				<label class="custom-file-label" :for="id + 'FileDeffer'">{{label}}</label>
 				<div class="invalid-feedback"></div>
@@ -83,7 +84,7 @@
 			//Кастомная функция {onProgress}. Формат onProgress такой же как у свойств listeners
 			'progressListener' : {type:Object},
 			'csrfToken' : {type:String},
-			'csfrTokenName': {type:String, default: '_token'},
+			'csrfTokenName': {type:String, default: '_token'},
 			'uploadButtonLabel' : {type:String, default : 'Upload'},
 			//Отправляем дополнительно данные перечисленных инпутов
 			'sendInputs' : {type:Array, default : () => { return []; }},
@@ -124,8 +125,18 @@
 			 * @description Обработка выбора файла
 			*/
 			onSelectFile(evt) {
-				console.log('I call');
 				this.sendFile(evt.target);
+			},
+			/**
+			 * @description Обработка выбора файла при не отложенной загрузке
+			*/
+			onSelectDefferedFile(evt) {
+				/**
+				 * selectdeffered - Событиея выбора файла, происходит только тогда, когда immediateleyUploadOff=true
+				 * Передаёт аргументом ссылку на экземпляр класса и на поле input[type=file] выбора файла в котором выбран файл
+				 * 
+				*/
+				this.$emit('selectdeffered', this, evt.target);
 			},
 			/**
 			 * @description Отправка файла
@@ -284,6 +295,13 @@
 				this.csrfTokenPriority = sValue;
 				this.csfrTokenPriorityName = sName;
 			},
+			/**
+			 * @description Получить значение CSRF токена
+			 * @return String
+			*/
+			getScfrfToken() {
+				return (this.csrfTokenPriority || this.csrfToken);
+			}
            
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName

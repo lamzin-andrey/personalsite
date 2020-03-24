@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Заявка #{{ o.id }} от {{ o.phdUser.email }}{% endblock %}
+
+{% block content %}
+<div id="phdapp">
+
+    <p>
+        Email: {{ email }}
+    </p>
+
+    {% if (phone is defined) %}
+        <p>
+            Phone: {{ phone }}
+        </p>
+    {% endif %}
+
+    <p>
+        <a class="btn btn-primary" href="{{ o.psdLink }}" target="_blank">PSD Link</a>
+        <a href="https://psd2htmlconverter.com/ru/" class="btn btn-primary" target="_blank">Servce</a>
+    </p>
+    <p>
+
+    </p>
+
+    <div class="alert alert-info" v-if="staticStateMessageIsVisible">
+        {{ 'Message state'|trans }}: {{ messageState }}
+    </div>
+
+    {% if (payed == 0) %}
+        <div class="alert alert-danger" v-if="staticPayStateMessageIsVisible">
+            {{ 'Unpayed'|trans }}
+        </div>
+    {% else %}
+        <div class="alert alert-success" v-if="staticPayStateMessageIsVisible">
+            {{ 'Payed'|trans }}
+            {% if ( sPayinfo is defined ) %}
+                <p>{{ sPayinfo }}</p>
+            {% endif %}
+
+            {% if ( sPaysum is defined ) %}
+                <p>{{ sPaysum }}</p>
+            {% endif %}
+
+            {% if ( sPaydatetime is defined ) %}
+                <p>{{ sPaydatetime }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+
+    <textarea hidden id="hiddenNotices" style="display:none">{{ o.serviceNotes }}</textarea>
+    <input type="hidden" value="{{ o.noticePreviewLink }}" id="hiddennoticepreviewlink">
+    <input type="hidden" value="{{ o.previewLink }}" id="hiddenpreviewlink">
+    <input type="hidden" value="{{ o.cssPreviewLink }}" id="hiddencsspreviewlink">
+    <input type="hidden" value="{{ o.htmlExampleLink }}" id="hiddenhtmlexamplelink">
+    <input type="hidden" value="{{ o.resultLink }}" id="hiddenresultlink">
+    <input type="hidden" value="{{ formToken }}" id="hiddenformtoken">
+
+    <phdadminform ref="phdadminform"></phdadminform>
+    <b4alertdlg id="appAlertDlg" v-bind:params="b4AlertDlgParams"></b4alertdlg>
+</div>
+{% endblock %}

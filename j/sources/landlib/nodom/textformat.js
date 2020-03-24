@@ -73,6 +73,16 @@ window.TextFormat = {
 	},
 	/**
 	 * @description 
+	 * Make first letter of string upper case
+	 * Делает первую буку строки в верхнем регистре
+	 * 
+	*/
+	capitalize:function(s){
+		let first = s.charAt(0), tail = s.substring(1);
+		return (first.toUpperCase() + tail);
+	},
+	/**
+	 * @description 
 	 * Translite string to url part
 	 * Преобразует строку в url
 	 * 

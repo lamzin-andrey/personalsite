@@ -9,7 +9,11 @@ if ($label) {
 		$domain = 'http://glavtorgi.ru';
 	}
 	if ($f == 'phd') {
-		$domain = 'http://andryuxa.ru';
-		$path = '/public/sp/yamoney/notice/reciever';
+		$domain = 'https://andryuxa.ru';
+		$path = '/sp/public/yamoney/notice/reciever';
+	}
+	if ($f == 'gw') {
+		$domain = 'https://gazel.website';
+		$path = '/yamoney/notice/reciever';
 	}
 }

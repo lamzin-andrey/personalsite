@@ -354,6 +354,9 @@ This event emit only when attribute `listeners` not set.
 This event emit when server response success. You can no listen this event, because 
 this component set path to uploaded file as him value, and binding model will containts it value.
 
+### selectdeffered
+
+This event emit when  file selected only when attribute `immediateleyUploadOff` set `true`.
 
 # Ru
 
@@ -716,3 +719,6 @@ Unique id for input. Uploaded file url will set in hidden input with it id.
 	Это событие наступает, когда загрузка файла закончилась успешно.
 	Вам не обязательно отслеживать его наступление, потому что этот компонент установит путь к файлу как своё собственное значение (запишет его в связанную модель).
 
+### selectdeffered
+
+Это событие происходит, когда файл выбран только тогда, когда атрибут `medileyUploadOff` установлен `true`.

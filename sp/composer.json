@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "landlib/simplemail": "dev-master",
+        "landlib/treealgorithms": "dev-master",
         "qiwi/bill-payments-php-sdk": "^0.1.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.0.*",

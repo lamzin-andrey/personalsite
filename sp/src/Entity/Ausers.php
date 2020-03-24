@@ -80,6 +80,13 @@ class Ausers implements UserInterface
      */
     private $isDeleted = '0';
 
+	/**
+	 * @var int|null
+	 *
+	 * @ORM\Column(name="logotype_id", type="integer", nullable=false, options={"comment"="Логотип user_media.id","default"="0"})
+	 */
+	private $logotypeId = '0';
+
     /**
      * @var \DateTime|null
      *
@@ -118,7 +125,7 @@ class Ausers implements UserInterface
     /**
      * @var int|null
      *
-     * @ORM\Column(name="role", type="integer", nullable=true, options={"comment"="Роль пользователя 0 - пользователь 1 - модератор - 2 - админ"})
+     * @ORM\Column(name="role", type="integer", nullable=true, options={"comment"="Роль пользователя 0 - пользователь 1 - модератор  2 - админ 3 - админ раздела конвертация psd в html+css", "default"="0"})
      */
     private $role = '0';
 
@@ -223,9 +230,16 @@ class Ausers implements UserInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_subscribed", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен получать письма от ЛАНд-а"})
-     */
+     * @ORM\Column(name="is_subscribed", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен получать письма от ЛАНд-а","default"="0"})
+    */
     private $isSubscribed = '0';
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="bsettings", type="integer", nullable=false, options={"comment"="Настройки типа bool. Хранятся в битах числа. Бит 0: бот в чате Полиглот 0 - выключен, 1 - включен","default"="0"})
+    */
+    private $bsettings = 0;
 
     public function getId(): ?int
     {
@@ -300,6 +314,29 @@ class Ausers implements UserInterface
     public function setIsDeleted(?int $isDeleted): self
     {
         $this->isDeleted = $isDeleted;
+
+        return $this;
+    }
+	public function getLogotypeId(): ?int
+	{
+		return $this->logotypeId;
+	}
+
+	public function setLogotypeId(?int $logotypeId): self
+	{
+		$this->logotypeId = $logotypeId;
+		return $this;
+	}
+
+    
+    public function getBSettings(): ?int
+    {
+        return $this->bsettings;
+    }
+
+    public function setBSettings(?int $v): self
+    {
+        $this->bsettings = $v;
 
         return $this;
     }
