@@ -1,0 +1,17 @@
+.messagecomponent .title, 
+.begincomponent .title,
+.essagecomponent .input .input-title,  .essagecomponent .output .output-title{
+	display:none!important;
+}
+
+.messagecomponent.selected {
+	background-color: #1B63FD!important;
+	color: white!important;
+	border-color: #060F5E!important;
+}
+
+.messagecomponent {
+	background-color: #B9C6E2!important;
+	color: black!important;
+	border-color: #6277A2!important;
+}
