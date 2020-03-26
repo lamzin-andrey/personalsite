@@ -1,3 +1,4 @@
+/** Вид компонентов */
 .messagecomponent .title, 
 .begincomponent .title,
 .essagecomponent .input .input-title,  .essagecomponent .output .output-title{
@@ -15,7 +16,37 @@
 	color: black!important;
 	border-color: #6277A2!important;
 }
+
+/** Контекстное меню */
 .context-menu .item {
 	background-color: #FFF!important;
 	color: black!important;
+	border-radius: 0px!important;
+	width: auto!important;
+	border: 1px solid black;
+	border-bottom: none!important;
+	padding-left: 14px!important;
+	font-size: 12px;
+}
+.context-menu :last-child{
+	border-bottom: 1px solid black!important;
+}
+.context-menu .item:hover {
+	background-color: blue!important;
+	color: white!important;
+	font-weight:bold;
+}
+.context-menu {
+	border-radius: 0px!important;
+	width: auto!important;
+}
+
+/** Отображение текста сообщения на блоке */
+.bot-scheme-editor-msg-view {
+	max-width: 200px;
+	max-height: 44px;
+	overflow-y: hidden;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	overflow-x: hidden;	
 }
