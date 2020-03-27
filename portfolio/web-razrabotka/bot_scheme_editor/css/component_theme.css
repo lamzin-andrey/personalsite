@@ -1,17 +1,23 @@
 /** Вид компонентов */
 .messagecomponent .title, 
 .begincomponent .title,
+.timercomponent .title,
+.conditioncomponent .title,
+.actioncomponent .title,
 .essagecomponent .input .input-title,  .essagecomponent .output .output-title{
 	display:none!important;
 }
 
-.messagecomponent.selected {
+.messagecomponent.selected,
+.timercomponent.selected
+ {
 	background-color: #1B63FD!important;
 	color: white!important;
 	border-color: #060F5E!important;
 }
 
-.messagecomponent {
+.messagecomponent,
+.timercomponent {
 	background-color: #B9C6E2!important;
 	color: black!important;
 	border-color: #6277A2!important;
@@ -41,7 +47,7 @@
 	width: auto!important;
 }
 
-/** Отображение текста сообщения на блоке */
+/** Отображение текста сообщения на блоке сообщения */
 .bot-scheme-editor-msg-view {
 	max-width: 200px;
 	max-height: 44px;
@@ -49,4 +55,53 @@
 	font-size: 12px;
 	text-overflow: ellipsis;
 	overflow-x: hidden;	
+}
+
+/** Внешний вид таймера */
+.timercomponent .timer-icon {
+	line-height: 32px;
+	vertical-align: bottom;
+	-webkit-user-select: none!important;
+	-moz-user-select: none!important;
+	user-select: none!important;
+}
+.timercomponent input[type=number] {
+	width: 50px;
+}
+.node.timercomponent {
+	max-width: 216px;
+	min-width:10px!important;
+}
+
+/** Внешний вид блока условия */
+.conditionName {
+	width: 100%!important;
+}
+.conditioncomponent.selected {
+	background-color: #35A647!important;
+	color: white!important;
+	border-color: #396D41!important;
+}
+
+.conditioncomponent {
+	background-color: #59CC4A!important;
+	color: white!important;
+	border-color: #62A26C!important;
+}
+
+
+/** Внешний вид блока действия */
+.actioncomponent.selected {
+	background-color: #ffd92c!important;
+	color: black!important;
+	border-color: #e3c000!important;
+}
+
+.actioncomponent {
+	background-color: #FFFE9C!important;
+	color: black!important;
+	border-color: #ffd92c!important;
+}
+.actioncomponent  .input-title,  .actioncomponent  .output-title{
+	color: black!important;
 }
