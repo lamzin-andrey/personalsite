@@ -1,0 +1,16 @@
+{
+  "name": "BotSchemeEditor",
+  "short_name": "BotSchemeEditor",
+  "icons": [{
+    "src": "/images/bot-scheme-toolbar/128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+  }],
+  "start_url": "/portfolio/web-razrabotka/bot_scheme_editor/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#3D5455",
+  "permissions": [
+	  "unlimitedStorage"
+   ]
+}
