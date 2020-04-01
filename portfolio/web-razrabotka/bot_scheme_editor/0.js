@@ -2291,10 +2291,8 @@ __webpack_require__.r(__webpack_exports__);
         var oGUIFileManager = new _classes_filesystem_landgiufilemanager_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
         console.log('Before openFileDialog');
         oGUIFileManager.openFileDialog('', '').then(function (sFileName) {
-          console.log('Was selected "' + sFileName + '"');
-          oFileManager.readFile(sFileName, function (oReadResult) {
-            _this.onReadData(oReadResult);
-          });
+          console.log('Was selected "' + sFileName + '"'); //oFileManager.readFile(sFileName, (oReadResult) => { this.onReadData(oReadResult);});
+
           oFileManager.writeFile(sFileName, sData, function (oWriteResult) {
             _this.onWriteData(oWriteResult);
           });
