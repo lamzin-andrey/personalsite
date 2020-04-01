@@ -218,11 +218,65 @@ var LandFileManager = /*#__PURE__*/function () {
       this.sLastError = '';
       this.currentFileName = sFileName;
       this.currentStringData = sData;
-      this.fResultHandler = fResultHandler;
+      this.fResultHandler = fResultHandler; //PERSISTENT | TEMPORARY
+
       window.webkitRequestFileSystem(window.PERSISTENT, this._requestedSizeMb * 1024 * 1024, function (fileSystem) {
         _this.onInitFileSystemForWrite(fileSystem);
       }, function (oError) {
         _this.onFailWriteFile(oError);
+      });
+    }
+    /**
+     * TODO избавиться от использования переменных использующихся для write операции
+     * @param {String} sFileName  полное имя файла
+     * @param {Function} fResultHandler функция - обработчик результата успешной или неуспешной записи в файл
+     * 						fResultHandler argument {success: Boolean, data:String,[errorInfo: String]}
+     */
+
+  }, {
+    key: "readFile",
+    value: function readFile(sFileName, fResultHandler) {
+      var _this2 = this;
+
+      if (this.writeProcessIsStart) {
+        this.fResultHandler({
+          error: true,
+          errorInfo: 'Already running process writing to file "' + this.currentFileName + '"'
+        });
+        return;
+      }
+      /** @property {Boolean}	writeProcessIsStart	принимает true когда вызван writeFile и остается в этом состоянии, пока запись в файл не завершена (в том числе и неуспешно) */
+
+
+      this.writeProcessIsStart = true;
+      /** @property {String} sLastError сюда собираютсяч все ошибки по ходу записи данных в файл */
+
+      this.sLastError = '';
+      this.currentFileName = sFileName;
+      this.fResultHandler = fResultHandler; //PERSISTENT | TEMPORARY
+
+      window.webkitRequestFileSystem(window.TEMPORARY, this._requestedSizeMb * 1024 * 1024, function (fileSystem) {
+        _this2.onInitFileSystemForRead(fileSystem);
+      }, function (oError) {
+        _this2.onFailWriteFile(oError);
+      });
+    }
+    /**
+     * @description Обработка успешного запроса к доступу к файловой системе
+     * @param {FileSystem} fileSystem 
+     */
+
+  }, {
+    key: "onInitFileSystemForRead",
+    value: function onInitFileSystemForRead(fileSystem) {
+      var _this3 = this;
+
+      fileSystem.root.getFile(this.currentFileName, {
+        create: false
+      }, function (oFileEntry) {
+        _this3.onFileEntry(oFileEntry, true);
+      }, function (oError) {
+        _this3.onFailWriteFile(oError);
       });
     }
     /**
@@ -233,14 +287,14 @@ var LandFileManager = /*#__PURE__*/function () {
   }, {
     key: "onInitFileSystemForWrite",
     value: function onInitFileSystemForWrite(fileSystem) {
-      var _this2 = this;
+      var _this4 = this;
 
       fileSystem.root.getFile(this.currentFileName, {
         create: true
       }, function (oFileEntry) {
-        _this2.onFileEntry(oFileEntry);
+        _this4.onFileEntry(oFileEntry);
       }, function (oError) {
-        _this2.onFailWriteFile(oError);
+        _this4.onFailWriteFile(oError);
       });
     }
     /**
@@ -251,13 +305,45 @@ var LandFileManager = /*#__PURE__*/function () {
   }, {
     key: "onFileEntry",
     value: function onFileEntry(oFileEntry) {
-      var _this3 = this;
+      var _this5 = this;
 
-      fileEntry.createWriter(function (oFileWriter) {
-        _this3._writeCurrentString(oFileWriter);
-      }, function (oError) {
-        _this3.onFailWriteFile(oError);
-      });
+      var bForRead = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (!bForRead) {
+        oFileEntry.createWriter(function (oFileWriter) {
+          _this5._writeCurrentString(oFileWriter);
+        }, function (oError) {
+          _this5.onFailWriteFile(oError);
+        });
+      } else {
+        //TODO это эксперименты
+        // Get a File object representing the file,
+        // then use FileReader to read its contents.
+        console.log('fP = ', oFileEntry.getParent(function (a, b, c) {
+          console.log(a, b, c);
+        }, function (a, b, c) {
+          console.log(a, b, c);
+        }));
+        var that = this;
+        oFileEntry.file(function (file) {
+          var reader = new FileReader();
+
+          reader.onloadend = function (e) {
+            /*var txtArea = document.createElement('textarea');
+            txtArea.value = this.result;
+            document.body.appendChild(txtArea);*/
+            var result = this.result;
+            that.fResultHandler({
+              success: true,
+              data: result
+            });
+          };
+
+          reader.readAsText(file);
+        }, function (e) {
+          _this5.onFailWriteFile(e);
+        });
+      }
     }
     /**
      * @description Собственно, запись в файл, но сначала создадим ещё обработчиков разных случаев
@@ -267,33 +353,30 @@ var LandFileManager = /*#__PURE__*/function () {
   }, {
     key: "_writeCurrentString",
     value: function _writeCurrentString(oFileWriter) {
-      var _this4 = this;
+      var _this6 = this;
 
       oFileWriter.onwriteend = function () {
-        oFileWriter.onwriteend = function () {
-          _this4.writeProcessIsStart = false;
+        _this6.writeProcessIsStart = false;
 
-          _this4.fResultHandler({
-            success: true
-          });
-        };
-
-        var blob = new BlobBuilder();
-        blob.append(_this4.currentStringData);
-        oFileWriter.write(blob.getBlob('text/plain'));
-      };
-
-      oFileWriter.onerror = function (oError) {
-        _this4.writeProcessIsStart = false;
-        _this4.sLastError += oError.toString() + '\n';
-
-        _this4.fResultHandler({
-          success: false,
-          errorInfo: _this4.sLastError
+        _this6.fResultHandler({
+          success: true
         });
       };
 
-      oFileWriter.truncate(0);
+      var blob = new Blob(['hw']); //blob.append(this.currentStringData);
+
+      oFileWriter.write(blob);
+      /*.getBlob('text/plain')*/
+
+      oFileWriter.onerror = function (oError) {
+        _this6.writeProcessIsStart = false;
+        _this6.sLastError += oError.toString() + '\n';
+
+        _this6.fResultHandler({
+          success: false,
+          errorInfo: _this6.sLastError
+        });
+      };
     }
     /**
      * @description Обработка не успешного запроса к доступу к файловой системе
@@ -323,12 +406,13 @@ var LandFileManager = /*#__PURE__*/function () {
         	this.sLastError += 'INVALID_STATE_ERR\n';
         	break;*/
         default:
-          this.sLastError += 'Unknown Error\n';
+          var s = oError.toString();
+          this.sLastError += s ? s + '\n' : 'Unknown Error\n';
           break;
       }
 
       this.fResultHandler({
-        success: true,
+        success: false,
         errorInfo: this.sLastError
       });
     }
@@ -380,14 +464,14 @@ var LandGUIFileManager = /*#__PURE__*/function () {
         setTimeout(function () {
           console.log('Before Call onSelectFile..');
           that.onSelectFile();
-        }, 3 * 1000);
+        }, 1 * 1000);
       });
     }
   }, {
     key: "onSelectFile",
     value: function onSelectFile() {
       console.log('Before Call this.resolver..');
-      this.resolver('log01042020.log');
+      this.resolver('log01042020i1.log');
     }
   }]);
 
@@ -2202,19 +2286,33 @@ __webpack_require__.r(__webpack_exports__);
       var oFileManager = new _classes_filesystem_landfilemanager_js__WEBPACK_IMPORTED_MODULE_0__["default"](1);
 
       if (oFileManager.isAccessible()) {
-        // Работает
+        // @Работает@
         var sData = '{}';
         var oGUIFileManager = new _classes_filesystem_landgiufilemanager_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
         console.log('Before openFileDialog');
         oGUIFileManager.openFileDialog('', '').then(function (sFileName) {
           console.log('Was selected "' + sFileName + '"');
-          oFileManager.writeFile(sFileName, sData, function (oWriteResult) {
-            _this.onWriteData(oWriteResult);
-          });
+          oFileManager.readFile(sFileName, function (oReadResult) {
+            _this.onReadData(oReadResult);
+          }); //oFileManager.writeFile(sFileName, sData, (oWriteResult) => { this.onWriteData(oWriteResult); }) 
         });
       } else {
         //TODO показать textarea+ с json
         alert('File API не поддерживается данным браузером');
+      }
+    },
+
+    /**
+     * @description Обработка окончания чтения из файла
+     * @param {Object} oReadResult {success:Boolean, data:String, errorInfo:String} - данные об успешном или не успешном окончании процесса записи
+    */
+    onReadData: function onReadData(oReadResult) {
+      var oWriteResult = oReadResult;
+
+      if (oWriteResult.success) {
+        this.alert(oWriteResult.data);
+      } else {
+        this.alert(oWriteResult.errorInfo);
       }
     },
 
