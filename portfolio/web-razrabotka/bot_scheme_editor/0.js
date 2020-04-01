@@ -2294,7 +2294,10 @@ __webpack_require__.r(__webpack_exports__);
           console.log('Was selected "' + sFileName + '"');
           oFileManager.readFile(sFileName, function (oReadResult) {
             _this.onReadData(oReadResult);
-          }); //oFileManager.writeFile(sFileName, sData, (oWriteResult) => { this.onWriteData(oWriteResult); }) 
+          });
+          oFileManager.writeFile(sFileName, sData, function (oWriteResult) {
+            _this.onWriteData(oWriteResult);
+          });
         });
       } else {
         //TODO показать textarea+ с json
