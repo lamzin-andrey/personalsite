@@ -1,5 +1,5 @@
 .bot-scheme-editor-property-editor-block {
-	height: 100vh;
+	min-height: 100vh;
 	width: 320px;
 	background-color: #ece9d8;
 }
