@@ -1,0 +1,34 @@
+body {
+	margin:0px;
+	padding: 0px;
+	font-family: DejaVu Serif,Calibri,Arial;
+}
+.d-flex {
+	display:flex;
+	align-items:stretch;
+	flex-direction: row;
+}
+.toolbar-wrapper {
+	border: solid 1px #ece9d8;
+	border-right-color: #3E97C4;
+	min-width: 63px;
+	width: 64px;
+	min-height: 99.5vh;
+	background-color: #ece9d8;
+	text-align: center;
+}
+.toolbar-fixed {
+	position:fixed;
+	z-index:2;
+}
+.editorarea-wrapper {
+	width: calc(100% - 70px);
+	min-height: 99.5vh;
+}
+.property-editor-wrapper{
+	position:absolute;
+	right:0px;
+	top:0px;
+	z-index:1;
+	min-height: 99.5vh;
+}
