@@ -54,7 +54,7 @@ class ArticlesController extends AppBaseController
 			return $this->_json($aResult);
 		}
 		$sToken = $this->_getListFormToken();
-		$sRecievedToken = ( $oRequest->get('articleslist', []) ?? '' );
+		$sRecievedToken = ( $oRequest->get('articleslist', [])['_token'] ?? '' );
 		if ($sToken != $sRecievedToken) {
 			$aResult['msg'] = $t->trans('Invalid csrf token', [], 'security');
 			$aResult['status'] = 'error';
