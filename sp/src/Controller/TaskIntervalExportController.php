@@ -31,7 +31,7 @@ class TaskIntervalExportController extends AppBaseController
 			]);
 			if (!$oTask) {
 				$this->addFlash('notice', $t->trans('You have not access to this task'));
-				return $this->render('task_interval_export/index.html.twig', $aData);
+				return $this->render('task_interval_export/articles.html.twig', $aData);
 			}
 			$aData['oTask'] = $oTask;
 		}
@@ -40,7 +40,7 @@ class TaskIntervalExportController extends AppBaseController
     	//TODO validate date!
 		if (!preg_match("#^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$#", $sDate)) {
 			$this->addFlash('notice', $t->trans('Invalid date'));
-			return $this->render('task_interval_export/index.html.twig', $aData);
+			return $this->render('task_interval_export/articles.html.twig', $aData);
 		}
 
 
@@ -88,7 +88,7 @@ class TaskIntervalExportController extends AppBaseController
 		$aData['sDate'] = $sDate;
 		$aData['oTree'] = $oBranch;
 
-        return $this->render('task_interval_export/index.html.twig', $aData);
+        return $this->render('task_interval_export/articles.html.twig', $aData);
     }
     /**
 	 * Добавляет в _aChildTasks очередной объект с данными задачи

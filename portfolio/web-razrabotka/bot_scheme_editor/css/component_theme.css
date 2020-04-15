@@ -11,14 +11,14 @@
 .messagecomponent.selected,
 .timercomponent.selected
  {
-	background-color: #1B63FD!important;
+	background-color: rgba(27, 99, 253, 0.8)!important;
 	color: white!important;
 	border-color: #060F5E!important;
 }
 
 .messagecomponent,
 .timercomponent {
-	background-color: #B9C6E2!important;
+	background-color: rgba(185, 198, 226, 0.8)!important;
 	color: black!important;
 	border-color: #6277A2!important;
 }
@@ -78,13 +78,13 @@
 	width: 100%!important;
 }
 .conditioncomponent.selected {
-	background-color: #35A647!important;
+	background-color: rgba(53, 166, 71, 0.8)!important;
 	color: white!important;
 	border-color: #396D41!important;
 }
 
 .conditioncomponent {
-	background-color: #59CC4A!important;
+	background-color: rgb(89, 204, 74, 0.8)!important;
 	color: white!important;
 	border-color: #62A26C!important;
 }
@@ -92,13 +92,13 @@
 
 /** Внешний вид блока действия */
 .actioncomponent.selected {
-	background-color: #ffd92c!important;
+	background-color: rgba(255, 217, 44, 0.8)!important;
 	color: black!important;
-	border-color: #e3c000!important;
+	border-color: !important;
 }
 
 .actioncomponent {
-	background-color: #FFFE9C!important;
+	background-color: rgba(255, 254, 156, 0.8)!important;
 	color: black!important;
 	border-color: #ffd92c!important;
 }

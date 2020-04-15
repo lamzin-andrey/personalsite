@@ -32,7 +32,7 @@ class PhdMessagesController extends AbstractController
             ->getRepository(PhdMessages::class)
             ->findBy($aFilter, ['createdAt' => 'DESC']);
 
-        return $this->render('phd_messages/index.html.twig', [
+        return $this->render('phd_messages/articles.html.twig', [
             'phd_messages' => $phdMessages,
 			'bOnlyPayed' => $bOnlyPayed
         ]);

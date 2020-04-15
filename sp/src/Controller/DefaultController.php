@@ -25,7 +25,7 @@ class DefaultController extends AbstractController
 			'formtoken' => $oForm->createView()->children['_token']->vars['value'],
 			'searchtags' => $this->_getSearchTagsData()
 		];
-        return $this->render('default/index.html.twig', $aData);
+        return $this->render('default/articles.html.twig', $aData);
     }
     /**
      * Получить тэги пользователя в формате JSON
