@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'articles' %}
+
+{% block title %}{{'Articles managment'|trans}}{% endblock %}
+
+{% block content %}
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link"
+               id="alist-tab"
+               href="#alist"
+               role="tab"
+               aria-controls="home"
+               aria-selected="true">{{ 'List'|trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active"
+               id="edit-tab"
+               data-toggle="tab"
+               href="#edit"
+               role="tab"
+               aria-controls="profile"
+               aria-selected="false">[[ formTabTitle ]]</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+
+        <div class="tab-pane fade " id="alist" role="tabpanel" aria-labelledby="list-tab">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Список статей</h5>
+
+
+                    <table id="articles" class="display table table-bordered" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th class="u-tabledragcolumn-head"> </th>
+                            <th>{{ 'Heading'|trans }}</th>
+                            <th>{{ 'Operations'|trans }} </th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>{{ 'Heading'|trans }}</th>
+                            <th>{{ 'Operations'|trans }}</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">[[ newEdit ]]</h5>
+                    <articleform ref="articleform"></articleform>
+                    <textarea hidden style="display:none" id="jdata">{{ jsonCategoriesData }}</textarea>
+                    <input id="formToken" value="{{ sToken }}" type="hidden">
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">SEO</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Переход куда-нибудь</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- Bootstrap core JavaScript-->
+    <script charset="UTF-8" src="/j/j.js"></script>
+
+    {# Он его два раза что ли тащит? #}
+    <script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
+{% endblock %}

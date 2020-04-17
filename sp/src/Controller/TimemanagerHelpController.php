@@ -13,7 +13,7 @@ class TimemanagerHelpController extends AbstractController
      */
     public function index(TranslatorInterface $t)
     {
-        return $this->render('timemanager_help/index.html.twig', [
+        return $this->render('timemanager_help/articles.html.twig', [
             'pageHeading' => $t->trans('Cron Friend Help'),
         ]);
     }

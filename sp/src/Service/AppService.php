@@ -493,6 +493,14 @@ class AppService
 		return $aResult;
 	}
 	/**
+	 * @param FormInterface $oForm
+	 * @return
+	*/
+	public function getFormTokenValue(FormInterface $oForm)
+	{
+		return $oForm->createView()->children['_token']->vars['value'];
+	}
+	/**
 	 * Удаляет из номера телефона всё, кроме цифр. Ведущий +7 меняет на 8.
 	 * @param string $sPhone
 	 * @return string

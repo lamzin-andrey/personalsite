@@ -27,7 +27,7 @@ class PhdOperationsController extends AbstractController
             ->getRepository(PhdOperations::class)
             ->findAll();
 
-        return $this->render('phd_operations/index.html.twig', [
+        return $this->render('phd_operations/articles.html.twig', [
             'phd_operations' => $phdOperations,
         ]);
     }

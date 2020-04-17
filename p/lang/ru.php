@@ -14,6 +14,7 @@ $aLang = [
 	'NewEdit'         	 => 'Новая/Редактировать',
 	'Sections'         => 'Разделы',
 	'Articles'         => 'Статьи',
+	'Articles (new)'         => 'Статьи (новые)',
 	'Article'         => 'Статья',
 	'Articles Categories'         => 'Категория для статей',
 	'Portfolio'         => 'Портфолио',

@@ -1,0 +1,107 @@
+/** Вид компонентов */
+.messagecomponent .title, 
+.begincomponent .title,
+.timercomponent .title,
+.conditioncomponent .title,
+.actioncomponent .title,
+.essagecomponent .input .input-title,  .essagecomponent .output .output-title{
+	display:none!important;
+}
+
+.messagecomponent.selected,
+.timercomponent.selected
+ {
+	background-color: rgba(27, 99, 253, 0.8)!important;
+	color: white!important;
+	border-color: #060F5E!important;
+}
+
+.messagecomponent,
+.timercomponent {
+	background-color: rgba(185, 198, 226, 0.8)!important;
+	color: black!important;
+	border-color: #6277A2!important;
+}
+
+/** Контекстное меню */
+.context-menu .item {
+	background-color: #FFF!important;
+	color: black!important;
+	border-radius: 0px!important;
+	width: auto!important;
+	border: 1px solid black;
+	border-bottom: none!important;
+	padding-left: 14px!important;
+	font-size: 12px;
+}
+.context-menu :last-child{
+	border-bottom: 1px solid black!important;
+}
+.context-menu .item:hover {
+	background-color: blue!important;
+	color: white!important;
+	font-weight:bold;
+}
+.context-menu {
+	border-radius: 0px!important;
+	width: auto!important;
+}
+
+/** Отображение текста сообщения на блоке сообщения */
+.bot-scheme-editor-msg-view {
+	max-width: 200px;
+	max-height: 44px;
+	overflow-y: hidden;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	overflow-x: hidden;	
+}
+
+/** Внешний вид таймера */
+.timercomponent .timer-icon {
+	line-height: 32px;
+	vertical-align: bottom;
+	-webkit-user-select: none!important;
+	-moz-user-select: none!important;
+	user-select: none!important;
+}
+.timercomponent input[type=number] {
+	width: 50px;
+}
+.node.timercomponent {
+	max-width: 216px;
+	min-width:10px!important;
+}
+
+/** Внешний вид блока условия */
+.conditionName {
+	width: 100%!important;
+}
+.conditioncomponent.selected {
+	background-color: rgba(53, 166, 71, 0.8)!important;
+	color: white!important;
+	border-color: #396D41!important;
+}
+
+.conditioncomponent {
+	background-color: rgb(89, 204, 74, 0.8)!important;
+	color: white!important;
+	border-color: #62A26C!important;
+}
+
+
+/** Внешний вид блока действия */
+.actioncomponent.selected {
+	background-color: rgba(255, 217, 44, 0.8)!important;
+	color: black!important;
+	border-color: !important;
+}
+
+.actioncomponent {
+	background-color: rgba(255, 254, 156, 0.8)!important;
+	color: black!important;
+	border-color: #ffd92c!important;
+}
+.actioncomponent  .input-title,  .actioncomponent  .output-title{
+	color: black!important;
+}

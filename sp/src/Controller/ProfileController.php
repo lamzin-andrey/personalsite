@@ -33,7 +33,7 @@ class ProfileController  extends AppBaseController
 			'avatarImgSrc' => $oAppService->getUserAvartarImageSrc(),
 			'pageHeading' => $t->trans('Profile settings')
 		];
-        return $this->render('profile/index.html.twig', $aData);
+        return $this->render('profile/articles.html.twig', $aData);
     }
     /**
      * @Route("/saveprofiledata", name="saveprofiledata")
@@ -102,7 +102,7 @@ class ProfileController  extends AppBaseController
 					'avatarImgSrc' => $oAppService->getUserAvartarImageSrc(),
 					'pageHeading' => $t->trans('Profile settings')
 				];
-				return $this->render('profile/index.html.twig', $aData);
+				return $this->render('profile/articles.html.twig', $aData);
 			}
 		}
 		return $this->redirectToRoute('profile');
