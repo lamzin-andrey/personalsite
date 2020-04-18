@@ -1,0 +1,9 @@
+@media (width < 720px ) {
+	#articles_paginate .paginate_button.page-item {
+		display:none;
+	}
+	#articles_paginate .paginate_button.page-item.previous, #articles_paginate .paginate_button.page-item.next {
+		display:block;
+	}
+}
+

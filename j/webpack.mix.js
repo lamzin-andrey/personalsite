@@ -34,6 +34,9 @@ let mix = require('laravel-mix');
 //Раздел статей в symfony проекте
 mix.js('sources/spadmin_articles/app.js', 'j.js');
 
+//Раздел Для "игры кто хочет стать миллионером"
+mix.js('sources/spadmin_kxm/app.js', 'k.js');
+
 /*mix.styles([
 		'./../s/vendor/bootstrap4.2.1.min.css',
 		'./../s/vendor/fontawesome5/all.css',
