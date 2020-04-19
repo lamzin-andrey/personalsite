@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        TrollKiller
+// @name        KillTroll
 // @namespace   https://otvet.mail.ru*
 // @include     https://otvet.mail.ru/*
 // @include     https://touch.otvet.mail.ru/*
@@ -8,34 +8,355 @@
 // @version     1
 // @grant       none
 // ==/UserScript==
-window.addEventListener('load',onReady);window.containerCss='pageQuestions';window.itemCss='q--li';window.userLinkCss='q--li--stat';window.userLinkCssOnAnswerPage="author a--author";window.authUserAvatarLinkCss='pm-toolbar__button__inner_avatar';window.touchAuthUserAvatarLinkCss='nav-menu__profile';window.CONTAINER=null;window.KEY='KKTSTRGDATA';window.KEY_SHARED='KKTSTRGDATA_MERGED';window.SERVER_HOST='https://andryuxa.ru';window.SERVER=window.SERVER_HOST+'/p/trollkiller';window.desktopAuthUserImageLoaded=!1;window.desktopAuthUserImage64data='';function onReady(){console.log('Run');if(!isDesktop()){window.authUserAvatarLinkCss=window.touchAuthUserAvatarLinkCss}
-if(location.host.indexOf('otvet.mail.ru')==-1){storage('killtroll',1);return}
-setLinkListener();killTrolls();pureAjax(window.SERVER+'/checkauth.jn/',{},(dt)=>{if(dt.uid){onSuccessLogin(dt);getBanlist();setInterval(getBanlist,120*1000)}else{window.KTKTUID=0;storage('ktktUid',0);setAuthView(!1)}},(a,b,c)=>{},'POST');setInterval(()=>{setLinkListener();killTrolls()},1*1000);parseDesktopImage()}
-function killTrolls(){var list=getSharedListFromStorage();list=count(list)?list:getListFromStorage();try{var c=getContainer();e4(c,userLinkCss,(item)=>{var href=attr(item,'href');if(list[href]){var quest=item.parentNode.parentNode;quest.parentNode.removeChild(quest)}})}catch(e){}
-try{e4(ee(D,'body')[0],userLinkCssOnAnswerPage,(item)=>{var href=attr(item,'href');if(list[href]){var quest=item.parentNode.parentNode}
-quest.parentNode.removeChild(quest)})}catch(e){}
-try{e4(ee(D,'body')[0],'h5',(item)=>{var href=attr(item,'href');if(href.indexOf('/profile/id')!=-1&&list[href]){var comm=item.parentNode.parentNode;var prnt=comm.parentNode;if(comm.className.indexOf('com--new')!=-1){prnt.removeChild(comm)}}})}catch(e){}
-var imgList=indexByImg(list);try{e4(ee(D,'body')[0],'user-pic-default',(item)=>{var url=getBgImageSUrl(item),name=item.parentNode.getElementsByClassName('user-name__text')[0];name=name.innerHTML?name.innerHTML.trim():'';if(imgList[url]&&name==imgList[url].name){var comm=item.parentNode.parentNode.parentNode;var prnt=comm.parentNode;if(comm.className=='item '){prnt.removeChild(comm)}}})}catch(e){}
-try{e4(ee(D,'body')[0],'item__header__user-large',(item)=>{var href=attr(item,'href');if(list[href]){var quest=item.parentNode.parentNode;quest.parentNode.removeChild(quest)}})}catch(e){}}
-function setLinkListener(){try{var c=getContainer();e4(c,userLinkCss,(item)=>{var setted=attr(item,'data-ktktsetted');if(!setted&&attr(item,'href').indexOf('/profile/id')==0){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink;item.style.color='#00AA00'}})}catch(e){}
-try{e4(ee(D,'body')[0],userLinkCssOnAnswerPage,(item)=>{var setted=attr(item,'data-ktktsetted');if(!setted){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink;item.style.color='#00AA00'}})}catch(e){}
-try{e4(ee(D,'body')[0],'h5',(item)=>{var setted=attr(item,'data-ktktsetted');var href=attr(item,'href');if(!setted&&href.indexOf('/profile/id')!=-1){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink;item.style.color='#00AA00'}})}catch(e){}
-try{e4(ee(D,'body')[0],'item__header__user-large',(item)=>{var setted=attr(item,'data-ktktsetted');var href=attr(item,'href');if(!setted&&href.indexOf('/profile/id')!=-1){attr(item,'data-ktktsetted','1')
-item.onclick=onClickUserlink;var namelinks=cs(item,'b-block user-name__text');if(namelinks[0]){namelinks[0].style.color='#00AA00'}}})}catch(e){}}
-function getContainer(){window.CONTAINER=ec(ee(D,'body')[0],window.containerCss)[0];return window.CONTAINER}
-function onClickUserlink(e){e.preventDefault();e.stopImmediatePropagation();var o=e.target,name=o.innerHTML,link=attr(o,'href'),sImgUrl='',aPicTagList;if(!link){link=attr(o.parentNode,'href')}
-if(!link){while(!o||(o.tagName!='A')){o=o.parentNode}
-if((o.tagName=='A')){link=attr(o,'href')}}
-if(link){aPicTagList=cs(o,'user-pic-default');sImgUrl=getBgImageSUrl(aPicTagList[0])}
-ktModal(name,link,sImgUrl);return!1}
-function ktModal(name,link,imgLink){window.onClickCloseKtDlg=function(){var r=e('ktKTDlg');r.parentNode.removeChild(r);r=e('ktktBg');r.parentNode.removeChild(r)}
-window.onClickBanBtn=function(){var nAMailId=link.replace(/[\D]/g,''),occ={'620174':1};if(nAMailId in occ){alert('Создателя TrollKiller нельзя забанить, потому что он не тролль, а эльф восьмидесятого уровня');return}
-var list=getListFromStorage();if(!list[link]){list[link]={name:name,reason:e('ktKtRreason').value,link:link,img:e('ktKtTrollAvatar').value};storage(KEY,list)}
-saveInSharedList(link,name,e('ktKtRreason').value,e('ktKtTrollAvatar').value);killTrolls();document.getElementById('sndGo').play();setTimeout(()=>{window.onClickCloseKtDlg();if(!isDesktop()){window.location.href='http://'+location.host}},1000)}
-var zi=isDesktop()?1000:1701;var vo=getViewport();var sw=vo.w;var sh=vo.h;var body=ee(D,'body')[0],bg=appendChild(body,'div',`&nbsp;`,{style:`
+
+//minify with https://www.minifier.org/
+
+/**
+ * TODO
+ * Пишем главную страницу TrollTech (FF only) и завершаем это дело.
+ *  - Видео.
+ *  
+ * 
+ * Упоминаем про этот прикольный заголовок, который в FF почему-то не работает. (а стоит ли?)
+ * 
+ * Там ещё заголовок скоро починят и для FF
+ * 
+ * 19 08 2019 Есть крайне неприятная запись в tk_userinfo - всё пусто кроме uid но uid типа правильный
+ *
+ * 
+*/
+//window.addEventListener('DOMContentLoaded', onReady); это не надо потому что ни при каком раскладе не работает
+window.addEventListener('load', onReady);
+
+//Desktop css
+window.containerCss = 'pageQuestions';
+window.itemCss = 'q--li';
+window.userLinkCss = 'q--li--stat';
+window.userLinkCssOnAnswerPage = "q--li--stat";
+window.authUserAvatarLinkCss = 'q--li--ava';
+
+//Mobile css
+window.touchAuthUserAvatarLinkCss = 'nav-menu__profile';
+
+
+window.CONTAINER = null;
+window.KEY = 'KKTSTRGDATA';
+window.KEY_SHARED = 'KKTSTRGDATA_MERGED';
+window.SERVER_HOST = 'https://andryuxa.ru';
+//window.SERVER_HOST = 'http://mh.loc';
+window.SERVER = window.SERVER_HOST + '/p/trollkiller';
+
+window.desktopAuthUserImageLoaded = false;
+window.desktopAuthUserImage64data = '';
+
+
+function onReady(){
+	console.log('Run');
+	if (!isDesktop()) {
+    console.log('It not desk...');
+		window.authUserAvatarLinkCss = window.touchAuthUserAvatarLinkCss;
+	}
+	/*if (location.host == 'touch.otvet.mail.ru') {
+		ee(D, 'body')[0].innerHTML = 'Hello!';
+		return;
+	}*/
+
+  /*
+   * Это не надо, потому что history API и DOMContentLoaded не работает все равно (контейнер пуст)
+   * if (window.KillTrollIsInit) {
+    return;
+  }
+  window.KillTrollIsInit = true;*/
+  if (location.host.indexOf('otvet.mail.ru') == -1) {
+	storage('killtroll', 1);
+	return;
+  }
+
+  //addStyle();
+  setLinkListener();
+  killTrolls();
+
+  //check auth
+  pureAjax(window.SERVER + '/checkauth.jn/', {}, (dt)=>{
+	if (dt.uid) {
+		onSuccessLogin(dt);
+		getBanlist();
+		setInterval(getBanlist, 120*1000);
+	} else {
+		window.KTKTUID = 0;
+		storage('ktktUid', 0);
+		setAuthView(false);
+	}
+  }, (a, b, c) => {
+  }, 'POST');
+  
+  
+  setInterval(() => {
+	  setLinkListener();
+	  killTrolls();
+  }, 1*1000);/**/
+
+  parseDesktopImage();
+}
+
+
+function killTrolls(){
+	var list = getSharedListFromStorage();
+	list = count(list) ? list : getListFromStorage();
+
+	//Delete on strip page
+	try {
+		var c = getContainer();
+		e4(c, userLinkCss, (item) => {
+			var href = attr(item, 'href');
+			if (list[href]) {
+				console.log('try remove ' + href, item);
+				var quest = item.parentNode.parentNode;
+				quest.parentNode.removeChild(quest);
+			}
+		});
+	} catch(e){;}
+  
+	//Delete on answers page
+	/*try {
+		e4(ee(D, 'body')[0], userLinkCssOnAnswerPage, (item) => {
+			var href = attr(item, 'href');
+			if (list[href]) {
+				var quest = item.parentNode.parentNode;
+			}
+				quest.parentNode.removeChild(quest);
+		});
+	} catch(e){;}*/
+	
+	//content__head_*...
+	try {
+		var ls = ee(D, 'a'), i, Sz = sz(ls), item, href;
+		for (i = 0; i < Sz; i++) {
+			item = ls[i];
+			href = attr(item, 'href');
+			if (item.tagName == 'A' 
+								&& attr(item, 'class').indexOf('content__head_') == 0 
+								&& href.indexOf('/profile/id') == 0
+				) {
+				if (list[href]) {
+					var quest = item.parentNode.parentNode.parentNode.parentNode.parentNode;
+					quest.parentNode.removeChild(quest);
+				}
+				
+			}
+		}
+			
+	} catch(e){;}
+
+	//Delete comments on answer page
+	try {
+		e4(ee(D, 'body')[0], 'h5', (item) => {
+			var href = attr(item, 'href');
+			if (href.indexOf('/profile/id') != -1 && list[href]) {
+				var comm = item.parentNode.parentNode;
+				var prnt = comm.parentNode;
+				if (comm.className.indexOf('com--new') != -1) {
+					prnt.removeChild(comm);
+				}
+			}
+		});
+	} catch(e){;}
+
+	//TOUCH
+	var imgList = indexByImg(list);
+	//Delete on touch strip page
+	try {
+		e4(ee(D, 'body')[0], 'user-pic-default', (item) => {
+			var url = getBgImageSUrl(item),
+				name = item.parentNode.getElementsByClassName('user-name__text')[0];
+				name = name.innerHTML ? name.innerHTML.trim() : '';
+			if (imgList[url] && name == imgList[url].name) {
+				var comm = item.parentNode.parentNode.parentNode;
+				var prnt = comm.parentNode;
+				if (comm.className == 'item ') {
+					prnt.removeChild(comm);
+				}
+			}
+		});
+	} catch(e){;}
+
+	//Delete on touch answers page
+	try {
+		e4(ee(D, 'body')[0], 'item__header__user-large', (item) => {
+			var href = attr(item, 'href');
+			if (list[href]) {
+				var quest = item.parentNode.parentNode;
+				quest.parentNode.removeChild(quest);
+			}
+		});
+	} catch(e){
+	};
+}
+/**
+ * @description Установить для всех ссылок на профили пользователя  наш обработчик
+*/
+function setLinkListener() {
+	//DESKTOP
+	//desktop question page
+  try {
+    var c = getContainer();
+    e4(c, userLinkCss, (item) => {
+		var setted = attr(item, 'data-ktktsetted');
+		if (!setted && item.tagName == 'A' && attr(item, 'href').indexOf('/profile/id') == 0) {
+			attr(item, 'data-ktktsetted', '1')
+			item.onclick = onClickUserlink;
+			item.style.color = '#00AA00';
+		}
+    });
+  } catch(e){;}
+	//on answer page
+	/*try {
+		e4(ee(D, 'body')[0], userLinkCssOnAnswerPage, (item) => {
+			var setted = attr(item, 'data-ktktsetted');
+			if (!setted) {
+				attr(item, 'data-ktktsetted', '1')
+				item.onclick = onClickUserlink;
+				item.style.color = '#00AA00';
+			}
+
+		});
+	} catch(e){;}*/
+	
+	//content__head_*...
+	try {
+		var ls = ee(D, 'a'), i, Sz = sz(ls), item;
+		for (i = 0; i < Sz; i++) {
+			item = ls[i];
+			if (item.tagName == 'A' && attr(item, 'class').indexOf('content__head_') == 0 && attr(item, 'href').indexOf('/profile/id') == 0) {
+				var setted = attr(item, 'data-ktktsetted');
+				if (!setted) {
+					attr(item, 'data-ktktsetted', '1')
+					item.onclick = onClickUserlink;
+					item.style.color = '#00AA00';
+				}
+			}
+		}
+			
+	} catch(e){;}
+	
+	//on comment page
+	try {
+		e4(ee(D, 'body')[0], 'h5', (item) => {
+			var setted = attr(item, 'data-ktktsetted');
+			var href = attr(item, 'href');
+			if (!setted && href.indexOf('/profile/id') != -1) {
+				attr(item, 'data-ktktsetted', '1')
+				item.onclick = onClickUserlink;
+				item.style.color = '#00AA00';
+			}
+
+		});
+	} catch(e){;}
+
+	//TOUCH
+	//on touch answer page
+	//item__header__child item__header__user item__header__user-large
+	try {
+		e4(ee(D, 'body')[0], 'item__header__user-large', (item) => {
+			var setted = attr(item, 'data-ktktsetted');
+			var href = attr(item, 'href');
+			if (!setted && href.indexOf('/profile/id') != -1) {
+				attr(item, 'data-ktktsetted', '1')
+				item.onclick = onClickUserlink;
+				var namelinks = cs(item, 'b-block user-name__text');
+				if (namelinks[0]) {
+					namelinks[0].style.color = '#00AA00';
+				}
+			}
+		});
+	} catch(e){;}
+}
+function getContainer() {
+	window.CONTAINER = ec(ee(D, 'body')[0], window.containerCss)[0];
+	return window.CONTAINER;
+}
+/**
+ * @description Клик на сылке  с именем пользователя
+*/
+function onClickUserlink(e) {
+	e.preventDefault();
+	e.stopImmediatePropagation();
+	var o = e.target, name = o.innerHTML, link = attr(o, 'href'), 
+		sImgUrl = '', aPicTagList;
+	// for answer page
+	if (!link) {
+		link = attr(o.parentNode, 'href')
+	}
+	// / for answer page
+
+	//for touch answer page
+	if (!link) {
+		while (!o || (o.tagName != 'A') ) {
+			o = o.parentNode;
+		}
+		if ((o.tagName == 'A')) {
+			link = attr(o, 'href')
+		}
+	}
+	//get image url
+	if (link) {
+		aPicTagList = cs(o, 'user-pic-default');
+		sImgUrl = getBgImageSUrl(aPicTagList[0]);
+	}
+	// / for touch answer page
+	  
+
+  	
+	ktModal(name, link, sImgUrl);
+	return false;
+}
+
+function ktModal(name, link, imgLink) {
+	
+	//TODO for touch parse z-index b-header
+	window.onClickCloseKtDlg = function() {
+		var r = e('ktKTDlg');
+		r.parentNode.removeChild(r);
+		r = e('ktktBg');
+		r.parentNode.removeChild(r);
+	}
+	window.onClickBanBtn = function() {
+		var nAMailId = link.replace(/[\D]/g, ''), occ = {'620174': 1};
+		if (nAMailId in occ) {
+			alert('Создателя TrollKiller нельзя забанить, потому что он не тролль, а эльф восьмидесятого уровня');
+			return;
+		}
+		//Добавляю тролля в локальный лист и сохраняю его на сервере
+		var list = getListFromStorage();
+		if (!list[link]) {
+			list[link] = {
+				name: name,
+				reason:e('ktKtRreason').value,
+				link:link,
+				img:e('ktKtTrollAvatar').value
+			};
+			storage(KEY, list);
+		}
+		//Добавляю тролля в общий лист и НЕ сохраняю его на сервере
+		saveInSharedList(link, name, e('ktKtRreason').value, e('ktKtTrollAvatar').value);
+		killTrolls();
+		document.getElementById('sndGo').play();
+		setTimeout(() =>{
+			console.log('Bef try close');
+			window.onClickCloseKtDlg();
+			if (!isDesktop()) {
+				window.location.href = 'http://' + location.host;
+			}
+		}, 1000);
+		
+	}
+  var zi = isDesktop() ? 1000 : 1701;
+  var vo = getViewport();
+  var sw = vo.w;
+  var sh = vo.h;
+	var body = ee(D, 'body')[0],
+		bg = appendChild(body, 'div', `&nbsp;`, {
+			style: `
 			background-color: rgba(255, 255, 255, 0.75);
 			width:  ${sw}px;
 			height: ${sh}px;
@@ -43,12 +364,97 @@ var zi=isDesktop()?1000:1701;var vo=getViewport();var sw=vo.w;var sh=vo.h;var bo
 			left : 0px;
 			position:fixed;
 			z-index:${zi};
-			`,id:'ktktBg'});zi++;var dName=getDisplayName(name);var dlgData=getDlgTemplate(dName,name,link,zi,sw,sh,imgLink);appendChild(bg,'div',dlgData.html,{style:dlgData.style,id:'ktKTDlg'});e('KtDlgClose').onclick=window.onClickCloseKtDlg;e('rtrtGotoProdile').onclick=window.onClickCloseKtDlg;e('ktKtBanBtn').onclick=window.onClickBanBtn;e('rtrtGotoBanlist').onclick=onClickGotoBanList;e('ktKtMainEdit').onclick=onClickGotoMainEdit;e('ktKtMainEditPicW').onclick=onClickGotoMainEdit;e('ktKtMainEditPic').onclick=onClickGotoMainEdit;e('ktKtMainLogin').onclick=onClickGotoLoginForm;e('ktKtMainLoginPicW').onclick=onClickGotoLoginForm;e('ktKtMainLoginPic').onclick=onClickGotoLoginForm;e('ktktHomepageLink').onclick=onClickGotoHomepage;e('ktktPrldEIcon').onload=onLoadEditIcon;e('ktktPrldUIcon').onload=onLoadUserIcon;e('rtrtGotoBanform').onclick=onClickGotoForm;e('rtrtGotoBanform2').onclick=onClickGotoForm;e('rtrtGotoBanform3').onclick=onClickGotoForm;e('ktKtSaveEditItemBtn').onclick=onClickUpdateBtn;e('ktKtLoginBtn').onclick=onClickLoginBtn;e('ktktLogin').onkeydown=onClickLoginBtn;e('ktktPassword').onkeydown=onClickLoginBtn;e('ktktLogin').onkeyup=onClickLoginBtn;e('ktktPassword').onkeyup=onClickLoginBtn;e('ktktRegLink').onclick=onClickRegLink;if(window.KTKTUID&&window.KTKTUID>0){setAuthView(!0)}
-swapEditButton();swapUserButton();document.getElementById('sndReady').play()}
-function isDesktop(){return location.host!='touch.otvet.mail.ru'}
-function getDlgTemplate(dName,name,link,zi,sw,sh,sImgLink){if(!isDesktop()){return getMobileDlgTemplate(dName,name,link,zi,sw,sh,sImgLink)}
-return getDesktopDlgTemplate(dName,name,link,zi,sw,sh)}
-function getDesktopDlgTemplate(dName,name,link,zi,sw,sh){var r={};var W=480;var H=320;var x=Math.round((sw-W)/2),y=Math.round((sh-H)/2);r.html=`
+			`,
+      id: 'ktktBg' 
+		});
+  
+  zi++;
+  
+ 	var dName = getDisplayName(name);
+	var dlgData = getDlgTemplate(dName, name, link, zi, sw, sh, imgLink);
+
+	appendChild(bg, 'div', dlgData.html,
+	{
+		style: dlgData.style,
+		id: 'ktKTDlg'
+	}
+	);
+	//Элементы управления формы
+	e('KtDlgClose').onclick=window.onClickCloseKtDlg;
+	e('rtrtGotoProdile').onclick=window.onClickCloseKtDlg;
+	e('ktKtBanBtn').onclick=window.onClickBanBtn;
+	e('rtrtGotoBanlist').onclick=onClickGotoBanList;
+	e('ktKtMainEdit').onclick     = onClickGotoMainEdit;
+	e('ktKtMainEditPicW').onclick = onClickGotoMainEdit;
+	e('ktKtMainEditPic').onclick  = onClickGotoMainEdit;
+	e('ktKtMainLogin').onclick = onClickGotoLoginForm;
+	e('ktKtMainLoginPicW').onclick = onClickGotoLoginForm;
+	e('ktKtMainLoginPic').onclick = onClickGotoLoginForm;
+	e('ktktHomepageLink').onclick = onClickGotoHomepage;
+
+	e('ktktPrldEIcon').onload = onLoadEditIcon;
+	e('ktktPrldUIcon').onload = onLoadUserIcon;
+	
+	//Элементы управления списка
+	e('rtrtGotoBanform').onclick = onClickGotoForm;
+	e('rtrtGotoBanform2').onclick = onClickGotoForm;
+	e('rtrtGotoBanform3').onclick = onClickGotoForm;
+	//Элементы управления формы редактирования
+	e('ktKtSaveEditItemBtn').onclick = onClickUpdateBtn;
+	//Элементы управления формы логина
+	e('ktKtLoginBtn').onclick = onClickLoginBtn;
+	e('ktktLogin').onkeydown = onClickLoginBtn;
+	e('ktktPassword').onkeydown = onClickLoginBtn;
+	e('ktktLogin').onkeyup = onClickLoginBtn;
+	e('ktktPassword').onkeyup = onClickLoginBtn;
+
+	e('ktktRegLink').onclick = onClickRegLink;
+
+	//authView
+	if (window.KTKTUID && window.KTKTUID > 0) {
+		setAuthView(true);
+	}
+	swapEditButton();
+	swapUserButton();
+	document.getElementById('sndReady').play();
+}
+function isDesktop() {
+	return location.host != 'touch.otvet.mail.ru';
+}
+/**
+ * @description Шаблон диалога для десктопа или для мобилки, в завивсмости от url
+ * @param {String} dName  Отображаемое на диалоге имя тролля
+ * @param {String} name   Полное имя тролля
+ * @param {String} link   Ссылка на профиль тролля
+ * @param {Number} zi     z-index окошка диалога
+ * @param {Number} sw     ширина вьюпорта
+ * @param {Number} sh     высота вьюпорта
+ * @param {String} sImgLink     путь к аватару тролля
+ * @return {Object} {html, style}
+ */
+function getDlgTemplate(dName, name, link, zi, sw, sh, sImgLink) {
+	if (!isDesktop()) {
+		return getMobileDlgTemplate(dName, name, link, zi, sw, sh, sImgLink);
+	}
+	return getDesktopDlgTemplate(dName, name, link, zi, sw, sh);
+}
+/**
+ * @description Шаблон диалога для десктопа
+ * @param {String} dName  Отображаемое на диалоге имя тролля
+ * @param {String} name   Полное имя тролля
+ * @param {String} link   Ссылка на профиль тролля
+ * @param {Number} zi     z-index окошка диалога
+ * @param {Number} sw     ширина вьюпорта
+ * @param {Number} sh     высота вьюпорта
+ * @return {Object} {html, style}
+ */
+function getDesktopDlgTemplate(dName, name, link, zi, sw, sh) {
+	var r = {};
+	var W = 480;
+	var H = 320;
+	var x = Math.round( (sw - W) / 2 ),
+		y = Math.round( (sh - H) / 2 );
+	r.html = `
 	<!-- #0000FF, #0000FF, #5555FF, #bbbbFF, #0000FF 
 	#000, #555, #999, #fff, #000
 	-->
@@ -255,7 +661,9 @@ function getDesktopDlgTemplate(dName,name,link,zi,sw,sh){var r={};var W=480;var 
 				<div class="clearfix" style="clear:both;"></div>
 			</div>
 		</div>
-	`;r.style=`font-family:arial;
+	`;
+
+	r.style = `font-family:arial;
 		position:absolute;
 		z-index:${zi};
 		left:${x}px;
@@ -265,8 +673,26 @@ function getDesktopDlgTemplate(dName,name,link,zi,sw,sh){var r={};var W=480;var 
 		padding:0px;
 			width:${W}px;
 			height:${H}px;
-	`;return r}
-function getMobileDlgTemplate(dName,name,link,zi,sw,sh,sImgLink){var r={};var x=0,y=0;r.html=`<div class="ktktdlg">
+	`;
+	return r;
+}
+
+/**
+ * @description Шаблон диалога для десктопа
+ * @param {String} dName  Отображаемое на диалоге имя тролля
+ * @param {String} name   Полное имя тролля
+ * @param {String} link   Ссылка на профиль тролля
+ * @param {Number} zi     z-index окошка диалога
+ * @param {Number} sw     ширина вьюпорта
+ * @param {Number} sh     высота вьюпорта
+ * @param {String} sImgLink     путь к аватару тролля
+ * @return {Object} {html, style}
+ */
+function getMobileDlgTemplate(dName, name, link, zi, sw, sh, sImgLink) {
+	var r = {};
+	var x = 0,
+		y = 0;
+	r.html = `<div class="ktktdlg">
 	<!-- #0000FF, #0000FF, #5555FF, #bbbbFF, #0000FF 
 	#000, #555, #999, #fff, #000
 	-->
@@ -512,7 +938,9 @@ function getMobileDlgTemplate(dName,name,link,zi,sw,sh,sImgLink){var r={};var x=
 			</div>
 		</div>
 		</div> <!-- ktktdlg -->
-	`;r.style=`font-family:arial;
+	`;
+
+	r.style = `font-family:arial;
 		position:absolute;
 		z-index:${zi};
 		left:${x}px;
@@ -523,36 +951,201 @@ function getMobileDlgTemplate(dName,name,link,zi,sw,sh,sImgLink){var r={};var x=
 		width:100%;
 		height:100%;
 		max-width:798px;
-	`;return r}
-function onLoadEditIcon(){window.isEditIconLoaded=!0;swapEditButton()}
-function swapEditButton(){if(!window.isEditIconLoaded){return}
-e('ktKtMainEditPicW').style.display='inline-block';e('ktKtMainEdit').style.display='none'}
-function onLoadUserIcon(){window.isUserIconLoaded=!0;setAuthView(isAuth())}
-function swapUserButton(){if(!window.isUserIconLoaded){return}
-e('ktKtMainLoginPicW').style.display='inline-block';e('ktKtMainLogin').style.display='none'}
-function onClickRegLink(){window.onClickCloseKtDlg();return!0}
-function onClickGotoHomepage(){window.onClickCloseKtDlg();return!0}
-function onClickLoginBtn(ev){if(ev.keyCode&&ev.keyCode!=13){console.log('ev.keyCode != 13, return true');return!0}
-ev.preventDefault();e('ktktViewErrorWrap').style.display='none';e('ktktViewError').innerHTML='';pureAjax(window.SERVER+'/login.jn/',{l:e('ktktLogin').value,p:e('ktktPassword').value},onSuccessLogin,onFailLogin,'POST');return!0}
-function onSuccessLogin(data){if(!onFailLogin(data)){return}
-if(parseInt(data.uid)){window.KTKTUID=data.uid;storage('ktktUid',data.uid);setAuthView(!0);gotoForm();getBanlist()}}
-function indexByImg(list){var r={},i;for(i in list){if(list[i].img){r[list[i].img]={...list[i]}}}
-return r}
-function setAuthView(bState){if(!e('ktKtMainLogin')){return}
-if(bState==!0){e('ktKtMainLogin').style.display='none';e('ktKtMainLoginPicW').style.display='none'}else{e('ktKtMainLogin').style.display='inline-block';swapUserButton()}}
-function onFailLogin(a,b,c){if(a.status=='ok'){return!0}
-if(!e('ktktViewErrorWrap')){return!1}
-if(a.status=='error'&&a.msg){e('ktktViewErrorWrap').style.display='block';e('ktktViewError').innerHTML=a.msg}else{e('ktktViewErrorWrap').style.display='block';e('ktktViewError').innerHTML='Что-то пошло не так, регистрация в TrollKiller временно недоступна.'}
-return!1}
-function onClickGotoLoginForm(ev){ev.preventDefault();ev.stopImmediatePropagation();var s='display';e('ktktBanForm').style[s]='none';e('ktktBanList').style[s]='none';e('ktktEditForm').style[s]='none';e('ktktLoginForm').style[s]='block';return!1}
-function onClickGotoMainEdit(ev){var trg=ev.target,link=attr(trg,'data-link'),name=attr(trg,'data-name'),reason=e('ktKtRreason').value;showEditForm(link,name,reason)}
-function onClickUpdateBtn(){var list=getListFromStorage(),i,link=e('ktktELink').value,name=e('ktktEName').value,img=e('ktKtTrollAvatar').value,reason=e('ktktEreason').value;if(!list[link]){list[link]={}}
-list[link].name=name;list[link].reason=reason;list[link].link=link;list[link].img=img;storage(KEY,list);saveInSharedList(link,name,reason,img);e('ktKtRreason').value=reason;e('ktKtMainName').innerHTML=name;gotoForm()}
-function saveInSharedList(link,name,reason,img){var list=getSharedListFromStorage();if(count(list)&&!list[link]){list[link]={name:name,reason:reason,img:img,link:link};storage(KEY_SHARED,list,!1)}}
-function onClickGotoForm(ev){ev.stopImmediatePropagation();ev.preventDefault();gotoForm();return!1}
-function gotoForm(){if(!e('ktktBanForm')){return}
-var s='display';e('ktktBanForm').style[s]='block';e('ktktBanList').style[s]='none';e('ktktEditForm').style[s]='none';e('ktktLoginForm').style[s]='none'}
-function onClickGotoBanList(ev){ev.stopImmediatePropagation();ev.preventDefault();var s='display';e('ktktBanForm').style[s]='none';e('ktktEditForm').style[s]='none';e('ktktBanList').style[s]='block';var list=getSharedListFromStorage(),i;list=count(list)?list:getListFromStorage();e('ktktBanlistContainer').innerHTML='';for(i in list){var dName=getDisplayName(list[i].name);appendChild('ktktBanlistContainer','div',`
+	`;
+	return r;
+}
+
+function onLoadEditIcon() {
+	window.isEditIconLoaded = true;
+	swapEditButton();
+}
+
+function swapEditButton() {
+	if (!window.isEditIconLoaded) {
+		return;
+	}
+	e('ktKtMainEditPicW').style.display = 'inline-block';
+	e('ktKtMainEdit').style.display = 'none';
+}
+
+function onLoadUserIcon() {
+	window.isUserIconLoaded = true;
+	setAuthView(isAuth());
+}
+
+function swapUserButton() {
+	if (!window.isUserIconLoaded) {
+		return;
+	}
+	e('ktKtMainLoginPicW').style.display = 'inline-block';
+	e('ktKtMainLogin').style.display = 'none';
+}
+
+function onClickRegLink() {
+	window.onClickCloseKtDlg();
+	return true;
+}
+
+function onClickGotoHomepage() {
+	window.onClickCloseKtDlg();
+	return true;
+}
+
+function onClickLoginBtn(ev) {
+	
+	if (ev.keyCode && ev.keyCode != 13) {
+		console.log('ev.keyCode != 13, return true');
+		return true;
+	}
+	ev.preventDefault();
+
+	e('ktktViewErrorWrap').style.display = 'none';
+	e('ktktViewError').innerHTML = '';
+	pureAjax(window.SERVER + '/login.jn/', {l:e('ktktLogin').value, p:e('ktktPassword').value}, onSuccessLogin, onFailLogin, 'POST');
+	return true;
+}
+
+function onSuccessLogin(data) {
+	if (!onFailLogin(data)) {
+		return;
+	}
+	if (parseInt(data.uid)) {
+		window.KTKTUID = data.uid;
+		storage('ktktUid', data.uid);
+		setAuthView(true);
+		gotoForm();
+		getBanlist();
+	}
+}
+
+function indexByImg(list) {
+	var r = {}, i;
+	for (i in list) {
+		if (list[i].img) {
+			r[list[i].img] = {...list[i]};
+		}
+	}
+	return r;
+}
+
+function setAuthView(bState) {
+	if (!e('ktKtMainLogin')) {
+		return;
+	}
+	if (bState == true) {
+		e('ktKtMainLogin').style.display = 'none';
+		e('ktKtMainLoginPicW').style.display = 'none';
+	} else {
+		e('ktKtMainLogin').style.display = 'inline-block';
+		swapUserButton();
+	}
+}
+
+function onFailLogin(a, b, c) {
+	if (a.status == 'ok'){
+		return true;
+	}
+	if (!e('ktktViewErrorWrap')) {
+		return false;
+	}
+	if (a.status == 'error' && a.msg) {
+		e('ktktViewErrorWrap').style.display = 'block';
+		e('ktktViewError').innerHTML = a.msg;
+	} else {
+		e('ktktViewErrorWrap').style.display = 'block';
+		e('ktktViewError').innerHTML = 'Что-то пошло не так, регистрация в TrollKiller временно недоступна.';
+	}
+	return false;
+}
+
+function onClickGotoLoginForm(ev) {
+	ev.preventDefault();
+	ev.stopImmediatePropagation();
+	var s = 'display';
+	e('ktktBanForm').style[s] = 'none';
+	e('ktktBanList').style[s] = 'none';
+	e('ktktEditForm').style[s] = 'none';
+	e('ktktLoginForm').style[s] = 'block';
+	return false;
+}
+
+function onClickGotoMainEdit(ev) {
+	var trg = ev.target, 
+		link = attr(trg, 'data-link'),
+		name = attr(trg, 'data-name'),
+		reason = e('ktKtRreason').value;
+	showEditForm(link, name, reason);
+}
+
+function onClickUpdateBtn() {
+	var list = getListFromStorage(), i,
+		link = e('ktktELink').value,
+		name = e('ktktEName').value,
+		img = e('ktKtTrollAvatar').value,
+		reason = e('ktktEreason').value;
+	if (!list[link]) {
+		list[link] = {};
+	}
+	list[link].name = name;
+	list[link].reason = reason;
+	list[link].link = link;
+	list[link].img = img;
+	storage(KEY, list);
+
+	saveInSharedList(link, name, reason, img);
+
+	//Update main form data
+	e('ktKtRreason').value = reason;
+	e('ktKtMainName').innerHTML = name;
+	gotoForm();
+}
+
+function saveInSharedList(link, name, reason, img) {
+	//if (isAuth()) {
+		var list = getSharedListFromStorage();
+		if (count(list) && !list[link]) {
+			list[link] = {
+				name: name,
+				reason:reason,
+				img:img,
+				link:link
+			};
+			storage(KEY_SHARED, list, false);
+		}
+	//}
+}
+
+function onClickGotoForm(ev) {
+	ev.stopImmediatePropagation();
+	ev.preventDefault();
+	gotoForm();
+	return false;
+}
+
+function gotoForm() {
+	if (!e('ktktBanForm')) {
+		return;
+	}
+	var s = 'display';
+	e('ktktBanForm').style[s] = 'block';
+	e('ktktBanList').style[s] = 'none';
+	e('ktktEditForm').style[s] = 'none';
+	e('ktktLoginForm').style[s] = 'none';
+}
+
+function onClickGotoBanList(ev) {
+	ev.stopImmediatePropagation();
+	ev.preventDefault();
+	var s = 'display';
+	e('ktktBanForm').style[s] = 'none';
+	e('ktktEditForm').style[s] = 'none';
+	e('ktktBanList').style[s] = 'block';
+	var list = getSharedListFromStorage(), i;
+	list = count(list) ? list : getListFromStorage();
+	e('ktktBanlistContainer').innerHTML = '';
+	for (i in list) {
+		var dName = getDisplayName(list[i].name);
+		appendChild('ktktBanlistContainer', 'div', `
 		<div style="">
 			<b title="${list[i].reason}" style="float:left;display:inline-block;">
 				<a class="ktktlist-item-v" href="${list[i].link}" target="_blank">${dName}</a>
@@ -582,85 +1175,503 @@ function onClickGotoBanList(ev){ev.stopImmediatePropagation();ev.preventDefault(
 							>Р</span>
 			<div style="clear:both;"></div>
 		</div>
-		`)}
-e4(e('ktktBanlistContainer'),'ktktlist-item-r',(item)=>{item.onclick=(ev)=>{var trg=ev.target,link=attr(trg,'data-link'),name=attr(trg,'data-name'),dName=getDisplayName(name),reason=attr(trg,'data-reason');if(confirm(`Разбанить пользователя ${dName} забаненого за "${reason}"?`)){delete list[link];var itemDiv=trg.parentNode.parentNode;itemDiv.parentNode.removeChild(itemDiv);storage(KEY,list);var shList=getSharedListFromStorage();delete shList[link];storage(KEY_SHARED,shList,!1)}}});e4(e('ktktBanlistContainer'),'ktktlist-item-e',(item)=>{item.onclick=(ev)=>{var trg=ev.target,link=attr(trg,'data-link'),name=attr(trg,'data-name'),reason=attr(trg,'data-reason');showEditForm(link,name,reason)}});return!1}
-function mergeServerAndLocalData(arr){let i,local=getListFromStorage(),co,shared={...local};for(i=0;i<arr.length;i++){co=new Object();co.link='/profile/id'+arr[i].a_mail_id+'/';co.name=arr[i].nick;co.reason=arr[i].reason;if(!shared[co.link]){shared[co.link]=co}}
-storage(window.KEY_SHARED,shared,!1)}
-function count(o){var n=0;for(var i in o){n++}
-return n}
-function getBanlist(){if(!window.KTKTUID){return}
-pureAjax(window.SERVER_HOST+'/portfolio/web/userscripts/trollkiller/d/'+window.KTKTUID+'.json?'+Math.random(),{},(dt)=>{mergeServerAndLocalData(dt)},(a,b,c)=>{if(a==404){createServerBanList()}},'GET')}
-function createServerBanList(){if(!window.KTKTUID){return}
-pureAjax(window.SERVER+'/createlist.jn/',{i:window.KTKTUID},(dt)=>{if(dt.status=='ok'){getBanlist()}},(a,b,c)=>{},'POST')}
-function getDisplayName(name){var L=20;if(name.length>L){return(name.substring(0,L)+'...')}
-return name}
-function showEditForm(link,name,reason){e('ktktELink').value=link;e('ktktEName').value=name;e('ktktEreason').value=reason;var s='display';e('ktktBanForm').style[s]='none';e('ktktEditForm').style[s]='block';e('ktktBanList').style[s]='none'}
-function getListFromStorage(){return _getListFromStorage(KEY)}
-function getSharedListFromStorage(){var key=KEY_SHARED;return _getListFromStorage(KEY_SHARED)}
-function _getListFromStorage(key){var list=storage(key);list=list?list:{};return list}
-function addStyle(){var body=ee(D,'body')[0];appendChild(body,'style',`
+		`);
+	}
+	e4( e('ktktBanlistContainer'), 'ktktlist-item-r', (item) => {
+		item.onclick = (ev) =>{
+			var trg = ev.target, 
+				link = attr(trg, 'data-link'),
+				name = attr(trg, 'data-name'),
+				dName = getDisplayName(name),
+				reason = attr(trg, 'data-reason');
+			if (confirm(`Разбанить пользователя ${dName} забаненого за "${reason}"?`)) {
+				delete list[link];
+				var itemDiv = trg.parentNode.parentNode;
+				itemDiv.parentNode.removeChild(itemDiv);
+				storage(KEY, list);
+				var shList = getSharedListFromStorage();
+				delete shList[link];
+				storage(KEY_SHARED, shList, false);
+			}
+		}
+	} );
+	e4( e('ktktBanlistContainer'), 'ktktlist-item-e', (item) => {
+		item.onclick = (ev) =>{
+			var trg = ev.target, 
+				link = attr(trg, 'data-link'),
+				name = attr(trg, 'data-name'),
+				reason = attr(trg, 'data-reason');
+			showEditForm(link, name, reason);
+		}
+	} );
+	/*e4( e('ktktBanlistContainer'), 'ktktlist-item-v', (item) => {
+		item.onclick = (ev) =>{
+			window.onClickCloseKtDlg();
+			return true;
+		}
+	} );*/
+	return false;
+}
+
+function mergeServerAndLocalData(arr) {
+	/*
+	 * Тут может захотеться помудрить, получать также getSharedListFromStorage и мержить ещё и с ним если он не пуст.
+	 * Этого делать не надо: новые тролли добавляются в локальный лист (и в общий, на минуточку). 
+	 * Если с сервера пришел новый общий лист, он тут мержится с локальным, так что всё гуд.
+	*/
+	let i, local = getListFromStorage(), co,
+		shared = {...local};
+
+	for (i = 0; i < arr.length; i++) {
+		co = new Object();
+		co.link = '/profile/id' + arr[i].a_mail_id + '/';
+		co.name = arr[i].nick;
+		co.reason = arr[i].reason;
+		if (!shared[co.link]) {
+			shared[co.link] = co;
+		}
+	}
+	storage(window.KEY_SHARED, shared, false);
+}
+
+function count(o) {
+	var n = 0;
+	for (var i in o) {
+		n++;
+	}
+	return n;
+}
+
+function getBanlist() {
+	if (!window.KTKTUID) {
+		return;
+	}
+	pureAjax(window.SERVER_HOST + '/portfolio/web/userscripts/trollkiller/d/' + window.KTKTUID + '.json?' + Math.random(), {},
+		(dt) => {
+			mergeServerAndLocalData(dt);
+		},
+		(a, b, c) => {
+			if (a == 404) {
+				createServerBanList();
+			}
+		},
+		'GET');
+}
+function createServerBanList() {
+	if (!window.KTKTUID) {
+		return;
+	}
+	pureAjax(window.SERVER + '/createlist.jn/', {i:window.KTKTUID},
+		(dt) => {
+			if (dt.status == 'ok') {
+				getBanlist();
+			}
+		},
+		(a, b, c) => {},
+		'POST');
+}
+function getDisplayName(name) {
+	var L = 20;
+	if (name.length > L) {
+		return (name.substring(0, L) + '...');
+	}
+	return name;
+}
+
+function showEditForm(link, name, reason) {
+	e('ktktELink').value = link;
+	e('ktktEName').value = name;
+	e('ktktEreason').value = reason;
+
+	var s = 'display';
+	e('ktktBanForm').style[s] = 'none';
+	e('ktktEditForm').style[s] = 'block';
+	e('ktktBanList').style[s] = 'none';
+}
+
+function getListFromStorage() {
+	return _getListFromStorage(KEY);
+}
+
+function getSharedListFromStorage() {
+	var key = KEY_SHARED;
+	return _getListFromStorage(KEY_SHARED);
+}
+
+function _getListFromStorage(key) {
+	var list = storage(key);
+	list = list ? list : {};
+	return list;
+}
+
+//TODO поом что-то придумать
+function addStyle() {
+	var body = ee(D, 'body')[0];
+	appendChild(body, 'style', `
 		.ktKtTest {
 			color:red;
 		}
-	`,{'data-ap':100})}
-function sendToServer(data){if(window.KTKTUID==0){return}
-var user=getUserData();pureAjax(window.SERVER+'/savelist.jn/',{d:data,u:user},(dt)=>{if(dt.status=='error'&&dt.msg=='Войдите'){window.KTKTUID=0;setAuthView(!1)}},(a,b,c)=>{console.log(a);console.log('b',b);console.log('c',c)},'POST')}
-function getUserData(){var list=cs(D,window.authUserAvatarLinkCss),s='',ret={img:s,link:s,name:s},o;if(list&&list[0]){o=list[0];ret.name=parseTitle(o);ret.img=parseImg(o);ret.link=attr(o,'href')}
-return JSON.stringify(ret)}
-function parseImg(o){if(window.authUserAvatarLinkCss==window.touchAuthUserAvatarLinkCss){return parseTouchImg(o)}
-return parseDeskImg(o)}
-function parseTouchImg(o){var list=ee(o,'img');if(list&&list[0]){return imgToDataUri(list[0])}
-return''}
-function parseDeskImg(o){if(window.desktopAuthUserImageLoaded){return window.desktopAuthUserImage64data}
-return''}
-function parseDesktopImage(){var list=cs(D,window.authUserAvatarLinkCss),s,o,img;if(list&&list[0]){o=cs(list[0],'pm-toolbar__button__icon__img');if(o&&o[0]){o=o[0];if(o.style&&o.style.backgroundImage){s=getBgImageSUrl(o);img=new Image();img.onload=onLoadAuthUserImg;img.onerror=()=>{console.log('Error load image!')}
-img.src=s}}}}
-function getBgImageSUrl(o){if(!o||!o.style||!o.style.backgroundImage){return''}
-var s=o.style.backgroundImage.replace('url(','');s=s.replace(')','');s=s.replace(/"/g,'');s=s.replace(/'/g,'');s=s.replace(/^\/\//,'https://');return s}
-function onLoadAuthUserImg(){window.desktopAuthUserImageLoaded=!0;window.desktopAuthUserImage64data=imgToDataUri(this)}
-function parseTitle(o){if(window.authUserAvatarLinkCss==window.touchAuthUserAvatarLinkCss){return parseTouchTitle(o)}
-return parseDeskTitle(o)}
-function parseDeskTitle(o){var s=attr(o,'title'),a=s.split(',');if(a.length>0){return a[1].trim()}
-return''}
-function parseTouchTitle(o){var list=cs(o,'nav-menu__profile__name');if(list&&list[0]){return list[0].innerHTML}
-return''}
-function isAuth(){if(window.KTKTUID){return!0}
-return!1}
-var D=document,W=window,S=String;function e(i){if(i&&i.tagName||D==i)return i;return D.getElementById(i)}
-W.micron$=e;function ee(p,c){p=e(p);return p.getElementsByTagName(c)}
-function ec(p,cn){return cs(p,cn)}
-function e3(p,c,callback){var i,ls=ee(p,c);for(i=0;i<ls.length;i++){callback(ls[i])}}
-function e4(p,cn,callback){var i,ls=ec(p,cn);for(i=0;i<ls.length;i++){callback(ls[i])}}
-W.micron$$=ee;function cs(p,c){p=e(p);if(p.getElementsByClassName){return p.getElementsByClassName(c)}
-return[]}
-function hasClass(obj,css){var obj=e(obj);var c=obj.className,_css=css.replace(/\-/g,"\\-"),re1=new RegExp("^\\s?"+_css+"\\s*"),re2=new RegExp("\\s+"+_css+"(\\s+[\\w\\s]*|\\s*)$");if(c==css||re1.test(c)||re2.test(c)){return!0}
-return!1}
-function removeClass(obj,css){obj=e(obj);var c=obj.className,re=/[0-9a-zA-Z\-_]+/gm,arr=c.match(re),i,result=[];if(arr)for(i=0;i<arr.length;i++){if(arr[i]!==css){result.push(arr[i])}}
-obj.className=result.join(' ')}
-function addClass(obj,css){obj=e(obj);removeClass(obj,css);obj.className+=' '+css}
-function getViewport(){var w=W.innerWidth,h=W.innerHeight;if(!w&&D.documentElement&&D.documentElement.clientWidth){w=D.documentElement.clientWidth}else if(!w){w=D.getElementsByTagName('body')[0].clientWidth}
-if(!h&&D.documentElement&&D.documentElement.clientHeight){h=D.documentElement.clientHeight}else if(!h){h=D.getElementsByTagName('body')[0].clientHeight}
-return{w:w,h:h}}
-function appendChild(parent,tag,innerHTML,obj,dataObj){var el=D.createElement(tag),i;if(obj){for(i in obj){if(obj[i]instanceof Function){el[i]=obj[i]}else{el.setAttribute(i,obj[i])}}}
-if(dataObj){for(i in dataObj){el.setAttribute('data-'+i,dataObj[i])}}
-el.innerHTML=innerHTML;e(parent).appendChild(el);return el}
-function sz(a){return a.length}
-function attr(o,name,val){o=e(o);if(val){o.setAttribute(name,val)}
-if(o.hasAttribute(name)){return o.getAttribute(name)}
-return''}
-function stl(o,s,v){o=e(o);o.style[s]=v}
-function show(o,v){v=v?v:'block';stl(o,'display',v)}
-function hide(o){stl(o,'display','none')}
-function trim(s){s=S(s).replace(/^\s+/mig,'');s=S(s).replace(/\s+$/mig,'');return s}
-function In(a){var i,o={};if(a instanceof Array){for(i=0;i<sz(a);i++){o[a[i]]=1}}else if(a instanceof Object){for(i in a){o[a[i]]=1}}else{for(i=0;i<sz(arguments);i++){o[arguments[i]]=1}}
-return o}
-function storage(key,data,_sendToServer=!0){var L=window.localStorage;if(L){if(data===null){L.removeItem(key)}
-if(!(data instanceof String)){data=JSON.stringify(data)}
-if(!data){data=L.getItem(key);if(data){try{data=JSON.parse(data)}catch(e){}}}else{L.setItem(key,data);if(_sendToServer){sendToServer(data)}}}
-return data}
-function imgToDataUri(i){var canvas;try{canvas=document.createElement('canvas');canvas.width=i.naturalWidth;canvas.height=i.naturalHeight;canvas.getContext('2d').drawImage(i,0,0);var r=canvas.toDataURL('image/png');delete canvas;return r}catch(e){if(canvas){delete canvas}}
-return!1}
-function pureAjax(url,data,onSuccess,onFail,method){var xhr=new XMLHttpRequest();var arr=[];console.log('send to:'+url,data);for(var i in data){arr.push(i+'='+encodeURIComponent(data[i]))}
-var sData=arr.join('&');xhr.open(method,url,!0);xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');xhr.onreadystatechange=function(){if(xhr.readyState==4){var error={};if(xhr.status==200){try{var response=JSON.parse(String(xhr.responseText));console.log(response);onSuccess(response,xhr);return}catch(e){error.state=1;error.info='Fail parse JSON'}}else{error.state=1}
-if(error.state){onFail(xhr.status,xhr.responseText,error.info,xhr)}}}
-xhr.send(sData)}
+	`, {'data-ap': 100});
+}
+/**
+ * @param {String} data if data was object it already String
+ */
+function sendToServer(data) {
+	if (window.KTKTUID == 0) {
+		return;
+	}
+	var user = getUserData();//stringify {img, link, name}
+	pureAjax(window.SERVER + '/savelist.jn/', {d:data, u:user}, (dt)=>{
+		if (dt.status == 'error' && dt.msg == 'Войдите') {
+			window.KTKTUID = 0;
+			setAuthView(false);
+		}
+	}, (a, b, c) => {
+		  console.log(a);
+		  console.log('b', b);
+		  console.log('c', c);
+	  }, 'POST');
+}
+/**
+ * @return {img, link, name}
+ */
+function getUserData() {
+	var list = cs(D, window.authUserAvatarLinkCss), s = '',
+		ret = {img:s, link:s, name: s}, o;
+	if (list && list[0]) {
+		o = list[0];
+		ret.name = parseTitle(o);
+		ret.img = parseImg(o);
+		ret.link = attr(o, 'href');
+	}
+	return JSON.stringify(ret);
+}
+
+function parseImg(o) {
+	if (window.authUserAvatarLinkCss == window.touchAuthUserAvatarLinkCss) {
+		return parseTouchImg(o);
+	}
+	return parseDeskImg(o);
+}
+
+function parseTouchImg(o) {
+	var list = ee(o, 'img');
+	if (list && list[0]) {
+		return imgToDataUri(list[0]);
+	}
+	return '';
+}
+function parseDeskImg(o) {
+	if (window.desktopAuthUserImageLoaded) {
+		return window.desktopAuthUserImage64data;
+	}
+	return '';
+}
+
+function parseDesktopImage() {
+	var list = cs(D, window.authUserAvatarLinkCss), s,
+		o, img;
+	if (list && list[0]) {
+		o = cs(list[0], 'pm-toolbar__button__icon__img');
+		if (o && o[0]) {
+			o = o[0];
+			if (o.style && o.style.backgroundImage) {
+				s = getBgImageSUrl(o);
+				img = new Image();
+				img.onload = onLoadAuthUserImg;
+				img.onerror = () =>{ console.log('Error load image!'); }
+				img.src = s;
+			}
+		}
+	}
+}
+
+function getBgImageSUrl(o) {
+	if (!o || !o.style || !o.style.backgroundImage) {
+		return '';
+	}
+	var s = o.style.backgroundImage.replace('url(', '');
+	s = s.replace(')', '');
+	s = s.replace(/"/g, '');
+	s = s.replace(/'/g, '');
+	s = s.replace(/^\/\//, 'https://');
+	return s;
+}
+
+function onLoadAuthUserImg() {
+	window.desktopAuthUserImageLoaded = true;
+	window.desktopAuthUserImage64data = imgToDataUri(this);
+}
+
+function parseTitle(o) {
+	if (window.authUserAvatarLinkCss == window.touchAuthUserAvatarLinkCss) {
+		return parseTouchTitle(o);
+	}
+	return parseDeskTitle(o);
+}
+function parseDeskTitle(o) {
+	var s = attr(o, 'title'),
+		a = s.split(',');
+	if (a.length > 0) {
+		return a[1].trim();
+	}
+	return '';
+}
+
+function parseTouchTitle(o) {
+	var list = cs(o, 'nav-menu__profile__name');
+	if (list && list[0]) {
+		return list[0].innerHTML;
+	}
+	return '';
+}
+
+function isAuth() {
+	if (window.KTKTUID) {
+		return true;
+	}
+	return false;
+}
+//---------------micronlib----------------
+var D = document,
+W = window, S = String;
+function e(i) {
+	if (i && i.tagName || D == i) return i;
+	return D.getElementById(i);
+}
+W.micron$ = e;
+function ee(p, c) {
+	p = e(p);
+	return p.getElementsByTagName(c);
+}
+function ec(p, cn) {
+	return cs(p, cn);
+}
+function e3(p, c, callback) {
+	var i, ls = ee(p, c);
+	for (i = 0; i < ls.length; i++) {
+		callback(ls[i]);
+	}
+}
+function e4(p, cn, callback) {
+	var i, ls = ec(p, cn);
+	for (i = 0; i < ls.length; i++) {
+		callback(ls[i]);
+	}
+}
+W.micron$$ = ee;
+function cs(p, c) {
+	p = e(p);
+	if (p.getElementsByClassName) {
+		return p.getElementsByClassName(c);
+	}
+	return [];
+}
+function hasClass(obj, css) {
+	var obj = e(obj);
+	var c = obj.className, _css = css.replace(/\-/g, "\\-"), 
+	re1 = new RegExp("^\\s?" + _css + "\\s*"), 
+	re2 = new RegExp("\\s+" + _css + "(\\s+[\\w\\s]*|\\s*)$");
+	if (c == css || re1.test(c) || re2.test(c)) {
+		return true;
+	} 
+	return false;
+}
+function removeClass(obj, css) {
+	obj = e(obj);
+	var c = obj.className, re = /[0-9a-zA-Z\-_]+/gm,
+	arr = c.match(re),
+	i, result = [];
+	if (arr) for (i = 0; i < arr.length; i++) {
+		if (arr[i] !== css) {
+			result.push(arr[i]);
+		}
+	}
+	obj.className = result.join(' ');
+}
+function addClass(obj, css) {
+	obj = e(obj);
+	removeClass(obj, css);
+	obj.className += ' ' + css;
+}
+//getviewport
+function getViewport() {
+	var w = W.innerWidth, h = W.innerHeight;
+	if (!w && D.documentElement && D.documentElement.clientWidth) {
+		w = D.documentElement.clientWidth;
+	} else if (!w) {
+		w = D.getElementsByTagName('body')[0].clientWidth;
+	}
+	if (!h && D.documentElement && D.documentElement.clientHeight) {
+		h = D.documentElement.clientHeight;
+	} else if (!h) {
+		h = D.getElementsByTagName('body')[0].clientHeight;
+	}
+	return {w:w, h:h};
+}
+function appendChild(parent, tag, innerHTML, obj, dataObj) {
+	var el = D.createElement(tag), i;
+	if (obj) {
+		for (i in obj) {
+			if (obj[i] instanceof Function) {
+				el[i] =  obj[i];
+			} else {
+				el.setAttribute(i, obj[i]);
+			}
+		}
+	}
+	if (dataObj) {
+		for (i in dataObj) {
+			el.setAttribute('data-' + i, dataObj[i]);
+		}
+	}
+	el.innerHTML = innerHTML;
+	e(parent).appendChild(el);
+	return el;
+}
+function sz(a) {
+	return a.length;
+}
+function attr(o, name, val) {
+	o = e(o);
+	if (val) {
+		o.setAttribute(name, val);
+	}
+	if (o.hasAttribute(name)) {
+		return o.getAttribute(name);
+	}
+	return '';
+}
+function stl(o, s, v) {
+	o = e(o);
+	o.style[s] = v;
+}
+function show(o, v) {
+	v = v ? v : 'block';
+	stl(o, 'display', v);
+}
+function hide(o) {
+	stl(o, 'display', 'none');
+}
+function trim(s) {
+	s = S(s).replace(/^\s+/mig, '');
+	s = S(s).replace(/\s+$/mig, '');
+	return s;
+}
+function In(a) {
+	var i, o = {};
+	if (a instanceof Array) {
+		for (i = 0; i < sz(a); i++) {
+			o[a[i]] = 1;
+		}
+	} else if (a instanceof Object) {
+		for (i in a) {
+			o[a[i]] = 1;
+		}
+	} else {
+		for (i = 0; i < sz(arguments); i++) {
+			o[arguments[i]] = 1;
+		}
+	}
+	return o;
+}
+/**
+ * Внимание, функция пропатчена
+ * пропатчено, чтобы отправляла данные на сервер если пользователь авторизован
+ * @description Индексирует массив по указанному полю
+ * @param {Array} data
+ * @param {String} id = 'id'
+ * @param {Boolean} _sendToServer = true
+ * @return {Object};
+*/
+function storage(key, data, _sendToServer = true) {
+	var L = window.localStorage;
+	if (L) {
+		if (data === null) {
+			L.removeItem(key);
+		}
+		if (!(data instanceof String)) {
+			data = JSON.stringify(data);
+		}
+		if (!data) {
+			data = L.getItem(key);
+			if (data) {
+				try {
+					data = JSON.parse(data);
+				} catch(e){;}
+			}
+		} else {
+			L.setItem(key, data);
+			if (_sendToServer) {
+				sendToServer(data);
+			}
+		}
+	}
+	return data;
+}
+/**
+ * @description Преобразовывается изображение в dataUri
+ * @param {Image} 
+ * @return {String}
+*/
+function imgToDataUri(i) {
+	var canvas;
+	try {
+		canvas = document.createElement('canvas');
+		canvas.width = i.naturalWidth;
+		canvas.height = i.naturalHeight;
+		canvas.getContext('2d').drawImage(i, 0, 0);
+		var r = canvas.toDataURL('image/png');
+		delete canvas;
+		return r;
+	} catch(e) {
+		if (canvas) {
+			delete canvas;
+		}
+	}
+	return false;
+}
+
+/**
+ * @desc Аякс запрос к серверу, использует JSON
+*/
+function pureAjax(url, data, onSuccess, onFail, method) {
+	var xhr = new XMLHttpRequest();
+	//подготовить данные для отправки
+	var arr = [];
+	console.log('send to:' + url, data);
+	for (var i in data) {
+		arr.push(i + '=' + encodeURIComponent(data[i]));
+	}
+	var sData = arr.join('&');
+	//установить метод  и адрес
+	xhr.open(method, url, true);
+	//установить заголовок
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	//обработать ответ
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			var error = {};
+			if (xhr.status == 200) {
+				try {
+					var response = JSON.parse(String(xhr.responseText));
+					console.log(response);
+					onSuccess(response, xhr);
+					return;
+				} catch(e) {
+					/*console.log(String(xhr.responseText));
+					console.log(e);*/
+					error.state = 1;
+					error.info = 'Fail parse JSON';
+				}
+			}else {
+				error.state = 1;
+			}
+			if (error.state) {
+				onFail(xhr.status, xhr.responseText, error.info, xhr);
+			}
+		} 
+	}
+	//отправить
+	xhr.send(sData);
+}
