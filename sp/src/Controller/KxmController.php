@@ -12,6 +12,7 @@ class KxmController extends AppBaseController
      */
     public function index()
     {
+        die('Hello kxm');
         return $this->render('kxm/index.html.twig', [
             'controller_name' => 'KxmController',
         ]);
