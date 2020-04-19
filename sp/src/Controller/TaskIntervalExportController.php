@@ -88,7 +88,7 @@ class TaskIntervalExportController extends AppBaseController
 		$aData['sDate'] = $sDate;
 		$aData['oTree'] = $oBranch;
 
-        return $this->render('task_interval_export/articles.html.twig', $aData);
+        return $this->render('task_interval_export/index.html.twig', $aData);
     }
     /**
 	 * Добавляет в _aChildTasks очередной объект с данными задачи
