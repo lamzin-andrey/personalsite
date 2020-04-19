@@ -4,13 +4,13 @@
 {% block title %}{{'Articles managment'|trans}}{% endblock %}
 
 {% block content %}
-    <kxmadmin ref="kxmadmin"></kxmadmin>
+    <kxmadmin ref="kxmadmin" token="{{ formtoken }}"></kxmadmin>
 {% endblock %}
 
 
 {% block javascripts %}
     <!-- Bootstrap core JavaScript-->
-    <!--script-- charset="UTF-8" src="/j/j.js"></script-->
+    <script charset="UTF-8" src="/j/k.js"></script>
 
     {# Он его два раза что ли тащит? #}
     <script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
