@@ -32,7 +32,7 @@ let mix = require('laravel-mix');
 //mix.js('sources/sploginpagecacheclient/app.js', 'i.js');
 
 //Раздел статей в symfony проекте
-mix.js('sources/spadmin_articles/app.js', 'j.js');
+//mix.js('sources/spadmin_articles/app.js', 'j.js');
 
 //Раздел Для "игры кто хочет стать миллионером"
 mix.js('sources/spadmin_kxm/app.js', 'k.js');

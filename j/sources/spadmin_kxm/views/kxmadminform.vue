@@ -109,7 +109,7 @@
 			 * @description уведомляем приложение, что данные изменились
 			 */
 			setDataChanges() {
-				this.$root.$refs.portfolio.setDataChanges(true);
+				//this.$root.$refs.portfolio.setDataChanges(true);
 			},
             /** 
              * @description Пробуем отправить форму
@@ -160,10 +160,13 @@
             */
 			allRequiredFilled(){
 				return (
-					parseInt(this.category) > 0
-					&& String(this.title).length > 0
-					&& String(this.heading).length > 0
-					&& String(this.body).length > 0
+					this.var1.length > 0 &&
+					this.var2.length > 0 &&
+					this.var3.length > 0 &&
+					this.var4.length > 0 &&
+					this.body.length > 0 &&
+					parseInt(this.price) > 0 &&
+					parseInt(this.varright) > 0
 				);
 			},
 			/**

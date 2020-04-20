@@ -28,4 +28,13 @@ class KxmQuestFormType extends AbstractType
             'data_class' => KxmQuest::class,
         ]);
     }
+
+    /**
+     *
+     * @return string Обертка вокруг полей формы
+    */
+    public function getBlockPrefix()
+    {
+        return "kxm";
+    }
 }
