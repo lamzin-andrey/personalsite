@@ -70,8 +70,16 @@
 		name: 'kxmadmin',
 		
 		props: {
+
+			/** @property {String} token Значение токена формы */
 			token: {
 				type:String,
+				default: 'not_initalized'
+			},
+
+			/** @property {String} tokenPrefix Имя токена формы */
+			token_prefix: {
+				type: String,
 				default: 'not_initalized'
 			}
 		},
@@ -330,10 +338,10 @@
 				this.$root.alert($t('DefaultFail'));
 			},
 			/**
-			 * @description Установить id редактируемой категории
+			 * @description Установить id редактируемого вопроса
 			 * @param {Number} id 
 			*/
-			setProductId(id) {
+			setQuestId(id) {
 				this.productId = id;
 				let key = 'app.New',
 					key2 = 'app.Append';
@@ -411,7 +419,8 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-			this.$refs.kxmadminform.setFormToken(this.token);
+			Rest._token = this.token;
+			this.$refs.kxmadminform.setFormToken(this.token, this.token_prefix);
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();

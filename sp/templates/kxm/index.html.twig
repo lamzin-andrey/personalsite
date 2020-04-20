@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
-{% trans_default_domain 'articles' %}
+{% trans_default_domain 'victorina' %}
 
-{% block title %}{{'Articles managment'|trans}}{% endblock %}
+{% block title %}{{'Quests managment'|trans}}{% endblock %}
 
 {% block content %}
-    <kxmadmin ref="kxmadmin" token="{{ formtoken }}"></kxmadmin>
+    <kxmadmin ref="kxmadmin" token="{{ formtoken }}" token_prefix="{{ sTokenPrefix }}"></kxmadmin>
 {% endblock %}
 
 

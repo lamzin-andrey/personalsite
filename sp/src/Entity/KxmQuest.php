@@ -56,6 +56,13 @@ class KxmQuest
         return $this->id;
     }
 
+    public function setId(int $id)
+    {
+        $this->id = $id;
+
+        return $id;
+    }
+
     public function getBody(): ?string
     {
         return $this->body;

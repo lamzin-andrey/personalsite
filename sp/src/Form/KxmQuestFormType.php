@@ -9,9 +9,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class KxmQuestFormType extends AbstractType
 {
+    /** @var string $prefix = 'kxm' */
+    public static $prefix = 'kxm';
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('id')
             ->add('body')
             ->add('var1')
             ->add('var2')
@@ -35,6 +39,6 @@ class KxmQuestFormType extends AbstractType
     */
     public function getBlockPrefix()
     {
-        return "kxm";
+        return static::$prefix;
     }
 }
