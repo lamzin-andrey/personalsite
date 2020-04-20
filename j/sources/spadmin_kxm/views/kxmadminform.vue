@@ -9,6 +9,21 @@
 			<inputb4 v-model="var_right" ref="varright" @input="setDataChanges" :counter="counter" :label="$t('app.varright')"  type="number" id="varright" rows="3" validators="'required'"></inputb4>
 			<inputb4 v-model="price" ref="price" @input="setDataChanges" :counter="counter" :label="$t('app.price')"  type="number" id="price" rows="3" validators="'required'"></inputb4>
 
+			<div class="float-right ">
+			<div id="Saver" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+				<div class="toast-header">
+					<strong class="mr-auto">Info</strong>
+					<small class="text-muted"></small>
+					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="toast-body">
+					{{ $t('app.SaveCompleted') }}
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
 	        <p class="text-right my-3">
 	            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
 	        </p>
@@ -33,25 +48,25 @@
         data: function(){
 			let _data  = {
 				//Вариант ответа
-				var1: '1',
+				var1: '',
 				
 				//Вариант ответа
-				var2: '2',
+				var2: '',
 				
 				//Вариант ответа
-				var3: '3',
+				var3: '',
 				
 				//Вариант ответа
-				var4: '74',
+				var4: '',
 				
 				//Текст вопроса
-				body:'dsads',
+				body:'',
 				
 				//Стоимость вопроса
 				price: 500,
 				
 				//Правильный вариант
-				var_right:10,
+				var_right:1,
 				
 				//Идентификатор редактируемого вопроса
 				id : 0,
@@ -79,31 +94,37 @@
 			 * @description Установитрь данные статьи для редактирования
 			 * @param {Object} data @see mysql table fields pages
 			*/
-			setProductData(data) {
+			setQuestData(data) {
 				this.var1 = '';
 				this.var2 = '';
 				this.var3 = '';
 				this.var4 = '';
 				this.body = '';
 				this.price = 0;
-				_this.varright = 0;
+				this.var_right = 0;
 				//Идентификатор редактируемого вопроса
 				this.id = 0;
 				this.hideFromProductlist = false;
 				
 				//Fix bug when edit the article more then one time...
 				Vue.nextTick(() => {
-					this.var1 = '';
-					this.var2 = '';
-					this.var3 = '';
-					this.var4 = '';
-					this.body = '';
-					this.price = 0;
-					this.var_right = 0;
+					this.var1 = data.var1;
+					this.var2 = data.var2;
+					this.var3 = data.var3;
+					this.var4 = data.var4;
+					this.body = data.body;
+					this.price = data.price;
+					this.var_right = data.var_right;
 					//Идентификатор редактируемого вопроса
-					this.id = 0;
-					this.hideFromProductlist = false;
+					this.id = data.id;
+					//this.hideFromProductlist = data.is_hidden;
 				});
+			},
+			/** 
+			 * @param {Number} nId
+			*/
+			setId(nId) {
+				this.id = nId;
 			},
 			/**
 			 * @description уведомляем приложение, что данные изменились
@@ -160,7 +181,7 @@
 				if (data.status == 'ok' && id) {
 					this.id = id;
 					this.$root.$refs.kxmadmin.setQuestId(id);
-					$('#kxmQuestSaver').toast('show');
+					$('#Saver').toast('show');
 					this.$root.$refs.kxmadmin.setDataChanges(false);
 					this.$root.$refs.kxmadmin.dataTable.search('').draw();
 				}

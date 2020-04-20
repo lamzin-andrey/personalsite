@@ -97,13 +97,52 @@ class KxmController extends AppBaseController
         $nSz = count($aData);
         $aResult = [
             'recordsTotal' => $this->_getTotalRecords($oAppService),
-            'recordsFiltred' => $nSz,
+            'recordsFiltred' => $this->_getTotalRecords($oAppService),
             'data' => $aData,
+            'draw' => $oRequest->get('draw'),
             'status' => 'ok'
         ];
         return $this->_json($aResult);
     }
 
+    /**
+     * @Route("/kxm/quest.json", name="getquest")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param AppService $oAppService
+     * @return Response
+    */
+    public function getquest(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+    {
+        $this->_oAppService = $oAppService;
+        $aResult = [];
+        if (!$this->_accessControl()) {
+            $aResult['msg'] = $t->trans('You have not access to this task');
+            $aResult['status'] = 'error';
+            return $this->_json($aResult);
+        }
+        $oQuest = $this->getDoctrine()->getRepository('App:KxmQuest')
+            ->find($oRequest->get('id'));
+        if ($oQuest) {
+            return $this->_json([
+                'status' => 'ok',
+                'quest' => [
+                    'id' => $oQuest->getId(),
+                    'body' => $oQuest->getBody(),
+                    'var1' => $oQuest->getVar1(),
+                    'var2' => $oQuest->getVar2(),
+                    'var3' => $oQuest->getVar3(),
+                    'var4' => $oQuest->getVar4(),
+                    'var_right' => $oQuest->getVarRight(),
+                    'price' => $oQuest->getPrice(),
+                ]
+            ]);
+        }
+        return $this->_json([
+            'status' => 'error',
+            'msg' => 'Quest not found'
+        ]);
+    }
     /**
      * Создать объект формы
      * @return
@@ -121,13 +160,23 @@ class KxmController extends AppBaseController
 	*/
     private function _loadData(AppService $oAppService, Request $oRequest) : array
     {
-		return $oAppService->repository('App:KxmQuest')
-            ->findAll([],
-                [
-                    'limit' => $oRequest->get('length', 0),
-                    'offset' =>  $oRequest->get('start', 0)
-                ]
-            );
+        $oQueryBuilder = $this->getDoctrine()
+            ->getRepository('App:KxmQuest')
+            ->createQueryBuilder('k');
+        $aData = $oQueryBuilder
+            ->setMaxResults($oRequest->get('length', 0))
+            ->setFirstResult($oRequest->get('start', 0))
+            ->getQuery()
+            ->getScalarResult();
+        $aResult = [];
+        foreach ($aData as $oItem) {
+            $aItem = [];
+            foreach ($oItem as $sName => $sValue) {
+                $aItem[ preg_replace("#^k_#", '', $sName) ] = $sValue;
+            }
+            $aResult[] = $aItem;
+        }
+        return $aResult;
 	}
 	/**
 	 * @return int Общее количество записей

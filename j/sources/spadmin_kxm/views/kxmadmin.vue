@@ -103,7 +103,7 @@
 				/** @property  {B4DataTablesPreloader} dataTablesPreloader */
 				dataTablesPreloader: new B4DataTablesPreloader(),
 
-				/** @property {Number} productId Идентификатор редактируемого вопроса */
+				/** @property {Number} questId Идентификатор редактируемого вопроса */
 				questId : 0,
 				 
 				 /** @property {DataTableMoveRecord} объект для добавления кнопок для перемещения записей таблицы на соседние страницы */
@@ -144,7 +144,7 @@
 							'class' : 'u-tablerowdragcellbg'
 						},
 						{ 
-							"data": "heading",
+							"data": "body",
 							'render' : function(data, type, row) {
 								if (row.url) {
 									return  `<a href="${row.url}" target="_blank">${data}</a>`;
@@ -256,25 +256,25 @@
 			 * @param {Event} evt
 			*/
 			onClickEditProduct(evt) {
-				if (this.requestedProductId > 0) {
+				if (this.requestedQuestId > 0) {
 					this.alert(this.$t('app.Other_product_requested_for_edit'));
 					return;
 				}
-				this.requestedProductId = $(evt.target).attr('data-id');
-				$('#spin' + this.requestedProductId).toggleClass('d-none');
-				this.$root._get((d) => {this.onSuccessGetProduct(d);}, `/p/portfolio/product.jn/?id=${this.requestedProductId}`, (a, b, c) => {this.onFailGetProduct(a, b, c);} );
+				this.requestedQuestId = $(evt.target).attr('data-id');
+				$('#spin' + this.requestedQuestId).toggleClass('d-none');
+				Rest._get((d) => {this.onSuccessGetQuest(d);}, `${this.$webRoot}/kxm/quest.json?id=${this.requestedQuestId}`, (a, b, c) => {this.onFailGetQuest(a, b, c);} );
 			},
 			/**
 			 * @description Success request product data for edit
 			 * @param {Object} data
 			*/
-			onSuccessGetProduct(data) {
-				if (!this.onFailGetProduct(data)) {
+			onSuccessGetQuest(data) {
+				if (!this.onFailGetQuest(data)) {
 					return;
 				}
-				this.setProductId(data.id);
-				this.$refs.kxmadminform.resetImages();
-				this.$refs.kxmadminform.setProductData(data);
+				this.setQuestId(data.quest.id);
+				//this.$refs.kxmadminform.resetImages();
+				this.$refs.kxmadminform.setQuestData(data.quest);
 				setTimeout(() => {
 					this.setDataChanges(false);
 				}, 1000);
@@ -284,9 +284,9 @@
 			 * @description Failed request product data for edit
 			 * @return Boolean
 			*/
-			onFailGetProduct(data, b ,c) {
-				$('#spin' + this.requestedProductId).toggleClass('d-none');
-				this.requestedProductId = 0;
+			onFailGetQuest(data, b ,c) {
+				$('#spin' + this.requestedQuestId).toggleClass('d-none');
+				this.requestedQuestId = 0;
 				return this.$root.defaultFailSendFormListener(data, b ,c);
 			},
 			/**
@@ -342,7 +342,7 @@
 			 * @param {Number} id 
 			*/
 			setQuestId(id) {
-				this.productId = id;
+				this.questId = id;
 				let key = 'app.New',
 					key2 = 'app.Append';
 				
@@ -356,8 +356,8 @@
 			 * @description Получить id редактируемого товара
 			 * @return Number
 			*/
-			getProductId() {
-				return this.productId;
+			getQuestId() {
+				return this.questId;
 			},
 			/**
 			 * @see isChange
@@ -388,6 +388,8 @@
 				});
 				$('#editquests-tab').on('shown.bs.tab', (ev) => {
 					this.setDataChanges(false);
+					this.requestedQuestId = 0;
+					this.$refs.kxmadminform.setId(0);
 				});
 			},
 			/**
@@ -404,8 +406,8 @@
 			gotoProductsListTab() {
 				$('#questlist-tab').tab('show');
 				$('#kxmadminform')[0].reset();
-				this.setProductId(0);
-				this.$refs.kxmadminform.resetImages();
+				this.setQuestId(0);
+				//this.$refs.kxmadminform.resetImages();
 				this.setDataChanges(false);
 			},
 			/**
