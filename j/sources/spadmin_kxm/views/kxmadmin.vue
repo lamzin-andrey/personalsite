@@ -3,24 +3,24 @@
 <ul class="nav nav-tabs" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link" 
-				id="portfoliolist-tab"
-				href="#portfoliolist"
+				id="questlist-tab"
+				href="#questlist"
 				role="tab"
 				aria-controls="home"
 				aria-selected="true">{{ $t('app.List') }}</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link active"
-				id="editportfolio-tab"
+				id="editquests-tab"
 				data-toggle="tab"
-				href="#editportfolio"
+				href="#editquests"
 				role="tab"
 				aria-controls="profile"
 				aria-selected="false"> {{ formTabTitle }} </a>
 		</li>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane fade " id="portfoliolist" role="tabpanel" aria-labelledby="list-tab">
+		<div class="tab-pane fade " id="questlist" role="tabpanel" aria-labelledby="list-tab">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">{{ $t('app.Worklist') }}</h5>
@@ -44,11 +44,11 @@
 			</div>
 		</div>
 		
-		<div class="tab-pane fade show active" id="editportfolio" role="tabpanel" aria-labelledby="edit-tab">
+		<div class="tab-pane fade show active" id="editquests" role="tabpanel" aria-labelledby="edit-tab">
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title"> {{ newEdit }} </h5>
-					<portfolioform ref="portfolioform"></portfolioform>
+					<kxmadminform ref="kxmadminform"></kxmadminform>
 				</div>
 			</div>
 		</div>
@@ -64,10 +64,18 @@
 	//Класс для добавления кнопок перемещения записей таблицы на предыдущую и следующую страницу
 	import DataTableMoveRecord from '../classes/datatablemoverecord';
 
-    Vue.component('portfolioform', require('./portfolioform.vue').default);
+    Vue.component('kxmadminform', require('./kxmadminform.vue').default);
 
     export default {
-        name: 'kxmadmin',
+		name: 'kxmadmin',
+		
+		props: {
+			token: {
+				type:String,
+				default: 'not_initalized'
+			}
+		},
+
         //вызывается раньше чем mounted
         data: function(){
 			let _data  = {
@@ -114,7 +122,7 @@
 					},
 					'processing': true,
 					'serverSide': true,
-					'ajax': (self.$webRoot + "/list.jn"),
+					'ajax': (self.$webRoot + "/kxmlist.json"),
 					"columns": [
 						{ 
 							"data": "id",
@@ -257,12 +265,12 @@
 					return;
 				}
 				this.setProductId(data.id);
-				this.$refs.portfolioform.resetImages();
-				this.$refs.portfolioform.setProductData(data);
+				this.$refs.kxmadminform.resetImages();
+				this.$refs.kxmadminform.setProductData(data);
 				setTimeout(() => {
 					this.setDataChanges(false);
 				}, 1000);
-				$('#editportfolio-tab').tab('show');
+				$('#editquests-tab').tab('show');
 			},
 			/**
 			 * @description Failed request product data for edit
@@ -354,7 +362,7 @@
 			 * @description Добавляем инициализацию табов
 			 */
 			initSeotab() {
-				$('#portfoliolist-tab').on('click', (ev) => {
+				$('#questlist-tab').on('click', (ev) => {
 					ev.preventDefault();
 					if (this.isChange) {
 						//Сменим тексты диалога, чтобы было ясно, что речь идёт именно о переключении на новую вкладку
@@ -370,7 +378,7 @@
 						this.gotoProductsListTab();
 					}
 				});
-				$('#editportfolio-tab').on('shown.bs.tab', (ev) => {
+				$('#editquests-tab').on('shown.bs.tab', (ev) => {
 					this.setDataChanges(false);
 				});
 			},
@@ -386,10 +394,10 @@
 			 * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
 			*/
 			gotoProductsListTab() {
-				$('#portfoliolist-tab').tab('show');
-				$('#portfolioform')[0].reset();
+				$('#questlist-tab').tab('show');
+				$('#kxmadminform')[0].reset();
 				this.setProductId(0);
-				this.$refs.portfolioform.resetImages();
+				this.$refs.kxmadminform.resetImages();
 				this.setDataChanges(false);
 			},
 			/**
@@ -403,6 +411,7 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
+			this.$refs.kxmadminform.setFormToken(this.token);
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();
