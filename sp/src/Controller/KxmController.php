@@ -97,7 +97,7 @@ class KxmController extends AppBaseController
         $nSz = count($aData);
         $aResult = [
             'recordsTotal' => $this->_getTotalRecords($oAppService),
-            'recordsFiltred' => $this->_getTotalRecords($oAppService),
+            'recordsFiltered' => $this->_getTotalRecords($oAppService),
             'data' => $aData,
             'draw' => $oRequest->get('draw'),
             'status' => 'ok'

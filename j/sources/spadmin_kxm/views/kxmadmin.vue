@@ -146,9 +146,6 @@
 						{ 
 							"data": "body",
 							'render' : function(data, type, row) {
-								if (row.url) {
-									return  `<a href="${row.url}" target="_blank">${data}</a>`;
-								}
 								return data;
 							}
 						},
