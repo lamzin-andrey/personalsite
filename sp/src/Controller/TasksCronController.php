@@ -173,21 +173,7 @@ class TasksCronController extends AppBaseController
 			$aResult['status'] = 'error';
 			return $this->_json($aResult);
 		}
-		$a = $oRequest->get('a', []);
-		$oRepository = $oAppService->repository('App:CrnTasks');
-		$oQueryBuilder = $oRepository->createQueryBuilder('t');
-		$e = $oQueryBuilder->expr();
-		$oQueryBuilder->select('MIN(t.delta) AS m')
-			->where($e->in('t.id', $a));
-		$aMinInfo = $oQueryBuilder->getQuery()->getSingleResult();
-		$nMin = ($aMinInfo['m'] ?? 0);
-		foreach ($a as $nId) {
-			$oQueryBuilder = $oRepository->createQueryBuilder('t');
-			$oQueryBuilder->update()->set('t.delta', $nMin)
-						  ->where( $e->eq('t.id', $nId) )
-						  ->getQuery()->execute();
-			$nMin++;
-		}
+		$oAppService->rearrangeRecords('App:CrnTasks', $oRequest->get('a', []));
 		return $this->_json($aResult);
 	}
 

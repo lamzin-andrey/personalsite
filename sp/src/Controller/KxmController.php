@@ -60,6 +60,7 @@ class KxmController extends AppBaseController
                 if (!$this->_oKxmQuest) {
                     $this->_oKxmQuest = $oForm->getData();
                 }
+                $this->_oKxmQuest->setDelta( $oAppService->getNextPosition('App:KxmQuest', 'delta') );
                 $oAppService->save($this->_oKxmQuest);
                 return $this->_json([
                     'status' => 'ok',
@@ -144,6 +145,38 @@ class KxmController extends AppBaseController
         ]);
     }
     /**
+     * @Route("/kxm/reorder.json", name="reorderjson")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param AppService $oAppService
+     * @return Response
+    */
+    public function reorder(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+    {
+        $this->_oAppService = $oAppService;
+        $aResult = [];
+        if (!$this->_accessControl()) {
+            $aResult['msg'] = $t->trans('You have not access to this task');
+            $aResult['status'] = 'error';
+            return $this->_json($aResult);
+        }
+        //check form token
+        $oForm = $this->_createForm();
+        $sToken = $oAppService->getFormTokenValue($oForm);
+        if ($sToken != $oRequest->get('_token')) {
+            return $this->_json(['status' => 'error',
+                'msg' => $t->trans('Invalid csrf token'),
+                //кроссдоменные ajax запросы по умолчанию запрещены
+                //чтение из iframe стороннего сайта тоже запрещено, значит это безопасно
+                'token' => $sToken]);
+        }
+
+        $oAppService->rearrangeRecords('App:KxmQuest', $oRequest->get('a'));
+        return $this->_json($aResult);
+    }
+
+
+    /**
      * Создать объект формы
      * @return
     */
@@ -160,12 +193,28 @@ class KxmController extends AppBaseController
 	*/
     private function _loadData(AppService $oAppService, Request $oRequest) : array
     {
+        /** @var QueryBuilder $oQueryBuilder */
         $oQueryBuilder = $this->getDoctrine()
             ->getRepository('App:KxmQuest')
             ->createQueryBuilder('k');
+        $e = $oQueryBuilder->expr();
+        $sText = $oRequest->get('search')['value'] ?? '';
+        if ($sText) {
+            $oQueryBuilder->where(
+                $e->orX(
+                    $e->like('k.body', ':text'),
+                    $e->like('k.var1', ':text'),
+                    $e->like('k.var2', ':text'),
+                    $e->like('k.var3', ':text'),
+                    $e->like('k.var4', ':text')
+                )
+            )->setParameters(['text' => '%' . $sText . '%']);
+		}
         $aData = $oQueryBuilder
             ->setMaxResults($oRequest->get('length', 0))
             ->setFirstResult($oRequest->get('start', 0))
+            ->orderBy('k.delta', 'ASC')
+            ->addOrderBy('k.id', 'ASC')
             ->getQuery()
             ->getScalarResult();
         $aResult = [];

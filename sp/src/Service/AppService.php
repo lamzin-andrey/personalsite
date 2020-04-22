@@ -942,4 +942,42 @@ class AppService
 	{
 		return $this->oContainer->getParameter($sParameterName);
 	}
+	/**
+	 * Переставить записи в таблице
+	 * @param string $sRepositoryId for example 'App:CrnTasks'
+	 * @param array $aOrderRecordsInfo for example ['15', '19', '25', '18'] each value is entity.id
+     * @param string  $sOrderFieldName = 'delta' имя поля, по которому упорядочиваются записи сущности
+	 * @return
+	*/
+	public function rearrangeRecords(string $sRepositoryId, array $aOrderRecordsInfo, string $sOrderFieldName = 'delta')
+	{
+        $oRepository = $this->repository($sRepositoryId);
+        $oQueryBuilder = $oRepository->createQueryBuilder('t');
+        $e = $oQueryBuilder->expr();
+        $oQueryBuilder->select('MIN(t.' . $sOrderFieldName . ') AS m')
+            ->where($e->in('t.id', $aOrderRecordsInfo));
+        $aMinInfo = $oQueryBuilder->getQuery()->getSingleResult();
+        $nMin = ($aMinInfo['m'] ?? 0);
+        foreach ($aOrderRecordsInfo as $nId) {
+            $oQueryBuilder = $oRepository->createQueryBuilder('t');
+            $oQueryBuilder->update()->set('t.' . $sOrderFieldName, $nMin)
+                ->where($e->eq('t.id', $nId))
+                ->getQuery()->execute();
+            $nMin++;
+        }
+	}
+	/**
+	 * @param string $sRepositoryId
+	 * @param string $sPositionFieldName = 'delta'
+     * @return int максимальное значение поля $sPositionFieldName в репозитории сущностей $sRepositoryId
+	*/
+	public function getNextPosition(string $sRepositoryId, string $sPositionFieldName = 'delta') : int
+	{
+        $oRepository = $this->repository($sRepositoryId);
+        $oQueryBuilder = $oRepository->createQueryBuilder('t');
+        $oQueryBuilder->select('MAX(t.' . $sPositionFieldName . ') AS m');
+        $aMaxInfo = $oQueryBuilder->getQuery()->getSingleResult();
+        $nMax = ($aMaxInfo['m'] ?? 0);
+        return ($nMax + 1);
+	}
 }

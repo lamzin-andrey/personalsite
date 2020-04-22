@@ -108,6 +108,9 @@
 				 
 				 /** @property {DataTableMoveRecord} объект для добавления кнопок для перемещения записей таблицы на соседние страницы */
 				 oDataTableMoveRecord: null,
+
+				 /** @property {String} updatedToken заполняется, если в процессе работы на странице токен обновился */
+				 updatedToken: ''
 			};
 			return _data;
 		},
@@ -221,7 +224,7 @@
 						$('.u-tablerowdragcellbg').addClass('u-tablerowdragcellbg-cursor-normal');
 						$('.j-dtrows-spinner').css('display', 'inline-block');
 						$('.j-dtdrag-icon').css('display', 'none');
-						this.$root._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, '/p/portfolio/reorder.jn/', (a, b, c) => {this.onFailReorderData(a, b, c);});
+						Rest._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, this.$webRoot + '/kxm/reorder.json', (a, b, c) => {this.onFailReorderData(a, b, c);});
 					}
 				});
 				
@@ -240,9 +243,12 @@
 			 * @param {Object} data 
 			 */
 			onFailReorderData(a, b, c) {
+				if (a.token) {
+					this.updatedToken = a.token;
+					this.$refs.kxmadminform.setFormToken(a.token, this.token_prefix);
+				}
 				$('.u-tablerowdragcellbg').removeClass('u-tablerowdragcellbg-cursor-normal');
 				$('.j-dtrows-spinner').css('display', 'none');
-				//$('.j-dtdrag-icon').removeClass('invisible');
 				$('.j-dtdrag-icon').css('display', 'inline-block');
 				this.dataTable.rowReorder.enable();
 				this.reorderRequestSended = false;
@@ -418,8 +424,8 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-			Rest._token = this.token;
-			this.$refs.kxmadminform.setFormToken(this.token, this.token_prefix);
+			let token = this.updatedToken ? this.updatedToken : this.token;
+			this.$refs.kxmadminform.setFormToken(token, this.token_prefix);
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();

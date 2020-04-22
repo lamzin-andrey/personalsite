@@ -51,6 +51,11 @@ class KxmQuest
      */
     private $price;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $delta;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -143,6 +148,18 @@ class KxmQuest
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDelta(): ?int
+    {
+        return $this->delta;
+    }
+
+    public function setDelta(int $delta): self
+    {
+        $this->delta = $delta;
 
         return $this;
     }

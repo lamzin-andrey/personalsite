@@ -227,6 +227,7 @@
 			*/
 			setFormToken(sToken, sTokenPrefix) {
 				this.token = sToken;
+				Rest._token = this.token;
 				this.tokenPrefix = sTokenPrefix;
 			}
         }, //end methods
