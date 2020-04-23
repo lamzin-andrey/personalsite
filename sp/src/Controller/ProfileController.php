@@ -30,7 +30,7 @@ class ProfileController  extends AppBaseController
 		]);
 		$aData = [
 			'form' => $oForm->createView(),
-			'avatarImgSrc' => $oAppService->getUserAvartarImageSrc(),
+			'avatarImgSrc' => $oAppService->getUserAvatarImageSrc(),
 			'pageHeading' => $t->trans('Profile settings')
 		];
         return $this->render('profile/articles.html.twig', $aData);
@@ -99,7 +99,7 @@ class ProfileController  extends AppBaseController
 			} else {
 				$aData = [
 					'form' => $oForm->createView(),
-					'avatarImgSrc' => $oAppService->getUserAvartarImageSrc(),
+					'avatarImgSrc' => $oAppService->getUserAvatarImageSrc(),
 					'pageHeading' => $t->trans('Profile settings')
 				];
 				return $this->render('profile/articles.html.twig', $aData);

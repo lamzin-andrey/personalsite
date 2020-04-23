@@ -6,6 +6,7 @@ use App\Entity\CrnTasks;
 use App\Form\TaskManagerType;
 use App\Repository\CrnTasksRepository;
 use App\Service\AppService;
+use App\Service\CrudAjaxService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\ORM\Query\Expr;
@@ -93,7 +94,7 @@ class TasksCronController extends AppBaseController
 	 * @param AppService $oAppService
 	 * @return Response
 	*/
-	public function move(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrnTasksRepository $oCrnTasksRepository) : Response
+	public function move(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrnTasksRepository $oCrnTasksRepository, CrudAjaxService $oCrudService) : Response
 	{
 		$this->_oAppService = $oAppService;
 		$aResult = [];
@@ -105,7 +106,7 @@ class TasksCronController extends AppBaseController
 		$nId = intval($oRequest->get('id') );
 		$sDirect = trim( strip_tags($oRequest->get('d')) );
 		if ($nId && ($sDirect == 'u' || $sDirect == 'd')) {
-			$aResult = $oAppService->moveRecordToOtherPage($nId, $oCrnTasksRepository, $sDirect, 'DESC');
+			$aResult = $oCrudService->moveRecordToOtherPage($nId, $oCrnTasksRepository, $sDirect, 'DESC');
 			return $this->_json($aResult);
 		}
 		$aResult['msg'] = $t->trans('Unknown error');
@@ -120,7 +121,7 @@ class TasksCronController extends AppBaseController
 	 * @param $
 	 * @return
 	*/
-	public function reorder(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	public function reorder(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrnTasksRepository $oRepository, CrudAjaxService $oCrudService)
 	{
 		$this->_oAppService = $oAppService;
 		$aResult = [];
@@ -129,10 +130,9 @@ class TasksCronController extends AppBaseController
 			$aResult['status'] = 'error';
 			return $this->_json($aResult);
 		}
-		$oAppService->rearrangeRecords('App:CrnTasks', $oRequest->get('a', []));
+		$oCrudService->rearrangeRecords($oRepository, $oRequest->get('a', []));
 		return $this->_json($aResult);
 	}
-
 	/**
 	 * @Route("/tasks/task.json", name="task")
 	 * @param Request $oRequest
@@ -161,11 +161,11 @@ class TasksCronController extends AppBaseController
 	 * @param TranslatorInterface $t
 	 * @param AppService $oAppService
 	*/
-	public function removetask(Request $oRequest, TranslatorInterface $t, AppService $oAppService)
+	public function removetask(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrnTasksRepository $oRepository)
 	{
 		$this->_oAppService = $oAppService;
 		$nId = intval($oRequest->get('i'));
-		$oAppService->deleteEntity('App:CrnTasks', $nId );
+		$oAppService->deleteEntity($oRepository, $nId);
 		return $this->_json(['id' => $nId]);
 	}
     /**

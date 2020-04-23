@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\KxmQuestRepository;
 use App\Service\AppService;
+use App\Service\CrudAjaxService;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -41,7 +42,7 @@ class KxmController extends AppBaseController
      * @param AppService $oAppService
      * @return Response
     */
-    public function savequestjson(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+    public function savequestjson(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrudAjaxService $oCrudService, KxmQuestRepository $oRepository) : Response
     {
         $this->_oAppService = $oAppService;
         $aResult = [];
@@ -61,7 +62,7 @@ class KxmController extends AppBaseController
                 if (!$this->_oKxmQuest) {
                     $this->_oKxmQuest = $oForm->getData();
                 }
-                $this->_oKxmQuest->setDelta( $oAppService->getNextPosition('App:KxmQuest', 'delta') );
+                $this->_oKxmQuest->setDelta( $oCrudService->getNextPosition($oRepository, 'delta') );
                 $oAppService->save($this->_oKxmQuest);
                 return $this->_json([
                     'status' => 'ok',
@@ -152,7 +153,7 @@ class KxmController extends AppBaseController
      * @param AppService $oAppService
      * @return Response
     */
-    public function reorder(Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+    public function reorder(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrudAjaxService $oCrudService, KxmQuestRepository $oRepository) : Response
     {
         $this->_oAppService = $oAppService;
         $aResult = [];
@@ -172,7 +173,7 @@ class KxmController extends AppBaseController
                 'token' => $sToken]);
         }
 
-        $oAppService->rearrangeRecords('App:KxmQuest', $oRequest->get('a'));
+        $oCrudService->rearrangeRecords($oRepository, $oRequest->get('a'));
         return $this->_json($aResult);
     }
 
@@ -184,7 +185,7 @@ class KxmController extends AppBaseController
      * @param AppService $oAppService
      * @return Response
     */
-    public function moverecordonotherpage(KxmQuestRepository $oKxmQuestRepository, Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+    public function moverecordonotherpage(KxmQuestRepository $oKxmQuestRepository, Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrudAjaxService $oCrudService) : Response
     {
         $this->_oAppService = $oAppService;
         $aResult = [];
@@ -196,7 +197,7 @@ class KxmController extends AppBaseController
 		$nId = intval($oRequest->get('id') );
 		$sDirect = trim( strip_tags($oRequest->get('d')) );
 		if ($nId && ($sDirect == 'u' || $sDirect == 'd')) {
-			$aResult = $oAppService->moveRecordToOtherPage($nId, $oKxmQuestRepository,  $sDirect, 'ASC', ['id', 'body', 'delta']);
+			$aResult = $oCrudService->moveRecordToOtherPage($nId, $oKxmQuestRepository,  $sDirect, 'ASC', ['id', 'body', 'delta']);
 			return $this->_json($aResult);
 		}
 		$aResult['msg'] = $t->trans('Unknown error');

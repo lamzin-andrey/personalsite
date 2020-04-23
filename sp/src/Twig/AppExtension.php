@@ -219,7 +219,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	*/
 	public function getAuthUserAvatarImgSrc() : string
 	{
-		return $this->_oAppService->getUserAvartarImageSrc();
+		return $this->_oAppService->getUserAvatarImageSrc();
 	}
 	/**
 	 * Возвращает загловок для сайдбара в зависимотси от роли пользователя
