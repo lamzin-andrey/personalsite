@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\KxmQuestRepository;
 use App\Service\AppService;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -175,7 +176,33 @@ class KxmController extends AppBaseController
         return $this->_json($aResult);
     }
 
-
+    /**
+     * Переместить запись на другую страницу
+     * @Route("moverecordonotherpage.json", name="moverecordonotherpagejson")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param AppService $oAppService
+     * @return Response
+    */
+    public function moverecordonotherpage(KxmQuestRepository $oKxmQuestRepository, Request $oRequest, TranslatorInterface $t, AppService $oAppService) : Response
+    {
+        $this->_oAppService = $oAppService;
+        $aResult = [];
+        if (!$this->_accessControl()) {
+            $aResult['msg'] = $t->trans('You have not access to this task');
+            $aResult['status'] = 'error';
+            return $this->_json($aResult);
+        }
+		$nId = intval($oRequest->get('id') );
+		$sDirect = trim( strip_tags($oRequest->get('d')) );
+		if ($nId && ($sDirect == 'u' || $sDirect == 'd')) {
+			$aResult = $oAppService->moveRecordToOtherPage($nId, $oKxmQuestRepository,  $sDirect);
+			return $this->_json($aResult);
+		}
+		$aResult['msg'] = $t->trans('Unknown error');
+		$aResult['status'] = 'error';
+		return $this->_json($aResult);
+    }
     /**
      * Создать объект формы
      * @return

@@ -151,6 +151,8 @@ var locales = {
 			'ShortDesc' : 'Краткое описание работы',
 			'OuterLinkText' : 'Текст ссылки на внешнюю страницу работы',
 			'product_file_textlink' : 'Текст ссылки на файл работы',
+			'moveToNextPage' : 'Переместить на следующую страницу',
+			'moveToPrevPage' : 'Переместить на предыдущую страницу',
 			'HeadingPortfolio' : 'Вопрос'
         }
     }

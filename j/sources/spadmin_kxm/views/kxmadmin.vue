@@ -123,7 +123,7 @@
 				if (this.isDataTableInitalized) {
 					return;
 				}
-				this.oDataTableMoveRecord = new DataTableMoveRecord('#kxmtable', this.$webRoot + '/kxm', this.$root);
+				this.oDataTableMoveRecord = new DataTableMoveRecord('#kxmtable', this.$webRoot + '/kxm/moverecordonotherpage.json', this.$root);
 				let id = '#kxmtable', self = this;
 				this.isDataTableInitalized = true;
 				this.dataTable =  $(id).DataTable( {
@@ -157,19 +157,19 @@
 							'render' : function(data, type, row, meta) {
 								let r =  `
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
+										<button data-id="${data}" type="button" class="btn btn-primary mt-2 j-edit-btn">
 											<i data-id="${data}" class="fas fa-edit fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn">
+										<button data-id="${data}" type="button" class="btn btn-danger mt-2 j-rm-btn">
 											<i data-id="${data}" class="fas fa-trash fa-sm"></i>
 										</button>
 									</div>`;
 								r = self.oDataTableMoveRecord.setHtml(r, meta.row, meta.settings, data);
 								r += `
 									<div class="form-group d-md-inline d-block ">
-										<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
+										<div id="spin${data}" class="spinner-grow text-success mt-2 d-none" role="status">
 											<span class="sr-only">Loading...</span>
 										</div>
 									</div>`;
