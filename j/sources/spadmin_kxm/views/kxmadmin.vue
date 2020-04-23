@@ -313,7 +313,7 @@
 			*/
 			onClickConfirmRemoveProduct() {
 				let args = this.$root.confirmDialogArticleArgs;
-				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, '/p/portfolio/removeproduct.jn/', (data) => {this.onFailRemove(data);})
+				Rest._post(args, (data) => {this.onSuccessRemove(data);}, this.$webRoot + '/kxm/remove.json', (data) => {this.onFailRemove(data);})
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
@@ -387,13 +387,17 @@
 						//Покажем диалог
 						this.$root.setConfirmDlgVisible(true);
 					} else {
+						this.editFormIsShowed = false;
 						this.gotoProductsListTab();
 					}
 				});
 				$('#editquests-tab').on('shown.bs.tab', (ev) => {
-					
+					this.editFormIsShowed = true;
 				});
 				$('#editquests-tab').on('click', (ev) => {
+					if (this.editFormIsShowed) {
+						return;
+					}
 					this.setDataChanges(false);
 					this.requestedQuestId = 0;
 					this.$refs.kxmadminform.setId(0);
@@ -411,6 +415,7 @@
 			 * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
 			*/
 			gotoProductsListTab() {
+				this.editFormIsShowed = false;
 				$('#questlist-tab').tab('show');
 				$('#kxmadminform')[0].reset();
 				this.setQuestId(0);

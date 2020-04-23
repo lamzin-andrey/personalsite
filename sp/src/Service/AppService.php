@@ -429,26 +429,7 @@ class AppService
 		return $oResult;
 	}
 
-	/**
-	 *
-	 * @param ServiceEntityRepositoryInterface $oRepository
-	 * @param int $nEntityId
-	 * @return bool true если сущность найдена и для неё был вызван remove
-	*/
-	public function deleteEntity(ServiceEntityRepositoryInterface $oRepository, int $nEntityId) : bool
-	{
-		if ($oRepository) {
-			$oEntity = $oRepository->find($nEntityId);
-			if ($oEntity) {
-				$oEm = $this->oContainer->get('doctrine')->getManager();
-				/** @var EntityManager $oEm */
-				$oEm->remove($oEntity);
-				$oEm->flush();
-				return true;
-			}
-		}
-		return false;
-	}
+
 	/**
 	 * Обновить поля времени, затраченного на задачу
 	 * @param CrnTasks $oRunnedTask

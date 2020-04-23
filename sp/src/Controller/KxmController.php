@@ -61,8 +61,9 @@ class KxmController extends AppBaseController
             if ($oForm->isValid()) {
                 if (!$this->_oKxmQuest) {
                     $this->_oKxmQuest = $oForm->getData();
+					$this->_oKxmQuest->setDelta( $oCrudService->getNextPosition($oRepository, 'delta') );
                 }
-                $this->_oKxmQuest->setDelta( $oCrudService->getNextPosition($oRepository, 'delta') );
+
                 $oAppService->save($this->_oKxmQuest);
                 return $this->_json([
                     'status' => 'ok',
@@ -194,6 +195,7 @@ class KxmController extends AppBaseController
             $aResult['status'] = 'error';
             return $this->_json($aResult);
         }
+        //TODO csrf!
 		$nId = intval($oRequest->get('id') );
 		$sDirect = trim( strip_tags($oRequest->get('d')) );
 		if ($nId && ($sDirect == 'u' || $sDirect == 'd')) {
@@ -204,6 +206,37 @@ class KxmController extends AppBaseController
 		$aResult['status'] = 'error';
 		return $this->_json($aResult);
     }
+
+    /**
+     * @Route("/kxm/remove.json", name="kxmremovejson")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param AppService $oAppService
+     * @return Response
+    */
+    public function kxmremovejson(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrudAjaxService $oCrudService, KxmQuestRepository $oRepository) : Response
+    {
+        $this->_oAppService = $oAppService;
+        $aResult = [];
+        if (!$this->_accessControl()) {
+            $aResult['msg'] = $t->trans('You have not access to this task');
+            $aResult['status'] = 'error';
+            return $this->_json($aResult);
+        }
+        //csrf
+		$oForm = $this->_createForm();
+        $sToken = $oRequest->get('_token');
+        if ($oAppService->getFormTokenValue($oForm) != $sToken) {
+        	return $this->_json([
+        		'status' => 'error',
+				'msg' => $t->trans('Invalid csrf token')
+			]);
+		}
+		$nId = intval($oRequest->get('i'));
+		$oCrudService->deleteEntity($oRepository, $nId);
+		return $this->_json(['id' => $nId]);
+    }
+
     /**
      * Создать объект формы
      * @return

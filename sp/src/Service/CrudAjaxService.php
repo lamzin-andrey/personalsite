@@ -164,4 +164,26 @@ class CrudAjaxService
 		$oQueryBuilder->where( $e->eq( ('t.' . $sIdFieldname), $nId2) );
 		$oQueryBuilder->getQuery()->execute();
 	}
+	/**
+	 *
+	 * @param ServiceEntityRepositoryInterface $oRepository
+	 * @param int $nEntityId
+	 * @return bool true если сущность найдена и для неё был вызван remove
+	*/
+	public function deleteEntity(ServiceEntityRepositoryInterface $oRepository, int $nEntityId) : bool
+	{
+		if ($oRepository) {
+			$oEntity = $oRepository->find($nEntityId);
+
+			if ($oEntity) {
+				//$oEm = $this->oContainer->get('doctrine')->getManager();
+				$oEm = $oRepository->getManager();
+				/** @var EntityManager $oEm */
+				$oEm->remove($oEntity);
+				$oEm->flush();
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -161,11 +161,27 @@ class TasksCronController extends AppBaseController
 	 * @param TranslatorInterface $t
 	 * @param AppService $oAppService
 	*/
-	public function removetask(Request $oRequest, TranslatorInterface $t, AppService $oAppService, CrnTasksRepository $oRepository)
+	public function removetask(Request $oRequest, TranslatorInterface $t, CrudAjaxService $oCrudService, CrnTasksRepository $oRepository)
 	{
-		$this->_oAppService = $oAppService;
+
+		//$this->_oAppService = $oAppService;
+		$aResult = [];
+		if (!$this->_accessControl()) {
+			$aResult['msg'] = $t->trans('You have not access to this task');
+			$aResult['status'] = 'error';
+			return $this->_json($aResult);
+		}
+		//csrf
+		/*$oForm = $this->_createForm();
+		$sToken = $oRequest->get('_token');
+		if ($oAppService->getFormTokenValue($oForm) != $sToken) {
+			return $this->_json([
+				'status' => 'error',
+				'msg' => $t->trans('Invalid csrf token')
+			]);
+		}*/
 		$nId = intval($oRequest->get('i'));
-		$oAppService->deleteEntity($oRepository, $nId);
+		$oCrudService->deleteEntity($oRepository, $nId);
 		return $this->_json(['id' => $nId]);
 	}
     /**
