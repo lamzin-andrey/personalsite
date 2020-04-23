@@ -130,7 +130,7 @@
 			 * @description уведомляем приложение, что данные изменились
 			 */
 			setDataChanges() {
-				//this.$root.$refs.kxmadmin.setDataChanges(true);
+				this.$root.$refs.kxmadmin.setDataChanges(true);
 			},
             /** 
              * @description Пробуем отправить форму

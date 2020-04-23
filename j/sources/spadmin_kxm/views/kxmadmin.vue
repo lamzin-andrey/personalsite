@@ -237,6 +237,7 @@
 				if (!this.onFailReorderData(data) ) {
 					return;
 				}
+				this.oDataTableMoveRecord.resetArrowButtons();
 			},
 			/**
 			 * @description Обработка успешного переупорядочивания статей
@@ -290,7 +291,7 @@
 			onFailGetQuest(data, b ,c) {
 				$('#spin' + this.requestedQuestId).toggleClass('d-none');
 				this.requestedQuestId = 0;
-				return this.$root.defaultFailSendFormListener(data, b ,c);
+				return this.$root.defaultFailSendFormListener(data, b, c);
 			},
 			/**
 			 * @description Click on button "Remove product"
@@ -390,6 +391,9 @@
 					}
 				});
 				$('#editquests-tab').on('shown.bs.tab', (ev) => {
+					
+				});
+				$('#editquests-tab').on('click', (ev) => {
 					this.setDataChanges(false);
 					this.requestedQuestId = 0;
 					this.$refs.kxmadminform.setId(0);
