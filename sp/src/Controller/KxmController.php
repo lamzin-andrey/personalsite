@@ -178,7 +178,7 @@ class KxmController extends AppBaseController
 
     /**
      * Переместить запись на другую страницу
-     * @Route("moverecordonotherpage.json", name="moverecordonotherpagejson")
+     * @Route("/kxm/moverecordonotherpage.json", name="moverecordonotherpagejson")
      * @param Request $oRequest
      * @param TranslatorInterface $t
      * @param AppService $oAppService
@@ -196,7 +196,7 @@ class KxmController extends AppBaseController
 		$nId = intval($oRequest->get('id') );
 		$sDirect = trim( strip_tags($oRequest->get('d')) );
 		if ($nId && ($sDirect == 'u' || $sDirect == 'd')) {
-			$aResult = $oAppService->moveRecordToOtherPage($nId, $oKxmQuestRepository,  $sDirect);
+			$aResult = $oAppService->moveRecordToOtherPage($nId, $oKxmQuestRepository,  $sDirect, 'ASC', ['id', 'body', 'delta']);
 			return $this->_json($aResult);
 		}
 		$aResult['msg'] = $t->trans('Unknown error');

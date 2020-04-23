@@ -81,9 +81,9 @@ class DataTableMoveRecord {
 			jCell = jRow.find('td')[1];
 			if (jCell) {
 				jCell = $(jCell);
-				if (data.newRec.name) {
+				if (data.newRec.body) {
 					jCell.html('');
-					jCell.append( $('<span>' + data.newRec.name + '</span>') );
+					jCell.append( $('<span>' + data.newRec.body + '</span>') );
 				} else {
 					jCell.text(data.newRec.heading);
 				}
