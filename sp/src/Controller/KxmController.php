@@ -26,6 +26,7 @@ class KxmController extends AppBaseController
      */
     public function index(AppService $oAppService, TranslatorInterface $t)
     {
+    	$this->_oAppService = $oAppService;
         $oForm = $this->_createForm();
         return $this->render('kxm/index.html.twig', [
             'controller_name' => 'KxmController',

@@ -12,6 +12,7 @@ class AppBaseController extends AbstractController
 	/** @property \App\Service\AppService $_oAppService */
 	protected $_oAppService;
 
+
 	protected function _json(array $aData)
 	{
 		return $this->_oAppService->json($aData);
@@ -44,5 +45,18 @@ class AppBaseController extends AbstractController
 			return $this->redirect($sReferer);
 		}
 		return $this->redirectToRoute('home');
+	}
+	/**
+	 * Добавляет в строку с путём к шаблону префикс каталога, в котором лежит тема оформления, например  'a2'
+	 *  если установлена соответсвующая кука
+	*/
+	protected function render(string $view, array $parameters = [], Response $response = null) : Response
+	{
+		$oRequest = $this->_oAppService->request();
+		$sThemeVersion = $oRequest->cookies->get('sv');
+		if ($sThemeVersion == 'a2') {
+			$view = 'themes/a2/' . $view;
+		}
+		return parent::render($view, $parameters, $response);
 	}
 }

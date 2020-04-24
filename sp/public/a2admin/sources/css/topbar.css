@@ -1,0 +1,59 @@
+.shadow {
+    -webkit-box-shadow: 0 .15em 1.75em 0 rgba(58,59,69,.15) !important;
+    box-shadow: 0 .15em 1.75em 0 rgba(58,59,69,.15) !important;
+}
+.topbar {
+    height: 4.375em;
+}
+.bg-white {
+    background-color: #fff !important;
+}
+
+.top-user-avatar {
+	margin: 20px 2px!important;
+}
+
+.topbar .dropdown {
+    position: static;
+}
+
+.dropdown-menu {
+    /*position: absolute;*/
+    top: 100%;
+    /*left: 0;*/
+    z-index: 1000;
+    display: none;
+    /*float: left;*/
+    min-width: 10rem;
+    /*padding: .5em 0;*/
+    margin: .125em 0 0;
+    font-size: .85rem;
+    color: #858796;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #e3e6f0;
+    border-radius: .35rem;
+}
+
+.topbar ul li.nav-item{
+	margin:26px 2px;
+}
+.topbar ul li.nav-item a{
+	padding: 0 .75em;
+}
+
+.sidebar .nav-item .nav-link .img-profile, .topbar .nav-item .nav-link .img-profile {
+    height: 32px;
+	width: 32px;
+}
+
+.topbar .navbar-nav {
+	width: 65%;
+}
+
+.input-group > .custom-select:not(:last-child), .input-group > .form-control:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}

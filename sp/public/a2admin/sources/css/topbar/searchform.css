@@ -1,0 +1,6 @@
+.topbar .dropdown .dropdown-menu {
+
+    width: calc(100% - 1.5em);
+    right: .75em;
+
+}
