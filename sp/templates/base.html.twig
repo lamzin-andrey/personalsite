@@ -65,6 +65,9 @@
                     <footer class="sticky-footer bg-white">
                         <div class="container my-auto">
                             <div class="copyright text-center my-auto">
+                                {% if (bEnableChooseSiteVersionButton) %}
+                                    <div class="mb-2">{{ 0|show_site_version_link|raw }}</div>
+                                {% endif %}
                                 <span>Copyright &copy; andryuxa.ru 2019. Admin panel free template from <a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a></span>
                             </div>
                         </div>

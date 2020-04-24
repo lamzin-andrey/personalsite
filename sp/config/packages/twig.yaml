@@ -13,3 +13,4 @@ twig:
         aNews: []
         aMessages: []
         phdAdminEmail: '%app.phdAdminEmail%'
+        bEnableChooseSiteVersionButton: '%app.enable_choose_site_version_button%'

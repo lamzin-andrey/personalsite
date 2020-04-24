@@ -31,6 +31,7 @@ class KxmController extends AppBaseController
             'controller_name' => 'KxmController',
             'formtoken' => $oAppService->getFormTokenValue($oForm),
             'sTokenPrefix' => $oForm->getName(),
+            'bEnableChooseSiteVersionButton' => true,
             'pageHeading' => $t->trans('Quests managment', [], 'victorina')
         ]);
     }

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\AppService;
 class AppBaseController extends AbstractController
@@ -29,5 +31,18 @@ class AppBaseController extends AbstractController
 	protected function getUserId() : int
 	{
 		return $this->getUser()->getId();
+	}
+	/**
+	 * Если есть реферер, делает редирект на реферер, иначе делает редирект на домашнюю страницу
+	 * @param Request $oRequest
+	 * @return Response
+	*/
+	protected function redirectDefault(Request $oRequest) : Response
+	{
+		$sReferer = $oRequest->server->get('HTTP_REFERER', '');
+		if ($sReferer) {
+			return $this->redirect($sReferer);
+		}
+		return $this->redirectToRoute('home');
 	}
 }
