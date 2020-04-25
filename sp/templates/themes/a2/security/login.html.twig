@@ -1,8 +1,8 @@
-{% extends 'security/loginmaster.html.twig' %}
+{% extends 'themes/a2/security/loginmaster.html.twig' %}
 
 {% trans_default_domain 'loginforms' %}
 
-{% block title %}{{ 'Signin'|trans }}{% endblock %}
+{% block title %} A2+ - {{ 'Signin'|trans }} {% endblock %}
 
 {% block content %}
     <div>
@@ -33,7 +33,7 @@
         </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-    <button type="submit" class="btn btn-primary btn-user btn-block">
+    <button type="submit" class="btn btn-success btn-user btn-block">
         {{ 'LoginFormButtonText'|trans }}
     </button>
     <!--hr>

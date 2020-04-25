@@ -2,22 +2,23 @@
 <html lang="ru">
 <head>
     <meta charset="Windows-1251">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height, user-scalable=no,target-densitydpi=device-dpi," />
     <meta name="description" content="">
 
-    <title>{% block title %}Welcome! SB Admin 2  - Login SymDepartment {% endblock %}</title>
-
-
+    <title>{% block title %}A2 SB Admin 2  - Login SymDepartment {% endblock %}</title>
 
     {% block stylesheets %}
-        <!-- Custom fonts for this template-->
-        <link href="{{ asset('sbadmin2/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-        <!-- Custom styles for this template-->
-        <link href="{{ asset('sbadmin2/css/sb-admin-2.min.css') }}" rel="stylesheet">
+        <!-- Custom fonts -->
+        <link href="{{ asset('a2admin/sources/css/fonts.css') }}" rel="stylesheet" type="text/css">
+        <!-- Bootstrap fragment and this theme  -->
+        <link href="{{ asset('a2admin/sources/css/unreg.css') }}" rel="stylesheet">
         <!-- Custom styles for this app -->
         <link href="/s/sources/admin/aauth.css" rel="stylesheet">
+
+
+
+
 
         <!--script src="/j/landcacherswinstaller.js"></script>
         <script>window.sReferer = "<?php echo o($app, 'referer') ?>";</script-->
@@ -28,7 +29,7 @@
 
 <body class="bg-gradient-primary">
 
-<div class="container" id="wrapperapp">
+<div class="" id="wrapperapp">
     <transition appear name="fade">
         <div  v-if="show">
             <!-- Outer Row -->
@@ -45,7 +46,7 @@
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">{{ 'Reset-Password'|trans }}</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">{{ pageHeading }}</h1>
                                             {% if (isResetform) %}
                                                 <p class="mb-4 d-none d-sm-block">{{ 'forgotPasswordSmallText'|trans|raw }}</p>
                                             {% endif %}
@@ -65,18 +66,18 @@
                                         {% block content %}{% endblock %}
                                         <hr>
                                         {% if (isResetform == 0) %}
-                                            <div class="text-center">
+                                            <div class="text-center my-2">
                                                 <a class="small" href="{{ path('reset') }}">{{ 'Forgot Password'|trans }}?</a>
                                             </div>
                                         {% endif %}
                                         {%  if (isAuthform == 1 or isResetform == 1)%}
-                                        <div class="text-center">
+                                        <div class="text-center my-2">
                                             <a class="small" href="{{ path('register') }}">{{ 'signup'|trans }}</a>
                                         </div>
                                         {%  endif %}
 
                                         {%  if (isAuthform == 0) %}
-                                        <div class="text-center">
+                                        <div class="text-center my-2">
                                             <a class="small" href="{{ path('login') }}">{{ 'gotoLoginPageLink'|trans }}</a>
                                         </div>
                                         {%  endif %}
@@ -92,7 +93,7 @@
     </transition>
 </div>
 
-<div class="footer bg-dark text-light sticky-footer-regpages">
+<div class="footer bg-dark text-light sticky-footer-regpages mt-2">
     <div class="container">
         <div class="row">
             <div class="col">
@@ -113,17 +114,8 @@
 {% block javascript %}
 <!-- Bootstrap core JavaScript -->
 
-{# script charset="UTF-8" src="/j/sya.js"></script #}
 <script src="{{ asset('sbadmin2/vendor/jquery/jquery.min.js') }}"></script>
-<script src="/j/i.js"></script>
 
-<script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
 {% endblock %}
 </body>
 
