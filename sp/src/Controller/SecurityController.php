@@ -4,6 +4,7 @@ namespace App\Controller;
 
 # use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\RegisterFormType;
+use App\Service\AppService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
@@ -24,13 +25,14 @@ use App\Form\ResetPasswordFormType;
 use Landlib\SimpleMail;
 
 
-class SecurityController extends AbstractController
+class SecurityController extends AppBaseController
 {
 	/**
 	 * @Route("/login", name="login")
 	 */
-	public function loginAction(AuthenticationUtils $authenticationUtils, CsrfTokenManagerInterface $oCsrfTokenManager)
+	public function loginAction(AuthenticationUtils $authenticationUtils, CsrfTokenManagerInterface $oCsrfTokenManager, AppService $oAppService)
 	{
+		$this->_oAppService = $oAppService;
 		if ($this->getUser()) {
 			return $this->redirectToRoute('home');
 		}

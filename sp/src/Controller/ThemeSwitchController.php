@@ -20,9 +20,9 @@ class ThemeSwitchController extends AppBaseController
     {
 		$sThemeCookieValue = $oRequest->cookies->get('sv', 'c70');
 		if ($sThemeCookieValue == 'c70') {
-			$sThemeCookieValue == 'a2';
+			$sThemeCookieValue = 'a2';
 		} else {
-			$sThemeCookieValue == 'c70';
+			$sThemeCookieValue = 'c70';
 		}
 		$oCookie = Cookie::create('sv', $sThemeCookieValue, time() + 365 * 24 * 3600);
 		$oResponse = $this->redirectDefault($oRequest);
