@@ -53,6 +53,7 @@ class SecurityController extends AbstractController
 		$aData['isAuthform']    = 1;
 		$aData['csrf_token']    = $csrfToken;
 		$aData['sFormBgImageCss']    = 'bg-login-image';
+		$aData['bEnableChooseSiteVersionButton']    = true;
 		return $this->render('security/login.html.twig', $aData);
 	}
 

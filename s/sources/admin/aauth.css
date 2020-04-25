@@ -5,3 +5,7 @@
 	transform: translateY(-1000px);
 	opacity: 0;
 }
+div.footer.sticky-footer-regpages {
+    padding: 2rem 0;
+    
+}

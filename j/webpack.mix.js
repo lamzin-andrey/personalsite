@@ -29,7 +29,7 @@ let mix = require('laravel-mix');
 //mix.js('sources/cronfrnd/app.js', 'h.js'); //crn
 
 //Страница логина второй уровень (там только конфиг для cache service worker)
-//mix.js('sources/sploginpagecacheclient/app.js', 'i.js');
+mix.js('sources/sploginpagecacheclient/app.js', 'i.js');
 
 //Раздел статей в symfony проекте
 //mix.js('sources/spadmin_articles/app.js', 'j.js');
