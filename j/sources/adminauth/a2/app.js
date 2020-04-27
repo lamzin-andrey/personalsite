@@ -4,7 +4,8 @@
 */
 function AppLayout() {
 	this.accordionSidebar = e('accordionSidebar');
-	this.mainLayout = e('content-wrapper')
+	this.mainLayout = e('content-wrapper');
+	this.hSearchform = e('hSearchform');
 }
 /**
  * @description Обработка клика на кнопке меню
@@ -23,6 +24,22 @@ AppLayout.prototype.onClickSidebarCloseButton = function(event) {
 	var that = window.appLayout;
 	that.hideScreens();
 	show(that.mainLayout);
+}
+/**
+ * @description Обработка клика на кнопке Показать / Скрыть форму поиска
+*/
+AppLayout.prototype.onClickToggleSearchForm = function(event) {
+	event.preventDefault();
+	var that = window.appLayout, 
+		o = that.hSearchform,
+		s = 'show';
+	if (hasClass(o, s)) {
+		removeClass(o, s);
+	} else {
+		addClass(that.hSearchform, s);
+	}
+	
+	return false;
 }
 
 AppLayout.prototype.hideScreens = function() {
