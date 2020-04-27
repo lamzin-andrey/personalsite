@@ -1,6 +1,6 @@
 {% trans_default_domain 'sidebar' %}
  <!-- Sidebar -->
-	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled no-list p-0 m-0" id="accordionSidebar">
 		<!-- Sidebar - Brand -->
 		<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/sp/public/">
 			<div class="sidebar-brand-icon rotate-n-15">
@@ -15,8 +15,9 @@
 
 		<!-- Nav Item - Pages Collapse Menu -->
 		<li class="nav-item active">
-			<a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+			<a class="nav-link ml-2 my-2 d-inline-block" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
 				<i class="fas fa-fw fa-folder"></i>
+				<img src="/i/whitedir.png">
 				<span>{{ 'Sections'|trans }}</span>
 			</a>
 			<div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -35,11 +36,13 @@
 			</div>
 		</li>
 	<!-- Divider -->
-	<hr class="sidebar-divider d-none d-md-block">
+	<hr class="sidebar-divider d-md-block">
 
 	<!-- Sidebar Toggler (Sidebar) -->
-	<div class="text-center d-none d-md-inline">
-		<button class="rounded-circle border-0" id="sidebarToggle"></button>
+	<div class="text-center  d-md-inline">
+		<button class="rounded-circle border-0" id="sidebarToggle" onclick="appLayout.onClickSidebarCloseButton(event)">
+			<img src="/i/arrowlefta2.png">
+		</button>
 	</div>
 	</ul>
 	<!-- End of Sidebar -->

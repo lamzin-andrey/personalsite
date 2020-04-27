@@ -13,12 +13,16 @@
             <!-- Custom fonts for this template-->
             <link href="{{ asset('a2admin/sources/css/fonts.css') }}" rel="stylesheet" type="text/css">
             <!-- Custom styles for this template-->
-            <link href="{{ asset('a2admin/sources/css/topbar.css') }}" rel="stylesheet">
-            <link href="{{ asset('a2admin/sources/css/footer.css') }}" rel="stylesheet">
-            <link href="{{ asset('a2admin/sources/css/topbar/menubutton.css') }}" rel="stylesheet">
-            <link href="{{ asset('a2admin/sources/css/topbar/searchform.css') }}" rel="stylesheet">
-            <link href="{{ asset('a2admin/sources/css/0.css') }}" rel="stylesheet">
-            <link href="/s/sources/admin/phdad.css" rel="stylesheet">
+            <link href="{{ asset('a2admin/sources/css/topbar.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/footer.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/topbar/menubutton.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/topbar/searchform.css') }}" rel="stylesheet"type="text/css">
+
+            <link href="{{ asset('a2admin/sources/css/sidebar.css') }}" rel="stylesheet" type="text/css">
+
+            <link href="{{ asset('/portfolio/web-razrabotka/saity/fastxampp/a2/s/bootstrap4shim.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/0.css') }}" rel="stylesheet" type="text/css">
+            <link href="/s/sources/admin/phdad.css" rel="stylesheet" type="text/css">
         {% endblock %}
     </head>
     <body id="page-top">
@@ -32,7 +36,7 @@
                 {% endif %}
 
                 <!-- Content Wrapper -->
-                <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content-wrapper" >
                     <!-- Main Content -->
                     <div id="content">
                         {% if (app.user) %}
@@ -118,16 +122,10 @@
 
 
         {% block javascripts %}
-            {# /j/b.js #}
             <!-- Bootstrap core JavaScript-->
-            <!--script-- charset="UTF-8" src="/j/g.js"></script-->
+            <script charset="UTF-8" src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
+            <script charset="UTF-8" src="/j/sources/adminauth/a2/app.js"></script>
 
-            {# Он его два раза что ли тащит? #}
-            <!--script src="{{ asset('sbadmin2/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script-->
-            <!-- Core plugin JavaScript-->
-            <!--script-- src="{{ asset('sbadmin2/vendor/jquery-easing/jquery.easing.min.js') }}"></script-->
-            <!-- Custom scripts for all pages-->
-            <!--script-- src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script-->
         {% endblock %}
     </body>
 </html>

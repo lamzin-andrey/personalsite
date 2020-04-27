@@ -30,6 +30,12 @@ a {
 .row div.col-12 {
 	width:8.33333%;
 }
+.d-inline-block {
+	display: inline-block;
+}
+.d-md-block {
+    display: block !important;
+}
 /** try use table model instead flex */
 .d-flex{
 	display: table-row;
@@ -106,9 +112,23 @@ a {
 /** / h & w */
 
 /** m & p */
-.mx-2 {
+/*.mx-2 {
 	margin-left:5px;
 	margin-right:5px;
+}*/
+.p-0 {
+	padding: 0px;
+}
+.m-0 {
+	margin: 0px;
+}
+
+.mb-2, .my-2 {
+    margin-bottom: .5em !important;
+}
+
+.ml-2, .mx-2 {
+    margin-left: .5em !important;
 }
 .mr-2 {
 	margin-right:5px;
@@ -167,3 +187,6 @@ a {
 }
 
 
+.rounded {
+    border-radius: .35rem !important;
+}

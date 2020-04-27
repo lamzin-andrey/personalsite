@@ -93,17 +93,6 @@ h1 {
 	color: #5a5c69;
 }
 
-.p-0 {
-	padding: 0px;
-}
-.m-0 {
-	margin: 0px;
-}
-
-.mb-2, .my-2 {
-    margin-bottom: .5em !important;
-}
-
 .d-none {
 	display: none;
 }
