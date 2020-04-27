@@ -125,3 +125,18 @@ a {
 hr {
 	color: greenyellow;
 }
+
+/* фрагмент aauth css */
+
+div.footer.sticky-footer-regpages {
+  padding: 2rem 0;
+}
+
+body {
+  border: 1px solid red;
+  /*min-height: 100vh;*/
+}
+
+#wrapperapp {
+  
+}
