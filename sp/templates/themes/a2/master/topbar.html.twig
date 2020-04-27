@@ -34,8 +34,8 @@
 					<div class="input-group">
 						<input type="text" class="form-control bg-light border-0 small" placeholder="{{ 'Search for...'|trans }}" aria-label="Search" aria-describedby="basic-addon2">
 						<div class="input-group-append">
-							<button class="btn btn-primary" type="button">
-								<i class="fas fa-search fa-sm"></i>
+							<button class="btn btn-primary pb-3" type="button" onclick="appModule.onClickSearchButton(event)">
+								<img src="/i/whitesearch.png">
 							</button>
 						</div>
 					</div>
@@ -109,12 +109,12 @@
 
 		<!-- Nav Item - User Information -->
 		<li class="nav-item dropdown no-arrow float-right top-user-avatar">
-			<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a onclick="appLayout.onClickTopbarToggleUsermenu(event)" class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ app.user|get_auth_user_display_name }}</span>
 				<img class="img-profile rounded-circle" src="{{ ''|user_avatar }}">
 			</a>
 			<!-- Dropdown - User Information -->
-			<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+			<div id="hUserDropdown" class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
 				{#a class="dropdown-item" href="#">
 				<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 				Profile
@@ -125,13 +125,12 @@
 					Activity Log
 				</a>
 				<div class="dropdown-divider"></div#}
-				<a class="dropdown-item" href="{{ path('profile') }}">
-					<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+				<a class="dropdown-item my-2" href="{{ path('profile') }}">
+					<img src="/i/sbadmin-umenu-settings.png">
 					{{ 'Profile'|trans }}
 				</a>
-				<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-				<a class="dropdown-item" href="/sp/public/logout/">
-					<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+				<a class="dropdown-item my-3" href="/sp/public/logout/">
+					<img src="/i/sbadmin-umenu-logout.png">
 					{{ 'Logout'|trans }}
 				</a>
 			</div>

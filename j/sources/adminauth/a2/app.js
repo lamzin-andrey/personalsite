@@ -6,6 +6,9 @@ function AppLayout() {
 	this.accordionSidebar = e('accordionSidebar');
 	this.mainLayout = e('content-wrapper');
 	this.hSearchform = e('hSearchform');
+	this.hUserDropdown = e('hUserDropdown');
+	/** @property {Object} oTogglers собираются сюда идентификаторы всех элементов, которые переданны функции _toggleElement. Это позволяет их все скрыть, когда надо показать один из них, когда какой-то другой тоже показан */
+	this.oTogglers = {};
 }
 /**
  * @description Обработка клика на кнопке меню
@@ -29,17 +32,38 @@ AppLayout.prototype.onClickSidebarCloseButton = function(event) {
  * @description Обработка клика на кнопке Показать / Скрыть форму поиска
 */
 AppLayout.prototype.onClickToggleSearchForm = function(event) {
+	var that = window.appLayout; 
+	that._toggleElement(event, 'hSearchform');
+	
+	return false;
+}
+/**
+ * @description Обработка клика на кнопке Показать / Скрыть меню пользователя (ссылки Выход, Профиль)
+*/
+AppLayout.prototype.onClickTopbarToggleUsermenu = function(event) {
+	var that = window.appLayout; 
+	that._toggleElement(event, 'hUserDropdown');
+	
+	return false;
+}
+/**
+ * @description Изменить видимость элемента верстки
+ * @param {Event} event
+ * @param {String} id элемента верстки, оно же имя поля экземпляра данного класса (см. в конструкторе строкеи вида this.hSearchform = e('hSearchform'))
+*/
+AppLayout.prototype._toggleElement = function(event, id) {
 	event.preventDefault();
-	var that = window.appLayout, 
-		o = that.hSearchform,
+	this.oTogglers[id] = 0;
+	var i, o = this[id],
 		s = 'show';
 	if (hasClass(o, s)) {
 		removeClass(o, s);
 	} else {
-		addClass(that.hSearchform, s);
+		for (i in this.oTogglers) {
+			removeClass(this[i], s);
+		}
+		addClass(this[id], s);
 	}
-	
-	return false;
 }
 
 AppLayout.prototype.hideScreens = function() {

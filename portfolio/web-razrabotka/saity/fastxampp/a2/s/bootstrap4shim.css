@@ -133,9 +133,13 @@ a {
 .mr-2 {
 	margin-right:5px;
 }
-.mt-3 {
+.mt-3, .my-3 {
 	margin-top:10px;
 }
+.mb-3, .my-3 {
+	margin-bottom:10px;
+}
+
 .mb-4 {
 	margin-bottom:15px;
 }
@@ -143,9 +147,21 @@ a {
 	padding-top:5px;
 	padding-bottom:5px;
 }
+.mt-2, .my-2 {
+	margin-top: .5em !important;
+}
+.mt-2, .my-2 {
+	margin-top: .5em !important;
+}
+.pb-2 {
+	padding-bottom:5px!important;
+}
 .py-3 {
 	padding-top:10px;
 	padding-bottom:10px;
+}
+.pb-3 {
+	padding-bottom:10px!important;
 }
 .py-4 {
 	padding-top:15px;
@@ -189,4 +205,10 @@ a {
 
 .rounded {
     border-radius: .35rem !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #4e73df!important;
+    border-color: #4e73df!important;
 }
