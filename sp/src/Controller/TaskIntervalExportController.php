@@ -15,6 +15,7 @@ class TaskIntervalExportController extends AppBaseController
      */
     public function index(Request $oRequest, AppService $oAppService, TranslatorInterface $t)
     {
+		$this->_oAppService = $oAppService;
     	if (!$this->_accessControl()) {
     		return $this->redirectToRoute('login');
 		}
