@@ -88,6 +88,14 @@ a {
 .bg-light {
     background-color: #f8f9fa !important;
 }
+.bg-danger {
+	background-color: #e74a3b !important;
+}
+.btn-danger {
+	color: #fff!important;
+	background-color: #e74a3b!important;
+	border-color: #e74a3b!important;
+}
 /** border-colors */
 .border-danger {
     border-color: #dc3545 !important;
