@@ -37,6 +37,41 @@ if ( @$_SESSION["lang"] == "en/" ) {
 
 
 <div>&nbsp;</div>
+<div class="couter tou2"><div class="mx-auto tin2 pt12">
+<p>
+<table><tbody>
+<tr>
+	<td colspan="2" align="right" class="text-success b">
+		FastXAMPP with XAMPP 7.3.12 (Beta!) (xubuntu 20.04 64 bit) ~ 267 <?=$unit?>
+	</td>
+</tr>
+<tr>
+		<td>
+			<img src="<?=img('d.png')?>">
+		</td>
+		<td style="padding-bottom:5px">
+			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/open?id=1RLDNx8o1Gl6QEqSNztdE5gpnbcYzpOqK" target="blank" class="text-success"><?=$linktext?>.</a>
+			
+			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+				<span class="py-1">
+					<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
+					<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 18.04"--> 
+					<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 20.04"> 
+					<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint 19.3"--> 
+				</span>
+			</div>
+		</td>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:center">
+		<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.3.12_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 7.3.12</a>
+	</td>
+</tr>
+</tbody></table>
+</p>
+</div></div>
+
+<div>&nbsp;</div>
 <div class="couter tou2">
 	<div class="mx-auto tin2 pt12">
 		<p>
@@ -82,40 +117,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 
 
 
-<div>&nbsp;</div>
-<div class="couter tou2"><div class="mx-auto tin2 pt12">
-<p>
-<table><tbody>
-<tr>
-	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP with XAMPP 7.3.12 (Beta!) (xubuntu 20.04 64 bit) ~ 267 <?=$unit?>
-	</td>
-</tr>
-<tr>
-		<td>
-			<img src="<?=img('d.png')?>">
-		</td>
-		<td style="padding-bottom:5px">
-			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/open?id=1RLDNx8o1Gl6QEqSNztdE5gpnbcYzpOqK" target="blank" class="text-success"><?=$linktext?>.</a>
-			
-			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
-				<span class="py-1">
-					<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
-					<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 18.04"--> 
-					<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 20.04"> 
-					<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint 19.3"--> 
-				</span>
-			</div>
-		</td>
-</tr>
-<tr>
-	<td colspan="2" style="text-align:center">
-		<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.3.12_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 7.3.12</a>
-	</td>
-</tr>
-</tbody></table>
-</p>
-</div></div>
+
 
 
 <div>&nbsp;</div>
