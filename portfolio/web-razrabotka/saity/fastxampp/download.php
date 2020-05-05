@@ -43,7 +43,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 			<table><tbody>
 				<tr>
 					<td colspan="2" align="right" class="text-success b">
-						FastXAMPP for XAMPP 7.4.1 (linux 64 bit) ~ 42 <?=$unit?>
+						FastXAMPP for XAMPP 7.4.1 ((x)ubuntu 18.04 64 bit) ~ 42 <?=$unit?>
 					</td>
 				</tr>
 				<tr>
@@ -87,7 +87,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP for XAMPP 7.3.12 (linux 64 bit) ~ 42 <?=$unit?>
+		FastXAMPP for XAMPP 7.3.12 ((x)ubuntu 18.04 64 bit) ~ 42 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -126,7 +126,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP with XAMPP 7.3.12 (linux 64 bit) ~ 278 <?=$unit?>
+		FastXAMPP with XAMPP 7.3.12 ((x)ubuntu 18.04 64 bit) ~ 278 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -162,7 +162,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP for Kubuntu 16.04, XAMPP 7.0.8-0, PHP 7.0.8 (linux 64 bit) ~ 239 <?=$unit?>
+		FastXAMPP for Kubuntu 16.04 - 18.04, XAMPP 7.0.8-0, PHP 7.0.8 (linux 64 bit) ~ 239 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -193,7 +193,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 7.0.8, PHP 7.0.8 (linux 64 bit) ~ 235 <?=$unit?>
+		FastXAMPP, XAMPP 7.0.8, PHP 7.0.8 ((x)ubuntu 14.04- 18.04 64 bit) ~ 235 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -221,7 +221,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP for Kubuntu 16.04, XAMPP 7.0.4-0, PHP 7.0.4 (linux 32 bit) ~ 238 <?=$unit?>
+		FastXAMPP for Kubuntu 14.04 - 16.04, XAMPP 7.0.4-0, PHP 7.0.4 (linux 32 bit) ~ 238 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -263,7 +263,7 @@ if ($lang != 'en/') :
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 7.0.4-0, PHP 7.0.4 (linux 32 bit) ~ 231 <?=$unit?>
+		FastXAMPP, XAMPP 7.0.4-0, PHP 7.0.4 ((x)ubuntu 14.04 - 16.04 32 bit) ~ 231 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -303,7 +303,7 @@ if ($lang != 'en/') :
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 (linux 64 bit) ~ 145 <?=$unit?>
+		FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 ((x)ubuntu 14.04 64 bit) ~ 145 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -323,7 +323,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP для XAMPP 1.8.3-3  (linux 64 bit) ~ 20 <?=$unit?>
+			FastXAMPP для XAMPP 1.8.3-3  ((x)ubuntu 14.04 64 bit) ~ 20 <?=$unit?>
 		</td>
 </tr>
 <tr>
@@ -343,7 +343,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP для XAMPP 1.8.3-3  (linux 32 bit) ~ 10 <?=$unit?>
+			FastXAMPP для XAMPP 1.8.3-3  ((x)ubuntu 14.04 32 bit) ~ 10 <?=$unit?>
 		</td>
 </tr>
 <tr>
@@ -363,7 +363,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 (linux 32 bit) ~ 130 <?=$unit?>
+			FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 ((x)ubuntu 12.04 - 16.04 32 bit) ~ 130 <?=$unit?>
 		</td>
 </tr>
 <tr>
@@ -383,7 +383,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP, XAMPP 1.7.1, PHP 5.3.5 (linux 32 bit)
+			FastXAMPP, XAMPP 1.7.1, PHP 5.3.5 ((x)ubuntu 12.04 32 bit)
 		</td>
 </tr>
 <tr>
