@@ -176,8 +176,8 @@ class CrudAjaxService
 			$oEntity = $oRepository->find($nEntityId);
 
 			if ($oEntity) {
-				//$oEm = $this->oContainer->get('doctrine')->getManager();
-				$oEm = $oRepository->getManager();
+				$oEm = $this->oContainer->get('doctrine')->getManager();
+				//$oEm = $oRepository->getEntityManager();
 				/** @var EntityManager $oEm */
 				$oEm->remove($oEntity);
 				$oEm->flush();

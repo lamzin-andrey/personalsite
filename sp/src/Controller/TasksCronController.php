@@ -161,10 +161,10 @@ class TasksCronController extends AppBaseController
 	 * @param TranslatorInterface $t
 	 * @param AppService $oAppService
 	*/
-	public function removetask(Request $oRequest, TranslatorInterface $t, CrudAjaxService $oCrudService, CrnTasksRepository $oRepository)
+	public function removetask(Request $oRequest, TranslatorInterface $t, CrudAjaxService $oCrudService, CrnTasksRepository $oRepository, AppService $oAppService)
 	{
 
-		//$this->_oAppService = $oAppService;
+		$this->_oAppService = $oAppService;
 		$aResult = [];
 		if (!$this->_accessControl()) {
 			$aResult['msg'] = $t->trans('You have not access to this task');
