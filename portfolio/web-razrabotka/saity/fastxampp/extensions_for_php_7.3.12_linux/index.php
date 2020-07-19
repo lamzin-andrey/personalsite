@@ -2,7 +2,7 @@
 $r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 //$sAuthorLinkText = 'Author site';
 $sAuthorLinkText = 'Сайт автора';
-$title = 'Скачать php extension imagick.so, xdebug.so и memcached.so для php-7.3.12 (xampp-7.3.12) amd64';
+$title = 'Скачать php extension imagick.so, xdebug.so, redis.so, amqp.so и memcached.so для php-7.3.12 (xampp-7.3.12) amd64';
 $description = 'Вы можете скачать php расширения imagick.so, xdebug.so, redis.so, amqp.so и memcached.so для php-7.3.12 (xampp-7.3.12) amd64 (linux ubuntu)';
 
 include_once "$r/functions.php";
