@@ -179,3 +179,9 @@
 .phpinival{
 	color: #912623;
 }
+.bash {
+	border: 1px solid #808080;
+	color: #2055CB;
+	font-weight:bold;
+	padding: 4px;
+}

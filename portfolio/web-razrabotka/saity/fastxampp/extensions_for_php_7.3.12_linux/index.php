@@ -3,7 +3,7 @@ $r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 //$sAuthorLinkText = 'Author site';
 $sAuthorLinkText = 'Сайт автора';
 $title = 'Скачать php extension imagick.so, xdebug.so и memcached.so для php-7.3.12 (xampp-7.3.12) amd64';
-$description = 'Вы можете скачать php расширения imagick.so, xdebug.so и memcached.so для php-7.3.12 (xampp-7.3.12) amd64 (linux ubuntu)';
+$description = 'Вы можете скачать php расширения imagick.so, xdebug.so, redis.so, amqp.so и memcached.so для php-7.3.12 (xampp-7.3.12) amd64 (linux ubuntu)';
 
 include_once "$r/functions.php";
 ob_start();
@@ -58,6 +58,41 @@ ob_start();
 </p>
 <p>SHA256 файла memcached.so:</p>
 <div class="border border-info">bb3088f5a1b65338daae4de36f056bde698632071800c076a04b01623d7d6ca8</div>
+
+<!-- -->
+<p class="x-vers">
+    redis.so for linux PHP-7.3.12 архитектуры amd64 (64 разряда)
+</p>
+
+<p>
+Распакуйте этот архив в </p>
+<p class="folderpath">/opt/lampp/lib/php/extensions/no-debug-non-zts-20180731/</p>
+<p>и добавьте строку в файл /opt/lampp/etc/php.ini</p>
+<p> <b class="phpinistr"><b class="phpinikey">extension</b>=<b class="phpinival">redis.so</b></b></p>
+<p>
+<a href="<?=WEBROOT ?>/files/amd64/7.3.12/redis.so.tar.gz" class="dlink" >Скачать</a>
+</p>
+<p>SHA256 файла redis.so.tar.gz:</p>
+<div class="border border-info">490dce4551f7e9908891df562b39920606c072057d3f5baa5d4d1be7e285b6c6</div>
+
+
+<!-- -->
+<p class="x-vers">
+    amqp.so for linux PHP-7.3.12 архитектуры amd64 (64 разряда)
+</p>
+
+<p>
+Распакуйте этот архив в </p>
+<p class="folderpath">/opt/lampp/lib/php/extensions/no-debug-non-zts-20180731/</p>
+<p>и добавьте строку в файл /opt/lampp/etc/php.ini</p>
+<p> <b class="phpinistr"><b class="phpinikey">extension</b>=<b class="phpinival">amqp.so</b></b></p>
+<p>
+<a href="<?=WEBROOT ?>/files/amd64/7.3.12/amqp.so.tar.gz" class="dlink" >Скачать</a>
+</p>
+<p>SHA256 файла amqp.so.tar.gz:</p>
+<div class="border border-info">6b79ad3072c198a8e32d780704478a60e41c402a0bf43f4dbed3f31978fb8fc6</div>
+<div>Выполните команду:</div>
+<div class="bash">sudo apt-get install librabbitmq-dev</div>
 
 
 <?php // /files/fastxampp.1.7.4.tar.gz
