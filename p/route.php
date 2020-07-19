@@ -21,6 +21,7 @@ class Route {
 		$this->_portfolio();
 		$this->_portfoliocats();
 		$this->_treedemo();
+		$this->_larincevareciever();
 		$this->_trollkiller();
 		$this->_stat();
 		$this->_phd();
@@ -175,6 +176,31 @@ class Route {
 			require_once $handler;
 			$this->app = new DemoCategoriesList();
 		}
+	}
+	/**
+	 * @description Маршруты для страницы /p/larlog
+	*/
+	protected function _larincevareciever()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/larlog/save.jn/') {
+			$handler = $sCtrlDir . 'larsave.php';
+			require_once $handler;
+			$this->app = new LarincevalogPost();
+		}
+		/*if ($baseUrl == '/p/treedemo/dcatdelte.jn/') {
+			$handler = $sCtrlDir . 'dcatremove.php';
+			require_once $handler;
+			$this->app = new DemoCategoryRemove();
+		}
+		if ($baseUrl == '/p/treedemo/tree.jn/') {
+			$handler = $sCtrlDir . 'dtree.php';
+			require_once $handler;
+			$this->app = new DemoCategoriesList();
+		}*/
 	}
 	/**
 	 * @description Маршруты для страницы /p/portfoliocats/

@@ -130,7 +130,6 @@ window.app = new Vue({
         //this.initSeotab(); ??
         //?? this.initDataTables(); ??
 		this.localizeParams();
-		Rest._token = this._getToken();
    },
    computed:{
 		
@@ -491,69 +490,6 @@ window.app = new Vue({
 		//Заголовок формы редактиорвания
 		this.newEdit = this.$t('app.New');
 		this.formTabTitle = this.$t('app.Append');
-	},
-	//Ниже функции, которые неплохобы вынести в какую-то библиотеку
-    /**
-     * @description Используем jQuery, так как бэкенд ждёт данные как formData
-     * @param {Object} data 
-     * @param {Function} onSuccess
-     * @param {String} url 
-     * @param {Function} onFail 
-     */
-    _post(data, onSuccess, url, onFail) {
-        let t = this._getToken();//TODO
-        if (t) {
-            data._token = t;
-            this._restreq('post', data, onSuccess, url, onFail)
-        }
-    },
-    _get(onSuccess, url, onFail) {
-        this._restreq('get', {}, onSuccess, url, onFail)
-    },
-    _getToken() {
-        let ls = document.getElementsByTagName('meta'), i;
-        for (i = 0; i < ls.length; i++) {
-            if (ls[i].getAttribute('name') == 'apptoken') {
-                return ls[i].getAttribute('content');
-            }
-        }
-        return '';
-    },
-    _restreq(method, data, onSuccess, url, onFail) {
-		let W = window, sendData = {...data}, i;
-		/** @property {Boolean} skipCutObjects false когда true удаления объектов и массивов из data не происходит. Устанавливается в false после каждого запроса */
-		//console.log(sendData);
-		for (i in sendData) {
-			if (!this.skipCutObjects && (i == '__ob__' || (sendData[i] instanceof Object) ) ) {
-				delete  sendData[i];
-			}
-		}
-
-		
-        W.root = '';
-        if (!url) {
-            url = window.location.href;
-        } else {
-            url = W.root + url;
-        }
-        if (!onFail) {
-            onFail = defaultFail;
-        }
-        switch (method) {
-            case 'put':
-            case 'patch':
-            case 'delete':
-                break;
-        }
-        $.ajax({
-            method: method,
-            data:sendData,
-            url:url,
-            dataType:'json',
-            success:onSuccess,
-            error:onFail
-        });
-        this.skipCutObjects = false;
 	},
 	/**
      * @description Показ алерта с ошибкой по умолчанию

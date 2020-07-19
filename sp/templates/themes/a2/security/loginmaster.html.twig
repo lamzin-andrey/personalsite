@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=Windows-1251" />
+    <meta charset="Windows-1251">
+
+    <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height, user-scalable=no,target-densitydpi=device-dpi," />
+
+
+    <title>{% block title %}A2 SB Admin 2  - Login SymDepartment {% endblock %}</title>
+
+    {% block stylesheets %}
+        <!-- Custom fonts -->
+        <link href="{{ asset('a2admin/sources/css/fonts.css') }}" rel="stylesheet" type="text/css"/>
+        <!-- Bootstrap fragment and this theme  -->
+        <link href="{{ asset('/portfolio/web-razrabotka/saity/fastxampp/a2/s/bootstrap4shim.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('a2admin/sources/css/unreg.css') }}" rel="stylesheet"/>
+        
+
+
+
+
+
+        <!--script src="/j/landcacherswinstaller.js"></script>
+        <script>window.sReferer = "<?php echo o($app, 'referer') ?>";</script-->
+    {% endblock %}
+
+
+</head>
+
+<body class="bg-gradient-primary">
+
+<div class="" id="wrapperapp">
+    <transition appear name="fade">
+        <div  v-if="show">
+            <!-- Outer Row -->
+            <div class="row justify-content-center">
+
+                <div class="col-xl-10 col-lg-12 col-md-9">
+
+                    <div class="card o-hidden border-0 shadow-lg my-5">
+                        <div class="card-body p-0">
+
+                            <!-- Nested Row within Card Body -->
+                            <div class="row">
+                                <div class="col-lg-6 d-none d-lg-block {{sFormBgImageCss}}"></div>
+                                <div class="col-lg-6">
+                                    <div class="p-5">
+                                        <div class="text-center">
+                                            <h1 class="h4 text-gray-900 mb-4">{{ pageHeading }}</h1>
+                                            {% if (isResetform) %}
+                                                <p class="mb-4 d-none d-sm-block">{{ 'forgotPasswordSmallText'|trans|raw }}</p>
+                                            {% endif %}
+                                        </div>
+
+                                        {% block vuepageerror %}{% endblock %}
+                                        {% for label, messages in app.flashes %}
+                                            {% for message in messages %}
+                                                {% if (label == 'notice') %}
+                                                    <div class="alert alert-danger">{{ message|raw }}</div>
+                                                {% else %}
+                                                    <div class="alert alert-success">{{ message|raw }}</div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        {% block content %}{% endblock %}
+                                        <hr>
+                                        {% if (isResetform == 0) %}
+                                            <div class="text-center my-2">
+                                                <a class="small" href="{{ path('reset') }}">{{ 'Forgot Password'|trans }}?</a>
+                                            </div>
+                                        {% endif %}
+                                        {%  if (isAuthform == 1 or isResetform == 1)%}
+                                        <div class="text-center my-2">
+                                            <a class="small" href="{{ path('register') }}">{{ 'signup'|trans }}</a>
+                                        </div>
+                                        {%  endif %}
+
+                                        {%  if (isAuthform == 0) %}
+                                        <div class="text-center my-2">
+                                            <a class="small" href="{{ path('login') }}">{{ 'gotoLoginPageLink'|trans }}</a>
+                                        </div>
+                                        {%  endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
+</div>
+
+<div class="footer bg-dark text-light sticky-footer-regpages mt-2">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% if (bEnableChooseSiteVersionButton) %}
+                    <div class="mb-2 text-center">{{ 0|show_site_version_link|raw }}</div>
+                {% endif %}
+                <div class="pb-2 text-center">
+                    <span>Copyright &copy; andryuxa.ru 2019. Admin panel free template from</span>
+                </div>
+                <div class="pb-2 text-center">
+                    <span>
+                        <a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascript %}
+<!-- Bootstrap core JavaScript -->
+
+<script src="{{ asset('sbadmin2/vendor/jquery/jquery.min.js') }}"></script>
+
+{% endblock %}
+</body>
+
+</html>

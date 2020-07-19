@@ -19,6 +19,11 @@ class KxmQuestRepository extends ServiceEntityRepository
         parent::__construct($registry, KxmQuest::class);
     }
 
+    public function getManager()
+	{
+		return $this->getEntityManager();
+	}
+
     // /**
     //  * @return KxmQuest[] Returns an array of KxmQuest objects
     //  */

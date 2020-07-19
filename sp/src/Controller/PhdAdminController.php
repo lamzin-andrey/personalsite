@@ -390,7 +390,7 @@ class PhdAdminController extends AbstractController
     	if (!$this->_hasPermissions()) {
     		return $this->redirectToRoute('home');
 		}
-        return $this->render('phd_admin/articles.html.twig', [
+        return $this->render('phd_admin/index.html.twig', [
             'controller_name' => 'PhdAdminController',
         ]);
     }

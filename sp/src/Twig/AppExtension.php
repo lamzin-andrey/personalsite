@@ -23,6 +23,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 		$this->container = $container;
 		$this->translator = $t;
 		$this->_oRequest = $container->get('request_stack')->getCurrentRequest();
+		$this->_oRouter = $container->get('router');
 		$oServer = $this->_oRequest->server ?? null;
 		$this->_oAppService = $oAppService;
 
@@ -45,6 +46,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 			new TwigFilter('get_auth_user_display_name', array($this, 'getAuthUserDisplayName')),
 			new TwigFilter('user_avatar', array($this, 'getAuthUserAvatarImgSrc')),
 			new TwigFilter('sidebar_heading', array($this, 'getSidebarHeading')),
+			new TwigFilter('show_site_version_link', array($this, 'showSiteVersionLink')),
 			new TwigFilter('get_uid', array($this, 'getUid'))
 		];
 	}
@@ -219,7 +221,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	*/
 	public function getAuthUserAvatarImgSrc() : string
 	{
-		return $this->_oAppService->getUserAvartarImageSrc();
+		return $this->_oAppService->getUserAvatarImageSrc();
 	}
 	/**
 	 * Возвращает загловок для сайдбара в зависимотси от роли пользователя
@@ -232,6 +234,37 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 			return 'ADMIN PANEL';
 		}
 		return 'FRIEND CRON';
+	}
+
+	/**
+	 * Возвращает html ссылки на страницу смены версии сайта (chrome 70+ или android browser 2.3.3,
+     * в зависимости от отсутствия соответсвующей куки )
+	 * @param $nZero (просто потому что это фильтр twig)
+	 * @return string html ссылки ({{- -}} проверить заодно)
+	*/
+	public function showSiteVersionLink() : string
+    {
+        /** @var Request $oRequest     */
+	    $oRequest = $this->_oRequest;
+        $sVersion = $oRequest->cookies->get('sv', 'c70');
+        $allowVersions = ['c70', 'a2'];
+        if (!in_array($sVersion, $allowVersions)) {
+            $sVersion = 'c70';
+        }
+		$sPath = $this->_oRouter->generate('theme_switch');
+
+        if ($sVersion == 'c70') {
+			return '<a href="' . $sPath . '" class="user-link-with-icon">
+	<img width="32" height="32" src="/i/a2-32.png"> ' . $this->translator->trans('Version for Android Browser 2+') . ' 
+</a>';
+        }
+
+		if ($sVersion == 'a2') {
+			return '<a href="' . $sPath . '" class="">
+	<i class="fab fa-chrome"></i> ' . $this->translator->trans('Version for Crome 70+') . ' 
+</a>';
+		}
+
 	}
 
 }

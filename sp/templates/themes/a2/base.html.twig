@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=Windows-1251" />
+        <meta charset="Windows-1251">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"-->
+        <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height, user-scalable=no,target-densitydpi=device-dpi" />
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!--meta name="apptoken" content="" -->
+        <title>{% block title %}Welcome! Android 2 {% endblock %}</title>
+        {% block stylesheets %}
+            <!-- Custom fonts for this template-->
+            <link href="{{ asset('a2admin/sources/css/fonts.css') }}" rel="stylesheet" type="text/css">
+            <!-- Custom styles for this template-->
+            <link href="{{ asset('a2admin/sources/css/topbar.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/footer.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/topbar/menubutton.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/topbar/searchform.css') }}" rel="stylesheet"type="text/css">
+
+            <link href="{{ asset('a2admin/sources/css/sidebar.css') }}" rel="stylesheet" type="text/css">
+
+            <link href="{{ asset('/portfolio/web-razrabotka/saity/fastxampp/a2/s/bootstrap4shim.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('a2admin/sources/css/0.css') }}" rel="stylesheet" type="text/css">
+            <link href="/s/sources/admin/phdad.css" rel="stylesheet" type="text/css">
+        {% endblock %}
+    </head>
+    <body id="page-top">
+
+        {% block body %}
+            <!-- Page Wrapper -->
+            <div id="wrapper">
+                {% if (app.user) %}
+                    {# see include __DIR__ . '/view/master/sidebar.php'; #}
+                    {{ include('themes/a2/master/sidebar.html.twig') }}
+                {% endif %}
+
+                <!-- Content Wrapper -->
+                <div id="content-wrapper" >
+                    <!-- Main Content -->
+                    <div id="content">
+                        {% if (app.user) %}
+                            {# see include __DIR__ . '/view/master/topbar.php'; #}
+                            {{ include('themes/a2/master/topbar.html.twig') }}
+                        {% endif %}
+                        <!-- Begin Page Content -->
+                        <div class="container-fluid">
+
+                            <!-- Page Heading -->
+                            <h1 class="h3 mb-4 text-gray-800" id="pHead">{{ pageHeading }}</h1>
+                            {#  TODO это может и во view переехать, надо посмотреть как там в вёрстке #}
+                            {% block vuepageerror %}{% endblock %}
+                            {% for label, messages in app.flashes %}
+                                {% for message in messages %}
+                                    {% if (label == 'notice') %}
+                                        <div class="alert alert-danger">{{ message|raw }}</div>
+                                    {% else %}
+                                        <div class="alert alert-success">{{ message|raw }}</div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+
+                            {% block content %}{% endblock %}
+
+                        </div>
+                        <!-- /.container-fluid -->
+                    </div>
+                    <!-- End of Main Content -->
+
+                    <!-- Footer -->
+                    <footer class="sticky-footer bg-white">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                {% if (bEnableChooseSiteVersionButton) %}
+                                    <div class="mb-2">{{ 0|show_site_version_link|raw }}</div>
+                                {% endif %}
+                                <div class="mb-2">
+                                    <span>Copyright &copy; andryuxa.ru 2019.</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span>Admin panel free template from </span>
+                                </div>
+                                <div>
+                                    <span> <a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End of Footer -->
+
+                </div>
+                <!-- End of Content Wrapper -->
+                <b4confirmdlg :params="b4ConfirmDlgParams" id="appConfirmDlg" ></b4confirmdlg>
+                <b4alertdlg :params="b4AlertDlgParams" id="appAlertDlg" ></b4alertdlg>
+            </div>
+            <!-- End of Page Wrapper -->
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+            <!-- Logout Modal TODO drop it later-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+
+
+        {% block javascripts %}
+            <!-- Bootstrap core JavaScript-->
+            <script charset="UTF-8" src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
+            <script charset="UTF-8" src="/j/sources/adminauth/a2/app.js"></script>
+
+        {% endblock %}
+    </body>
+</html>

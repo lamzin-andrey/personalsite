@@ -1,0 +1,48 @@
+{% extends 'themes/a2/security/loginmaster.html.twig' %}
+
+{% trans_default_domain 'loginforms' %}
+
+{% block title %} A2+ - {{ 'Signin'|trans }} {% endblock %}
+
+{% block content %}
+    <div>
+        {% if error %}
+            <div class="alert alert-danger">{{  error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+    </div>
+<form class="user" id="signinform" method="POST" action="{{ path('check_path') }}" novalidate><!-- TODO try -novalidate -->
+    <div class="form-group">
+        {#v-b421validators="'required,email'" #}
+        <input  placeholder="{{'Enter username'|trans }}"
+                type="text" class="form-control form-control-user"  aria-describedby="emailHelp"  name="_username">
+        <div class="invalid-feedback"></div>
+        <small id="emailHelp" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        {# v-b421validators="'required,password,length6_128'" #}
+        <input
+                placeholder="{{'Password'|trans }}"
+                type="password" class="form-control form-control-user" name="_password">
+        <div class="invalid-feedback"></div>
+        <small id="passwordHelp" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+        <div class="custom-control custom-checkbox small">
+            <input type="checkbox" class="custom-control-input" id="rememberMe" name="_remember_me" value="on">
+            <label class="custom-control-label" for="rememberMe">{{ 'Remember Me'|trans }}</label>
+        </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+    <button type="submit" class="btn btn-success btn-user btn-block">
+        {{ 'LoginFormButtonText'|trans }}
+    </button>
+    <!--hr>
+    <a href="index.html" class="btn btn-google btn-user btn-block">
+        <i class="fab fa-google fa-fw"></i> Login with Google
+    </a>
+    <a href="index.html" class="btn btn-facebook btn-user btn-block">
+        <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+    </a-->
+</form>
+
+{% endblock %}

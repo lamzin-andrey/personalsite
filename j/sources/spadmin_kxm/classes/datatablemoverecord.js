@@ -4,7 +4,7 @@
 */
 class DataTableMoveRecord {
 	constructor(sTableId, sUrl, context) {
-		/** @property context Ссылка на объект приложения. Неолбходимы его методы _post, alert, defaultFailSendFormListener */
+		/** @property context Ссылка на объект приложения. Неолбходимы его методы alert, defaultFailSendFormListener */
 		this.context = context;
 		/** @property {String} sTableId  - идентификатор таблицы DataTables */
 		this.sTableId = sTableId;
@@ -13,7 +13,7 @@ class DataTableMoveRecord {
 	}
 
 	/**
-	 * @description Модифицирует html ячеёки таблицы с кнопками управления, добавляя в него кнопку Вверх или Вниз при необходимости.
+	 * @description Модифицирует html ячейки таблицы с кнопками управления, добавляя в него кнопку Вверх или Вниз при необходимости.
 	 * "Вверх" имеет смысл "Переместить запись на предыдущую страницу"
 	 * "Вниз" имеет смысл "Переместить запись на следующую страницу"
 	 * Вызывать в функции DataTables render
@@ -26,20 +26,10 @@ class DataTableMoveRecord {
 	*/
 	setHtml(sHtml, nRow, oSettings, nId) {
 		if (nRow == 0) {
-			sHtml += `
-			<div class="form-group d-md-inline d-block ">
-				<button data-id="${nId}" type="button" class="btn btn-primary j-up-btn">
-					<i data-id="${nId}" class="fas fa-arrow-up fa-sm"></i>
-				</button>
-			</div>`;
+			sHtml += this._getUpButtonHtml(nId);
 		}
 		if (nRow == (oSettings._iDisplayLength - 1)) {
-			sHtml += `
-			<div class="form-group d-md-inline d-block ">
-				<button data-id="${nId}" type="button" class="btn btn-primary j-down-btn">
-					<i data-id="${nId}" class="fas fa-arrow-down fa-sm"></i>
-				</button>
-			</div>`;
+			sHtml += this._getDownButtonHtml(nId);
 		}
 		return sHtml;
 	}
@@ -91,9 +81,9 @@ class DataTableMoveRecord {
 			jCell = jRow.find('td')[1];
 			if (jCell) {
 				jCell = $(jCell);
-				if (data.newRec.url) {
+				if (data.newRec.body) {
 					jCell.html('');
-					jCell.append( $(`<a href="${data.newRec.url}" target="nblank">${data.newRec.heading}</a>`) );
+					jCell.append( $('<span>' + data.newRec.body + '</span>') );
 				} else {
 					jCell.text(data.newRec.heading);
 				}
@@ -128,8 +118,52 @@ class DataTableMoveRecord {
 			$('#spin' + id).toggleClass('d-none');
 			this.bIsMoveRecordRequestSended = 1;
 			this.bIsMoveRecordRequestSendedRecId = id;
-			this.context._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, this.sUrl, (a, b, c) => { this.onFailMoveRecord(a, b, c); });
+			Rest._post({id:id, 'd':direction}, (data) => { this.onSuccessMoveRecord(data) }, this.sUrl, (a, b, c) => { this.onFailMoveRecord(a, b, c); });
 		}
+	}
+	/***
+	 * @description Это надо вызывать после переупорядочивания записей в пределах одной страницы.
+	 * Удаляет из таблицы все кнопки с классами  j-up-btn j-down-btn
+	 * Добавляет в первую и последнюю строки таблицы строку
+	*/
+	resetArrowButtons() {
+		$(this.sTableId + ' .j-up-btn, ' + this.sTableId + ' .j-down-btn').each((i, j) => {
+			$(j).remove();
+		});
+		let firstRowCell = $(this.sTableId + ' tbody tr').first().find('td').last(),
+			lastRowCell = $(this.sTableId + ' tbody tr').last().find('td').last(),
+			nUpId = firstRowCell.find('button').first().attr('data-id'),
+			nDownId = lastRowCell.find('button').first().attr('data-id');
+		
+		firstRowCell.append($(this._getUpButtonHtml(nUpId)));
+		lastRowCell.append($(this._getDownButtonHtml(nDownId)));
+		this.setListeners();
+	}
+	/**
+	 * @description Получить html кнопки "Вверх"
+	 * @param {*} nId 
+	 */
+	_getUpButtonHtml(nId){
+		return this._getUpDownButtonHtml(nId, 'j-up-btn', 'fa-arrow-up', 'moveToPrevPage');
+	}
+	/**
+	 * @description Получить html кнопки "Вверх"
+	 * @param {*} nId 
+	 */
+	_getDownButtonHtml(nId){
+		return this._getUpDownButtonHtml(nId, 'j-down-btn', 'fa-arrow-down');
+	}
+	/**
+	 * @description Получить html кнопки "Вверх" или "Вниз"
+	 * @param {*} nId 
+	*/
+	_getUpDownButtonHtml(nId, sCssAction = 'j-down-btn', sCssIcon = 'fa-arrow-down', sHint = 'moveToNextPage' ){
+		return `
+		<div class="form-group d-md-inline d-block ">
+			<button data-id="${nId}" type="button" class="${sCssAction} mt-2 btn btn-primary" title="${this.context.$t('app.' + sHint)}">
+				<i data-id="${nId}" class="fas ${sCssIcon} fa-sm"></i>
+			</button>
+		</div>`;
 	}
 }
 

@@ -116,7 +116,7 @@ window.Rest = {
             dataType:'json',
             success:onSuccess,
             error:onFail
-        };
+		};
         $.ajax(conf);
         
 	},

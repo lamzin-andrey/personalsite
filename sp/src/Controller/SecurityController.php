@@ -4,6 +4,7 @@ namespace App\Controller;
 
 # use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\RegisterFormType;
+use App\Service\AppService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
@@ -24,13 +25,14 @@ use App\Form\ResetPasswordFormType;
 use Landlib\SimpleMail;
 
 
-class SecurityController extends AbstractController
+class SecurityController extends AppBaseController
 {
 	/**
 	 * @Route("/login", name="login")
 	 */
-	public function loginAction(AuthenticationUtils $authenticationUtils, CsrfTokenManagerInterface $oCsrfTokenManager)
+	public function loginAction(TranslatorInterface $t, AuthenticationUtils $authenticationUtils, CsrfTokenManagerInterface $oCsrfTokenManager, AppService $oAppService)
 	{
+		$this->_oAppService = $oAppService;
 		if ($this->getUser()) {
 			return $this->redirectToRoute('home');
 		}
@@ -53,14 +55,18 @@ class SecurityController extends AbstractController
 		$aData['isAuthform']    = 1;
 		$aData['csrf_token']    = $csrfToken;
 		$aData['sFormBgImageCss']    = 'bg-login-image';
+		$aData['bEnableChooseSiteVersionButton'] = true;
+		$aData['pageHeading'] = $t->trans('Reset-Password');
+		$aData['pageHeading'] = $t->trans('Login', [], 'loginforms');
 		return $this->render('security/login.html.twig', $aData);
 	}
 
 	/**
 	 * @Route("/register", name="register")
 	*/
-	public function register(Request $oRequest, UserPasswordEncoderInterface $oEncoder, TranslatorInterface $t)
+	public function register(Request $oRequest, UserPasswordEncoderInterface $oEncoder, TranslatorInterface $t, AppService $oAppService)
 	{
+		$this->_oAppService = $oAppService;
 		$oUser = new User();
 		$this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
 		$this->translator = $t;
@@ -103,6 +109,7 @@ class SecurityController extends AbstractController
 		$aData = $this->_getDefaultViewData();
 		$aData['form'] = $oForm->createView();
 		$aData['sFormBgImageCss'] = 'bg-register-image';
+		$aData['bEnableChooseSiteVersionButton'] = true;
 		return $this->render('security/register.html.twig', $aData);
 	}
 
@@ -130,8 +137,9 @@ class SecurityController extends AbstractController
 	/**
 	 * @Route("/reset", name="reset")
 	*/
-	public function reset(Request $oRequest, TranslatorInterface $t, UserPasswordEncoderInterface $oEncoder)
+	public function reset(Request $oRequest, TranslatorInterface $t, UserPasswordEncoderInterface $oEncoder, AppService $oAppService)
 	{
+		$this->_oAppService = $oAppService;
 		$this->_oForm = $oForm = $this->createForm(get_class(new ResetPasswordFormType()));
 		$this->translator = $t;
 		$aData = $this->_getDefaultViewData();
@@ -139,6 +147,7 @@ class SecurityController extends AbstractController
 		$aData['isEmailWasFound'] = 0;
 		$aData['emailHostLink'] = '#';
 		$aData['isResetform'] = 0;
+		$aData['bEnableChooseSiteVersionButton'] = true;
 		$aData['form'] = $oForm->createView();
 		if ($oRequest->getMethod() == 'POST') {
 			$oForm->handleRequest($oRequest);

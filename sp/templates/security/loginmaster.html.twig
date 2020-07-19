@@ -16,6 +16,8 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <!-- Custom styles for this template-->
         <link href="{{ asset('sbadmin2/css/sb-admin-2.min.css') }}" rel="stylesheet">
+        <!-- Custom styles for this app -->
+        <link href="/s/sources/admin/aauth.css" rel="stylesheet">
 
         <!--script src="/j/landcacherswinstaller.js"></script>
         <script>window.sReferer = "<?php echo o($app, 'referer') ?>";</script-->
@@ -90,11 +92,20 @@
     </transition>
 </div>
 
-<div class="footer bg-dark text-light">
+<div class="footer bg-dark text-light sticky-footer-regpages">
     <div class="container">
         <div class="row">
             <div class="col">
-                <span>Copyright &copy; andryuxa.ru 2019. Admin panel free template from <a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a></span>
+                {% if (bEnableChooseSiteVersionButton) %}
+                    <div class="mb-2 text-center">{{ 0|show_site_version_link|raw }}</div>
+                {% endif %}
+                <div class="pb-2 text-center">
+                    <span>Copyright &copy; andryuxa.ru 2019. Admin panel free template from</span>
+                </div>
+                <div class="pb-2 text-center">
+                    <span><a href="https://startbootstrap.com/previews/sb-admin-2/" target="_blank">SB Admin-2</a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -114,8 +125,6 @@
 <!-- Custom scripts for all pages-->
 <script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
 {% endblock %}
-
-<link rel="stylesheet" type="text/css" href="/s/vendor/bootstrap4_sticky_footer.css">
 </body>
 
 </html>

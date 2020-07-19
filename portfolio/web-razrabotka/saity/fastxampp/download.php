@@ -37,13 +37,48 @@ if ( @$_SESSION["lang"] == "en/" ) {
 
 
 <div>&nbsp;</div>
+<div class="couter tou2"><div class="mx-auto tin2 pt12">
+<p>
+<table><tbody>
+<tr>
+	<td colspan="2" align="right" class="text-success b">
+		FastXAMPP with XAMPP 7.3.12 (Beta!) (xubuntu 20.04 64 bit) ~ 267 <?=$unit?>
+	</td>
+</tr>
+<tr>
+		<td>
+			<img src="<?=img('d.png')?>">
+		</td>
+		<td style="padding-bottom:5px">
+			<a title="Download and extract the archive, and run Setup" href="https://drive.google.com/open?id=1RLDNx8o1Gl6QEqSNztdE5gpnbcYzpOqK" target="blank" class="text-success"><?=$linktext?>.</a>
+			
+			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+				<span class="py-1">
+					<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
+					<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 18.04"--> 
+					<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 20.04"> 
+					<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint 19.3"--> 
+				</span>
+			</div>
+		</td>
+</tr>
+<tr>
+	<td colspan="2" style="text-align:center">
+		<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.3.12_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 7.3.12</a>
+	</td>
+</tr>
+</tbody></table>
+</p>
+</div></div>
+
+<div>&nbsp;</div>
 <div class="couter tou2">
 	<div class="mx-auto tin2 pt12">
 		<p>
 			<table><tbody>
 				<tr>
 					<td colspan="2" align="right" class="text-success b">
-						FastXAMPP for XAMPP 7.4.1 (linux 64 bit) ~ 42 <?=$unit?>
+						FastXAMPP for XAMPP 7.4.1 ((x)ubuntu 18.04 64 bit) ~ 42 <?=$unit?>
 					</td>
 				</tr>
 				<tr>
@@ -81,13 +116,17 @@ if ( @$_SESSION["lang"] == "en/" ) {
 
 
 
+
+
+
+
 <div>&nbsp;</div>
 <div class="couter tou2"><div class="mx-auto tin2 pt12">
 <p>
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP for XAMPP 7.3.12 (linux 64 bit) ~ 42 <?=$unit?>
+		FastXAMPP for XAMPP 7.3.12 ((x)ubuntu 18.04 64 bit) ~ 42 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -126,7 +165,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP with XAMPP 7.3.12 (linux 64 bit) ~ 278 <?=$unit?>
+		FastXAMPP with XAMPP 7.3.12 ((x)ubuntu 18.04 64 bit) ~ 278 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -162,7 +201,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP for Kubuntu 16.04, XAMPP 7.0.8-0, PHP 7.0.8 (linux 64 bit) ~ 239 <?=$unit?>
+		FastXAMPP for Kubuntu 16.04 - 18.04, XAMPP 7.0.8-0, PHP 7.0.8 (linux 64 bit) ~ 239 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -193,7 +232,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 7.0.8, PHP 7.0.8 (linux 64 bit) ~ 235 <?=$unit?>
+		FastXAMPP, XAMPP 7.0.8, PHP 7.0.8 ((x)ubuntu 14.04- 18.04 64 bit) ~ 235 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -221,7 +260,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP for Kubuntu 16.04, XAMPP 7.0.4-0, PHP 7.0.4 (linux 32 bit) ~ 238 <?=$unit?>
+		FastXAMPP for Kubuntu 14.04 - 16.04, XAMPP 7.0.4-0, PHP 7.0.4 (linux 32 bit) ~ 238 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -263,7 +302,7 @@ if ($lang != 'en/') :
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 7.0.4-0, PHP 7.0.4 (linux 32 bit) ~ 231 <?=$unit?>
+		FastXAMPP, XAMPP 7.0.4-0, PHP 7.0.4 ((x)ubuntu 14.04 - 16.04 32 bit) ~ 231 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -303,7 +342,7 @@ if ($lang != 'en/') :
 <table><tbody>
 <tr>
 	<td colspan="2" align="right" class="text-success b">
-		FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 (linux 64 bit) ~ 145 <?=$unit?>
+		FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 ((x)ubuntu 14.04 64 bit) ~ 145 <?=$unit?>
 	</td>
 </tr>
 <tr>
@@ -323,7 +362,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP для XAMPP 1.8.3-3  (linux 64 bit) ~ 20 <?=$unit?>
+			FastXAMPP для XAMPP 1.8.3-3  ((x)ubuntu 14.04 64 bit) ~ 20 <?=$unit?>
 		</td>
 </tr>
 <tr>
@@ -343,7 +382,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP для XAMPP 1.8.3-3  (linux 32 bit) ~ 10 <?=$unit?>
+			FastXAMPP для XAMPP 1.8.3-3  ((x)ubuntu 14.04 32 bit) ~ 10 <?=$unit?>
 		</td>
 </tr>
 <tr>
@@ -363,7 +402,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 (linux 32 bit) ~ 130 <?=$unit?>
+			FastXAMPP, XAMPP 1.8.3-3, PHP 5.5.9 ((x)ubuntu 12.04 - 16.04 32 bit) ~ 130 <?=$unit?>
 		</td>
 </tr>
 <tr>
@@ -383,7 +422,7 @@ if ($lang != 'en/') :
 	<table><tbody>
 <tr>
 <td colspan="2" align="right" class="text-success b">
-			FastXAMPP, XAMPP 1.7.1, PHP 5.3.5 (linux 32 bit)
+			FastXAMPP, XAMPP 1.7.1, PHP 5.3.5 ((x)ubuntu 12.04 32 bit)
 		</td>
 </tr>
 <tr>

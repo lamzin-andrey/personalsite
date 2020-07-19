@@ -70,8 +70,16 @@
 		name: 'kxmadmin',
 		
 		props: {
+
+			/** @property {String} token Значение токена формы */
 			token: {
 				type:String,
+				default: 'not_initalized'
+			},
+
+			/** @property {String} tokenPrefix Имя токена формы */
+			token_prefix: {
+				type: String,
 				default: 'not_initalized'
 			}
 		},
@@ -95,11 +103,14 @@
 				/** @property  {B4DataTablesPreloader} dataTablesPreloader */
 				dataTablesPreloader: new B4DataTablesPreloader(),
 
-				/** @property {Number} productId Идентификатор редактируемого вопроса */
+				/** @property {Number} questId Идентификатор редактируемого вопроса */
 				questId : 0,
 				 
 				 /** @property {DataTableMoveRecord} объект для добавления кнопок для перемещения записей таблицы на соседние страницы */
 				 oDataTableMoveRecord: null,
+
+				 /** @property {String} updatedToken заполняется, если в процессе работы на странице токен обновился */
+				 updatedToken: ''
 			};
 			return _data;
 		},
@@ -112,7 +123,7 @@
 				if (this.isDataTableInitalized) {
 					return;
 				}
-				this.oDataTableMoveRecord = new DataTableMoveRecord('#kxmtable', this.$webRoot + '/kxm', this.$root);
+				this.oDataTableMoveRecord = new DataTableMoveRecord('#kxmtable', this.$webRoot + '/kxm/moverecordonotherpage.json', this.$root);
 				let id = '#kxmtable', self = this;
 				this.isDataTableInitalized = true;
 				this.dataTable =  $(id).DataTable( {
@@ -136,11 +147,8 @@
 							'class' : 'u-tablerowdragcellbg'
 						},
 						{ 
-							"data": "heading",
+							"data": "body",
 							'render' : function(data, type, row) {
-								if (row.url) {
-									return  `<a href="${row.url}" target="_blank">${data}</a>`;
-								}
 								return data;
 							}
 						},
@@ -149,19 +157,19 @@
 							'render' : function(data, type, row, meta) {
 								let r =  `
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-primary j-edit-btn">
+										<button data-id="${data}" type="button" class="btn btn-primary mt-2 j-edit-btn">
 											<i data-id="${data}" class="fas fa-edit fa-sm"></i>
 										</button>
 									</div>
 									<div class="form-group d-md-inline d-block ">
-										<button data-id="${data}" type="button" class="btn btn-danger j-rm-btn">
+										<button data-id="${data}" type="button" class="btn btn-danger mt-2 j-rm-btn">
 											<i data-id="${data}" class="fas fa-trash fa-sm"></i>
 										</button>
 									</div>`;
 								r = self.oDataTableMoveRecord.setHtml(r, meta.row, meta.settings, data);
 								r += `
 									<div class="form-group d-md-inline d-block ">
-										<div id="spin${data}" class="spinner-grow text-success d-none" role="status">
+										<div id="spin${data}" class="spinner-grow text-success mt-2 d-none" role="status">
 											<span class="sr-only">Loading...</span>
 										</div>
 									</div>`;
@@ -216,7 +224,7 @@
 						$('.u-tablerowdragcellbg').addClass('u-tablerowdragcellbg-cursor-normal');
 						$('.j-dtrows-spinner').css('display', 'inline-block');
 						$('.j-dtdrag-icon').css('display', 'none');
-						this.$root._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, '/p/portfolio/reorder.jn/', (a, b, c) => {this.onFailReorderData(a, b, c);});
+						Rest._post({a:a}, (data) =>{this.onSuccessReorderData(data);}, this.$webRoot + '/kxm/reorder.json', (a, b, c) => {this.onFailReorderData(a, b, c);});
 					}
 				});
 				
@@ -229,15 +237,19 @@
 				if (!this.onFailReorderData(data) ) {
 					return;
 				}
+				this.oDataTableMoveRecord.resetArrowButtons();
 			},
 			/**
 			 * @description Обработка успешного переупорядочивания статей
 			 * @param {Object} data 
 			 */
 			onFailReorderData(a, b, c) {
+				if (a.token) {
+					this.updatedToken = a.token;
+					this.$refs.kxmadminform.setFormToken(a.token, this.token_prefix);
+				}
 				$('.u-tablerowdragcellbg').removeClass('u-tablerowdragcellbg-cursor-normal');
 				$('.j-dtrows-spinner').css('display', 'none');
-				//$('.j-dtdrag-icon').removeClass('invisible');
 				$('.j-dtdrag-icon').css('display', 'inline-block');
 				this.dataTable.rowReorder.enable();
 				this.reorderRequestSended = false;
@@ -248,25 +260,25 @@
 			 * @param {Event} evt
 			*/
 			onClickEditProduct(evt) {
-				if (this.requestedProductId > 0) {
+				if (this.requestedQuestId > 0) {
 					this.alert(this.$t('app.Other_product_requested_for_edit'));
 					return;
 				}
-				this.requestedProductId = $(evt.target).attr('data-id');
-				$('#spin' + this.requestedProductId).toggleClass('d-none');
-				this.$root._get((d) => {this.onSuccessGetProduct(d);}, `/p/portfolio/product.jn/?id=${this.requestedProductId}`, (a, b, c) => {this.onFailGetProduct(a, b, c);} );
+				this.requestedQuestId = $(evt.target).attr('data-id');
+				$('#spin' + this.requestedQuestId).toggleClass('d-none');
+				Rest._get((d) => {this.onSuccessGetQuest(d);}, `${this.$webRoot}/kxm/quest.json?id=${this.requestedQuestId}`, (a, b, c) => {this.onFailGetQuest(a, b, c);} );
 			},
 			/**
 			 * @description Success request product data for edit
 			 * @param {Object} data
 			*/
-			onSuccessGetProduct(data) {
-				if (!this.onFailGetProduct(data)) {
+			onSuccessGetQuest(data) {
+				if (!this.onFailGetQuest(data)) {
 					return;
 				}
-				this.setProductId(data.id);
-				this.$refs.kxmadminform.resetImages();
-				this.$refs.kxmadminform.setProductData(data);
+				this.setQuestId(data.quest.id);
+				//this.$refs.kxmadminform.resetImages();
+				this.$refs.kxmadminform.setQuestData(data.quest);
 				setTimeout(() => {
 					this.setDataChanges(false);
 				}, 1000);
@@ -276,10 +288,10 @@
 			 * @description Failed request product data for edit
 			 * @return Boolean
 			*/
-			onFailGetProduct(data, b ,c) {
-				$('#spin' + this.requestedProductId).toggleClass('d-none');
-				this.requestedProductId = 0;
-				return this.$root.defaultFailSendFormListener(data, b ,c);
+			onFailGetQuest(data, b ,c) {
+				$('#spin' + this.requestedQuestId).toggleClass('d-none');
+				this.requestedQuestId = 0;
+				return this.$root.defaultFailSendFormListener(data, b, c);
 			},
 			/**
 			 * @description Click on button "Remove product"
@@ -301,7 +313,7 @@
 			*/
 			onClickConfirmRemoveProduct() {
 				let args = this.$root.confirmDialogArticleArgs;
-				this.$root._post(args, (data) => {this.onSuccessRemove(data);}, '/p/portfolio/removeproduct.jn/', (data) => {this.onFailRemove(data);})
+				Rest._post(args, (data) => {this.onSuccessRemove(data);}, this.$webRoot + '/kxm/remove.json', (data) => {this.onFailRemove(data);})
 				this.$root.setConfirmDlgVisible(false);
 			},
 			/**
@@ -330,11 +342,11 @@
 				this.$root.alert($t('DefaultFail'));
 			},
 			/**
-			 * @description Установить id редактируемой категории
+			 * @description Установить id редактируемого вопроса
 			 * @param {Number} id 
 			*/
-			setProductId(id) {
-				this.productId = id;
+			setQuestId(id) {
+				this.questId = id;
 				let key = 'app.New',
 					key2 = 'app.Append';
 				
@@ -348,8 +360,8 @@
 			 * @description Получить id редактируемого товара
 			 * @return Number
 			*/
-			getProductId() {
-				return this.productId;
+			getQuestId() {
+				return this.questId;
 			},
 			/**
 			 * @see isChange
@@ -375,11 +387,20 @@
 						//Покажем диалог
 						this.$root.setConfirmDlgVisible(true);
 					} else {
+						this.editFormIsShowed = false;
 						this.gotoProductsListTab();
 					}
 				});
 				$('#editquests-tab').on('shown.bs.tab', (ev) => {
+					this.editFormIsShowed = true;
+				});
+				$('#editquests-tab').on('click', (ev) => {
+					if (this.editFormIsShowed) {
+						return;
+					}
 					this.setDataChanges(false);
+					this.requestedQuestId = 0;
+					this.$refs.kxmadminform.setId(0);
 				});
 			},
 			/**
@@ -394,10 +415,11 @@
 			 * @description Показать список категорий, сбросить id редактируемой категории, установить флаг "данные не изменялись" и очистить форму
 			*/
 			gotoProductsListTab() {
+				this.editFormIsShowed = false;
 				$('#questlist-tab').tab('show');
 				$('#kxmadminform')[0].reset();
-				this.setProductId(0);
-				this.$refs.kxmadminform.resetImages();
+				this.setQuestId(0);
+				//this.$refs.kxmadminform.resetImages();
 				this.setDataChanges(false);
 			},
 			/**
@@ -411,7 +433,8 @@
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {
-			this.$refs.kxmadminform.setFormToken(this.token);
+			let token = this.updatedToken ? this.updatedToken : this.token;
+			this.$refs.kxmadminform.setFormToken(token, this.token_prefix);
 			this.localizeParams();
 			this.initDataTables();
 			this.initSeotab();

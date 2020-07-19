@@ -5,3 +5,15 @@
 	transform: translateY(-1000px);
 	opacity: 0;
 }
+div.footer.sticky-footer-regpages {
+    padding: 2rem 0;
+    
+}
+body {
+	flex-direction: column;
+	display:flex;
+	min-height: 100vh;
+}
+#wrapperapp {
+	flex-grow: 1;
+}

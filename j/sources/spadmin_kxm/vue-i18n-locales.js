@@ -76,7 +76,7 @@ var locales = {
             "Save": "Сохранить",
 			"Append": "Добавить",
 			"Download": "Скачать",
-			"New": "Новая",
+			"New": "Новый",
 			"Edit": "Редактировать",
 			"OK": "OK",
 			"Upload": "Загрузить",
@@ -114,7 +114,7 @@ var locales = {
 			"Are_You_Sure_drop_Article_Category": "Вы действительно хотите удалить категорию",
 
 			//Portfolio list
-			'Worklist' : 'Список работ',
+			'Worklist' : 'Список вопросов',
 			Other_product_requested_for_edit : 'Уже запрошены для редактирования данные другой работы',
 			Are_You_Sure_drop_Product : 'Вы действительно хотите удалить работу',
 
@@ -151,7 +151,9 @@ var locales = {
 			'ShortDesc' : 'Краткое описание работы',
 			'OuterLinkText' : 'Текст ссылки на внешнюю страницу работы',
 			'product_file_textlink' : 'Текст ссылки на файл работы',
-			'HeadingPortfolio' : 'Название работы'
+			'moveToNextPage' : 'Переместить на следующую страницу',
+			'moveToPrevPage' : 'Переместить на предыдущую страницу',
+			'HeadingPortfolio' : 'Вопрос'
         }
     }
 }

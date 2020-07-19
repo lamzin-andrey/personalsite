@@ -6,9 +6,24 @@
 			<textareab4 v-model="var2" ref="var2" @input="setDataChanges" :counter="counter" :label="$t('app.var2')"  id="var2" rows="3" validators="'required'"></textareab4>
 			<textareab4 v-model="var3" ref="var3" @input="setDataChanges" :counter="counter" :label="$t('app.var3')"  id="var3" rows="3" validators="'required'"></textareab4>
 			<textareab4 v-model="var4" ref="var4" @input="setDataChanges" :counter="counter" :label="$t('app.var4')"  id="var4" rows="3" validators="'required'"></textareab4>
-			<inputb4 v-model="varright" ref="varright" @input="setDataChanges" :counter="counter" :label="$t('app.varright')"  type="number" id="varright" rows="3" validators="'required'"></inputb4>
+			<inputb4 v-model="var_right" ref="varright" @input="setDataChanges" :counter="counter" :label="$t('app.varright')"  type="number" id="varright" rows="3" validators="'required'"></inputb4>
 			<inputb4 v-model="price" ref="price" @input="setDataChanges" :counter="counter" :label="$t('app.price')"  type="number" id="price" rows="3" validators="'required'"></inputb4>
 
+			<div class="float-right ">
+			<div id="Saver" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+				<div class="toast-header">
+					<strong class="mr-auto">Info</strong>
+					<small class="text-muted"></small>
+					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="toast-body">
+					{{ $t('app.SaveCompleted') }}
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
 	        <p class="text-right my-3">
 	            <button  class="btn btn-primary">{{ $t('app.Save') }}</button>
 	        </p>
@@ -51,7 +66,7 @@
 				price: 500,
 				
 				//Правильный вариант
-				varright:'',
+				var_right:1,
 				
 				//Идентификатор редактируемого вопроса
 				id : 0,
@@ -62,8 +77,8 @@
 				/** @property {Boolean} hideFromProductlist Скрывать ли на странице портфолио  */
 				hideFromProductlist : false,
 
-				/** @property {Boolean} hideFromProductlist Скрывать ли на странице портфолио  */
-				token : ''
+				/** @property {String} csrf token  */
+				token: ''
 			};
 			return _data;
 		},
@@ -79,37 +94,43 @@
 			 * @description Установитрь данные статьи для редактирования
 			 * @param {Object} data @see mysql table fields pages
 			*/
-			setProductData(data) {
+			setQuestData(data) {
 				this.var1 = '';
 				this.var2 = '';
 				this.var3 = '';
 				this.var4 = '';
 				this.body = '';
 				this.price = 0;
-				this.varright = 0;
+				this.var_right = 0;
 				//Идентификатор редактируемого вопроса
 				this.id = 0;
 				this.hideFromProductlist = false;
 				
 				//Fix bug when edit the article more then one time...
 				Vue.nextTick(() => {
-					this.var1 = '';
-					this.var2 = '';
-					this.var3 = '';
-					this.var4 = '';
-					this.body = '';
-					this.price = 0;
-					this.varright = 0;
+					this.var1 = data.var1;
+					this.var2 = data.var2;
+					this.var3 = data.var3;
+					this.var4 = data.var4;
+					this.body = data.body;
+					this.price = data.price;
+					this.var_right = data.var_right;
 					//Идентификатор редактируемого вопроса
-					this.id = 0;
-					this.hideFromProductlist = false;
+					this.id = data.id;
+					//this.hideFromProductlist = data.is_hidden;
 				});
+			},
+			/** 
+			 * @param {Number} nId
+			*/
+			setId(nId) {
+				this.id = nId;
 			},
 			/**
 			 * @description уведомляем приложение, что данные изменились
 			 */
 			setDataChanges() {
-				//this.$root.$refs.portfolio.setDataChanges(true);
+				this.$root.$refs.kxmadmin.setDataChanges(true);
 			},
             /** 
              * @description Пробуем отправить форму
@@ -118,44 +139,61 @@
                 evt.preventDefault();
                 if (this.allRequiredFilled()) {
 					let formInputValidator = this.$root.formInputValidator;
-					this.id = this.$root.$refs.portfolio.getProductId();
-					this.url = $('#url').val();
-					if (!this._validateSga256Inputs(formInputValidator)) {
-						return false;
-					}
-					this.relatedArticles = JSON.stringify(this.tags);
-                    this.$root._post(
-                        this.$data,
-                        (data) => { this.onSuccessAddProduct(data, formInputValidator);},
-                        '/p/portfolio/psave.jn/',
-                        (a, b, c) => { this.onFailAddProduct(a, b, c);}
+					Rest._post(
+                        this.getWrappedData(),	//wrap fields
+                        (data) => { this.onSuccessSaveQuest(data, formInputValidator);},
+                        this.$webRoot + '/kxmquestsave.json',
+						(a, b, c) => { this.onFailSaveQuest(a, b, c);},
+						true
                     );
-                }
+				}
 			},
 			/**
-			 * @description Успешное добавление статьи
+			 * @description Оборачивает поля формы в префикс формы, чтобы Symfony могло стандартно обработать эту форму
+			 * @return {Object} _data;
 			*/
-			onSuccessAddProduct(data, formInputValidator){
-				if (!this.onFailAddProduct(data)) {
+			getWrappedData() {
+				let i, _data = {},
+				
+				exclude = {
+					counter: 1,
+					token: 1,
+					hideFromProductlist: 1
+				};
+
+				for (i in this.$data) {
+					if (! (i in exclude) ) {
+						_data[this.tokenPrefix + '[' + i + ']'] = this.$data[i];
+					}
+				}
+				/** @property {String} tokenPrefix имя массива формы, в котором должны быть переданы все поля */
+				_data[this.tokenPrefix + '[_token]'] = this.token;
+				return _data;
+			},
+			/**
+			 * @description Успешное сохранение вопроса
+			*/
+			onSuccessSaveQuest(data, formInputValidator){
+				if (!this.onFailSaveQuest(data)) {
 					return;
 				}
 				let id = parseInt(data.id);
 				if (data.status == 'ok' && id) {
-					this.$root.$refs.portfolio.setProductId(id);
-					$('#portfolioSaver').toast('show');
-					this.$root.$refs.portfolio.setDataChanges(false);
-					this.$root.$refs.portfolio.dataTable.search('').draw();
+					this.id = id;
+					this.$root.$refs.kxmadmin.setQuestId(id);
+					$('#Saver').toast('show');
+					this.$root.$refs.kxmadmin.setDataChanges(false);
+					this.$root.$refs.kxmadmin.dataTable.search('').draw();
 				}
 			},
 			/**
-			 * @description Неуспешное добавление статьи
+			 * @description Неуспешное добавление вопроса
 			 * @return Boolean false если существует data.status == 'error'
 			*/
-			onFailAddProduct(data, b, c){
+			onFailSaveQuest(data, b, c){
 				return this.$root.defaultFailSendFormListener(data,b, c);
 			},
 			/**
-			 * TODO
              * @description Проверяет, заполнены ли все необходимые поля
             */
 			allRequiredFilled(){
@@ -166,7 +204,7 @@
 					this.var4.length > 0 &&
 					this.body.length > 0 &&
 					parseInt(this.price) > 0 &&
-					parseInt(this.varright) > 0
+					parseInt(this.var_right) > 0
 				);
 			},
 			/**
@@ -183,10 +221,14 @@
 				this.setRelatedArticles();
 			},
 			/**
-			 * @param {String} sToken
+			 * @param {String} sToken Значение токена
+			 * @param {String} sTokenPrefix Значение префикса токена (все поля формы будут помещены в массив с этим именем)
+			 * 
 			*/
-			setFormToken(sToken) {
+			setFormToken(sToken, sTokenPrefix) {
 				this.token = sToken;
+				Rest._token = this.token;
+				this.tokenPrefix = sTokenPrefix;
 			}
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName

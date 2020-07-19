@@ -1,0 +1,13 @@
+.topbar #sidebarToggleTop:hover {
+    background-color: #eaecf4;
+}
+.topbar #sidebarToggleTop {
+    height: 2.5em;
+	width: 2.5em;
+	margin-top: 15px;
+	margin-left: 15px;
+}
+.btn-link:hover {
+    color: #224abe;
+    text-decoration: underline;
+}
