@@ -25,6 +25,7 @@ class Route {
 		$this->_trollkiller();
 		$this->_stat();
 		$this->_phd();
+		$this->_apipdf();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -82,6 +83,24 @@ class Route {
 		///ctrl/articles/task_recompilemainlists.php
 		
 	}
+	
+	/**
+	 * @description Маршруты для страницы /p/phd/
+	*/
+	protected function _apipdf()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/api/newpdftotext') {
+			$handler = $sCtrlDir . 'getnewpdftexttask.php';
+			require_once $handler;
+			$this->app = new GetNewPdfTextTask();
+		}
+	}
+	
 	/**
 	 * @description Маршруты для страницы /p/phd/
 	*/
