@@ -19,7 +19,7 @@ class GetNewPdfTextTask extends OpenApp {
 		foreach ($data as $row) {
 			$resultItem = [
 				'insurance_policy_request_id' => $row['insurance_policy_request_id'],
-				'links' => explode("\n", $row['links']);
+				'links' => explode("\n", $row['links'])
 			];
 			$result[] = $resultItem;
 		}

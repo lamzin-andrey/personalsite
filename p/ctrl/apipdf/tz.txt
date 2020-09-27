@@ -10,7 +10,7 @@
 api на сервере.
 Получив токен /p/api/pdftotext 
  сохраняет файл,
- добавляет в базу запись в pdftotext_tasks insurance_policy_request_id, links, state 1 - ждет ообработки, 2 - обработано, 3 - отправлено
+ добавляет в базу запись в pdftotext_tasks insurance_policy_request_id, links, state 1 - ждет обработки, 2 - обработано, 3 - отправлено
  висит с секундным интервалом, пока pdftotext_tasks.status не станет 2
  получив, отправляет в формате JSON
  
