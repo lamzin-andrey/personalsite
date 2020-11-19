@@ -18,6 +18,7 @@ $or = ' или ';
 $other_linux = ' установщик другой версии xampp для linux amd 64';
 $imagiktext = 'Вы также можете скачать imagick.so для этой версии xampp';
 $extensionstext = 'Вы также можете скачать расширения imagick.so, xdebug.so, memcached.so для PHP версии ';
+$extensionsOnlyText = 'Вы можете скачать расширения imagick.so, xdebug.so, memcached.so, amqp.so, redis.so для PHP версии ';
 
 if ( @$_SESSION["lang"] == "en/" ) {
 	$linktext = 'Extract this archive, and run the Setup.';
@@ -32,6 +33,8 @@ if ( @$_SESSION["lang"] == "en/" ) {
 	$other_linux = 'other xampp-linux-x64 installer';
 	$imagiktext = 'You also can download imagick.so for this php version';
 	$extensionstext = 'Also you can download extensions imagick.so, xdebug.so, memcached.so for PHP version ';
+	$extensionsOnlyText = 'You can download extensions imagick.so, xdebug.so, memcached.so, amqp.so, redis.so for PHP version ';
+	$lang = 'en/';
 }
 ?>
 
@@ -158,6 +161,36 @@ if ( @$_SESSION["lang"] == "en/" ) {
 </p>
 </div></div>
 
+
+
+<div>&nbsp;</div>
+<div class="couter tou2"><div class="mx-auto tin2 pt12">
+<p>
+<table><tbody>
+<tr>
+	<td colspan="2" align="right" class="text-success b">
+		Extensions for XAMPP 7.1.33 ((x)ubuntu 18.04 64 bit) 
+	</td>
+</tr>
+<tr>
+		<td>
+			<img src="<?=img('d.png')?>">
+		</td>
+		<td style="padding-bottom:5px">
+			<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.1.33_linux_ubuntu/<?php echo $lang ?>"><?php echo $extensionsOnlyText ?> 7.1.33</a>
+			<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+				<span class="py-1">
+					<img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 18.04"> 
+					<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 18.04"> 
+					<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 18.04"> 
+					<img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint 19.3"> 
+				</span>
+			</div>
+		</td>
+</tr>
+</tbody></table>
+</p>
+</div></div>
 
 <div>&nbsp;</div>
 <div class="couter tou2"><div class="mx-auto tin2 pt12">
