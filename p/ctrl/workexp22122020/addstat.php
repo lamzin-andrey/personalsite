@@ -13,9 +13,9 @@ class AddStat extends OpenApp {
 		
 		$this->ireq('userId', 'user_id');
 		$this->tsreq('source');
-		$this->ireq('has_mark_model');
-		$this->ireq('has_date_expired');
-		$this->ireq('estimation_has_mark_model');
+		$this->tsreq('has_mark_model');
+		$this->tsreq('has_date_expired');
+		$this->tsreq('estimation_has_mark_model');
 		
 		$errors = [];
 		
@@ -23,6 +23,20 @@ class AddStat extends OpenApp {
 		if ($this->_validate($errors)) {
 			$this->request['created_time'] = now();
 			$this->request['updated_time'] = now();
+			
+			
+			if ( strval($this->request['has_mark_model']) == '') {
+				$this->request['has_mark_model'] = null;
+			}
+			
+			if ( strval($this->request['has_date_expired']) == '') {
+				$this->request['has_date_expired'] = null;
+			}
+			
+			if ( strval($this->request['estimation_has_mark_model']) == '') {
+				$this->request['estimation_has_mark_model'] = null;
+			}
+			
 			$sql = $this->insertQuery([]);
 			
 			$newId = query($sql);

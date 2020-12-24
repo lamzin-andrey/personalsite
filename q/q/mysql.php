@@ -178,8 +178,13 @@ function db_createInsertQuery($data, $tableName, $config = array(), &$options = 
             } else {
                 $fields[] = '`'. $config[$key] .'`';
             }
-            db_safeString($item);
-            $values[] = "'{$item}'";
+            if (!is_null($item)) {
+				db_safeString($item);
+				$values[] = "'{$item}'";
+			} else {
+				$values[] = 'NULL';
+			}
+            
             $count++;
         } else {
 			db_safeString($item);
