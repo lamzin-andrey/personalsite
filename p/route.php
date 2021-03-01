@@ -73,6 +73,11 @@ class Route {
 			$this->app = new Logout();
 		}
 		
+		if ($baseUrl == '/p/ua/') {
+			echo $_SERVER['HTTP_USER_AGENT'];
+			die;
+		}
+		
 		
 		//временно, пока в консоли php 5
 		if ($baseUrl == '/p/task_recompilemainlists/') {
