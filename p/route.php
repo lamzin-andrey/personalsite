@@ -74,7 +74,7 @@ class Route {
 		}
 		
 		if ($baseUrl == '/p/ua/') {
-			echo '<!DOCTYPE html><meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no">' $_SERVER['HTTP_USER_AGENT'];
+			echo '<!DOCTYPE html><meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no">' .  $_SERVER['HTTP_USER_AGENT'];
 			die;
 		}
 		
