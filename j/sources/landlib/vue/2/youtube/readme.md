@@ -17,7 +17,7 @@ Vue.component('youtube', require('../landlib/vue/2/youtube/youtube.vue'));
 
 ## Usage 
 ```html
-<youtube video="https://www.youtube.com/watch?v=mFlrc16xjik" img="/i/relaxdemo.jpg" autoplay="false"></youtube>
+<youtube video="https://www.youtube.com/watch?v=mFlrc16xjik" img="/i/relaxdemo.jpg" autoplay="false" imageclass="mw-100"></youtube>
 ```
 
 In the img attribute you must specify the path to the image that will be displayed instead of the video.
@@ -58,6 +58,10 @@ This value for allowfullscreen attribute youtube iframe. Default "allowfullscree
 
 This value for frameborder attribute youtube iframe. Default "0".
 
+#### imageclass attribute
+
+This value for img.`class` attribute. Default "mw-100".
+
 # Ru
 
 ## Что это
@@ -78,7 +82,7 @@ Vue.component('youtube', require('../landlib/vue/2/youtube/youtube.vue'));
 ## Использование
 
 ```html
-<youtube video="https://www.youtube.com/watch?v=mFlrc16xjik" img="/i/relaxdemo.jpg" autoplay="false"></youtube>
+<youtube video="https://www.youtube.com/watch?v=mFlrc16xjik" img="/i/relaxdemo.jpg" autoplay="false" imageclass="mw-100"></youtube>
 ```
 
 В атрибуте img вы должны указатьпуть к изображению, которое будет показываться вместо видео на сайте, пока пользователь по нему не кликнет.
@@ -118,3 +122,7 @@ Vue.component('youtube', require('../landlib/vue/2/youtube/youtube.vue'));
 #### Атрибут frameborder
 
 Это значение для атрибута frameborder youtube iframe. По умолчанию "0".
+
+#### Атрибут imageclass
+
+Это значение для атрибута img.class. По умолчанию "mw-100".

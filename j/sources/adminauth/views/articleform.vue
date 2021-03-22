@@ -4,7 +4,10 @@
 		<inputb4 v-model="title" @input="setDataChanges" type="text" :placeholder="$t('app.Title')" :label="$t('app.Title')" id="title" validators="'required'"></inputb4>
         <inputb4 v-model="url"  @input="setDataChanges"  type="url" :label="$t('app.Url')" :placeholder="$t('app.Url')" id="url" ></inputb4>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
-        <textareab4 v-model="body" ref="articlebody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
+        <textareab4 v-model="body" ref="articlebody" @input="setDataChanges"
+             @keydown="onKeyDown"
+             :counter="counter"
+             :label="$t('app.Content')"  id="content_block" rows="12" validators="'required'"></textareab4>
         <div class="mb-3">
 			<inputfileb4 
 						v-model="poster"
@@ -389,7 +392,14 @@
 				} else {
 					window.LandLibDom.liveTransliteSetWasHandEdit(key, false);
 				}
-			}
+			},
+            onKeyDown(evt) {
+                if (evt.ctrlKey && evt.keyCode == 83) {
+                    evt.preventDefault();
+                    this.onSubmit(evt);
+                }
+                return true;
+            }
         }, //end methods
         //вызывается после data, поля из data видны "напрямую" как this.fieldName
         mounted() {

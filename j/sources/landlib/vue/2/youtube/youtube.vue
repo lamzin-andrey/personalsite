@@ -1,6 +1,6 @@
 <template>
 	<div>
-   		<img v-if="noclicked" :src="img" @click="onClickGetVideo" :video="video" :autoplay="autoplay" style="cursor:pointer" :width="width" :height="height">
+   		<img v-if="noclicked" :src="img" @click="onClickGetVideo" :video="video" :autoplay="autoplay" style="cursor:pointer" :width="width" :height="height" :class="imageclass">
 		<youframe v-if="!noclicked" :src="compSrc" :autoplay="compAutoplay" 
 			:allowfullscreen="allowfullscreen" 
 			:width="width" 
@@ -35,7 +35,11 @@
 				type:String,
 				default: 'true'
 			},
-
+            // img.class calue
+            imageclass: {
+                type:String,
+				default: 'mw-100'
+            },
 			//Youtube iframe attributes
 			allowfullscreen: {
 				type:String,

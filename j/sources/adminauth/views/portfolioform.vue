@@ -13,9 +13,9 @@
 		</div>
         <inputb4 v-model="heading" @input="setDataChanges" id="heading" type="text" :label="$t('app.Heading')" :placeholder="$t('app.Heading')"  validators="'required'"></inputb4>
         
-		<textareab4 v-model="shortdesc" ref="portfolioshortdesc" @input="setDataChanges" :counter="counter" :label="$t('app.ShortDesc')"  id="content_preview" rows="12" validators="'required'"></textareab4>
+		<textareab4 @keydown="onKeyDown" v-model="shortdesc" ref="portfolioshortdesc" @input="setDataChanges" :counter="counter" :label="$t('app.ShortDesc')"  id="content_preview" rows="12" validators="'required'"></textareab4>
 
-		<textareab4 v-model="body" ref="portfoliobody" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12"></textareab4>
+		<textareab4 v-model="body" ref="portfoliobody" @keydown="onKeyDown" @input="setDataChanges" :counter="counter" :label="$t('app.Content')"  id="content_block" rows="12"></textareab4>
         <div class="mb-3">
 			<!--  тут путь не ошибочен, это вполне подходит на 04 08 2019 -->
 			<inputfileb4 
@@ -514,6 +514,17 @@
                     );
                 }
 			},
+            /**
+			 * @description Сохранение файла в поле ввода
+			*/
+            onKeyDown(evt){
+                if (evt.ctrlKey && evt.keyCode == 83) {
+                    evt.preventDefault();
+                    this.onSubmit(evt);
+                }
+
+                return true;
+            },
 			/**
 			 * @description Клик на ссылке удалить файл sha256
 			*/

@@ -10,21 +10,21 @@
 		"test": "echo 'none'"
 	},
 	"devDependencies": {
-		"cross-env": "^5.2.0",
-		"jquery": "^3.4.1",
-		"laravel-mix": "^5.0.1",
+		"cross-env": "^5.2.1",
+		"jquery": "^3.6.0",
+		"laravel-mix": "^5.0.9",
 		"laravel-slug": "^1.0.0",
-		"vue": "^2.6.11",
+		"vue": "^2.6.12",
 		"vue-i18n": "^7.0.0",
-		"vue-router": "^3.0.1",
-		"vue-template-compiler": "^2.6.11"
+		"vue-router": "^3.5.1",
+		"vue-template-compiler": "^2.6.12"
 	},
 	"dependencies": {
 		"@johmun/vue-tags-input": "^2.1.0",
-		"datatables.net-bs4": "^1.10.19",
-		"datatables.net-rowreorder-bs4": "^1.2.5",
+		"datatables.net-bs4": "^1.10.24",
+		"datatables.net-rowreorder-bs4": "^1.2.7",
 		"popper": "^1.0.1",
-		"popper.js": "^1.15.0",
+		"popper.js": "^1.16.1",
 		"vue-backtotop": "^1.6.1",
 		"vue-context-menu": "^2.0.6"
 	}

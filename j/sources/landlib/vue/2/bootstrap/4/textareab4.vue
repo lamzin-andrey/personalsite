@@ -4,6 +4,8 @@
 		<textarea 
 			:value="value"
 			@input="$emit('input', $event.target.value); onInput($event);"
+			@keydown="$emit('keydown', $event);"
+			@keyup="$emit('keyup', $event);"
 			:placeholder="placeholder"
 			v-b421validators="validators"
 			:rows="rows"
