@@ -1,3 +1,10 @@
+var D = document,
+W = window, S = String;
+function e(i) {
+	if (i && i.tagName || D == i) return i;
+	return D.getElementById(i);
+}
+
 W.addEventListener('load', onInit);
 
 function onInit() {

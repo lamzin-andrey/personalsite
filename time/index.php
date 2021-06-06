@@ -13,8 +13,8 @@ if (isset($_GET['cbapp']) && true == $_GET['cbapp']) {
 <body>
 	<div class="text-center" id="hTimeview"><?php echo date('d.m.Y H:i:s'); ?></div>
 </body>
-<script src="j/micron.js"></script>
-<script src="j/php.js"></script>
+<!--script src="j/php.js"></script-->
+<script src="j/phpdatetime.js"></script>
 <script src="j/0.js"></script>
 </html>
 
