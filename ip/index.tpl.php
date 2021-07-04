@@ -14,6 +14,9 @@
 			<div class="val"><?=utils_cp1251($country)?></div>
 			<div class="title">Город:</div>
 			<div class="val"><?=utils_cp1251($city)?></div>
+			<div class="mt-3 text-center">
+				<a class="button" href="/blog/">В блог</a>
+			</div>
 		</div>
 	</body>
 </html>

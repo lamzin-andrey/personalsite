@@ -31,3 +31,20 @@ html, body {
 .val {
 	border-bottom: 1px solid black;
 }
+.mt-3 {
+	margin-top:1.5rem;
+}
+.button {
+	display: inline-block;
+	padding: 0px 4px;
+	text-decoration:none;
+	min-height: 32px;
+	background-color: #5881c1;
+	color:white;
+	border: none;
+	font-weight:bold;
+	font-family:Arial;
+	min-height: 20px;
+	line-height: 28px;
+	border-radius:4px;
+}
