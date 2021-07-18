@@ -10,6 +10,28 @@ body.f100, html.f100 {
 .tc {
 	text-align:center;
 }
+.tr {
+	text-align:right;
+}
 .d-none {
 	display:none;
+}
+input[type=text],input[type=password],input[type=email],input[type=button] {
+	min-height:32px;
+}
+input[type=text],input[type=password], input[type=email], {
+	width:77%;
+}
+.iwrapper, .cbwrapper {
+	margin:8px 0px
+}
+.btnr {
+	margin-right:24px;
+}
+.regbtn {
+	width: 80%;
+}
+
+.mt-3 {
+	margin-top: 1.0em;
 }

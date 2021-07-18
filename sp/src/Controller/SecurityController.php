@@ -101,7 +101,11 @@ class SecurityController extends AppBaseController
 					$oEm = $this->getDoctrine()->getManager();
 					$oEm->persist($oUser);
 					$oEm->flush();
-					return $this->redirectToRoute('login');
+                    if (!$oRequest->isXmlHttpRequest()) {
+                        return $this->redirectToRoute('login');
+                    } else {
+                        return $this->_json(['success' => true]);
+                    }
 				}
 
 			}
@@ -110,7 +114,15 @@ class SecurityController extends AppBaseController
 		$aData['form'] = $oForm->createView();
 		$aData['sFormBgImageCss'] = 'bg-register-image';
 		$aData['bEnableChooseSiteVersionButton'] = true;
-		return $this->render('security/register.html.twig', $aData);
+
+
+		if (!$oRequest->isXmlHttpRequest()) {
+            return $this->render('security/register.html.twig', $aData);
+        } else {
+            $errors = $oAppService->getFormErrorsAsArray($oForm);
+            return $this->_json(['success' => false, 'errors' => $errors]);
+        }
+
 	}
 
 	/**
@@ -166,6 +178,7 @@ class SecurityController extends AppBaseController
 					$oEm->flush();
 
 					$siteAdminEmail = $this->getParameter('app.siteAdminEmail');
+
 					$subject = 'Восстановление пароля в сервисе контроля времени';
 					$sHtml = '<p>Ваш забытый пароль ' . $sPasswordRaw . '</p>';
 					$oMessage = new SimpleMail();

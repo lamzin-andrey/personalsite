@@ -328,3 +328,18 @@ function ex(data, i, j) {
   data[i] = data[j];
   data[j] = b;
 }
+
+function array_values(o) {
+	if (o instanceof Array) {
+		return o;
+	}
+	if (o instanceof Object) {
+		var r = [], i;
+		for (i in o) {
+			r.push(o[i]);
+		}
+		return r;
+	}
+	
+	return [];
+}

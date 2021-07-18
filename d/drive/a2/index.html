@@ -9,12 +9,12 @@
 	</head>
 	<body class="f100">
 		<!-- screen first (get authenticate state) -->
-		<div class="tc screen" id="hWaitScreeh">
+		<div class="tc screen" id="hWaitScreen">
 			<img src="./i/u.png" id="im">
 			<div><i>Please wait</i></div>
 		</div>
 		<!-- screen catalogs -->
-		<div class="tc screen d-none" id="hCatalogScreeh">
+		<div class="tc screen d-none" id="hCatalogScreen">
 			Calalog list and design and etc
 		</div>
 		<!-- screen settings dialog -->
@@ -23,15 +23,95 @@
 		
 		<!-- No, let will many html files!!-->
 		<!-- screen auth -->
-		<div class="tc screen d-none" id="hAuthScreeh">
-			Auth screen
+		<div class="tc screen d-none" id="hAuthScreen">
+			<div id="loginForm">
+				<div class="iwrapper">
+					<input type="hidden" id="apptype" value="drv">
+					<input type="hidden" id="_csrf_token" value="x">
+					<input type="text" id="_username" placeholder="Login">
+				</div>
+				<div class="iwrapper">
+					<input type="password" id="_password" placeholder="Password">
+				</div>
+				<div class="cbwrapper">
+					<input type="checkbox" id="_remember_me" >
+					<label for="_remember_me">Remember me</label>
+				</div>
+			</div>
+			<div class="tr">
+				<input type="button" id="bLogin" value="Sign in" class="btnr">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowRegisterScreen" value="Sign up" class="regbtn">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowResetScreen" value="Reset password" class="regbtn">
+			</div>
 		</div>
-		<div class="tc screen d-none" id="hRegisterScreeh">
-			Register screen
+		<div class="tc screen d-none" id="hRegisterScreen">
+			<div id="registerForm">
+				<div class="iwrapper">
+					<input type="text" id="register_form[name]" placeholder="First name">
+				</div>
+				<div class="iwrapper">
+					<input type="text" id="register_form[surname]" placeholder="Last name">
+				</div>
+				<div class="iwrapper">
+					<input type="email" id="register_form[email]" placeholder="E-mail">
+				</div>
+				
+				<div class="iwrapper">
+					<input type="hidden" id="apptype" value="drv">
+					<input type="hidden" id="register_form[_token]" value="x">
+					<input type="text" id="register_form[username]" placeholder="Login">
+				</div>
+				<div class="iwrapper">
+					<input type="password" id="register_form[passwordRaw]" placeholder="Password">
+				</div>
+				<div class="iwrapper">
+					<input type="password" id="register_form[passwordRepeat]" placeholder="Password repeat">
+				</div>
+				<div class="cbwrapper">
+					<input type="checkbox" id="register_form[agree]" >
+					<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">Политикой конфендициальности</span></a></label>
+				</div>
+				<div class="cbwrapper">
+					<input type="checkbox" id="register_form[isSubscribed]" >
+					<label for="register_form[isSubscribed]">
+						Я согласен получать email рассылку от Ламзина Андрея Николаевича, вдруг он ещё что полезное напишет
+					</label>
+				</div>
+			</div>
+			<div class="tr">
+				<input type="button" id="bRegisterNow" value="Register now" class="btnr">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen" value="Goto Auth" class="regbtn">
+			</div>
+		</div>
+		
+		<div class="tc screen d-none" id="hResetScreen">
+			<div id="resetForm">
+				
+				<div class="iwrapper">
+					<input type="hidden" id="apptype" value="drv">
+					<input type="hidden" id="reset_password_form[_token]" value="x">
+					<input type="email" id="reset_password_form[email]" placeholder="E-mail">
+				</div>
+				
+			</div>
+			<div class="tr">
+				<input type="button" id="bReset" value="Reset password" class="btnr">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen2" value="Goto Auth" class="regbtn">
+			</div>
 		</div>
 		
 		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
 		<script src="/j/sources/landlib/net/rest.es5.js"></script>
+		
+		<script src="./j/auth.js"></script>
 		<script src="./j/u.js"></script>
 	</body>
 </html>

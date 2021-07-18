@@ -3,6 +3,11 @@ window.Rest = {
 	 * @property {String} csrf token, set it from app
 	*/
 	_token : '',
+	
+	/**
+	 * @property {String} csrf token name, set it from app
+	*/
+	_token_name : '_token',
 	/**
 	 * @property {String} _lang
 	*/
@@ -18,7 +23,7 @@ window.Rest = {
     _post:function(data, onSuccess, url, onFail) {
         var t = this._getToken();
         if (t) {
-            data._token = t;
+            data[this._token_name] = t;
             this._restreq('post', data, onSuccess, url, onFail)
         }
 	},
@@ -78,7 +83,7 @@ window.Rest = {
 	 * @return String
      */
     _getToken:function() {
-        return this._token;
+        return this[this._token_name];
 	},
 	/**
      * @description ajax request (FormData).
@@ -94,7 +99,7 @@ window.Rest = {
         } else {
             url = this.root + url;
         }
-        if (!onFail) {
+        if (!onFail && window.defaultFail) {
             onFail = defaultFail;
         }
         /*switch (method) {
@@ -133,6 +138,8 @@ window.Rest = {
         //console.log('Open...');
         //установить заголовок
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        // xhr.setRequestHeader('Content-Type', 'application/json');
         //обработать ответ
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {

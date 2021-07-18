@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\PhdMessages;
 use App\Entity\PhdUsers;
 use App\Form\PsdUploadFormType;
+use App\Form\RegisterFormType;
+use App\Form\ResetPasswordFormType;
 use App\Service\AppService;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -35,7 +38,7 @@ class UsbController extends AbstractController
 	public function driveCheckAuthStateAction(Request $oRequest,
                                               TranslatorInterface $t,
                                               AppService $oAppService,
-                                              CsrfTokenManager $csrfTokenManager)
+                                              CsrfTokenManagerInterface $csrfTokenManager)
 	{
 	    // $aData['errors'] = $oAppService->getFormErrorsAsArray($oForm);
         // $this->_json($aData)
@@ -47,16 +50,22 @@ class UsbController extends AbstractController
 		    $user = $this->getUser();
 		    if (is_null($user)) {
                 $csrfToken = $csrfTokenManager
-                    ? $oCsrfTokenManager->getToken('authenticate')->getValue()
+                    ? $csrfTokenManager->getToken('authenticate')->getValue()
                     : null;
+                $form = $this->createForm(get_class(new RegisterFormType()));
+                $csrfRegToken = $oAppService->getFormTokenValue($form);
 		        $data = [
 		            'auth' => false,
-                    'token' => $csrfToken
+                    'token' => $csrfToken,
+                    'token_reg' => $csrfRegToken
                 ];
             } else {
-
+                $data = [
+                    'auth' => true,
+                    'uid' => $user->getId()
+                ];
             }
-			return $this->_json(['nopost' => 1]);
+			return $this->_json($data);
 		}
 	}
 
