@@ -98,6 +98,9 @@ class SecurityController extends AppBaseController
 					//Success
 					$sPassword = $oEncoder->encodePassword($oUser, $sPassword);
 					$oUser->setPassword($sPassword);
+
+					$this->setRole($oRequest, $oUser);
+
 					$oEm = $this->getDoctrine()->getManager();
 					$oEm->persist($oUser);
 					$oEm->flush();
@@ -161,6 +164,7 @@ class SecurityController extends AppBaseController
 		$aData['isResetform'] = 0;
 		$aData['bEnableChooseSiteVersionButton'] = true;
 		$aData['form'] = $oForm->createView();
+		$ajaxData = [];
 		if ($oRequest->getMethod() == 'POST') {
 			$oForm->handleRequest($oRequest);
 			if ($oForm->isValid()) {
@@ -179,7 +183,10 @@ class SecurityController extends AppBaseController
 
 					$siteAdminEmail = $this->getParameter('app.siteAdminEmail');
 
-					$subject = 'Восстановление пароля в сервисе контроля времени';
+					$subject = $t->trans('Password recovery in the Time Comtrol Service', [], 'loginforms');
+					if (User::ROLE_WEB_DRIVE_USER == $oUser->getRole()) {
+                        $subject = $t->trans('Password recovery for your the Web-USB', [], 'loginforms');
+                    }
 					$sHtml = '<p>Ваш забытый пароль ' . $sPasswordRaw . '</p>';
 					$oMessage = new SimpleMail();
 					$oMessage->setSubject($subject);
@@ -187,19 +194,31 @@ class SecurityController extends AppBaseController
 					$oMessage->setTo($sEmail);
 					$oMessage->setBody($sHtml, 'text/html', 'UTF-8');
 					$bSuccess = $oMessage->send();
+                    $ajaxData['success'] = false;
+                    $ajaxData['token'] = $oAppService->getFormTokenValue($oForm);
 					if ($bSuccess) {
 						$aData['isEmailWasFound'] = 1;
 						$a = explode('@', $sEmail);
-						$aData['emailHostLink'] = 'https://' . $a[1];
+
+                        $ajaxData['emailHostLink'] = $aData['emailHostLink'] = 'https://' . $a[1];
+                        $ajaxData['success'] = true;
+                        $ajaxData['message'] = $t->trans('send reset success', [], 'loginforms');
 					} else {
 						$this->addFlash('notice', $t->trans('Unable send email'));
+                        $ajaxData['message'] = $t->trans('Unable send email');
 					}
 
 				} else {
 					$this->addFlash('notice', $t->trans('User with email %email% not found', null, ['%email%' => $sEmail]));
+                    $ajaxData['message'] = $t->trans('User with email %email% not found', null, ['%email%' => $sEmail]);
 				}
 			}
 		}
+
+		if ($oRequest->isXmlHttpRequest()) {
+            return $this->_json($ajaxData);
+        }
+
 		return $this->render('security/reset.html.twig', $aData);
 	}
 	/**
@@ -245,5 +264,20 @@ class SecurityController extends AppBaseController
 		}
 
 		return $str;
+	}
+
+	/**
+	 * Устанавливает роль пользователя при необходимости
+	 * @return
+	*/
+	protected function setRole(Request $request, User $user) : void
+	{
+	    $appType = $request->request->get('apptype');
+	    switch ($appType) {
+            case 'drv':
+                $user->setRole(User::ROLE_WEB_DRIVE_USER);
+                break;
+        }
+	    return;
 	}
 }

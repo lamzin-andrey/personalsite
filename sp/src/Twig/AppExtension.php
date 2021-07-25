@@ -121,7 +121,7 @@ class AppExtension extends \Twig\Extension\AbstractExtension
 	 * @param string $href
 	 * @param string $text
 	 * @param string $translationDomain = 'sidebar'
-	 * @param array $access = [2] кодлы допустимых уровней доступа
+	 * @param array $access = [2] коды допустимых уровней доступа
 	 * @return string
 	*/
 	public function drawMenuItem(string $href, string $text, string $translationDomain = 'sidebar', array $access = [2]) : string

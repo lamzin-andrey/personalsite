@@ -52,12 +52,15 @@ class UsbController extends AbstractController
                 $csrfToken = $csrfTokenManager
                     ? $csrfTokenManager->getToken('authenticate')->getValue()
                     : null;
-                $form = $this->createForm(get_class(new RegisterFormType()));
-                $csrfRegToken = $oAppService->getFormTokenValue($form);
+                $formRegister = $this->createForm(get_class(new RegisterFormType()));
+                $csrfRegToken = $oAppService->getFormTokenValue($formRegister);
+                $formReset = $this->createForm(ResetPasswordFormType::class);
+                $csrfResetToken = $oAppService->getFormTokenValue($formReset);
 		        $data = [
 		            'auth' => false,
                     'token' => $csrfToken,
-                    'token_reg' => $csrfRegToken
+                    'token_reg' => $csrfRegToken,
+                    'token_res' => $csrfResetToken
                 ];
             } else {
                 $data = [

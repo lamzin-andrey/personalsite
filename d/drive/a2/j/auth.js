@@ -7,7 +7,18 @@ function setListenersAuth() {
 	e('bShowRegisterScreen').onclick = onClickShowRegister;
 	e('bShowResetScreen').onclick = onClickShowReset;
 	e('bShowAuthScreen').onclick = onClickShowAuth;
+	e('bShowAuthScreen2').onclick = onClickShowAuth;
+	e('bReset').onclick = onClickResetForm;
 	e('bRegisterNow').onclick = onClickRegisterNow;
+}
+
+function onClickResetForm() {
+	var data = _map('resetForm', 1),
+		tokenName = 'reset_password_form[_token]';
+	Rest[tokenName] = data[tokenName];
+	Rest._token_name = tokenName;
+	// showScreen('hWaitScreen');
+	Rest._post(data, onSuccessReset, '/sp/public/reset', onFailSendReset);
 }
 
 function onClickShowRegister() {
@@ -31,12 +42,23 @@ function onClickRegisterNow() {
 	Rest._post(data, onSuccessRegister, '/sp/public/register', onFailSendRegister);
 }
 
+function onSuccessReset(data) {
+	if (!onFailSendReset(data)) {
+		return;
+	}
+	if (data.success === true) {
+		showScreen('hAuthScreen');
+		showSuccess(data.message + '<a href="' + data.emailHostLink + '" target="_blank">Email</a>');
+	}
+}
+
 function onSuccessRegister(data) {
 	if (!onFailSendRegister(data)) {
 		return;
 	}
 	if (data.success === true) {
-		showScreen('hCatalogScreen');
+		showScreen('hAuthScreen');
+		showSuccess(l('Registration success, we can login'));
 	}
 }
 
@@ -64,6 +86,12 @@ function onFailSendLogin(data, responseText, info, xhr) {
 
 function onFailSendRegister(data, responseText, info, xhr) {
 	showScreen('hRegisterScreen');
+	return authDefaultResponseError(data, responseText, info, xhr);
+}
+
+function onFailSendReset(data, responseText, info, xhr) {
+	e('reset_password_form[_token]').value = data.token;
+	showScreen('hResetScreen');
 	return authDefaultResponseError(data, responseText, info, xhr);
 }
 

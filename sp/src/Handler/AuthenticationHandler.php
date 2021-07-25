@@ -49,7 +49,6 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     {
 
         if ($request->isXmlHttpRequest()) {
-			// $url = $this->router->generate('fos_user_profile_show');
             return new JsonResponse(['success' => true]);
         }
         else {

@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints AS Assert;
  */
 class Ausers implements UserInterface
 {
+    const ROLE_USER = 0;
+    const ROLE_MODERATOR = 1;
+    const ROLE_ADMIN = 2;
+    const ROLE_ADMIN_PSD_TO_HTML = 3;
+    const ROLE_WEB_DRIVE_USER = 4;
     /**
      * @var int
      *
@@ -125,7 +130,7 @@ class Ausers implements UserInterface
     /**
      * @var int|null
      *
-     * @ORM\Column(name="role", type="integer", nullable=true, options={"comment"="Роль пользователя 0 - пользователь 1 - модератор  2 - админ 3 - админ раздела конвертация psd в html+css", "default"="0"})
+     * @ORM\Column(name="role", type="integer", nullable=true, options={"comment"="Роль пользователя 0 - пользователь 1 - модератор  2 - админ 3 - админ раздела конвертация psd в html+css 4 - пользователь web-usb", "default"="0"})
      */
     private $role = '0';
 

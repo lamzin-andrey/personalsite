@@ -149,8 +149,8 @@ window.Rest = {
                         var response = JSON.parse(String(xhr.responseText));
                         onSuccess(response, xhr);
                         return;
-                    } catch(e) {
-                        console.log(e);
+                    } catch(err) {
+                        console.log(err);
                         error.state = 1;
                         error.info = 'Fail parse JSON';
                     }

@@ -343,3 +343,7 @@ function array_values(o) {
 	
 	return [];
 }
+// Temporary
+function l(s) {
+	return s;
+}

@@ -42,3 +42,5 @@ Reset password: Сбросить пароль. Второй уровень.
 forgotPasswordSmallText: Такое, наверное, бывает... &copy; Просто введите свой адрес электронной почты ниже, и я вышлю вам ссылку для сброса пароля.
 send reset success: Новый пароль успешно отправлен вам на
 Logout: Выход
+Password recovery in the Time Comtrol Service: Восстановление пароля в сервисе контроля времени
+Password recovery for your the Web-USB: Пароль от вашей WEB-флешки

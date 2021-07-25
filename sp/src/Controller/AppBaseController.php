@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\AppService;
 class AppBaseController extends AbstractController
 {
-	/** @property \App\Service\AppService $_oAppService */
+	/** @var \App\Service\AppService $_oAppService */
 	protected $_oAppService;
 
 

@@ -23,6 +23,7 @@ function onSuccessGetAuthState(data) {
 		showScreen('hAuthScreen');
 		e('_csrf_token').value = data.token;
 		e('register_form[_token]').value = data.token_reg;
+		e('reset_password_form[_token]').value = data.token_res;
 		return;
 	}
 	showScreen('hCatalogScreen');
@@ -111,4 +112,8 @@ function  _map(id, read) {
 	}
 	
 	return data;
+}
+
+function showSuccess(s) {
+	alert(s);
 }
