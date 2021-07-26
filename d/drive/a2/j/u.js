@@ -1,3 +1,4 @@
+window.root = '/d/drive/a2';
 window.onload = initApp;
 function initApp() {
 	// styling
@@ -6,6 +7,7 @@ function initApp() {
 	stl('im', 'margin-top', h + 'px');
 	
 	initAuth();
+	initMainMenuBack();
 	
 	getAuthState();
 }
@@ -27,6 +29,7 @@ function onSuccessGetAuthState(data) {
 		return;
 	}
 	showScreen('hCatalogScreen');
+	mainMenuBackPush();
 }
 
 function showScreen(showScreenId) {

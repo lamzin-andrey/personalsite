@@ -1,4 +1,5 @@
 // @depends u.js
+// @depends mmb.js
 function initAuth() {
 	setListenersAuth();
 }
@@ -76,6 +77,7 @@ function onSuccessLogin(data) {
 	}
 	if (data.success === true) {
 		showScreen('hCatalogScreen');
+		mainMenuBackPush();
 	}
 }
 
