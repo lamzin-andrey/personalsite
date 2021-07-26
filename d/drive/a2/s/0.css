@@ -116,6 +116,29 @@ input[type=text],input[type=password], input[type=email], {
 	margin-top:52px;
 	/*background-color:black;*/
 }
+/* empty */
+.fl.empty {
+	background-image: url('../i/empty-icon.png');
+	height:240px;
+	width:100%;
+	background-position-x: center;
+	background-position-y: 18px;
+	background-repeat: no-repeat;
+	position: relative;
+}
+.fl.empty .empty-label {
+	bottom: 71px;
+	width: 100%;
+	position: absolute;
+	color:gray;
+	font-weight:bold;
+	font-family:Arial;
+	display:block;
+}
+.empty-label {
+	display:none;
+}
+
 .it {
 	border-bottom: 1px solid gray;
 }
