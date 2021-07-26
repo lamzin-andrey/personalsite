@@ -81,9 +81,9 @@ input[type=text],input[type=password], input[type=email], {
 .b-home {
 	background-image: url('../i/home-bg.png');
 	background-size:cover;
-	width:82px;
-	height:31px;
-	line-height:31px;
+	width:85px;
+	height:33px;
+	line-height:33px;
 	padding-left: 12px;
 	font-size:13px;
 	font-family:arial;
@@ -94,7 +94,7 @@ input[type=text],input[type=password], input[type=email], {
 	float:left;
 	background-image: url('../i/up_button_bg.png');
 	background-size:cover;
-	width:81px;
+	width:79px;
 	height:33px;
 	line-height:31px;
 	padding-left: 12px;
@@ -106,9 +106,9 @@ input[type=text],input[type=password], input[type=email], {
 	font-size:12px;
 	font-family:arial;
 	font-weight:1000;
-	max-height:12px;
+	height:16px;
 	white-space: nowrap;
-	background-color: black;
+	background-color: #141431;
 }
 
 /** files list */
