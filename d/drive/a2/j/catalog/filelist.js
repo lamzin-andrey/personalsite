@@ -41,7 +41,7 @@ window.fileList = {
 		
 	},
 	
-	clear() {
+	clear:function() {
 		addClass(e(this.id), 'empty');
 		var ls = cs(this.id, 'it'), i, sZ = sz(ls), j;
 		for (i = 0; i < sZ; i++) {
