@@ -7,8 +7,14 @@ body {
 body.f100, html.f100 {
 	height:100%;
 }
+.hide {
+	display: none;
+}
 .cl {
 	clear:both;
+}
+.left {
+	float:left;
 }
 .tc {
 	text-align:center;
@@ -158,3 +164,25 @@ input[type=text],input[type=password], input[type=email], {
 	font-family:arial;
 	font-weight:1000;
 }
+
+/** bottom menu */
+.botMenuWr {
+	position: fixed;
+	bottom:0px;
+	z-index:4;
+	background-image: url('../i/bot-menu.jpg');
+	width:100%;
+	height:105px;
+}
+.bmb {
+	/*background-color: red;*/
+	width:78px;
+	height: 49px;
+	margin:1px;
+	font-family: Arial;
+	font-size: 10px;
+	font-weight: bold;
+	text-align:center;
+	margin-top:36px;
+}
+/** end bottom menu */

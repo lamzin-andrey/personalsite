@@ -72,6 +72,25 @@ class UsbController extends AbstractController
 		}
 	}
 
+    /**
+     * @Route("/driveaddcatalog.json", name="driveaddcatalog")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveAddCatalogAction(Request $request,
+                                              TranslatorInterface $t,
+                                              AppService $oAppService,
+                                              CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        // TODO
+        return $this->_json([
+            'name' => $request->request->get('name', '')
+        ]);
+
+    }
+
     private function _json($aData)
 	{
 		if (!isset($aData['status'])) {
