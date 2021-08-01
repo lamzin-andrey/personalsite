@@ -26,7 +26,12 @@ function onSuccessAddCatalog(data) {
 	if (!onFailAddCatalog(data)) {
 		return;
 	}
-	fileList.addCatalog(data.name, data.current);
+	alert(data.name);
+	try {
+		fileList.addCatalog(data.name, /*data.current*/'/');
+	} catch(err) {
+		alert(err);
+	}
 }
 
 
