@@ -15,6 +15,7 @@ function initMainMenu() {
 
 function onClickMainAddCatalog(evt) {
 	evt.preventDefault();
+	addClass('hBotMenu', 'hide');
 	var s = prompt(l('Enter catalog name'), l('New catalog'));
 	Rest._token = e('_csrf_token').value;
 	Rest._post({name: s}, onSuccessAddCatalog, window.br + '/driveaddcatalog.json', onFailAddCatalog);
@@ -26,7 +27,6 @@ function onSuccessAddCatalog(data) {
 	if (!onFailAddCatalog(data)) {
 		return;
 	}
-	alert(data.name);
 	try {
 		fileList.addCatalog(data.name, /*data.current*/'/');
 	} catch(err) {
