@@ -25,7 +25,7 @@ window.fileList = {
 		attr = {
 			'class': 'it'
 		};
-		this.clear();
+		// this.clear();
 		
 		if (sZ > 0) {
 			removeClass(e(this.id), 'empty');
