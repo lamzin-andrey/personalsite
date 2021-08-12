@@ -1,5 +1,7 @@
 window.root = '/d/drive/a2';
 window.br = window.backRoot = '/sp/public';
+window.currentDir = 0;
+window.parentDir = 0;
 window.onload = initApp;
 function initApp() {
 	// styling
@@ -23,15 +25,31 @@ function onSuccessGetAuthState(data) {
 		return;
 	}
 	// no auth
+	e('_csrf_token').value = data.token;
+	Rest._token = data.token;
 	if (!data.auth) {
 		showScreen('hAuthScreen');
-		e('_csrf_token').value = data.token;
 		e('register_form[_token]').value = data.token_reg;
 		e('reset_password_form[_token]').value = data.token_res;
 		return;
 	}
-	showScreen('hCatalogScreen');
+	//showScreen('hCatalogScreen');
+	showScreen('hWaitScreen');
+	
+	//TODO RestLS
+	currentDir = parseInt(storage('pwd') );
+	currentDir = isNaN(currentDir) ? 0 : currentDir;
+	// TODO режим показа скрытых файлов m=1
+	Rest._get(onSuccessGetFileList, br + '/drivelist.json?c=' + currentDir + '&m=0', onSuccessGetFileList);
 	mainMenuBackPush();
+}
+
+function onSuccessGetFileList(data) {
+	if (!onFailGetFileList(data)) {
+		return;
+	}
+	window.parentDir = data.p;
+	fileList.render(data.ls);
 }
 
 function showScreen(showScreenId) {
@@ -44,7 +62,11 @@ function showScreen(showScreenId) {
 
 
 function onFailGetAuthState(data, responseText, info, xhr) {
-	
+	return defaultResponseError(data, responseText, info, xhr);
+}
+
+function onFailGetFileList(data, responseText, info, xhr) {
+	showScreen('hCatalogScreen');
 	return defaultResponseError(data, responseText, info, xhr);
 }
 

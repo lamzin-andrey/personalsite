@@ -1,14 +1,15 @@
 window.fileList = {
 	id: 'fl',
-	addCatalog:function(name, current) {
-		var ls = storage(current),
+	addCatalog:function(name, id) {
+		var ls = storage('f' + currentDir),
 			inObj;
 		if (!(ls instanceof Array)) {
 			ls = [];
 		}
 		if (!(name in In(ls))) {
-			ls.push({type:'c', name:name});
+			ls.push({type:'c', name:name, i: id});
 		}
+		storage('f' + currentDir, ls);
 		
 		this.render(ls);
 	},

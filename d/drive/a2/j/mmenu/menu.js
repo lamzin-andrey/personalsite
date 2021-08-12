@@ -18,7 +18,7 @@ function onClickMainAddCatalog(evt) {
 	addClass('hBotMenu', 'hide');
 	var s = prompt(l('Enter catalog name'), l('New catalog'));
 	Rest._token = e('_csrf_token').value;
-	Rest._post({name: s}, onSuccessAddCatalog, window.br + '/driveaddcatalog.json', onFailAddCatalog);
+	Rest._post({name: s, c: currentDir}, onSuccessAddCatalog, window.br + '/driveaddcatalog.json', onFailAddCatalog);
 }
 function onFailAddCatalog(data, responseText, info, xhr) {
 	return defaultResponseError(data, responseText, info, xhr);
@@ -28,7 +28,7 @@ function onSuccessAddCatalog(data) {
 		return;
 	}
 	try {
-		fileList.addCatalog(data.name, /*data.current*/'/');
+		fileList.addCatalog(data.name, data.i);
 	} catch(err) {
 		alert(err);
 	}
@@ -38,8 +38,6 @@ function onSuccessAddCatalog(data) {
 
 function onClickMainMenuUpload() {
 }
-
-
 function onClickMainRemove() {
 }
 function onClickMainViewType() {

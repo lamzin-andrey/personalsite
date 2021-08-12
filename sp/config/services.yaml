@@ -36,6 +36,9 @@ parameters:
     #footer site template version
     app.enable_choose_site_version_button: false
 
+    #wusb section
+    app.wusb_catalog_root: "%env(resolve:WUSB_CATALOG_ROOT)%"
+
 services:
     # default configuration for services in *this* file
     _defaults:
