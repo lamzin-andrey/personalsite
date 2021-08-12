@@ -52,7 +52,7 @@ class DrvCatalogs
      *
      * @ORM\Column(name="is_deleted", type="boolean", nullable=true, options={"comment"="Флаг удален или нет"})
      */
-    private $isDeleted;
+    private $isDeleted = false;
 
     /**
      * @var bool|null
