@@ -14,6 +14,7 @@ function initMainMenu() {
 }
 
 function onClickMainAddCatalog(evt) {
+	alert('ICall');
 	try {
 		evt.preventDefault();
 		addClass('hBotMenu', 'hide');
@@ -24,8 +25,8 @@ function onClickMainAddCatalog(evt) {
 		Rest._token = e('_csrf_token').value;
 		showLoader();
 		Rest._post({name: s, c: currentDir}, onSuccessAddCatalog, window.br + '/driveaddcatalog.json', onFailAddCatalog);
-	} catch(e) {
-		alert(e);
+	} catch(ex) {
+		alert(ex);
 	}
 }
 function onFailAddCatalog(data, responseText, info, xhr) {
