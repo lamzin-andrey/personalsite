@@ -5,12 +5,14 @@ function mainMenuShow() {
 }
 
 function initMainMenu() {
+	alert('Start init mm');
 	e('bmUpload').onclick = onClickMainMenuUpload;
 	e('bmAddCatalog').onclick = onClickMainAddCatalog;
 	e('bmRemove').onclick = onClickMainRemove;
 	e('bmViewType').onclick = onClickMainViewType;
 	e('bmSort').onclick = onClickMainSort;
 	e('bmOptions').onclick = onClickMainOptions;
+	alert('End init mm');
 }
 
 function onClickMainAddCatalog(evt) {
