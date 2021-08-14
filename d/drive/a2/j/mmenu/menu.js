@@ -5,23 +5,21 @@ function mainMenuShow() {
 }
 
 function initMainMenu() {
-	alert('Start init mm');
 	e('bmUpload').onclick = onClickMainMenuUpload;
 	e('bmAddCatalog').onclick = onClickMainAddCatalog;
 	e('bmRemove').onclick = onClickMainRemove;
 	e('bmViewType').onclick = onClickMainViewType;
 	e('bmSort').onclick = onClickMainSort;
 	e('bmOptions').onclick = onClickMainOptions;
-	alert('End init mm');
 }
 
 function onClickMainAddCatalog(evt) {
-	alert('ICall');
 	try {
 		evt.preventDefault();
 		addClass('hBotMenu', 'hide');
 		var s = prompt(l('Enter catalog name'), l('New catalog'));
 		if (!s) {
+			alert('!s');
 			return;
 		}
 		Rest._token = e('_csrf_token').value;
