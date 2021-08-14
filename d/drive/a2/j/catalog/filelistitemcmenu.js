@@ -122,6 +122,6 @@ window.fileListItemCmenu = {
 	},
 	onClickDownload:function(evt) {
 		alert('Call d');
-	},
+	}
 	
 };
