@@ -144,3 +144,11 @@ function  _map(id, read) {
 function showSuccess(s) {
 	alert(s);
 }
+
+function showLoader() {
+	showScreen('hWaitScreen');
+}
+function hideLoader(screenId) {
+	screenId = screenId ? screenId : 'hCatalogScreen';
+	showScreen(screenId);
+}

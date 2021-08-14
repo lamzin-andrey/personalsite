@@ -76,8 +76,9 @@ function onSuccessLogin(data) {
 		return;
 	}
 	if (data.success === true) {
-		showScreen('hCatalogScreen');
-		mainMenuBackPush();
+		location.reload();
+		//showScreen('hCatalogScreen');
+		//mainMenuBackPush();
 	}
 }
 

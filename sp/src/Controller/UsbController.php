@@ -61,6 +61,7 @@ class UsbController extends AbstractController
                 $csrfResetToken = $oAppService->getFormTokenValue($formReset);
 		        $data = [
 		            'auth' => false,
+                    'token' => $csrfToken,
                     'token_reg' => $csrfRegToken,
                     'token_res' => $csrfResetToken
                 ];
