@@ -19,7 +19,6 @@ function onClickMainAddCatalog(evt) {
 		addClass('hBotMenu', 'hide');
 		var s = prompt(l('Enter catalog name'), l('New catalog'));
 		if (!s) {
-			alert('!s');
 			return;
 		}
 		Rest._token = e('_csrf_token').value;

@@ -5,6 +5,7 @@ function initDirect() {
 		h = Math.round(o.h / 2) - 64,
 		ua = navigator.userAgent.toLowerCase(),
 		savedTheme = storage('savedTheme');
+	savedTheme = savedTheme ? savedTheme : 'a2';
 	stl('im', 'margin-top', h + 'px');
 	
 	// choose app
