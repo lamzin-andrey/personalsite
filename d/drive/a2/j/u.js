@@ -33,24 +33,10 @@ function onSuccessGetAuthState(data) {
 		e('reset_password_form[_token]').value = data.token_res;
 		return;
 	}
-	//showScreen('hCatalogScreen');
-	showScreen('hWaitScreen');
-	
-	//TODO RestLS
-	currentDir = parseInt(storage('pwd') );
-	currentDir = isNaN(currentDir) ? 0 : currentDir;
-	// TODO режим показа скрытых файлов m=1
-	Rest._get(onSuccessGetFileList, br + '/drivelist.json?c=' + currentDir + '&m=0', onSuccessGetFileList);
+	fileList.loadCurrentDir();
 	mainMenuBackPush();
 }
 
-function onSuccessGetFileList(data) {
-	if (!onFailGetFileList(data)) {
-		return;
-	}
-	window.parentDir = data.p;
-	fileList.render(data.ls);
-}
 
 function showScreen(showScreenId) {
 	var ls = cs(D, 'screen'), i, sZ = sz(ls);
@@ -65,10 +51,6 @@ function onFailGetAuthState(data, responseText, info, xhr) {
 	return defaultResponseError(data, responseText, info, xhr);
 }
 
-function onFailGetFileList(data, responseText, info, xhr) {
-	showScreen('hCatalogScreen');
-	return defaultResponseError(data, responseText, info, xhr);
-}
 
 
 

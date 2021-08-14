@@ -49,6 +49,37 @@ window.fileList = {
 			j = ls[i];
 			e(this.id).removeChild(j);
 		}
-	}
+	},
+	
+	loadCurrentDir: function() {
+		showLoader();
+		//TODO RestLS
+		currentDir = parseInt(storage('pwd') );
+		currentDir = isNaN(currentDir) ? 0 : currentDir;
+		// TODO режим показа скрытых файлов m=1
+		var self = this;
+		Rest._get(function(data){
+			self.onSuccessGetFileList(data);
+		},
+		
+		br + '/drivelist.json?c=' + currentDir + '&m=0', 
+		
+		function(data, responseText, info, xhr) {
+			self.onFailGetFileList(data, responseText, info, xhr);
+		});
+	},
+	onSuccessGetFileList:function(data) {
+		if (!this.onFailGetFileList(data)) {
+			return;
+		}
+		window.parentDir = data.p;
+		storage('f' + currentDir, data.ls);
+		this.render(data.ls);
+	},
+	
+	onFailGetFileList:function(data, responseText, info, xhr) {
+		hideLoader();
+		return defaultResponseError(data, responseText, info, xhr);
+	},
 	
 };
