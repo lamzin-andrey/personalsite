@@ -21,20 +21,24 @@ function getAuthState() {
 	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json', onFailGetAuthState);
 }
 function onSuccessGetAuthState(data) {
-	if (!onFailGetAuthState(data)) {
-		return;
+	try {
+		if (!onFailGetAuthState(data)) {
+			return;
+		}
+		// no auth
+		e('_csrf_token').value = data.token;
+		Rest._token = data.token;
+		if (!data.auth) {
+			showScreen('hAuthScreen');
+			e('register_form[_token]').value = data.token_reg;
+			e('reset_password_form[_token]').value = data.token_res;
+			return;
+		}
+		fileList.loadCurrentDir();
+		mainMenuBackPush();
+	} catch(err) {
+		alert(err);
 	}
-	// no auth
-	e('_csrf_token').value = data.token;
-	Rest._token = data.token;
-	if (!data.auth) {
-		showScreen('hAuthScreen');
-		e('register_form[_token]').value = data.token_reg;
-		e('reset_password_form[_token]').value = data.token_res;
-		return;
-	}
-	fileList.loadCurrentDir();
-	mainMenuBackPush();
 }
 
 
