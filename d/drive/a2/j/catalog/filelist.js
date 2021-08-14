@@ -26,7 +26,7 @@ window.fileList = {
 		attr = {
 			'class': 'it'
 		};
-		// this.clear();
+		this.clear();
 		
 		if (sZ > 0) {
 			removeClass(e(this.id), 'empty');
@@ -45,7 +45,7 @@ window.fileList = {
 	clear:function() {
 		addClass(e(this.id), 'empty');
 		var ls = cs(this.id, 'it'), i, sZ = sz(ls), j;
-		for (i = 0; i < sZ; i++) {
+		for (i = sZ - 1; i > -1; i--) {
 			j = ls[i];
 			e(this.id).removeChild(j);
 		}
