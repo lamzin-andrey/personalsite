@@ -115,7 +115,7 @@ window.fileList = {
 			alert('Fail get item id on end touch');
 			return;
 		}
-		startTime = this.touchItemsMap[id] ?? 0;
+		startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
 		if (time - startTime < 500) {
 			this.onEnterInFolder({target: e(id)});
 		} else {
