@@ -47,7 +47,7 @@ input[type=text],input[type=password], input[type=email], {
 
 /** catalog design start */
 .rel {
-	position:relative;
+	/*! position:relative; */
 }
 .abs {
 	position:absolute;
@@ -72,6 +72,8 @@ input[type=text],input[type=password], input[type=email], {
 	width:100%;
 	height:78px;
 	z-index:3;
+	top: 0px;
+	left: 0px;
 }
 
 /** top buttons */
@@ -171,7 +173,7 @@ input[type=text],input[type=password], input[type=email], {
 	bottom:0px;
 	z-index:4;
 	width:100%;
-	height:105px;
+	height:103px;
 }
 .botMenuBg {
 	background-image: url('../i/bot-menu.jpg');
