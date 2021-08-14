@@ -34,7 +34,7 @@ function onSuccessGetAuthState(data) {
 			e('reset_password_form[_token]').value = data.token_res;
 			return;
 		}
-		fileList.loadCurrentDir();
+		window.fileList.loadCurrentDir();
 		mainMenuBackPush();
 	} catch(err) {
 		alert(err);
