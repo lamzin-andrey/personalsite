@@ -184,7 +184,7 @@ input[type=text],input[type=password], input[type=email], {
 .bmb {
 	/*background-color: red;*/
 	width:78px;
-	height: 49px;
+	/*! height: 49px; */
 	margin:1px;
 	font-family: Arial;
 	font-size: 10px;
