@@ -14,15 +14,19 @@ function initMainMenu() {
 }
 
 function onClickMainAddCatalog(evt) {
-	evt.preventDefault();
-	addClass('hBotMenu', 'hide');
-	var s = prompt(l('Enter catalog name'), l('New catalog'));
-	if (!s) {
-		return;
+	try {
+		evt.preventDefault();
+		addClass('hBotMenu', 'hide');
+		var s = prompt(l('Enter catalog name'), l('New catalog'));
+		if (!s) {
+			return;
+		}
+		Rest._token = e('_csrf_token').value;
+		showLoader();
+		Rest._post({name: s, c: currentDir}, onSuccessAddCatalog, window.br + '/driveaddcatalog.json', onFailAddCatalog);
+	} catch(e) {
+		alert(e);
 	}
-	Rest._token = e('_csrf_token').value;
-	showLoader();
-	Rest._post({name: s, c: currentDir}, onSuccessAddCatalog, window.br + '/driveaddcatalog.json', onFailAddCatalog);
 }
 function onFailAddCatalog(data, responseText, info, xhr) {
 	hideLoader();
