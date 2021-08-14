@@ -195,3 +195,39 @@ input[type=text],input[type=password], input[type=email], {
 	padding-top:36px;
 }
 /** end bottom menu */
+
+/** Catalaog item menu */
+.hCatItemMenu {
+	background-color:#fff;
+	border: solid 3px #B4BFCA;
+	border-radius: 6px;
+	margin-left:6px;
+	margin-right:6px;
+	font-family:arial;
+	text-align:left;
+}
+
+.cim_head_wr {
+	background-color: #366894;
+	
+}
+.cim_head_text {
+	margin-left:10px;
+	font-weight:bold;
+	padding:10px 0px;
+	white-space: nowrap;
+	max-width:94%;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+}
+.cim_items_wr {
+	color:#000;
+}
+
+.cim_item, .cim_item_props {
+	border-bottom: 1px solid #F1F1F1;
+	margin-left:8px;
+	padding:10px 0px;
+}
+
+/** End Catalaog item menu */

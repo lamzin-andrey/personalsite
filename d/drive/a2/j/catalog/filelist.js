@@ -1,5 +1,7 @@
 window.fileList = {
 	id: 'fl',
+	/** @property  touchItemsMap store time start touch */
+	touchItemsMap: {},
 	addCatalog:function(name, id) {
 		var ls = storage('f' + currentDir),
 			inObj;
@@ -23,9 +25,11 @@ window.fileList = {
 						'<div class="cl"></div>',
 					// '</div>',
 		s, i, sZ = sz(list), j, newItem,
-		attr = {
+		vAttr = {
 			'class': 'it'
-		};
+		},
+		prefix = 'f',
+		self = this;
 		this.clear();
 		
 		if (sZ > 0) {
@@ -36,8 +40,14 @@ window.fileList = {
 			j = list[i];
 			s = tpl.replace('{t}', j.type);
 			s = s.replace('{name}', j.name);
-			attr['data-name'] = j.name;
-			newItem = appendChild(e(this.id), 'div', s, attr);
+			vAttr['data-name'] = j.name;
+			if (j.type != 'c') {
+				prefix = 'fi';
+			}
+			vAttr['id'] = prefix + j.i;
+			newItem = appendChild(e(this.id), 'div', s, vAttr);
+			newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
+			newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
 		}
 		
 	},
@@ -81,5 +91,64 @@ window.fileList = {
 		hideLoader();
 		return defaultResponseError(data, responseText, info, xhr);
 	},
+	
+	onStartTouchItem:function(evt) {
+		var id = this.getItemId(evt.currentTarget),
+			dt = new Date(),
+			time = dt.getTime();
+		if (!id) {
+			alert('Fail get item id');
+			return;
+		}
+		this.touchItemsMap[id] = time;
+		
+		return true;
+	},
+	
+	onEndTouchItem:function(evt) {
+		
+		var id = this.getItemId(evt.currentTarget),
+			dt = new Date(),
+			time = dt.getTime(),
+			startTime;
+		if (!id) {
+			alert('Fail get item id on end touch');
+			return;
+		}
+		startTime = this.touchItemsMap[id] ?? 0;
+		if (time - startTime < 500) {
+			this.onEnterInFolder({target: e(id)});
+		} else {
+			console.log('bef onCallContextMenu');
+			this.onCallContextMenu({target: e(id)});
+		}
+	},
+	
+	getItemId:function(currentTarget) {
+		var node = currentTarget, id;
+		do {
+			id = attr(node, 'id');
+			if (id && hasClass(node, 'it')) {
+				return id;
+			}
+			node = node.parentNode;
+		} while (node);
+		
+		return '';
+	},
+	
+	onCallContextMenu:function(evt) {
+		console.log('Will show cm');
+		fileListItemCmenu.buildAndShowMenu(evt.target.id);
+	},
+	
+	onEnterInFolder:function(evt) {
+		var id = attr(evt.target, 'id');
+		window.currentDir = id.replace('fi', '').replace('f', '');
+		storage('pwd', currentDir);
+		if (window.currentDir > 0) {
+			this.loadCurrentDir();
+		}
+	}
 	
 };
