@@ -13,6 +13,7 @@ use App\Service\AppService;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\TreeWalkerAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -22,7 +23,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Translation\Translator;
+use \TreeAlgorithms;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class UsbController extends AbstractController
 {
@@ -178,6 +181,7 @@ class UsbController extends AbstractController
         $filter = [
             'userId' => $this->getUser()->getId(),
             'parentId' => $parentId,
+            'isDeleted' => false,
             'isHide' => false
         ];
         if (intval($request->query->get('m')) === 1) {
@@ -257,5 +261,85 @@ class UsbController extends AbstractController
 
 	    return $s;
 	}
-		
+
+	/**
+     * @Route("/driveremid.json", name="drivegetcatalogsidlist")
+     * Get all subcatalog id list
+	 * @param $
+	 * @return
+	*/
+	public function getRemovableIdListAction(Request $request, TranslatorInterface $t)
+	{
+	    $domain = '';
+        $id = intval($request->get('i'));
+        /**
+         * @var DrvCatalogsRepository $catalogsRepository
+        */
+	    $catalogsRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
+	    // check acccess rights
+        $catalog = $catalogsRepository->find($id);
+        if (!$this->getUser() || is_null($catalog) || $catalog->getUserId() != $this->getUser()->getId()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+
+        TreeAlgorithms::$parentIdFieldName = 'parentId';
+        $list = [$id];
+	    $flatList = $catalogsRepository->getFlatIdListByUserId( intval($this->getUser()->getId() ) );
+        $tree = TreeAlgorithms::buildTreeFromFlatList($flatList, false);
+
+        $node = null;
+        for ($i = 0; $i < count($tree); $i++) {
+            $node = TreeAlgorithms::findById($tree[$i], $id);
+            if (!is_null($node)) {
+                break;
+            }
+        }
+        if (!is_null($node)) {
+            $list = TreeAlgorithms::getBranchIdList($node);
+        }
+
+
+	    return $this->_json([
+	        'status' => 'ok',
+            'list' => $list
+        ]);
+	}
+    /**
+     * @Route("/drivermrf.json", name="driveremovecatalog", methods={"POST"})
+     * Set all catalogs as is Deleted
+     * @param $
+     * @return
+     */
+    public function setCalaogsAsIsDeleted(Request $request, TranslatorInterface $t)
+    {
+        $domain = '';
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+
+        $rawIdList = explode(',', $request->request->get('list'));
+        $idList = [];
+        foreach ($rawIdList as $id) {
+            $n = intval($id);
+            if ($n > 0) {
+                $idList[] = $n;
+            }
+        }
+
+        if (count($idList)) {
+            /**
+             * @var DrvCatalogsRepository $catalogsRepository
+             */
+            $catalogsRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
+            $catalogsRepository->removeByIdList($idList, intval($this->getUser()->getId()));
+        }
+
+        return $this->json(['status' => 'ok']);
+    }
 }

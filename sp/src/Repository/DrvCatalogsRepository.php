@@ -58,4 +58,37 @@ class DrvCatalogsRepository extends ServiceEntityRepository
         return intval($dir->getId());
     }
 
+    /**
+     * @param $
+     * @return
+    */
+    public function getFlatIdListByUserId(int $userId) : array
+    {
+        $queryBuilder = $this->createQueryBuilder('c');
+        $e = $queryBuilder->expr();
+        $queryBuilder->where($e->eq('c.userId', ':userId'));
+        $queryBuilder->setParameters([
+            ':userId' => $userId
+        ]);
+        $queryBuilder->select('c.id', 'c.parentId');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    public function removeByIdList(array $idList, int $userId) : void
+    {
+        if (!count($idList)) {
+            return;
+        }
+        $em = $this->getEntityManager();
+        $sIdList = implode(',', $idList);
+        $sqlQuery = 'UPDATE `drv_catalogs` SET is_deleted = 1 WHERE id IN(' . $sIdList . ') AND user_id = ' . $userId;
+        $statement = $em->getConnection()->prepare($sqlQuery);
+        $statement->execute();
+    }
+
 }

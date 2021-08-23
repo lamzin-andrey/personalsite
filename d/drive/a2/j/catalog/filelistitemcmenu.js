@@ -26,7 +26,6 @@ window.fileListItemCmenu = {
 	 * @description Build and show folder or file context menu
 	*/
 	buildAndShowMenu:function(id){
-		alert('Aga');
 		var isDir = id.indexOf('fi') != 0,
 			item,
 			menuItems = this.fileUnknownMenuItems;
@@ -112,7 +111,60 @@ window.fileListItemCmenu = {
 	},
 	
 	onClickRemove:function(evt) {
-		alert('Call remove');
+		var o = this;
+		showLoader();
+		Rest._get(function(data){o.onSuccessGetRemoveIdList(data);},
+			br + '/driveremid.json?i=' + o.cmMenuOpenItemId,
+			function(data, responseText, info, xhr){o.onFailGetRemoveIdList(data, responseText, info, xhr)});
+	},
+	onSuccessGetRemoveIdList:function(data){
+		if (!this.onFailGetRemoveIdList(data)) {
+			hideLoader();
+			return;
+		}
+		this.removableIdList = data.list;
+		var o = this;
+		Rest._token = e('_csrf_token').value;
+		Rest._post({list: data.list}, function(data){o.onSuccessRemoveCatalog(data);},
+			br + '/drivermrf.json',
+			function(data, responseText, info, xhr){/*o.onFailRemoveCatalog*/o.onFailGetRemoveIdList(data, responseText, info, xhr)});
+	},
+	onFailGetRemoveIdList:function(data, responseText, info, xhr){
+		var r = defaultResponseError(data, responseText, info, xhr);
+		if (!r) {
+			this.removableIdList = [];
+		}
+		return r;
+	},
+	onSuccessRemoveCatalog:function(data) {
+		if (!this.onFailGetRemoveIdList(data)) {
+			return;
+		}
+		data = {list: this.removableIdList};
+		var i, sZ = sz(data.list.length), idList = [], current, idx, j;
+		// remove current and childs
+		for (i = 0; i < sZ; i++) {
+			localStorage.removeItem('f' + data.list[i]);
+		}
+		//remove from parent list
+		current = storage('f' + parentDir);
+		idx = -1;
+		if (current instanceof Array) {
+			sZ = sz(current);
+			for (i = 0; i < sZ; i++) {
+				j = current[i];
+				if (j.i == this.cmMenuOpenItemId && j.type == 'c') {
+					idx = i;
+					break;
+				}
+			}
+			if (idx > -1) {
+				current.splice(idx, 1);
+			}
+			storage('f' + parentDir, current);
+		}
+		fileList.render(current);
+		hideLoader();
 	},
 	onClickRename:function(evt) {
 		alert('Call rename');
