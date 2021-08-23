@@ -57,7 +57,7 @@ class DrvCatalogs
     /**
      * @var bool|null
      *
-     * @ORM\Column(name="is_hide", type="boolean", nullable=true, options={"comment"="Флаг скрытый или нет"})
+     * @ORM\Column(name="is_hide", type="boolean", nullable=true, options={"comment"="Флаг скрытый или нет", "default"="0"})
      */
     private $isHide = false;
 
