@@ -191,10 +191,6 @@ window.Rest = {
 			this._postSendFileAndroid2(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout);
 			return;
 		}
-		
-		
-		
-        
         
         tokenName = tokenName ? tokenName : '_token';
         

@@ -206,6 +206,10 @@ class UsbController extends AbstractController
             ];
             $list[] = $item;
         }
+        $parentCatalog = $catalogRepository->find($parentId);
+        if ($parentCatalog) {
+            $parentId = $parentCatalog->getParentId();
+        }
 
         return $this->_json([
             'ls' => $list,

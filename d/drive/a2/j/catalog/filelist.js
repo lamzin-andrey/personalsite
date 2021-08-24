@@ -83,6 +83,12 @@ window.fileList = {
 			return;
 		}
 		window.parentDir = data.p;
+		if (currentDir == 0) {
+			setUpButtonDisable(this.bUp);
+		} else {
+			setUpButtonEnable(this.bUp);
+		}
+		console.log('window.parentDir', window.parentDir);
 		storage('f' + currentDir, data.ls);
 		this.render(data.ls);
 	},
@@ -159,6 +165,25 @@ window.fileList = {
 		storage('pwd', currentDir);
 		if (window.currentDir > 0) {
 			this.loadCurrentDir();
+		}
+	},
+	
+	initUpButton:function(bUp){
+		var o = this;
+		this.bUp = bUp;
+		bUp.onclick = function(evt){
+			return o.onClickUpButton(evt);
+		}
+	},
+	
+	onClickUpButton:function(evt){
+		if (currentDir != parentDir) {
+			setUpButtonEnable(this.bUp);
+			window.currentDir = parentDir;
+			storage('pwd', currentDir);
+			this.loadCurrentDir();
+		} else {
+			setUpButtonDisable(this.bUp);
 		}
 	}
 	

@@ -12,6 +12,7 @@ function initApp() {
 	initAuth();
 	initMainMenu();
 	initMainMenuBack();
+	fileList.initUpButton(e('bUp'));
 	
 	getAuthState();
 }
@@ -137,4 +138,13 @@ function showLoader() {
 function hideLoader(screenId) {
 	screenId = screenId ? screenId : 'hCatalogScreen';
 	showScreen(screenId);
+}
+
+function setUpButtonDisable(bUp) {
+	bUp.style['background-image'] = "url('./a2/i/up_button_bg_d.png')";
+	bUp.style['color'] = '#546575';
+}
+function setUpButtonEnable(bUp) {
+	bUp.style['background-image'] = null;
+	bUp.style['color'] = null;
 }
