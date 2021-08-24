@@ -80,34 +80,55 @@ window.fileListItemCmenu = {
 			listener,
 			self = this;
 		e('hCatalogItemTitle').innerHTML = fileListItem.name;
+		this.delayForMenuItems = 1;
 		for (i = 0; i < sZ; i++) {
-			menuItem = appendChild('hListItemCmItems', 'div', ls[i], {'class': 'cim_item'});
+			menuItem = appendChild('hListItemCmItems', 'div', ls[i], {'class': 'cim_item gray'});
 			switch (ls[i]) {
 				case l('Remove'):
 					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
 						self.onClickRemove.call(self, evt);
 					};
 					break;
 				case l('Rename'):
 					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
 						self.onClickRename.call(self, evt);
 					};
 					break;
 				case l('Move'):
 					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
 						self.onClickMove.call(self, evt);
 					};
 					break;
 				case l('Download'):
-					this.onClickDownload;
 					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
 						self.onClickDownload.call(self, evt);
 					};
 					break;
 			}
-			
-			
-		}
+		}// end for
+		setTimeout(function() {
+			var ls = cs('hCatItemMenu', 'cim_item'), i, sZ = sz(ls);
+			for (i = 0; i < sZ; i++) {
+				removeClass(ls[i], 'gray');
+			}
+			self.delayForMenuItems = 0;
+		}, 700);
 	},
 	
 	onClickRemove:function(evt) {

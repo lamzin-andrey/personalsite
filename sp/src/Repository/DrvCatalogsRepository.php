@@ -32,6 +32,7 @@ class DrvCatalogsRepository extends ServiceEntityRepository
             'userId' => $userId,
             'parentId' => $parentId,
             'name' => $name,
+            'isDeleted' => false
         ]);
 
         if ($exists) {

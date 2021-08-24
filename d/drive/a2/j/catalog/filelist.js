@@ -93,6 +93,8 @@ window.fileList = {
 	},
 	
 	onStartTouchItem:function(evt) {
+		console.log('onStartTouchItem');
+		this.startY = this.getTouchY(evt);
 		var id = this.getItemId(evt.currentTarget),
 			dt = new Date(),
 			time = dt.getTime();
@@ -105,23 +107,32 @@ window.fileList = {
 		return true;
 	},
 	
-	onEndTouchItem:function(evt) {
-		
+	onEndTouchItem:function(evt) {console.log('onEndTouchItem');
 		var id = this.getItemId(evt.currentTarget),
 			dt = new Date(),
 			time = dt.getTime(),
-			startTime;
+			startTime,
+			endY = this.getTouchY(evt);
 		if (!id) {
 			alert('Fail get item id on end touch');
 			return;
 		}
 		startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
-		if (time - startTime < 500) {
-			this.onEnterInFolder({target: e(id)});
-		} else {
-			console.log('bef onCallContextMenu');
-			this.onCallContextMenu({target: e(id)});
+		if (Math.abs(this.startY - endY) < 1) {
+			if (time - startTime < 500) {
+				this.onEnterInFolder({target: e(id)});
+			} else {
+				this.onCallContextMenu({target: e(id)});
+			}
 		}
+	},
+	
+	getTouchY:function(evt){
+		var o = evt.changedTouches;
+		o = o && o[0] ? o[0] : 0;
+		o = o && o.clientY ? o.clientY : 0;
+		
+		return o;
 	},
 	
 	getItemId:function(currentTarget) {
