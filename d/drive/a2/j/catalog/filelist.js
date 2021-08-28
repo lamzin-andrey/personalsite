@@ -128,34 +128,36 @@ window.fileList = {
 		return true;
 	},
 	
-	onEndTouchItem:function(evt) {console.log('onEndTouchItem');
-		var id = this.getItemId(evt.currentTarget),
-			dt = new Date(),
-			time = dt.getTime(),
-			startTime,
-			endY = this.getTouchY(evt);
-		if (!id) {
-			alert('Fail get item id on end touch');
-			return;
-		}
-		e(id).style['background-color'] = null;
-		setTimeout(function(){
+	onEndTouchItem:function(evt) {
+		try {
+			var id = this.getItemId(evt.currentTarget),
+				dt = new Date(),
+				time = dt.getTime(),
+				startTime,
+				endY = this.getTouchY(evt);
+			if (!id) {
+				alert('Fail get item id on end touch');
+				return;
+			}
 			e(id).style['background-color'] = null;
-		}, 100);
-		
-		startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
-		if (Math.abs(this.startY - endY) < 1) {
-			if (time - startTime < 500) {
-				this.onEnterInFolder({target: e(id)});
+			
+			
+			startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
+			if (Math.abs(this.startY - endY) < 1) {
+				if (time - startTime < 500) {
+					this.onEnterInFolder({target: e(id)});
+				} else {
+					this.onCallContextMenu({target: e(id)});
+				}
 			} else {
-				this.onCallContextMenu({target: e(id)});
+				var ls = cs(e('fl', 'it')), i;
+				sz(ls);
+				for (i = 0; i < SZ; i++) {
+					ls[i].style['background-color'] = null;
+				}
 			}
-		} else {
-			var ls = cs(e('fl', 'it')), i;
-			sz(ls);
-			for (i = 0; i < SZ; i++) {
-				ls[i].style['background-color'] = null;
-			}
+		} catch (err) {
+			alert(err);
 		}
 	},
 	
