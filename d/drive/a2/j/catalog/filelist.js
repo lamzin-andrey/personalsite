@@ -49,7 +49,12 @@ window.fileList = {
 			newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
 			newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
 		}
-		
+		e('hPath').innerHTML = path;
+		if (path.length > 30) {
+			setTimeout(function(){
+				e('hPath').innerHTML = '<marquee scrolldelay="42" scrollamount="1">' + path + '</marquee>';
+			}, 2*1000);
+		}
 	},
 	
 	clear:function() {
@@ -88,8 +93,16 @@ window.fileList = {
 		} else {
 			setUpButtonEnable(this.bUp);
 		}
-		console.log('window.parentDir', window.parentDir);
+		
+		if (currentDir == homeDir) {
+			setHomeButtonDisable(this.bHome);
+		} else {
+			setHomeButtonEnable(this.bHome);
+		}
+		
 		storage('f' + currentDir, data.ls);
+		var s = '/wcard';
+		path = data.bc == '/' ? s : (s + data.bc);
 		this.render(data.ls);
 	},
 	
@@ -182,6 +195,37 @@ window.fileList = {
 			window.currentDir = parentDir;
 			storage('pwd', currentDir);
 			this.loadCurrentDir();
+		} else {
+			setUpButtonDisable(this.bUp);
+		}
+		//-
+		if (currentDir != homeDir) {
+			setHomeButtonEnable(this.bHome);
+		} else {
+			setHomeButtonDisable(this.bHome);
+		}
+	},
+	
+	initHomeButton:function(bHome){
+		var o = this;
+		this.bHome = bHome;
+		bHome.onclick = function(evt){
+			return o.onClickHomeButton(evt);
+		}
+	},
+	
+	onClickHomeButton:function(evt){
+		if (currentDir != homeDir) {
+			setHomeButtonEnable(this.bHome);
+			window.currentDir = homeDir;
+			storage('pwd', currentDir);
+			this.loadCurrentDir();
+		} else {
+			setHomeButtonDisable(this.bHome);
+		}
+		//-
+		if (currentDir != parentDir) {
+			setUpButtonEnable(this.bUp);
 		} else {
 			setUpButtonDisable(this.bUp);
 		}

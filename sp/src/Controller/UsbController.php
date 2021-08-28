@@ -206,17 +206,32 @@ class UsbController extends AbstractController
             ];
             $list[] = $item;
         }
+        $realParentId = $parentId;
         $parentCatalog = $catalogRepository->find($parentId);
         if ($parentCatalog) {
-            $parentId = $parentCatalog->getParentId();
+            $realParentId = $parentCatalog->getParentId();
         }
+
+        TreeAlgorithms::$parentIdFieldName = 'parentId';
+        $flatList = $catalogRepository->getFlatIdListByUserId($this->getUser()->getId());
+        $cluster = TreeAlgorithms::buildTreeFromFlatList($flatList, true);
+        $breadCrumbs = [];
+        foreach ($cluster as $tree) {
+            $nodes = TreeAlgorithms::getNodesByNodeId($tree, $parentId);
+            if (count($nodes)) {
+                foreach ($nodes as $node) {
+                    $breadCrumbs[] = $node->name;
+                }
+                break;
+            }
+        }
+        $breadCrumbs = '/' . implode('/', $breadCrumbs);
 
         return $this->_json([
             'ls' => $list,
-            'p' => $parentId
+            'p' => $realParentId,
+            'bc' => $breadCrumbs
         ]);
-
-
     }
 
     private function _json($aData)

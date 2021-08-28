@@ -1,7 +1,9 @@
 window.root = '/d/drive/a2';
 window.br = window.backRoot = '/sp/public';
+window.path = '/wcard';
 window.currentDir = 0;
 window.parentDir = 0;
+window.homeDir = 0;
 window.onload = initApp;
 function initApp() {
 	// styling
@@ -13,6 +15,7 @@ function initApp() {
 	initMainMenu();
 	initMainMenuBack();
 	fileList.initUpButton(e('bUp'));
+	fileList.initHomeButton(e('bHome'));
 	
 	getAuthState();
 }
@@ -144,10 +147,22 @@ function setUpButtonDisable(bUp) {
 	bUp.style['background-image'] = "url('./a2/i/up_button_bg_d.png')";
 	bUp.style['color'] = '#546575';
 }
+
 function setUpButtonEnable(bUp) {
 	bUp.style['background-image'] = null;
 	bUp.style['color'] = null;
 }
+
+function setHomeButtonDisable(bH) {
+	bH.style['background-image'] = "url('./a2/i/home-bg-d.png')";
+	bH.style['color'] = '#546575';
+}
+
+function setHomeButtonEnable(bH) {
+	bH.style['background-image'] = null;
+	bH.style['color'] = null;
+}
+
 function showInputDlg(legend, s) {
 	s = prompt(legend, s);
 	if (s && (window.onClickInputDlgOk instanceof Function)) {

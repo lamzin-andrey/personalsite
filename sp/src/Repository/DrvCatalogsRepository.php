@@ -106,7 +106,7 @@ class DrvCatalogsRepository extends ServiceEntityRepository
         $queryBuilder->setParameters([
             ':userId' => $userId
         ]);
-        $queryBuilder->select('c.id', 'c.parentId');
+        $queryBuilder->select('c.id', 'c.parentId', 'c.name');
 
         return $queryBuilder->getQuery()->getResult();
     }
