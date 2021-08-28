@@ -58,6 +58,41 @@ class DrvCatalogsRepository extends ServiceEntityRepository
 
         return intval($dir->getId());
     }
+    /**
+     * @param $
+     * @return
+     */
+    public function renameCatalogEntity(int $targetId, string $name, int $userId, int $parentId, bool &$alreadyExists) : int
+    {
+        $alreadyExists = false;
+        $exists = $this->findOneBy([
+            'userId' => $userId,
+            'parentId' => $parentId,
+            'name' => $name,
+            'isDeleted' => false
+        ]);
+
+        if ($exists) {
+            $alreadyExists = true;
+            return intval($exists->getId());
+        }
+
+        if ($parentId > 0) {
+            $parent = $this->find($parentId);
+            if ($parent->getUserId() != $userId) {
+                return 0;
+            }
+        }
+
+
+        $dir = $parent = $this->find($targetId);
+        $dir->setName($name);
+        $em = $this->getEntityManager();
+        $em->persist($dir);
+        $em->flush();
+
+        return intval($dir->getId());
+    }
 
     /**
      * @param $

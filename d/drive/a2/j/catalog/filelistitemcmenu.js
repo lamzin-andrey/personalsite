@@ -188,7 +188,55 @@ window.fileListItemCmenu = {
 		hideLoader();
 	},
 	onClickRename:function(evt) {
-		alert('Call rename');
+		var name = '',
+			ls = storage('f' + currentDir),
+			i, o = this;
+		sz(ls);
+		for (i = 0; i < SZ; i++) {
+			if (ls[i].i == this.cmMenuOpenItemId) {
+				name = ls[i].name;
+			}
+		}
+		
+		window.onClickInputDlgOk = function(evt) {
+			o.onEnterNewName(evt.inputStr);
+		}
+		
+		window.onClickInputDlgCancel = function(evt) {
+			o.onCancelEnterNewName();
+		}
+
+		showInputDlg(l('Enter new name'), name);
+	},
+	onEnterNewName:function(newName) {
+		var o = this;
+		showLoader();
+		Rest._patch({i: this.cmMenuOpenItemId, s: newName, c: currentDir}, function(data){o.onSuccessRenameCatalog(data);},
+		br + '/drivern.json',
+		function(data, responseText, info, xhr){o.onFailRenameCatalog(data, responseText, info, xhr)});
+	},
+	onCancelEnterNewName:function() {
+		hideLoader();
+	},
+	onSuccessRenameCatalog:function(data) {
+		if (!this.onFailRenameCatalog(data)) {
+			return;
+		}
+		var ls = storage('f' + currentDir),
+			i, o = this;
+		sz(ls);
+		for (i = 0; i < SZ; i++) {
+			if (ls[i].i == this.cmMenuOpenItemId) {
+				ls[i].name = data.name;
+				break;
+			}
+		}
+		storage('f' + currentDir, ls);
+		fileList.render(ls);
+	},
+	onFailRenameCatalog:function(data, responseText, info, xhr) {
+		hideLoader();
+		return defaultResponseError(data, responseText, info, xhr);
 	},
 	onClickMove:function(evt) {
 		alert('Call m');

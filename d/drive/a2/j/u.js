@@ -148,3 +148,11 @@ function setUpButtonEnable(bUp) {
 	bUp.style['background-image'] = null;
 	bUp.style['color'] = null;
 }
+function showInputDlg(legend, s) {
+	s = prompt(legend, s);
+	if (s && (window.onClickInputDlgOk instanceof Function)) {
+		window.onClickInputDlgOk({inputStr:s});
+	} else if (window.onClickInputDlgCancel instanceof Function){
+		window.onClickInputDlgCancel();
+	}
+}

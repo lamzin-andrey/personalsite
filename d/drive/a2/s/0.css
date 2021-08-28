@@ -70,7 +70,7 @@ input[type=text],input[type=password], input[type=email], {
 .head {
 	position:fixed;
 	width:100%;
-	height:78px;
+	height:52px;
 	z-index:3;
 	top: 0px;
 	left: 0px;
@@ -149,6 +149,7 @@ input[type=text],input[type=password], input[type=email], {
 
 .it {
 	border-bottom: 1px solid gray;
+	user-select: none;
 }
 .im_wrapper {
 	width: 44px;

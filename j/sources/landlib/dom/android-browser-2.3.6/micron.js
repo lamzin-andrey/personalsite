@@ -312,12 +312,13 @@ function decsz(o) {
   return sz(o) - 1;
 }
 /**
- * @description Безопасно озвращает размер массива
+ * @description Безопасно возвращает размер массива
  * @param {Array} o
  * @return Number array length - 1
 */
 function sz(o) {
-  return o && o.length ? o.length : 0;
+  window.SZ = o && o.length ? o.length : 0;
+  return window.SZ;
 }
 /**
  * @description Меняет два элемента в массиве (или объекте) местами

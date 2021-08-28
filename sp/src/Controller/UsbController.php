@@ -346,4 +346,70 @@ class UsbController extends AbstractController
 
         return $this->json(['status' => 'ok']);
     }
+    /**
+     * @Route("/drivern.json", name="driverenamecatalog")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveRenameCatalogAction(Request $request,
+                                          TranslatorInterface $t,
+                                          AppService $oAppService,
+                                          Filesystem $filesystem,
+                                          CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        if ($csrfToken != $request->request->get('_token')) {
+            $domain = null;
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+
+        $domain = 'wusb_filesystem';
+        // Create db record
+        /**
+         * @var DrvCatalogsRepository $catalogRepository
+         */
+        $catalogRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
+        $alreadyExists = false;
+
+        $catalogId = $catalogRepository->renameCatalogEntity(intval($request->get('i')), $request->get('s'), $this->getUser()->getId(), intval($request->get('c')), $alreadyExists);
+
+        if ($alreadyExists) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('Catalog with name already exists', [], $domain)
+            ]);
+        }
+
+        if (!$catalogId) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('Unable create catalog (db)', [], $domain)
+            ]);
+        }
+
+        // First create phisical catalog
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($this->getUser()->getId());
+        $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogId;
+        $filesystem->mkdir($path);
+
+        if (!$filesystem->exists($path) || !is_dir($path)) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('Unable create catalog', [], $domain)
+            ]);
+        }
+
+
+        return $this->_json([
+            'name' => $request->request->get('s', '')
+        ]);
+    }
 }
