@@ -146,6 +146,12 @@ window.fileList = {
 			} else {
 				this.onCallContextMenu({target: e(id)});
 			}
+		} else {
+			var ls = cs(e('fl', 'it')), i;
+			sz(ls);
+			for (i = 0; i < SZ; i++) {
+				ls[i].style['background-color'] = null;
+			}
 		}
 	},
 	
