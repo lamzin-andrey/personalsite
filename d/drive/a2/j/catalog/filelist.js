@@ -114,6 +114,7 @@ window.fileList = {
 	onStartTouchItem:function(evt) {
 		console.log('onStartTouchItem');
 		this.startY = this.getTouchY(evt);
+		// #302e9f
 		var id = this.getItemId(evt.currentTarget),
 			dt = new Date(),
 			time = dt.getTime();
@@ -122,6 +123,7 @@ window.fileList = {
 			return;
 		}
 		this.touchItemsMap[id] = time;
+		e(id).style['background-color'] = '#302e9f';
 		
 		return true;
 	},
@@ -136,6 +138,7 @@ window.fileList = {
 			alert('Fail get item id on end touch');
 			return;
 		}
+		e(id).style['background-color'] = null;
 		startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
 		if (Math.abs(this.startY - endY) < 1) {
 			if (time - startTime < 500) {

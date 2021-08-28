@@ -168,6 +168,7 @@ input[type=text],input[type=password], input[type=email], {
 	float:left;
 	font-family:arial;
 	font-weight:1000;
+	user-select: none;
 }
 
 /** bottom menu */
