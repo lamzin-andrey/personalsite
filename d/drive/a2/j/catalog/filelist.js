@@ -139,6 +139,10 @@ window.fileList = {
 			return;
 		}
 		e(id).style['background-color'] = null;
+		setTimeout(function(){
+			e(id).style['background-color'] = null;
+		}, 100);
+		
 		startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
 		if (Math.abs(this.startY - endY) < 1) {
 			if (time - startTime < 500) {
