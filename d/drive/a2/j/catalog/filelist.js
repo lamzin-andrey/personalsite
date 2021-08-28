@@ -117,6 +117,7 @@ window.fileList = {
 		// #302e9f
 		var id = this.getItemId(evt.currentTarget),
 			dt = new Date(),
+			self = this,
 			time = dt.getTime();
 		if (!id) {
 			alert('Fail get item id');
@@ -124,6 +125,9 @@ window.fileList = {
 		}
 		this.touchItemsMap[id] = time;
 		e(id).style['background-color'] = '#302e9f';
+		setTimeout(function() {
+			self.clearActiveItems();
+		}, 1000);
 		
 		return true;
 	},
@@ -150,14 +154,18 @@ window.fileList = {
 					this.onCallContextMenu({target: e(id)});
 				}
 			} else {
-				var ls = cs(e('fl', 'it')), i;
-				sz(ls);
-				for (i = 0; i < SZ; i++) {
-					ls[i].style['background-color'] = null;
-				}
+				this.clearActiveItems();
 			}
 		} catch (err) {
 			alert(err);
+		}
+	},
+	
+	clearActiveItems:function() {
+		var ls = cs(e('fl', 'it')), i;
+			sz(ls);
+		for (i = 0; i < SZ; i++) {
+			ls[i].style['background-color'] = null;
 		}
 	},
 	
