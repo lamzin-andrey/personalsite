@@ -362,7 +362,7 @@ class UsbController extends AbstractController
         return $this->json(['status' => 'ok']);
     }
     /**
-     * @Route("/drivern.json", name="driverenamecatalog", methods={"PATCH"})
+     * @Route("/drivern.json", name="driverenamecatalog", methods={"PATCH", "POST"})
      * @param Request $oRequest
      * @param TranslatorInterface $t
      * @param $

@@ -211,7 +211,7 @@ window.fileListItemCmenu = {
 	onEnterNewName:function(newName) {
 		var o = this;
 		showLoader();
-		Rest._patch({i: this.cmMenuOpenItemId, s: newName, c: currentDir}, function(data){o.onSuccessRenameCatalog(data);},
+		Rest._post({i: this.cmMenuOpenItemId, s: newName, c: currentDir}, function(data){o.onSuccessRenameCatalog(data);},
 		br + '/drivern.json',
 		function(data, responseText, info, xhr){o.onFailRenameCatalog(data, responseText, info, xhr)});
 	},
