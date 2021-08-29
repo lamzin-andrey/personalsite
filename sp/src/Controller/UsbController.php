@@ -587,7 +587,7 @@ class UsbController extends AbstractController
         $string = str_replace('?', '', $string);
 
         $result = strtolower($string);
-        $allow = 'abcdefgkijklmnopqrstuvwxyz-./';
+        $allow = 'abcdefgkijklmnopqrstuvwxyz-./0123456789';
         $sz = strlen($result);
         $allowResult = '';
         for ($i = 0; $i < $sz; $i++) {
