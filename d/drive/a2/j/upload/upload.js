@@ -3,7 +3,9 @@ window.upload = {
 		var o = this,
 			iFile = e('iFile');
 		this.iFile = iFile;
-		iFile.onchange = function(evt){o.onSelectFile(evt);}
+		iFile.onchange = function(evt){
+			o.onSelectFile(evt);
+		}
 	},
 	onSelectFile:function() {
 		var o = this;
@@ -18,7 +20,7 @@ window.upload = {
 				function(data) {
 					// o.onProgressUpload(data);
 				},
-				'_csrf_token',
+				'_csrf_token_uf',
 				e('_csrf_token').value,
 				5 * 60
 			);

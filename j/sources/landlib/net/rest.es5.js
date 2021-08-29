@@ -272,23 +272,38 @@ window.Rest = {
 			if (data[name]) {
 				attr(ls[i], 'value', data[name])
 				existsFields[name] = 1;
+				alert('Set Ex Field 1 for ' + name + ' (1)');
 			} else {
 				name = attr(ls[i], 'name');
 				if (data[name]) {
 					attr(ls[i], 'value', data[name])
 					existsFields[name] = 1;
+					alert('Set Ex Field 1 for ' + name + ' (2)');
 				}
 			}
 		}
         
         tokenName = tokenName ? tokenName : '_token';
         
-        ce(form, 'input', 'path', {value: url, type:'hidden', name: 'path'});
-        ce(form, 'input', 'isiframe', {value: 1, type:'hidden', name: 'isiframe'});
+        if (!e('path')) {
+			alert('Create path');
+			ce(form, 'input', 'path', {value: url, type:'hidden', name: 'path'});
+		} else {
+			e('path').value = url;
+		}
+		if (!e('isiframe')) {
+			alert('Create isifr');
+			ce(form, 'input', 'isiframe', {value: 1, type:'hidden', name: 'isiframe'});
+		} else {
+			e('isiframe').value = 1;
+		}
         for (i in data) {
             // form.append(i, data[i]);
-            if (!existsFields[i]) {
+            if (!e(i)) {
+				alert('Create ' + i);
 				ce(form, 'input', i, {value: data[i], type:'hidden', name: i});
+			} else {
+				e(i).value = data[i];
 			}
         }
         t = this._getToken();
@@ -298,7 +313,12 @@ window.Rest = {
         }
         
         if (t) {
-            ce(form, 'input', tokenName, {value: t, type:'hidden', name: tokenName});
+			if (!e(tokenName)) {
+				alert('Create ' + tokenName);
+				ce(form, 'input', tokenName, {value: t, type:'hidden', name: tokenName});
+			} else {
+				e(tokenName).value = t;
+			}
         }
         
         
@@ -306,19 +326,20 @@ window.Rest = {
         // xhr.send(form);
         iFrame = e(iFrameName);
         
-        if (iFrame) {
+        /*if (iFrame) {
 			rm(iFrame);
 			iFrame = null;
-		}
+		}*/
 		
 		window.up = 0;
         
-        if (!iFrame) {
-			iFrame = ce(bod(), 'iframe', iFrameName, {
+        if (iFrame) {
+			/*iFrame = ce(bod(), 'iframe', iFrameName, {
 				name: iFrameName,
 				src: '/0.html?r=' + Math.random(),
 				style: 'display:none'
-			});
+			}); */
+			
 			iFrame.onload = function() {
 				if (window.up == 0) {
 					window.up++;
@@ -354,6 +375,10 @@ window.Rest = {
 					
 				}
 			}
+			
+			alert('Bef aattr call');
+			attr(iFrame, 'src', '/0.html?r=' + Math.random());
+			alert('Was aattr call');
 			
 			iFrame.onerror = function(e) {
 				clearInterval(ival);

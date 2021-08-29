@@ -83,9 +83,14 @@
 				</div>
 			</div>
 			<div class="tc mt-3" id="hFormUpWr">
-				<form>
+				<form method="POST" enctype="multipart/form-data">
 					<input type="file" id="iFile" name="iFile">
+					<input type="hidden" id="path" name="path">
+					<input type="hidden" id="isiframe" name="isiframe">
+					<input type="hidden" id="c" name="c">
+					<input type="hidden" id="_csrf_token_uf" name="_csrf_token_uf">
 				</form>
+				<iframe id="iFileA2UpIframe" name="iFileA2UpIframe" style="display:none"></iframe>
 			</div>
 			<div class="mt-3">
 				<input type="button" id="bUploadCancel" value="Cancel">
@@ -202,7 +207,7 @@
 		</div>
 		
 		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
-		<script src="/j/sources/landlib/net/rest.es5.js"></script>
+		<script src="/j/sources/landlib/net/rest.es5.js?vA"></script>
 		
 		<script src="./j/pbar/pbar.js"></script>
 		
@@ -213,7 +218,7 @@
 		<script src="./j/catalog/filelistitemcmenu.js?v=1"></script>
 		
 		<script src="./j/upload/anim.js"></script>
-		<script src="./j/upload/upload.js"></script>
+		<script src="./j/upload/upload.js?3"></script>
 		
 		<script src="./j/u.js"></script>
 	</body>

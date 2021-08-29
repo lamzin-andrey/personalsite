@@ -445,7 +445,7 @@ class UsbController extends AbstractController
         $csrfToken = $csrfTokenManager
             ? $csrfTokenManager->getToken('authenticate')->getValue()
             : null;
-        if ($csrfToken != $request->request->get('_csrf_token')) {
+        if ($csrfToken != $request->request->get('_csrf_token_uf')) {
             $domain = null;
             return $this->mixResponse($request, [
                 'status' => 'error',
@@ -483,7 +483,7 @@ class UsbController extends AbstractController
         $targetName = $this->transliteUrl($originalName);
         $file->move($targetPath, $targetName);
 
-        return $this->mixRequest($request, [
+        return $this->mixResponse($request, [
             'status' => 'ok',
             'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName
         ]);
@@ -494,7 +494,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function mixRequest(Request $request, array $data)
+    protected function mixResponse(Request $request, array $data)
     {
         if (intval($request->request->get('isiframe')) !== 1) {
             return $this->_json($data);
