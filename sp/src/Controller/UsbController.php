@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\DrvCatalogs;
+use App\Entity\DrvFile;
 use App\Entity\PhdMessages;
 use App\Entity\PhdUsers;
 use App\Form\PsdUploadFormType;
@@ -209,9 +210,35 @@ class UsbController extends AbstractController
         }
         $realParentId = $parentId;
         $parentCatalog = $catalogRepository->find($parentId);
+
+        $files = [];
         if ($parentCatalog) {
             $realParentId = $parentCatalog->getParentId();
+            // TODO if mode
+            $files = $parentCatalog->getFiles();
+
+        } else {
+            $this->container->get('doctrine')->getRepository(DrvFile::class)->findBy([
+                'userId' => $this->getUser()->getId(),
+                'catalogId' => 0,
+                'isHidden' => false
+            ]);
         }
+        foreach ($files as $drvFile) {
+            $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $parentCatalog->getId() . '/' . $drvFile->getId();
+            /*if (!$filesystem->exists($path) ) {
+                continue;
+            }*/
+            $item = [
+                'name' => $drvFile->getName(),
+                'type' => 'a',// TODO
+                'i' => $drvFile->getId(),
+                'h' => $drvFile->getIsHidden()
+            ];
+            $list[] = $item;
+        }
+
+
 
         TreeAlgorithms::$parentIdFieldName = 'parentId';
         $flatList = $catalogRepository->getFlatIdListByUserId($this->getUser()->getId());
@@ -460,6 +487,7 @@ class UsbController extends AbstractController
         $relativePath = $this->getParameter('app.wusb_catalog_root');
         $userPath = $this->generateUserPath($this->getUser()->getId());
         $drvCatalogId = intval($request->request->get('c'));
+        $drvCatalog = null;
         if ($drvCatalogId > 0) {
             $drvCatalog = $this->getDoctrine()->getRepository(DrvCatalogs::class)->find($drvCatalogId);
             if (is_null($drvCatalog) || $drvCatalog->getUserId() != $this->getUser()->getId()) {
@@ -483,12 +511,31 @@ class UsbController extends AbstractController
         // if (mb_detect_encoding($originalName, ['Windows-1251', 'utf-8']) == 'Windows-1251') {
             $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
         // }
-        $targetName = $this->transliteUrl($originalName);
+
+        $fileEntity = new DrvFile();
+        $fileEntity->setName($originalName);
+        $fileEntity->setType('a');// TODO calculate by mime
+        $fileEntity->setIsDeleted(false);
+        $fileEntity->setIsHidden(false);
+        $fileEntity->setUserId($this->getUser()->getId());
+        $fileEntity->setCatalogEntity($drvCatalog);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($fileEntity);
+        $em->flush();
+
+        $pathInfo = pathinfo($originalName);
+        $targetName = $fileEntity->getId() . '.' . $pathInfo['extension'];
         $file->move($targetPath, $targetName);
 
         return $this->mixResponse($request, [
             'status' => 'ok',
-            'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName
+            'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName,
+            'file' => [
+                'name' => $originalName,
+                'type' => 'a', // TODO
+                'i'    => $fileEntity->getId(),
+                'h'    => false
+            ]
         ]);
     }
 

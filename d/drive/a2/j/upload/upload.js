@@ -39,6 +39,7 @@ window.upload = {
 	},
 	onSuccessUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
+		fileList.addCatalog(data.file.name, data.file.id, data.file.type);
 		this.onClickCancel();
 	},
 	onFailUpload:function(data) {

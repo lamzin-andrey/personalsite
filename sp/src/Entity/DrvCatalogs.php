@@ -61,6 +61,13 @@ class DrvCatalogs
      */
     private $isHide = false;
 
+    /**
+     * @var array of DrvFile
+     * @ORM\OneToMany(targetEntity="DrvFile", mappedBy="catalogEntity")
+    */
+
+    private $files;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -126,5 +133,9 @@ class DrvCatalogs
         return $this;
     }
 
+    public function getFiles()
+    {
+        return $this->files;
+    }
 
 }

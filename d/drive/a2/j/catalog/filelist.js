@@ -2,14 +2,15 @@ window.fileList = {
 	id: 'fl',
 	/** @property  touchItemsMap store time start touch */
 	touchItemsMap: {},
-	addCatalog:function(name, id) {
+	addCatalog:function(name, id, type) {
+		type = def(type, 'c');
 		var ls = storage('f' + currentDir),
 			inObj;
 		if (!(ls instanceof Array)) {
 			ls = [];
 		}
 		if (!(name in In(ls))) {
-			ls.push({type:'c', name:name, i: id});
+			ls.push({type:type, name:name, i: id});
 		}
 		storage('f' + currentDir, ls);
 		
@@ -46,8 +47,10 @@ window.fileList = {
 			}
 			vAttr['id'] = prefix + j.i;
 			newItem = appendChild(e(this.id), 'div', s, vAttr);
-			newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
-			newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
+			if (j.type == 'c') {
+				newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
+				newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
+			}
 		}
 		e('hPath').innerHTML = path;
 		if (path.length > 30) {
