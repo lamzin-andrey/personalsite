@@ -237,3 +237,13 @@ input[type=text],input[type=password], input[type=email], {
 	color:gray;
 }
 /** End Catalaog item menu */
+
+/** Upload screen **/
+#hUpScreen input[type=file], #hUpScreen input[type=button] {
+	height:32px;
+}
+
+#hUpScreen input[type=file] {
+	border: 1px solid gray;
+}
+/** End Upload screen **/

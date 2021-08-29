@@ -17,6 +17,8 @@ function initApp() {
 	fileList.initUpButton(e('bUp'));
 	fileList.initHomeButton(e('bHome'));
 	
+	upload.init();
+	
 	getAuthState();
 }
 

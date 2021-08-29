@@ -84,6 +84,14 @@ function appendChild(parent, tag, innerHTML, obj, dataObj) {
 	
 	return el;
 }
+function ce(parent, tag, id, obj, dataObj) {
+	obj.id = id;
+	return appendChild(parent, tag, '', obj, dataObj);
+}
+function rm(DOMNode) {
+	var o = DOMNode;
+	o.parentNode.removeChild(o);
+}
 function attr(o, name, val) {
 	o = e(o);
 	if (val) {
@@ -93,6 +101,9 @@ function attr(o, name, val) {
 		return o.getAttribute(name);
 	}
 	return null;
+}
+function bod() {
+	return D.getElementsByTagName('body')[0];
 }
 function stl(o, s, v) {
 	o = e(o);

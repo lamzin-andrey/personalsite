@@ -308,6 +308,7 @@ window.Rest = {
         
         if (iFrame) {
 			rm(iFrame);
+			iFrame = null;
 		}
 		
 		window.up = 0;
@@ -315,7 +316,7 @@ window.Rest = {
         if (!iFrame) {
 			iFrame = ce(bod(), 'iframe', iFrameName, {
 				name: iFrameName,
-				src: '/0.htm',
+				src: '/0.html?r=' + Math.random(),
 				style: 'display:none'
 			});
 			iFrame.onload = function() {
@@ -337,15 +338,15 @@ window.Rest = {
 								
 							} catch(e) {
 								clearInterval(ival);
-								alert(e);
-								alert(r);
+								showError(e);
+								showError(r);
 								onFail(e);
 							}
 						}
 						
 						if (i > timeout) {
 							clearInterval(ival);
-							onFail({status: 'error', errors: {p:'Превышен интервал ожидания запроса'}});
+							onFail({status: 'error', errors: {p: l('Превышен интервал ожидания запроса')}});
 						}
 						
 						i++;

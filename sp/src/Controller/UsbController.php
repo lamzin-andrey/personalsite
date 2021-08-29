@@ -17,6 +17,7 @@ use Doctrine\ORM\Query\TreeWalkerAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -427,4 +428,177 @@ class UsbController extends AbstractController
             'name' => $request->request->get('s', '')
         ]);
     }
+
+    /**
+     * @Route("/drvupload.json", name="driverenamecatalog", methods={"POST"})
+     * @param Request $request
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveUploadAction(Request $request,
+                                             TranslatorInterface $t,
+                                             AppService $oAppService,
+                                             Filesystem $filesystem,
+                                             CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        if ($csrfToken != $request->request->get('_csrf_token')) {
+            $domain = null;
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+        $domain = 'wusb_filesystem';
+        /**
+         * @var UploadedFile $file
+        */
+        $file = $request->files->get('iFile');
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($this->getUser()->getId());
+        $drvCatalogId = $request->request->get('c');
+        $drvCatalog = $this->getDoctrine()->getRepository(DrvCatalogs::class)->find($drvCatalogId);
+        if (is_null($drvCatalog) || $drvCatalog->getUserId() != $this->getUser()->getId()) {
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+        $targetPath = $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $drvCatalog->getId();
+
+        if (!$filesystem->exists($targetPath)) {
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $t->trans('Target catalog not found on disk. Try again later.', [], $domain)
+            ]);
+        }
+        // TODO при сохранении использовать id из таблицы.
+        $originalName = $file->getClientOriginalName();
+        // if (mb_detect_encoding($originalName, ['Windows-1251', 'utf-8']) == 'Windows-1251') {
+            $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
+        // }
+        $targetName = $this->transliteUrl($originalName);
+        $file->move($targetPath, $targetName);
+
+        return $this->mixRequest($request, [
+            'status' => 'ok',
+            'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName
+        ]);
+    }
+
+    /**
+     * Если в request есть isiframe = 1 вернет html, иначе JSON
+     * @param $
+     * @return
+    */
+    protected function mixRequest(Request $request, array $data)
+    {
+        if (intval($request->request->get('isiframe')) !== 1) {
+            return $this->_json($data);
+        }
+
+        return $this->render('webusb/a2uploadsuccess.html.twig', [
+            'data' => json_encode($data)
+
+        ]);
+    }
+
+    /**
+     * TODO в сервис, у тебя уже есть AppExtension
+     * Транслитерация
+     **/
+    public function transliteUrl(string $string) : string
+    {
+        $string = str_replace('ё','e',$string);
+        $string = str_replace('й','y',$string);
+        $string = str_replace('ю','yu',$string);
+        $string = str_replace('ь','',$string);
+        $string = str_replace('ч','ch',$string);
+        $string = str_replace('щ','sh',$string);
+        $string = str_replace('ц','c',$string);
+        $string = str_replace('у','u',$string);
+        $string = str_replace('к','k',$string);
+        $string = str_replace('е','e',$string);
+        $string = str_replace('н','n',$string);
+        $string = str_replace('г','g',$string);
+        $string = str_replace('ш','sh',$string);
+        $string = str_replace('з','z',$string);
+        $string = str_replace('х','h',$string);
+        $string = str_replace('ъ','',$string);
+        $string = str_replace('ф','f',$string);
+        $string = str_replace('ы','i',$string);
+        $string = str_replace('в','v',$string);
+        $string = str_replace('а','a',$string);
+        $string = str_replace('п','p',$string);
+        $string = str_replace('р','r',$string);
+        $string = str_replace('о','o',$string);
+        $string = str_replace('л','l',$string);
+        $string = str_replace('д','d',$string);
+        $string = str_replace('ж','j',$string);
+        $string = str_replace('э','е',$string);
+        $string = str_replace('я','ya',$string);
+        $string = str_replace('с','s',$string);
+        $string = str_replace('м','m',$string);
+        $string = str_replace('и','i',$string);
+        $string = str_replace('т','t',$string);
+        $string = str_replace('б','b',$string);
+        $string = str_replace('Ё','E',$string);
+        $string = str_replace('Й','Y',$string);
+        $string = str_replace('Ю','YU',$string);
+        $string = str_replace('Ч','CH',$string);
+        $string = str_replace('Ь','',$string);
+        $string = str_replace('Щ','SH',$string);
+        $string = str_replace('Ц','C',$string);
+        $string = str_replace('У','U',$string);
+        $string = str_replace('К','K',$string);
+        $string = str_replace('Е','E',$string);
+        $string = str_replace('Н','N',$string);
+        $string = str_replace('Г','G',$string);
+        $string = str_replace('Ш','SH',$string);
+        $string = str_replace('З','Z',$string);
+        $string = str_replace('Х','H',$string);
+        $string = str_replace('Ъ','',$string);
+        $string = str_replace('Ф','F',$string);
+        $string = str_replace('Ы','I',$string);
+        $string = str_replace('В','V',$string);
+        $string = str_replace('А','A',$string);
+        $string = str_replace('П','P',$string);
+        $string = str_replace('Р','R',$string);
+        $string = str_replace('О','O',$string);
+        $string = str_replace('Л','L',$string);
+        $string = str_replace('Д','D',$string);
+        $string = str_replace('Ж','J',$string);
+        $string = str_replace('Э','E',$string);
+        $string = str_replace('Я','YA',$string);
+        $string = str_replace('С','S',$string);
+        $string = str_replace('М','M',$string);
+        $string = str_replace('И','I',$string);
+        $string = str_replace('Т','T',$string);
+        $string = str_replace('Б','B',$string);
+        $string = str_replace(' ','_',$string);
+        $string = str_replace('"','',$string);
+        $string = str_replace('.','.',$string);
+        $string = str_replace("'",'',$string);
+        $string = str_replace(",",'',$string);
+        $string = str_replace('\\', '', $string);
+        $string = str_replace('?', '', $string);
+
+        $result = strtolower($string);
+        $allow = 'abcdefgkijklmnopqrstuvwxyz-./';
+        $sz = strlen($result);
+        $allowResult = '';
+        for ($i = 0; $i < $sz; $i++) {
+            $ch = $result[$i];
+            if (strpos($allow, $ch) !== false) {
+                $allowResult .= $ch;
+            }
+        }
+
+        return $allowResult;
+    }
+
+
 }

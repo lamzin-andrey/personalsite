@@ -7,6 +7,7 @@
 		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height, user-scalable=no, target-densitydpi=device-dpi">
 		<title>Онлайн флешка для любого вашего устройства</title>
 		<link rel="stylesheet" type="text/css" href="./s/0.css">
+		<link rel="stylesheet" type="text/css" href="./j/pbar/pbar.css">
 		<link href="./i/u.ico" rel="shortcut icon" type="image/x-icon" >
 	</head>
 	<body class="f100">
@@ -60,6 +61,34 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		
+		<!-- screen upload -->
+		<div class="tc screen d-none up-screen" id="hUpScreen">
+			<div>
+				<img src="./i/up/01.png">
+			</div>
+			<div>
+				<div id="extractPBar" style="display:non; width:97%; margin:auto; ">
+					 <div class="text-center" id="progressStateLabel">
+						Uploading...
+					 </div>
+					 <div style="line-height:28px;">
+						 
+						 <div class="pbarwrap">
+							<div style="width:40%;margin-left:-40%;" id="dompb" class="dompb">&nbsp;</div>
+						 </div>
+					 </div>
+				</div>
+			</div>
+			<div class="tc mt-3" id="hFormUpWr">
+				<form>
+					<input type="file" id="iFile" name="iFile">
+				</form>
+			</div>
+			<div class="mt-3">
+				<input type="button" id="bUploadCancel" value="Cancel">
 			</div>
 		</div>
 		
@@ -175,11 +204,17 @@
 		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
 		<script src="/j/sources/landlib/net/rest.es5.js"></script>
 		
+		<script src="./j/pbar/pbar.js"></script>
+		
 		<script src="./j/auth.js"></script>
 		<script src="./j/mmb.js"></script>
 		<script src="./j/mmenu/menu.js?v=2"></script>
 		<script src="./j/catalog/filelist.js"></script>
 		<script src="./j/catalog/filelistitemcmenu.js?v=1"></script>
+		
+		<script src="./j/upload/anim.js"></script>
+		<script src="./j/upload/upload.js"></script>
+		
 		<script src="./j/u.js"></script>
 	</body>
 </html>
