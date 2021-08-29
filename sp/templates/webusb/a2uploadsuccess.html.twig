@@ -5,7 +5,7 @@
 </head>	
 	<body>
 <script>
-    var s = '{{ data}}';
+    var s = '{{ data|raw }}';
     localStorage.setItem('iframeUpload', s);
 </script>
 {{ data }}

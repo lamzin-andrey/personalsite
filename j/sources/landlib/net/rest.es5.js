@@ -344,7 +344,6 @@ window.Rest = {
 						response = localStorage.getItem('iframeUpload');
 						var r = response;
 						if (r) {
-							alert(r);
 							try {
 								response = JSON.parse(response);
 								if (response) {
