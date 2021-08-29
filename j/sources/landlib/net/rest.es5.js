@@ -255,8 +255,7 @@ window.Rest = {
 			form = iFile.parentNode,
 			ls, name, existsFields = {},
 			iFrame,
-			iFrameHtml, ival, response
-			;
+			iFrameHtml, ival, response;
         
         while (form.tagName != 'FORM') {
 			form = form.parentNode;
@@ -272,13 +271,11 @@ window.Rest = {
 			if (data[name]) {
 				attr(ls[i], 'value', data[name])
 				existsFields[name] = 1;
-				alert('Set Ex Field 1 for ' + name + ' (1)');
 			} else {
 				name = attr(ls[i], 'name');
 				if (data[name]) {
 					attr(ls[i], 'value', data[name])
 					existsFields[name] = 1;
-					alert('Set Ex Field 1 for ' + name + ' (2)');
 				}
 			}
 		}
@@ -286,21 +283,18 @@ window.Rest = {
         tokenName = tokenName ? tokenName : '_token';
         
         if (!e('path')) {
-			alert('Create path');
 			ce(form, 'input', 'path', {value: url, type:'hidden', name: 'path'});
 		} else {
 			e('path').value = url;
 		}
 		if (!e('isiframe')) {
-			alert('Create isifr');
 			ce(form, 'input', 'isiframe', {value: 1, type:'hidden', name: 'isiframe'});
 		} else {
 			e('isiframe').value = 1;
 		}
         for (i in data) {
-            // form.append(i, data[i]);
+            // form.append(i, data[i]); 
             if (!e(i)) {
-				alert('Create ' + i);
 				ce(form, 'input', i, {value: data[i], type:'hidden', name: i});
 			} else {
 				e(i).value = data[i];
@@ -314,7 +308,6 @@ window.Rest = {
         
         if (t) {
 			if (!e(tokenName)) {
-				alert('Create ' + tokenName);
 				ce(form, 'input', tokenName, {value: t, type:'hidden', name: tokenName});
 			} else {
 				e(tokenName).value = t;
@@ -330,16 +323,17 @@ window.Rest = {
 			rm(iFrame);
 			iFrame = null;
 		}*/
+		if (!iFrame) {
+			iFrame = ce(bod(), 'iframe', iFrameName, {
+				name: iFrameName,
+				src: '/0.html?r=' + Math.random(),
+				style: 'display:none'
+			}); 
+		}
 		
 		window.up = 0;
         
         if (iFrame) {
-			/*iFrame = ce(bod(), 'iframe', iFrameName, {
-				name: iFrameName,
-				src: '/0.html?r=' + Math.random(),
-				style: 'display:none'
-			}); */
-			
 			iFrame.onload = function() {
 				if (window.up == 0) {
 					window.up++;
@@ -350,6 +344,7 @@ window.Rest = {
 						response = localStorage.getItem('iframeUpload');
 						var r = response;
 						if (r) {
+							alert(r);
 							try {
 								response = JSON.parse(response);
 								if (response) {
@@ -375,14 +370,10 @@ window.Rest = {
 					
 				}
 			}
-			
-			alert('Bef aattr call');
 			attr(iFrame, 'src', '/0.html?r=' + Math.random());
-			alert('Was aattr call');
-			
-			iFrame.onerror = function(e) {
+			iFrame.onerror = function(err) {
 				clearInterval(ival);
-				onFail(e);
+				onFail(err);
 			}
 		}
 		

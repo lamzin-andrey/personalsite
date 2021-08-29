@@ -27,7 +27,7 @@ use Symfony\Component\Translation\Translator;
 use \TreeAlgorithms;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
+ 
 class UsbController extends AbstractController
 {
 	/** @property string $_subdir подкаталог в который загружаются файлы при аплоаде */
@@ -449,7 +449,7 @@ class UsbController extends AbstractController
             $domain = null;
             return $this->mixResponse($request, [
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $t->trans('You have not access to this page 1', [], $domain)
             ]);
         }
         $domain = 'wusb_filesystem';
@@ -459,14 +459,17 @@ class UsbController extends AbstractController
         $file = $request->files->get('iFile');
         $relativePath = $this->getParameter('app.wusb_catalog_root');
         $userPath = $this->generateUserPath($this->getUser()->getId());
-        $drvCatalogId = $request->request->get('c');
-        $drvCatalog = $this->getDoctrine()->getRepository(DrvCatalogs::class)->find($drvCatalogId);
-        if (is_null($drvCatalog) || $drvCatalog->getUserId() != $this->getUser()->getId()) {
-            return $this->mixResponse($request, [
-                'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
-            ]);
+        $drvCatalogId = intval($request->request->get('c'));
+        if ($drvCatalogId > 0) {
+            $drvCatalog = $this->getDoctrine()->getRepository(DrvCatalogs::class)->find($drvCatalogId);
+            if (is_null($drvCatalog) || $drvCatalog->getUserId() != $this->getUser()->getId()) {
+                return $this->mixResponse($request, [
+                    'status' => 'error',
+                    'error' => $t->trans('You have not access to this page 2', [], $domain)
+                ]);
+            }
         }
+
         $targetPath = $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $drvCatalog->getId();
 
         if (!$filesystem->exists($targetPath)) {
@@ -500,10 +503,12 @@ class UsbController extends AbstractController
             return $this->_json($data);
         }
 
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/html');
         return $this->render('webusb/a2uploadsuccess.html.twig', [
             'data' => json_encode($data)
-
-        ]);
+        ], $response);
+        
     }
 
     /**

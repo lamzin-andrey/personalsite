@@ -7,7 +7,7 @@ window.upload = {
 			o.onSelectFile(evt);
 		}
 	},
-	onSelectFile:function() {
+	onSelectFile:function() { 
 		var o = this;
 		try {
 			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir}, 
