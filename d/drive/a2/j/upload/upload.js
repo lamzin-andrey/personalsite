@@ -6,6 +6,12 @@ window.upload = {
 		iFile.onchange = function(evt){
 			o.onSelectFile(evt);
 		}
+		
+		this.bCancel = e('bUploadCancel');
+		this.bCancel.onclick = function(evt){
+			o.onClickCancel(evt);
+		}
+		this.progressStateLabel = e('progressStateLabel');
 	},
 	onSelectFile:function() { 
 		var o = this;
@@ -25,15 +31,23 @@ window.upload = {
 				5 * 60
 			);
 			addClass('hFormUpWr', 'd-none');
+			this.progressStateLabel.innerHTML = l('Uploading...');
+			uploadAnimation.run();
 		} catch (err) {
 			alert(err);
 		}
 	},
 	onSuccessUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
+		// this.onClickCancel();
 	},
 	onFailUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
-		alert('Fail!');
+		showError('Fail!');
+	},
+	onClickCancel:function(evt) {
+		uploadAnimation.stop();
+		this.progressStateLabel.innerHTML = l('ChooseFile');
+		showScreen('hCatalogScreen');
 	}
 };

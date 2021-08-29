@@ -46,6 +46,7 @@ function onSuccessAddCatalog(data) {
 
 
 function onClickMainMenuUpload() {
+	addClass('hBotMenu', 'hide');
 	showScreen('hUpScreen');
 }
 function onClickMainRemove() {

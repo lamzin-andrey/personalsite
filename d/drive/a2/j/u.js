@@ -18,6 +18,7 @@ function initApp() {
 	fileList.initHomeButton(e('bHome'));
 	
 	upload.init();
+	window.uploadAnimation = new LoaderAnim('imgUp', 1, 5, 'dompb', -41, 100);
 	
 	getAuthState();
 }
