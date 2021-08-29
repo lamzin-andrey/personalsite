@@ -39,7 +39,7 @@ window.upload = {
 	},
 	onSuccessUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
-		// this.onClickCancel();
+		this.onClickCancel();
 	},
 	onFailUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
