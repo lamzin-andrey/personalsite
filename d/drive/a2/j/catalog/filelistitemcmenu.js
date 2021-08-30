@@ -30,6 +30,10 @@ window.fileListItemCmenu = {
 			item,
 			menuItems = this.fileUnknownMenuItems;
 		this.cmMenuOpenItemId = id.replace('fi', '').replace('f', '');
+		this.cmMenuOpenItemType = 'c';
+		if (!isDir) {
+			this.cmMenuOpenItemType = 'f';
+		}
 		item = this.findItem();
 		if (!item) {
 			showError(l('Unable find file info, reload page and try again'));
@@ -133,6 +137,11 @@ window.fileListItemCmenu = {
 	
 	onClickRemove:function(evt) {
 		var o = this;
+		if (o.cmMenuOpenItemType != 'c') {
+			alert('Not release');
+			hideLoader();
+			return;
+		}
 		showLoader();
 		Rest._get(function(data){o.onSuccessGetRemoveIdList(data);},
 			br + '/driveremid.json?i=' + o.cmMenuOpenItemId,
@@ -168,7 +177,7 @@ window.fileListItemCmenu = {
 			localStorage.removeItem('f' + data.list[i]);
 		}
 		//remove from parent list
-		current = storage('f' + parentDir);
+		current = storage('f' + currentDir);
 		idx = -1;
 		if (current instanceof Array) {
 			sZ = sz(current);
@@ -188,6 +197,11 @@ window.fileListItemCmenu = {
 		hideLoader();
 	},
 	onClickRename:function(evt) {
+		if (this.cmMenuOpenItemType != 'c') {
+			alert('Not release');
+			hideLoader();
+			return;
+		}
 		var name = '',
 			ls = storage('f' + currentDir),
 			i, o = this;
@@ -241,8 +255,23 @@ window.fileListItemCmenu = {
 	onClickMove:function(evt) {
 		alert('Call m');
 	},
+	
 	onClickDownload:function(evt) {
-		alert('Call d');
+		var o = this;
+		Rest._get(function(data){o.onSuccessGetDLink(data);},
+			br + '/drivegetlink.json?i=' + this.cmMenuOpenItemId,
+			function(data, responseText, info, xhr){o.onFailGetDLink(data, responseText, info, xhr)});
+	},
+	
+	onSuccessGetDLink:function(data){
+		if (this.onFailGetDLink(data)) {
+			window.location.href = data.link;
+		}
+	},
+	
+	onFailGetDLink:function(data, responseText, info, xhr){
+		showScreen('hCatalogScreen');
+		return defaultResponseError(data, responseText, info, xhr);
 	}
 	
 };

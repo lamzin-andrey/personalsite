@@ -169,6 +169,10 @@ input[type=text],input[type=password], input[type=email], {
 	font-family:arial;
 	font-weight:1000;
 	user-select: none;
+	white-space: nowrap;
+	max-width: 75%;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 }
 
 /** bottom menu */

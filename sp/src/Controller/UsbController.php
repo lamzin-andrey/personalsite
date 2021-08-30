@@ -10,6 +10,7 @@ use App\Form\PsdUploadFormType;
 use App\Form\RegisterFormType;
 use App\Form\ResetPasswordFormType;
 use App\Repository\DrvCatalogsRepository;
+use App\Repository\DrvFileRepository;
 use App\Service\AppService;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
@@ -144,7 +145,8 @@ class UsbController extends AbstractController
 
         return $this->_json([
             'name' => $request->request->get('name', ''),
-            'i' => $catalogId
+            'i' => $catalogId,
+            'type' => 'c'
         ]);
 
     }
@@ -259,6 +261,80 @@ class UsbController extends AbstractController
             'ls' => $list,
             'p' => $realParentId,
             'bc' => $breadCrumbs
+        ]);
+    }
+
+    /**
+     * @Route("/drivegetlink.json", name="drivegetdownloadkink")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveGetFileDowloadLinkAction(Request $request,
+                                               TranslatorInterface $t,
+                                               AppService $oAppService,
+                                               Filesystem $filesystem,
+                                               CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        /*$csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        if ($csrfToken != $request->request->get('_token')) {
+            $domain = null;
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }*/
+
+        $domain = 'wusb_filesystem';
+        // Create db record
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+        $filter = [
+            'userId' => $this->getUser()->getId(),
+            'id' => intval($request->query->get('i')),
+            'isDeleted' => false
+        ];
+        /** @var DrvFile $fileEntity */
+        $fileEntity = $fileRepository->findOneBy($filter);
+
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($this->getUser()->getId());
+        $catalogIdSubpath = '';
+        $catalogEntity = $fileEntity->getCatalogEntity();
+        if (!is_null($catalogEntity)) {
+            $catalogIdSubpath = $catalogEntity->getId() . '/';
+        }
+        $ext = $this->getExtWithDot($fileEntity->getName());
+        $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogIdSubpath . $fileEntity->getId() .  $ext;
+        $relativePathForSymlink = str_replace('drive/d', 'drive/t', $relativePath);
+        $symlink = $request->server->get('DOCUMENT_ROOT') . $relativePathForSymlink . '/' . $userPath . '/' . $catalogIdSubpath;
+        $symlink = preg_replace("#/$#", '', $symlink);
+        $filesystem->mkdir($symlink);
+
+        if (!$filesystem->exists($symlink) || !is_dir($symlink)) {
+            return $this->_json([
+                'status' => 'ok',
+                'error' => $t->trans('Unable create temp catalog', [], $domain)
+            ]);
+        }
+        $symlink .= '/' . $fileEntity->getId() . $ext;
+        if (!$filesystem->exists($symlink)) {
+            symlink($path, $symlink);
+        }
+        if (!$filesystem->exists($symlink)) {
+            return $this->_json([
+                'status' => 'ok',
+                'error' => $t->trans('Unable create copy', [], $domain)
+            ]);
+        }
+
+        return $this->_json([
+            'link' => str_replace($request->server->get('DOCUMENT_ROOT'), '', $symlink)
         ]);
     }
 
@@ -484,6 +560,7 @@ class UsbController extends AbstractController
          * @var UploadedFile $file
         */
         $file = $request->files->get('iFile');
+        $originalName = $file->getClientOriginalName();
         $relativePath = $this->getParameter('app.wusb_catalog_root');
         $userPath = $this->generateUserPath($this->getUser()->getId());
         $drvCatalogId = intval($request->request->get('c'));
@@ -498,6 +575,19 @@ class UsbController extends AbstractController
             }
         }
 
+        $existsFile = $this->getDoctrine()->getRepository(DrvFile::class)->findOneBy([
+            'name' => $originalName,
+            'catalogEntity' => $drvCatalog,
+            'isDeleted' => false
+        ]);
+
+        if (!is_null($existsFile)) {
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $t->trans('File with name {name} already exists', ['{name}' => $originalName], $domain)
+            ]);
+        }
+
         $targetPath = $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $drvCatalog->getId();
 
         if (!$filesystem->exists($targetPath)) {
@@ -506,8 +596,7 @@ class UsbController extends AbstractController
                 'error' => $t->trans('Target catalog not found on disk. Try again later.', [], $domain)
             ]);
         }
-        // TODO при сохранении использовать id из таблицы.
-        $originalName = $file->getClientOriginalName();
+
         // if (mb_detect_encoding($originalName, ['Windows-1251', 'utf-8']) == 'Windows-1251') {
             $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
         // }
@@ -652,5 +741,14 @@ class UsbController extends AbstractController
         return $allowResult;
     }
 
+    /**
+     * @param $
+     * @return
+    */
+    protected function getExtWithDot(string $s) : string
+    {
+        $pathInfo = pathinfo($s);
 
+        return (isset($pathInfo['extension']) ? ('.' . $pathInfo['extension']) : '');
+    }
 }

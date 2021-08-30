@@ -39,12 +39,16 @@ window.upload = {
 	},
 	onSuccessUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
-		fileList.addCatalog(data.file.name, data.file.id, data.file.type);
+		if (!this.onFailUpload(data)) {
+			this.onClickCancel();
+			return;
+		}
+		fileList.addCatalog(data.file.name, data.file.i, data.file.type);
 		this.onClickCancel();
 	},
-	onFailUpload:function(data) {
+	onFailUpload:function(data, responseText, info, xhr) {
 		removeClass('hFormUpWr', 'd-none');
-		showError('Fail!');
+		return defaultResponseError(data, responseText, info, xhr);
 	},
 	onClickCancel:function(evt) {
 		uploadAnimation.stop();

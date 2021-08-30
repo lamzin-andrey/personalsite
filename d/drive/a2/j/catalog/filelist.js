@@ -25,11 +25,12 @@ window.fileList = {
 						'<span class="fn">{name}</span>' + 
 						'<div class="cl"></div>',
 					// '</div>',
+		prefix = 'f',
 		s, i, sZ = sz(list), j, newItem,
 		vAttr = {
 			'class': 'it'
 		},
-		prefix = 'f',
+		
 		self = this;
 		this.clear();
 		
@@ -42,15 +43,16 @@ window.fileList = {
 			s = tpl.replace('{t}', j.type);
 			s = s.replace('{name}', j.name);
 			vAttr['data-name'] = j.name;
+			prefix = 'f';
 			if (j.type != 'c') {
 				prefix = 'fi';
 			}
 			vAttr['id'] = prefix + j.i;
 			newItem = appendChild(e(this.id), 'div', s, vAttr);
-			if (j.type == 'c') {
-				newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
-				newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
-			}
+			
+			newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
+			newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
+			
 		}
 		e('hPath').innerHTML = path;
 		if (path.length > 30) {
@@ -152,7 +154,10 @@ window.fileList = {
 			startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
 			if (Math.abs(this.startY - endY) < 1) {
 				if (time - startTime < 500) {
-					this.onEnterInFolder({target: e(id)});
+					console.log(id);
+					if (id.indexOf('fi') == -1) {
+						this.onEnterInFolder({target: e(id)});
+					}
 				} else {
 					this.onCallContextMenu({target: e(id)});
 				}
@@ -194,7 +199,7 @@ window.fileList = {
 	},
 	
 	onCallContextMenu:function(evt) {
-		console.log('Will show cm');
+		console.log('Will show cm ' + evt.target.id);
 		fileListItemCmenu.buildAndShowMenu(evt.target.id);
 	},
 	

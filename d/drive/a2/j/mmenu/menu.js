@@ -37,7 +37,7 @@ function onSuccessAddCatalog(data) {
 		return;
 	}
 	try {
-		fileList.addCatalog(data.name, data.i);
+		fileList.addCatalog(data.name, data.i, data.type);
 	} catch(err) {
 		alert(err);
 	}
