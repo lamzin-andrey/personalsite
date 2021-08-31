@@ -48,6 +48,7 @@ window.upload = {
 	},
 	onFailUpload:function(data, responseText, info, xhr) {
 		removeClass('hFormUpWr', 'd-none');
+		mainMenuBackPush();
 		return defaultResponseError(data, responseText, info, xhr);
 	},
 	onClickCancel:function(evt) {

@@ -22,7 +22,7 @@ class DrvFile
     private $catalogId = 0;
 
     /**
-     * @ORM\Column(name="type", type="string", length=32, options={"comment"="unknown, zip, audio, text, image", "default"="unknown"})
+     * @ORM\Column(name="type", type="string", length=32, options={"comment"="unknown, zip, audio, text, image, pdf", "default"="unknown"})
      */
     private $type;
 

@@ -233,7 +233,7 @@ class UsbController extends AbstractController
             }*/
             $item = [
                 'name' => $drvFile->getName(),
-                'type' => 'a',// TODO
+                'type' => $drvFile->getType()[0] ?? 'u',// TODO
                 'i' => $drvFile->getId(),
                 'h' => $drvFile->getIsHidden()
             ];
@@ -603,7 +603,7 @@ class UsbController extends AbstractController
 
         $fileEntity = new DrvFile();
         $fileEntity->setName($originalName);
-        $fileEntity->setType('a');// TODO calculate by mime
+        $this->setType($fileEntity);
         $fileEntity->setIsDeleted(false);
         $fileEntity->setIsHidden(false);
         $fileEntity->setUserId($this->getUser()->getId());
@@ -621,7 +621,7 @@ class UsbController extends AbstractController
             'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName,
             'file' => [
                 'name' => $originalName,
-                'type' => 'a', // TODO
+                'type' => $fileEntity->getType()[0] ?? 'u',
                 'i'    => $fileEntity->getId(),
                 'h'    => false
             ]
@@ -750,5 +750,64 @@ class UsbController extends AbstractController
         $pathInfo = pathinfo($s);
 
         return (isset($pathInfo['extension']) ? ('.' . $pathInfo['extension']) : '');
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function setType(DrvFile $fileEntity) : void
+    {
+        $a = explode('.', $fileEntity->getName());
+        $ext = $a[count($a) - 1] ?? '';
+        $isZip = false;
+        if ('zip' === $ext) {
+            $ext = $a[count($a) - 2] ?? '';
+            $isZip = true;
+        }
+        $type = $this->getTypeByExtension($ext);
+        if ('unknown' === $type && $isZip) {
+            $type = 'zip';
+        }
+
+        $fileEntity->setType($type[0]);
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function getTypeByExtension(string $extension) : string
+    {
+        $types = [
+            //zip
+            'zip' => 'zip',
+            'gz' => 'zip',
+            '7z' => 'zip',
+            // audio
+            'mp3' => 'audio',
+            'ogg' => 'audio',
+            'wav' => 'audio',
+            'mp4' => 'audio',
+
+            // text
+            'txt' => 'text',
+            'php' => 'text',
+            'js' => 'text',
+
+            // image
+            'jpg' => 'image',
+            'png' => 'image',
+            'bmp' => 'image',
+            'jpeg' => 'image',
+            'jiff' => 'image',
+
+            // pdf
+            'pdf' => 'pdf',
+
+            // apk
+            'apk' => 'apk',
+        ];
+        return $types[$extension] ?? 'unknown';
     }
 }
