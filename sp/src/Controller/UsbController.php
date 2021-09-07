@@ -567,7 +567,7 @@ class UsbController extends AbstractController
         $drvCatalog = null;
         if ($drvCatalogId > 0) {
             $drvCatalog = $this->getDoctrine()->getRepository(DrvCatalogs::class)->find($drvCatalogId);
-            if (is_null($drvCatalog) || $drvCatalog->getUserId() != $this->getUser()->getId()) {
+            if (is_null($drvCatalog) || !$this->getUser() || $drvCatalog->getUserId() != $this->getUser()->getId() ) {
                 return $this->mixResponse($request, [
                     'status' => 'error',
                     'error' => $t->trans('You have not access to this page 2', [], $domain)
@@ -596,10 +596,24 @@ class UsbController extends AbstractController
                 'error' => $t->trans('Target catalog not found on disk. Try again later.', [], $domain)
             ]);
         }
-
-        // if (mb_detect_encoding($originalName, ['Windows-1251', 'utf-8']) == 'Windows-1251') {
-            $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
-        // }
+        $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
+        $pathInfo = pathinfo($originalName);
+        $ext = $pathInfo['extension'] ?? '';
+        $ext = strtolower($ext);
+        if ( (
+                'php' == $ext
+                || 'sh' == $ext
+                || 'js' == $ext
+                || 'pl' == $ext
+                || 'py' == $ext
+                || 'bat' == $ext
+                || 'exe' == $ext
+            ) && 2 !== $this->getUser()->getRole() ) {
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $t->trans('This file type deny for upload', [], $domain)
+            ]);
+        }
 
         $fileEntity = new DrvFile();
         $fileEntity->setName($originalName);
@@ -612,8 +626,7 @@ class UsbController extends AbstractController
         $em->persist($fileEntity);
         $em->flush();
 
-        $pathInfo = pathinfo($originalName);
-        $targetName = $fileEntity->getId() . '.' . $pathInfo['extension'];
+        $targetName = $fileEntity->getId() . '.' . $ext;
         $file->move($targetPath, $targetName);
 
         return $this->mixResponse($request, [
