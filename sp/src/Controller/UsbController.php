@@ -533,7 +533,7 @@ class UsbController extends AbstractController
     }
 
     /**
-     * @Route("/drvupload.json", name="driverenamecatalog", methods={"POST"})
+     * @Route("/drvupload.json", name="driveupload", methods={"POST"})
      * @param Request $request
      * @param TranslatorInterface $t
      * @param $
