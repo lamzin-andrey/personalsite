@@ -18,6 +18,22 @@ class DrvFileRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, DrvFile::class);
     }
+    /**
+     * @param $
+     * @return
+    */
+    public function removeById(int $fileId, int $userId) : void
+    {
+        if (!$fileId || !$userId) {
+
+            return;
+        }
+        $em = $this->getEntityManager();
+        $sqlQuery = 'UPDATE `drv_file` SET is_deleted = 1 WHERE id  = ' . $fileId . ' AND user_id = ' . $userId;
+        $statement = $em->getConnection()->prepare($sqlQuery);
+        $statement->execute();
+        return;
+    }
 
     // /**
     //  * @return DrvFile[] Returns an array of DrvFile objects

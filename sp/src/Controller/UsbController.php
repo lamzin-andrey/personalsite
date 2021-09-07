@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ausers;
 use App\Entity\DrvCatalogs;
 use App\Entity\DrvFile;
 use App\Entity\PhdMessages;
@@ -223,7 +224,8 @@ class UsbController extends AbstractController
             $this->container->get('doctrine')->getRepository(DrvFile::class)->findBy([
                 'userId' => $this->getUser()->getId(),
                 'catalogId' => 0,
-                'isHidden' => false
+                'isHidden' => false,
+                'isDeleted' => false
             ]);
         }
         foreach ($files as $drvFile) {
@@ -231,6 +233,11 @@ class UsbController extends AbstractController
             /*if (!$filesystem->exists($path) ) {
                 continue;
             }*/
+
+            if ($drvFile->getIsDeleted() === true) {
+                continue;
+            }
+
             $item = [
                 'name' => $drvFile->getName(),
                 'type' => $drvFile->getType()[0] ?? 'u',// TODO
@@ -302,27 +309,16 @@ class UsbController extends AbstractController
         /** @var DrvFile $fileEntity */
         $fileEntity = $fileRepository->findOneBy($filter);
 
-        $relativePath = $this->getParameter('app.wusb_catalog_root');
-        $userPath = $this->generateUserPath($this->getUser()->getId());
-        $catalogIdSubpath = '';
-        $catalogEntity = $fileEntity->getCatalogEntity();
-        if (!is_null($catalogEntity)) {
-            $catalogIdSubpath = $catalogEntity->getId() . '/';
-        }
-        $ext = $this->getExtWithDot($fileEntity->getName());
-        $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogIdSubpath . $fileEntity->getId() .  $ext;
-        $relativePathForSymlink = str_replace('drive/d', 'drive/t', $relativePath);
-        $symlink = $request->server->get('DOCUMENT_ROOT') . $relativePathForSymlink . '/' . $userPath . '/' . $catalogIdSubpath;
-        $symlink = preg_replace("#/$#", '', $symlink);
-        $filesystem->mkdir($symlink);
-
-        if (!$filesystem->exists($symlink) || !is_dir($symlink)) {
+        $filePathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+        $path = $filePathObject->path;
+        if (!empty($filePathObject->error)) {
             return $this->_json([
                 'status' => 'ok',
-                'error' => $t->trans('Unable create temp catalog', [], $domain)
+                'error' => $t->trans($filePathObject->error, [], $domain)
             ]);
         }
-        $symlink .= '/' . $fileEntity->getId() . $ext;
+        $symlink = $filePathObject->symlink;
+
         if (!$filesystem->exists($symlink)) {
             symlink($path, $symlink);
         }
@@ -465,6 +461,52 @@ class UsbController extends AbstractController
 
         return $this->json(['status' => 'ok']);
     }
+
+    /**
+     * @Route("/driverm.json", name="driveremove", methods={"POST"})
+     * Set file as is Deleted and remove phisical file
+     * @param $
+     * @return
+     */
+    public function driveRemoveFile(Request $request, TranslatorInterface $t, Filesystem $filesystem)
+    {
+        $domain = '';
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+
+        $fileId = intval($request->request->get('i') );
+
+        if ($fileId > 0) {
+            /**
+             * @var DrvFileRepository $fileRepository
+             */
+            $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+            // remove phisical + symlink
+            $fileEntity = $fileRepository->find($fileId);
+            if ($fileEntity->getUserId() != $this->getUser()->getId()) {
+                return $this->_json([
+                    'status' => 'error',
+                    'error' => $t->trans('You have not access to this page', [], $domain)
+                ]);
+            }
+            $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+            if (!empty($pathObject->path) && file_exists($pathObject->path)) {
+                $filesystem->remove($pathObject->path);
+            }
+            if (!empty($pathObject->symlink) && file_exists($pathObject->symlink)) {
+                $filesystem->remove($pathObject->symlink);
+            }
+
+            $fileRepository->removeById($fileId, intval($this->getUser()->getId()));
+        }
+
+        return $this->json(['status' => 'ok']);
+    }
+
     /**
      * @Route("/drivern.json", name="driverenamecatalog", methods={"PATCH", "POST"})
      * @param Request $oRequest
@@ -822,5 +864,43 @@ class UsbController extends AbstractController
             'apk' => 'apk',
         ];
         return $types[$extension] ?? 'unknown';
+    }
+
+
+    /**
+     * @param $
+     * @return \StdClass {symlink:string, path: string, error: string}
+    */
+    protected function getFilePathObject(DrvFile $fileEntity, Ausers $user, Request $request, Filesystem $filesystem) : \StdClass
+    {
+        $result = new \StdClass();
+        $result->symlink = '';
+        $result->path = '';
+        $result->error = '';
+
+        // start method
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($user->getId());
+        $catalogIdSubpath = '';
+        $catalogEntity = $fileEntity->getCatalogEntity();
+        if (!is_null($catalogEntity)) {
+            $catalogIdSubpath = $catalogEntity->getId() . '/';
+        }
+        $ext = $this->getExtWithDot($fileEntity->getName());
+        $result->path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogIdSubpath . $fileEntity->getId() .  $ext;
+        $relativePathForSymlink = str_replace('drive/d', 'drive/t', $relativePath);
+        $symlink = $request->server->get('DOCUMENT_ROOT') . $relativePathForSymlink . '/' . $userPath . '/' . $catalogIdSubpath;
+        $symlink = preg_replace("#/$#", '', $symlink);
+        $filesystem->mkdir($symlink);
+
+        if (!$filesystem->exists($symlink) || !is_dir($symlink)) {
+            $result->error = 'Unable create temp catalog';
+
+            return $result;
+        }
+        $symlink .= '/' . $fileEntity->getId() . $ext;
+        $result->symlink = $symlink;
+
+        return $result;
     }
 }

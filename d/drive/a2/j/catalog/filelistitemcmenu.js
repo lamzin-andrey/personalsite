@@ -138,8 +138,12 @@ window.fileListItemCmenu = {
 	onClickRemove:function(evt) {
 		var o = this;
 		if (o.cmMenuOpenItemType != 'c') {
-			alert('Not release');
-			hideLoader();
+			showLoader();
+			Rest._post(
+				{i: o.cmMenuOpenItemId}, function(data){o.onSuccessRemoveFile(data);},
+				br + '/driverm.json',
+				function(data, responseText, info, xhr){/*o.onFailRemoveFile*/o.onFailGetRemoveIdList(data, responseText, info, xhr)}
+			);
 			return;
 		}
 		showLoader();
@@ -191,7 +195,34 @@ window.fileListItemCmenu = {
 			if (idx > -1) {
 				current.splice(idx, 1);
 			}
-			storage('f' + parentDir, current);
+			storage('f' + currentDir, current);
+		}
+		fileList.render(current);
+		hideLoader();
+	},
+	onSuccessRemoveFile:function(data) {
+		if (!this.onFailGetRemoveIdList(data)) {
+			return;
+		}
+		
+		var i, current, idx, j;
+		
+		//remove from parent list
+		current = storage('f' + currentDir);
+		idx = -1;
+		if (current instanceof Array) {
+			sz(current);
+			for (i = 0; i < SZ; i++) {
+				j = current[i];
+				if (j.i == this.cmMenuOpenItemId && j.type != 'c') {
+					idx = i;
+					break;
+				}
+			}
+			if (idx > -1) {
+				current.splice(idx, 1);
+			}
+			storage('f' + currentDir, current);
 		}
 		fileList.render(current);
 		hideLoader();
