@@ -228,20 +228,24 @@ window.fileListItemCmenu = {
 		hideLoader();
 	},
 	onClickRename:function(evt) {
-		if (this.cmMenuOpenItemType != 'c') {
-			alert('Not release');
-			hideLoader();
+		/*if (o.cmMenuOpenItemType != 'c') {
+			showLoader();
+			Rest._post(
+				{i: o.cmMenuOpenItemId}, function(data){o.onSuccessRemoveFile(data);},
+				br + '/driverm.json',
+				function(data, responseText, info, xhr){o.onFailGetRemoveIdList(data, responseText, info, xhr)}
+			);
 			return;
-		}
+		}*/
 		var name = '',
-			ls = storage('f' + currentDir),
-			i, o = this;
-		sz(ls);
-		for (i = 0; i < SZ; i++) {
-			if (ls[i].i == this.cmMenuOpenItemId) {
-				name = ls[i].name;
-			}
+			o = this,
+			r = o.findItemByIdAndType();
+		if (r.i > -1) {
+			name = r.ls[r.i].name;
 		}
+		
+		o.sourceExt = o.getExtensionPart(name);
+		name = name.replace(new RegExp(o.sourceExt + '$', 'i'), '');
 		
 		window.onClickInputDlgOk = function(evt) {
 			o.onEnterNewName(evt.inputStr);
@@ -254,9 +258,10 @@ window.fileListItemCmenu = {
 		showInputDlg(l('Enter new name'), name);
 	},
 	onEnterNewName:function(newName) {
-		var o = this;
+		var o = this,
+			action = '/drivern.json';
 		showLoader();
-		Rest._post({i: this.cmMenuOpenItemId, s: newName, c: currentDir}, function(data){o.onSuccessRenameCatalog(data);},
+		Rest._post({i: o.cmMenuOpenItemId, s: newName + o.sourceExt, c: currentDir, t: o.cmMenuOpenItemType}, function(data){o.onSuccessRenameCatalog(data);},
 		br + '/drivern.json',
 		function(data, responseText, info, xhr){o.onFailRenameCatalog(data, responseText, info, xhr)});
 	},
@@ -267,18 +272,101 @@ window.fileListItemCmenu = {
 		if (!this.onFailRenameCatalog(data)) {
 			return;
 		}
+		var o = this,
+			r = o.findItemByIdAndType();
+		if (r.i > -1) {
+			r.ls[r.i].name = data.name;
+			storage('f' + currentDir, r.ls);
+		}
+		fileList.render(r.ls);
+	},
+	/**
+	 * @return Object {ls:Array, i:Number}
+	*/
+	findItemByIdAndType:function() {
 		var ls = storage('f' + currentDir),
-			i, o = this;
+			i, o = this, t,
+			r = {ls: [], i: -1};
 		sz(ls);
 		for (i = 0; i < SZ; i++) {
-			if (ls[i].i == this.cmMenuOpenItemId) {
-				ls[i].name = data.name;
-				break;
+			t = ls[i].type;
+			t = t == 'c' ? t : 'f';
+			if (ls[i].i == o.cmMenuOpenItemId && o.cmMenuOpenItemType == t) {
+				r.ls = ls;
+				r.i = i;
+				return r;
 			}
 		}
-		storage('f' + currentDir, ls);
-		fileList.render(ls);
+		return r;
 	},
+	
+	/**
+	 * @description If filename end is '.some.zip' retun '.some.zip'
+	 * If filename is 'somestring.ext' return 'ext'
+	*/
+	getExtensionPart:function(name) {
+		var a = name.split('.'),
+			ext, isZip = false, type, extF, extFType;
+        ext = def(a[sz(a) - 1], 0) ? a[sz(a) - 1] : '';
+        extF = ext;
+        if ('zip' == ext) {
+            ext = def(a[sz(a) - 2]) ? a[sz(a) - 2] : '';
+            isZip = true;
+        }
+        type = this.getTypeByExtension(ext);
+        extFType = this.getTypeByExtension(extF);
+        if ('unknown' == extFType) {
+			return '';
+		}
+        if ('unknown' == type && isZip) {
+            return '.zip';
+        } else if ('unknown' == type && extF) {
+			return '.' + extF;
+		} else if ('unknown' == type && !extF) {
+			return '';
+		} else if ('unknown' != type && extF) {
+			if (isZip) {
+				return '.' + ext + '.zip';
+			}
+			return '.' + ext;
+			
+		}
+		return '';
+	},
+	getTypeByExtension:function(extension)
+    {
+        var types = {
+            //zip
+            'zip' : 'zip',
+            'gz' : 'zip',
+            '7z' : 'zip',
+            // audio
+            'mp3' : 'audio',
+            'ogg' : 'audio',
+            'wav' : 'audio',
+            'mp4' : 'audio',
+
+            // text
+            'txt' : 'text',
+            'php' : 'text',
+            'js' : 'text',
+
+            // image
+            'jpg' : 'image',
+            'png' : 'image',
+            'bmp' : 'image',
+            'jpeg' : 'image',
+            'jiff' : 'image',
+
+            // pdf
+            'pdf' : 'pdf',
+
+            // apk
+            'apk' : 'apk',
+        };
+        return types[extension] ? types[extension] : 'unknown';
+    },
+
 	onFailRenameCatalog:function(data, responseText, info, xhr) {
 		hideLoader();
 		return defaultResponseError(data, responseText, info, xhr);

@@ -35,32 +35,38 @@ class DrvFileRepository extends ServiceEntityRepository
         return;
     }
 
-    // /**
-    //  * @return DrvFile[] Returns an array of DrvFile objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $
+     * @return
+     */
+    public function renameFileEntity(int $targetId, string $name, int $userId, int $catalogId, bool &$alreadyExists) : int
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $alreadyExists = false;
+        $exists = $this->findOneBy([
+            'userId' => $userId,
+            'catalogId' => $catalogId,
+            'name' => $name,
+            'isDeleted' => false
+        ]);
 
-    /*
-    public function findOneBySomeField($value): ?DrvFile
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($exists) {
+            $alreadyExists = true;
+            return intval($exists->getId());
+        }
+
+
+        $file = $this->find($targetId);
+        if (!$file) {
+            return 0;
+        }
+        if ($file->getUserId() != $userId) {
+            return 0;
+        }
+        $file->setName($name);
+        $em = $this->getEntityManager();
+        $em->persist($file);
+        $em->flush();
+
+        return intval($file->getId());
     }
-    */
 }
