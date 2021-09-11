@@ -15,9 +15,12 @@ function ee(p, c) {
 }
 W.micron$$ = ee;
 function cs(p, c) {
+	var a;
 	p = e(p);
 	if (p.getElementsByClassName) {
-		return p.getElementsByClassName(c);
+		a = p.getElementsByClassName(c);
+		sz(a);
+		return a;
 	}
 	return [];
 }

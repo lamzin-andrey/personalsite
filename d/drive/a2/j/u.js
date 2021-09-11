@@ -4,6 +4,8 @@ window.path = '/wcard';
 window.currentDir = 0;
 window.parentDir = 0;
 window.homeDir = 0;
+window.selectMode = 0;
+window.selectedItems = {};
 window.onload = initApp;
 function initApp() {
 	// styling

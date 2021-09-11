@@ -22,16 +22,26 @@ window.fileList = {
 						'<div class="im_wrapper">' + 
 							'<img src="./a2/i/mime/{t}.png">' +
 						'</div>' +
-						'<span class="fn">{name}</span>' + 
+						'<span class="fn">{name}</span>{checkbox}' + 
 						'<div class="cl"></div>',
 					// '</div>',
 		prefix = 'f',
-		s, i, sZ = sz(list), j, newItem,
+		s, i, sZ = sz(list), j, newItem, cid, chName,
 		vAttr = {
 			'class': 'it'
 		},
+		self = this, checkboxTpl = '<div class="imch_wrapper">' + 
+							'<img src="' + root + '/i/{ct}.jpg" class="chVw">' +
+						'</div>';
 		
-		self = this;
+		if (!selectMode) {
+			checkboxTpl = '';
+			removeClass(this.id, 'selmod');
+		} else {
+			addClass(this.id, 'selmod');
+		}
+		tpl = tpl.replace('{checkbox}', checkboxTpl);
+		
 		this.clear();
 		
 		if (sZ > 0) {
@@ -47,7 +57,16 @@ window.fileList = {
 			if (j.type != 'c') {
 				prefix = 'fi';
 			}
-			vAttr['id'] = prefix + j.i;
+			cid = vAttr['id'] = prefix + j.i;
+			
+			if (selectMode) {
+				chName = 'check_intive';
+				if (selectedItems[cid]) {
+					chName = 'check_active';
+				}
+				s = s.replace('{ct}', chName);
+			}
+			
 			newItem = appendChild(e(this.id), 'div', s, vAttr);
 			
 			newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
@@ -106,9 +125,13 @@ window.fileList = {
 		}
 		
 		storage('f' + currentDir, data.ls);
+		this.renderCurrentDir(data.ls, data.bc);
+	},
+
+	renderCurrentDir:function(ls, bc) {
 		var s = '/wcard';
-		path = data.bc == '/' ? s : (s + data.bc);
-		this.render(data.ls);
+		path = bc == '/' ? s : (s + bc);
+		this.render(ls);
 	},
 	
 	onFailGetFileList:function(data, responseText, info, xhr) {
@@ -153,17 +176,31 @@ window.fileList = {
 			
 			startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
 			if (Math.abs(this.startY - endY) < 1) {
-				if (time - startTime < 500) {
-					console.log(id);
-					if (id.indexOf('fi') == -1) {
-						this.onEnterInFolder({target: e(id)});
+				if (time - startTime < 500) { // short touch
+					if (id.indexOf('fi') == -1) { // folder
+						if (!selectedItems[id]) {
+							this.onEnterInFolder({target: e(id)});
+						} else {
+							showError(l('Unable move folder into this. (Deselect it)'));
+						}
+					} else { // file
+						if (selectMode) {
+							this.onClickCheckbox({target: e(id)});
+						}
 					}
-				} else {
-					this.onCallContextMenu({target: e(id)});
+				} else { // long touch
+					if (!selectMode) {
+						this.onCallContextMenu({target: e(id)});
+					} else {
+						if (id.indexOf('fi') == -1) {
+							this.onClickCheckbox({target: e(id)});
+						}
+					}
 				}
 			} else {
 				this.clearActiveItems();
 			}
+			
 		} catch (err) {
 			alert(err);
 		}
@@ -210,6 +247,21 @@ window.fileList = {
 		if (window.currentDir > 0) {
 			this.loadCurrentDir();
 		}
+	},
+	
+	onClickCheckbox:function(evt) {
+		var id = attr(evt.target, 'id'),
+			vw = cs(id, 'chVw')[0], s = 'check_intive';
+		if (vw ) {
+			if (!selectedItems[id]) {
+				s = 'check_active';
+				selectedItems[id] = currentDir;
+			} else {
+				delete selectedItems[id];
+			}
+			attr(vw, 'src', root + '/i/' + s +'.jpg');
+		}
+		
 	},
 	
 	initUpButton:function(bUp){
@@ -260,6 +312,7 @@ window.fileList = {
 		} else {
 			setUpButtonDisable(this.bUp);
 		}
-	}
+	},
+	
 	
 };

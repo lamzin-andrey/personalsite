@@ -8,7 +8,7 @@ function initMainMenu() {
 	e('bmUpload').onclick = onClickMainMenuUpload;
 	e('bmAddCatalog').onclick = onClickMainAddCatalog;
 	e('bmRemove').onclick = onClickMainRemove;
-	e('bmViewType').onclick = onClickMainViewType;
+	e('bmSelectMode').onclick = onClickMainSelectMode;
 	e('bmSort').onclick = onClickMainSort;
 	e('bmOptions').onclick = onClickMainOptions;
 }
@@ -51,7 +51,15 @@ function onClickMainMenuUpload() {
 }
 function onClickMainRemove() {
 }
-function onClickMainViewType() {
+function onClickMainSelectMode() {
+	addClass('hBotMenu', 'hide');
+	selectMode = selectMode ? 0 : 1;
+	if (!selectMode) {
+		selectedItems = {};
+	}
+	var ls = storage('f' + currentDir),
+		bc = path.replace('/wcard', '');
+	fileList.renderCurrentDir(ls, bc);
 }
 function onClickMainSort() {
 }
