@@ -33,8 +33,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  
 class UsbController extends AbstractController
 {
-	/** @property string $_subdir подкаталог в который загружаются файлы при аплоаде */
-	private  $_subdir;
+
+    /** @property string $backendRoot subdirectory with root symfony project */
+    private  $backendRoot = '/sp/public';
 
 
 
@@ -273,44 +274,32 @@ class UsbController extends AbstractController
 
     /**
      * @Route("/drivegetlink.json", name="drivegetdownloadkink")
-     * @param Request $oRequest
+     * @param Request $request
      * @param TranslatorInterface $t
      * @param $
      * @return
      */
     public function driveGetFileDowloadLinkAction(Request $request,
                                                TranslatorInterface $t,
-                                               AppService $oAppService,
                                                Filesystem $filesystem,
                                                CsrfTokenManagerInterface $csrfTokenManager)
     {
-        /*$csrfToken = $csrfTokenManager
-            ? $csrfTokenManager->getToken('authenticate')->getValue()
-            : null;
-        if ($csrfToken != $request->request->get('_token')) {
-            $domain = null;
-            return $this->_json([
-                'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
-            ]);
-        }*/
+        $data = [];
+        $fileEntity = null;
+        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity)) {
+            return $this->_json($data);
+        }
 
         $domain = 'wusb_filesystem';
-        // Create db record
-        /**
-         * @var DrvFileRepository $fileRepository
-         */
-        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
-        $filter = [
-            'userId' => $this->getUser()->getId(),
-            'id' => intval($request->query->get('i')),
-            'isDeleted' => false
-        ];
-        /** @var DrvFile $fileEntity */
-        $fileEntity = $fileRepository->findOneBy($filter);
-
         $filePathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
         $path = $filePathObject->path;
+
+        if (filesize($path) < pow(1024, 2)) {
+            return $this->_json([
+                'link' => $this->backendRoot . '/drivedwnlsmall?i=' . $request->query->get('i')
+            ]);
+        }
+
         if (!empty($filePathObject->error)) {
             return $this->_json([
                 'status' => 'ok',
@@ -332,6 +321,63 @@ class UsbController extends AbstractController
         return $this->_json([
             'link' => str_replace($request->server->get('DOCUMENT_ROOT'), '', $symlink)
         ]);
+    }
+
+
+    /**
+     *
+     * Small file - file less than 40 Mb
+     * @Route("/drivedwnlsmall", name="drivedownloadsmallfile")
+     * @param Request $request
+     * @param TranslatorInterface $t
+    */
+    public function downloadSmallFileAction(Request $request,
+                                         TranslatorInterface $t,
+                                         Filesystem $filesystem,
+                                         CsrfTokenManagerInterface $csrfTokenManager)
+    {
+
+        $data = [];
+        /**
+         * @var ?DrvFile $fileEntity
+        */
+        $fileEntity = null;
+        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity)) {
+            return $this->_json($data);
+        }
+
+        $domain = 'wusb_filesystem';
+        $filePathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+        $path = $filePathObject->path;
+        if (!empty($filePathObject->error)) {
+            return $this->_json([
+                'status' => 'ok',
+                'error' => $t->trans($filePathObject->error, [], $domain)
+            ]);
+        }
+
+        if (!$filesystem->exists($path)) {
+            $s = $t->trans('File not found', [], $domain);
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="Not_Found.txt"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . strlen($s));
+            echo $s;
+            die;
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.basename($fileEntity->getName()).'"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        die;
     }
 
     private function _json($aData)
@@ -910,5 +956,54 @@ class UsbController extends AbstractController
         $result->symlink = $symlink;
 
         return $result;
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function hasAccessToFile(Request $request, CsrfTokenManagerInterface $csrfTokenManager, array &$data, TranslatorInterface $t, ?DrvFile &$fileEntity) : bool
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        $domain = null;
+        /*if ($csrfToken != $request->request->get('_token')) {
+            $data = [
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ];
+
+            return false;
+        }*/
+        if (!$this->getUser()) {
+            $data = [
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ];
+
+            return false;
+        }
+
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+        $filter = [
+            'userId' => $this->getUser()->getId(),
+            'id' => intval($request->query->get('i')),
+            'isDeleted' => false
+        ];
+
+        $fileEntity = $fileRepository->findOneBy($filter);
+        if ($this->getUser()->getId() !== $fileEntity->getUserId()) {
+            $data =[
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ];
+            return false;
+        }
+
+        return true;
     }
 }
