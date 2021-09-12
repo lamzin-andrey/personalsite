@@ -284,20 +284,7 @@ window.fileListItemCmenu = {
 	 * @return Object {ls:Array, i:Number}
 	*/
 	findItemByIdAndType:function() {
-		/*var ls = storage('f' + currentDir),
-			i, o = this, t,
-			r = {ls: [], i: -1};
-		sz(ls);
-		for (i = 0; i < SZ; i++) {
-			t = ls[i].type;
-			t = t == 'c' ? t : 'f';
-			if (ls[i].i == o.cmMenuOpenItemId && o.cmMenuOpenItemType == t) {
-				r.ls = ls;
-				r.i = i;
-				return r;
-			}
-		}
-		return r;*/
+		var o = this;
 		return fileList.findItemByIdAndType(o.cmMenuOpenItemId, o.cmMenuOpenItemType, 'f' + currentDir);
 	},
 	
