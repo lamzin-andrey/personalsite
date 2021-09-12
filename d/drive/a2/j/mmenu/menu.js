@@ -69,6 +69,11 @@ function onClickMainSelectMode() {
 function onClickMainPaste(evt) {
 	evt.preventDefault();
 	addClass('hBotMenu', 'hide');
+	if (!sz(selectedItems)) {
+		return;
+	}
+	
+	
 	Rest._token = e('_csrf_token').value;
 	showLoader();
 	// TODO create list
