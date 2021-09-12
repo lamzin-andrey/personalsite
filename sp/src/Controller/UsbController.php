@@ -213,7 +213,7 @@ class UsbController extends AbstractController
         $filePathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
         $path = $filePathObject->path;
 
-        if (filesize($path) < pow(1024, 2)) {
+        if (filesize($path) < 40 * pow(1024, 2)) {
             return $this->_json([
                 'link' => $this->backendRoot . '/drivedwnlsmall?i=' . $request->query->get('i')
             ]);
