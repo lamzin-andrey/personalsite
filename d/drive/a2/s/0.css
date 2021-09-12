@@ -161,21 +161,8 @@ input[type=text],input[type=password], input[type=email], {
 .im_wrapper img {
 	text-align:center;
 	vertical-align:middle;
-	line-height:44px;
+	line-height:44px
 }
-
-.imch_wrapper {
-	width: 44px;
-	height: 44px;
-	float:right;
-	/*! vertical-align: bottom; */
-	line-height: 37px;
-}
-.imch_wrapper img {
-	text-align:center;
-	vertical-align:middle;
-}
-
 .fn {
 	line-height:44px;
 	float:left;
@@ -186,10 +173,6 @@ input[type=text],input[type=password], input[type=email], {
 	max-width: 75%;
 	overflow-x: hidden;
 	text-overflow: ellipsis;
-}
-
-.selmod .fn {
-	max-width: 61%;
 }
 
 /** bottom menu */
@@ -218,6 +201,9 @@ input[type=text],input[type=password], input[type=email], {
 	font-weight: bold;
 	text-align:center;
 	padding-top:36px;
+}
+.menu_paste {
+	color: gray;
 }
 /** end bottom menu */
 

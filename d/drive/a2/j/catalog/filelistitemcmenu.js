@@ -284,7 +284,7 @@ window.fileListItemCmenu = {
 	 * @return Object {ls:Array, i:Number}
 	*/
 	findItemByIdAndType:function() {
-		var ls = storage('f' + currentDir),
+		/*var ls = storage('f' + currentDir),
 			i, o = this, t,
 			r = {ls: [], i: -1};
 		sz(ls);
@@ -297,7 +297,8 @@ window.fileListItemCmenu = {
 				return r;
 			}
 		}
-		return r;
+		return r;*/
+		return fileList.findItemByIdAndType(o.cmMenuOpenItemId, o.cmMenuOpenItemType, 'f' + currentDir);
 	},
 	
 	/**

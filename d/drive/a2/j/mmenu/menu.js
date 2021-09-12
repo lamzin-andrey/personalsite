@@ -1,5 +1,10 @@
 // @depends mmb.js
 function mainMenuShow() {
+	if (sz(selectedItems) > 0) {
+		removeClass('bmPaste', 'menu_paste');
+	} else {
+		addClass('bmPaste', 'menu_paste');
+	}
 	removeClass('hBotMenu', 'hide');
 	mainMenuBackPush();
 }
@@ -9,7 +14,7 @@ function initMainMenu() {
 	e('bmAddCatalog').onclick = onClickMainAddCatalog;
 	e('bmRemove').onclick = onClickMainRemove;
 	e('bmSelectMode').onclick = onClickMainSelectMode;
-	e('bmSort').onclick = onClickMainSort;
+	e('bmPaste').onclick = onClickMainPaste;
 	e('bmOptions').onclick = onClickMainOptions;
 }
 
@@ -61,7 +66,27 @@ function onClickMainSelectMode() {
 		bc = path.replace('/wcard', '');
 	fileList.renderCurrentDir(ls, bc);
 }
-function onClickMainSort() {
+function onClickMainPaste(evt) {
+	evt.preventDefault();
+	addClass('hBotMenu', 'hide');
+	Rest._token = e('_csrf_token').value;
+	showLoader();
+	// TODO create list
+	var ls = [], i;
+	for (i in selectedItems) {
+		ls.push(i);
+	}
+	Rest._post({ls: ls, t: currentDir}, onSuccessMoveFiles, 
+		window.br + '/drivemv.json', 
+		onFailAddCatalog
+	);
+}
+
+function onSuccessMoveFiles(data) {
+	if (!onFailAddCatalog(data)) {
+		return;
+	}
+	fileList.moveFiles(data);
 }
 
 function onClickMainOptions() {

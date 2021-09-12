@@ -17,7 +17,7 @@ class DrvFile
     private $id;
 
     /**
-     * @ORM\Column(name="catalog_id", type="integer", options={"comment"="drv_catalog.id", "default"="0"})
+     * @ORM\Column(name="catalog_id", nullable=true, type="integer", options={"comment"="drv_catalog.id", "default"="0"})
      */
     private $catalogId = 0;
 

@@ -331,6 +331,16 @@ function decsz(o) {
  * @return Number array length - 1
 */
 function sz(o) {
+  if (o && String(o.length) === 'undefined') {
+    if (o instanceof Object) {
+		var l = 0, i;
+		for (var i in o) {
+			l++;
+		}
+		window.SZ = l;
+		return l;
+	}
+  }
   window.SZ = o && o.length ? o.length : 0;
   return window.SZ;
 }
@@ -345,7 +355,9 @@ function ex(data, i, j) {
   data[i] = data[j];
   data[j] = b;
 }
-
+/**
+ * @return Array
+*/
 function array_values(o) {
 	if (o instanceof Array) {
 		return o;

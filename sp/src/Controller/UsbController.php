@@ -162,7 +162,6 @@ class UsbController extends AbstractController
      */
     public function driveGetCatalogFilesAction(Request $request,
                                           TranslatorInterface $t,
-                                          AppService $oAppService,
                                           Filesystem $filesystem,
                                           CsrfTokenManagerInterface $csrfTokenManager)
     {
@@ -176,100 +175,20 @@ class UsbController extends AbstractController
                 'error' => $t->trans('You have not access to this page', [], $domain)
             ]);
         }*/
+        if (!$this->getUser()) {
+            $data = [
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], null)
+            ];
+
+            return $this->_json($data);
+        }
 
         $domain = 'wusb_filesystem';
-        // Create db record
-        /**
-         * @var DrvCatalogsRepository $catalogRepository
-         */
-        $catalogRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
         $parentId = $request->query->get('c');
-        $filter = [
-            'userId' => $this->getUser()->getId(),
-            'parentId' => $parentId,
-            'isDeleted' => false,
-            'isHide' => false
-        ];
-        if (intval($request->query->get('m')) === 1) {
-            unset($filter['isHide']);
-        }
-        $listData = $catalogRepository->findBy($filter);
+        $mode = intval($request->query->get('m'));
 
-        $list = [];
-        $relativePath = $this->getParameter('app.wusb_catalog_root');
-        $userPath = $this->generateUserPath($this->getUser()->getId());
-
-        foreach ($listData as $drvCatalogs) {
-            $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $drvCatalogs->getId();
-            /*if (!$filesystem->exists($path) || !is_dir($path)) {
-                continue;
-            }*/
-            $item = [
-                'name' => $drvCatalogs->getName(),
-                'type' => 'c',
-                'i' => $drvCatalogs->getId(),
-                'h' => $drvCatalogs->getIsHide()
-            ];
-            $list[] = $item;
-        }
-        $realParentId = $parentId;
-        $parentCatalog = $catalogRepository->find($parentId);
-
-        $files = [];
-        if ($parentCatalog) {
-            $realParentId = $parentCatalog->getParentId();
-            // TODO if mode
-            $files = $parentCatalog->getFiles();
-
-        } else {
-            $this->container->get('doctrine')->getRepository(DrvFile::class)->findBy([
-                'userId' => $this->getUser()->getId(),
-                'catalogId' => 0,
-                'isHidden' => false,
-                'isDeleted' => false
-            ]);
-        }
-        foreach ($files as $drvFile) {
-            $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $parentCatalog->getId() . '/' . $drvFile->getId();
-            /*if (!$filesystem->exists($path) ) {
-                continue;
-            }*/
-
-            if ($drvFile->getIsDeleted() === true) {
-                continue;
-            }
-
-            $item = [
-                'name' => $drvFile->getName(),
-                'type' => $drvFile->getType()[0] ?? 'u',// TODO
-                'i' => $drvFile->getId(),
-                'h' => $drvFile->getIsHidden()
-            ];
-            $list[] = $item;
-        }
-
-
-
-        TreeAlgorithms::$parentIdFieldName = 'parentId';
-        $flatList = $catalogRepository->getFlatIdListByUserId($this->getUser()->getId());
-        $cluster = TreeAlgorithms::buildTreeFromFlatList($flatList, true);
-        $breadCrumbs = [];
-        foreach ($cluster as $tree) {
-            $nodes = TreeAlgorithms::getNodesByNodeId($tree, $parentId);
-            if (count($nodes)) {
-                foreach ($nodes as $node) {
-                    $breadCrumbs[] = $node->name;
-                }
-                break;
-            }
-        }
-        $breadCrumbs = '/' . implode('/', $breadCrumbs);
-
-        return $this->_json([
-            'ls' => $list,
-            'p' => $realParentId,
-            'bc' => $breadCrumbs
-        ]);
+        return $this->_json($this->getFileList($parentId, $mode, $request, $filesystem, $this->getUser()));
     }
 
     /**
@@ -923,7 +842,7 @@ class UsbController extends AbstractController
 
     /**
      * @param $
-     * @return \StdClass {symlink:string, path: string, error: string}
+     * @return \StdClass {symlink:string, path: string, error: string, ext: string}
     */
     protected function getFilePathObject(DrvFile $fileEntity, Ausers $user, Request $request, Filesystem $filesystem) : \StdClass
     {
@@ -931,6 +850,7 @@ class UsbController extends AbstractController
         $result->symlink = '';
         $result->path = '';
         $result->error = '';
+        $result->ext = '';
 
         // start method
         $relativePath = $this->getParameter('app.wusb_catalog_root');
@@ -940,7 +860,7 @@ class UsbController extends AbstractController
         if (!is_null($catalogEntity)) {
             $catalogIdSubpath = $catalogEntity->getId() . '/';
         }
-        $ext = $this->getExtWithDot($fileEntity->getName());
+        $result->ext = $ext = $this->getExtWithDot($fileEntity->getName());
         $result->path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogIdSubpath . $fileEntity->getId() .  $ext;
         $relativePathForSymlink = str_replace('drive/d', 'drive/t', $relativePath);
         $symlink = $request->server->get('DOCUMENT_ROOT') . $relativePathForSymlink . '/' . $userPath . '/' . $catalogIdSubpath;
@@ -954,6 +874,32 @@ class UsbController extends AbstractController
         }
         $symlink .= '/' . $fileEntity->getId() . $ext;
         $result->symlink = $symlink;
+
+        return $result;
+    }
+    /**
+     * @param $
+     * @return \StdClass {path: string, error: string}
+     */
+    protected function getDirPathObject(?DrvCatalogs $catalogEntity, Ausers $user, Request $request, Filesystem $filesystem) : \StdClass
+    {
+        $result = new \StdClass();
+        $result->path = '';
+        $result->error = '';
+
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($user->getId());
+
+        $catalogIdSubpath = '';
+        if ($catalogEntity) {
+            $catalogIdSubpath = '/' . $catalogEntity->getId();
+        }
+        $result->path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath .   $catalogIdSubpath;
+        $filesystem->mkdir($result->path);
+
+        if (!$filesystem->exists($result->path) || !is_dir($result->path)) {
+            $result->error = 'Unable create catalog';
+        }
 
         return $result;
     }
@@ -1005,5 +951,296 @@ class UsbController extends AbstractController
         }
 
         return true;
+    }
+
+    /**
+     * @Route("/drivemv.json", name="drivemovefiles")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveMoveFilesAction(Request $request,
+                                          TranslatorInterface $t,
+                                          AppService $oAppService,
+                                          Filesystem $filesystem,
+                                          CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        $domain = null;
+        if ($csrfToken != $request->request->get('_token')) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+
+        $domain = 'wusb_filesystem';
+        // Create db record
+        /**
+         * @var DrvCatalogsRepository $catalogRepository
+         */
+        $catalogRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+
+        // build id lists
+        $idListStr = $request->request->get('ls', '');
+        $idList = explode(',', $idListStr);
+        $fileIdList = [];
+        $catalogIdList = [];
+        $targetCatalogId = intval($request->request->get('t'));
+        if ($targetCatalogId) {
+            $catalogIdList[] = $targetCatalogId;
+        }
+        $sz = count($idList);
+        for ($i = 0; $i < $sz; $i++) {
+            $id = $idList[$i];
+            $type = strpos($id, 'fi') === false ? 'c' : 'f';
+            if ('f' === $type) {
+                $id = intval(trim(str_replace('fi', '', $id) ) );
+                if ($id) {
+                    $fileIdList[] = $id;
+                }
+            } else {
+                $id = intval(trim(str_replace('f', '', $id) ) );
+                if ($id) {
+                    $catalogIdList[] = $id;
+                }
+            }
+        }
+        // get all user files
+        $fileEntities = [];
+        if ($fileIdList) {
+            $fileEntities = $fileRepository->findBy([
+                'id' => $fileIdList,
+                'userId' => $user->getId()
+            ]);
+        }
+        // get all user catalogs
+        $catalogEntities = [];
+        if ($catalogIdList) {
+            $catalogEntities = $catalogRepository->findBy([
+                'id' => $catalogIdList,
+                'userId' => $user->getId()
+            ]);
+        }
+        // check target access
+        $targetCatalogEntity = null;
+        foreach ($catalogEntities as $dirEntity) {
+            if ($dirEntity->getId() == intval($request->request->get('t'))) {
+                $targetCatalogEntity = $dirEntity;
+                if ($dirEntity->getUserId() != $user->getId()) {
+                    return $this->_json([
+                        'status' => 'error',
+                        'error' => $t->trans('You have not access to this page', [], $domain)
+                    ]);
+                }
+                break;
+            }
+        }
+        // move phisical file
+        // change file parent in db
+        $dirPathObject = $this->getDirPathObject($targetCatalogEntity, $user, $request, $filesystem);
+        if ($dirPathObject->error) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans($dirPathObject->error, [], $domain)
+            ]);
+        }
+        foreach ($fileEntities as $fileEntity) {
+            if ($fileEntity->getUserId() != $user->getId()) {
+                continue;
+            }
+            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
+            if (!$filePathObject->error) {
+                if (file_exists($filePathObject->symlink)) {
+                    $filesystem->remove($filePathObject->symlink);
+                }
+                $success = false;
+                $error = '';
+                try {
+                    $filesystem->rename($filePathObject->path, $dirPathObject->path . '/' . $fileEntity->getId() . $filePathObject->ext, true);
+                    $success = true;
+                } catch (\Exception $exception) {
+                    $error = $exception->getMessage();
+                }
+                if (!$success) {
+                    return $this->_json([
+                        'status' => 'error',
+                        'error' => $t->trans('mup failed! ' . $error, [], $domain)
+                    ]);
+                }
+
+                // db
+                $fileEntity->setCatalogEntity($targetCatalogEntity);
+
+            }
+        }
+        $em = $this->container->get('doctrine')->getManager();
+        // init tree
+        TreeAlgorithms::$parentIdFieldName = 'parentId';
+        $flatList = $catalogRepository->getFlatIdListByUserId( intval($user->getId() ) );
+        $tree = TreeAlgorithms::buildTreeFromFlatList($flatList, true);
+        $rootNode = new \StdClass;
+        $rootNode->id = 0;
+        $rootNode->parentId = -1;
+        $rootNode->children = [];
+        for ($i = 0; $i < count($tree); $i++) {
+            $rootNode->children[] = $tree[$i];
+        }
+        // change catalog parent in db (use tree for validate action)
+        foreach ($catalogEntities as $catalogEntity) {
+            if ($catalogEntity->getUserId() != $user->getId()) {
+                continue;
+            }
+            if ($catalogEntity->getId() == $targetCatalogEntity->getId()) {
+                continue;
+            }
+            $nodes = TreeAlgorithms::getNodesByNodeId($rootNode, $targetCatalogEntity->getId());
+            $doContinue = false;
+            foreach ($nodes as $node) {
+                if ($node->id == $catalogEntity->getId()) {
+                    $doContinue = true;
+                    break;
+                }
+            }
+            if ($doContinue) {
+                continue;
+            }
+            // db
+            $targetCatalogId = 0;
+            if ($targetCatalogEntity) {
+                $targetCatalogId = $targetCatalogEntity->getId();
+            }
+            $catalogEntity->setParentId($targetCatalogId);
+        }
+        $em->flush();
+
+        // get current dir list
+        $catalogId = 0;
+        if ($targetCatalogEntity) {
+            $catalogId = $targetCatalogEntity->getId();
+        }
+        return $this->_json($this->getFileList($catalogId, 0, $request, $filesystem, $user));
+
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function getFileList(int $parentId, int $mode, Request $request, Filesystem $filesystem, Ausers $user) : array
+    {
+        // Create db record
+        /**
+         * @var DrvCatalogsRepository $catalogRepository
+         */
+        $catalogRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
+
+        $sParentId = $parentId;
+        if ($parentId === 0) {
+            $sParentId = null;
+        }
+
+        $filter = [
+            'userId' => $user->getId(),
+            'parentId' => $parentId,
+            'isDeleted' => false,
+            'isHide' => false
+        ];
+        if ($mode === 1) {
+            unset($filter['isHide']);
+        }
+        $listData = $catalogRepository->findBy($filter);
+
+        $list = [];
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($user->getId());
+
+        foreach ($listData as $drvCatalogs) {
+            $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $drvCatalogs->getId();
+            /*if (!$filesystem->exists($path) || !is_dir($path)) {
+                continue;
+            }*/
+            $item = [
+                'name' => $drvCatalogs->getName(),
+                'type' => 'c',
+                'i' => $drvCatalogs->getId(),
+                'h' => $drvCatalogs->getIsHide()
+            ];
+            $list[] = $item;
+        }
+        $realParentId = $parentId;
+        $parentCatalog = $catalogRepository->find($parentId);
+
+        $files = [];
+        $parentCatalogPath = '';
+        if ($parentCatalog) {
+            $realParentId = $parentCatalog->getParentId();
+            // TODO if mode
+            $files = $parentCatalog->getFiles();
+            $parentCatalogPath = '/' . $parentCatalog->getId();
+        } else {
+            $files = $this->container->get('doctrine')->getRepository(DrvFile::class)->findBy([
+                'userId' => $user->getId(),
+                'catalogId' => null,
+                'isHidden' => false,
+                'isDeleted' => false
+            ]);
+        }
+
+        foreach ($files as $drvFile) {
+            $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . $parentCatalogPath . '/' . $drvFile->getId();
+            /*if (!$filesystem->exists($path) ) {
+                continue;
+            }*/
+
+            if ($drvFile->getIsDeleted() === true) {
+                continue;
+            }
+
+            $item = [
+                'name' => $drvFile->getName(),
+                'type' => $drvFile->getType()[0] ?? 'u',// TODO
+                'i' => $drvFile->getId(),
+                'h' => $drvFile->getIsHidden()
+            ];
+            $list[] = $item;
+        }
+
+
+
+        TreeAlgorithms::$parentIdFieldName = 'parentId';
+        $flatList = $catalogRepository->getFlatIdListByUserId($this->getUser()->getId());
+        $cluster = TreeAlgorithms::buildTreeFromFlatList($flatList, true);
+        $breadCrumbs = [];
+        foreach ($cluster as $tree) {
+            $nodes = TreeAlgorithms::getNodesByNodeId($tree, $parentId);
+            if (count($nodes)) {
+                foreach ($nodes as $node) {
+                    $breadCrumbs[] = $node->name;
+                }
+                break;
+            }
+        }
+        $breadCrumbs = '/' . implode('/', $breadCrumbs);
+
+        return [
+            'ls' => $list,
+            'p' => $realParentId,
+            'bc' => $breadCrumbs
+        ];
     }
 }
