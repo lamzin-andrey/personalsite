@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../../../../q/q/config.php';
 require_once DOC_ROOT . '/q/q/cpagecompiler.php';
 require_once DOC_ROOT . '/q/q/treealg/src/treealgorithms.php';
+use \Landlib\TreeAlgorithms;
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/q/q/lang.php';

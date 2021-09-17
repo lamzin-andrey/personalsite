@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../../../../q/q/config.php';
 require_once DOC_ROOT . '/q/q/cpagecompiler.php';
 require_once DOC_ROOT . '/q/q/treealg/src/treealgorithms.php';
+use \Landlib\TreeAlgorithms;
+
 
 require_once DOC_ROOT . '/p/lang/ru.php';
 require_once DOC_ROOT . '/p/ctrl/portfolio/classes/rightmenucompiler.php';
@@ -263,11 +265,11 @@ class PortfoliolistCompiler extends CPageCompiler {
 	{
 		$_REQUEST['noxhr'] = true;
 		$aData = query('SELECT * FROM portfolio_categories WHERE is_deleted != 1 ORDER BY id');
-		$oTree = TreeAlgorithms::buildTreeFromFlatList($aData);
+		$oTree = \Landlib\TreeAlgorithms::buildTreeFromFlatList($aData);
 		$oTree = isset($oTree[0]) ? $oTree[0] : null;
 		unset($_REQUEST['noxhr']);
 		if ($oTree) {
-			return TreeAlgorithms::getNodesByNodeId($oTree, $this->nCategory);
+			return \Landlib\TreeAlgorithms::getNodesByNodeId($oTree, $this->nCategory);
 		}
 		return [];
 	}
@@ -318,9 +320,9 @@ class PortfoliolistCompiler extends CPageCompiler {
 		$nTopCategory = $nCategoryId;
 		$aCategoryData = query('SELECT id, parent_id, category_name AS cname FROM portfolio_categories');
 		$_REQUEST['xhr'] = $safeIsXhr;
-		$aTree = TreeAlgorithms::buildTreeFromFlatList($aCategoryData);
+		$aTree = \Landlib\TreeAlgorithms::buildTreeFromFlatList($aCategoryData);
 		$oTree = isset($aTree[0]) ? $aTree[0] : null;
-		$aPath = TreeAlgorithms::getNodesByNodeId($oTree, $nCategoryId);
+		$aPath = \Landlib\TreeAlgorithms::getNodesByNodeId($oTree, $nCategoryId);
 		$sCompilerUrl = '/';
 		foreach ($aPath as $oItem) {
 			$sCompilerUrl .= utils_translite_url($oItem->cname) . '/';
@@ -353,7 +355,7 @@ class PortfoliolistCompiler extends CPageCompiler {
 			
 			$this->compile();
 			
-			$oNode = TreeAlgorithms::findById($oTree, $nTopCategory);
+			$oNode = \Landlib\TreeAlgorithms::findById($oTree, $nTopCategory);
 			if ($oNode && isset($oNode->parent_id)) {
 				$nParentId = $oNode->parent_id;
 			} else {
@@ -366,9 +368,9 @@ class PortfoliolistCompiler extends CPageCompiler {
 			$sCompilerUrl = $url;
 			
 			$nTopCategory = $nParentId;
-			$oNode = TreeAlgorithms::findById($oTree, $nParentId);
+			$oNode = \Landlib\TreeAlgorithms::findById($oTree, $nParentId);
 			if ($oNode /*&& isset($oNode->children)*/) {
-				TreeAlgorithms::walkAndExecuteAction($oNode, $oCallback);
+				\Landlib\TreeAlgorithms::walkAndExecuteAction($oNode, $oCallback);
 				//$aCategories = array_column($oNode->children, 'id');
 				//$allCategories = array_unique( array_merge($allCategories, $aCategories, [$nParentId]) );
 				$allCategories = array_unique( array_merge($allCategories, $this->_aChildList, [$nParentId]) );
