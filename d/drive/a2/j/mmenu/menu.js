@@ -70,7 +70,7 @@ function onClickMainRemove(evt) {
 	for (i in selectedItems) {
 		ls.push(i);
 	}
-	Rest._post({ls: ls, t: currentDir}, onSuccessRemoveFiles, 
+	Rest._post({ls: ls, t: currentDir}, onSuccessMoveFiles, 
 		window.br + '/drivermls.json', 
 		onFailAddCatalog
 	);
@@ -113,12 +113,6 @@ function onSuccessMoveFiles(data) {
 	fileList.moveFiles(data);
 }
 
-function onSuccessRemoveFiles(data) {
-	if (!onFailAddCatalog(data)) {
-		return;
-	}
-	fileList.moveFiles(data);
-}
 
 function onClickMainOptions() {
 	addClass('hBotMenu', 'hide');

@@ -359,8 +359,21 @@ window.fileListItemCmenu = {
 		hideLoader();
 		return defaultResponseError(data, responseText, info, xhr);
 	},
+	
 	onClickMove:function(evt) {
-		alert('Call m');
+		addClass('hBotMenu', 'hide');
+		selectMode = 1;
+		var ls = storage('f' + currentDir),
+			bc = path.replace('/wcard', ''),
+			o = this,
+			id = (o.cmMenuOpenItemType == 'c' ? 'f' : 'fi') + o.cmMenuOpenItemId;
+		
+		selectedItems = {};
+		selectedItems[id] = currentDir;
+		
+		
+		fileList.renderCurrentDir(ls, bc);
+		hideLoader();
 	},
 	
 	onClickDownload:function(evt) {

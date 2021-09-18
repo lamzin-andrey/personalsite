@@ -260,6 +260,14 @@ window.fileList = {
 				delete selectedItems[id];
 			}
 			attr(vw, 'src', root + '/i/' + s +'.jpg');
+			
+			if (sz(selectedItems)) {
+				removeClass('bmPaste', 'menu_paste');
+				removeClass('bmRemove', 'menu_paste');
+			} else {
+				addClass('bmPaste', 'menu_paste');
+				addClass('bmRemove', 'menu_paste');
+			}
 		}
 		
 	},
