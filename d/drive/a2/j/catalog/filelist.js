@@ -355,6 +355,47 @@ window.fileList = {
 		
 	},
 	
+	/*removeFiles:function(data) {
+		// Собираем все каталоги, из которых забрали файлы
+		var sourcesDirs = {},
+			i, j, ls, parentCatalog, 
+			fr,  // findResult
+			sZ,
+			strgId, o = this, type;
+		for (i in selectedItems) {
+			if (!sourcesDirs[selectedItems[i]]) {
+				sourcesDirs[selectedItems[i]] = [];
+			}
+			sourcesDirs[selectedItems[i]].push(i);
+		}
+		// sourcesDirs = array_values(sourcesDirs);
+		
+		// Чистим из lStor удалённые файлы
+		for (i in sourcesDirs) {
+			i = parentCatalog;
+			ls = sourcesDirs[i];
+			sZ = sz(ls);
+			for (j = 0; j < sZ; j++) {
+				strgId = 'f' + parentCatalog;
+				type = 'c';
+				if (ls[j].indexOf('fi') != -1) {
+					type = 'f';
+				}
+				fr = o.findItemByIdAndType(ls[j], type, strgId);
+				if (~fr.i) {
+					fr.ls.splice(fr.i, 1);
+					storage(strgId, fr.ls);
+				}
+			}
+		}
+		// рендерим текущий каталог (в data должны быть поля аналогичные ответу на запрос файлов каталога)
+		selectedItems = {};
+		selectMode = 0;
+		storage('f' + currentDir, data.ls);
+		o.renderCurrentDir(data.ls, data.bc);
+		
+	},*/
+	
 	/**
 	 * @return Object {ls:Array, i:Number}
 	*/

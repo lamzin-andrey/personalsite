@@ -1138,6 +1138,136 @@ class UsbController extends AbstractController
     }
 
     /**
+     * @Route("/drivermls.json", name="driveremovefiles")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveRemoveFilesAction(Request $request,
+                                         TranslatorInterface $t,
+                                         AppService $oAppService,
+                                         Filesystem $filesystem,
+                                         CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        $domain = null;
+        if ($csrfToken != $request->request->get('_token')) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $t->trans('You have not access to this page', [], $domain)
+            ]);
+        }
+
+        $domain = 'wusb_filesystem';
+        // Create db record
+        /**
+         * @var DrvCatalogsRepository $catalogRepository
+         */
+        $catalogRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+
+        // build id lists
+        $idListStr = $request->request->get('ls', '');
+        $idList = explode(',', $idListStr);
+        $fileIdList = [];
+        $catalogIdList = [];
+        $targetCatalogId = intval($request->request->get('t'));
+
+        $sz = count($idList);
+        for ($i = 0; $i < $sz; $i++) {
+            $id = $idList[$i];
+            $type = strpos($id, 'fi') === false ? 'c' : 'f';
+            if ('f' === $type) {
+                $id = intval(trim(str_replace('fi', '', $id) ) );
+                if ($id) {
+                    $fileIdList[] = $id;
+                }
+            } else {
+                $id = intval(trim(str_replace('f', '', $id) ) );
+                if ($id) {
+                    $catalogIdList[] = $id;
+                }
+            }
+        }
+        // get all user files
+        $fileEntities = [];
+        if ($fileIdList) {
+            $fileEntities = $fileRepository->findBy([
+                'id' => $fileIdList,
+                'userId' => $user->getId()
+            ]);
+        }
+        // get all user catalogs
+        $catalogEntities = [];
+        if ($catalogIdList) {
+            $catalogEntities = $catalogRepository->findBy([
+                'id' => $catalogIdList,
+                'userId' => $user->getId()
+            ]);
+        }
+
+        foreach ($fileEntities as $fileEntity) {
+            if ($fileEntity->getUserId() != $user->getId()) {
+                continue;
+            }
+            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
+            if (!$filePathObject->error) {
+                $success = false;
+                $error = '';
+                try {
+                    if (file_exists($filePathObject->symlink)) {
+                        $filesystem->remove($filePathObject->symlink);
+                    }
+                    if (file_exists($filePathObject->path)) {
+                        $filesystem->remove($filePathObject->path);
+                    }
+                    $success = true;
+                } catch (\Exception $exception) {
+                    $error = $exception->getMessage();
+                }
+                if (!$success) {
+                    return $this->_json([
+                        'status' => 'error',
+                        'error' => $t->trans('remove failed! ' . $error, [], $domain)
+                    ]);
+                }
+
+                // db
+                $fileEntity->setIsDeleted(true);
+
+            }
+        }
+        $em = $this->container->get('doctrine')->getManager();
+
+        // change catalog parent in db (use tree for validate action)
+        foreach ($catalogEntities as $catalogEntity) {
+            if ($catalogEntity->getUserId() != $user->getId()) {
+                continue;
+            }
+            // db
+            $catalogEntity->setIsDeleted(true);
+        }
+        $em->flush();
+
+        // get current dir list
+        return $this->_json($this->getFileList($targetCatalogId, 0, $request, $filesystem, $user));
+
+    }
+
+    /**
      * @param $
      * @return
     */

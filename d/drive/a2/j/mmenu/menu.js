@@ -2,8 +2,10 @@
 function mainMenuShow() {
 	if (sz(selectedItems) > 0) {
 		removeClass('bmPaste', 'menu_paste');
+		removeClass('bmRemove', 'menu_paste');
 	} else {
 		addClass('bmPaste', 'menu_paste');
+		addClass('bmRemove', 'menu_paste');
 	}
 	removeClass('hBotMenu', 'hide');
 	mainMenuBackPush();
@@ -54,7 +56,24 @@ function onClickMainMenuUpload() {
 	addClass('hBotMenu', 'hide');
 	showScreen('hUpScreen');
 }
-function onClickMainRemove() {
+function onClickMainRemove(evt) {
+	evt.preventDefault();
+	addClass('hBotMenu', 'hide');
+	if (!sz(selectedItems)) {
+		return;
+	}
+	
+	Rest._token = e('_csrf_token').value;
+	showLoader();
+	// create list
+	var ls = [], i;
+	for (i in selectedItems) {
+		ls.push(i);
+	}
+	Rest._post({ls: ls, t: currentDir}, onSuccessRemoveFiles, 
+		window.br + '/drivermls.json', 
+		onFailAddCatalog
+	);
 }
 function onClickMainSelectMode() {
 	addClass('hBotMenu', 'hide');
@@ -76,7 +95,7 @@ function onClickMainPaste(evt) {
 	
 	Rest._token = e('_csrf_token').value;
 	showLoader();
-	// TODO create list
+	// create list
 	var ls = [], i;
 	for (i in selectedItems) {
 		ls.push(i);
@@ -88,6 +107,13 @@ function onClickMainPaste(evt) {
 }
 
 function onSuccessMoveFiles(data) {
+	if (!onFailAddCatalog(data)) {
+		return;
+	}
+	fileList.moveFiles(data);
+}
+
+function onSuccessRemoveFiles(data) {
 	if (!onFailAddCatalog(data)) {
 		return;
 	}
