@@ -1,6 +1,7 @@
 function l(s) {
 	return (window.L[s] ? window.L[s] : s);
 }
+
 function setDOM() {
 	var ls = window.L, i, j, v, nm, n2 = 'placeholder';
 	for (i in ls) {
@@ -18,7 +19,7 @@ function setDOM() {
 	}
 }
 
-window.L = window.langRu;
+window.L = window.langEn;
 var lang = storage('lang');
 if (lang && window[lang]) {
 	window.L = window[lang];
