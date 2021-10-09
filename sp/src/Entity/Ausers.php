@@ -242,7 +242,7 @@ class Ausers implements UserInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="bsettings", type="integer", nullable=false, options={"comment"="Настройки типа bool. Хранятся в битах числа. Бит 0: бот в чате Полиглот 0 - выключен, 1 - включен","default"="0"})
+     * @ORM\Column(name="bsettings", type="integer", nullable=false, options={"comment"="Настройки типа bool. Хранятся в битах числа. Бит 0: бот в чате Полиглот 0 - выключен, 1 - включен. Бит 1: язык webUSB. 0 - en, 1 - ru","default"="0"})
     */
     private $bsettings = 0;
 

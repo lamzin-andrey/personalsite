@@ -100,6 +100,7 @@ class SecurityController extends AppBaseController
 					$oUser->setPassword($sPassword);
 
 					$this->setRole($oRequest, $oUser);
+					$this->setGuestId($oRequest, $oUser);
 
 					$oEm = $this->getDoctrine()->getManager();
 					$oEm->persist($oUser);
@@ -278,6 +279,17 @@ class SecurityController extends AppBaseController
                 $user->setRole(User::ROLE_WEB_DRIVE_USER);
                 break;
         }
-	    return;
 	}
+
+    /**
+     * Сохраняет guest_id пользователя при необходимости
+     * @return
+     */
+    protected function setGuestId(Request $request, User $user) : void
+    {
+        $guestId = $this->request->cookies->get('guest_id');
+        if ($guestId) {
+            $user->setGuestId($guestId);
+        }
+    }
 }

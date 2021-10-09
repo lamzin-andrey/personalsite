@@ -13,11 +13,13 @@ use App\Form\ResetPasswordFormType;
 use App\Repository\DrvCatalogsRepository;
 use App\Repository\DrvFileRepository;
 use App\Service\AppService;
+use App\Service\BitReader;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\TreeWalkerAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -37,7 +39,15 @@ class UsbController extends AbstractController
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
 
+    /**
+     * @var Request
+    */
+    protected $request;
 
+    public function __construct(ContainerInterface $container)
+    {
+            $this->request = $container->get('request_stack')->getCurrentRequest();
+    }
 
 	/**
 	 * @Route("/dast.json", name="driveauthstate")
@@ -104,7 +114,7 @@ class UsbController extends AbstractController
             $domain = null;
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', $domain)
             ]);
         }
 
@@ -117,30 +127,31 @@ class UsbController extends AbstractController
         $alreadyExists = false;
         $catalogId = $catalogRepository->addCatalogEntity($request->get('name'), $this->getUser()->getId(), intval($request->get('c')), $alreadyExists);
 
+
         if ($alreadyExists) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('Catalog with name already exists', [], $domain)
+                'error' => $this->l($t, 'Catalog with name already exists')
             ]);
         }
 
         if (!$catalogId) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('Unable create catalog (db)', [], $domain)
+                'error' => $this->l($t, 'Unable create catalog (db)')
             ]);
         }
 
         // First create phisical catalog
         $relativePath = $this->getParameter('app.wusb_catalog_root');
-        $userPath = $this->generateUserPath($this->getUser()->getId()); // TODO
+        $userPath = $this->generateUserPath($this->getUser()->getId());
         $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogId;
         $filesystem->mkdir($path);
 
         if (!$filesystem->exists($path) || !is_dir($path)) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('Unable create catalog', [], $domain)
+                'error' => $this->l($t, 'Unable create catalog')
             ]);
         }
 
@@ -165,7 +176,9 @@ class UsbController extends AbstractController
                                           Filesystem $filesystem,
                                           CsrfTokenManagerInterface $csrfTokenManager)
     {
-        /*$csrfToken = $csrfTokenManager
+        /*
+         * TODO may be, token need? ))))
+         * $csrfToken = $csrfTokenManager
             ? $csrfTokenManager->getToken('authenticate')->getValue()
             : null;
         if ($csrfToken != $request->request->get('_token')) {
@@ -178,7 +191,7 @@ class UsbController extends AbstractController
         if (!$this->getUser()) {
             $data = [
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], null)
+                'error' => $this->l($t, 'You have not access to this page',  null)
             ];
 
             return $this->_json($data);
@@ -222,7 +235,7 @@ class UsbController extends AbstractController
         if (!empty($filePathObject->error)) {
             return $this->_json([
                 'status' => 'ok',
-                'error' => $t->trans($filePathObject->error, [], $domain)
+                'error' => $this->l($t, $filePathObject->error)
             ]);
         }
         $symlink = $filePathObject->symlink;
@@ -233,7 +246,7 @@ class UsbController extends AbstractController
         if (!$filesystem->exists($symlink)) {
             return $this->_json([
                 'status' => 'ok',
-                'error' => $t->trans('Unable create copy', [], $domain)
+                'error' => $this->l($t, 'Unable create copy')
             ]);
         }
 
@@ -271,7 +284,7 @@ class UsbController extends AbstractController
         if (!empty($filePathObject->error)) {
             return $this->_json([
                 'status' => 'ok',
-                'error' => $t->trans($filePathObject->error, [], $domain)
+                'error' => $this->l($t, $filePathObject->error)
             ]);
         }
 
@@ -365,7 +378,7 @@ class UsbController extends AbstractController
         if (!$this->getUser() || is_null($catalog) || $catalog->getUserId() != $this->getUser()->getId()) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', null)
             ]);
         }
 
@@ -399,11 +412,10 @@ class UsbController extends AbstractController
      */
     public function setCalaogsAsIsDeleted(Request $request, TranslatorInterface $t)
     {
-        $domain = '';
         if (!$this->getUser()) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', null)
             ]);
         }
 
@@ -435,11 +447,10 @@ class UsbController extends AbstractController
      */
     public function driveRemoveFile(Request $request, TranslatorInterface $t, Filesystem $filesystem)
     {
-        $domain = '';
         if (!$this->getUser()) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', '')
             ]);
         }
 
@@ -455,7 +466,7 @@ class UsbController extends AbstractController
             if ($fileEntity->getUserId() != $this->getUser()->getId()) {
                 return $this->_json([
                     'status' => 'error',
-                    'error' => $t->trans('You have not access to this page', [], $domain)
+                    'error' => $this->l($t, 'You have not access to this page', null)
                 ]);
             }
             $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
@@ -492,7 +503,7 @@ class UsbController extends AbstractController
             $domain = null;
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', null)
             ]);
         }
         $domain = 'wusb_filesystem';
@@ -508,14 +519,14 @@ class UsbController extends AbstractController
             if ($alreadyExists) {
                 return $this->_json([
                     'status' => 'error',
-                    'error' => $t->trans('Catalog with name already exists', [], $domain)
+                    'error' => $this->l($t, 'Catalog with name already exists')
                 ]);
             }
 
             if (!$catalogId) {
                 return $this->_json([
                     'status' => 'error',
-                    'error' => $t->trans('Unable rename catalog (db)', [], $domain)
+                    'error' => $this->l($t, 'Unable rename catalog (db)')
                 ]);
             }
         } else {
@@ -530,14 +541,14 @@ class UsbController extends AbstractController
             if ($alreadyExists) {
                 return $this->_json([
                     'status' => 'error',
-                    'error' => $t->trans('File with name already exists', [], $domain)
+                    'error' => $this->l($t, 'File with name already exists')
                 ]);
             }
 
             if (!$fileId) {
                 return $this->_json([
                     'status' => 'error',
-                    'error' => $t->trans('Unable rename file (db)', [], $domain)
+                    'error' => $this->l($t, 'Unable rename file (db)')
                 ]);
             }
         }
@@ -567,7 +578,7 @@ class UsbController extends AbstractController
             $domain = null;
             return $this->mixResponse($request, [
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page 1', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page 1', $domain)
             ]);
         }
         $domain = 'wusb_filesystem';
@@ -585,7 +596,7 @@ class UsbController extends AbstractController
             if (is_null($drvCatalog) || !$this->getUser() || $drvCatalog->getUserId() != $this->getUser()->getId() ) {
                 return $this->mixResponse($request, [
                     'status' => 'error',
-                    'error' => $t->trans('You have not access to this page 2', [], $domain)
+                    'error' => $this->l($t, 'You have not access to this page 2', $domain)
                 ]);
             }
         }
@@ -599,7 +610,7 @@ class UsbController extends AbstractController
         if (!is_null($existsFile)) {
             return $this->mixResponse($request, [
                 'status' => 'error',
-                'error' => $t->trans('File with name {name} already exists', ['{name}' => $originalName], $domain)
+                'error' => $this->l($t, 'File with name {name} already exists', $domain, ['{name}' => $originalName])
             ]);
         }
 
@@ -608,7 +619,7 @@ class UsbController extends AbstractController
         if (!$filesystem->exists($targetPath)) {
             return $this->mixResponse($request, [
                 'status' => 'error',
-                'error' => $t->trans('Target catalog not found on disk. Try again later.', [], $domain)
+                'error' => $this->l($t, 'Target catalog not found on disk. Try again later.')
             ]);
         }
         $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
@@ -626,7 +637,7 @@ class UsbController extends AbstractController
             ) && 2 !== $this->getUser()->getRole() ) {
             return $this->mixResponse($request, [
                 'status' => 'error',
-                'error' => $t->trans('This file type deny for upload', [], $domain)
+                'error' => $this->l($t, 'This file type deny for upload')
             ]);
         }
 
@@ -925,7 +936,7 @@ class UsbController extends AbstractController
         if (!$this->getUser()) {
             $data = [
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', null)
             ];
 
             return false;
@@ -945,7 +956,7 @@ class UsbController extends AbstractController
         if ($this->getUser()->getId() !== $fileEntity->getUserId()) {
             $data =[
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page', $domain)
             ];
             return false;
         }
@@ -973,14 +984,14 @@ class UsbController extends AbstractController
         if ($csrfToken != $request->request->get('_token')) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page')
             ]);
         }
         $user = $this->getUser();
         if (!$user) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page')
             ]);
         }
 
@@ -1044,7 +1055,7 @@ class UsbController extends AbstractController
                 if ($dirEntity->getUserId() != $user->getId()) {
                     return $this->_json([
                         'status' => 'error',
-                        'error' => $t->trans('You have not access to this page', [], $domain)
+                        'error' => $this->l($t, 'You have not access to this page')
                     ]);
                 }
                 break;
@@ -1056,7 +1067,7 @@ class UsbController extends AbstractController
         if ($dirPathObject->error) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans($dirPathObject->error, [], $domain)
+                'error' => $this->l($t, $dirPathObject->error)
             ]);
         }
         foreach ($fileEntities as $fileEntity) {
@@ -1079,7 +1090,7 @@ class UsbController extends AbstractController
                 if (!$success) {
                     return $this->_json([
                         'status' => 'error',
-                        'error' => $t->trans('mup failed! ' . $error, [], $domain)
+                        'error' => $this->l($t, 'mup failed! ' . $error)
                     ]);
                 }
 
@@ -1157,14 +1168,14 @@ class UsbController extends AbstractController
         if ($csrfToken != $request->request->get('_token')) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page')
             ]);
         }
         $user = $this->getUser();
         if (!$user) {
             return $this->_json([
                 'status' => 'error',
-                'error' => $t->trans('You have not access to this page', [], $domain)
+                'error' => $this->l($t, 'You have not access to this page')
             ]);
         }
 
@@ -1241,7 +1252,7 @@ class UsbController extends AbstractController
                 if (!$success) {
                     return $this->_json([
                         'status' => 'error',
-                        'error' => $t->trans('remove failed! ' . $error, [], $domain)
+                        'error' => $this->l($t, 'remove failed! ') . $error
                     ]);
                 }
 
@@ -1372,5 +1383,35 @@ class UsbController extends AbstractController
             'p' => $realParentId,
             'bc' => $breadCrumbs
         ];
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function l(TranslatorInterface $t, string $s, string $domain = 'wusb_filesystem', $params = []) : string
+    {
+        $locale = 'en';
+        /**
+         * @var Ausers $user
+         *
+        */
+        $user = $this->getUser();
+        if (!$user || !($user instanceof Ausers)) {
+            $guestId = $this->request->cookies->get('guest_id');
+            if ($guestId) {
+                $this->container->get('doctrine')->getRepository(Ausers::class)->findOneBy([
+                    'guestId' => $guestId
+                ]);
+            }
+        }
+        if ($user && ($user instanceof Ausers) ) {
+            $x = BitReader::get(intval($user->getBSettings()), 1);
+            if (1 === $x) {
+                $locale = 'ru';
+            }
+        }
+        // ($t, 'You have not access to this page', $domain)
+        return $t->trans($s, $params, $domain, $locale);
     }
 }

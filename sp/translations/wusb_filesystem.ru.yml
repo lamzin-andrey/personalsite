@@ -1,3 +1,4 @@
 Catalog with name already exists: Каталог с таким именем уже существует
 Unable create catalog (db): Невозможно создать каталог (db)
 Unable create catalog: Невозможно создать каталог
+File with name {name} already exists: Файл с именем {name} уже существует
