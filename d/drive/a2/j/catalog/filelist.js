@@ -79,6 +79,7 @@ window.fileList = {
 				e('hPath').innerHTML = '<marquee scrolldelay="42" scrollamount="1">' + path + '</marquee>';
 			}, 2*1000);
 		}
+		onLoadA236();
 	},
 	
 	clear:function() {
