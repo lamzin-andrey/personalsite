@@ -30,7 +30,6 @@ window.upload = {
 				e('_csrf_token').value,
 				5 * 60
 			);
-			onLoadA236();
 			addClass('hFormUpWr', 'd-none');
 			this.progressStateLabel.innerHTML = l('Uploading...');
 			uploadAnimation.run();

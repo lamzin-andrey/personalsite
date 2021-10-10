@@ -14,5 +14,10 @@ function mainMenuBackPush() {
 function onMainMenuBackButton() {
 	window.mainMenuBackPushFlag = false;
 	mainMenuShow();
+	var y = 1;
+	w.scrollTo(0, y);
+	setTimeout(function(){
+		w.scrollTo(0, y);
+	}, 200);
 	
 }

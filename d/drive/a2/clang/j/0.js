@@ -81,9 +81,9 @@ function onLoadA236() {
 	}
 	d.body.style['min-height'] = '400px';
 	// d.body.style['border'] = 'black 1px solid';
-	var y = 90;
+	var y = 1;
 	w.scrollTo(0, y);
 	setTimeout(function(){
 		w.scrollTo(0, y);
-	}, 1000);
+	}, 200);
 }
