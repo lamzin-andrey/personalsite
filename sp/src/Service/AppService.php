@@ -602,4 +602,13 @@ class AppService
 	{
 		return $this->oContainer->getParameter($sParameterName);
 	}
+
+	/**
+     * @param $f = 'md5' You can set sha1, sha256 e. t. c
+	 * @return string by default md5(HTTP_USER_AGENT . microtime . additionalParams)
+	*/
+	public function getHash(Request $request, string $additionalParams = '', string $f = 'md5') : string
+	{
+	    return $f($request->server->get('HTTP_USER_AGENT') . '-' . microtime(false) . $additionalParams);
+	}
 }

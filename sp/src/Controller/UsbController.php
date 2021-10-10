@@ -23,6 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -1276,6 +1277,67 @@ class UsbController extends AbstractController
         // get current dir list
         return $this->_json($this->getFileList($targetCatalogId, 0, $request, $filesystem, $user));
 
+    }
+
+    /**
+     * @Route("/wusbsetlang", name="drivechooselang")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveChooseLangAction(Request $request,
+                                           TranslatorInterface $t,
+                                           AppService $appService,
+                                           CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        $domain = null;
+        if ($csrfToken != $request->request->get('_token')) {
+            return new RedirectResponse('/d/drive/a2/clang?no_token');
+        }
+        $lang = $request->request->get('lang', 'en');
+
+        $users = [];
+        $user = $this->getUser();
+        $guestId = $appService->getHash($request, $lang);
+        if ($user && ($user instanceof Ausers)) {
+            $users[] = $user;
+            if ($user->getGuestId()) {
+                $guestId = $user->getGuestId();
+            }
+        } else {
+            $guestId = $this->request->cookies->get('guest_id');
+            if ($guestId) {
+                // TODO index to guest_id
+                $users = $this->container->get('doctrine')->getRepository(Ausers::class)
+                    ->findBy([
+                        'gusetId' => $guestId
+                    ]);
+            }
+        }
+
+        if (!$users) {
+            $user = new Ausers();
+            $user->setGuestId($guestId);
+            $users[] = $user;
+        }
+
+        if ($users) {
+            foreach ($users as $user) {
+                $user->setLang($lang);
+            }
+            $em = $this->container->get('doctrine')->getManager();
+            $em->flush();
+        }
+
+        $cookie = Cookie::create('guest_id', $guestId, time() + 265*24*3600);
+        $response = new RedirectResponse('/d/drive/a2');
+        $response->headers->setCookie($cookie);
+
+        return $response;
     }
 
     /**

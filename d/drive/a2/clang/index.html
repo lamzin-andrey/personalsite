@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="f100">
+	<head>
+		<script src="/a/2+2/js/registersw.js"></script>
+		<meta charset="WINDOWS-1251">
+		<!--meta name="viewport" content="width=device-width,no-scale"-->
+		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height, user-scalable=no, target-densitydpi=device-dpi">
+		<title>Choose lang</title>
+		<link rel="stylesheet" type="text/css" href="./s/0.css">
+		<link rel="stylesheet" type="text/css" href="./j/pbar/pbar.css">
+		<link href=".././i/u.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body class="f100">
+		<div class="tc screen" id="hWaitScreen">
+			<img src="../i/u.png" id="im">
+			<div><i id="hWaitLabel">Please wait</i></div>
+		</div>
+		<!-- screen choose lang -->
+		<div class="tc screen hide" id="hCLangScreen">
+			<form id="cLangForm" method="POST" action="/sp/public/wusbsetlang">
+				<div class="w-image">
+					<input type="image" src="./i/ru.png" id="bRu">
+				</div>
+				<div class="vspacer">RU</div>
+				
+				<div class="w-image">
+					<input type="image" src="./i/en.png" id="bEn">
+				</div>
+				<div class="vspacer">EN</div>
+				<input type="hidden" id="_csrf_token" name="_token">
+				<input type="hidden" id="lang" name="lang">
+			</form>
+		</div>
+		
+		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script> <!--TODO ?  -->
+		<script src="/j/sources/landlib/net/rest.es5.js?vE"></script><!--TODO ?  -->
+		
+		<script src="./j/0.js"></script>
+	</body>
+</html>
+

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Service\BitReader;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints AS Assert;
@@ -631,4 +632,18 @@ class Ausers implements UserInterface
 	{
 		;
 	}
+
+	public function setLang(string $lang) {
+        $n = intval($this->getBSettings());
+        $targetValue = 0;
+        if ('ru' == $lang) {
+            $targetValue = 1;
+        }
+
+        $currentValue = BitReader::get($n, 1);
+        if ($currentValue != $targetValue) {
+            $n = $n ^ 2;// Для 2 бит номер 1 равен 1. Если в бите номер 1 $n 0 XOR даст 1. Если в бите номер 1 $n 1 XOR даст 0. Бит номер 2 $n не будет затронут, проверено.
+        }
+        $this->setBSettings($n);
+    }
 }

@@ -1,0 +1,22 @@
+body {
+	background-color:#201F67;
+	color:white;
+	padding:0;
+	margin:0;
+}
+body.f100, html.f100 {
+	height:100%;
+}
+.hide {
+	display: none;
+}
+.tc {
+	text-align:center;
+}
+.w-image {
+	height:128px;
+	border: 2px solid #002ddd; /* #4f67c6 */
+}
+#hWaitScreen {
+	margin-top:46px;
+}
