@@ -23,6 +23,7 @@ function initApp() {
 	window.uploadAnimation = new LoaderAnim('imgUp', 1, 5, 'dompb', -41, 100);
 	
 	getAuthState();
+	onLoadA236();
 }
 
 function getAuthState() {
@@ -175,4 +176,16 @@ function showInputDlg(legend, s) {
 	} else if (window.onClickInputDlgCancel instanceof Function){
 		window.onClickInputDlgCancel();
 	}
+}
+function onLoadA236() {
+	if (nav.userAgent.toLowerCase().indexOf('android 2.3.6') == -1) {
+		return;
+	}
+	d.body.style['min-height'] = '400px';
+	// d.body.style['border'] = 'black 1px solid';
+	var y = 90;
+	w.scrollTo(0, y);
+	setTimeout(function(){
+		w.scrollTo(0, y);
+	}, 1000);
 }

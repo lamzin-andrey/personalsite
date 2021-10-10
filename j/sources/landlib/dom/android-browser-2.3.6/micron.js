@@ -3,7 +3,10 @@
  * Её удобно использовать, когда пишешь код со (и для) старого смартфона.
 */
 var D = document,
-W = window, S = String;
+d = D,
+W = window, S = String,
+w = W,
+nav = W.navigator;
 function e(i) {
 	if (i && i.tagName || D == i) return i;
 	return D.getElementById(i);

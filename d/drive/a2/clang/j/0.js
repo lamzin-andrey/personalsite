@@ -3,6 +3,7 @@ window.br = window.backRoot = '/sp/public';
 window.onload = initApp;
 function initApp() {
 	setListeners();
+	onLoadA236();
 	getAuthState();
 	
 }
@@ -72,4 +73,17 @@ function defaultResponseError(data, responseText, info, xhr) {
 	}
 	
 	return false;
+}
+
+function onLoadA236() {
+	if (nav.userAgent.toLowerCase().indexOf('android 2.3.6') == -1) {
+		return;
+	}
+	d.body.style['min-height'] = '400px';
+	// d.body.style['border'] = 'black 1px solid';
+	var y = 90;
+	w.scrollTo(0, y);
+	setTimeout(function(){
+		w.scrollTo(0, y);
+	}, 1000);
 }
