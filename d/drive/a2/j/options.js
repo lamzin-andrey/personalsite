@@ -16,7 +16,7 @@ function hideOptions() {
 
 function onClickOptionLeave() {
 	var ref = storage('referrer');
-	if (!ref) {
+	if (!ref || ref == location.href) {
 		ref = 'https://google.com';
 	}
 	hideOptions();
