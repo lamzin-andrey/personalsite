@@ -36,7 +36,8 @@ window.langRu = {
 	'Move' : 'Переместить',
 	'Enter catalog name' : 'Введите имя каталога',
 	'New catalog' : 'Новая папка',
-	'' : '',
-	'' : '',
-	'' : '',
+	hBackMenuMessage: 'Для вызова меню нажмите кнопку Назад',
+	hBackMenuTitle: 'Информация',
+	hIUnderstood: 'Я понял',
+	'' : ''
 };

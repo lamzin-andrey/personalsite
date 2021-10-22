@@ -1,0 +1,22 @@
+.cbLegend{
+  line-height: 24px;
+  vertical-align: top;
+}
+i{
+  display: inline-block;
+}
+.cbWrapper{
+  height: 48px;
+  border:  solid 1px #ffffff;
+  padding-top: 20px;
+}
+
+.imgWrapper img{
+  width:24px;
+  height:24px;
+  border: solid 1px #BBBBBB;
+}
+
+.green-border {
+  border-color: #00BB00!important;
+}

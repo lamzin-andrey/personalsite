@@ -8,6 +8,10 @@
 		<title>Онлайн флешка для любого вашего устройства</title>
 		<link rel="stylesheet" type="text/css" href="./s/0.css">
 		<link rel="stylesheet" type="text/css" href="./j/pbar/pbar.css">
+		<link rel="stylesheet" type="text/css" href="./j/bmenu/dlg/s/adlg.css">
+		<link rel="stylesheet" type="text/css" href="./j/bmenu/dlg/s/q.css">
+		<link rel="stylesheet" type="text/css" href="./j/cbox/cbox.css">
+		
 		<link href="./i/u.ico" rel="shortcut icon" type="image/x-icon" >
 	</head>
 	<body class="f100">
@@ -63,6 +67,32 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- screen back menu dialog-->
+		<div class="screen d-none" id="backMenuInfo">
+			<div class="a2dlg">
+				<div class="titleWrapper">
+					<div  id="hBackMenuTitle"class="title">
+						Information
+					</div>
+					<div class="line">&nbsp;</div>
+				</div><!-- end title wrapper -->
+
+				<div class="body">
+				  <div class="info" id="hBackMenuMessage">For call application menu press back button.</div>
+					<div class="tc">  
+						<div class="cbWrapper">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<input type="hidden"  id="chIAgree">
+							<span class="cbLegend" id="hIUnderstood">I understood</span>
+						</div><!-- end cbWrappet -->
+						<input type="button"  class="avBtn" value="OK" id="bOk">
+					</div>
+				</div><!-- end body -->
+			</div><!-- end a2dlg -->
+		</div><!-- end screen -->
 		
 		<!-- screen upload -->
 		<div class="tc screen d-none up-screen" id="hUpScreen">
@@ -223,6 +253,9 @@
 		
 		<script src="./j/upload/anim.js"></script>
 		<script src="./j/upload/upload.js?3"></script>
+		
+		<script src="./j/bmenu/dlg/j/a2dlg.js"></script>
+		<script src="./j/cbox/cbox.js"></script>
 		
 		
 		

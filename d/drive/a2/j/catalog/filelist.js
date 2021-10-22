@@ -133,6 +133,7 @@ window.fileList = {
 		var s = '/wcard';
 		path = bc == '/' ? s : (s + bc);
 		this.render(ls);
+		mainMenuBackShowDialog();
 	},
 	
 	onFailGetFileList:function(data, responseText, info, xhr) {
