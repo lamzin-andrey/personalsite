@@ -25,7 +25,7 @@ window.langRu = {
 	'register_form[passwordRepeat]' : 'Пароль повторно',
 	'hIAgree' : 'Я согласен с',
 	'hPolicyName' : 'Политикой конфендициальности',
-	'register_form[isSubscribed]' : 'Я согласен получать email рассылку от автора этого сайта',
+	'hIAgreeFromAuthor' : 'Я согласен получать email рассылку от автора этого сайта',
 	'bRegisterNow' : 'Регистрироваться',
 	'bShowAuthScreen' : 'К форме логина',
 	'reset_password_form[email]' : 'E-mail',
