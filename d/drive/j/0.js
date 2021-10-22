@@ -1,5 +1,6 @@
 window.onload = initDirect;
 function initDirect() {
+	storage('referrer', document.referrer);
 	// styling
 	var o = getViewport(),
 		h = Math.round(o.h / 2) - 64,

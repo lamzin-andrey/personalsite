@@ -9,19 +9,30 @@ function showOptions() {
 	addClass('hBotMenu', 'hide');
 	removeClass('hBotOptions', 'hide');
 }
+function hideOptions() {
+	addClass('hBotMenu', 'hide');
+	addClass('hBotOptions', 'hide');
+}
 
 function onClickOptionLeave() {
-	
+	var ref = storage('referrer');
+	if (!ref) {
+		ref = 'https://google.com';
+	}
+	hideOptions();
+	ref = location.href;
 }
 
 function onClickOptionChangeLanguage() {
-	
+	hideOptions();
+	location.href = root + '/clang';
 }
 
 function onClickOptionChangeTheme() {
-	
+	location.href = root; // Это не догма, мути что хочешь
+	hideOptions();
 }
 
 function onClickOptionExit() {
-	
+	hideOptions();
 }

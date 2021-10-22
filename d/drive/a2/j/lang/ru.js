@@ -34,6 +34,7 @@ window.langRu = {
 	'Remove' : 'Удалить',
 	'Rename' : 'Переименовать',
 	'Move' : 'Переместить',
+	'Download' : 'Скачать',
 	'Enter catalog name' : 'Введите имя каталога',
 	'New catalog' : 'Новая папка',
 	'hBackMenuMessage': 'Для вызова меню нажмите кнопку Назад',
