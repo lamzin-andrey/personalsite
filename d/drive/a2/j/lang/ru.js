@@ -40,5 +40,9 @@ window.langRu = {
 	'hBackMenuMessage': 'Для вызова меню нажмите кнопку Назад',
 	'hBackMenuTitle': 'Информация',
 	'hIUnderstood': 'Я понял',
+	'boLeave': 'Выйти из WebUSB',
+	'boChangeLang': 'Change language',
+	'boChangeTheme': 'Выбрать устройство',
+	'boCloseOpts': 'Закрыть меню',
 	'' : ''
 };

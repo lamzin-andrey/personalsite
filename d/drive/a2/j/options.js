@@ -20,7 +20,7 @@ function onClickOptionLeave() {
 		ref = 'https://google.com';
 	}
 	hideOptions();
-	ref = location.href;
+	location.href = ref;
 }
 
 function onClickOptionChangeLanguage() {
