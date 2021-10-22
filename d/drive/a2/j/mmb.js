@@ -26,6 +26,7 @@ function mainMenuBackShowDialog() {
 	var v = storage('bmenualert');
 	if (1 != v) {
 		showScreen('backMenuInfo');
+		setDOM();
 	} else {
 		hideLoader();
 	}
