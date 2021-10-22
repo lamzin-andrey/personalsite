@@ -22,6 +22,9 @@ body.f100, html.f100 {
 .tr {
 	text-align:right;
 }
+.tl {
+	text-align:left;
+}
 .d-none {
 	display:none;
 }
@@ -271,3 +274,28 @@ input[type=text],input[type=password], input[type=email], {
 	border: 1px solid gray;
 }
 /** End Upload screen **/
+
+/** bottom settings */
+.botOptsWr {
+	position: fixed;
+	bottom:0px;
+	z-index:5;
+	width:100%;
+}
+.botOptsBg {
+	background-color: #1F1F1F;
+	border: 3px solid rgba(255, 255, 255, 0.75);
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	width:90%;
+	margin:auto;
+}
+
+.bopt {
+	font-weight:bold;
+	font-family:arial;
+	padding-left:8px;
+	border-bottom: 2px solid gray;
+	height:48px;
+	line-height:48px;
+}

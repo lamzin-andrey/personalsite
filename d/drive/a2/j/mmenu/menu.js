@@ -116,4 +116,5 @@ function onSuccessMoveFiles(data) {
 
 function onClickMainOptions() {
 	addClass('hBotMenu', 'hide');
+	showOptions();
 }

@@ -18,6 +18,7 @@ function initApp() {
 	initMainMenuBack();
 	fileList.initUpButton(e('bUp'));
 	fileList.initHomeButton(e('bHome'));
+	initOptions();
 	
 	upload.init();
 	window.uploadAnimation = new LoaderAnim('imgUp', 1, 5, 'dompb', -41, 100);
