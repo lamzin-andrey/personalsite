@@ -611,4 +611,60 @@ class AppService
 	{
 	    return $f($request->server->get('HTTP_USER_AGENT') . '-' . microtime(false) . $additionalParams);
 	}
+
+	public static function getHumanFilesize(int $n, int $percision = 3, int $maxOrder = 3, bool $pack = true) : string
+    {
+        return self::getHumanValue($n,
+            ['b', 'Kb', 'Mb', 'Gb', 'Tb'],
+            1024,
+            $percision,
+            $maxOrder,
+            $pack
+        );
+    }
+
+    public static function getHumanValue(int $n, array $units, int $divider = 1000, int $percision = 3, int $maxOrder = 3, bool $pack = true) : string
+    {
+        $unitIterator = 0;
+        $r = strval($n) . ' ' . $units[$unitIterator];
+        if ($pack) {
+            $a = explode('.', $r);
+            $int = $a[0];
+            $add = $a[1] ?? '';
+            $buf = [];
+            $buf[] = dechex($int);
+            if ($add) {
+                $buf[] = dechex($add);
+            }
+            $buf[] =  $units[$unitIterator];
+            $r = implode('g', $buf);
+        }
+
+
+
+        $unitsSz = count($units);
+        do {
+            $n = round($n, $percision);
+            $s = strval($n);
+            $a = explode('.', $s);
+            $int = $a[0];
+            $add = $a[1] ?? '';
+            if (strlen($int) <= $maxOrder || $unitIterator > ($unitsSz - 1) ) {
+                if ($pack) {
+                    $buf = [];
+                    $buf[] = dechex($int);
+                    if ($add) {
+                        $buf[] = dechex($add);
+                    }
+                    $buf[] = $units[$unitIterator];
+                    return implode('g', $buf);
+                }
+                return $s . ' ' . $units[$unitIterator];
+            }
+            $n = $n / $divider;
+            $unitIterator++;
+        } while(true);
+
+        return $r;
+    }
 }

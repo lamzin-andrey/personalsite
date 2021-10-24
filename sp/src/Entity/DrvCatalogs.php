@@ -68,6 +68,27 @@ class DrvCatalogs
 
     private $files;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="size", type="integer", nullable=false, options={"comment"="Размер каталога", "default"="0"})
+     */
+    private $size = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity_catalogs", type="integer", nullable=false, options={"comment"="Количество вложенных каталогов", "default"="0"})
+     */
+    private $quantityCatalogs = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity_files", type="integer", nullable=false, options={"comment"="Количество вложенных файлов", "default"="0"})
+     */
+    private $quantityFiles = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,4 +159,39 @@ class DrvCatalogs
         return $this->files;
     }
 
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function setSize(int $n): self
+    {
+        $this->size = $n;
+
+        return $this;
+    }
+
+    public function getQuantityCatalogs(): int
+    {
+        return $this->quantityCatalogs;
+    }
+
+    public function setQuantityCatalogs(int $n): self
+    {
+        $this->quantityCatalogs = $n;
+
+        return $this;
+    }
+
+    public function getQuantityFiles(): int
+    {
+        return $this->quantityFiles;
+    }
+
+    public function setQuantityFiles(int $n): self
+    {
+        $this->quantityFiles = $n;
+
+        return $this;
+    }
 }

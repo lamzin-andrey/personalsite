@@ -54,6 +54,13 @@ class DrvFile
      */
     private $userId;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="size", type="integer", nullable=false, options={"comment"="Размер файла", "default"="0"})
+     */
+    private $size = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -130,6 +137,17 @@ class DrvFile
     public function setUserId(int $user_id): self
     {
         $this->userId = $user_id;
+
+        return $this;
+    }
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function setSize(int $n): self
+    {
+        $this->size = $n;
 
         return $this;
     }

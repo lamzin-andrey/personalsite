@@ -2,25 +2,29 @@ window.fileListItemCmenu = {
 	dirMenuItems: [
 		l('Remove'),
 		l('Rename'),
-		l('Move')
+		l('Move'),
+		l('Exit')
 	],
 	fileMediaMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
-		l('Move')
+		l('Move'),
+		l('Exit')
 	],
 	fileTextMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
-		l('Move')
+		l('Move'),
+		l('Exit')
 	],
 	fileUnknownMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
-		l('Move')
+		l('Move'),
+		l('Exit')
 	],
 	/**
 	 * @description Build and show folder or file context menu
@@ -82,6 +86,8 @@ window.fileListItemCmenu = {
 			i, sZ = sz(ls),
 			menuItem,
 			listener,
+			propertiesText,
+			catalogPropertiesText = '',
 			self = this;
 		e('hCatalogItemTitle').innerHTML = fileListItem.name;
 		this.delayForMenuItems = 1;
@@ -123,9 +129,30 @@ window.fileListItemCmenu = {
 						}
 						self.onClickDownload.call(self, evt);
 					};
+				case l('Exit'):
+					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
+						self.onClickExit.call(self, evt);
+					};
 					break;
 			}
 		}// end for
+		
+		// Add Properties item
+		propertiesText = l('Properties') + '<div class="props">\
+			<div>' + fileListItem.name + '<div>\
+			<div>' + self.unpackHexSz(fileListItem.s) + '<div>{folderProps}\
+		</div';
+		if (fileListItem.type == 'c') {
+			catalogPropertiesText = '<div>' + l('Files') + ':' + fileListItem.qf + '</div>';
+			catalogPropertiesText += '<div>' + l('Catalogs') + ':' + fileListItem.qc + '</div>';
+		}
+		propertiesText = propertiesText.replace('{folderProps}', catalogPropertiesText);
+		menuItem = appendChild('hListItemCmItems', 'div', propertiesText, {'class': 'cim_item_props gray'});
+		
 		setTimeout(function() {
 			var ls = cs('hCatItemMenu', 'cim_item'), i, sZ = sz(ls);
 			for (i = 0; i < sZ; i++) {
@@ -392,6 +419,38 @@ window.fileListItemCmenu = {
 	onFailGetDLink:function(data, responseText, info, xhr){
 		showScreen('hCatalogScreen');
 		return defaultResponseError(data, responseText, info, xhr);
+	},
+	
+	onClickExit:function(evt) {
+		showScreen('hCatalogScreen');
+	},
+	
+	unpackHexSz:function(n) {
+		var a = String(n).split('g'), i, r;
+		sz(a);
+		for (i = 0; i < SZ - 1; i++) {
+			a[i] = parseInt(a[i], 16);
+		}
+		
+		if (SZ > 2) {
+			r = this.formatNumber(S(a[0])) + ',' + a[1] + ' ' + a[2];
+		} else {
+			r = this.formatNumber(S(a[0])) + ' ' + a[1];
+		}
+		
+		return r;
+	},
+	
+	formatNumber:function(s) {
+		var i, a = [], j = 0;
+		for (i = s.length - 1; i > -1 ; i--, j++) {
+			if (j > 0 && (j % 3) ==  0) {
+				a.push(' ');
+			}
+			a.push(s.charAt(i));
+		}
+		s = a.reverse().join('');
+		return s;
 	}
 	
 };

@@ -10,7 +10,7 @@ window.fileList = {
 			ls = [];
 		}
 		if (!(name in In(ls))) {
-			ls.push({type:type, name:name, i: id});
+			ls.push({type:type, name:name, i: id, s: '0gb', qf: 0, qc: 0});
 		}
 		storage('f' + currentDir, ls);
 		

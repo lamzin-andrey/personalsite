@@ -44,5 +44,9 @@ window.langRu = {
 	'boChangeLang': 'Change language',
 	'boChangeTheme': 'Выбрать устройство',
 	'boCloseOpts': 'Закрыть меню',
+	'Properties' : 'Свойства',
+	'Exit' : 'Закрыть',
+	'Catalogs' : 'Папок',
+	'Files' : 'Файлов',
 	'' : ''
 };

@@ -1372,6 +1372,9 @@ class UsbController extends AbstractController
         $relativePath = $this->getParameter('app.wusb_catalog_root');
         $userPath = $this->generateUserPath($user->getId());
 
+        $qntCatalogs = 0;
+        $qntFiles = 0;
+        $size = 0;
         foreach ($listData as $drvCatalogs) {
             $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $drvCatalogs->getId();
             /*if (!$filesystem->exists($path) || !is_dir($path)) {
@@ -1380,10 +1383,15 @@ class UsbController extends AbstractController
             $item = [
                 'name' => $drvCatalogs->getName(),
                 'type' => 'c',
-                'i' => $drvCatalogs->getId(),
-                'h' => $drvCatalogs->getIsHide()
+                'i'  => $drvCatalogs->getId(),
+                'h'  => $drvCatalogs->getIsHide(),
+                's'  => AppService::getHumanFilesize($drvCatalogs->getSize(), 2),
+                'qf' => $drvCatalogs->getQuantityFiles(),
+                'qc' => $drvCatalogs->getQuantityCatalogs()
             ];
             $list[] = $item;
+            $qntCatalogs++;
+            $size += $drvCatalogs->getSize();
         }
         $realParentId = $parentId;
         $parentCatalog = $catalogRepository->find($parentId);
@@ -1404,6 +1412,8 @@ class UsbController extends AbstractController
             ]);
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $sizeIsModify = false;
         foreach ($files as $drvFile) {
             $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . $parentCatalogPath . '/' . $drvFile->getId();
             /*if (!$filesystem->exists($path) ) {
@@ -1413,14 +1423,35 @@ class UsbController extends AbstractController
             if ($drvFile->getIsDeleted() === true) {
                 continue;
             }
-
+            $currentFilesize = $drvFile->getSize();
+            if (0 == $currentFilesize) {
+                $pathObject = $this->getFilePathObject($drvFile, $user, $request, $filesystem);
+                if (file_exists($pathObject->path)) {
+                    $currentFilesize = filesize($pathObject->path);
+                    $drvFile->setSize($currentFilesize);
+                    $sizeIsModify = true;
+                    $em->persist($drvFile);
+                }
+            }
             $item = [
                 'name' => $drvFile->getName(),
                 'type' => $drvFile->getType()[0] ?? 'u',// TODO
                 'i' => $drvFile->getId(),
-                'h' => $drvFile->getIsHidden()
+                'h' => $drvFile->getIsHidden(),
+                's' => AppService::getHumanFilesize($currentFilesize, 2)
             ];
             $list[] = $item;
+            $size += $drvFile->getSize();
+            $qntFiles++;
+        }
+        if ($parentCatalog) {
+            $parentCatalog->setSize($size);
+            $parentCatalog->setQuantityFiles($qntFiles);
+            $parentCatalog->setQuantityCatalogs($qntCatalogs);
+            $em->persist($parentCatalog);
+            $em->flush();
+        } else if ($sizeIsModify) {
+            $em->flush();
         }
 
 
