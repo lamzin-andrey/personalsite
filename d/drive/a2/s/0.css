@@ -261,8 +261,18 @@ input[type=text],input[type=password], input[type=email], {
 	text-align:left;
 	margin-left:8px;
 }
+.cim_item_props .props .prop{
+	margin-top:4px;
+}
+.cim_item_name {
+	word-break: break-all;
+	margin-top:4px;
+}
 .gray {
 	color:gray;
+}
+.black {
+	color:#000;
 }
 /** End Catalaog item menu */
 

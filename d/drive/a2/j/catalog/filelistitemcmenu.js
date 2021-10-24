@@ -142,13 +142,13 @@ window.fileListItemCmenu = {
 		}// end for
 		
 		// Add Properties item
-		propertiesText = l('Properties') + '<div class="props">\
-			<div>' + fileListItem.name + '<div>\
-			<div>' + self.unpackHexSz(fileListItem.s) + '<div>{folderProps}\
-		</div';
+		propertiesText = '<span class="black">' + l('Properties') + ':</span><div class="props">\
+			<div class="cim_item_name">' + fileListItem.name + '</div>\
+			<div class="prop">' + self.unpackHexSz(fileListItem.s) + '</div>{folderProps}\
+		</div>';
 		if (fileListItem.type == 'c') {
-			catalogPropertiesText = '<div>' + l('Files') + ':' + fileListItem.qf + '</div>';
-			catalogPropertiesText += '<div>' + l('Catalogs') + ':' + fileListItem.qc + '</div>';
+			catalogPropertiesText = '<div class="prop">' + l('Files') + ':' + fileListItem.qf + '</div>';
+			catalogPropertiesText += '<div class="prop">' + l('Catalogs') + ':' + fileListItem.qc + '</div>';
 		}
 		propertiesText = propertiesText.replace('{folderProps}', catalogPropertiesText);
 		menuItem = appendChild('hListItemCmItems', 'div', propertiesText, {'class': 'cim_item_props gray'});
