@@ -2,7 +2,7 @@ window.fileList = {
 	id: 'fl',
 	/** @property  touchItemsMap store time start touch */
 	touchItemsMap: {},
-	addCatalog:function(name, id, type) {
+	addCatalog:function(name, id, type, size) {
 		type = def(type, 'c');
 		var ls = storage('f' + currentDir),
 			inObj;
@@ -10,7 +10,7 @@ window.fileList = {
 			ls = [];
 		}
 		if (!(name in In(ls))) {
-			ls.push({type:type, name:name, i: id, s: '0gb', qf: 0, qc: 0});
+			ls.push({type:type, name:name, i: id, s: size, qf: 0, qc: 0});
 		}
 		storage('f' + currentDir, ls);
 		

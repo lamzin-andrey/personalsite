@@ -674,12 +674,16 @@ class UsbController extends AbstractController
         $fileEntity->setIsHidden(false);
         $fileEntity->setUserId($this->getUser()->getId());
         $fileEntity->setCatalogEntity($drvCatalog);
+        $size = $file->getSize();
+        $fileEntity->setSize( $size );
         $em = $this->getDoctrine()->getManager();
         $em->persist($fileEntity);
+        $drvCatalog->setSize($drvCatalog->getSize() + $size);
         $em->flush();
 
         $targetName = $fileEntity->getId() . '.' . $ext;
         $file->move($targetPath, $targetName);
+
 
         return $this->mixResponse($request, [
             'status' => 'ok',
@@ -688,7 +692,8 @@ class UsbController extends AbstractController
                 'name' => $originalName,
                 'type' => $fileEntity->getType()[0] ?? 'u',
                 'i'    => $fileEntity->getId(),
-                'h'    => false
+                'h'    => false,
+                's' => AppService::getHumanFilesize($size)
             ]
         ]);
     }

@@ -58,7 +58,7 @@ window.upload = {
 			this.onClickCancel();
 			return;
 		}
-		fileList.addCatalog(data.file.name, data.file.i, data.file.type);
+		fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s);
 		this.onClickCancel();
 	},
 	onFailUpload:function(data, responseText, info, xhr) {
