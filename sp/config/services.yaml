@@ -38,6 +38,7 @@ parameters:
 
     #wusb section
     app.wusb_catalog_root: "%env(resolve:WUSB_CATALOG_ROOT)%"
+    app.wusb_max_space: "%env(resolve:WUSB_MAX_SPACE)%"
 
 services:
     # default configuration for services in *this* file

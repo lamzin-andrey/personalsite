@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Ausers;
 use App\Entity\DrvFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -68,5 +69,25 @@ class DrvFileRepository extends ServiceEntityRepository
         $em->flush();
 
         return intval($file->getId());
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    public function getCurrentSize(Ausers $user) : int
+    {
+        $queryBuilder = $this->createQueryBuilder('f');
+        $e = $queryBuilder->expr();
+        $queryBuilder->select('SUM(f.size) AS s');
+        $queryBuilder->where($e->eq('f.userId', ':userId'));
+        $queryBuilder->setParameters([
+            ':userId' => $user->getId()
+        ]);
+        $rows = $queryBuilder->getQuery()->execute();
+        if (count($rows) > 0) {
+            return intval($rows[0]['s']);
+        }
+        return 0;
     }
 }

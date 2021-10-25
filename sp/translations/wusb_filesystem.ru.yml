@@ -2,3 +2,4 @@ Catalog with name already exists: Каталог с таким именем уж
 Unable create catalog (db): Невозможно создать каталог (db)
 Unable create catalog: Невозможно создать каталог
 File with name {name} already exists: Файл с именем {name} уже существует
+Your busy all {allowSize}: У вас заняты все {allowSize}

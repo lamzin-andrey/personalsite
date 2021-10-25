@@ -1482,7 +1482,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function l(TranslatorInterface $t, string $s, string $domain = 'wusb_filesystem', $params = []) : string
+    protected function l(TranslatorInterface $t, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
     {
         $locale = 'en';
         /**
@@ -1506,5 +1506,55 @@ class UsbController extends AbstractController
         }
         // ($t, 'You have not access to this page', $domain)
         return $t->trans($s, $params, $domain, $locale);
+    }
+    /**
+     * @Route("/space.json", name="drivegetspace", methods={"GET"})
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveGetSpace(Request $request,
+                                               TranslatorInterface $t,
+                                               Filesystem $filesystem,
+                                               CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        /*$csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        if ($csrfToken != $request->request->get('_token')) {
+            $domain = null;
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', $domain)
+            ]);
+        }*/
+        $user = $this->getUser();
+        if (!$user) {
+            $data = [
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page',  null)
+            ];
+
+            return $this->_json($data);
+        }
+
+        // Get all user files sizes
+        /**
+         * @var DrvFileRepository $filesRepository
+        */
+        $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
+        $size = $filesRepository->getCurrentSize($user);
+        $allowSize = intval($this->getParameter('app.wusb_max_space') );
+        if ($allowSize <= $size) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'Your busy all {allowSize}',  'wusb_filesystem', [
+                    '{allowSize}' => AppService::getHumanFilesize($allowSize, 0, 3, false)
+                ])
+            ]);
+        }
+
+        return $this->_json(['status' => 'ok']);
     }
 }

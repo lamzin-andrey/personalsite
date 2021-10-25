@@ -2,18 +2,33 @@ window.upload = {
 	init:function() {
 		var o = this,
 			iFile = e('iFile');
-		this.iFile = iFile;
+		o.iFile = iFile;
 		iFile.onchange = function(evt){
 			o.onSelectFile(evt);
 		}
 		
-		this.bCancel = e('bUploadCancel');
-		this.bCancel.onclick = function(evt){
+		o.bCancel = e('bUploadCancel');
+		o.bCancel.onclick = function(evt){
 			o.onClickCancel(evt);
 		}
-		this.progressStateLabel = e('progressStateLabel');
+		o.progressStateLabel = e('progressStateLabel');
 	},
-	onSelectFile:function() { 
+	onSelectFile:function() {
+		var o = this;
+		Rest._get(
+			function(data){o.onSuccessGetSpace(data);},
+			br + '/space.json',
+			function(data, responseText, info, xhr){ o.onFailUpload(data, responseText, info, xhr);}
+		);
+	},
+	onSuccessGetSpace:function(data){
+		if (!this.onFailUpload(data)) {
+			this.onClickCancel();
+			return;
+		}
+		this.onSpaceOk();
+	},
+	onSpaceOk:function() { 
 		var o = this;
 		try {
 			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir}, 

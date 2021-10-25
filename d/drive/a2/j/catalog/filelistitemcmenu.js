@@ -129,6 +129,7 @@ window.fileListItemCmenu = {
 						}
 						self.onClickDownload.call(self, evt);
 					};
+					break;
 				case l('Exit'):
 					menuItem.onclick = function(evt) {
 						if (self.delayForMenuItems) {
@@ -151,7 +152,7 @@ window.fileListItemCmenu = {
 			catalogPropertiesText += '<div class="prop">' + l('Catalogs') + ':' + fileListItem.qc + '</div>';
 		}
 		propertiesText = propertiesText.replace('{folderProps}', catalogPropertiesText);
-		menuItem = appendChild('hListItemCmItems', 'div', propertiesText, {'class': 'cim_item_props gray'});
+		appendChild('hListItemCmItems', 'div', propertiesText, {'class': 'cim_item_props gray'});
 		
 		setTimeout(function() {
 			var ls = cs('hCatItemMenu', 'cim_item'), i, sZ = sz(ls);
