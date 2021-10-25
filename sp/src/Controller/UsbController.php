@@ -582,11 +582,36 @@ class UsbController extends AbstractController
                 'error' => $this->l($t, 'You have not access to this page 1', $domain)
             ]);
         }
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page 2', null)
+            ]);
+        }
+
         $domain = 'wusb_filesystem';
         /**
          * @var UploadedFile $file
         */
         $file = $request->files->get('iFile');
+
+        // Get all user files sizes
+        /**
+         * @var DrvFileRepository $filesRepository
+         */
+        $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
+        $size = $filesRepository->getCurrentSize($user) + $file->getSize();
+        $allowSize = intval($this->getParameter('app.wusb_max_space') );
+        if ($allowSize <= $size) {
+            return $this->mixResponse($request, [
+                'status' => 'error',
+                'error' => $this->l($t, 'Your busy all {allowSize}',  'wusb_filesystem', [
+                    '{allowSize}' => AppService::getHumanFilesize($allowSize, 0, 3, false)
+                ])
+            ]);
+        }
+
         $originalName = $file->getClientOriginalName();
         $relativePath = $this->getParameter('app.wusb_catalog_root');
         $userPath = $this->generateUserPath($this->getUser()->getId());
@@ -1519,16 +1544,6 @@ class UsbController extends AbstractController
                                                Filesystem $filesystem,
                                                CsrfTokenManagerInterface $csrfTokenManager)
     {
-        /*$csrfToken = $csrfTokenManager
-            ? $csrfTokenManager->getToken('authenticate')->getValue()
-            : null;
-        if ($csrfToken != $request->request->get('_token')) {
-            $domain = null;
-            return $this->_json([
-                'status' => 'error',
-                'error' => $this->l($t, 'You have not access to this page', $domain)
-            ]);
-        }*/
         $user = $this->getUser();
         if (!$user) {
             $data = [
