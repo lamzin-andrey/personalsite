@@ -37,43 +37,7 @@
 					<div class="path" id="hPath">/wcard</div>
 				</div>
 				<div class="fl empty" id="fl">
-					<div class="empty-label" id="hNoFiles">
-						No files
-					</div>
-					<!--div class="it">
-						<div class="im_wrapper">
-							<img src="i/mime/c.png">
-						</div>
-						<span class="fn">Мираж</span>
-						<div class="cl"></div>
-					</div-->
-				</div>
-				<div id="hBotMenu" class="botMenuWr hide">
-					<div class="botMenuBg">
-						<div>
-							<div id="bmUpload" class="left bmb">Загрузить</div>
-							<div id="bmAddCatalog" class="left bmb">Создать папку</div>
-							<div id="bmRemove" class="left bmb menu_paste">Удалить</div>
-							<div class="cl"></div>
-						</div>
-						<div>
-							<div id="bmSelectMode" class="left bmb">Режим выбора</div>
-							<div id="bmPaste" class="left bmb menu_paste">Вставить</div>
-							<div id="bmOptions" class="left bmb">Опции</div>
-							<div class="cl"></div>
-						</div>
-					</div>
-				</div>
-				
-				<div id="hBotOptions" class="botOptsWr hide tl">
-					<div class="botOptsBg">
-						<div>
-							<div id="boLeave" class="bopt">Leave WebUSB</div>
-							<div id="boChangeLang" class="bopt">Change language</div>
-							<div id="boChangeTheme" class="bopt">Change mode</div>
-							<div id="boCloseOpts" class="bopt">Exit</div>
-						</div>
-					</div>
+					<div class="empty-label" id="hNoFiles"></div>
 				</div>
 			</div>
 		</div>
@@ -136,25 +100,42 @@
 			</div>
 		</div>
 		
+		<!-- screen bottom menu 1 -->
+		<div id="hBotMenu" class="botMenuWr hide">
+			<div class="botMenuBg">
+				<div>
+					<div id="bmUpload" class="left bmb">Загрузить</div>
+					<div id="bmAddCatalog" class="left bmb">Создать папку</div>
+					<div id="bmRemove" class="left bmb menu_paste">Удалить</div>
+					<div class="cl"></div>
+				</div>
+				<div>
+					<div id="bmSelectMode" class="left bmb">Режим выбора</div>
+					<div id="bmPaste" class="left bmb menu_paste">Вставить</div>
+					<div id="bmOptions" class="left bmb">Опции</div>
+					<div class="cl"></div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- screen bottom menu 2 -->
+		<div id="hBotOptions" class="botOptsWr hide tl">
+			<div class="botOptsBg">
+				<div>
+					<div id="boLeave" class="bopt">Leave WebUSB</div>
+					<div id="boChangeLang" class="bopt">Change language</div>
+					<div id="boChangeTheme" class="bopt">Change mode</div>
+					<div id="boCloseOpts" class="bopt">Exit</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- screen context menu -->
 		<div class="tc screen d-none hCatItemMenu" id="hCatItemMenu">
 			<div class="cim_head_wr">
-				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
 				<div class="cim_head_text" id="hCatalogItemTitle">Longly long multiwords file</div>
 			</div>
-			<div class="cim_items_wr" id="hListItemCmItems">
-				<!--проверить, не сломается - удалить div class="cim_item">
-					Удалить
-				</div>
-				<div class="cim_item">
-					Переименовать
-				</div>
-				<div class="cim_item">
-					Переместить
-				</div>
-				<div class="cim_item_props">
-					3,75 Мб. 2 5968 файлов. 
-				</div--> 
-			</div>
+			<div class="cim_items_wr" id="hListItemCmItems"></div>
 		</div>
 		<!-- screen settings dialog -->
 		<!-- screen settings -->
