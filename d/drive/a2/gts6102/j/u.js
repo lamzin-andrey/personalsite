@@ -1,4 +1,4 @@
-window.root = '/d/drive/a2';
+window.root = '/d/drive/a2/gts6102';
 window.roota2 = '/d/drive/a2';
 window.br = window.backRoot = '/sp/public';
 window.path = '/wcard';
@@ -152,7 +152,7 @@ function hideLoader(screenId) {
 }
 
 function setUpButtonDisable(bUp) {
-	bUp.style['background-image'] = "url('./a2/i/up_button_bg_d.png')";
+	bUp.style['background-image'] = "url('../a2/i/up_button_bg_d.png')";
 	bUp.style['color'] = '#546575';
 }
 
@@ -162,7 +162,7 @@ function setUpButtonEnable(bUp) {
 }
 
 function setHomeButtonDisable(bH) {
-	bH.style['background-image'] = "url('./a2/i/home-bg-d.png')";
+	bH.style['background-image'] = "url('../a2/i/home-bg-d.png')";
 	bH.style['color'] = '#546575';
 }
 

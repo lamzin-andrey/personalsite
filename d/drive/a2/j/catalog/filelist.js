@@ -20,7 +20,7 @@ window.fileList = {
 	render:function(list) {
 		var tpl = // '<div class="it">' + 
 						'<div class="im_wrapper">' + 
-							'<img src="./a2/i/mime/{t}.png">' +
+							'<img src="{path}/i/mime/{t}.png">' +
 						'</div>' +
 						'<span class="fn">{name}</span>{checkbox}' + 
 						'<div class="cl"></div>',
@@ -51,6 +51,7 @@ window.fileList = {
 		for (i = 0; i < sZ; i++) {
 			j = list[i];
 			s = tpl.replace('{t}', j.type);
+			s = s.replace('{path}', roota2);
 			s = s.replace('{name}', j.name);
 			vAttr['data-name'] = j.name;
 			prefix = 'f';
