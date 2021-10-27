@@ -25,7 +25,7 @@ window.langEn = {
 	'register_form[passwordRepeat]' : 'Password repeat',
 	'hIAgree' : 'I agree with',
 	'hPolicyName' : 'Comfindential policy',
-	'register_form[isSubscribed]' : 'I agree to receive email newsletters from the author of this site ',
+	'hIAgreeFromAuthor' : 'I agree to receive email newsletters from the author of this site',
 	'bRegisterNow' : 'Sign up',
 	'bShowAuthScreen' : 'Goto login',
 	'reset_password_form[email]' : 'E-mail',
