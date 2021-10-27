@@ -256,7 +256,7 @@ window.fileList = {
 		var id = attr(evt.target, 'id'),
 			vw = cs(id, 'chVw')[0], s = 'check_intive';
 		if (vw ) {
-			if (!selectedItems[id]) {
+			if (S(selectedItems[id]) == 'undefined') {
 				s = 'check_active';
 				selectedItems[id] = currentDir;
 			} else {
