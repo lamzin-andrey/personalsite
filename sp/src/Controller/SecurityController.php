@@ -100,6 +100,7 @@ class SecurityController extends AppBaseController
 					$oUser->setPassword($sPassword);
 
 					$this->setRole($oRequest, $oUser);
+					$this->request = $oRequest;
 					$this->setGuestId($oRequest, $oUser);
 
 					$oEm = $this->getDoctrine()->getManager();

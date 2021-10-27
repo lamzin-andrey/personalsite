@@ -7,7 +7,7 @@ function initDirect() {
 		ua = navigator.userAgent.toLowerCase(),
 		savedTheme = storage('savedTheme'),
 		lang;
-	savedTheme = savedTheme ? savedTheme : 'a2';
+	savedTheme = savedTheme ? savedTheme : '';
 	stl('im', 'margin-top', h + 'px');
 	
 	// choose app
@@ -17,13 +17,14 @@ function initDirect() {
 			savedTheme = 'a2/gts6102';
 		}
 	} else {
+		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');
 	}
 	
 	if (savedTheme) {
 		// If language not selected, redirect to chjoose lang
 		lang = storage('lang');
-		if (!(lang in In(['ru', 'en']))) {
+		if (lang != 'langRu' && lang != 'langEn') {
 			location = '/d/drive/a2/clang';
 			return;
 		}

@@ -1364,7 +1364,7 @@ class UsbController extends AbstractController
         }
 
         $cookie = Cookie::create('guest_id', $guestId, time() + 265*24*3600);
-        $response = new RedirectResponse('/d/drive/a2');
+        $response = new RedirectResponse('/d/drive');
         $response->headers->setCookie($cookie);
 
         return $response;

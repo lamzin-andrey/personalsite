@@ -31,7 +31,7 @@ window.fileList = {
 			'class': 'it'
 		},
 		self = this, checkboxTpl = '<div class="imch_wrapper">' + 
-							'<img src="' + root + '/i/{ct}.jpg" class="chVw">' +
+							'<img src="' + roota2 + '/i/{ct}.jpg" class="chVw">' +
 						'</div>';
 		
 		if (!selectMode) {
@@ -262,7 +262,7 @@ window.fileList = {
 			} else {
 				delete selectedItems[id];
 			}
-			attr(vw, 'src', root + '/i/' + s +'.jpg');
+			attr(vw, 'src', roota2 + '/i/' + s +'.jpg');
 			
 			if (sz(selectedItems)) {
 				removeClass('bmPaste', 'menu_paste');

@@ -313,3 +313,12 @@ input[type=text],input[type=password], input[type=email], {
 	height:48px;
 	line-height:48px;
 }
+.s-pseudo {
+	background-image: url('../i/menp.jpg');
+	width:240px;
+	height:320px;
+	margin:auto;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
