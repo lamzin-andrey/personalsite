@@ -131,7 +131,7 @@ input[type=text],input[type=password], input[type=email], {
 }
 /* empty */
 .fl.empty {
-	background-image: url('../i/empty-icon.png');
+	background-image: url('../../i/empty-icon.png');
 	height:240px;
 	width:100%;
 	background-position-x: center;
