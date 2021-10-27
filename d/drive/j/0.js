@@ -13,6 +13,9 @@ function initDirect() {
 	// choose app
 	if (!sz(savedTheme) && ua.indexOf('android 2.3') != -1) {
 		savedTheme = 'a2';
+		if (ua.indexOf('gt-s6102') != -1) {
+			savedTheme = 'a2/gts6102';
+		}
 	} else {
 		// alert('Unknown theme!');
 	}
@@ -21,7 +24,7 @@ function initDirect() {
 		// If language not selected, redirect to chjoose lang
 		lang = storage('lang');
 		if (!(lang in In(['ru', 'en']))) {
-			location = '/d/drive/' + savedTheme + '/clang';
+			location = '/d/drive/a2/clang';
 			return;
 		}
 		
