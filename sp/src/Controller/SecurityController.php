@@ -211,8 +211,8 @@ class SecurityController extends AppBaseController
 					}
 
 				} else {
-					$this->addFlash('notice', $t->trans('User with email %email% not found', null, ['%email%' => $sEmail]));
-                    $ajaxData['message'] = $t->trans('User with email %email% not found', null, ['%email%' => $sEmail]);
+					$this->addFlash('notice', $t->trans('User with email %email% not found', ['%email%' => $sEmail], null));
+                    $ajaxData['message'] = $t->trans('User with email %email% not found', ['%email%' => $sEmail], null);
 				}
 			}
 		}
