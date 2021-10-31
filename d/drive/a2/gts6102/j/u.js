@@ -24,6 +24,8 @@ function initApp() {
 	upload.init();
 	window.uploadAnimation = new LoaderAnim('imgUp', 1, 5, 'dompb', -41, 100);
 	
+	e('hAlertScreen').onclick = onClickShowSuccessBtn;
+	
 	getAuthState();
 	onLoadA236();
 }
@@ -55,6 +57,8 @@ function onSuccessGetAuthState(data) {
 
 
 function showScreen(showScreenId) {
+	window.prevScreen = window.currentScreen;
+	window.currentScreen = showScreenId;
 	var ls = cs(D, 'screen'), i, sZ = sz(ls);
 	for (i = 0; i < sZ; i++) {
 		addClass(e(ls[i]), 'd-none');
@@ -140,7 +144,16 @@ function  _map(id, read) {
 }
 
 function showSuccess(s) {
-	alert(s);
+	e('hAlertMessage').innerHTML = s;
+	showScreen('hAlertScreen');
+}
+function onClickShowSuccessBtn() {
+	var s = window.prevScreen;
+	if (s && e(s)) {
+		showScreen(s);
+	} else {
+		hideLoader();
+	}
 }
 
 function showLoader() {

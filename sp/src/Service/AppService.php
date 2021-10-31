@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Ausers;
 use App\Entity\CrnIntervals;
 use App\Entity\CrnTasks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
@@ -16,6 +17,7 @@ use Doctrine\Common\Collections\Criteria;
 //use Landlib\RusLexicon;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AppService
 {
@@ -23,12 +25,23 @@ class AppService
 	/** @property FormInterface $_oForm Сюда можно передать форму для более простой работы с ними */
 	private $_oForm;
 
-	public function __construct(ContainerInterface $container, ?ViewDataService $oViewDataService = null, ?FileUploaderService $oFileUploaderService = null)
+    /** @property TranslatorInterface $t */
+    private $t;
+
+    /** @property Request $request */
+    private $request;
+
+	public function __construct(ContainerInterface $container,
+                                ?ViewDataService $oViewDataService = null,
+                                ?FileUploaderService $oFileUploaderService = null,
+                                TranslatorInterface $t)
 	{
 		$this->oContainer = $container;
+		$this->request = $container->get('request_stack')->getCurrentRequest();
 		$this->translator = $container->get('translator');
 		$this->oViewDataService = $oViewDataService;
 		$this->oFileUploaderService = $oFileUploaderService;
+		$this->t = $t;
 	}
 
 	/**
@@ -666,5 +679,35 @@ class AppService
         } while(true);
 
         return $r;
+    }
+
+    public function l(Ausers $user, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
+    {
+        $t = $this->t;
+        $locale = 'en';
+        /**
+         * @var Ausers $user
+         *
+         */
+        if (!$user || !($user instanceof Ausers)) {
+            $guestId = null;
+            if ($this->request) {
+                $guestId = $this->request->cookies->get('guest_id');
+            }
+
+            if ($guestId) {
+                $this->container->get('doctrine')->getRepository(Ausers::class)->findOneBy([
+                    'guestId' => $guestId
+                ]);
+            }
+        }
+        if ($user && ($user instanceof Ausers) ) {
+            $x = BitReader::get(intval($user->getBSettings()), 1);
+            if (1 === $x) {
+                $locale = 'ru';
+            }
+        }
+
+        return $t->trans($s, $params, $domain, $locale);
     }
 }

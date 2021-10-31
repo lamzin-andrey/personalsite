@@ -49,7 +49,7 @@ function onSuccessReset(data) {
 	}
 	if (data.success === true) {
 		showScreen('hAuthScreen');
-		showSuccess(data.message + '<a href="' + data.emailHostLink + '" target="_blank">Email</a>');
+		showSuccess(data.message + ' <a href="' + data.emailHostLink + '" target="_blank">Email</a>');
 	}
 }
 

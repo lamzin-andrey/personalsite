@@ -40,7 +40,10 @@ Signin: Авторизация на сайте. Второй уровень.
 Signup: Регистрация на сайте. Второй уровень.
 Reset password: Сбросить пароль. Второй уровень.
 forgotPasswordSmallText: Такое, наверное, бывает... &copy; Просто введите свой адрес электронной почты ниже, и я вышлю вам ссылку для сброса пароля.
-send reset success: Новый пароль успешно отправлен вам на
+The new password has been successfully emailed to you: Новый пароль успешно отправлен вам на
 Logout: Выход
-Password recovery in the Time Comtrol Service: Восстановление пароля в сервисе контроля времени
+Password recovery in the Time Control Service: Восстановление пароля в сервисе контроля времени
+Password recovery in the WebUSB service: Восстановление пароля в сервисе WebUSB
 Password recovery for your the Web-USB: Пароль от вашей WEB-флешки
+Your forgotten password: Ваш забытый пароль
+User with email %email% not found: Пользователь с email %email% не найден

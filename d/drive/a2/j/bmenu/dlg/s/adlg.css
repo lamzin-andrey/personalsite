@@ -31,6 +31,11 @@
 
 .a2dlg .info {
   padding-bottom: 10px;
+  min-height:32px;
+  line-height: 24px;
+}
+.a2dlg .info a{
+  color:red;
 }
 
 .a2dlg .avBtn{

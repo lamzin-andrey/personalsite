@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 # use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Entity\Ausers;
 use App\Form\RegisterFormType;
 use App\Service\AppService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -154,7 +155,10 @@ class SecurityController extends AppBaseController
     /**
      * @Route("/reset", name="reset")
     */
-    public function reset(Request $oRequest, TranslatorInterface $t, UserPasswordEncoderInterface $oEncoder, AppService $oAppService)
+    public function reset(Request $oRequest,
+                          TranslatorInterface $t,
+                          UserPasswordEncoderInterface $oEncoder,
+                          AppService $oAppService)
     {
         $this->_oAppService = $oAppService;
         $this->_oForm = $oForm = $this->createForm(get_class(new ResetPasswordFormType()));
@@ -167,6 +171,8 @@ class SecurityController extends AppBaseController
         $aData['bEnableChooseSiteVersionButton'] = true;
         $aData['form'] = $oForm->createView();
         $ajaxData = [];
+        $csrfResetToken = $oAppService->getFormTokenValue($oForm);
+
         if ($oRequest->getMethod() == 'POST') {
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
@@ -185,11 +191,10 @@ class SecurityController extends AppBaseController
 
                     $siteAdminEmail = $this->getParameter('app.siteAdminEmail');
 
-                    $subject = $t->trans('Password recovery in the Time Comtrol Service', [], 'loginforms');
-                    if (User::ROLE_WEB_DRIVE_USER == $oUser->getRole()) {
-                        $subject = $t->trans('Password recovery for your the Web-USB', [], 'loginforms');
-                    }
-                    $sHtml = '<p>Ваш забытый пароль ' . $sPasswordRaw . '</p>';
+                    $subject = $this->getRecoveryMailSubject($oUser, $oAppService);
+
+                    // Ваш забытый пароль
+                    $sHtml = '<p> ' . $oAppService->l($oUser, 'Your forgotten password', 'loginforms')  . ' '. $sPasswordRaw . '</p>';
                     $oMessage = new SimpleMail();
                     $oMessage->setSubject($subject);
                     $oMessage->setFrom($siteAdminEmail);
@@ -197,26 +202,32 @@ class SecurityController extends AppBaseController
                     $oMessage->setBody($sHtml, 'text/html', 'UTF-8');
                     $bSuccess = $oMessage->send();
                     $ajaxData['success'] = false;
-                    $ajaxData['token'] = $oAppService->getFormTokenValue($oForm);
+                    $ajaxData['token'] = $csrfResetToken;
                     if ($bSuccess) {
                         $aData['isEmailWasFound'] = 1;
                         $a = explode('@', $sEmail);
 
                         $ajaxData['emailHostLink'] = $aData['emailHostLink'] = 'https://' . $a[1];
                         $ajaxData['success'] = true;
-                        $ajaxData['message'] = $t->trans('send reset success', [], 'loginforms');
+                        $ajaxData['message'] = $oAppService->l($oUser, 'The new password has been successfully emailed to you', 'loginforms');
                     } else {
-                        $this->addFlash('notice', $t->trans('Unable send email'));
-                        $ajaxData['message'] = $t->trans('Unable send email');
+                        $message = $oAppService->l($oUser, 'Unable send email', 'loginsform');
+                        $this->addFlash('notice', $message);
+                        $ajaxData['message'] = $message;
                     }
 
                 } else {
-                    $this->addFlash('notice', $t->trans('User with email %email% not found', ['%email%' => $sEmail], null));
-                    $ajaxData['message'] = $t->trans('User with email %email% not found', ['%email%' => $sEmail], null);
+                    $user = new Ausers();
+                    $message = $oAppService->l($user, 'User with email %email% not found', 'loginforms', ['%email%' => $sEmail]);
+                    $this->addFlash('notice', $message);
+                    $ajaxData['success'] = false;
+                    $ajaxData['message'] = $message;
+                    $ajaxData['token'] = $csrfResetToken;
                 }
             } else {
                 $ajaxData['success'] = false;
                 $ajaxData['message'] = implode(';', $oAppService->getFormErrorsAsArray($oForm));
+                $ajaxData['token'] = $csrfResetToken;
             }
         }
 
@@ -295,5 +306,20 @@ class SecurityController extends AppBaseController
         if ($guestId) {
             $user->setGuestId($guestId);
         }
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function getRecoveryMailSubject(Ausers $user, AppService $appService) : string
+    {
+        $subject =  'Password recovery in the Time Control Service';
+        if ($user->getRole() == Ausers::ROLE_WEB_DRIVE_USER) {
+            $subject =  'Password recovery in the WebUSB service';
+        }
+        $subject = $appService->l($user, $subject, 'loginforms');
+
+        return $subject;
     }
 }
