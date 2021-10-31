@@ -28,10 +28,13 @@ body.f100, html.f100 {
 .d-none {
 	display:none;
 }
-input[type=text],input[type=password],input[type=email],input[type=button] {
+input[type=text],input[type=password],input[type=email] {
+	min-height:32px;
+}
+input[type=button] {
 	min-height:48px;
 }
-input[type=text],input[type=password], input[type=email], {
+input[type=text],input[type=password], input[type=email] {
 	width:77%;
 }
 .iwrapper, .cbwrapper {
