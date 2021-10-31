@@ -72,6 +72,7 @@ class SecurityController extends AppBaseController
         $this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
         $this->translator = $t;
         if ($oRequest->getMethod() == 'POST') {
+            $oRequest->setLocale('en'); // TODO dynamic
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
                 $sPassword = $oForm->get('passwordRaw')->getData();
@@ -91,10 +92,10 @@ class SecurityController extends AppBaseController
                 $oExistsUser = $oRepository->matching($oCriteria)->get(0);
                 if ($oExistsUser) {
                     //$this->addFlash('notice', $t->trans('User with login or email already exists'));
-                    $this->addFormError('User with login or email already exists', 'username');
+                    $this->addFormError('User with login or email already exists', 'username', $oAppService);
                     //return $this->redirectToRoute('login');
                 } else if ($sPassword != $sPassword2) {
-                    $this->addFormError('Passwords is different', 'passwordRaw');
+                    $this->addFormError('Passwords is different', 'passwordRaw', $oAppService);
                 } else {
                     //Success
                     $sPassword = $oEncoder->encodePassword($oUser, $sPassword);
@@ -242,9 +243,10 @@ class SecurityController extends AppBaseController
      * @param string $sField
      * @param FormInterface $oForm
      **/
-    public function addFormError(string $sError, string $sField, ?FormInterface $oForm = null)
+    public function addFormError(string $sError, string $sField, AppService $appService, ?FormInterface $oForm = null)
     {
-        $oError = new \Symfony\Component\Form\FormError($this->translator->trans($sError));
+        $message = $appService->l(null, $sError, null);
+        $oError = new \Symfony\Component\Form\FormError($message);
         $this->_oForm->get($sField)->addError($oError);
     }
     /**

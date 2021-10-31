@@ -681,7 +681,7 @@ class AppService
         return $r;
     }
 
-    public function l(Ausers $user, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
+    public function l(?Ausers $user, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
     {
         $t = $this->t;
         $locale = 'en';
@@ -696,7 +696,7 @@ class AppService
             }
 
             if ($guestId) {
-                $this->container->get('doctrine')->getRepository(Ausers::class)->findOneBy([
+                $this->oContainer->get('doctrine')->getRepository(Ausers::class)->findOneBy([
                     'guestId' => $guestId
                 ]);
             }

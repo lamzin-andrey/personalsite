@@ -1339,14 +1339,18 @@ class UsbController extends AbstractController
                 $guestId = $user->getGuestId();
             }
         } else {
-            $guestId = $this->request->cookies->get('guest_id');
-            if ($guestId) {
-                // TODO index to guest_id
-                $users = $this->container->get('doctrine')->getRepository(Ausers::class)
-                    ->findBy([
-                        'gusetId' => $guestId
-                    ]);
+            $saved = $this->request->cookies->get('guest_id');
+            if ($saved) {
+                $guestId = $saved;
             }
+        }
+
+        if ($guestId) {
+            // TODO index to guest_id
+            $users = $this->container->get('doctrine')->getRepository(Ausers::class)
+                ->findBy([
+                    'guestId' => $guestId
+                ]);
         }
 
         if (!$users) {
@@ -1356,14 +1360,15 @@ class UsbController extends AbstractController
         }
 
         if ($users) {
+            $em = $this->container->get('doctrine')->getManager();
             foreach ($users as $user) {
                 $user->setLang($lang);
+                $em->persist($user);
             }
-            $em = $this->container->get('doctrine')->getManager();
             $em->flush();
         }
 
-        $cookie = Cookie::create('guest_id', $guestId, time() + 265*24*3600);
+        $cookie = Cookie::create('guest_id', $guestId, time() + 365*24*3600);
         $response = new RedirectResponse('/d/drive');
         $response->headers->setCookie($cookie);
 
