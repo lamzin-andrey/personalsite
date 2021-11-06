@@ -72,7 +72,6 @@ class SecurityController extends AppBaseController
         $this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
         $this->translator = $t;
         if ($oRequest->getMethod() == 'POST') {
-            $oRequest->setLocale('en'); // TODO dynamic
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
                 $sPassword = $oForm->get('passwordRaw')->getData();

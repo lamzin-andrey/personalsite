@@ -236,6 +236,7 @@ class AppService
 			$oCurrentError = $oForm->getErrors(true)->current();
 			$sKey = $oCurrentError->getOrigin()->getConfig()->getName();
 			$sMessage = $oCurrentError->getMessage();
+			$sMessage = $this->localizeFormError($sMessage);
 			$aResult[$sKey] = $sMessage;
 		}
 		for ($i = 0; $i < $nSz - 1; $i ++) {
@@ -684,11 +685,61 @@ class AppService
     public function l(?Ausers $user, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
     {
         $t = $this->t;
+        $locale = $this->getUserLocale($user);
+
+        return $t->trans($s, $params, $domain, $locale);
+    }
+
+    /**
+     *  $request->setLocale does not work. In onKernelRequest too.
+    */
+    protected function localizeFormError(string $message) : string
+    {
+        $locale = $this->getUserLocale();
+
+        if ('en' === $locale) {
+            $ruYamlFile = __DIR__ . '/../../translations/validators.ru.yaml';
+            $map = $this->parseReversive($ruYamlFile);
+            return ($map[$message] ?? $message);
+        }
+
+        return $message;
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    protected function parseReversive(string $fileName) : array
+    {
+        $map = [];
+        if (file_exists($fileName)) {
+            $a = explode("\n", file_get_contents($fileName));
+            foreach ($a as $line) {
+                $pair = explode(': ', $line);
+                $val = trim($pair[0]);
+                $key = trim($pair[1]);
+                $map[$key] = $val;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * @param $
+     * @return
+    */
+    public function getUserLocale(?Ausers $user = null) : string
+    {
         $locale = 'en';
         /**
          * @var Ausers $user
-         *
-         */
+        */
+        if (!$user || !($user instanceof Ausers)) {
+            $user = $this->getAuthUser();
+        }
+
         if (!$user || !($user instanceof Ausers)) {
             $guestId = null;
             if ($this->request) {
@@ -696,7 +747,7 @@ class AppService
             }
 
             if ($guestId) {
-                $this->oContainer->get('doctrine')->getRepository(Ausers::class)->findOneBy([
+                $user = $this->oContainer->get('doctrine')->getRepository(Ausers::class)->findOneBy([
                     'guestId' => $guestId
                 ]);
             }
@@ -708,6 +759,6 @@ class AppService
             }
         }
 
-        return $t->trans($s, $params, $domain, $locale);
+        return $locale;
     }
 }
