@@ -214,14 +214,13 @@ class SecurityController extends AppBaseController
                         $ajaxData['success'] = true;
                         $ajaxData['message'] = $oAppService->l($oUser, 'The new password has been successfully emailed to you', 'loginforms');
                     } else {
-                        $message = $oAppService->l($oUser, 'Unable send email', 'loginsform');
+                        $message = $oAppService->l(null, 'Unable send email', 'loginforms');
                         $this->addFlash('notice', $message);
                         $ajaxData['message'] = $message;
                     }
 
                 } else {
-                    $user = new Ausers();
-                    $message = $oAppService->l($user, 'User with email %email% not found', 'loginforms', ['%email%' => $sEmail]);
+                    $message = $oAppService->l(null, 'User with email %email% not found', 'loginforms', ['%email%' => $sEmail]);
                     $this->addFlash('notice', $message);
                     $ajaxData['success'] = false;
                     $ajaxData['message'] = $message;
