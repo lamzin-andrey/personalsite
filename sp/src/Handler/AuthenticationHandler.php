@@ -1,6 +1,7 @@
 <?php
 namespace App\Handler;
 
+use App\Service\AppService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -27,17 +28,23 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      */
     private $session;
 
+    /**
+     * @var AppService
+    */
+    private $appService;
+
 
     /**
      * AuthenticationHandler constructor.
      * @param RouterInterface $router
      * @param Session $session
      */
-    public function __construct(RouterInterface $router,/* Session $session*/ ContainerInterface $oContainer)
+    public function __construct(RouterInterface $router,/* Session $session*/ ContainerInterface $oContainer, AppService $appService)
     {
         $this->router = $router;
 		$this->_oContainer = $oContainer;
         $this->session = $oContainer->get('request_stack')->getCurrentRequest()->getSession();
+        $this->appService = $appService;
     }
 
     /**
@@ -68,7 +75,7 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
         if ($request->isXmlHttpRequest()) {
 			//$request->get('session')->set(Security::AUTHENTICATION_ERROR, $exception);
 			$t = $this->_oContainer->get('translator');
-			$sMessage = $t->trans($exception->getMessage(), [], null);
+			$sMessage = $this->appService->l(null, $exception->getMessage(), null);
             return new JsonResponse(['success' => false, 'message' => $sMessage]);
         } else {
             $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);

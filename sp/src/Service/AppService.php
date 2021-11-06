@@ -83,7 +83,11 @@ class AppService
 	//TODO избавиться от security.token_storage
 	public function getAuthUser()
 	{
-		$oUser = $this->oContainer->get('security.token_storage')->getToken()->getUser();
+	    $token = $this->oContainer->get('security.token_storage')->getToken();
+            $oUser = null;
+	    if ($token) {
+                $oUser = $token->getUser();
+	    }
 		return $oUser;
 	}
 	/**
