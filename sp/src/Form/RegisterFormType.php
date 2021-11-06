@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType AS TType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -44,9 +45,11 @@ class RegisterFormType extends AbstractType
 			])
 			->add('agree', CheckboxType::class, [
 				'mapped' => false,
+				'required' => true,
 				'constraints' => [
-					new NotBlank([
-						'message' => 'Consent to agree to terms of use'
+					new EqualTo([
+					    'value' => 'true',
+						'message' => 'Consent to agree to terms of use {{ value }}'
 					])
 				]
 			])

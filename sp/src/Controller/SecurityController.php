@@ -71,6 +71,7 @@ class SecurityController extends AppBaseController
         $oUser = new User();
         $this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
         $this->translator = $t;
+        $agree = $oRequest->request->get('register_form')['agree'];
         if ($oRequest->getMethod() == 'POST') {
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
@@ -95,6 +96,8 @@ class SecurityController extends AppBaseController
                     //return $this->redirectToRoute('login');
                 } else if ($sPassword != $sPassword2) {
                     $this->addFormError('Passwords is different', 'passwordRaw', $oAppService);
+                } else if ('true' !== $agree) {
+                    $this->addFormError('Consent to agree to terms of use', 'agree', $oAppService);
                 } else {
                     //Success
                     $sPassword = $oEncoder->encodePassword($oUser, $sPassword);
