@@ -1,6 +1,16 @@
 window.onload = initDirect;
 function initDirect() {
+	Rest._token = 'free';
+	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/0.html';
+	Rest._get(
+		function() {onCheckSsl(true)},
+		url,
+		function() {onCheckSsl(false)},
+	);
+}
+function onCheckSsl(isSSLSupport) {
 	storage('referrer', document.referrer);
+	storage('ssl', (isSSLSupport ? 2 : 1));
 	// styling
 	var o = getViewport(),
 		h = Math.round(o.h / 2) - 64,
@@ -24,15 +34,19 @@ function initDirect() {
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');
 	}
+	var hostPrefix = '';
+	if (isSSLSupport) {
+		hostPrefix = HttpQueryString.SSLP + HttpQueryString.host();
+	}
 	
 	if (savedTheme) {
-		// If language not selected, redirect to chjoose lang
+		// If language not selected, redirect to choose lang
 		lang = storage('lang');
 		if (lang != 'langRu' && lang != 'langEn') {
-			location = '/d/drive/a2/clang';
+			location = hostPrefix + '/d/drive/a2/clang';
 			return;
 		}
-		location = '/d/drive/' + savedTheme + '/';
+		location = hostPrefix + '/d/drive/' + savedTheme + '/';
 		return;
 	}
 	
