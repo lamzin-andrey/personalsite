@@ -722,7 +722,7 @@ class AppService
             foreach ($a as $line) {
                 $pair = explode(': ', $line);
                 $val = trim($pair[0]);
-                $key = trim($pair[1]);
+                $key = trim($pair[1] ?? '');
                 $map[$key] = $val;
             }
         }

@@ -17,6 +17,10 @@ function initDirect() {
 			savedTheme = 'a2/gts6102';
 		}
 	} else {
+		// check FormData
+		if (FormData) {
+			savedTheme = 'fd';
+		}
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');
 	}
@@ -28,7 +32,6 @@ function initDirect() {
 			location = '/d/drive/a2/clang';
 			return;
 		}
-		
 		location = '/d/drive/' + savedTheme + '/';
 		return;
 	}

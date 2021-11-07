@@ -1,0 +1,318 @@
+body {
+	background-color:#201F67;
+	color:white;
+	padding:0;
+	margin:0;
+}
+body.f100, html.f100 {
+	height:100%;
+}
+.hide {
+	display: none;
+}
+.cl {
+	clear:both;
+}
+.left {
+	float:left;
+}
+.tc {
+	text-align:center;
+}
+.tr {
+	text-align:right;
+}
+.tl {
+	text-align:left;
+}
+.d-none {
+	display:none;
+}
+input[type=text],input[type=password],input[type=email] {
+	min-height:32px;
+}
+input[type=button] {
+	height:48px;
+}
+input[type=text],input[type=password], input[type=email] {
+	width:77%;
+}
+.iwrapper, .cbwrapper {
+	margin:8px 0px
+}
+.btnr {
+	margin-right:24px;
+}
+.regbtn {
+	width: 80%;
+}
+
+.mt-3 {
+	margin-top: 1.0em;
+}
+
+/** catalog design start */
+.rel {
+	/*! position:relative; */
+}
+.abs {
+	position:absolute;
+}
+.abs-canvas {
+	position:absolute;
+	left:0px;
+	top:0px;
+	width:100%;
+	/*height:320px;*/
+	z-index:2;
+}
+
+.bg-des {
+	width:100%;
+	/*height:320px;*/
+	/*background-image: url('../i/dsg/0-empty.png');*/
+	background-position: cover;
+}
+.head {
+	position:fixed;
+	width:100%;
+	height:52px;
+	z-index:3;
+	top: 0px;
+	left: 0px;
+}
+
+/** top buttons */
+.hbuttonsplace {
+	width: 188px;
+	margin:auto;
+}
+.hbuttons {
+	background-image: url('../../a2/i/h_button_bg.jpg');
+	min-height:38px;
+}
+
+.b-home {
+	background-image: url('../../a2/i/home-bg.png');
+	background-size:cover;
+	width:85px;
+	height:33px;
+	line-height:36px;
+	padding-left: 12px;
+	font-size:13px;
+	font-family:arial;
+	font-weight:bold;
+	float:left;
+}
+.b-up {
+	float:left;
+	background-image: url('../../a2/i/up_button_bg.png');
+	background-size:cover;
+	width:79px;
+	height:33px;
+	line-height:36px;
+	padding-left: 12px;
+	font-size:13px;
+	font-family:arial;
+	font-weight:bold;
+}
+.path {
+	font-size:12px;
+	font-family:arial;
+	font-weight:1000;
+	height:16px;
+	white-space: nowrap;
+	background-color: #141431;
+	text-align: left;
+	padding-left: 4px;
+}
+
+/** files list */
+.fl {
+	margin-top:52px;
+	/*background-color:black;*/
+}
+/* empty */
+.fl.empty {
+	background-image: url('../../a2/i/empty-icon.png');
+	height:240px;
+	width:100%;
+	background-position-x: center;
+	background-position-y: 18px;
+	background-repeat: no-repeat;
+	position: relative;
+}
+.fl.empty .empty-label {
+	bottom: 71px;
+	width: 100%;
+	position: absolute;
+	color:gray;
+	font-weight:bold;
+	font-family:Arial;
+	display:block;
+}
+.empty-label {
+	display:none;
+}
+
+.it {
+	border-bottom: 1px solid gray;
+	user-select: none;
+}
+.im_wrapper {
+	width: 44px;
+	height: 44px;
+	float:left;
+}
+.im_wrapper img {
+	text-align:center;
+	vertical-align:middle;
+	line-height:44px;
+}
+
+.imch_wrapper {
+	width: 44px;
+	height: 44px;
+	float:right;
+	/*! vertical-align: bottom; */
+	line-height: 37px;
+}
+.imch_wrapper img {
+	text-align:center;
+	vertical-align:middle;
+}
+
+.fn {
+	line-height:44px;
+	float:left;
+	font-family:arial;
+	font-weight:1000;
+	user-select: none;
+	white-space: nowrap;
+	max-width: 75%;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+
+.selmod .fn {
+	max-width: 61%;
+}
+
+/** bottom menu */
+.botMenuWr {
+	position: fixed;
+	bottom:0px;
+	z-index:4;
+	width:100%;
+	height:103px;
+}
+.botMenuBg {
+	background-image: url('../../a2/i/bot-menu.jpg');
+	width:240px;
+	height:105px;
+	margin:auto;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.bmb {
+	/*background-color: red;*/
+	width:78px;
+	/*! height: 49px; */
+	margin:1px;
+	font-family: Arial;
+	font-size: 10px;
+	font-weight: bold;
+	text-align:center;
+	padding-top:36px;
+}
+.menu_paste {
+	color: gray;
+}
+/** end bottom menu */
+
+/** Catalaog item menu */
+.hCatItemMenu {
+	background-color:#fff;
+	border: solid 3px #B4BFCA;
+	border-radius: 6px;
+	margin-left:6px;
+	margin-right:6px;
+	font-family:arial;
+	text-align:left;
+}
+
+.cim_head_wr {
+	background-color: #366894;
+	
+}
+.cim_head_text {
+	margin-left:10px;
+	font-weight:bold;
+	padding:10px 0px;
+	white-space: nowrap;
+	max-width:94%;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+}
+.cim_items_wr {
+	color:#000;
+}
+
+.cim_item, .cim_item_props {
+	border-bottom: 1px solid #F1F1F1;
+	margin-left:8px;
+	padding:10px 0px;
+}
+.cim_item_props .props {
+	text-align:left;
+	margin-left:8px;
+}
+.cim_item_props .props .prop{
+	margin-top:4px;
+}
+.cim_item_name {
+	word-break: break-all;
+	margin-top:4px;
+}
+.gray {
+	color:gray;
+}
+.black {
+	color:#000;
+}
+/** End Catalaog item menu */
+
+/** Upload screen **/
+#hUpScreen input[type=file], #hUpScreen input[type=button] {
+	height:32px;
+}
+
+#hUpScreen input[type=file] {
+	border: 1px solid gray;
+}
+/** End Upload screen **/
+
+/** bottom settings */
+.botOptsWr {
+	position: fixed;
+	bottom:0px;
+	z-index:5;
+	width:100%;
+}
+.botOptsBg {
+	background-color: #1F1F1F;
+	border: 3px solid rgba(255, 255, 255, 0.75);
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	width:90%;
+	margin:auto;
+}
+
+.bopt {
+	font-weight:bold;
+	font-family:arial;
+	padding-left:8px;
+	border-bottom: 2px solid gray;
+	height:48px;
+	line-height:48px;
+}
