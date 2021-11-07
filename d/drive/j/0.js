@@ -1,7 +1,7 @@
 window.onload = initDirect;
 function initDirect() {
 	Rest._token = 'free';
-	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/0.html';
+	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/p/treedemo/tree.jn/?lang=ru';
 	Rest._get(
 		function() {onCheckSsl(true)},
 		url,
