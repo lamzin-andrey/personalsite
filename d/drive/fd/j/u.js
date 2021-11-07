@@ -222,5 +222,5 @@ function goURL(url) {
 		}
 	}
 	
-	location = url;
+	location.href = url;
 }
