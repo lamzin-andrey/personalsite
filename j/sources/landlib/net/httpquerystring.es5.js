@@ -12,7 +12,7 @@ window.HttpQueryString = {
 		if (!s && window && window.location &&  window.location.href) {
 			s = window.location.href;
 		}
-		let a, i, GET = {}, aB;
+		var a, i, GET = {}, aB;
 		a = s.split('#');
 		a = a[0].split('?');
 		a = String(a[1]).split('&');
@@ -31,7 +31,7 @@ window.HttpQueryString = {
 		if (!s && window && window.location &&  window.location.href) {
 			s = window.location.href;
 		}
-		let a = s.split('/');
+		var a = s.split('/');
 		return a[2];
 	},
 	/**
@@ -43,7 +43,7 @@ window.HttpQueryString = {
 		if (!s && window && window.location && window.location.href) {
 			s = window.location.href;
 		}
-		let a = s.split('#');
+		var a = s.split('#');
 		a = a[0].split('/');
 		a.shift();
 		a.shift();
@@ -58,13 +58,13 @@ window.HttpQueryString = {
 	 * @return String;
 	*/
 	_GET: function(key, _default, querystring) {
-		let def = _default,
+		var def = _default,
 			v = key,
 			search = querystring;
 		if (!def) {
 			def = null;
 		}
-		let s = window.location.href, buf = [], val, map = {};
+		var s = window.location.href, buf = [], val, map = {};
 		s = search ? search : s;
 		while (s.indexOf(v + '[]') != -1) {
 			val = this._GET(v  + '[]', def, s);
@@ -77,10 +77,10 @@ window.HttpQueryString = {
 		if (buf.length) {
 			return buf;
 		}
-		let st = s.indexOf("?" + v + "=");
+		var st = s.indexOf("?" + v + "=");
 		if (st == -1) st = s.indexOf("&" + v + "=");
 		if (st == -1) return def;
-		let en = s.indexOf("&", st + 1);
+		var en = s.indexOf("&", st + 1);
 		if ( en == -1 ) {
 			return s.substring( st + v.length + 2);
 		}
