@@ -25,7 +25,7 @@ function onClickOptionLeave() {
 
 function onClickOptionChangeLanguage() {
 	hideOptions();
-	location.href = root + '/clang';
+	location.href = roota2 + '/clang';
 }
 
 function onClickOptionChangeTheme() {
