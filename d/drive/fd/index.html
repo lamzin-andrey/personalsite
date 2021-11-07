@@ -128,8 +128,11 @@
 					 </div>
 					 <div style="line-height:28px;">
 						 <div class="pbarwrap">
-							<div style="width:40%;margin-left:-40%;" id="dompb" class="dompb">&nbsp;</div>
+							<div style="width:0%;" id="dompb" class="dompb">&nbsp;</div>
 						 </div>
+					 </div>
+					 <div class="text-center" id="progressState">
+						0 / 0 (0%)
 					 </div>
 				</div>
 			</div>
@@ -153,20 +156,7 @@
 				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
 				<div class="cim_head_text" id="hCatalogItemTitle">Longly long multiwords file</div>
 			</div>
-			<div class="cim_items_wr" id="hListItemCmItems">
-				<!--проверить, не сломается - удалить div class="cim_item">
-					Удалить
-				</div>
-				<div class="cim_item">
-					Переименовать
-				</div>
-				<div class="cim_item">
-					Переместить
-				</div>
-				<div class="cim_item_props">
-					3,75 Мб. 2 5968 файлов. 
-				</div--> 
-			</div>
+			<div class="cim_items_wr" id="hListItemCmItems"></div>
 		</div>
 		<!-- screen settings dialog -->
 		<!-- screen settings -->
@@ -269,12 +259,14 @@
 		
 		<script src="../a2/j/auth.js"></script>
 		<script src="../a2/j/mmb.js?v=1"></script>
-		<script src="../a2/j/mmenu/menu.js?v=2"></script>
+		<script src="./j/mmenu/menu.js?v=2"></script>
 		<script src="../a2/j/catalog/filelist.js"></script>
 		<script src="../a2/j/catalog/filelistitemcmenu.js?v=1"></script>
 		
-		<script src="../a2/j/upload/anim.js"></script>
-		<script src="../a2/j/upload/upload.js?3"></script>
+		<script src="./j/php.js"></script>
+		<script src="./j/humanvalue.js"></script>
+		<script src="./j/upload/anim.js"></script>
+		<script src="./j/upload/upload.js?1"></script>
 		
 		<script src="../a2/j/bmenu/dlg/j/a2dlg.js"></script>
 		<script src="../a2/j/cbox/cbox.js"></script>

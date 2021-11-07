@@ -290,6 +290,9 @@ input[type=text],input[type=password], input[type=email] {
 #hUpScreen input[type=file] {
 	border: 1px solid gray;
 }
+#progressState {
+	margin-top:10px
+}
 /** End Upload screen **/
 
 /** bottom settings */

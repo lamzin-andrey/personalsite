@@ -209,11 +209,11 @@ window.Rest = {
             form.append(tokenName, t);
         }
         xhr.upload.addEventListener("progress", function(pEvt){
-            var loadedPercents, loadedBytes, total;
+            var loadedPercents;
             if (pEvt && pEvt.lengthComputable) {
                 loadedPercents = Math.round((pEvt.loaded * 100) / pEvt.total);
             }
-            onProgress(loadedPercents, loadedBytes, total);
+            onProgress(loadedPercents, pEvt.loaded, pEvt.total);
         });
         xhr.upload.addEventListener("error", onFail);
         xhr.onreadystatechange = function () {
