@@ -1,16 +1,23 @@
 window.onload = initDirect;
 function initDirect() {
-	Rest._token = 'free';
+	e('im').onload = function() {onCheckSsl(true)};
+	e('im').onerror = function() {onCheckSsl(false)};
+	attr(e('im'), 'src', HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png');
+	/*Rest._token = 'free';
 	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/p/treedemo/tree.jn/?lang=ru';
 	Rest._get(
 		function() {onCheckSsl(true)},
 		url,
 		function() {onCheckSsl(false)},
-	);
+	);*/
 }
 function onCheckSsl(isSSLSupport) {
 	storage('referrer', document.referrer);
 	storage('ssl', (isSSLSupport ? 2 : 1));
+	if (!isSSLSupport) {
+		e('im').onload = function(){};
+		attr(e('im'), 'src', '/d/drive/i/u.png');
+	}
 	// styling
 	var o = getViewport(),
 		h = Math.round(o.h / 2) - 64,
