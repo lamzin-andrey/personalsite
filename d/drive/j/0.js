@@ -2,6 +2,7 @@ window.onload = initDirect;
 function initDirect() {
 	e('im').onload = function() {onCheckSsl(true)};
 	e('im').onerror = function() {onCheckSsl(false)};
+	alert('Bef call HQSTR');
 	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png';
 	alert(url);
 	attr(e('im'), 'src', url);

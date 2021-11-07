@@ -143,7 +143,7 @@ window.HttpQueryString = {
 		return (a[0] == 'https');
 	}
 }
-window.addEventListener('load', () => {
+window.addEventListener('load', function() {
 	window.$_GET = HttpQueryString.parse();
 	window.$_SERVER = {};
 	window.$_SERVER['HTTP_HOST'] = HttpQueryString.host();
