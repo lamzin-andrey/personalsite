@@ -3,13 +3,6 @@ function initDirect() {
 	e('im').onload = function() {onCheckSsl(true)};
 	e('im').onerror = function() {onCheckSsl(false)};
 	attr(e('im'), 'src', HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png');
-	/*Rest._token = 'free';
-	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/p/treedemo/tree.jn/?lang=ru';
-	Rest._get(
-		function() {onCheckSsl(true)},
-		url,
-		function() {onCheckSsl(false)},
-	);*/
 }
 function onCheckSsl(isSSLSupport) {
 	storage('referrer', document.referrer);

@@ -9,6 +9,14 @@ window.selectMode = 0;
 window.selectedItems = {};
 window.onload = initApp;
 function initApp() {
+	// check ssl from LS
+	if (intval(storage('ssl')) === 2 && !HttpQueryString.isSSL()) {
+		var s = location.href;
+		s = s.replace('http://', 'https://');
+		location = s;
+		return;
+	}
+	
 	// styling
 	var o = getViewport(),
 		h = Math.round(o.h / 2) - 64;

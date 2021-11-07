@@ -95,7 +95,7 @@ window.HttpQueryString = {
 	 * @param {String} unsetValue  = '' if  checkByValue = true && value == 'CMD_UNSET' must contains value, which need unset (will remove string varName=$unsetValue, for example in "?arr[]=1&arr[]=2" will unseted second element if unsetValue equal 2). It use for unset array element
 	 * @return String (modified link)
 	*/
-	setVariable:function(link, varName, value, checkByValue = false, unsetValue = '') {
+	setVariable:function(link, varName, value, checkByValue, unsetValue) {
 		value = decodeURIComponent(value);
 		checkByValue = String(checkByValue) == 'undefined' ? false : checkByValue;
 		unsetValue = String(unsetValue) == 'undefined' ? '' : unsetValue;
@@ -132,6 +132,15 @@ window.HttpQueryString = {
 		}
 		link = tail ? (base + '?' + tail) : base;
 		return link;
+	},
+	/**
+	 * @description 
+	 * @return Boolean true if current location dstart from https://
+	*/
+	isSSL:function() {
+		var a = location.href.split(':');
+		
+		return (a[0] == 'https');
 	}
 }
 window.addEventListener('load', () => {
