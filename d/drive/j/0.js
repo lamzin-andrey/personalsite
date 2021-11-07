@@ -2,7 +2,9 @@ window.onload = initDirect;
 function initDirect() {
 	e('im').onload = function() {onCheckSsl(true)};
 	e('im').onerror = function() {onCheckSsl(false)};
-	attr(e('im'), 'src', HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png');
+	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png';
+	alert(url);
+	attr(e('im'), 'src', url);
 }
 function onCheckSsl(isSSLSupport) {
 	storage('referrer', document.referrer);
