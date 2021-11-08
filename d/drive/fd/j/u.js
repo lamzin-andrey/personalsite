@@ -24,7 +24,6 @@ function initApp() {
 	
 	initAuth();
 	initMainMenu();
-	initMainMenuBack();// TODO cut it
 	fileList.initUpButton(e('bUp'));
 	fileList.initHomeButton(e('bHome'));
 	initOptions();
@@ -57,7 +56,6 @@ function onSuccessGetAuthState(data) {
 			return;
 		}
 		window.fileList.loadCurrentDir();
-		mainMenuBackPush();
 	} catch(err) {
 		alert(err);
 	}
@@ -173,7 +171,7 @@ function hideLoader(screenId) {
 }
 
 function setUpButtonDisable(bUp) {
-	bUp.style['background-image'] = "url('./a2/i/up_button_bg_d.png')";
+	bUp.style['background-image'] = "url('../a2/i/up_button_bg_d.png')";
 	bUp.style['color'] = '#546575';
 }
 
@@ -183,7 +181,7 @@ function setUpButtonEnable(bUp) {
 }
 
 function setHomeButtonDisable(bH) {
-	bH.style['background-image'] = "url('./a2/i/home-bg-d.png')";
+	bH.style['background-image'] = "url('../a2/i/home-bg-d.png')";
 	bH.style['color'] = '#546575';
 }
 
