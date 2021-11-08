@@ -1,5 +1,5 @@
-// @depends mmb.js
-function mainMenuShow() {
+// @depends mmb.js TODO why?
+function mainMenuShow(fromHtmlButton) {
 	if (sz(selectedItems) > 0) {
 		removeClass('bmPaste', 'menu_paste');
 		removeClass('bmRemove', 'menu_paste');
@@ -8,7 +8,9 @@ function mainMenuShow() {
 		addClass('bmRemove', 'menu_paste');
 	}
 	removeClass('hBotMenu', 'hide');
-	mainMenuBackPush();
+	if (!fromHtmlButton) {
+		mainMenuBackPush(); // TODO cut it
+	}
 }
 
 function initMainMenu() {
@@ -18,6 +20,7 @@ function initMainMenu() {
 	e('bmSelectMode').onclick = onClickMainSelectMode;
 	e('bmPaste').onclick = onClickMainPaste;
 	e('bmOptions').onclick = onClickMainOptions;
+	e('bMainMenu').onclick = onClickMainMenuToggler;
 }
 
 function onClickMainAddCatalog(evt) {
@@ -119,4 +122,12 @@ function onSuccessMoveFiles(data) {
 function onClickMainOptions() {
 	addClass('hBotMenu', 'hide');
 	showOptions();
+}
+
+function onClickMainMenuToggler() {
+	if (hasClass('hBotMenu', 'hide')) {
+		mainMenuShow(1);
+	} else {
+		addClass('hBotMenu', 'hide');
+	}
 }

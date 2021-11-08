@@ -24,7 +24,7 @@ function initApp() {
 	
 	initAuth();
 	initMainMenu();
-	initMainMenuBack();
+	initMainMenuBack();// TODO cut it
 	fileList.initUpButton(e('bUp'));
 	fileList.initHomeButton(e('bHome'));
 	initOptions();
