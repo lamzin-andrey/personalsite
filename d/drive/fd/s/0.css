@@ -324,9 +324,9 @@ input[type=text],input[type=password], input[type=email] {
 	background-color: #000;
 	border-radius:4px;
 	position:absolute;
-	top:0px;
+	top:6px;
 	left:8px;
-	height:30px;
+	height:24px;
 	width:30px;
 }
 .bmenurow {
@@ -335,5 +335,8 @@ input[type=text],input[type=password], input[type=email] {
 	height:4px;
 	width:30px;
 	margin-top:6px;
+}
+.bmenurow.first {
+	margin-top:0px!important;
 }
 /** End main menu bitton  */
