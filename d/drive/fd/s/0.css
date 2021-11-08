@@ -319,3 +319,21 @@ input[type=text],input[type=password], input[type=email] {
 	height:48px;
 	line-height:48px;
 }
+/** main menu bitton  */
+.menubtnplace {
+	background-color: #000;
+	border-radius:4px;
+	position:absolute;
+	top:0px;
+	left:8px;
+	height:30px;
+	width:30px;
+}
+.bmenurow {
+	background-color: #fff;
+	border-radius:4px;
+	height:4px;
+	width:30px;
+	margin-top:6px;
+}
+/** End main menu bitton  */
