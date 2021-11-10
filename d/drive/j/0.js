@@ -44,7 +44,7 @@ function onCheckSsl(isSSLSupport) {
 		// If language not selected, redirect to choose lang
 		lang = storage('lang');
 		if (lang != 'langRu' && lang != 'langEn') {
-			location = hostPrefix + '/d/drive/a2/clang';
+			location = hostPrefix + '/d/drive/a2/clang/';
 			return;
 		}
 		location = hostPrefix + '/d/drive/' + savedTheme + '/';
