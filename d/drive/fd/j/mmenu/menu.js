@@ -1,4 +1,5 @@
 // @depends mmb.js TODO why?
+window.MENU_ID = 'hTopOptions';
 function mainMenuShow(fromHtmlButton) {
 	if (sz(selectedItems) > 0) {
 		removeClass('bmPaste', 'menu_paste');
@@ -7,7 +8,7 @@ function mainMenuShow(fromHtmlButton) {
 		addClass('bmPaste', 'menu_paste');
 		addClass('bmRemove', 'menu_paste');
 	}
-	removeClass('hBotMenu', 'hide');
+	removeClass(MENU_ID, 'hide');
 	if (!fromHtmlButton) {
 		mainMenuBackPush(); // TODO cut it
 	}
@@ -26,7 +27,7 @@ function initMainMenu() {
 function onClickMainAddCatalog(evt) {
 	try {
 		evt.preventDefault();
-		addClass('hBotMenu', 'hide');
+		addClass(MENU_ID, 'hide');
 		var s = prompt(l('Enter catalog name'), l('New catalog'));
 		if (!s) {
 			return;
@@ -56,14 +57,14 @@ function onSuccessAddCatalog(data) {
 
 
 function onClickMainMenuUpload() {
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	e('progressState').innerHTML = HumanValue.getHumanFilesize(0, 2, 3, false) + ' / ' + HumanValue.getHumanFilesize(0, 2, 3, false) + ' (' + 0+ '%)';
 	e('dompb').style['width'] = '0%';
 	showScreen('hUpScreen');
 }
 function onClickMainRemove(evt) {
 	evt.preventDefault();
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	if (!sz(selectedItems)) {
 		return;
 	}
@@ -81,7 +82,7 @@ function onClickMainRemove(evt) {
 	);
 }
 function onClickMainSelectMode() {
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	selectMode = selectMode ? 0 : 1;
 	if (!selectMode) {
 		selectedItems = {};
@@ -92,7 +93,7 @@ function onClickMainSelectMode() {
 }
 function onClickMainPaste(evt) {
 	evt.preventDefault();
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	if (!sz(selectedItems)) {
 		return;
 	}
@@ -120,14 +121,14 @@ function onSuccessMoveFiles(data) {
 
 
 function onClickMainOptions() {
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	showOptions();
 }
 
 function onClickMainMenuToggler() {
-	if (hasClass('hBotMenu', 'hide')) {
+	if (hasClass(MENU_ID, 'hide')) {
 		mainMenuShow(1);
 	} else {
-		addClass('hBotMenu', 'hide');
+		addClass(MENU_ID, 'hide');
 	}
 }

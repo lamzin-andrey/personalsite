@@ -6,11 +6,11 @@ function initOptions() {
 }
 
 function showOptions() {
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	removeClass('hBotOptions', 'hide');
 }
 function hideOptions() {
-	addClass('hBotMenu', 'hide');
+	addClass(MENU_ID, 'hide');
 	addClass('hBotOptions', 'hide');
 }
 
