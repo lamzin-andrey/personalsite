@@ -31,8 +31,10 @@ window.upload = {
 	onSpaceOk:function() {
 		var o = this;
 		o.totalSize = o.calculateTotalSize();
+		o.uploadedSize = 0;
 		o.currentFile = 0;
 		o.totalLength = o.iFile.files.length;
+		o.uploadedCounter = 0;
 		addClass('hFormUpWr', 'd-none');
 		o.progressStateLabel.innerHTML = l('Uploading...');
 		uploadAnimation.run();
@@ -61,10 +63,12 @@ window.upload = {
 		}
 	},
 	calculateTotalSize:function() {
-		var i, o = this, n = 0;
-		sz(o.iFile.files);
-		for (i = 0; i < SZ; i++) {
-			n += o.iFile.files[i];
+		var i, o = this, n = 0,
+			sZ = sz(o.iFile.files);
+		o.uploadedSizeAcc = [];
+		for (i = 0; i < sZ; i++) {
+			n += o.iFile.files[i].size;
+			o.uploadedSizeAcc[i] = 0;
 		}
 		
 		return n;
@@ -96,8 +100,26 @@ window.upload = {
 		this.progressStateLabel.innerHTML = l('ChooseFile');
 		showScreen('hCatalogScreen');
 	},
-	onProgressUpload(percents, current, total) {
+	onProgressUpload:function(percents, current, total) {
+		var o = this;
 		e('progressState').innerHTML = HumanValue.getHumanFilesize(current, 2, 3, false) + ' / ' + HumanValue.getHumanFilesize(total, 2, 3, false) + ' (' + percents + '%)';
 		e('dompb').style['width'] = percents + '%';
+		
+		o.uploadedSize = 0;
+		var i;
+		for (i = 0; i < o.iFile.files.length; i++) {
+			if (i < o.currentFile) {
+				o.uploadedSize += o.iFile.files[i].size;
+			} else if (i == o.currentFile) {
+				o.uploadedSize += current;
+			}
+		}
+		if (o.uploadedSize > o.totalSize) {
+			o.uploadedSize = o.totalSize;
+		}
+		// console.log(o.currentFile, current, o.uploadedSize, o.totalSize);
+		var p = Math.round((o.uploadedSize * 100) / o.totalSize);
+		e('dompb2').style['width'] = p + '%';
+		e('progressState2').innerHTML = HumanValue.getHumanFilesize(o.uploadedSize, 2, 3, false) + ' / ' + HumanValue.getHumanFilesize(o.totalSize, 2, 3, false) + ' (' + p + '%)';
 	}
 };

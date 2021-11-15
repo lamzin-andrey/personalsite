@@ -648,7 +648,11 @@ class UsbController extends AbstractController
                 'error' => $this->l($t, 'Target catalog not found on disk. Try again later.')
             ]);
         }
-        $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
+
+        if (intval($request->request->get('isiframe')) === 1) {
+            $originalName = mb_convert_encoding($originalName, 'utf-8', 'Windows-1251');
+        }
+
         $pathInfo = pathinfo($originalName);
         $ext = $pathInfo['extension'] ?? '';
         $ext = strtolower($ext);

@@ -60,6 +60,10 @@ function onClickMainMenuUpload() {
 	addClass(MENU_ID, 'hide');
 	e('progressState').innerHTML = HumanValue.getHumanFilesize(0, 2, 3, false) + ' / ' + HumanValue.getHumanFilesize(0, 2, 3, false) + ' (' + 0+ '%)';
 	e('dompb').style['width'] = '0%';
+	
+	e('dompb2').style['width'] = '0%';
+	e('progressState2').innerHTML = HumanValue.getHumanFilesize(0, 2, 3, false) + ' / ' + HumanValue.getHumanFilesize(0, 2, 3, false) + ' (' + '0' + '%)';
+		
 	showScreen('hUpScreen');
 }
 function onClickMainRemove(evt) {
