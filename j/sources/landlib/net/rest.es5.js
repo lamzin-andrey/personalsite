@@ -9,6 +9,11 @@ window.Rest = {
 	*/
 	_token_name : '_token',
 	/**
+	 * @property {Number} For multiupload uploading input.files[_fileIndex]
+	*/
+	_fileIndex: 0,
+	
+	/**
 	 * @property {String} _lang
 	*/
 	_lang : '',
@@ -194,7 +199,7 @@ window.Rest = {
         
         tokenName = tokenName ? tokenName : '_token';
         
-        form.append(iFile.id, iFile.files[0]);
+        form.append(iFile.id, iFile.files[this._fileIndex]);
         form.append("path", url);
         for (i in data) {
             form.append(i, data[i]);
