@@ -1,5 +1,8 @@
+function CacheSw(){
+	this.init();
+}
 extend(LandCacheClient, CacheSw);
-function CacheSw(){}
+
 var P = CacheSw.prototype;
 /**
  * @description Не кэшируем запросы, заканчивающиеся на '*.jn/'
@@ -10,7 +13,7 @@ P.getExcludeFilterList = function() {
 	var o = new Object();
 	o.type = 'filterlist';
 	o.data = ['*.jn/', '*.jn', '*.json'];
-	console.log('Call exFilter', o);
+	
 	return o;
 }
 /**
