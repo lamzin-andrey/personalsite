@@ -9,6 +9,7 @@ window.selectMode = 0;
 window.selectedItems = {};
 window.onload = initApp;
 function initApp() {
+	new CacheSw();
 	// check ssl from LS
 	if (intval(storage('ssl')) === 2 && !HttpQueryString.isSSL()) {
 		var s = location.href;
