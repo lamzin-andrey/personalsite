@@ -10,6 +10,7 @@ P.getExcludeFilterList = function() {
 	var o = new Object();
 	o.type = 'filterlist';
 	o.data = ['*.jn/', '*.jn', '*.json'];
+	console.log('Call exFilter', o);
 	return o;
 }
 /**
