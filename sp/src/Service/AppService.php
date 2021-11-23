@@ -31,6 +31,8 @@ class AppService
     /** @property Request $request */
     private $request;
 
+    const SQZ_NUMS_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 	public function __construct(ContainerInterface $container,
                                 ?ViewDataService $oViewDataService = null,
                                 ?FileUploaderService $oFileUploaderService = null,
@@ -764,5 +766,99 @@ class AppService
         }
 
         return $locale;
+    }
+
+    public static function sqzDatetime(?\DateTime $dateTime) : string
+    {
+        if (!$dateTime) {
+            return '2021-11-23 00:00:00';
+        }
+        $sDt = $dateTime->format('Y,m,d,H,i,s');
+        $aDt = explode(',', $sDt);
+        $year = self::sqz($aDt[0]);
+        $month = self::sqz($aDt[1]);
+        $day = self::sqz($aDt[2]);
+        $hour = self::sqz($aDt[3]);
+        $min = self::sqz($aDt[4]);
+        $sec = self::sqz($aDt[5]);
+
+        return $day . $month . $year . $hour . $min . $sec;
+
+    }
+
+    /**
+     * Encode number as index in string.
+     * If number < 59 return index of self::SQZ_NUMS_ALPHABET
+     * If number >= 59:
+     *  If number >= 1900 AND N - 1900 < 59 AND n < 2000 return X[index of self::SQZ_NUMS_ALPHABET]
+     *  If number >= 2000 AND N - 2000 < 59 return Y[index of self::SQZ_NUMS_ALPHABET]
+     *  If N - Z > 59  return Znumber
+    */
+    public static function sqz(string $s) : string
+    {
+        $n = intval($s);
+        $s = strval($n);
+        $symbols = self::SQZ_NUMS_ALPHABET;
+
+        $limit = 59;
+        if ($n < $limit) {
+            return $symbols[$n];
+        }
+
+        // If number >= 59:
+        if ($n > 1899 && $n < 3000) {
+            $left = 1900;
+            $sL = 'X';
+            if ($n > 2000) {
+                $left = 2000;
+                $sL = 'Y';
+            }
+            $right = $n - $left;
+            if ($right < $limit) {
+                return $sL . $symbols[$right];
+            }
+            return 'Z' . $s;
+        }
+
+        return 'Z' . $s;
+
+    }
+
+    public static function desqzDatetime(string $sqzDt) : string
+    {
+        $sz = strlen($sqzDt);
+        $day = self::desqz($sqzDt[0]);
+        $month = self::desqz($sqzDt[1]);
+        $hour = self::desqz($sqzDt[$sz - 3]);
+        $min = self::desqz($sqzDt[$sz - 2]);
+        $sec = self::desqz($sqzDt[$sz - 1]);
+
+        $yearType = $sqzDt[2];
+        if ('Z' == $yearType) {
+            $length = $sz - 6;
+            $year = substr($sqzDt, 3, $length);
+        } else if ('X' == $yearType) {
+            $year = '19' . self::desqz($sqzDt[3]);
+        } else if ('Y' == $yearType) {
+            $year = '20' . self::desqz($sqzDt[3]);
+        }
+
+        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+    }
+
+    public static function desqz(string $s) : string
+    {
+        $n = strpos(self::SQZ_NUMS_ALPHABET, $s);
+        if (false === $n) {
+            return '-1';
+        }
+
+        $s = strpos($n);
+
+        if ($n < 10) {
+            $s = '0' . $s;
+        }
+
+        return $s;
     }
 }

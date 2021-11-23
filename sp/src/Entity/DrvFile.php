@@ -61,6 +61,20 @@ class DrvFile
      */
     private $size = 0;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_time", type="datetime", nullable=false, options={"comment"="Время создания", "default"="2021-11-23 00:00:00"})
+     */
+    private $createdTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_time", type="datetime", nullable=false, options={"comment"="Время изменения", "default"="2021-11-23 00:00:00"})
+     */
+    private $updatedTime;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -148,6 +162,30 @@ class DrvFile
     public function setSize(int $n): self
     {
         $this->size = $n;
+
+        return $this;
+    }
+
+    public function getCreatedTime(): ?\DateTime
+    {
+        return $this->createdTime;
+    }
+
+    public function setCreatedTime(?\DateTime $n): self
+    {
+        $this->createdTime = $n;
+
+        return $this;
+    }
+
+    public function getUpdatedTime(): ?\DateTime
+    {
+        return $this->updatedTime;
+    }
+
+    public function setUpdatedTime(?\DateTime $n): self
+    {
+        $this->updatedTime = $n;
 
         return $this;
     }

@@ -1426,7 +1426,9 @@ class UsbController extends AbstractController
                 'h'  => $drvCatalogs->getIsHide(),
                 's'  => AppService::getHumanFilesize($drvCatalogs->getSize(), 2),
                 'qf' => $drvCatalogs->getQuantityFiles(),
-                'qc' => $drvCatalogs->getQuantityCatalogs()
+                'qc' => $drvCatalogs->getQuantityCatalogs(),
+                'ct' => AppService::sqzDatetime($drvCatalogs->getCreatedTime()),
+                'ut' => AppService::sqzDatetime($drvCatalogs->getUpdatedTime()),
             ];
             $list[] = $item;
             $qntCatalogs++;
@@ -1477,7 +1479,9 @@ class UsbController extends AbstractController
                 'type' => $drvFile->getType()[0] ?? 'u',// TODO
                 'i' => $drvFile->getId(),
                 'h' => $drvFile->getIsHidden(),
-                's' => AppService::getHumanFilesize($currentFilesize, 2)
+                's' => AppService::getHumanFilesize($currentFilesize, 2),
+                'ct' => AppService::sqzDatetime($drvFile->getCreatedTime()),
+                'ut' => AppService::sqzDatetime($drvFile->getUpdatedTime()),
             ];
             $list[] = $item;
             $size += $drvFile->getSize();
