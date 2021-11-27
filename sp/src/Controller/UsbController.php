@@ -595,6 +595,9 @@ class UsbController extends AbstractController
          * @var UploadedFile $file
         */
         $file = $request->files->get('iFile');
+        $iModifyTime = round(intval($request->request->get('mt', 0) ) / 1000 );
+        $modifyTime = new \DateTime();
+        $modifyTime->setTimestamp($iModifyTime);
 
         // Get all user files sizes
         /**
@@ -679,7 +682,10 @@ class UsbController extends AbstractController
         $fileEntity->setUserId($this->getUser()->getId());
         $fileEntity->setCatalogEntity($drvCatalog);
         $size = $file->getSize();
-        $fileEntity->setSize( $size );
+        $fileEntity->setSize($size);
+        $fileEntity->setUpdatedTime($modifyTime);
+        $fileEntity->setCreatedTime(new \DateTime());
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($fileEntity);
         $drvCatalog->setSize($drvCatalog->getSize() + $size);
@@ -697,7 +703,9 @@ class UsbController extends AbstractController
                 'type' => $fileEntity->getType()[0] ?? 'u',
                 'i'    => $fileEntity->getId(),
                 'h'    => false,
-                's' => AppService::getHumanFilesize($size)
+                's' => AppService::getHumanFilesize($size),
+                'ct' => AppService::sqzDatetime($fileEntity->getCreatedTime()),
+                'ut' => AppService::sqzDatetime($fileEntity->getUpdatedTime())
             ]
         ]);
     }
@@ -1474,14 +1482,20 @@ class UsbController extends AbstractController
                     $em->persist($drvFile);
                 }
             }
+
+            $createdTime = AppService::sqzDatetime($drvFile->getCreatedTime());
+            $updatedTime = AppService::sqzDatetime($drvFile->getUpdatedTime());
+
             $item = [
                 'name' => $drvFile->getName(),
                 'type' => $drvFile->getType()[0] ?? 'u',// TODO
                 'i' => $drvFile->getId(),
                 'h' => $drvFile->getIsHidden(),
                 's' => AppService::getHumanFilesize($currentFilesize, 2),
-                'ct' => AppService::sqzDatetime($drvFile->getCreatedTime()),
-                'ut' => AppService::sqzDatetime($drvFile->getUpdatedTime()),
+                'ct' => $createdTime,
+                'ut' => $updatedTime,
+                'ctd' => AppService::desqzDatetime($createdTime),
+                'upd' => AppService::desqzDatetime($updatedTime),
             ];
             $list[] = $item;
             $size += $drvFile->getSize();

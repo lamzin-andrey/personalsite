@@ -52,6 +52,8 @@ class DrvCatalogsRepository extends ServiceEntityRepository
         $dir->setUserId($userId);
         $dir->setParentId($parentId);
         $dir->setName($name);
+        $dir->setCreatedTime(new \DateTime());
+        $dir->setUpdatedTime(new \DateTime());
         $em = $this->getEntityManager();
         $em->persist($dir);
         $em->flush();

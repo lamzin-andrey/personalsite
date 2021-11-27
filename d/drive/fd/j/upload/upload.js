@@ -79,7 +79,7 @@ window.upload = {
 			o.onClickCancel();
 			return;
 		}
-		fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s);
+		fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
 		
 		o.currentFile++;
 		if (o.totalLength > o.currentFile) {

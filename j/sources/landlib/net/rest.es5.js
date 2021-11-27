@@ -201,6 +201,7 @@ window.Rest = {
         
         form.append(iFile.id, iFile.files[this._fileIndex]);
         form.append("path", url);
+        form.append("mt", iFile.files[this._fileIndex].lastModified);
         for (i in data) {
             form.append(i, data[i]);
         }
@@ -296,6 +297,13 @@ window.Rest = {
 			ce(form, 'input', 'isiframe', {value: 1, type:'hidden', name: 'isiframe'});
 		} else {
 			e('isiframe').value = 1;
+		}
+		
+		// form.append("mt", iFile.files[this._fileIndex].lastModified);
+		if (!e('mt')) {
+			ce(form, 'input', 'mt', {value: intval(iFile.files[this._fileIndex].lastModified), type:'hidden', name: 'mt'});
+		} else {
+			e('mt').value = intval(iFile.files[this._fileIndex].lastModified);
 		}
         for (i in data) {
             // form.append(i, data[i]); 

@@ -853,7 +853,7 @@ class AppService
             return '-1';
         }
 
-        $s = strpos($n);
+        $s = strval($n);
 
         if ($n < 10) {
             $s = '0' . $s;

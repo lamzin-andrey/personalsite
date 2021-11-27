@@ -50,5 +50,8 @@ window.langRu = {
 	'Catalogs' : 'Папок',
 	'Files' : 'Файлов',
 	'Uploading...' : 'Загрузка...',
+	'Uploaded' : 'Загружен',
+	'Modify' : 'Изменен',
+	'Unknown' : 'Неизвестно',
 	'' : ''
 };

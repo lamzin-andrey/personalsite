@@ -87,6 +87,7 @@ window.fileListItemCmenu = {
 			menuItem,
 			listener,
 			propertiesText,
+			filetimeText,
 			catalogPropertiesText = '',
 			self = this;
 		e('hCatalogItemTitle').innerHTML = fileListItem.name;
@@ -146,12 +147,18 @@ window.fileListItemCmenu = {
 		propertiesText = '<span class="black">' + l('Properties') + ':</span><div class="props">\
 			<div class="cim_item_name">' + fileListItem.name + '</div>\
 			<div class="prop">' + self.unpackHexSz(fileListItem.s) + '</div>{folderProps}\
+			{fileTime}\
 		</div>';
 		if (fileListItem.type == 'c') {
-			catalogPropertiesText = '<div class="prop">' + l('Files') + ':' + fileListItem.qf + '</div>';
-			catalogPropertiesText += '<div class="prop">' + l('Catalogs') + ':' + fileListItem.qc + '</div>';
+			catalogPropertiesText = '<div class="prop">' + l('Files') + ': ' + fileListItem.qf + '</div>';
+			catalogPropertiesText += '<div class="prop">' + l('Catalogs') + ': ' + fileListItem.qc + '</div>';
 		}
 		propertiesText = propertiesText.replace('{folderProps}', catalogPropertiesText);
+		
+		filetimeText = '<div class="prop">' + l('Uploaded') + ': ' + SqzDatetime.desqzDatetime(fileListItem.ct, 0) + '</div>';
+		filetimeText += '<div class="prop">' + l('Modify') + ': ' + SqzDatetime.desqzDatetime(fileListItem.ut, 0) + '</div>';
+		propertiesText = propertiesText.replace('{fileTime}', filetimeText);
+		
 		appendChild('hListItemCmItems', 'div', propertiesText, {'class': 'cim_item_props gray'});
 		
 		setTimeout(function() {
