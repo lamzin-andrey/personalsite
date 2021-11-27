@@ -1338,7 +1338,7 @@ class UsbController extends AbstractController
             : null;
         $domain = null;
         if ($csrfToken != $request->request->get('_token')) {
-            return new RedirectResponse('/d/drive/a2/clang?no_token');
+            return new RedirectResponse('/d/drive/a2/clang/?no_token');
         }
         $lang = $request->request->get('lang', 'en');
 
@@ -1381,7 +1381,7 @@ class UsbController extends AbstractController
         }
 
         $cookie = Cookie::create('guest_id', $guestId, time() + 365*24*3600);
-        $response = new RedirectResponse('/d/drive');
+        $response = new RedirectResponse('/d/drive/');
         $response->headers->setCookie($cookie);
 
         return $response;
