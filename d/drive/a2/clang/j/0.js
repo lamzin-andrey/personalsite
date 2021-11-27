@@ -10,7 +10,7 @@ function initApp() {
 function setListeners() {
 	e('bRu').onclick=onClickChooseRu;
 	e('bEn').onclick=onClickChooseEn;
-	attr('cLangForm', 'action', br + '/wusbsetlang');
+	attr('cLangForm', 'action', br + '/wusbsetlang/');
 	e('cLangForm').onsubmit=onSubmit;
 }
 function onSubmit(evt) {
