@@ -457,7 +457,7 @@ window.fileList = {
 		return list;
 	},
 	
-	sortPart(ls) {
+	sortPart:function(ls) {
 		var currentSort = this.getStoredSort(), prevSize, nextSize, prevTime, nextTime;
 		ls.sort(function(prev, next) {
 			var m = -1;
@@ -506,7 +506,7 @@ window.fileList = {
 		
 		return ls;
 	},
-	getStoredSort() {
+	getStoredSort:function() {
 		currentSort = storage('sort');
 		currentSort = currentSort ? currentSort : {t: 'name', d: 'a'};
 		return currentSort;
