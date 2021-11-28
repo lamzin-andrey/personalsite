@@ -53,5 +53,14 @@ window.langRu = {
 	'Uploaded' : 'Загружен',
 	'Modify' : 'Изменен',
 	'Unknown' : 'Неизвестно',
+	'boSortSetting' : 'Сортировка',
+	'hSortSettingTitle': 'Сортировка',
+	'hByNameAsc': 'От А до Я',
+	'hByNameDesc': 'От Я до А',
+	'hBySizeAsc': 'Сначала малые',
+	'hBySizeDesc': 'Сначала большие',
+	'hByMTimeAsc': 'Сначала старые',
+	'hByMTimeDesc': 'Сначала новые',
+	'bCloseSortSetings': 'Закрыть',
 	'' : ''
 };
