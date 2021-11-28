@@ -36,42 +36,37 @@ function onClickBClose() {
 
 function onClickChSortByNameAsc(evt) {
 	storage('sort', {t: 'name', d: 'a'});
-	var ls = storage('f' + currentDir),
-		bc = path.replace('/wcard', '');
-	fileList.renderCurrentDir(ls, bc);
+	closeSortSettDlg();
 }
 
 function onClickChSortByNameDesc(evt) {
 	storage('sort', {t: 'name', d: 'd'});
-	var ls = storage('f' + currentDir),
-		bc = path.replace('/wcard', '');
-	fileList.renderCurrentDir(ls, bc);
+	closeSortSettDlg();
 }
 
 function onClickChSortBySizeAsc(evt) {
 	storage('sort', {t: 'size', d: 'a'});
-	var ls = storage('f' + currentDir),
-		bc = path.replace('/wcard', '');
-	fileList.renderCurrentDir(ls, bc);
+	closeSortSettDlg();
 }
 
 function onClickChSortBySizeDesc(evt) {
 	storage('sort', {t: 'size', d: 'd'});
-	var ls = storage('f' + currentDir),
-		bc = path.replace('/wcard', '');
-	fileList.renderCurrentDir(ls, bc);
+	closeSortSettDlg();
 }
 
 function onClickChSortByModifyTimeAsc(evt) {
 	storage('sort', {t: 'time', d: 'a'});
-	var ls = storage('f' + currentDir),
-		bc = path.replace('/wcard', '');
-	fileList.renderCurrentDir(ls, bc);
+	closeSortSettDlg();
 }
 
 function onClickChSortByModifyTimeDesc(evt) {
 	storage('sort', {t: 'time', d: 'd'});
+	closeSortSettDlg();
+}
+
+function closeSortSettDlg() {
 	var ls = storage('f' + currentDir),
 		bc = path.replace('/wcard', '');
 	fileList.renderCurrentDir(ls, bc);
+	hideOptions();
 }

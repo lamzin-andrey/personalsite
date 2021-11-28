@@ -69,6 +69,7 @@
 					<div class="botOptsBg">
 						<div>
 							<div id="boLeave" class="bopt">Leave WebUSB</div>
+							<div id="boSortSetting" class="bopt">Sort setting</div>
 							<div id="boChangeLang" class="bopt">Change language</div>
 							<div id="boChangeTheme" class="bopt">Change mode</div>
 							<div id="boCloseOpts" class="bopt">Exit</div>
@@ -118,6 +119,90 @@
 				  <div class="info" id="hAlertMessage"></div>
 					<div class="tc">  
 						<input type="button"  class="avBtn" value="OK" id="bAlertOk">
+					</div>
+				</div><!-- end body -->
+			</div><!-- end a2dlg -->
+		</div><!-- end screen -->
+		
+		<!-- screen sort settings dialog -->
+		<div class="screen d-none" id="sortMenu">
+			<div class="a2dlg">
+				<div class="titleWrapper">
+					<div  id="hSortSettingTitle"class="title">
+						Sort setting
+					</div>
+					<div class="line">&nbsp;</div>
+				</div><!-- end title wrapper -->
+
+				<div class="body">
+					<div>  
+						<div class="cbWrapper pl-2" id="cbSortByNameAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortByNameAsc">
+							<span class="cbLegend" id="hByNameAsc">By name asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortByNameDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/up.png">
+							</span>
+							<input type="hidden"  id="chSortByNameDesc">
+							<span class="cbLegend" id="hByNameDesc">By name desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="cbWrapper pl-2" id="cbSortBySizeAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortBySizeAsc">
+							<span class="cbLegend" id="hBySizeAsc">By size asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortBySizeDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/up.png">
+							</span>
+							<input type="hidden"  id="chSortBySizeDesc">
+							<span class="cbLegend" id="hBySizeDesc">By size desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="cbWrapper pl-2" id="cbSortByModifyTimeAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortByModifyTimeAsc">
+							<span class="cbLegend" id="hByMTimeAsc">By modify time asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortByModifyTimeDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/up.png">
+							</span>
+							<input type="hidden"  id="chSortByModifyTimeDesc">
+							<span class="cbLegend" id="hByMTimeDesc">By modify time desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="tc">
+							<input id="bCloseSortSetings" type="button" value="Close" class="avBtn">
+						</div>
+						
 					</div>
 				</div><!-- end body -->
 			</div><!-- end a2dlg -->
