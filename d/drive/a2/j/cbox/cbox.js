@@ -45,13 +45,14 @@ function onClickA2Cb(evt){
 		}
 	}
 	
+	return true;
 }
 
 function onLoadA2Cb(){
 	var ls = cs(document, 'cbWrapper'), i;
 	for(i = 0; i < sz(ls); i++){
 		//ls[i].onclick = onClickA2Cb;
-		ls[i].addEventListener('click', onClickA2Cb, false);
+		ls[i].addEventListener('click', onClickA2Cb, true);
 	}
 }
 /**

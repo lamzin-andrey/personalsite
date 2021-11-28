@@ -449,6 +449,42 @@ window.fileListItemCmenu = {
 		return r;
 	},
 	
+	/**
+	 * @return Number
+	*/
+	calculateFromHexSz:function(n) {
+		var a = String(n).split('g'), i, r, meas, m = 1;
+		sz(a);
+		for (i = 0; i < SZ - 1; i++) {
+			a[i] = parseInt(a[i], 16);
+		}
+		
+		if (SZ > 2) {
+			meas = a[2];
+			r = parseFloat(a[0] + '.' + a[1]);
+		} else {
+			meas = a[1];
+			r = parseFloat(a[0]);
+		}
+		
+		switch (meas) {
+			case 'b':
+				m = 1;
+				break;
+			case 'Kb':
+				m = 1000;
+				break;
+			case 'Mb':
+				m = 1000000;
+				break;
+			case 'Gb':
+				m = 1000000000;
+				break;
+		}
+		
+		return r * m;
+	},
+	
 	formatNumber:function(s) {
 		var i, a = [], j = 0;
 		for (i = s.length - 1; i > -1 ; i--, j++) {

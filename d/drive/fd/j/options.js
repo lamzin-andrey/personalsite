@@ -41,5 +41,4 @@ function onClickOptionExit() {
 
 function onClickOptionSortSetting() {
 	showScreen('sortMenu');
-	alert(2);
 }

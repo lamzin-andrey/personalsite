@@ -35,6 +35,7 @@ function initApp() {
 	e('hAlertScreen').onclick = onClickShowSuccessBtn;
 	
 	setRadioBehaviorForCboxes(['chSortByNameAsc', 'chSortByNameDesc', 'chSortBySizeAsc', 'chSortBySizeDesc', 'chSortByModifyTimeAsc', 'chSortByModifyTimeDesc']);
+	sortSettingDlgInit();
 	
 	getAuthState();
 	onLoadA236();
