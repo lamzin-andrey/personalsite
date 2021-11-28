@@ -3,6 +3,8 @@ function initOptions() {
 	e('boChangeLang').onclick = onClickOptionChangeLanguage;
 	e('boChangeTheme').onclick = onClickOptionChangeTheme;
 	e('boCloseOpts').onclick = onClickOptionExit;
+	var E = e('boSortSetting');
+	E.onclick = onClickOptionSortSetting;
 }
 
 function showOptions() {
@@ -35,4 +37,9 @@ function onClickOptionChangeTheme() {
 
 function onClickOptionExit() {
 	hideOptions();
+}
+
+function onClickOptionSortSetting() {
+	showScreen('sortMenu');
+	alert(2);
 }

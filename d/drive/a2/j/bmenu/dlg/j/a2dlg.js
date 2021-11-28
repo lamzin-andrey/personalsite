@@ -1,7 +1,10 @@
 window.addEventListener('load', onLoadBMenuAlertDlg, false);
 
-function onLoadBMenuAlertDlg(){
-     e('bOk').onclick = onClickBMenuDlgOk;
+function onLoadBMenuAlertDlg() {
+	var E = e('bOk');
+	if (E) {
+		E.onclick = onClickBMenuDlgOk;
+	}
 }
 
 function onClickBMenuDlgOk(){

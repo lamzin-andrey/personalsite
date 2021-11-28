@@ -16,6 +16,11 @@ i{
   height:24px;
   border: solid 1px #BBBBBB;
 }
+.imgWrapperNoBord img{
+  width:24px;
+  height:24px;
+  border: solid 1px #366894;
+}
 
 .green-border {
   border-color: #00BB00!important;
