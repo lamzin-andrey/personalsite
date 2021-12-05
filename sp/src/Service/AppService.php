@@ -86,9 +86,9 @@ class AppService
 	public function getAuthUser()
 	{
 	    $token = $this->oContainer->get('security.token_storage')->getToken();
-            $oUser = null;
+	    $oUser = null;
 	    if ($token) {
-                $oUser = $token->getUser();
+            $oUser = $token->getUser();
 	    }
 		return $oUser;
 	}
@@ -602,6 +602,7 @@ class AppService
 	public function getUserAvatarImageSrc() : string
 	{
 		$oUser = $this->getAuthUser();
+
 		$nLogoId = $oUser->getLogotypeId();
 		if ($nLogoId) {
 			$oLogoInfo = $this->repository('App:UserMedia')->find($nLogoId);

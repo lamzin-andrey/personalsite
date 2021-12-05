@@ -2,6 +2,7 @@
 namespace App\Handler;
 
 use App\Service\AppService;
+use App\Service\UserService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -33,18 +34,25 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     */
     private $appService;
 
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+
 
     /**
      * AuthenticationHandler constructor.
      * @param RouterInterface $router
      * @param Session $session
      */
-    public function __construct(RouterInterface $router,/* Session $session*/ ContainerInterface $oContainer, AppService $appService)
+    public function __construct(RouterInterface $router,/* Session $session*/ ContainerInterface $oContainer, AppService $appService, UserService $userService)
     {
         $this->router = $router;
 		$this->_oContainer = $oContainer;
         $this->session = $oContainer->get('request_stack')->getCurrentRequest()->getSession();
         $this->appService = $appService;
+        $this->userService = $userService;
     }
 
     /**
@@ -54,11 +62,12 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
+        $this->userService->restorePassword($token->getUser());
+
 
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse(['success' => true]);
-        }
-        else {
+        } else {
             $url = $this->router->generate('home');
             return new RedirectResponse($url);
         }

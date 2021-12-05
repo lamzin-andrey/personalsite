@@ -4,8 +4,10 @@ namespace App\Controller;
 
 # use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\Ausers;
+use App\Form\ChangeUserFormType;
 use App\Form\RegisterFormType;
 use App\Service\AppService;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
@@ -13,8 +15,11 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use App\Entity\Ausers AS User;
@@ -100,6 +105,7 @@ class SecurityController extends AppBaseController
                     $this->addFormError('Consent to agree to terms of use', 'agree', $oAppService);
                 } else {
                     //Success
+                    // TODO userService!
                     $sPassword = $oEncoder->encodePassword($oUser, $sPassword);
                     $oUser->setPassword($sPassword);
 
@@ -324,5 +330,58 @@ class SecurityController extends AppBaseController
         $subject = $appService->l($user, $subject, 'loginforms');
 
         return $subject;
+    }
+
+    /**
+     * @Route("/changeuser", name="changeuser")
+     */
+    public function changeUserAction(Request $request, AppService $appService, UserService $userService) : Response
+    {
+        $aData = $this->_getDefaultViewData();
+        $form = $this->createForm(ChangeUserFormType::class);
+        $aData['form'] = $form->createView();
+        $aData['last_username'] = '';
+        $this->_oAppService = $appService;
+
+        if ($request->getMethod() == 'POST') {
+            $newUserId = $request->request->get('change_user_form')['user_id'];
+            $newUser = $this->container->get('doctrine')->getRepository(Ausers::class)->find($newUserId);
+            /***
+             * @var Ausers $newUser
+            */
+            if ($newUser) {
+                // 1 Добавить в aData хеш (для проверки просто userId)
+                $aData['hash'] = $newUserId;
+                // 2 Добавить в aData форму авторизации с предзаполненными полями
+                $aData['last_username'] = $newUser->getUsername();
+            }
+        }
+
+        return $this->render('security/change_user.html.twig', $aData);
+    }
+
+    /**
+     * @Route("/swid", name="getSwitchUserId")
+     */
+    public function getSwitchedUserData(Request $request, AppService $appService, UserService $userService) : Response
+    {
+        $newUserId = $request->query->get('id');
+        $newUser = $this->container->get('doctrine')->getRepository(Ausers::class)->find($newUserId);
+        /***
+         * @var Ausers $newUser
+         */
+        if ($newUser) {
+            // 1 Установить пользователю временный пароль
+            // Сохраняем старый пароль пользователя
+            $userService->storePassword($newUser);
+            $newPassword = $appService->getHash($request);
+            $userService->setPassword($newUser, $newPassword, true);
+            // 2 Добавить в aData хеш (для проверки просто userId)
+            $aData['password'] = $newPassword;
+            $aData['csrf_token'] = $userService->getFormLoginTokenCsrf();
+            return $appService->json($aData);
+        }
+
+        return $appService->json([]);
     }
 }

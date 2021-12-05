@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Change user'|trans }}{% endblock %}
+
+{% block content %}
+{{ form_start(form, {'action': path('changeuser')}) }}
+	{{ form_row(form.user_id) }}
+	<p class="text-right">
+		<button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+	</p>
+{{ form_end(form) }}
+
+{% if (last_username) %}
+	<form id="signinformsw" method="POST" action="{{ path('check_path') }}" novalidate style="display:none"><!-- TODO try -novalidate -->
+		<div >
+			{#v-b421validators="'required,email'" #}
+			<input
+					type="hidden"
+					name="_username"
+					value="{{ last_username }}">
+		</div>
+		<div >
+			{# v-b421validators="'required,password,length6_128'" #}
+			<input
+					id="password"
+					type="password"  name="_password"
+					>
+		</div>
+		<div >
+			<div class="custom-control custom-checkbox small">
+				<input type="checkbox" id="rememberMe" name="_remember_me" value="on" checked>
+			</div>
+		</div>
+		<input type="hidden" name="_csrf_token"  id="csrf"/>
+		<input type="hidden" value="{{ hash }}"  id="hash"/>
+
+
+	</form>
+{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="/j/l.js"></script>
+{% endblock %}

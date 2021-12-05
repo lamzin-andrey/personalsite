@@ -15,6 +15,7 @@ mix.js('sources/admin/vue/js/app.js', 'a.js');
 //Для авторизованных админов
 mix.js('sources/adminauth/app.js', 'b.js');
 mix.js('sources/adminauthvdt/app.js', 'e.js');
+mix.js('sources/adminauth/switchuser/app.js', 'l.js');
 //Конвертер онлайн
 mix.js('sources/phd/app.js', 'f.js'); //phd - тут протеряли css файл 
 //Конвертер онлайн - админка
