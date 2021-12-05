@@ -87,6 +87,7 @@ window.fileListItemCmenu = {
 			menuItem,
 			listener,
 			propertiesText,
+			filetimeText,
 			catalogPropertiesText = '',
 			self = this;
 		e('hCatalogItemTitle').innerHTML = fileListItem.name;
@@ -146,12 +147,18 @@ window.fileListItemCmenu = {
 		propertiesText = '<span class="black">' + l('Properties') + ':</span><div class="props">\
 			<div class="cim_item_name">' + fileListItem.name + '</div>\
 			<div class="prop">' + self.unpackHexSz(fileListItem.s) + '</div>{folderProps}\
+			{fileTime}\
 		</div>';
 		if (fileListItem.type == 'c') {
-			catalogPropertiesText = '<div class="prop">' + l('Files') + ':' + fileListItem.qf + '</div>';
-			catalogPropertiesText += '<div class="prop">' + l('Catalogs') + ':' + fileListItem.qc + '</div>';
+			catalogPropertiesText = '<div class="prop">' + l('Files') + ': ' + fileListItem.qf + '</div>';
+			catalogPropertiesText += '<div class="prop">' + l('Catalogs') + ': ' + fileListItem.qc + '</div>';
 		}
 		propertiesText = propertiesText.replace('{folderProps}', catalogPropertiesText);
+		
+		filetimeText = '<div class="prop">' + l('Uploaded') + ': ' + SqzDatetime.desqzDatetime(fileListItem.ct, 0) + '</div>';
+		filetimeText += '<div class="prop">' + l('Modify') + ': ' + SqzDatetime.desqzDatetime(fileListItem.ut, 0) + '</div>';
+		propertiesText = propertiesText.replace('{fileTime}', filetimeText);
+		
 		appendChild('hListItemCmItems', 'div', propertiesText, {'class': 'cim_item_props gray'});
 		
 		setTimeout(function() {
@@ -440,6 +447,42 @@ window.fileListItemCmenu = {
 		}
 		
 		return r;
+	},
+	
+	/**
+	 * @return Number
+	*/
+	calculateFromHexSz:function(n) {
+		var a = String(n).split('g'), i, r, meas, m = 1;
+		sz(a);
+		for (i = 0; i < SZ - 1; i++) {
+			a[i] = parseInt(a[i], 16);
+		}
+		
+		if (SZ > 2) {
+			meas = a[2];
+			r = parseFloat(a[0] + '.' + a[1]);
+		} else {
+			meas = a[1];
+			r = parseFloat(a[0]);
+		}
+		
+		switch (meas) {
+			case 'b':
+				m = 1;
+				break;
+			case 'Kb':
+				m = 1000;
+				break;
+			case 'Mb':
+				m = 1000000;
+				break;
+			case 'Gb':
+				m = 1000000000;
+				break;
+		}
+		
+		return r * m;
 	},
 	
 	formatNumber:function(s) {

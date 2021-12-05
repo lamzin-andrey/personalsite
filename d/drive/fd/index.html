@@ -53,6 +53,7 @@
 					<div class="botOptsBg">
 						<div>
 							<div id="boLeave" class="bopt">Leave WebUSB</div>
+							<div id="boSortSetting" class="bopt">Sort setting</div>
 							<div id="boChangeLang" class="bopt">Change language</div>
 							<div id="boChangeTheme" class="bopt">Change mode</div>
 							<div id="boCloseOpts" class="bopt">Exit</div>
@@ -96,6 +97,93 @@
 			</div><!-- end a2dlg -->
 		</div><!-- end screen -->
 		
+		
+		
+		<!-- screen sort settings dialog -->
+		<div class="screen d-none" id="sortMenu">
+			<div class="a2dlg">
+				<div class="titleWrapper">
+					<div  id="hSortSettingTitle"class="title">
+						Sort setting
+					</div>
+					<div class="line">&nbsp;</div>
+				</div><!-- end title wrapper -->
+
+				<div class="body">
+					<div>  
+						<div class="cbWrapper pl-2" id="cbSortByNameAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortByNameAsc">
+							<span class="cbLegend" id="hByNameAsc">By name asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortByNameDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/u.png">
+							</span>
+							<input type="hidden"  id="chSortByNameDesc">
+							<span class="cbLegend" id="hByNameDesc">By name desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="cbWrapper pl-2" id="cbSortBySizeAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortBySizeAsc">
+							<span class="cbLegend" id="hBySizeAsc">By size asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortBySizeDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/u.png">
+							</span>
+							<input type="hidden"  id="chSortBySizeDesc">
+							<span class="cbLegend" id="hBySizeDesc">By size desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="cbWrapper pl-2" id="cbSortByModifyTimeAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortByModifyTimeAsc">
+							<span class="cbLegend" id="hByMTimeAsc">By modify time asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortByModifyTimeDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/u.png">
+							</span>
+							<input type="hidden"  id="chSortByModifyTimeDesc">
+							<span class="cbLegend" id="hByMTimeDesc">By modify time desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="tc">
+							<input id="bCloseSortSetings" type="button" value="Close" class="avBtn">
+						</div>
+						
+					</div>
+				</div><!-- end body -->
+			</div><!-- end a2dlg -->
+		</div><!-- end screen -->
+		
+		
 		<!-- screen upload -->
 		<div class="tc screen d-none up-screen" id="hUpScreen">
 			<div>
@@ -130,9 +218,9 @@
 			<div class="tc mt-3" id="hFormUpWr">
 				<form method="POST" enctype="multipart/form-data">
 					<input type="file" id="iFile" name="iFile" multiple>
-					<input type="hidden" id="path" name="path">
+					<!--input type="hidden" id="path" name="path">
 					<input type="hidden" id="isiframe" name="isiframe">
-					<input type="hidden" id="c" name="c">
+					<input type="hidden" id="c" name="c"-->
 					<input type="hidden" id="_csrf_token_uf" name="_csrf_token_uf">
 				</form>
 			</div>
@@ -242,7 +330,7 @@
 		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
 		<script src="/j/sources/landlib/net/httpquerystring.es5.js"></script>
 		<script src="/j/sources/landlib/net/rest.es5.js?vF"></script>
-		<script src="./j/php.js"></script>
+		<script src="../a2/j/php.js"></script>
 		
 		<script src="/j/sources/landcache/sources/js/land_cache_client.es5.js"></script>
 		<script src="/d/drive/fd/j/cachesw.es5.js"></script>
@@ -256,7 +344,9 @@
 		<script src="../a2/j/auth.js"></script>
 		<script src="./j/mmb.js?v=1"></script>
 		<script src="./j/mmenu/menu.js?v=2"></script>
+		<script src="../a2/j/catalog/sqzdatetime.js"></script>
 		<script src="../a2/j/catalog/filelist.js"></script>
+		<script src="../a2/j/catalog/sortsettingdlg.js"></script>
 		<script src="../a2/j/catalog/filelistitemcmenu.js?v=1"></script>
 		
 		
@@ -264,6 +354,8 @@
 		<script src="./j/upload/anim.js"></script>
 		<script src="./j/upload/upload.js?1"></script>
 		
+		<script src="../a2/j/bmenu/dlg/j/a2dlg.js"></script>
+		<script src="../a2/j/cbox/cbox.js"></script>
 		
 		<script src="./j/options.js?v=1"></script>
 		

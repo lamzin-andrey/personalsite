@@ -50,6 +50,10 @@ input[type=text],input[type=password], input[type=email] {
 .mt-3 {
 	margin-top: 1.0em;
 }
+.pl-2 {
+	padding-left: 0.5em;
+}
+
 
 /** catalog design start */
 .rel {

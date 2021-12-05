@@ -2,7 +2,7 @@ window.fileList = {
 	id: 'fl',
 	/** @property  touchItemsMap store time start touch */
 	touchItemsMap: {},
-	addCatalog:function(name, id, type, size) {
+	addCatalog:function(name, id, type, size, ut, ct) {
 		type = def(type, 'c');
 		var ls = storage('f' + currentDir),
 			inObj;
@@ -10,7 +10,7 @@ window.fileList = {
 			ls = [];
 		}
 		if (!(name in In(ls))) {
-			ls.push({type:type, name:name, i: id, s: size, qf: 0, qc: 0});
+			ls.push({type:type, name:name, i: id, s: size, qf: 0, qc: 0, ut: ut, ct: ct});
 		}
 		storage('f' + currentDir, ls);
 		
@@ -48,6 +48,8 @@ window.fileList = {
 			removeClass(e(this.id), 'empty');
 		}
 		
+		list = this.sort(list);
+		sZ = sz(list);
 		for (i = 0; i < sZ; i++) {
 			j = list[i];
 			s = tpl.replace('{t}', j.type);
@@ -427,4 +429,86 @@ window.fileList = {
 		return r;
 	},
 	
+	sort:function(list) {
+		var i, catalogs = [], files = [];
+		sz(list);
+		for (i = 0; i < SZ; i++) {
+			if (list[i].type == 'c') {
+				catalogs.push(list[i]);
+			} else {
+				files.push(list[i]);
+			}
+		}
+		
+		
+		
+		files = this.sortPart(files);
+		catalogs = this.sortPart(catalogs);
+		list = [];
+		sz(catalogs);
+		for (i = 0; i < SZ; i++) {
+			list.push(catalogs[i]);
+		}
+		sz(files);
+		for (i = 0; i < SZ; i++) {
+			list.push(files[i]);
+		}
+		
+		return list;
+	},
+	
+	sortPart:function(ls) {
+		var currentSort = this.getStoredSort(), prevSize, nextSize, prevTime, nextTime;
+		ls.sort(function(prev, next) {
+			var m = -1;
+			if (currentSort.d == 'd') {
+				m = 1;
+			}
+			if (currentSort.t == 'name') {
+				if (prev.name < next.name) {
+					return 1 * m;
+				} else {
+					return -1 * m;
+				}
+			}
+			
+			if (currentSort.t == 'size') {
+				prevSize = fileListItemCmenu.calculateFromHexSz(prev.s);
+				nextSize = fileListItemCmenu.calculateFromHexSz(next.s);
+				if (prevSize < nextSize) {
+					return 1 * m;
+				} else if (prevSize > nextSize) {
+					return -1 * m;
+				} else {
+					return 0;
+				}
+			}
+			
+			if (currentSort.t == 'time') {
+				prevTime = strtotime(SqzDatetime.desqzDatetime(prev.ut));
+				nextTime = strtotime(SqzDatetime.desqzDatetime(next.ut));
+				
+				if (prevTime == nextTime) {
+					prevTime = strtotime(SqzDatetime.desqzDatetime(prev.ct));
+					nextTime = strtotime(SqzDatetime.desqzDatetime(next.ct));
+				}
+				
+				if (prevTime < nextTime) {
+					return 1 * m;
+				} else if (prevTime > nextTime) {
+					return -1 * m;
+				} else {
+					return 0;
+				}
+			}
+			
+		});
+		
+		return ls;
+	},
+	getStoredSort:function() {
+		currentSort = storage('sort');
+		currentSort = currentSort ? currentSort : {t: 'name', d: 'a'};
+		return currentSort;
+	}
 };
