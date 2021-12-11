@@ -11,7 +11,7 @@
 {{ form_end(form) }}
 
 {% if (last_username) %}
-	<form id="signinformsw" method="POST" action="{{ path('check_path') }}" novalidate style="display:none"><!-- TODO try -novalidate -->
+	<form id="signinformsw" method="POST" action="{{ path('check_path') }}/" novalidate style="display:none"><!-- TODO try -novalidate -->
 		<div >
 			{#v-b421validators="'required,email'" #}
 			<input
