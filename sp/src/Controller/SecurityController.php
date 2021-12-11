@@ -337,6 +337,9 @@ class SecurityController extends AppBaseController
      */
     public function changeUserAction(Request $request, AppService $appService, UserService $userService) : Response
     {
+        if (!$this->hasPermissions()) {
+            return $this->redirectToRoute('home');
+        }
         $aData = $this->_getDefaultViewData();
         $form = $this->createForm(ChangeUserFormType::class);
         $aData['form'] = $form->createView();
@@ -351,7 +354,10 @@ class SecurityController extends AppBaseController
             */
             if ($newUser) {
                 // 1 Добавить в aData хеш (для проверки просто userId)
-                $aData['hash'] = $newUserId;
+                $recoveryHash = $appService->getHash($request);
+                $newUser->setRecoveryHash($recoveryHash);
+                $appService->save($newUser);
+                $aData['hash'] = $recoveryHash;
                 // 2 Добавить в aData форму авторизации с предзаполненными полями
                 $aData['last_username'] = $newUser->getUsername();
             }
@@ -365,8 +371,10 @@ class SecurityController extends AppBaseController
      */
     public function getSwitchedUserData(Request $request, AppService $appService, UserService $userService) : Response
     {
-        $newUserId = $request->query->get('id');
-        $newUser = $this->container->get('doctrine')->getRepository(Ausers::class)->find($newUserId);
+        $newUserHash = $request->query->get('id');
+        $newUser = $this->container->get('doctrine')->getRepository(Ausers::class)->findOneBy([
+            'recoveryHash' => $newUserHash
+        ]);
         /***
          * @var Ausers $newUser
          */
@@ -383,5 +391,18 @@ class SecurityController extends AppBaseController
         }
 
         return $appService->json([]);
+    }
+
+    /**
+     * @return bool true когда пользователь имеет роль админ
+     */
+    private function hasPermissions() : bool
+    {
+        $oUser = $this->getUser();
+        if (!$oUser) {
+            return false;
+        }
+        $nRole = $oUser->getRole();
+        return (2 == $nRole);
     }
 }

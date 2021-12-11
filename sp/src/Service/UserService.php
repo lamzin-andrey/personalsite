@@ -93,6 +93,9 @@ class UserService
         if ($userTempPassword) {
             $user->setPassword($userTempPassword->getPassword());
             $this->save($user);
+            $em = $this->container->get('doctrine')->getManager();
+            $em->remove($userTempPassword);
+            $em->flush();
         }
         return;
     }
