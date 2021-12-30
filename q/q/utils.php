@@ -137,6 +137,9 @@ function now($ignore_summer_time = false) {
  * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
 function utils_pngResize($srcFilename, $destFilename, $destW, $destH, $compression = 9, $defaultTransparentColor = [0, 0, 0], $bgW = 0, $bgH = 0, $withAlpha = true) {
+	if (utils_Imagick($srcFilename, $destFilename, $destW, $destH)) {
+		return;
+	}
 	if (!$img = @imagecreatefrompng($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
@@ -182,6 +185,10 @@ function utils_pngResize($srcFilename, $destFilename, $destW, $destH, $compressi
  * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
 function utils_gifResize($srcFilename, $destFilename, $destW, $destH, $defaultTransparentColor = [0, 0, 0], $bgW = 0, $bgH = 0, $withAlpha = true) {
+	if (utils_Imagick($srcFilename, $destFilename, $destW, $destH)) {
+		return;
+	}
+	
 	if (!$img = @imagecreatefromgif($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
@@ -226,6 +233,11 @@ function utils_gifResize($srcFilename, $destFilename, $destW, $destH, $defaultTr
  * */
 function utils_jpgResize($srcFilename, $destFilename, $destW, $destH, $quality = 80, $bgW = 0, $bgH = 0, $color = [0, 0, 0])
 {
+	
+	if (utils_Imagick($srcFilename, $destFilename, $destW, $destH)) {
+		return;
+	}
+	
 	if (!$img = imagecreatefromjpeg($srcFilename)) {
 		throw new Exception('Ошибка формата изображения');
 	}
@@ -1102,4 +1114,17 @@ function utils_getUserDisplayName($aRow, $sNameFieldName = 'name', $surnameField
 		return ($surname);
 	}
 	return '';*/
+}
+
+function utils_Imagick(string $srcFilename, string $destFilename, string $destW, string $destH) : bool
+{
+	if (class_exists('Imagick')) {
+		$imagick = new Imagick($srcFilename);
+		$imagick->resizeImage($destW, $destH, Imagick::FILTER_POINT, 1.0 /*, $bestFit*/);
+		$data =  $imagick->getImageBlob();
+		file_put_contents($destFilename, $data);
+		return true;
+	}
+	
+	return false;
 }
