@@ -39,6 +39,9 @@ function hasClass(obj, css) {
 }
 function removeClass(obj, css) {
 	obj = e(obj);
+	if (!obj) {
+		return;
+	}
 	var c = obj.className, re = /[0-9a-zA-Z\-_]+/gm,
 	arr = c.match(re),
 	i, result = [];
@@ -51,6 +54,9 @@ function removeClass(obj, css) {
 }
 function addClass(obj, css) {
 	obj = e(obj);
+	if (!obj) {
+		return;
+	}
 	removeClass(obj, css);
 	obj.className += ' ' + css;
 }
