@@ -88,6 +88,31 @@ class Route {
 		}
 		///ctrl/articles/task_recompilemainlists.php
 		
+		
+		if ($baseUrl == '/p/gts1/') {
+			$handler = __dir__ . '/ctrl/ps/gts1.php';
+			require_once $handler;
+			$this->app = new GetTs1();
+		}
+		
+		if ($baseUrl == '/p/sts1/') {
+			$handler = __dir__ . '/ctrl/ps/sts1.php';
+			require_once $handler;
+			$this->app = new SetTs1();
+		}
+		
+		if ($baseUrl == '/p/gts2/') {
+			$handler = __dir__ . '/ctrl/ps/gts2.php';
+			require_once $handler;
+			$this->app = new GetTs2();
+		}
+		
+		if ($baseUrl == '/p/sts2/') {
+			$handler = __dir__ . '/ctrl/ps/sts2.php';
+			require_once $handler;
+			$this->app = new SetTs2();
+		}
+		
 	}
 	
 	/**
