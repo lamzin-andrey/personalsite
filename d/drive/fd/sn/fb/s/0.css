@@ -1,0 +1,46 @@
+body {
+	background-color:#201F67;
+	color:white;
+	padding:0;
+	margin:0;
+}
+body.f100, html.f100 {
+	height:100%;
+}
+.hide {
+	display: none;
+}
+.cl {
+	clear:both;
+}
+.left {
+	float:left;
+}
+.tc {
+	text-align:center;
+}
+.tr {
+	text-align:right;
+}
+.tl {
+	text-align:left;
+}
+.d-none {
+	display:none;
+}
+
+input[type=button] {
+	height:48px;
+}
+
+
+.mt-3 {
+	margin-top: 1.0em;
+}
+
+.pl-2 {
+	padding-left: 0.5em;
+}
+
+
+
