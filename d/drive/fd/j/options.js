@@ -3,6 +3,7 @@ function initOptions() {
 	e('boChangeLang').onclick = onClickOptionChangeLanguage;
 	e('boChangeTheme').onclick = onClickOptionChangeTheme;
 	e('boCloseOpts').onclick = onClickOptionExit;
+	e('boLogout').onclick = onClickOptionLogout;
 	var E = e('boSortSetting');
 	E.onclick = onClickOptionSortSetting;
 }
@@ -41,4 +42,8 @@ function onClickOptionExit() {
 
 function onClickOptionSortSetting() {
 	showScreen('sortMenu');
+}
+
+function onClickOptionLogout() {
+	location.href = window.backRoot + '/logout?rd=/d/drive/';
 }

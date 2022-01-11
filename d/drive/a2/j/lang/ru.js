@@ -54,6 +54,7 @@ window.langRu = {
 	'Modify' : 'Изменен',
 	'Unknown' : 'Неизвестно',
 	'boSortSetting' : 'Сортировка',
+	'boLogout' : 'Выйти из системы',
 	'hSortSettingTitle': 'Сортировка',
 	'hByNameAsc': 'От А до Я',
 	'hByNameDesc': 'От Я до А',

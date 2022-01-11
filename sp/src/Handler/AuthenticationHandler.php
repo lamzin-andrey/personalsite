@@ -91,4 +91,6 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
             return new RedirectResponse($this->router->generate('login'));
         }
     }
+
+
 }

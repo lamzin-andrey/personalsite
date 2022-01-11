@@ -21,8 +21,10 @@ security:
                 csrf_token_generator: security.csrf.token_manager
                 success_handler: app.security.authentication_handler
                 failure_handler: app.security.authentication_handler
-            logout: ~
-                # target: /hello/anonymous
+            logout:
+                path: /logout
+                success_handler: app.security.logout_handler
+                invalidate_session: false
             remember_me:
                 secret:   '%kernel.secret%'
                 path:     /
