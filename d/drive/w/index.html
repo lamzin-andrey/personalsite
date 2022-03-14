@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="f100">
+	<head>
+		<meta charset="WINDOWS-1251">
+		<!--meta name="viewport" content="width=device-width,no-scale"-->
+		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height, user-scalable=no, target-densitydpi=device-dpi">
+		<title>Онлайн флешка для любого вашего устройства</title>
+		<link rel="stylesheet" type="text/css" href="./s/0.css">
+		<link rel="stylesheet" type="text/css" href="../a2/j/pbar/pbar.css">
+		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/adlg.css">
+		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/q.css">
+		<link rel="stylesheet" type="text/css" href="../a2/j/cbox/cbox.css">
+		
+		<link href="../i/u.ico" rel="shortcut icon" type="image/x-icon" >
+		<script src="/j/landcacherswinstaller.js"></script>
+	</head>
+	<body class="f100">
+		<!-- screen first (get authenticate state) -->
+		<div class="tc screen" id="hWaitScreen">
+			<img src="../a2/i/u.png" id="im">
+			<div><i id="hWaitLabel">Please wait</i></div>
+		</div>
+		<!-- screen catalogs -->
+		<div class="tc screen d-none rel bg-des" id="hCatalogScreen">
+			<div class="abs-canva">
+				<div class="head">
+					<div class="hbuttons rel">
+						<div class="hbuttonsplace">
+							<div class="b-home" id="bHome">
+								Home
+							</div>
+							<div class="b-up" id="bUp">
+								Up
+							</div>
+							<div class="cl"></div>
+						</div>
+						<div id="bMainMenu" class="menubtnplace abs">
+							<div class="bmenurow first">&nbsp;</div>
+							<div class="bmenurow">&nbsp;</div>
+							<div class="bmenurow">&nbsp;</div>
+						</div>
+					</div>
+					<div class="path" id="hPath">/wcard</div>
+				</div>
+				<div class="fl empty" id="fl">
+					<div class="empty-label" id="hNoFiles">
+						No files
+					</div>
+				</div>
+				
+				
+				<div id="hBotOptions" class="botOptsWr hide tl">
+					<div class="botOptsBg">
+						<div>
+							<div id="boLeave" class="bopt">Leave WebUSB</div>
+							<div id="boSortSetting" class="bopt">Sort setting</div>
+							<div id="boChangeLang" class="bopt">Change language</div>
+							<div id="boChangeTheme" class="bopt">Change mode</div>
+							<div id="boLogout" class="bopt">Logout</div>
+							<div id="boCloseOpts" class="bopt">Exit</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="hTopOptions" class="topOptsWr hide tl">
+					<div class="topOptsBg">
+						<div>
+							<div id="bmUpload" class="bopt">Leave WebUSB</div>
+							<div id="bmAddCatalog" class="bopt">Change language</div>
+							<div id="bmRemove" class="bopt">Change mode</div>
+							<div id="bmSelectMode" class="bopt">Exit</div>
+							<div id="bmPaste" class="bopt">Exit</div>
+							<div id="bmOptions" class="bopt">Exit</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		
+		<!-- screen alert dialog-->
+		<div class="screen d-none" id="hAlertScreen">
+			<div class="a2dlg">
+				<div class="titleWrapper">
+					<div  id="hAlertTitle"class="title">
+						Information
+					</div>
+					<div class="line">&nbsp;</div>
+				</div><!-- end title wrapper -->
+
+				<div class="body">
+				  <div class="info" id="hAlertMessage"></div>
+					<div class="tc">  
+						<input type="button"  class="avBtn" value="OK" id="bAlertOk">
+					</div>
+				</div><!-- end body -->
+			</div><!-- end a2dlg -->
+		</div><!-- end screen -->
+		
+		
+		
+		<!-- screen sort settings dialog -->
+		<div class="screen d-none" id="sortMenu">
+			<div class="a2dlg">
+				<div class="titleWrapper">
+					<div  id="hSortSettingTitle"class="title">
+						Sort setting
+					</div>
+					<div class="line">&nbsp;</div>
+				</div><!-- end title wrapper -->
+
+				<div class="body">
+					<div>  
+						<div class="cbWrapper pl-2" id="cbSortByNameAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortByNameAsc">
+							<span class="cbLegend" id="hByNameAsc">By name asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortByNameDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/u.png">
+							</span>
+							<input type="hidden"  id="chSortByNameDesc">
+							<span class="cbLegend" id="hByNameDesc">By name desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="cbWrapper pl-2" id="cbSortBySizeAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortBySizeAsc">
+							<span class="cbLegend" id="hBySizeAsc">By size asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortBySizeDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/u.png">
+							</span>
+							<input type="hidden"  id="chSortBySizeDesc">
+							<span class="cbLegend" id="hBySizeDesc">By size desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="cbWrapper pl-2" id="cbSortByModifyTimeAsc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/d.png">
+							</span>
+							<input type="hidden"  id="chSortByModifyTimeAsc">
+							<span class="cbLegend" id="hByMTimeAsc">By modify time asc</span>
+						</div><!-- end cbWrapper -->
+						<div class="cbWrapper pl-2" id="cbSortByModifyTimeDesc">
+							<span class="imgWrapper">
+								<img src="./i/check_intive.jpg">
+							</span>
+							<span class="imgWrapperNoBord">
+								<img src="./i/u.png">
+							</span>
+							<input type="hidden"  id="chSortByModifyTimeDesc">
+							<span class="cbLegend" id="hByMTimeDesc">By modify time desc</span>
+						</div><!-- end cbWrapper -->
+						
+						<div class="tc">
+							<input id="bCloseSortSetings" type="button" value="Close" class="avBtn">
+						</div>
+						
+					</div>
+				</div><!-- end body -->
+			</div><!-- end a2dlg -->
+		</div><!-- end screen -->
+		
+		
+		<!-- screen upload -->
+		<div class="tc screen d-none up-screen" id="hUpScreen">
+			<div>
+				<img src="../a2/i/up/1.png" id="imgUp">
+			</div>
+			<div>
+				<div style="display:non; width:97%; margin:auto; ">
+					 <div class="text-center" id="progressStateLabel">
+						Choose file
+					 </div>
+					 <div style="line-height:28px;">
+						 <div class="pbarwrap">
+							<div style="width:0%;" id="dompb" class="dompb">&nbsp;</div>
+						 </div>
+					 </div>
+					 <div class="text-center" id="progressState">
+						0 / 0 (0%)
+					 </div>
+				</div>
+				
+				<div style="display:non; width:97%; margin:14px auto; ">
+					 <div style="line-height:28px;">
+						 <div class="pbarwrap">
+							<div style="width:0%;" id="dompb2" class="dompb">&nbsp;</div>
+						 </div>
+					 </div>
+					 <div class="text-center" id="progressState2">
+						0 / 0 (0%)
+					 </div>
+				</div>
+			</div>
+			<div class="tc mt-3" id="hFormUpWr">
+				<form method="POST" enctype="multipart/form-data">
+					<input type="file" id="iFile" name="iFile" multiple>
+					<!--input type="hidden" id="path" name="path">
+					<input type="hidden" id="isiframe" name="isiframe">
+					<input type="hidden" id="c" name="c"-->
+					<input type="hidden" id="_csrf_token_uf" name="_csrf_token_uf">
+				</form>
+			</div>
+			<iframe id="iFileA2UpIframe" name="iFileA2UpIframe" style="display:none"></iframe>
+			<div class="mt-3">
+				<input type="button" id="bUploadCancel" value="Cancel"> 
+			</div>
+		</div>
+		
+		<div class="tc screen d-none hCatItemMenu" id="hCatItemMenu">
+			<div class="cim_head_wr">
+				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
+				<div class="cim_head_text" id="hCatalogItemTitle">Longly long multiwords file</div>
+			</div>
+			<div class="cim_items_wr" id="hListItemCmItems"></div>
+		</div>
+		<!-- screen settings dialog -->
+		<!-- screen settings -->
+		
+		
+		<!-- No, let will many html files!!-->
+		<!-- screen auth -->
+		<div class="tc screen d-none" id="hAuthScreen">
+			<div id="loginForm">
+				<div class="iwrapper">
+					<input type="hidden" id="apptype" value="drv">
+					<input type="hidden" id="_csrf_token" value="x">
+					<input type="text" id="_username" placeholder="Login">
+				</div>
+				<div class="iwrapper">
+					<input type="password" id="_password" placeholder="Password">
+				</div>
+				<div class="cbwrapper">
+					<input type="checkbox" id="_remember_me" >
+					<label for="_remember_me" id="rememberMeLabel">Remember me</label>
+				</div>
+			</div>
+			<div class="tr">
+				<input type="button" id="bLogin" value="Sign in" class="btnr">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowRegisterScreen" value="Sign up" class="regbtn">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowResetScreen" value="Reset password" class="regbtn">
+			</div>
+		</div>
+		<div class="tc screen d-none" id="hRegisterScreen">
+			<div id="registerForm">
+				<div class="iwrapper">
+					<input type="text" id="register_form[name]" placeholder="First name">
+				</div>
+				<div class="iwrapper">
+					<input type="text" id="register_form[surname]" placeholder="Last name">
+				</div>
+				<div class="iwrapper">
+					<input type="email" id="register_form[email]" placeholder="E-mail">
+				</div>
+				
+				<div class="iwrapper">
+					<input type="hidden" id="apptype" value="drv">
+					<input type="hidden" id="register_form[_token]" value="x">
+					<input type="text" id="register_form[username]" placeholder="Login">
+				</div>
+				<div class="iwrapper">
+					<input type="password" id="register_form[passwordRaw]" placeholder="Password">
+				</div>
+				<div class="iwrapper">
+					<input type="password" id="register_form[passwordRepeat]" placeholder="Password repeat">
+				</div>
+				<div class="cbwrapper">
+					<input type="checkbox" id="register_form[agree]" >
+					<!-- TODO здесь ссылка должна меняться при смене языка-->
+					<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">Политикой конфендициальности</span></a></label>
+				</div>
+				<div class="cbwrapper">
+					<input type="checkbox" id="register_form[isSubscribed]" >
+					<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
+						Я согласен получать email рассылку от автора сайта
+					</label>
+				</div>
+			</div>
+			<div class="tr">
+				<input type="button" id="bRegisterNow" value="Register now" class="btnr">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen" value="Goto Auth" class="regbtn">
+			</div>
+		</div>
+		
+		<div class="tc screen d-none" id="hResetScreen">
+			<div id="resetForm">
+				<div class="iwrapper">
+					<input type="hidden" id="apptype" value="drv">
+					<input type="hidden" id="reset_password_form[_token]" value="x">
+					<input type="email" id="reset_password_form[email]" placeholder="E-mail">
+				</div>
+			</div>
+			<div class="tr">
+				<input type="button" id="bReset" value="Reset password" class="btnr">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen2" value="Goto Auth" class="regbtn">
+			</div>
+		</div>
+		
+		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
+		<script src="/j/sources/landlib/net/httpquerystring.es5.js"></script>
+		<script src="/j/sources/landlib/net/rest.es5.js?vF"></script>
+		<script src="../a2/j/php.js"></script>
+		
+		<script src="/j/sources/landcache/sources/js/land_cache_client.es5.js"></script>
+		<script src="/d/drive/fd/j/cachesw.es5.js"></script>
+		
+		<script src="../a2/j/lang/ru.js?v=1" charset="UTF-8"></script>
+		<script src="../a2/j/lang/en.js"></script>
+		<script src="../a2/j/lang/l.js"></script>
+		
+		<script src="../a2/j/pbar/pbar.js"></script>
+		
+		<script src="../a2/j/auth.js"></script>
+		<script src="./j/mmb.js?v=1"></script>
+		<script src="./j/mmenu/menu.js?v=2"></script>
+		<script src="../a2/j/catalog/sqzdatetime.js"></script>
+		<script src="../a2/j/catalog/filelist.js"></script>
+		<script src="./j/catalog/filelist.js"></script>
+		<script src="../a2/j/catalog/sortsettingdlg.js"></script>
+		<script src="../a2/j/catalog/filelistitemcmenu.js?v=1"></script>
+		
+		
+		<script src="./j/humanvalue.js"></script>
+		<script src="./j/upload/anim.js"></script>
+		<script src="./j/upload/upload.js?1"></script>
+		
+		<script src="../a2/j/bmenu/dlg/j/a2dlg.js"></script>
+		<script src="../a2/j/cbox/cbox.js"></script>
+		
+		<script src="./j/options.js?v=1"></script>
+		
+		
+		
+		<script src="./j/u.js?v=1"></script>
+	</body>
+</html>
+

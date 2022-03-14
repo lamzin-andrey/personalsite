@@ -17,7 +17,8 @@ function onCheckSsl(isSSLSupport) {
 		h = Math.round(o.h / 2) - 64,
 		ua = navigator.userAgent.toLowerCase(),
 		savedTheme = storage('savedTheme'),
-		lang;
+		lang,
+		vw;
 	savedTheme = savedTheme ? savedTheme : '';
 	stl('im', 'margin-top', h + 'px');
 	
@@ -31,6 +32,10 @@ function onCheckSsl(isSSLSupport) {
 		// check FormData
 		if (FormData) {
 			savedTheme = 'fd';
+		}
+		vw = getViewport();
+		if (vw.w > 799) {
+			savedTheme = 'w';
 		}
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');

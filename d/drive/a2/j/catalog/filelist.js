@@ -145,7 +145,6 @@ window.fileList = {
 	},
 	
 	onStartTouchItem:function(evt) {
-		console.log('onStartTouchItem');
 		this.startY = this.getTouchY(evt);
 		// #302e9f
 		var id = this.getItemId(evt.currentTarget),
