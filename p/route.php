@@ -27,6 +27,7 @@ class Route {
 		$this->_phd();
 		$this->_apipdf();
 		$this->_work_exp22122020();
+		$this->_work_exp18042022();
 		
 		if ($baseUrl == '/p/signin/') {
 			$handler = __dir__ . '/ctrl/signin.php';
@@ -129,6 +130,24 @@ class Route {
 			$handler = $sCtrlDir . 'getnewpdftexttask.php';
 			require_once $handler;
 			$this->app = new GetNewPdfTextTask();
+		}
+	}
+	
+	
+	/**
+	 * @description Маршруты для страницы /p/work18042022/
+	*/
+	protected function _work_exp18042022()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/work18042022/') {
+		    $handler = $sCtrlDir . 'addbuffer.php';
+		    require_once $handler;
+		    $this->app = new AddBuffer();
 		}
 	}
 	
