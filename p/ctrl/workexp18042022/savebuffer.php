@@ -27,7 +27,7 @@ class SaveBuffer extends OpenApp {
 		
 		query($sql);
 		
-		json_ok_arr(['sql' => $sql]);
+		json_ok_arr([]);
 		return;
 		
 		$errors = [];
