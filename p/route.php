@@ -161,6 +161,12 @@ class Route {
 		    require_once $handler;
 		    $this->app = new DelBuffer();
 		}
+		
+		if ($baseUrl == '/p/work18042022/save/') {
+		    $handler = $sCtrlDir . 'savebuffer.php';
+		    require_once $handler;
+		    $this->app = new SaveBuffer();
+		}
 	}
 	
 	
