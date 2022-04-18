@@ -12,7 +12,7 @@ class GetBuffer extends OpenApp {
 		$sql = 'SELECT id, `value`, `astr` FROM ' . $this->table . ' ORDER BY id ASC LIMIT 50;';
 		$rows = query($sql);
 		
-		json_ok_arr($rows);
+		json_ok_arr(['list' => $rows]);
 		
 		return;
 		
