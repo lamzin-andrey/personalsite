@@ -2,36 +2,18 @@
 
 require_once __DIR__ . '/openapp.php';
 
-class AddBuffer extends OpenApp {
+class GetBuffer extends OpenApp {
 	/** @property string */
 	//public $ = '';
 	
 	public function __construct() {
 		parent::__construct();
 		
-		$this->tsreq('value');
-		$this->request['astr'] = trim(treq('number'));
-		$this->request['created_time'] = now();
+		$sql = 'SELECT id, `value`, `astr` FROM ' . $this->table . ' ORDER BY id ASC LIMIT 50;';
+		$rows = query($sql);
 		
-		$rawPost = file_get_contents('php://input');
-		//file_put_contents('/home/andrey/log.log', print_r($_POST, 1) . "\n\nRasw post: \n" .  print_r($rawPost, 1) .  "\n");
-		$sql = 'CREATE TABLE IF NOT EXISTS exp_18042022(
-			`id` INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-			`value` VARCHAR(1024),
-			`astr` VARCHAR(64),
-			`created_time` DATETIME DEFAULT NULL
-		)engine=MyIsam;';
-		query($sql);
+		json_ok_arr($rows);
 		
-		$data = null;
-		$sql = $this->insertQuery($data);
-		
-		query($sql);
-		
-		
-		echo "OK\n";
-		die($sql);
-		die;
 		return;
 		
 		$errors = [];

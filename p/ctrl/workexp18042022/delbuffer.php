@@ -2,36 +2,37 @@
 
 require_once __DIR__ . '/openapp.php';
 
-class AddBuffer extends OpenApp {
+class DelBuffer extends OpenApp {
 	/** @property string */
 	//public $ = '';
 	
 	public function __construct() {
 		parent::__construct();
 		
-		$this->tsreq('value');
-		$this->request['astr'] = trim(treq('number'));
-		$this->request['created_time'] = now();
-		
-		$rawPost = file_get_contents('php://input');
-		//file_put_contents('/home/andrey/log.log', print_r($_POST, 1) . "\n\nRasw post: \n" .  print_r($rawPost, 1) .  "\n");
-		$sql = 'CREATE TABLE IF NOT EXISTS exp_18042022(
-			`id` INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-			`value` VARCHAR(1024),
-			`astr` VARCHAR(64),
-			`created_time` DATETIME DEFAULT NULL
-		)engine=MyIsam;';
-		query($sql);
-		
-		$data = null;
-		$sql = $this->insertQuery($data);
-		
-		query($sql);
+		if (!$_POST) {
+			json_error('msg', 'post');
+		}
 		
 		
-		echo "OK\n";
-		die($sql);
-		die;
+		$this->tsreq('ls');
+		$a = explode(',', $this->ls);
+		$q = [];
+		$sz = count($a);
+		$nsz = 0;
+		for ($i = 0; $i < $sz; $i++) {
+			$n = intval($a[$i]);
+			if ($n > 0) {
+				$q[] = $n;
+				++$nsz;
+			}
+		}
+		$sql = 'Empty set';
+		if ($nsz) {
+			$sql = 'DELETE FROM exp_18042022 WHERE id IN(' . implode(',', $q) . ')';
+			query($sql);
+		}
+		
+		json_ok('sql', $sql);
 		return;
 		
 		$errors = [];

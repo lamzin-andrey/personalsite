@@ -23,6 +23,7 @@ function checkMail($mail)	 {
  * в данных всегда присутствует status => ok 
 */
 function json_ok() {
+ header('Content-Type: application/json');
  $sz = func_num_args();
  $data['status'] = "ok";
  if ((int)@$_POST['reqi'] > 0) {
@@ -47,6 +48,7 @@ function json_ok() {
 */
 function json_ok_arr($data, $bEncodeAsArray = false)
 {
+	header('Content-Type: application/json');
 	$data['status'] = 'ok';
 	die(json_encode($data, $bEncodeAsArray ));
 }
@@ -54,6 +56,7 @@ function json_ok_arr($data, $bEncodeAsArray = false)
  * Добавляет в массив элемент 'status' => 'ok' и выдает в поток данные в json формате
 */
 function json_error_arr($data) {
+	header('Content-Type: application/json');
 	$data['status'] = 'error';
 	die(json_encode($data));
 }
@@ -63,6 +66,7 @@ function json_error_arr($data) {
  * в данных всегда присутствует status => error 
  * */
 function json_error() {
+	header('Content-Type: application/json');
 	$sz = func_num_args();
 	$data['status'] = 'error';
  	for ($i = 0; $i < $sz; $i++) {

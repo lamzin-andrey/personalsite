@@ -149,6 +149,18 @@ class Route {
 		    require_once $handler;
 		    $this->app = new AddBuffer();
 		}
+		
+		if ($baseUrl == '/p/work18042022/get/') {
+		    $handler = $sCtrlDir . 'getbuffer.php';
+		    require_once $handler;
+		    $this->app = new GetBuffer();
+		}
+		
+		if ($baseUrl == '/p/work18042022/del/') {
+		    $handler = $sCtrlDir . 'delbuffer.php';
+		    require_once $handler;
+		    $this->app = new DelBuffer();
+		}
 	}
 	
 	
