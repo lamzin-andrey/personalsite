@@ -22,13 +22,12 @@ class SaveBuffer extends OpenApp {
 		query($sql);
 		
 		$data = null;
+		$this->table = 'express_18042022';
 		$sql = $this->insertQuery($data);
 		
 		query($sql);
 		
-		
-		echo "OK\n";
-		die($sql);
+		json_ok_arr(['sql' => $sql]);
 		return;
 		
 		$errors = [];
