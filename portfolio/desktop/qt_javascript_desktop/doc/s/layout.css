@@ -1,0 +1,36 @@
+body {
+	padding:0px;
+	margin:0px;
+	overflow-y:hidden;
+	font-family:Liberation Sans, Geneva, Arial;
+}
+table.layout {
+	height:100%;
+	width:100%;
+}
+table.layout td {
+	vertical-align:top;
+}
+.sidebar {
+	width:300px;
+	background-color:#AABEF8;
+	overflow-y:scroll;
+	color:white;
+	font-weight:bold;
+	border-right: 1px solid blue;
+	float:left;
+}
+.sidebar a{
+	color:white;
+	
+}
+.content {
+	background-color:#FFFFFF;
+	overflow:scroll;
+	padding-left: 4px;
+	float:right;
+	width: 75%;
+}
+.tc {
+	text-align:center;
+}
