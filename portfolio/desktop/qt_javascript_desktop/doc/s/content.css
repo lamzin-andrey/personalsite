@@ -1,3 +1,18 @@
+.btn-primary {
+	background-color:blue;
+	color:white;
+	display:block;
+	margin: 10px auto;
+	padding: 8px 8px;
+	width:200px;
+	text-decoration:none;
+	border-radius:4px;
+	font-size:19px;
+}
+.demo-disabld {
+	color: #aa0000;
+	margin-bottom:10px;
+}
 .function, .function table td, .function table th {
     border: 1px solid #E6EFFF;
 }

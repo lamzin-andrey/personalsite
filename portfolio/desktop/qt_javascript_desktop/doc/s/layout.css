@@ -34,3 +34,6 @@ table.layout td {
 .tc {
 	text-align:center;
 }
+.clear {
+	clear:both;
+}
