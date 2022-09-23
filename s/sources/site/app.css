@@ -58,3 +58,6 @@
 .list-style-type-none, .nomark {
 	list-style-type: none;
 }
+h1 {
+	font-size:1.5rem!important;
+}

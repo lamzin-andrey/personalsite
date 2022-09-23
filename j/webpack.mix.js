@@ -11,7 +11,7 @@ let mix = require('laravel-mix');
  |
  */
 //Для неавторизованных пользователей
-mix.js('sources/admin/vue/js/app.js', 'a.js');
+// mix.js('sources/admin/vue/js/app.js', 'a.js');
 //Для авторизованных админов
 //mix.js('sources/adminauth/app.js', 'b.js');
 //mix.js('sources/adminauthvdt/app.js', 'e.js');
@@ -40,7 +40,7 @@ mix.js('sources/admin/vue/js/app.js', 'a.js');
 
 //Для dto-online
 // l.js вроде как есть, но что в нём я не знаю.
-mix.js('sources/dto-online/vue/js/app.js', 'm.js');
+// mix.js('sources/dto-online/vue/js/app.js', 'm.js');
 
 mix.styles([
 		'./../s/vendor/bootstrap4.2.1.min.css',
