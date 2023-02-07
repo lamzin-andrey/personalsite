@@ -2,8 +2,8 @@
 $r = $_SERVER['DOCUMENT_ROOT'] . '/portfolio/web-razrabotka/saity/fastxampp';
 $sAuthorLinkText = 'Author site';
 
-$title = 'Download php extensions imagick.so, xdebug.so è memcached.so for php-7.4.1 (xampp-7.4.1) amd64';
-$description = 'You can download php extensions imagick.so, xdebug.so è memcached.so for php-7.4.1 (xampp-7.4.1) amd64 (linux ubuntu)';
+$title = 'Download php extensions imagick.so, xdebug.so, amqp.so, redis.so, sodium.so and memcached.so for php-7.4.1 (xampp-7.4.1) amd64';
+$description = 'You can download php extensions imagick.so, xdebug.so and memcached.so for php-7.4.1 (xampp-7.4.1) amd64 (linux ubuntu)';
 
 include_once "$r/functions.php";
 ob_start();
