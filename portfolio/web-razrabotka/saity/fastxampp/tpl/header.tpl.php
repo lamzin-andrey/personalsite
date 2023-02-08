@@ -2,7 +2,7 @@
 <div class="row u-fastxampp-header-xs">
     <div class="col-6 col-lg-4 u-fastxampp-header-left-lg">
         <div class="u-fastlogo">
-            <a href="<?=WEBROOT . (@$currlang == 'en/' ? '/en/' : '')?>" >
+            <a href="<?=WEBROOT . (@$currlang == 'en/' ? '/en/' : '/')?>" >
                 <div class="text-white text-center">FAST</div>
                 <div>
                     <img src="<?=img('xampp.png')?>">
