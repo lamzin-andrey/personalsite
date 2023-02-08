@@ -67,14 +67,8 @@
 <?php if(!isset($ignoreCordovaBanner)): ?>
     <!-- elephants  -->
     <div class="row">
-        <div class="col bg-light d-flex align-items-end justify-content-center pb-2">
-            <img class="u-e7" src="<?=img('elfs/7.png')?>">
-            <img class="u-e6" src="<?=img('elfs/6.png')?>">
-            <img class="u-e5" src="<?=img('elfs/5.png')?>">
-            <img class="u-e4" src="<?=img('elfs/4.png')?>">
-            <img class="u-e3" src="<?=img('elfs/3.png')?>">
-            <img class="u-e2" src="<?=img('elfs/2.png')?>">
-            <img class="u-e1" src="<?=img('elfs/1.png')?>">
+        <div class="col bg-light d-flex align-items-end justify-content-center pb-2 u-php8-bg">
+            <img class="mw-100 u-e6 u-php8-logo" src="<?=img('8/php8.png')?>">
         </div>
     </div>
     <!-- /elephants  -->

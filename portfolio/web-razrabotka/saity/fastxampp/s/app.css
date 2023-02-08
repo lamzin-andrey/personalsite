@@ -204,3 +204,9 @@
 	margin:auto;
 	width:290px;
 }
+.u-php8-logo {
+	max-height:426px;
+}
+.u-php8-bg {
+	background: linear-gradient(to right, #d0d0e9, #d0d0e9, #d0d0e9, #d0d0e9, #5555AA);
+}

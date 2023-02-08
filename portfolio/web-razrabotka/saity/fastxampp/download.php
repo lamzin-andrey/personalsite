@@ -63,8 +63,8 @@ if ( @$_SESSION["lang"] == "en/" ) {
 						
 						<div style="text-align:right;margin-bottom:0px;" class="addinfo">
 							<span class="py-1">
-								<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 22.04"> 
-								<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 22.04"--> 
+								<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 22.04"--> 
+								<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 22.04"> 
 								<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 22.04"> 
 								<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint ??.?"--> 
 							</span>
@@ -106,8 +106,8 @@ if ( @$_SESSION["lang"] == "en/" ) {
 						
 						<div style="text-align:right;margin-bottom:0px;" class="addinfo">
 							<span class="py-1">
-								<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 22.04"> 
-								<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 22.04"--> 
+								<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 22.04"--> 
+								<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 22.04"> 
 								<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 22.04"> 
 								<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint ??.?"--> 
 							</span>
