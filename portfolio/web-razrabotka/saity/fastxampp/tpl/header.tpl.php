@@ -68,7 +68,7 @@
     <!-- elephants  -->
     <div class="row">
         <div class="col bg-light d-flex align-items-end justify-content-center pb-2 u-php8-bg">
-            <img class="mw-100 u-e6 u-php8-logo" src="<?=img('8/php8.png')?>">
+            <img class="mw-100 u-e6 u-php8-logo" src="<?=img('8/php8.jpg')?>">
         </div>
     </div>
     <!-- /elephants  -->

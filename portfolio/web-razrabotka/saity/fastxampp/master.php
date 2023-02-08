@@ -32,7 +32,7 @@
     <?php endif ?>
     <link rel="stylesheet" type="text/css" href="/s/vendor/bootstrap4.2.1.min.css">
     <link rel="stylesheet" href="/s/vendor/fontawesome5/all.css" >
-    <link rel="stylesheet" type="text/css" href="/portfolio/web-razrabotka/saity/fastxampp/s/app.css">
+    <link rel="stylesheet" type="text/css" href="/portfolio/web-razrabotka/saity/fastxampp/s/app.css?1">
     <script>window.rid = 24;</script><?php /* //24 - product */?>
     <script src="/portfolio/web-razrabotka/saity/fastxampp/js/landcacherswinstaller.js"></script>
     <link href="/portfolio/web-razrabotka/saity/fastxampp/favicon.ico" rel="shortcut icon" type="image/x-icon" >
