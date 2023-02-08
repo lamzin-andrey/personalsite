@@ -185,3 +185,22 @@
 	font-weight:bold;
 	padding: 4px;
 }
+
+.fleft {
+	float:left;
+}
+.endfloat {
+	clear:both;
+}
+
+.fishki li {
+	display:inline-block;
+	margin-bottom:14px;
+	padding:4px;
+	border: solid #acc5ec 1px;
+	text-align:center;
+}
+.rabbit-logo {
+	margin:auto;
+	width:290px;
+}

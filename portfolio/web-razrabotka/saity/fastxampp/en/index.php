@@ -8,11 +8,11 @@ ob_start();
 <p>Menu icon in the system tray or panel Unity allows you to add or delete another site on localhost in three mouse clicks.</p>
 <p>FastXAMPP was tested in Linux Mint, Ubuntu, Kubuntu and Xubuntu.
 
-<p class="x-vers">XAMPP 7.3.12, is:</p>
+<p class="x-vers">XAMPP 8.2.0 is:</p>
 <ul class="lstnono">
-	<li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.4.41,</div><div class="endfloat"></div></div></li>
-	<li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 7.3.12,</div><div class="endfloat"></div></div></li>
-	<li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL server 10.4.10-MariaDB,  клиент 5.0.12-dev</div><div class="endfloat"></div></div></li>
+	<li><div><div class="left"><img src="<?=img('apache_logo.png')?>"></div> <div class="left mtt">Apache 2.4.54,</div><div class="endfloat"></div></div></li>
+	<li><div><div class="left"><img src="<?=img('php_logo.png')?>"></div> <div class="left mphp">PHP 8.2.0</div><div class="endfloat"></div></div></li>
+	<li><div><div class="left"><img src="<?=img('mysql_logo.png')?>"></div> <div class="left mmysql">MySQL server 10.4.27-MariaDB,  client 8.2.0-dev</div><div class="endfloat"></div></div></li>
 </ul>
 
 List of versions of each operation system and features  FastXAMPP (if any) in each of them you can read clicking on the link the main menu of this page.</p>
@@ -27,21 +27,49 @@ List of versions of each operation system and features  FastXAMPP (if any) in ea
 </ul>	
 </p>
 <p>The archive also includes extensions for the specified version of PHP:
-<ul class="lstnono">
-	<li><div><div class="left"><img src="<?=img('xdebug_logo.png')?>" /></div> <div class="left mtt">Xdebug,</div><div class="endfloat"></div></div></li>
-	<li>
-		<div>
-			<div class="left"><img src="<?=img('memcached_logo.png')?>" /></div>
-			<div class="left memci">Memcached</div><div class="endfloat"></div>
-		</div>
-	</li>
-	<li>
-		<div>
-			<div class="left"><img src="<?=img('imagick_logo.png')?>" class="mw250px"></div>
-			<div class="left memci">Starting from version php 7.3.12 Imagick</div><div class="endfloat"></div>
-		</div>
-	</li>
-</ul>	
+<ul class="lstnono fishki" style="dispaly:inline-block">
+            <li style="display:inline-block"><div><div class="left"><img src="<?=img('xdebug_logo.png')?>"></div> <div class="left mtt">Xdebug</div><div class="endfloat"></div></div></li>
+            <li style="display:inline-block">
+                <div>
+                    <div class="left"><img src="<?=img('memcached_logo.png')?>"></div>
+                    <div class="left memci">Memcached</div><div class="endfloat"></div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="left"><img src="<?=img('imagick_logo.png')?>" class="mw250px"></div>
+                    <div class="left memci">From version Xampp 7.4.28 for Xubuntu 22.04 Imagick </div><div class="endfloat"></div>
+                </div>
+            </li>
+            <li>
+                <div>
+					<div class="rabbit-logo">
+						<div class="left fleft"><img src="<?=img('amqp_logo.png')?>" class="mw250px"></div>
+						<div class="left fleft"><img src="<?=img('rabbitmq_logo.png')?>" style="width:144px"></div>
+						<div class="endfloat"></div>
+					</div>
+                    <div class="left memci">From version Xampp 7.4.28 for Xubuntu 22.04 amqp.</div>
+                    <div class="left memci">You can use transport rabbitmq from your php scripts.</div>
+                    <div class="endfloat"></div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="left"><img src="<?=img('redis_logo.png')?>" class="mw250px"></div>
+                    <div class="left memci">From version Xampp 7.4.28 for Xubuntu 22.04 Redis.</div>
+                    <div class="left memci">You can use redis storage from your php scripts.</div>
+                    <div class="endfloat"></div>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="left"><img src="<?=img('sodium_logo.png')?>" class="mw250px"></div>
+                    <div class="left memci">From version Xampp 7.4.28 for Xubuntu 22.04 Sodium.</div>
+                    <div class="left memci">YOu can use cryptographic library libsodium in your php scripts.</div>
+                    <div class="endfloat"></div>
+                </div>
+            </li>
+        </ul>
 </p>
 <p>FastXAMPP adds to your system tray the icon,<br/>
 <img src="<?=img('en_menu.png')?>" class="mw-100 py-2"><br> which allows you to quickly start or stop XAMPP.

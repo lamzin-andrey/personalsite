@@ -45,6 +45,49 @@ if ( @$_SESSION["lang"] == "en/" ) {
 			<table><tbody>
 				<tr>
 					<td colspan="2" align="right" class="text-success b">
+						FastXAMPP for XAMPP 8.2.0 ((x)ubuntu 22.04 64 bit) ~ 42 <?=$unit?>
+					</td>
+				</tr>
+				<tr>
+					<td style="border:solid 1px #d0d7fb;">
+						<img src="<?=img('d.png')?>">
+					</td>
+					<td style="padding-bottom:5px;border:solid 1px #d0d7fb;">
+						<div class="alert alert-warning">
+							<img src="<?=img('warning-32.png')?>" title="<?=$warning; ?>" class="mr-2"><?=$req_run ?> 
+							<a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.0/xampp-linux-x64-8.2.0-0-installer.run/download" target="_blank">xampp-linux-x64-8.2.0-0-installer.run</a>
+							<?= $or?>
+							<a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/" target="_blank"><?=$other_linux ?></a>.
+						</div>
+						<a href="https://drive.google.com/file/d/1utWpNp0L8lxnMn_9f_R42WBTlEwaEFc7/view?usp=share_link" title="Download and extract the archive, and run Setup" target="blank" class="text-success" style="display:inline-block;margin-left:22px;"><?=$linktext?>.</a>
+						
+						<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+							<span class="py-1">
+								<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 22.04"> 
+								<img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 22.04"--> 
+								<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 22.04"> 
+								<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint ??.?"--> 
+							</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align:center">
+						<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_8.2.0_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 8.2.0</a>
+					</td>
+				</tr>
+			</tbody></table>
+		</p>
+	</div>
+</div>
+
+<div>&nbsp;</div>
+<div class="couter tou2">
+	<div class="mx-auto tin2 pt12">
+		<p>
+			<table><tbody>
+				<tr>
+					<td colspan="2" align="right" class="text-success b">
 						FastXAMPP for XAMPP 7.4.28 ((x)ubuntu 22.04 64 bit) ~ 42 <?=$unit?>
 					</td>
 				</tr>
