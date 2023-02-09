@@ -261,7 +261,15 @@ class BookUpload {
 		if (!trim($subtitle) && !trim($title)) {
 			$title = $titleSecondary;
 			$subtitle = $subtitleSecondary;
-			/*var_dump($subtitle);
+			
+			
+			if (!$isCp1251 && $isUtf8) {
+				$title = mb_convert_encoding($title, CP1251, UTF8);
+				$subtitle = mb_convert_encoding($subtitle, CP1251, UTF8);
+			}
+			
+			/*var_dump($title);
+			var_dump($subtitle);
 			die;*/
 		}
 		
