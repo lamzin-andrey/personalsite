@@ -16,7 +16,7 @@ class CacheClient extends LandCacheClient {
          * Отключение сообщения "Кэширование завершено"
 	*/
 	showFirstCachingCompleteMessage() {
-		beepClick();
+		// beepClick();
 		var s = 'Дождитесь перезагрузки страницы, добавьте читалку на главный экран, чтобы она была под рукой даже без интернета.';
 		alert(s);
 		location.reload();
