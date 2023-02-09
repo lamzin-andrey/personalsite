@@ -29,7 +29,7 @@ class CacheClient extends LandCacheClient {
 	getExcludeFilterList() {
 		let o = new Object();
 		o.type = 'filterlist';
-		o.data = ['*.json', this.schemeHost() + '/pagenocache.html'];
+		o.data = ['*.json', this.schemeHost() + '/pagenocache.html', this.schemeHost() + '/a/reader/18/form/upload.php'];
 		return o;
 	}
 }
