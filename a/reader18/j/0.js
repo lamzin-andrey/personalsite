@@ -114,23 +114,23 @@ window.app = new Vue({
         startX: 0,
         startY: 0,
         scrollY: 0,
-        /** @property влияет на стиль отображения содержимого книги */
+        /** @property РІР»РёСЏРµС‚ РЅР° СЃС‚РёР»СЊ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РєРЅРёРіРё */
         displayBookContent: 'block',
         bookBg: '#000000',
         bookColor: '#3B9449',
-        /** @property handle интервала прокрутки */
+        /** @property handle РёРЅС‚РµСЂРІР°Р»Р° РїСЂРѕРєСЂСѓС‚РєРё */
         ival: null,
-        /** @property handle интервала сохранения прокрутки */
+        /** @property handle РёРЅС‚РµСЂРІР°Р»Р° СЃРѕС…СЂР°РЅРµРЅРёСЏ РїСЂРѕРєСЂСѓС‚РєРё */
         ivalsave: null,
-        /** @property {Number} размер шрифта */
+        /** @property {Number} СЂР°Р·РјРµСЂ С€СЂРёС„С‚Р° */
         bookFontSize: 14,
-        /** @property {Number} шаг прокрутки, на эту величину страница прокручивается при наступлении события onInterval */
+        /** @property {Number} С€Р°Рі РїСЂРѕРєСЂСѓС‚РєРё, РЅР° СЌС‚Сѓ РІРµР»РёС‡РёРЅСѓ СЃС‚СЂР°РЅРёС†Р° РїСЂРѕРєСЂСѓС‡РёРІР°РµС‚СЃСЏ РїСЂРё РЅР°СЃС‚СѓРїР»РµРЅРёРё СЃРѕР±С‹С‚РёСЏ onInterval */
         nStep: 1,
-        /** @property {Number} интервал прокрутки */
+        /** @property {Number} РёРЅС‚РµСЂРІР°Р» РїСЂРѕРєСЂСѓС‚РєРё */
         nInt: 43
     },
     /**
-     * @description Событие, наступающее после связывания el с этой логикой
+     * @description РЎРѕР±С‹С‚РёРµ, РЅР°СЃС‚СѓРїР°СЋС‰РµРµ РїРѕСЃР»Рµ СЃРІСЏР·С‹РІР°РЅРёСЏ el СЃ СЌС‚РѕР№ Р»РѕРіРёРєРѕР№
     */
     mounted: function mounted() {
         var _this = this;
@@ -155,7 +155,7 @@ window.app = new Vue({
 
     methods: {
         /** 
-         * @description Обработка клика на сохранении цвета
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° РЅР° СЃРѕС…СЂР°РЅРµРЅРёРё С†РІРµС‚Р°
         */
         saveColorData: function saveColorData() {
             this.storage('bookBg', this.bookBg);
@@ -168,7 +168,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Сохранить данные скролла
+         * @description РЎРѕС…СЂР°РЅРёС‚СЊ РґР°РЅРЅС‹Рµ СЃРєСЂРѕР»Р»Р°
         */
         saveScrollData: function saveScrollData() {
             var self = this,
@@ -182,7 +182,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Показать меню
+         * @description РџРѕРєР°Р·Р°С‚СЊ РјРµРЅСЋ
         */
         showMenu: function showMenu() {
             clearInterval(this.ival);
@@ -193,7 +193,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Показать меню
+         * @description РџРѕРєР°Р·Р°С‚СЊ РјРµРЅСЋ
         */
         hideMenu: function hideMenu() {
             var _this2 = this;
@@ -211,7 +211,7 @@ window.app = new Vue({
         },
         
         /** 
-         * @description Обработка меню из десктоп версии
+         * @description РћР±СЂР°Р±РѕС‚РєР° РјРµРЅСЋ РёР· РґРµСЃРєС‚РѕРї РІРµСЂСЃРёРё
         */
         onContextMenu: function onContextMenu(evt) {
             // console.log(evt);
@@ -223,7 +223,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Включить или остановить автопрокрутку
+         * @description Р’РєР»СЋС‡РёС‚СЊ РёР»Рё РѕСЃС‚Р°РЅРѕРІРёС‚СЊ Р°РІС‚РѕРїСЂРѕРєСЂСѓС‚РєСѓ
         */
         toggleAutoscroll: function toggleAutoscroll() {
             var _this3 = this;
@@ -247,7 +247,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Извлекает clientX из 0 элемента changedTouches события TouchStartEvent
+         * @description РР·РІР»РµРєР°РµС‚ clientX РёР· 0 СЌР»РµРјРµРЅС‚Р° changedTouches СЃРѕР±С‹С‚РёСЏ TouchStartEvent
          * @param {TouchStartEvent} evt
          * @return Number
         */
@@ -259,7 +259,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Извлекает clientY из 0 элемента changedTouches события TouchStartEvent
+         * @description РР·РІР»РµРєР°РµС‚ clientY РёР· 0 СЌР»РµРјРµРЅС‚Р° changedTouches СЃРѕР±С‹С‚РёСЏ TouchStartEvent
          * @param {TouchStartEvent} evt
          * @return Number
         */
@@ -271,7 +271,7 @@ window.app = new Vue({
         },
 
         /**
-         * @description Индексирует массив по указанному полю
+         * @description РРЅРґРµРєСЃРёСЂСѓРµС‚ РјР°СЃСЃРёРІ РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ РїРѕР»СЋ
          * @param {Array} data
          * @param {String} id = 'id'
          * @return Object
@@ -11526,7 +11526,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
         installMessageChannelImplementation();
 
     } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
+        // For IE 6вЂ“8
         installReadyStateChangeImplementation();
 
     } else {
@@ -11944,10 +11944,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'Menu',
-    //вызывается раньше чем mounted
+    //РІС‹Р·С‹РІР°РµС‚СЃСЏ СЂР°РЅСЊС€Рµ С‡РµРј mounted
     data: function data() {
         return {
-            //видимость всей страницы меню.
+            //РІРёРґРёРјРѕСЃС‚СЊ РІСЃРµР№ СЃС‚СЂР°РЅРёС†С‹ РјРµРЅСЋ.
             menuBlockVisible: 'block',
             isMainMenuVisible: true,
             isScrollWndVisible: false,
@@ -11958,7 +11958,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         /** 
-         * @description Обработка клика на сохранении настроек прокрутки
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° РЅР° СЃРѕС…СЂР°РЅРµРЅРёРё РЅР°СЃС‚СЂРѕРµРє РїСЂРѕРєСЂСѓС‚РєРё
         */
         onClickSaveScrollData: function onClickSaveScrollData(evt) {
             this.$root.saveScrollData();
@@ -11966,7 +11966,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         /** 
-         * @description Обработка клика на сохранении цвета
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° РЅР° СЃРѕС…СЂР°РЅРµРЅРёРё С†РІРµС‚Р°
         */
         onClickSaveColorData: function onClickSaveColorData(evt) {
             this.$root.saveColorData();
@@ -11974,7 +11974,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         /** 
-         * @description Обработка клика "Справка"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РЎРїСЂР°РІРєР°"
         */
         onClickHelp: function onClickHelp(evt) {
             this.isMainMenuVisible = false;
@@ -11984,31 +11984,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         
         /** 
-         * @description Обработка клика "Переход на загрузку новой книги"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РџРµСЂРµС…РѕРґ РЅР° Р·Р°РіСЂСѓР·РєСѓ РЅРѕРІРѕР№ РєРЅРёРіРё"
         */
         onClickUpload: function onClickUpload(evt) {
             location.href = "/a/reader18/form/";
         },
         
         /** 
-         * @description Обработка клика "Переход на список новых книг"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РџРµСЂРµС…РѕРґ РЅР° СЃРїРёСЃРѕРє РЅРѕРІС‹С… РєРЅРёРі"
         */
         onClickUploadList: function onClickUploadList(evt) {
             location.href = "/a/reader18/list/";
         },
         
         /** 
-         * @description Обработка клика "Переход на список новых книг"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РџРµСЂРµС…РѕРґ РЅР° СЃРїРёСЃРѕРє РЅРѕРІС‹С… РєРЅРёРі"
         */
         onClickResetScroll: function onClickResetScroll(evt) {
-            if (confirm('Значение поркрутки будет сброшено для всех книг. Продолжить?')) {
+            if (confirm('Р—РЅР°С‡РµРЅРёРµ РїРѕСЂРєСЂСѓС‚РєРё Р±СѓРґРµС‚ СЃР±СЂРѕС€РµРЅРѕ РґР»СЏ РІСЃРµС… РєРЅРёРі. РџСЂРѕРґРѕР»Р¶РёС‚СЊ?')) {
 				this.$root.scrollY = 0;
 				this.$root.saveScrollData();
 			}
         },
 
         /** 
-         * @description Обработка клика "Назад"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РќР°Р·Р°Рґ"
         */
         onClickGotoMainMenu: function onClickGotoMainMenu(evt) {
             this.isMainMenuVisible = true;
@@ -12018,7 +12018,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         /** 
-         * @description Обработка клика "Читать книгу"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "Р§РёС‚Р°С‚СЊ РєРЅРёРіСѓ"
         */
         onClickBack: function onClickBack(evt) {
             this.menuBlockVisible = 'none';
@@ -12026,7 +12026,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         /** 
-         * @description Обработка клика "Показать настройки цвета"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РџРѕРєР°Р·Р°С‚СЊ РЅР°СЃС‚СЂРѕР№РєРё С†РІРµС‚Р°"
         */
         onClickShowColorSettings: function onClickShowColorSettings(evt) {
             this.isMainMenuVisible = false;
@@ -12036,7 +12036,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         /** 
-         * @description Обработка клика "Показать настройки скроллинга"
+         * @description РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° "РџРѕРєР°Р·Р°С‚СЊ РЅР°СЃС‚СЂРѕР№РєРё СЃРєСЂРѕР»Р»РёРЅРіР°"
         */
         onClickShowScrollSettings: function onClickShowScrollSettings(evt) {
             this.isMainMenuVisible = false;
@@ -12045,7 +12045,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.isColorWndVisible = false;
         }
     },
-    //вызывается после data
+    //РІС‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ data
     mounted: function mounted() {
         var self = this;
         this.$root.$on('showMenuEvent', function (evt) {
@@ -12074,7 +12074,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickBack } },
-            [_vm._v("Читать книгу")]
+            [_vm._v("Р§РёС‚Р°С‚СЊ РєРЅРёРіСѓ")]
           ),
           _vm._v(" "),
           _c(
@@ -12083,7 +12083,7 @@ var render = function() {
               staticClass: "menuItem",
               on: { click: _vm.onClickShowScrollSettings }
             },
-            [_vm._v("Настройки скроллинга")]
+            [_vm._v("РќР°СЃС‚СЂРѕР№РєРё СЃРєСЂРѕР»Р»РёРЅРіР°")]
           ),
           _vm._v(" "),
           _c(
@@ -12092,31 +12092,31 @@ var render = function() {
               staticClass: "menuItem",
               on: { click: _vm.onClickShowColorSettings }
             },
-            [_vm._v("Настройки цвета")]
+            [_vm._v("РќР°СЃС‚СЂРѕР№РєРё С†РІРµС‚Р°")]
           ),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickHelp } },
-            [_vm._v("Справка")]
+            [_vm._v("РЎРїСЂР°РІРєР°")]
           ),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickUpload } },
-            [_vm._v("Загрузить книгу")]
+            [_vm._v("Р—Р°РіСЂСѓР·РёС‚СЊ РєРЅРёРіСѓ")]
           ),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickUploadList } },
-            [_vm._v("Список книг")]
+            [_vm._v("РЎРїРёСЃРѕРє РєРЅРёРі")]
           ),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickResetScroll } },
-            [_vm._v("Сбросить скроллинг")]
+            [_vm._v("РЎР±СЂРѕСЃРёС‚СЊ СЃРєСЂРѕР»Р»РёРЅРі")]
           )
         ])
       : _vm._e(),
@@ -12126,12 +12126,12 @@ var render = function() {
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickGotoMainMenu } },
-            [_vm._v("Назад")]
+            [_vm._v("РќР°Р·Р°Рґ")]
           ),
           _vm._v(" "),
           _c("div", [
             _c("label", [
-              _vm._v(" Шаг прокрутки (пиксели)\n                "),
+              _vm._v(" РЁР°Рі РїСЂРѕРєСЂСѓС‚РєРё (РїРёРєСЃРµР»Рё)\n                "),
               _c("input", {
                 directives: [
                   {
@@ -12157,7 +12157,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", [
             _c("label", [
-              _vm._v(" Частота прокрутки (миллисекунды)"),
+              _vm._v(" Р§Р°СЃС‚РѕС‚Р° РїСЂРѕРєСЂСѓС‚РєРё (РјРёР»Р»РёСЃРµРєСѓРЅРґС‹)"),
               _c("br"),
               _vm._v(" "),
               _c("input", {
@@ -12185,7 +12185,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", [
             _c("label", [
-              _vm._v(" Размер шрифта"),
+              _vm._v(" Р Р°Р·РјРµСЂ С€СЂРёС„С‚Р°"),
               _c("br"),
               _vm._v(" "),
               _c("input", {
@@ -12223,12 +12223,12 @@ var render = function() {
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickGotoMainMenu } },
-            [_vm._v("Назад")]
+            [_vm._v("РќР°Р·Р°Рґ")]
           ),
           _vm._v(" "),
           _c("div", [
             _c("label", [
-              _vm._v(" Цвет фона\n                "),
+              _vm._v(" Р¦РІРµС‚ С„РѕРЅР°\n                "),
               _c("input", {
                 directives: [
                   {
@@ -12253,7 +12253,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", [
-            _c("label", [_vm._v(" Цвет текста")]),
+            _c("label", [_vm._v(" Р¦РІРµС‚ С‚РµРєСЃС‚Р°")]),
             _c("br"),
             _vm._v(" "),
             _c("input", {
@@ -12290,18 +12290,18 @@ var render = function() {
           _c(
             "div",
             { staticClass: "menuItem", on: { click: _vm.onClickGotoMainMenu } },
-            [_vm._v("Назад")]
+            [_vm._v("РќР°Р·Р°Рґ")]
           ),
           _vm._v(" "),
           _c("p", [
             _vm._v(
-              "Одно касание экрана запускает прокрутку. Следующее касание останавливает."
+              "РћРґРЅРѕ РєР°СЃР°РЅРёРµ СЌРєСЂР°РЅР° Р·Р°РїСѓСЃРєР°РµС‚ РїСЂРѕРєСЂСѓС‚РєСѓ. РЎР»РµРґСѓСЋС‰РµРµ РєР°СЃР°РЅРёРµ РѕСЃС‚Р°РЅР°РІР»РёРІР°РµС‚."
             )
           ]),
           _vm._v(" "),
           _c("p", [
             _vm._v(
-              "В режиме чтения проведите по экрану слева направо чтобы увидеть меню приложения"
+              "Р’ СЂРµР¶РёРјРµ С‡С‚РµРЅРёСЏ РїСЂРѕРІРµРґРёС‚Рµ РїРѕ СЌРєСЂР°РЅСѓ СЃР»РµРІР° РЅР°РїСЂР°РІРѕ С‡С‚РѕР±С‹ СѓРІРёРґРµС‚СЊ РјРµРЅСЋ РїСЂРёР»РѕР¶РµРЅРёСЏ"
             )
           ])
         ])
