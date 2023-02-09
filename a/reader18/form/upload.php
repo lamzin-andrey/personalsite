@@ -283,7 +283,7 @@ class BookUpload {
 	 * */
 	private function isShortLine(string $s) : bool
 	{
-		$a = preg_split("#\b#", $s);
+		$a = preg_split("#[\s,.!]#", $s);
 		$n = 0;
 		foreach ($a as $w) {
 			if (trim($w)) {
