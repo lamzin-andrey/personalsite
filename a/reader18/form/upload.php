@@ -215,13 +215,21 @@ class BookUpload {
 		$encs = [CP1251, UTF8];
 		$title = '';
 		$subtitle = '';
+		$titleSecondary = '';
+		$subtitleSecondary = '';
 		for ($i = 0; $i < $sz; $i++) {
 			$s = trim(strip_tags($a[$i]));
 			if ($s) {
-				if ($title == '' && $this->isShortLine($s)) { // TODO
+				if ($title == '' && $this->isShortLine($s)) {
 					$title = $s;
 				} elseif ($title != '' && $subtitle == '' && $this->isShortLine($s)) {
 					$subtitle = $s;
+				}
+				
+				if ($titleSecondary == '' && !$this->isShortLine($s, $buf)) {
+					$titleSecondary = $buf;
+				} elseif($titleSecondary != '' && $subtitleSecondary == '' && !$this->isShortLine($s, $buf)) {
+					$subitleSecondary = $buf;
 				}
 				
 				$enc = mb_detect_encoding($s, $encs);
@@ -250,11 +258,18 @@ class BookUpload {
 			$subtitle = mb_convert_encoding($subtitle, CP1251, UTF8);
 		}
 		
+		if (!trim($subtitle) && !trim($title)) {
+			$title = $titleSecondary;
+			$subtitle = $subtitleSecondary;
+			/*var_dump($subtitle);
+			die;*/
+		}
+		
 		if (trim($subtitle)) {
 			$title .= ' ' . trim($subtitle);
-			$this->displayName = mb_convert_encoding($subtitle, UTF8, CP1251);
-			$this->folderName = utils_translite_url($this->displayName);
 		}
+		$this->displayName = mb_convert_encoding($title, UTF8, CP1251);
+		$this->folderName = utils_translite_url($this->displayName);
 		
 		if (!trim($this->folderName)) {
 			die("Unable detect subcatalog name\n<br>");
@@ -281,7 +296,7 @@ class BookUpload {
 	/**
 	 * @return bool true if words in line less when 7
 	 * */
-	private function isShortLine(string $s) : bool
+	private function isShortLine(string $s, &$buf = null) : bool
 	{
 		$a = preg_split("#[\s,.!]#", $s);
 		$n = 0;
@@ -289,6 +304,21 @@ class BookUpload {
 			if (trim($w)) {
 				$n++;
 			}
+		}
+		
+		if ($n > 6) {
+			$aBuf = [];
+			$k = 0;
+			foreach ($a as $w) {
+				if (trim($w)) {
+					$aBuf[] = $w;
+				}
+				$k++;
+				if ($k > 6) {
+					break;
+				}
+			}
+			$buf = implode(' ', $aBuf);
 		}
 		
 		return ($n < 7);
