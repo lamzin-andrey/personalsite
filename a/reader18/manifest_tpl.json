@@ -1,0 +1,13 @@
+{
+  "name": "{Display_name}",
+  "short_name": "{uniq}_BookReader18",
+  "icons": [{
+    "src": "i/128.{ext}",
+      "sizes": "128x128",
+      "type": "{mime}"
+    }],
+  "start_url": "/a/reader18/books/{folder_name}/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#3D5455"
+}

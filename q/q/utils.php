@@ -140,7 +140,16 @@ function now($ignore_summer_time = false) {
  * @param int $bgH = 0 высота бэкграунда. Если она передана, уменьшенное изображение будет отцентровано по вертикали на прямоугольнике данной высоты
  * @param bool $withAlpha = true если передать false будет непрозрачный и иметь цвет переданный в defaultTransparentColor
  * */
-function utils_pngResize($srcFilename, $destFilename, $destW, $destH, $compression = 9, $defaultTransparentColor = [0, 0, 0], $bgW = 0, $bgH = 0, $withAlpha = true) {
+function utils_pngResize(
+	$srcFilename, 
+	$destFilename, 
+	$destW, 
+	$destH,
+	$compression = 9, 
+	$defaultTransparentColor = [0, 0, 0],
+	$bgW = 0,
+	$bgH = 0,
+	$withAlpha = true) {
 	if (utils_Imagick($srcFilename, $destFilename, $destW, $destH)) {
 		return;
 	}
