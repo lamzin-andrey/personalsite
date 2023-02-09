@@ -17,7 +17,7 @@ class CacheClient extends LandCacheClient {
 	*/
 	showFirstCachingCompleteMessage() {
 		// beepClick();
-		var s = 'Дождитесь перезагрузки страницы, добавьте читалку на главный экран, чтобы она была под рукой даже без интернета.';
+		var s = 'Дождитесь перезагрузки страницы, добавьте книгу на главный экран, чтобы она была под рукой даже без интернета.';
 		alert(s);
 		location.reload();
 	}
