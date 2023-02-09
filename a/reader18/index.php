@@ -5155,6 +5155,7 @@
 </div>	
 <test-menu></test-menu>
 </div>
+    <script src="./j/jquery.min.js"></script>
     <script src="./j/cache_client.js"></script>
 	<script src="./j/cache_conf.js"></script>
 	<script src="./j/0.js"></script>
