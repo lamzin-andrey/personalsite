@@ -1,0 +1,66 @@
+define("N", "\n");
+function main() {
+	$a = explode(N, file_get_contents(__DIR__ . '/StillRatGame.txt'));
+	$buf = [];
+	$firstLineFound = false;
+	$n = 0;
+	$m = N;
+	foreach ($a as $line) {
+		if (isNumberLine($line, $n)) {
+			if (!$firstLineFound) {
+				$firstLineFound = 1;
+				$buf[] = $line;
+				continue;
+			}
+			$cnt = count($buf);
+			echo "detect name `$n` cnt = {$cnt} $m";
+			writeBuf($buf, $n);
+			$buf = [];
+			$buf[] = $line;
+		} else {
+			$buf[] = $line;
+		}
+	}
+}
+
+function isNumberLine(string $line, int &$n) : bool
+{
+	$sz = strlen($line);
+	$r = '';
+	for ($i = 0; $i < $sz; $i++) {
+		$ch = $line[$i];
+		if ($i < 5 && $ch == ' ') {
+			continue;
+		}
+		if (strval(intval($ch)) != strval($ch)) {
+			return false;
+		} else {
+			$r .= $ch;
+		}
+	}
+	
+	
+	
+	$n = intval($r);
+	
+	return $n > 0;
+}
+
+function writeBuf(array $buf, $name) : void
+{
+	
+	$name = strval($name - 1);
+	$s = '<p>' . implode("</p>\n<p>", $buf) . '</p>';
+	$s = preg_replace("#(на ([0-9]+))#mis", '<a href="$2.html">на $2</a>', $s);
+	$s = preg_replace("#(к ([0-9]+))#mis", '<a href="$2.html">к $2</a>', $s);
+	$file = __DIR__ . '/out/' . $name . '.html';
+	
+	$tpl = file_get_contents(__DIR__ . '/template.html');
+	$q = str_replace('{Title}', $name, $tpl);
+	$q = str_replace('{content}', $s, $q);
+	
+	
+	file_put_contents($file, $q);
+}
+
+main();

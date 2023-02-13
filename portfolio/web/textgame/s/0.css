@@ -1,0 +1,31 @@
+body, html
+{
+	background-color:black;
+	margin:0px;
+	padding:0px;
+	color:aqua;
+	font-weight:bold;
+	font-family:"Times New Roman",Calibri,Candara,Arial;
+}
+
+input[type=number] {
+	width:  99%;
+	height: 32px;
+	border: solid aqua 1px;
+	background-color:black;
+	color:aqua;
+	font-size:20px;
+}
+
+input[type=button] {
+	width:  99%;
+	height: 32px;
+	border: solid aqua 1px;
+	background-color:black;
+	color:aqua;
+	font-size:20px;
+}
+
+a {
+	color:white;
+}
