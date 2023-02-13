@@ -6,8 +6,8 @@ body, html
 	color:aqua;
 	font-weight:bold;
 	font-family:Arial;
-	line-height:16px;
-	font-size:16px;
+	line-height:20px;
+	font-size:18px;
 }
 
 input[type=number] {
