@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: http://samsungmobyle.comxa.com/sitemap.xml
