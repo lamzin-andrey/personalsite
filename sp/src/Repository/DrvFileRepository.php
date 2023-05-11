@@ -6,6 +6,7 @@ use App\Entity\Ausers;
 use App\Entity\DrvFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Connection;
 
 /**
  * @method DrvFile|null find($id, $lockMode = null, $lockVersion = null)
@@ -89,5 +90,23 @@ class DrvFileRepository extends ServiceEntityRepository
             return intval($rows[0]['s']);
         }
         return 0;
+    }
+
+    public function removeByCatalogIdList(array $catalogIdList, $userId)
+    {
+        if (!count($catalogIdList)) {
+            return;
+        }
+        $em = $this->getEntityManager();
+        $sqlQuery = 'UPDATE `drv_file` SET is_deleted = 1 WHERE catalog_id IN(:list) AND user_id = :userId';
+        $conn = $em->getConnection();
+        $conn->executeUpdate($sqlQuery, [
+                'list' => $catalogIdList,
+                'userId' => $userId
+            ],
+            [
+                'list' => Connection::PARAM_INT_ARRAY,
+            ]
+        );
     }
 }

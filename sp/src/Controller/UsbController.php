@@ -435,6 +435,11 @@ class UsbController extends AbstractController
              */
             $catalogsRepository = $this->container->get('doctrine')->getRepository(DrvCatalogs::class);
             $catalogsRepository->removeByIdList($idList, intval($this->getUser()->getId()));
+            /**
+             * @var DrvFileRepository $filesRepository
+             */
+            $filesRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+            $filesRepository->removeByCatalogIdList($idList, intval($this->getUser()->getId()));
         }
 
         return $this->json(['status' => 'ok']);

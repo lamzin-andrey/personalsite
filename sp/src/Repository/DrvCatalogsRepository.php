@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\DrvCatalogs;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Connection;
 
 /**
  * @method DrvCatalogs|null find($id, $lockMode = null, $lockVersion = null)
@@ -123,10 +124,18 @@ class DrvCatalogsRepository extends ServiceEntityRepository
             return;
         }
         $em = $this->getEntityManager();
-        $sIdList = implode(',', $idList);
-        $sqlQuery = 'UPDATE `drv_catalogs` SET is_deleted = 1 WHERE id IN(' . $sIdList . ') AND user_id = ' . $userId;
-        $statement = $em->getConnection()->prepare($sqlQuery);
-        $statement->execute();
+        $sqlQuery = 'UPDATE `drv_catalogs` SET is_deleted = 1 WHERE id IN(:list) AND user_id = :userId';
+        // $statement = $em->getConnection()->prepare($sqlQuery);
+        // $statement->execute();
+        $conn = $em->getConnection();
+        $conn->executeUpdate($sqlQuery, [
+                'list' => $idList,
+                'userId' => $userId
+            ],
+            [
+                'list' => Connection::PARAM_INT_ARRAY,
+            ]
+        );
     }
 
 }
