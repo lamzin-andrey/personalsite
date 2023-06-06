@@ -1638,7 +1638,7 @@ class UsbController extends AbstractController
         return $this->_json(['status' => 'ok']);
     }
 
-    private function createCatalog(Request $request, Filesystem $filesystem, int $catalogId): string
+    private function createCatalog(Request $request, Filesystem $filesystem, $catalogId): string
     {
         $relativePath = $this->getParameter('app.wusb_catalog_root');
         $userPath = $this->generateUserPath($this->getUser()->getId());

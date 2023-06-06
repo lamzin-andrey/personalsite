@@ -15,9 +15,9 @@ class WusbUploadService {
     }
     
     public function getUploadCatalogId(
-        int $catalogId,
-        string $lang,
-        int $userId
+        $catalogId,
+        $lang,
+        $userId
     ):int
     {
         if($catalogId > 0) {
