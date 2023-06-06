@@ -85,6 +85,12 @@ window.upload = {
 			fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
 		}
 		
+		if (data.isRt) {
+			setTimeout(function(){
+				showSuccess(l("Your file uploaded to") + " " + data.file.name);
+			}, 1000);
+		}
+		
 		o.currentFile++;
 		if (o.totalLength > o.currentFile) {
 			o.uploadOneFile();

@@ -97,6 +97,10 @@ function showError(s) {
 	alert(s);
 }
 
+function showMessage(s) {
+	alert(s);
+}
+
 function  _map(id, read) {
 	var $obj, obj, i,
 		data = {}, ls, sZ;

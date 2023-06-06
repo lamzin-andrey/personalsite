@@ -739,7 +739,8 @@ class UsbController extends AbstractController
         return $this->mixResponse($request, [
             'status' => 'ok',
             'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName,
-            'file' => $fileData
+            'file' => $fileData,
+            'isRt' => $isTryUploadInRoot
         ]);
     }
 

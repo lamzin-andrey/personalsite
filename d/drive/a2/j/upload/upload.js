@@ -62,6 +62,12 @@ window.upload = {
 		if (!e('f' + data.file.i)) {
 			fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
 		}
+		if (data.isRt) {
+			
+			setTimeout(function(){
+				showMessage(l("Your file uploaded to") + " " + data.file.name);
+			}, 1000);
+		}
 		this.onClickCancel();
 	},
 	onFailUpload:function(data, responseText, info, xhr) {

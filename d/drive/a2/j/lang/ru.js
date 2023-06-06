@@ -63,5 +63,6 @@ window.langRu = {
 	'hByMTimeAsc': 'Сначала старые',
 	'hByMTimeDesc': 'Сначала новые',
 	'bCloseSortSetings': 'Закрыть',
+	'Your file uploaded to': 'Ваш файл был загружен в каталог',
 	'' : ''
 };
