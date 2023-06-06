@@ -145,7 +145,7 @@ class UsbController extends AbstractController
         }
 
         // First create phisical catalog
-        $path = $this->createCatalog($requst, $filesystem, $catalogId);
+        $path = $this->createCatalog($request, $filesystem, $catalogId);
 
         if (!$filesystem->exists($path) || !is_dir($path)) {
             return $this->_json([
