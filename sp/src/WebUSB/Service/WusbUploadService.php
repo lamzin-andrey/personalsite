@@ -42,6 +42,14 @@ class WusbUploadService {
             $c->setUserId($userId);
             $this->registry->getManager()->persist($c);
             $this->registry->getManager()->flush();
+        } else {
+            /**
+             * @var DrvCatalogs $c
+            */
+            if ($c->getIsDeleted()) {
+                $c->setIsDeleted(false);
+                $this->registry->getManager()->flush();
+            }
         }
 
         return $c->getId();
