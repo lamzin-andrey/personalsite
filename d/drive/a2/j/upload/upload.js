@@ -29,9 +29,10 @@ window.upload = {
 		this.onSpaceOk();
 	},
 	onSpaceOk:function() { 
-		var o = this;
+		var o = this,
+			lang = storage("lang");
 		try {
-			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir}, 
+			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir, lang: lang}, 
 				function(data) {
 					o.onSuccessUpload(data);
 				},
@@ -58,7 +59,9 @@ window.upload = {
 			this.onClickCancel();
 			return;
 		}
-		fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
+		if (!e('f' + data.file.i)) {
+			fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
+		}
 		this.onClickCancel();
 	},
 	onFailUpload:function(data, responseText, info, xhr) {

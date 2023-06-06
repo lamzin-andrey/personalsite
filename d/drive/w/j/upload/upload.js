@@ -41,10 +41,11 @@ window.upload = {
 		o.uploadOneFile();
 	},
 	uploadOneFile:function() {
-		var o = this;
+		var o = this,
+			lang = storage("lang");
 		try {
 			Rest._fileIndex = o.currentFile;
-			Rest._postSendFile(o.iFile, br + '/drvupload.json', {c: currentDir}, 
+			Rest._postSendFile(o.iFile, br + '/drvupload.json', {c: currentDir, lang: lang}, 
 				function(data) {
 					o.onSuccessUpload(data);
 				},
@@ -79,7 +80,9 @@ window.upload = {
 			o.onClickCancel();
 			return;
 		}
-		fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
+		if (!e('f' + data.file.i)) {
+			fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
+		}
 		
 		o.currentFile++;
 		if (o.totalLength > o.currentFile) {

@@ -16,6 +16,7 @@ use App\Service\AppService;
 use App\Service\BitReader;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
+use App\WebUSB\Service\WusbUploadService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\TreeWalkerAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -144,10 +145,7 @@ class UsbController extends AbstractController
         }
 
         // First create phisical catalog
-        $relativePath = $this->getParameter('app.wusb_catalog_root');
-        $userPath = $this->generateUserPath($this->getUser()->getId());
-        $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogId;
-        $filesystem->mkdir($path);
+        $path = $this->createCatalog($requst, $filesystem, $catalogId);
 
         if (!$filesystem->exists($path) || !is_dir($path)) {
             return $this->_json([
@@ -572,10 +570,12 @@ class UsbController extends AbstractController
      * @return
      */
     public function driveUploadAction(Request $request,
-                                             TranslatorInterface $t,
-                                             AppService $oAppService,
-                                             Filesystem $filesystem,
-                                             CsrfTokenManagerInterface $csrfTokenManager)
+                                     TranslatorInterface $t,
+                                     AppService $oAppService,
+                                     Filesystem $filesystem,
+                                     CsrfTokenManagerInterface $csrfTokenManager,
+                                     WusbUploadService $wusbUploadService
+    )
     {
         $csrfToken = $csrfTokenManager
             ? $csrfTokenManager->getToken('authenticate')->getValue()
@@ -625,7 +625,21 @@ class UsbController extends AbstractController
         $userPath = $this->generateUserPath($this->getUser()->getId());
         $drvCatalogId = intval($request->request->get('c'));
         $drvCatalog = null;
+
+        $isTryUploadInRoot = false;
+        if ($drvCatalogId == 0) {
+            $lang = 'en';
+            if ('langRu' == $request->request->get('lang')) {
+                $lang = 'ru';
+            }
+            $drvCatalogId = $wusbUploadService->getUploadCatalogId($drvCatalogId, $lang, $user->getId());
+            $this->createCatalog($request, $filesystem, $drvCatalogId);
+            $isTryUploadInRoot = true;
+        }
         if ($drvCatalogId > 0) {
+            /**
+             * @var DrvCatalogs $drvCatalog
+            */
             $drvCatalog = $this->getDoctrine()->getRepository(DrvCatalogs::class)->find($drvCatalogId);
             if (is_null($drvCatalog) || !$this->getUser() || $drvCatalog->getUserId() != $this->getUser()->getId() ) {
                 return $this->mixResponse($request, [
@@ -699,19 +713,33 @@ class UsbController extends AbstractController
         $targetName = $fileEntity->getId() . '.' . $ext;
         $file->move($targetPath, $targetName);
 
+        $fileData = [
+            'name' => $originalName,
+            'type' => $fileEntity->getType()[0] ?? 'u',
+            'i'    => $fileEntity->getId(),
+            'h'    => false,
+            's' => AppService::getHumanFilesize($size),
+            'ct' => AppService::sqzDatetime($fileEntity->getCreatedTime()),
+            'ut' => AppService::sqzDatetime($fileEntity->getUpdatedTime())
+        ];
 
+        if ($isTryUploadInRoot) {
+            $drvCatalog->setSize($drvCatalog->getSize() + $size);
+            $oAppService->save($drvCatalog);
+            $fileData = [
+                'name' => $drvCatalog->getName(),
+                'type' => 'c',
+                'i'    => $drvCatalog->getId(),
+                'h'    => false,
+                's' => AppService::getHumanFilesize($size),
+                'ct' => AppService::sqzDatetime($drvCatalog->getCreatedTime()),
+                'ut' => AppService::sqzDatetime($drvCatalog->getUpdatedTime())
+            ];
+        }
         return $this->mixResponse($request, [
             'status' => 'ok',
             'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName,
-            'file' => [
-                'name' => $originalName,
-                'type' => $fileEntity->getType()[0] ?? 'u',
-                'i'    => $fileEntity->getId(),
-                'h'    => false,
-                's' => AppService::getHumanFilesize($size),
-                'ct' => AppService::sqzDatetime($fileEntity->getCreatedTime()),
-                'ut' => AppService::sqzDatetime($fileEntity->getUpdatedTime())
-            ]
+            'file' => $fileData
         ]);
     }
 
@@ -1608,5 +1636,15 @@ class UsbController extends AbstractController
         }
 
         return $this->_json(['status' => 'ok']);
+    }
+
+    private function createCatalog(Request $request, Filesystem $filesystem, int $catalogId): string
+    {
+        $relativePath = $this->getParameter('app.wusb_catalog_root');
+        $userPath = $this->generateUserPath($this->getUser()->getId());
+        $path = $request->server->get('DOCUMENT_ROOT') . $relativePath . '/' . $userPath . '/' . $catalogId;
+        $filesystem->mkdir($path);
+
+        return $path;
     }
 }
