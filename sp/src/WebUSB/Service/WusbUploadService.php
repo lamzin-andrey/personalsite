@@ -18,7 +18,7 @@ class WusbUploadService {
         $catalogId,
         $lang,
         $userId
-    ):int
+    )
     {
         if($catalogId > 0) {
           return $catalogId;
