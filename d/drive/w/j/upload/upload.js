@@ -42,10 +42,8 @@ window.upload = {
 	},
 	uploadOneFile:function() {
 		var o = this,
-			lang = storage("flang");
-		if (lang == "ru") {
-			lang == "langRu";
-		}
+			lang = storage("lang");
+		
 		try {
 			Rest._fileIndex = o.currentFile;
 			Rest._postSendFile(o.iFile, br + '/drvupload.json', {c: currentDir, lang: lang}, 
