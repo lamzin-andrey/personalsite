@@ -87,7 +87,7 @@ window.upload = {
 		if (data.isRt) {
 			setTimeout(function(){
 				showSuccess(l("Your file uploaded to") + " " + data.file.name);
-			}, 1000);
+			}, 1500);
 		}
 		
 		o.currentFile++;

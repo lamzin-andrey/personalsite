@@ -66,7 +66,7 @@ window.upload = {
 			
 			setTimeout(function(){
 				showMessage(l("Your file uploaded to") + " " + data.file.name);
-			}, 1000);
+			}, 1500);
 		}
 		this.onClickCancel();
 	},
