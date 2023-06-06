@@ -6,7 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class WusbUploadService {
-    private $registry;
+    private Registry $registry;
     public function __construct(
         ContainerInterface $container
     )
