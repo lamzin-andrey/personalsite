@@ -12,7 +12,7 @@ window.upload = {
 			o.onClickCancel(evt);
 		}
 		o.progressStateLabel = e('progressStateLabel');
-		alert("A2V6");
+		alert("A2V7");
 	},
 	onSelectFile:function() {
 		var o = this;
@@ -60,15 +60,15 @@ window.upload = {
 			this.onClickCancel();
 			return;
 		}
-		if (!e('f' + data.file.i)) {
+		//if (!e('f' + data.file.i)) {
 			fileList.addCatalog(data.file.name, data.file.i, data.file.type, data.file.s, data.file.ut, data.file.ct);
-		}
-		if (data.isRt) {
+		//}
+		/*if (data.isRt) {
 			
 			setTimeout(function(){
 				showMessage(l("Your file uploaded to") + " " + data.file.name);
 			}, 1500);
-		}
+		}*/
 		this.onClickCancel();
 	},
 	onFailUpload:function(data, responseText, info, xhr) {
