@@ -30,7 +30,7 @@ window.upload = {
 	},
 	onSpaceOk:function() { 
 		var o = this,
-			lang = storage("lang");
+			lang = "en";
 		try {
 			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir, lang: lang}, 
 				function(data) {
