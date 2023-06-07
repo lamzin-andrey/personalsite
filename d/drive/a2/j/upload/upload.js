@@ -12,7 +12,6 @@ window.upload = {
 			o.onClickCancel(evt);
 		}
 		o.progressStateLabel = e('progressStateLabel');
-		alert("A2V11");
 	},
 	onSelectFile:function() {
 		var o = this;

@@ -31,7 +31,6 @@ function initApp() {
 	
 	getAuthState();
 	onLoadA236();
-	alert("U3");
 }
 
 function getAuthState() {
