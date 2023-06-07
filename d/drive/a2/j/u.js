@@ -31,6 +31,7 @@ function initApp() {
 	
 	getAuthState();
 	onLoadA236();
+	alert("U2");
 }
 
 function getAuthState() {
@@ -96,11 +97,11 @@ function defaultResponseError(data, responseText, info, xhr) {
 function showError(s) {
 	alert(s);
 }
-
+/*
 function showMessage(s) {
 	alert(s);
 }
-
+*/
 function  _map(id, read) {
 	var $obj, obj, i,
 		data = {}, ls, sZ;
