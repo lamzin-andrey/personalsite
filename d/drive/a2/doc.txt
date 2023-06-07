@@ -1,0 +1,1 @@
+DOMError may be if script try add input in form before upload.
