@@ -12,7 +12,7 @@ window.upload = {
 			o.onClickCancel(evt);
 		}
 		o.progressStateLabel = e('progressStateLabel');
-		alert("A2V7");
+		alert("A2V8");
 	},
 	onSelectFile:function() {
 		var o = this;
@@ -30,10 +30,9 @@ window.upload = {
 		this.onSpaceOk();
 	},
 	onSpaceOk:function() { 
-		var o = this,
-			lang = "en";
+		var o = this;
 		try {
-			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir, lang: lang}, 
+			Rest._postSendFileAndroid2(this.iFile, br + '/drvupload.json', {c: currentDir}, 
 				function(data) {
 					o.onSuccessUpload(data);
 				},
