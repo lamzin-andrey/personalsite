@@ -83,7 +83,7 @@ class DrvFile
     /**
      * @var string
      *
-     * @ORM\Column(name="hash", type="string", length="255", nullable=false, options={"comment"="Хеш файла", "default"=""})
+     * @ORM\Column(name="hash", type="string", length=255, nullable=false, options={"comment"="Хеш файла", "default"=""})
      */
     private $hash;
 
