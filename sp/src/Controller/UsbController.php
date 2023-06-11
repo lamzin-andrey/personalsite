@@ -33,7 +33,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Translation\Translator;
 use \TreeAlgorithms;
 use Symfony\Contracts\Translation\TranslatorInterface;
-
+use Transliterator;
  
 class UsbController extends AbstractController
 {
@@ -409,7 +409,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
      */
-    public function setCalaogsAsIsDeleted(Request $request, TranslatorInterface $t)
+    public function setCalaogsAsIsDeleted(Request $request, TranslatorInterface $t, Filesystem $filesystem)
     {
         if (!$this->getUser()) {
             return $this->_json([
@@ -438,6 +438,8 @@ class UsbController extends AbstractController
              */
             $filesRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
             $filesRepository->removeByCatalogIdList($idList, intval($this->getUser()->getId()));
+            $list = $filesRepository->findBy(['catalogId' => $idList]);
+            $this->removePhisFiles($list, $this->getUser(), $request, $filesystem, $t);
         }
 
         return $this->json(['status' => 'ok']);
@@ -474,12 +476,13 @@ class UsbController extends AbstractController
                 ]);
             }
             $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+
+            $this->removeSymlink($filesystem, $pathObject->symlink);
+
             if (!empty($pathObject->path) && file_exists($pathObject->path)) {
                 $filesystem->remove($pathObject->path);
             }
-            if (!empty($pathObject->symlink) && file_exists($pathObject->symlink)) {
-                $filesystem->remove($pathObject->symlink);
-            }
+
 
             $fileRepository->removeById($fileId, intval($this->getUser()->getId()));
         }
@@ -965,7 +968,20 @@ class UsbController extends AbstractController
 
             return $result;
         }
-        $symlink .= '/' . $fileEntity->getId() . $ext;
+
+        // $symlink .= '/' . $fileEntity->getId() . $ext;
+        $transliterator = Transliterator::create('Any-Latin');
+        $transliteratorToASCII = Transliterator::create('Latin-ASCII');
+        $safeFilename = $transliteratorToASCII->transliterate($transliterator->transliterate($fileEntity->getName()));
+        $safeFilename = preg_replace("#\s#", '_', $safeFilename);
+        $symlink .= '/' . $fileEntity->getHash();
+        $filesystem->mkdir($symlink);
+        if (!$filesystem->exists($symlink) || !is_dir($symlink)) {
+            $result->error = 'Unable create temp catalog (2)';
+
+            return $result;
+        }
+        $symlink .= '/' . $safeFilename;
         $result->symlink = $symlink;
 
         return $result;
@@ -1311,37 +1327,9 @@ class UsbController extends AbstractController
                 'userId' => $user->getId()
             ]);
         }
-
-        foreach ($fileEntities as $fileEntity) {
-            if ($fileEntity->getUserId() != $user->getId()) {
-                continue;
-            }
-            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
-            if (!$filePathObject->error) {
-                $success = false;
-                $error = '';
-                try {
-                    if (file_exists($filePathObject->symlink)) {
-                        $filesystem->remove($filePathObject->symlink);
-                    }
-                    if (file_exists($filePathObject->path)) {
-                        $filesystem->remove($filePathObject->path);
-                    }
-                    $success = true;
-                } catch (\Exception $exception) {
-                    $error = $exception->getMessage();
-                }
-                if (!$success) {
-                    return $this->_json([
-                        'status' => 'error',
-                        'error' => $this->l($t, 'remove failed! ') . $error
-                    ]);
-                }
-
-                // db
-                $fileEntity->setIsDeleted(true);
-
-            }
+        $response = $this->removePhisFiles($fileEntities, $user, $request, $filesystem, $t);
+        if ($response) {
+            return $this->_json($response);
         }
         $em = $this->container->get('doctrine')->getManager();
 
@@ -1652,5 +1640,57 @@ class UsbController extends AbstractController
         $filesystem->mkdir($path);
 
         return $path;
+    }
+
+    private function removeSymlink(Filesystem $filesystem, string $path)
+    {
+        if (!empty($path) ) {
+            if (file_exists($path)) {
+                $filesystem->remove($path);
+            }
+            $a = explode('/', $path);
+            unset($a[count($a) - 1]);
+            $symlinkDir = implode('/', $a);
+            if (file_exists($symlinkDir)) {
+                rmdir($symlinkDir);
+            }
+        }
+    }
+
+    private function removePhisFiles($fileEntities, Ausers  $user, Request $request, Filesystem $filesystem, TranslatorInterface $t)
+    {
+        foreach ($fileEntities as $fileEntity) {
+            if ($fileEntity->getUserId() != $user->getId()) {
+                continue;
+            }
+            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
+            if (!$filePathObject->error) {
+                $success = false;
+                $error = '';
+                try {
+                    $this->removeSymlink($filesystem, $filePathObject->symlink);
+                    if (file_exists($filePathObject->path)) {
+                        $filesystem->remove($filePathObject->path);
+                    }
+                    $success = true;
+                } catch (\Exception $exception) {
+                    $error = $exception->getMessage();
+                    $success = false;
+                }
+
+                // db
+                $fileEntity->setIsDeleted(true);
+
+            }
+        }
+
+        if (!$success) {
+            return [
+                'status' => 'error',
+                'error' => $this->l($t, 'remove failed! ') . $error
+            ];
+        }
+
+        return [];
     }
 }

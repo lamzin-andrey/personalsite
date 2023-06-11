@@ -37,8 +37,13 @@
   $symlink .= '/' . $fileEntity->getId() . $ext;
   менять на 
   $symlink .= '/' . $fileEntity->getHash() .'/' . transliteUrl($fileEntity->getName()) . $ext;
+  Учесть, что при удалении что-то с ней тоже делаем. Там теперь каталог надо удалять. 
   
+  
+
 3 Создать новую сущность. file_id K, user_id K, created_time
+
+4 Чекнуть, не станет ли возможным удалять чужой файл, если он общий.
 
 
 Фронтенд.
