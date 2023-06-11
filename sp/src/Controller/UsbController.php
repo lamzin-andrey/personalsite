@@ -297,7 +297,7 @@ class UsbController extends AbstractController
             header('Pragma: public');
             header('Content-Length: ' . strlen($s));
             echo $s;
-            die;
+            exit;
         }
 
         header('Content-Description: File Transfer');
@@ -308,7 +308,7 @@ class UsbController extends AbstractController
         header('Pragma: public');
         header('Content-Length: ' . filesize($path));
         readfile($path);
-        die;
+        exit;
     }
 
     private function _json($aData)
@@ -704,6 +704,11 @@ class UsbController extends AbstractController
         $fileEntity->setSize($size);
         $fileEntity->setUpdatedTime($modifyTime);
         $fileEntity->setCreatedTime(new \DateTime());
+        $fileEntity->setHash($oAppService->getHash(
+            $request,
+            $originalName . $this->getUser()->getId(),
+            'sha1'
+        ));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($fileEntity);

@@ -37,6 +37,11 @@ class DrvFile
     private $isDeleted = false;
 
     /**
+     * @ORM\Column(name="is_public", type="boolean", options={"comment"="1 - allow for all, 0 - no allow for all", "default"="0"})
+     */
+    private $isPublic = false;
+
+    /**
      * @var DrvCatalogs
      * @ORM\ManyToOne(targetEntity="DrvCatalogs", inversedBy="files")
      * @ORM\JoinColumn(name="catalog_id", referencedColumnName="id")
@@ -74,6 +79,13 @@ class DrvFile
      * @ORM\Column(name="updated_time", type="datetime", nullable=false, options={"comment"="Время изменения", "default"="2021-11-23 00:00:00"})
      */
     private $updatedTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length="255", nullable=false, options={"comment"="Хеш файла", "default"=""})
+     */
+    private $hash;
 
     public function getId(): ?int
     {
@@ -186,6 +198,44 @@ class DrvFile
     public function setUpdatedTime(?\DateTime $n): self
     {
         $this->updatedTime = $n;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @param string $hash
+     * @return DrvFile
+     */
+    public function setHash(string $hash): self
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsPublic(): bool
+    {
+        return $this->isPublic;
+    }
+
+    /**
+     * @param bool $isPublic
+     * @return DrvFile
+     */
+    public function setIsPublic(bool $isPublic): self
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }
