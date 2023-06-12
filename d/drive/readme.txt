@@ -33,7 +33,7 @@
   Делаем поле is_public для файла.
   Его будем заполнять в п. 1 фронтенда.
   
-2 getFilePathObject 
+2 getFilePathObject 													*
   $symlink .= '/' . $fileEntity->getId() . $ext;
   менять на 
   $symlink .= '/' . $fileEntity->getHash() .'/' . transliteUrl($fileEntity->getName()) . $ext;
@@ -41,9 +41,11 @@
   
   
 
-3 Создать новую сущность. file_id K, user_id K, created_time
+3 Создать новую сущность. file_id K, user_id K, created_time			*
+		*
+3 Исправить функцию проверки доступа к файлу							*
 
-4 Чекнуть, не станет ли возможным удалять чужой файл, если он общий.
+100 Чекнуть, не станет ли возможным удалять чужой файл, если он общий.	*
 
 
 Фронтенд.

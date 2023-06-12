@@ -16,6 +16,7 @@ use App\Service\AppService;
 use App\Service\BitReader;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
+use App\WebUSB\Service\FilePermissionService;
 use App\WebUSB\Service\WusbUploadService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\TreeWalkerAdapter;
@@ -210,14 +211,17 @@ class UsbController extends AbstractController
      * @param $
      * @return
      */
-    public function driveGetFileDowloadLinkAction(Request $request,
-                                               TranslatorInterface $t,
-                                               Filesystem $filesystem,
-                                               CsrfTokenManagerInterface $csrfTokenManager)
+    public function driveGetFileDowloadLinkAction(
+       Request $request,
+       TranslatorInterface $t,
+       Filesystem $filesystem,
+       CsrfTokenManagerInterface $csrfTokenManager,
+       FilePermissionService $filePermissionService
+    )
     {
         $data = [];
         $fileEntity = null;
-        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity)) {
+        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity, $filePermissionService)) {
             return $this->_json($data);
         }
 
@@ -262,10 +266,13 @@ class UsbController extends AbstractController
      * @param Request $request
      * @param TranslatorInterface $t
     */
-    public function downloadSmallFileAction(Request $request,
-                                         TranslatorInterface $t,
-                                         Filesystem $filesystem,
-                                         CsrfTokenManagerInterface $csrfTokenManager)
+    public function downloadSmallFileAction(
+        Request $request,
+        TranslatorInterface $t,
+        Filesystem $filesystem,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        FilePermissionService $filePermissionService
+    )
     {
 
         $data = [];
@@ -273,7 +280,7 @@ class UsbController extends AbstractController
          * @var ?DrvFile $fileEntity
         */
         $fileEntity = null;
-        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity)) {
+        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity, $filePermissionService)) {
             return $this->_json($data);
         }
 
@@ -1017,7 +1024,14 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function hasAccessToFile(Request $request, CsrfTokenManagerInterface $csrfTokenManager, array &$data, TranslatorInterface $t, ?DrvFile &$fileEntity) : bool
+    protected function hasAccessToFile(
+        Request $request,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        array &$data,
+        TranslatorInterface $t,
+        ?DrvFile &$fileEntity,
+        FilePermissionService $filePermissionService
+    ) : bool
     {
         $csrfToken = $csrfTokenManager
             ? $csrfTokenManager->getToken('authenticate')->getValue()
@@ -1031,7 +1045,12 @@ class UsbController extends AbstractController
 
             return false;
         }*/
-        if (!$this->getUser()) {
+
+        $isPublic = false;
+        if ($fileEntity && $fileEntity->getIsPublic()) {
+            $isPublic = true;
+        }
+        if (!$this->getUser() && !$isPublic) {
             $data = [
                 'status' => 'error',
                 'error' => $this->l($t, 'You have not access to this page', null)
@@ -1045,13 +1064,21 @@ class UsbController extends AbstractController
          */
         $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
         $filter = [
-            'userId' => $this->getUser()->getId(),
             'id' => intval($request->query->get('i')),
             'isDeleted' => false
         ];
 
         $fileEntity = $fileRepository->findOneBy($filter);
-        if ($this->getUser()->getId() !== $fileEntity->getUserId()) {
+
+        if (!$fileEntity) {
+            $data =[
+                'status' => 'error',
+                'error' => $this->l($t, 'File not found', $domain)
+            ];
+            return false;
+        }
+
+        if (!$filePermissionService->hasAccessToFile($this->getUser()->getId(), $fileEntity)) {
             $data =[
                 'status' => 'error',
                 'error' => $this->l($t, 'You have not access to this page', $domain)
