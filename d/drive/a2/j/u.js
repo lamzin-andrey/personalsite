@@ -31,6 +31,11 @@ function initApp() {
 	
 	getAuthState();
 	onLoadA236();
+	
+	// dev
+	setTimeout(() => {
+		showScreen('hFilePermission');
+	}, 3000);
 }
 
 function getAuthState() {

@@ -10,21 +10,24 @@ window.fileListItemCmenu = {
 		l('Rename'),
 		l('Download'),
 		l('Move'),
-		l('Exit')
+		l('Exit'),
+		l('Link to file')
 	],
 	fileTextMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
 		l('Move'),
-		l('Exit')
+		l('Exit'),
+		l('Link to file')
 	],
 	fileUnknownMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
 		l('Move'),
-		l('Exit')
+		l('Exit'),
+		l('Link to file')
 	],
 	/**
 	 * @description Build and show folder or file context menu
@@ -129,6 +132,15 @@ window.fileListItemCmenu = {
 							return false;
 						}
 						self.onClickDownload.call(self, evt);
+					};
+					break;
+				case l('Link to file'):
+					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
+						self.onClickShareLink.call(self, evt);
 					};
 					break;
 				case l('Exit'):
@@ -495,6 +507,14 @@ window.fileListItemCmenu = {
 		}
 		s = a.reverse().join('');
 		return s;
-	}
+	},
+	
+	onClickShareLink:function(evt) {
+		var o = this;
+		showScreen('hFilePermission');
+		/*Rest._get(function(data){o.onSuccessGetDLink(data);},
+			br + '/drivegetlink.json?i=' + this.cmMenuOpenItemId,
+			function(data, responseText, info, xhr){o.onFailGetDLink(data, responseText, info, xhr)});*/
+	},
 	
 };
