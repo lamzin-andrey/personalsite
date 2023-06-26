@@ -338,6 +338,20 @@ input[type=text],input[type=password], input[type=email] {
 	background: #000;
 }
 
+.forexit{
+	height:38px!important;
+}
+
+.pcaseRmBtn {
+  display: inline-block;
+  line-height: 14px;
+  vertical-align: top;
+  width: 38px;
+  margin-top: 3px;
+  background: #5b072e;
+  float: right;
+}
+
 .userCardSmAvatar img{
 	width:44px;
 	height:44px;
@@ -354,6 +368,7 @@ input[type=text],input[type=password], input[type=email] {
 	border-bottom: solid #DBCFCF 2px;
 	border-right: solid #DBCFCF 3px;
 	background: #5b072e;
+	float:right;
 }
 .userCardSmAvatarRmBtn img{
   width: 36px;
@@ -415,7 +430,7 @@ input[type=text],input[type=password], input[type=email] {
 	width: 63px;
 	text-align: left;
 }
-/* *** ** **/
+
 .clinkW input{
 	width: 86%;
 	line-height: 48px;
