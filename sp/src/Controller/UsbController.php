@@ -35,7 +35,8 @@ use Symfony\Component\Translation\Translator;
 use \TreeAlgorithms;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Transliterator;
- 
+use StdClass;
+
 class UsbController extends AbstractController
 {
 
@@ -320,9 +321,16 @@ class UsbController extends AbstractController
 
     private function _json($aData)
 	{
-		if (!isset($aData['status'])) {
-			$aData['status'] = 'ok';
-		}
+	    if (is_array($aData)) {
+            if (!isset($aData['status'])) {
+                $aData['status'] = 'ok';
+            }
+        } else {
+            if (!isset($aData->status)) {
+                $aData->status = 'ok';
+            }
+        }
+
     	$oResponse = new Response( json_encode($aData) );
     	$oResponse->headers->set("Content-Type", "application/json");
     	return $oResponse;
@@ -1719,5 +1727,53 @@ class UsbController extends AbstractController
         }
 
         return [];
+    }
+
+    /**
+     * @Route("/drivegetfileprm.json", name="drivegetfileprm", methods={"GET"})
+     * Ge tfile permissions
+     * @param $
+     * @return
+     */
+    public function driveGetFilePermission(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+
+        $fileId = intval($request->query->get('i') );
+
+        if ($fileId > 0) {
+            /**
+             * @var DrvFileRepository $fileRepository
+             */
+            $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+            // remove phisical + symlink
+            $fileEntity = $fileRepository->find($fileId);
+            if ($fileEntity->getUserId() != $this->getUser()->getId()) {
+                return $this->_json([
+                    'status' => 'error',
+                    'error' => $this->l($t, 'You have not access to this page', null)
+                ]);
+            }
+
+            $response = new StdClass();
+            $response->status = 'ok';
+            $response->shareMode = $filePermissionService->getShareModeAsJstring($fileEntity->getId(), $fileEntity->getIsPublic());
+            $response->flink = $request->server->get('HTTP_HOST')
+                . $this->backendRoot . '/d/drive/?action=share&i=' . $fileId;
+            $response->uls = $filePermissionService->getUsersForLastFile();
+
+
+            return $this->_json($response);
+        }
+
+        return $this->_json(['status' => 'ok']);
     }
 }

@@ -511,10 +511,35 @@ window.fileListItemCmenu = {
 	
 	onClickShareLink:function(evt) {
 		var o = this;
-		showScreen('hFilePermission');
-		/*Rest._get(function(data){o.onSuccessGetDLink(data);},
-			br + '/drivegetlink.json?i=' + this.cmMenuOpenItemId,
-			function(data, responseText, info, xhr){o.onFailGetDLink(data, responseText, info, xhr)});*/
+		showLoader();
+		Rest._get(function(data){o.onSuccessGetFPerm(data);},
+			br + '/drivegetfileprm.json?i=' + this.cmMenuOpenItemId,
+			function(data, responseText, info, xhr){o.onFailGetFPerm(data, responseText, info, xhr)});
 	},
+	onSuccessGetFPerm:function(data){
+		var rd;
+		if (this.onFailGetFPerm(data)) {
+			// TODO set fields
+			// e('clink').value
+			// W.shareLinkSetter.setLink(data.flink); // TODO отдельный файл, в различных версиях всё по разному
+			
+			rd = e(data.shareMode);
+			if (rd) {
+				rd.checked = true;
+			}
+			this.renderUsers(data.uls);
+			
+			showScreen('hFilePermission');
+		}
+	},
+	
+	renderUsers:function(list){
+		alert(list);
+	},
+	
+	onFailGetFPerm:function(data, responseText, info, xhr){
+		showScreen('hCatalogScreen');
+		return defaultResponseError(data, responseText, info, xhr);
+	}
 	
 };

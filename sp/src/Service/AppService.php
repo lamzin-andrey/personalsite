@@ -6,6 +6,7 @@ use App\Entity\CrnIntervals;
 use App\Entity\CrnTasks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Entity;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormInterface;
@@ -861,5 +862,34 @@ class AppService
         }
 
         return $s;
+    }
+
+    /**
+     * @param <int|string, Entity> $list
+    */
+    public function extractUserId(array $list): array
+    {
+        return $this->extractField($list, 'UserId');
+    }
+
+    /**
+     * @param <int|string, Entity> $list
+     */
+    public function extractField(array $list, string $fieldName): array
+    {
+        $result = [];
+        $m = "get{$fieldName}";
+        $mExsists = null;
+        foreach ($list as $entity) {
+            if (null === $mExsists) {
+                $mExsists = method_exists($entity, $m);
+            }
+            if ($mExsists) {
+                $v = $entity->$m;
+                $result[$v] = $v;
+            }
+        }
+
+        return $result;
     }
 }
