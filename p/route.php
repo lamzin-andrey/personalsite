@@ -22,6 +22,7 @@ class Route {
 		$this->_portfoliocats();
 		$this->_treedemo();
 		$this->_larincevareciever();
+		$this->_slackagentreceiver();
 		$this->_trollkiller();
 		$this->_stat();
 		$this->_phd();
@@ -306,6 +307,22 @@ class Route {
 			require_once $handler;
 			$this->app = new DemoCategoriesList();
 		}*/
+	}
+	
+	/**
+	 * @description Маршруты для страницы /p/slackagency/status.jn
+	*/
+	protected function _slackagentreciever()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/slackagency/status.jn/') {
+			$handler = $sCtrlDir . 'statussave.php';
+			require_once $handler;
+			$this->app = new SlackAgencyStatusPost();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/portfoliocats/
