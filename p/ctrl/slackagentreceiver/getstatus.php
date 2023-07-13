@@ -3,8 +3,6 @@
 require_once __DIR__ . '/openapp.php';
 
 class SlackAgencyStatus extends OpenApp {
-	/** @property string */
-	//public $ = '';
 	
 	public function __construct() {
 		parent::__construct();
