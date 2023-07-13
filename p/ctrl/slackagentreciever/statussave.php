@@ -20,9 +20,9 @@ class SlackAgencyStatusPost extends OpenApp {
 			$now = now();
 			file_put_contents(__DIR__ . '/icon.json', $this->icon);
 			
-			echo $this->icon;
-			die;
-			//json_ok('icon', $this->icon);
+			/*echo $this->icon;
+			die;*/
+			json_ok('icon', $this->icon);
 		}
 		$aErr = [];
 		foreach ($errors as $key => $sText) {
