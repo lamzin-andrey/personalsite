@@ -10,7 +10,8 @@ class SlackAgencyStatusPost extends OpenApp {
 		parent::__construct();
 		
 		
-		$this->tsreq('icon');
+		// $this->tsreq('icon');
+		$this->icon = $_REQUEST['icon'] ?? '';
 		
 		
 		$errors = [];

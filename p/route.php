@@ -312,7 +312,7 @@ class Route {
 	/**
 	 * @description Маршруты для страницы /p/slackagency/status.jn
 	*/
-	protected function _slackagentreciever()
+	protected function _slackagentreceiver()
 	{
 		$s = str_replace('_', '', __FUNCTION__);
 		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
