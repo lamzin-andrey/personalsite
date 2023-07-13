@@ -10,20 +10,17 @@ class SlackAgencyStatusPost extends OpenApp {
 		parent::__construct();
 		
 		
-		// $this->tsreq('icon');
-		$this->icon = $_REQUEST['icon'] ?? '';
+		$this->tsreq('icon');
+		// $this->icon = $_REQUEST['icon'] ?? '';
 		
 		
 		$errors = [];
 		
 		
-		if ($this->_validate($errors)) {//TODO
-			$now = now();
+		if ($this->_validate($errors)) {
 			file_put_contents(__DIR__ . '/icon.json', $this->icon);
 			
-			echo $this->icon;
-			die;
-			// json_ok('icon', $this->icon);
+			json_ok('icon', $this->icon);
 		}
 		$aErr = [];
 		foreach ($errors as $key => $sText) {

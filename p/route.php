@@ -323,6 +323,12 @@ class Route {
 			require_once $handler;
 			$this->app = new SlackAgencyStatusPost();
 		}
+		
+		if ($baseUrl == '/p/slackagency/gstatus.jn/') {
+			$handler = $sCtrlDir . 'getstatus.php';
+			require_once $handler;
+			$this->app = new SlackAgencyStatus();
+		}
 	}
 	/**
 	 * @description Маршруты для страницы /p/portfoliocats/
