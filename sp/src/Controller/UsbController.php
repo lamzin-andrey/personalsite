@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ausers;
 use App\Entity\DrvCatalogs;
 use App\Entity\DrvFile;
+use App\Entity\DrvFilePermissions;
 use App\Entity\PhdMessages;
 use App\Entity\PhdUsers;
 use App\Form\PsdUploadFormType;
@@ -1770,6 +1771,52 @@ class UsbController extends AbstractController
                 . $this->backendRoot . '/d/drive/?action=share&i=' . $fileId;
             $response->uls = $filePermissionService->getUsersForLastFile();
 
+
+            return $this->_json($response);
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/drivermfileprm.json", name="drivermfileprm", methods={"POST"})
+     * Rm file permissions
+     * @param $
+     * @return
+     */
+    public function driveRemoveFilePermission(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+
+        $fileId = intval($request->request->get('f') );
+        $userId = intval($request->request->get('i') );
+
+        if ($fileId > 0 && $userId > 0) {
+            /**
+             * @var DrvFileRepository $fileRepository
+             */
+            $filePertmissionsRepository = $this->container->get('doctrine')->getRepository(DrvFilePermissions::class);
+            // remove phisical + symlink
+            $entity = $filePertmissionsRepository->findOneBy([
+                'userId' => $userId,
+                'fileId' => $fileId
+            ]);
+            if ($entity) {
+                $em = $this->get('doctrine')->getManager();
+                $em->remove($entity);
+                $em->flush();
+            }
+            $response = new StdClass();
+            $response->status = 'ok';
+            $response->id = $userId;
 
             return $this->_json($response);
         }

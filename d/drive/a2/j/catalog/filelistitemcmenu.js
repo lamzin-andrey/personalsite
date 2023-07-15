@@ -520,8 +520,7 @@ window.fileListItemCmenu = {
 		var rd;
 		if (this.onFailGetFPerm(data)) {
 			// TODO set fields
-			// e('clink').value
-			// W.shareLinkSetter.setLink(data.flink); // TODO отдельный файл, в различных версиях всё по разному
+			W.ShareLinkSetter.setLink(data.flink);
 			
 			rd = e(data.shareMode);
 			if (rd) {
@@ -534,7 +533,30 @@ window.fileListItemCmenu = {
 	},
 	
 	renderUsers:function(list){
-		alert(list);
+		var cont = cs(D, 'customUsersWrapper')[0], i, 
+			SZ = sz(list),
+			tpl = this.userViewTpl(), s;
+		cont.innerHTML = '';
+		for (i = 0; i < SZ; i++) {
+			s = str_replace('{id}', list[i].id, tpl);
+			s = str_replace('{login}', list[i].login, s);
+			s = str_replace('{fid}', this.cmMenuOpenItemId, s);
+			s = str_replace('{root}', W.roota2, s);
+			cont.innerHTML += s;
+		}
+	},
+	
+	userViewTpl:function() {
+		return '<div class="userCardSm" id="usr{id}">\
+						<span class="userCardSmAvatar">\
+							<img src="{root}/i/usr.png">\
+						</span>\
+						<span class="userCardSmNick">{login}</span>\
+						<span class="userCardSmAvatarRmBtn" onclick="FPC.rm({id}, {fid})">\
+							<img src="{root}/i/clos48.png" class="rmu" onclick="FPC.rm({id}, {fid})">\
+						</span>\
+						<div class="cl"></div>\
+					</div>';
 	},
 	
 	onFailGetFPerm:function(data, responseText, info, xhr){

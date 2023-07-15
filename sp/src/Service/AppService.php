@@ -885,7 +885,7 @@ class AppService
                 $mExsists = method_exists($entity, $m);
             }
             if ($mExsists) {
-                $v = $entity->$m;
+                $v = $entity->$m();
                 $result[$v] = $v;
             }
         }
