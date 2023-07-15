@@ -7,7 +7,16 @@ use DateTimeInterface;
 use DateTimeImmutable;
 
 /**
- * @ORM\Table(name="drv_file_permissions")
+ *
+ * @ORM\Table(
+ *   name="drv_file_permissions",
+ *   uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="uf", columns={"user_id", "file_id"})
+ *   },
+ *   indexes={
+ *       @ORM\Index(name="uf2", columns={"user_id", "file_id"})
+ *   }
+ *   )
  * @ORM\Entity(repositoryClass="App\WebUSB\Repository\DrvFilePermissionsRepository")
  * @ORM\HasLifecycleCallbacks()
  */

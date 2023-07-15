@@ -308,50 +308,17 @@
 						<div class="cl"></div>
 					</label>
 									</div>
-				<div class="customUsersWrapper">
-					<div class="userCardSm">
-						<span class="userCardSmAvatar">
-							<img src="./i/usr.png">
-						</span>
-						<span class="userCardSmNick">MonkSilicianCastorTroySecondAndMoreMoreLetters</span>
-						<span class="userCardSmAvatarRmBtn">
-							<img src="./i/clos48.png" class="rmu">
-						</span>
-						<div class="cl"></div>
-					</div>
-					
-					<div class="userCardSm">
-						<span class="userCardSmAvatar">
-							<img src="./i/usr.png">
-						</span>
-						<span class="userCardSmNick">Monk</span>
-						<span class="userCardSmAvatarRmBtn">
-							<img src="./i/clos48.png" class="rmu">
-						</span>
-						<div class="cl"></div>
-					</div>
-					
-					<div class="userCardSm">
-						<span class="userCardSmAvatar">
-							<img src="./i/usr.png">
-						</span>
-						<span class="userCardSmNick">Lue Koing</span>
-						<span class="userCardSmAvatarRmBtn">
-							<img src="./i/clos48.png" class="rmu">
-						</span>
-						<div class="cl"></div>
-					</div>
-				</div>
+				<div class="customUsersWrapper"></div>
 				
 				<div class="pairBtnHWr tc">
-					<span class="userCardBtn">
+					<span class="userCardBtn" id="bAddFileUser">
 						<span class="userCardBtnImgW">
 							<img src="./i/+.png">
 						</span>
 						<span class="userCardBtnImgLbl" id="hAddUserPerm">Добавить</span>
 					</span>
 					
-					<span class="userCardBtn">
+					<span class="userCardBtn" id="bClosePermScr">
 						<span class="userCardBtnImgW">
 							<img src="./i/exit.png">
 						</span>
@@ -361,6 +328,32 @@
 				
 			</div>
 		</div>
+		
+		<!-- Begin add file perm user -->
+		<div class="tc screen d-none hFilePermission" id="hAddFileUser">
+			<div class="cim_head_wr">
+				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
+				<div class="cim_head_text" id="hFileAddUserTitle">Share file for user</div>
+			</div>
+			<div class="tl" id="">
+				<div class="clinkW tc">
+					<input type="text" id="srchuser" placeholder="Type user login and search it">
+				</div>
+				<div id="customUsersSearchWrapper"></div>
+				
+				<div class="pairBtnHWr tc">
+					<span class="userCardBtn" id="bCloseAddFileUserScr">
+						<span class="userCardBtnImgW">
+							<img src="./i/exit.png">
+						</span>
+						<span class="userCardBtnImgLbl" id="hExitAddUserLbl">Close</span>
+					</span>
+				</div>
+				
+			</div>
+		</div>
+		<!-- End add file perm user -->
+		
 		
 		<!-- screen settings dialog -->
 		<!-- screen settings -->
@@ -468,9 +461,14 @@
 		<script src="./j/catalog/sqzdatetime.js"></script>
 		<script src="./j/catalog/filelist.js"></script>
 		<script src="./j/catalog/sortsettingdlg.js"></script>
+		
+		<!-- add file permissions screen -->
 		<script src="./j/catalog/sharelinksetter.js"></script>
 		<script src="./j/catalog/filepermissioncontroller.js"></script>
-		<script src="./j/catalog/filelistitemcmenu.js?v=1"></script>
+		<script src="./j/catalog/filepermissionadduserctrl.js"></script>
+		<!-- /add file permissions screen -->
+		
+		<script src="./j/catalog/filelistitemcmenu.js?v=1"></script><!-- add file permissions screen -->
 		
 		<script src="./j/upload/anim.js"></script>
 		<script src="./j/upload/upload.js?12"></script>

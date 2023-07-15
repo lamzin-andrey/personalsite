@@ -1751,18 +1751,15 @@ class UsbController extends AbstractController
         $fileId = intval($request->query->get('i') );
 
         if ($fileId > 0) {
+            if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+                return $this->_json($response);
+            }
             /**
              * @var DrvFileRepository $fileRepository
              */
-            $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+            $fileRepository = $this->get('doctrine')->getRepository(DrvFile::class);
             // remove phisical + symlink
             $fileEntity = $fileRepository->find($fileId);
-            if ($fileEntity->getUserId() != $this->getUser()->getId()) {
-                return $this->_json([
-                    'status' => 'error',
-                    'error' => $this->l($t, 'You have not access to this page', null)
-                ]);
-            }
 
             $response = new StdClass();
             $response->status = 'ok';
@@ -1780,7 +1777,6 @@ class UsbController extends AbstractController
 
     /**
      * @Route("/drivermfileprm.json", name="drivermfileprm", methods={"POST"})
-     * Rm file permissions
      * @param $
      * @return
      */
@@ -1798,6 +1794,11 @@ class UsbController extends AbstractController
 
         $fileId = intval($request->request->get('f') );
         $userId = intval($request->request->get('i') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            return $this->_json($response);
+        }
+
 
         if ($fileId > 0 && $userId > 0) {
             /**
@@ -1818,6 +1819,103 @@ class UsbController extends AbstractController
             $response->status = 'ok';
             $response->id = $userId;
 
+            return $this->_json($response);
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/drivesavefileprm.json", name="drivesavefileprm", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveSaveFilePermission(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+        $fileId = intval($request->request->get('i') );
+        $permission = intval($request->request->get('p') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            $response['error'] = $this->l($t, $response['error'], null);
+            return $this->_json($response);
+        }
+
+        if ($fileId > 0) {
+            $filePermissionService->saveFilePermission($fileId, (1 == $permission));
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+    /**
+     * @Route("/driveaddfileusr.json", name="driveaddfileuser", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveAddFileUser(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+        $fileId = intval($request->request->get('i') );
+        $userId = intval($request->request->get('u') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            $response['error'] = $this->l($t, $response['error'], null);
+            return $this->_json($response);
+        }
+
+        if ($fileId > 0) {
+            $filePermissionService->addFileUser($fileId, $userId);
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/drivesrchusr.json", name="drivesrchusr", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveSearchUser(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+        $fileId = intval($request->request->get('i') );
+        $fragment = strval($request->request->get('s') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            $response['error'] = $this->l($t, $response['error'], null);
+            return $this->_json($response);
+        }
+
+        if ($fileId > 0) {
+            $repository = $this->get('doctrine')->getRepository(Ausers::class);
+            $list = $repository->searchByLogin($fragment);
+            $response = new StdClass();
+            $response->ls = $list;
+            $response->status = 'ok';
             return $this->_json($response);
         }
 

@@ -552,8 +552,8 @@ window.fileListItemCmenu = {
 							<img src="{root}/i/usr.png">\
 						</span>\
 						<span class="userCardSmNick">{login}</span>\
-						<span class="userCardSmAvatarRmBtn" onclick="FPC.rm({id}, {fid})">\
-							<img src="{root}/i/clos48.png" class="rmu" onclick="FPC.rm({id}, {fid})">\
+						<span class="userCardSmAvatarRmBtn" onclick="FPC.rm(event, {id}, {fid})">\
+							<img src="{root}/i/clos48.png" class="rmu" onclick="FPC.rm(event, {id}, {fid})">\
 						</span>\
 						<div class="cl"></div>\
 					</div>';

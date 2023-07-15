@@ -7,15 +7,19 @@ namespace App\WebUSB\Service;
 use App\Entity\Ausers;
 use App\Entity\DrvFile;
 use App\Entity\DrvFilePermissions;
+use App\Repository\DrvFileRepository;
 use App\Service\AppService;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use StdClass;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FilePermissionService
 {
     private Registry $registry;
     private AppService $appService;
+    private TranslatorInterface $t;
 
     /**
      * @var array
@@ -24,11 +28,13 @@ class FilePermissionService
 
     public function __construct(
         ManagerRegistry $registry,
-        AppService $appService
+        AppService $appService,
+        TranslatorInterface $t
     )
     {
         $this->registry = $registry;
         $this->appService = $appService;
+        $this->t = $t;
     }
 
     public function hasAccessToFile(int $userId, DrvFile $file): bool
@@ -94,4 +100,57 @@ class FilePermissionService
 
         return $result;
     }
+
+    public function saveFilePermission(int $fileId, bool $isPublic): void
+    {
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->registry->getRepository(DrvFile::class);
+        $fileEntity = $fileRepository->find($fileId);
+        if ($fileEntity) {
+            $fileEntity->setIsPublic($isPublic);
+            $this->appService->save($fileEntity);
+        }
+    }
+
+    public function isOwner(string $userId, int $fileId, ?array &$response = null): bool
+    {
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->registry->getRepository(DrvFile::class);
+        // remove phisical + symlink
+        $fileEntity = $fileRepository->find($fileId);
+        if ($fileEntity->getUserId() != $userId) {
+            $response = [
+                'status' => 'error',
+                'error' => 'You have not access to this page'
+            ];
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function addFileUser(int $fileId, int $userId): void
+    {
+        $sql = "INSERT INTO `drv_file_permissions`
+                (`user_id`, `file_id`, `created_time`)
+                VALUES(:u, :f, :t)
+                ON DUPLICATE KEY UPDATE `user_id` = `user_id`
+        ";
+        $parameters = [
+            'u' => $userId,
+            'f' => $fileId,
+            't' => date('Y-m-d H:i:s')
+        ];
+        /**
+         * @var Connection $conn
+        */
+        $conn = $this->registry->getConnection();
+        $conn->executeUpdate($sql, $parameters);
+    }
 }
+

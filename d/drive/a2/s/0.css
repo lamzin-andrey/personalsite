@@ -450,3 +450,24 @@ input[type=text],input[type=password], input[type=email] {
 	padding-bottom:4px;
 }
 /**  / permissions screen  */
+
+/** add user scr */
+.userCardSmAvatarAddBtn {
+	border: solid 1px #DBCFCF;
+	border-radius: 6px;
+	display: inline-block;
+	line-height: 38px;
+	vertical-align: top;
+	width: 38px;
+	margin-top: 4px;
+	border-bottom: solid #DBCFCF 2px;
+	border-right: solid #DBCFCF 3px;
+	background: #6D83AD;
+	float:right;
+}
+.userCardSmAvatarAddBtn img{
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+}
+/**  / add user scr */
