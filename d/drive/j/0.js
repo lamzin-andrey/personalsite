@@ -52,7 +52,7 @@ function onCheckSsl(isSSLSupport) {
 			&& HttpQueryString._GET('i', 0) > 0
 		   )
 		{
-			location = hostPrefix + '/d/drive/a2/share/?i =' + HttpQueryString._GET('i', 0);
+			location = hostPrefix + '/d/drive/a2/share/?i=' + HttpQueryString._GET('i', 0);
 			return;
 		}
 		
