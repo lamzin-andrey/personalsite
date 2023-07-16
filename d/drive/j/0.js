@@ -23,9 +23,9 @@ function onCheckSsl(isSSLSupport) {
 	stl('im', 'margin-top', h + 'px');
 	
 	// choose app
-	if (!sz(savedTheme) && ua.indexOf('android 2.3') != -1) {
+	if (!sz(savedTheme) && ~ua.indexOf('android 2.3')) {
 		savedTheme = 'a2';
-		if (ua.indexOf('gt-s6102') != -1) {
+		if (~ua.indexOf('gt-s6102')) {
 			savedTheme = 'a2/gts6102';
 		}
 	} else {
@@ -46,6 +46,16 @@ function onCheckSsl(isSSLSupport) {
 	}
 	
 	if (savedTheme) {
+		// If it share link, locate to share page
+		if (
+			HttpQueryString._GET('action', '') == 'share'
+			&& HttpQueryString._GET('i', 0) > 0
+		   )
+		{
+			location = hostPrefix + '/d/drive/a2/share/?i =' + HttpQueryString._GET('i', 0);
+			return;
+		}
+		
 		// If language not selected, redirect to choose lang
 		lang = storage('lang');
 		if (lang != 'langRu' && lang != 'langEn') {

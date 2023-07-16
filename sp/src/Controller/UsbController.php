@@ -1765,7 +1765,7 @@ class UsbController extends AbstractController
             $response->status = 'ok';
             $response->shareMode = $filePermissionService->getShareModeAsJstring($fileEntity->getId(), $fileEntity->getIsPublic());
             $response->flink = $request->server->get('HTTP_HOST')
-                . $this->backendRoot . '/d/drive/?action=share&i=' . $fileId;
+                . '/d/drive/?action=share&i=' . $fileId;
             $response->uls = $filePermissionService->getUsersForLastFile();
 
 
