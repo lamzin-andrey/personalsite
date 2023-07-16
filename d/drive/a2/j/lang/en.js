@@ -31,7 +31,15 @@ window.langEn = {
 	'reset_password_form[email]' : 'E-mail',
 	'bReset' : 'Reset password',
 	'bShowAuthScreen2' : 'Goto login',
+	'hFilePermissionTitle' : 'File access',
+	'hPrivateCaseLabel' : 'Only for me',
+	'hPublicCaseLabel' : 'For all',
+	'hCustomCaseLabel' : 'For users:',
+	'hAddUserPerm' : 'Add user',
+	'hExitPerm' : 'Close',
+	// 'hFileAddUserTitle' : 'Share file for user',
+	'srchuser' : 'Type user login and search it', // placeholder
+	'hExitAddUserLbl' : 'Close',
 	'' : '',
-	'' : '',
-	'' : '',
+	'' : ''
 };

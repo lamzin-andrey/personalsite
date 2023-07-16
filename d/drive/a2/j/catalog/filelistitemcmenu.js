@@ -11,7 +11,7 @@ window.fileListItemCmenu = {
 		l('Download'),
 		l('Move'),
 		l('Exit'),
-		l('Link to file')
+		l('Share link')
 	],
 	fileTextMenuItems: [
 		l('Remove'),
@@ -19,7 +19,7 @@ window.fileListItemCmenu = {
 		l('Download'),
 		l('Move'),
 		l('Exit'),
-		l('Link to file')
+		l('Share link')
 	],
 	fileUnknownMenuItems: [
 		l('Remove'),
@@ -27,7 +27,7 @@ window.fileListItemCmenu = {
 		l('Download'),
 		l('Move'),
 		l('Exit'),
-		l('Link to file')
+		l('Share link')
 	],
 	/**
 	 * @description Build and show folder or file context menu
@@ -134,7 +134,7 @@ window.fileListItemCmenu = {
 						self.onClickDownload.call(self, evt);
 					};
 					break;
-				case l('Link to file'):
+				case l('Share link'):
 					menuItem.onclick = function(evt) {
 						if (self.delayForMenuItems) {
 							evt.preventDefault();
