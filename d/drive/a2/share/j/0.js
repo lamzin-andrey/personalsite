@@ -43,8 +43,6 @@ function onChangeLang()
 	var cLang = storage('lang');
 	cLang = cLang ? cLang : 'langRu';
 	
-	console.log(cLang);
-	
 	if (cLang == 'langRu') {
 		onClickChooseEn();
 	} else {
@@ -69,15 +67,19 @@ function setLangImageOnly(lng)
 }
 
 function setLang(lng, displayLng) {
-	var s = e('hWaitGetLink').innerHTML.trim(), q;
+	var s = e('hWaitGetLink').innerHTML.trim(), q,
+		isErr = hasClass(e('hWaitGetLink'), 'errMsg');
 	storage('lang', lng);
 	e('chLang').innerHTML = displayLng;
 	window.L = window[lng];
 	setDOM();
 	if (s) {
 		q = l(s);
-		if (q == s) {
+		if (q == s && isErr) {
 			q = 'You have not access to this page';
+		}
+		if (q == s && !isErr) {
+			q = 'Click download button';
 		}
 		e('hWaitGetLink').innerHTML = q;
 	}
