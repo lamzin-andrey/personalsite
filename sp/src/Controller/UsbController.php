@@ -1695,6 +1695,7 @@ class UsbController extends AbstractController
 
     private function removePhisFiles($fileEntities, Ausers  $user, Request $request, Filesystem $filesystem, TranslatorInterface $t)
     {
+        $success = true;
         foreach ($fileEntities as $fileEntity) {
             if ($fileEntity->getUserId() != $user->getId()) {
                 continue;
