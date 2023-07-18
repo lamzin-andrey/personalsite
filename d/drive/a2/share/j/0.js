@@ -2,6 +2,16 @@ window.root = '/d/drive/a2/share';
 window.br = window.backRoot = '/sp/public';
 window.onload = initApp;
 function initApp() {
+	var cLang = storage('lang');
+	if (!cLang) {
+		cLang = 'langEn';
+		window.L = window[cLang];
+		storage('lang', cLang);
+		onChangeLang();
+	} else {
+		setLangImageOnly(cLang);
+	}
+	
 	setListeners();
 	onLoadA236();
 	getAuthState();
@@ -9,9 +19,10 @@ function initApp() {
 }
 
 function setListeners() {
-	
+	e('chLang').ontouchstart = onChangeLang;
 }
 
+// ??
 function onSubmit(evt) {
 	if (window.submitOk) {
 		return true;
@@ -26,14 +37,52 @@ function onSubmit(evt) {
 	}, 500);
 	return false;
 }
+
+function onChangeLang()
+{
+	var cLang = storage('lang');
+	cLang = cLang ? cLang : 'langRu';
+	
+	console.log(cLang);
+	
+	if (cLang == 'langRu') {
+		onClickChooseEn();
+	} else {
+		onClickChooseRu();
+	}
+}
+
 function onClickChooseEn() {
-	storage('lang', 'langEn');
-	e('lang').value = 'en';
+	setLang('langEn', 'Ru');
+	attr('bDwnl', 'src', W.root + '/i/dbtnen.png');
 }
+
 function onClickChooseRu() {
-	storage('lang', 'langRu');
-	e('lang').value = 'ru';
+	setLang('langRu', 'En');
+	attr('bDwnl', 'src', W.root + '/i/dbtn.png');
 }
+
+function setLangImageOnly(lng)
+{
+	var img = (lng == 'langEn' ? '/i/dbtnen.png' : '/i/dbtn.png');
+	attr('bDwnl', 'src', W.root + img);
+}
+
+function setLang(lng, displayLng) {
+	var s = e('hWaitGetLink').innerHTML.trim(), q;
+	storage('lang', lng);
+	e('chLang').innerHTML = displayLng;
+	window.L = window[lng];
+	setDOM();
+	if (s) {
+		q = l(s);
+		if (q == s) {
+			q = 'You have not access to this page';
+		}
+		e('hWaitGetLink').innerHTML = q;
+	}
+}
+
 function getAuthState() {
 	Rest._token = '';
 	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json', onFailGetAuthState);
@@ -70,11 +119,6 @@ function onSuccessGetDLink(data){
 	}
 }
 
-// TODO include from a2 main, but ru and en need self
-function l(s) {
-	return s;
-}
-
 function onFailGetDLink(data, responseText, info, xhr) {
 	return defaultResponseError(data, responseText, info, xhr);
 }
@@ -84,7 +128,7 @@ function showError(er)
 	//alert(er); // TODO
 	removeClass('hWaitGetLink', 'infoMsg');
 	addClass('hWaitGetLink', 'errMsg');
-	e('hWaitGetLink').innerHTML = er;
+	e('hWaitGetLink').innerHTML = l(er);
 }
 
 function onFailGetAuthState(data, responseText, info, xhr) {

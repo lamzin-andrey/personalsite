@@ -55,8 +55,10 @@ body.f100, html.f100 {
 	background-color:#201F67;
 	color:#FFF;
 }
-.foot {
+.abs {
 	position:absolute;
+}
+.foot {
 	bottom:0px;
 	width:100%;
 	background-color:rgba(0,0,255,0.20);
@@ -68,4 +70,19 @@ body.f100, html.f100 {
 }
 .nig .about {
 	color:aqua;
+}
+
+#chLang {
+	background-color: #FFF;
+	border-radius: 100px;
+	width: 28px;
+	top: 10px;
+	right: 10px;
+	color: #000;
+	height: 25px;
+	font-size: 12px;
+	font-family: arial;
+	line-height: 25px;
+	cursor: pointer;
+	border:#30fdcd 1px solid;
 }
