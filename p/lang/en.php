@@ -50,4 +50,5 @@ Now we working create personal cabinet, it will decide similar provlems. Now you
 	'Articles'         => 'Articles',
 	'must-have-size' => 'required size',
 	'pixels' => 'pixels',
+	'inostr-email'       => 'You can send russian email only',
 ];

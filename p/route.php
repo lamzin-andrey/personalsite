@@ -17,6 +17,7 @@ class Route {
 		}
 		
 		$this->_p();
+		$this->_drvemailsave();
 		$this->_acategories();
 		$this->_portfolio();
 		$this->_portfoliocats();
@@ -308,6 +309,23 @@ class Route {
 			$this->app = new DemoCategoriesList();
 		}*/
 	}
+	
+	/**
+	 * @description Маршруты для страницы /p/drvemails/post.jn
+	*/
+	protected function _drvemailsave()
+	{
+		$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/drvemails/post.jn') {
+			$handler = $sCtrlDir . 'save.php';
+			require_once $handler;
+			$this->app = new DrvEmailWanterPost();
+		}
+	}
+	
 	
 	/**
 	 * @description Маршруты для страницы /p/slackagency/status.jn
