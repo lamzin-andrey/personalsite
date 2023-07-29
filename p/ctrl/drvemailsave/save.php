@@ -31,8 +31,8 @@ class DrvEmailWanterPost extends OpenApp {
 			$mailer->setHtmlText("<p>Привет!</p>
 			<p>Пользователь {$login} с сайта {$site} будет рад попробовать этот твой WebUSB когда его закончишь.</p>
 			");
-			$mailer->setAddressFrom('admin@andryuxa.ru');
-			$mailer->setAddressTo('lamzin80@mail.ru');
+			$mailer->setAddressFrom(['admin@andryuxa.ru' => 'admin@andryuxa.ru']);
+			$mailer->setAddressTo(['lamzin80@mail.ru' => 'lamzin80@mail.ru']);
 			$mailer->send();
 			
 			$mailer = new SampleMail();
@@ -45,8 +45,8 @@ class DrvEmailWanterPost extends OpenApp {
 			<p>Но как только я доработаю этот нюанс, я пришлю вам ссылку на сервис.</p>
 			<p>Спасибо за вашу поддержку, знать, что моя работа кому-то нужна очень приятно!</p>
 			");
-			$mailer->setAddressFrom('admin@andryuxa.ru');
-			$mailer->setAddressTo($this->email);
+			$mailer->setAddressFrom(['admin@andryuxa.ru' => 'admin@andryuxa.ru']);
+			$mailer->setAddressTo([$this->email => $this->email]);
 			$mailer->send();
 			
 			json_ok('msg', l('Thank-for-want-web-usb'));
