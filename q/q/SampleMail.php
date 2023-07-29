@@ -240,7 +240,7 @@ class SampleMail
 		$header .= "Mime-Version: 1.0\n";
 		$header .= "Content-Type: multipart/mixed; boundary=$boundary\n\n";		
 		$bodyHeader  = "--$boundary\n";
-		$bodyHeader .= "Content-Type: $this->contentType; charset=$this->encoding\n";
+		$bodyHeader .= "Content-type: $this->contentType; charset=$this->encoding\n";
 		$bodyHeader .= "Content-Transfer-Encoding: base64\r\n\r\n";
 		//Далее код прикрепляющий файлы
 		$files = "";
