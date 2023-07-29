@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/openapp.php';
+require_once DOC_ROOT . '/q/q/SampleMail.php';
 
 class DrvEmailWanterPost extends OpenApp {
 	/** @property string */
@@ -20,7 +21,31 @@ class DrvEmailWanterPost extends OpenApp {
 			$sql = "INSERT IGNORE INTO drv_want_emails            (`email`)           VALUES('{$this->email}');";
 			query($sql);
 			
-			json_ok('msg', l('Thank-for-want-web-usb'), 'sql', $sql);
+			
+			$mailer = new SampleMail();
+			$mailer->setSubject('Появился новый желающий попробовать Web USB');
+			$mailer->setBody("Привет!
+			Пользователь {$login} с сайта {$site} будет рад попробовать этот твой WebUSB когда его закончишь.
+			");
+			$mailer->setFrom('admin@andryuxa.ru');
+			$mailer->setTo('lamzin80@mail.ru');
+			$mailer->send();
+			
+			$mailer = new SampleMail();
+			$mailer->setSubject('Статус вашей заявки в бесплатном онлайн-сервисе Web USB');
+			$mailer->setBody("Здравствуйте!
+			Вы получили это письмо, потому что оставили заявку на использование сервиса webUSB.
+			Сейчас я не могу предоставить его вам в использование, потому что веду доработки связанные 
+			с соблюдением законодательства Российской Федерации.
+			Речь идет об обязательном хранении в течении полугода данных, которые пользователи сайтов загружают на сайт.
+			Но как только я доработаю этот нюанс, я пришлю вам ссылку на сервис.
+			Спасибо за вашу поддержку, знать, что моя работа кому-то нужна очень приятно!
+			");
+			$mailer->setFrom('admin@andryuxa.ru');
+			$mailer->setTo($this->email);
+			$mailer->send();
+			
+			json_ok('msg', l('Thank-for-want-web-usb'));
 		}
 		$aErr = [];
 		foreach ($errors as $key => $sText) {
