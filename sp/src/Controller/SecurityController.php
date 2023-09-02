@@ -76,7 +76,7 @@ class SecurityController extends AppBaseController
         $oUser = new User();
         $this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
         $this->translator = $t;
-        $agree = $oRequest->request->get('register_form')['agree'];
+        $agree = $oRequest->request->get('register_form')['agree'] ?? null;
         if ($oRequest->getMethod() == 'POST') {
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
@@ -103,6 +103,10 @@ class SecurityController extends AppBaseController
                     $this->addFormError('Passwords is different', 'passwordRaw', $oAppService);
                 } else if ('true' !== $agree) {
                     $this->addFormError('Consent to agree to terms of use', 'agree', $oAppService);
+                } else if (!$this->isRussianEmail($sEmail, $allowEmails)) {
+                    $this->addFormError('email_must_be_russian' , 'email', $oAppService, null, [
+                        '%list%' => implode(",\n",  $allowEmails)
+                    ]);
                 } else {
                     //Success
                     // TODO userService!
@@ -138,6 +142,38 @@ class SecurityController extends AppBaseController
             return $this->_json(['success' => false, 'errors' => $errors]);
         }
 
+    }
+
+    /*
+	 * @desc Проверяем, относится ли email к одному из российских почтовых сервисов?
+	*/
+    private function isRussianEmail($email, &$allow = null)
+    {
+        $domain = explode('@', strtolower($email))[1];
+        $allowList = [
+            'mail.ru',
+            'list.ru',
+            'internet.ru',
+            'inbox.ru',
+            'bk.ru',
+            'yandex.ru',
+            'ya.ru',
+            'narod.ru',
+            'autorambler.ru',
+            'myrambler.ru',
+            'rambler.ru',
+            'rambler.ua',
+            'ro.ru',
+        ];
+        $allow = $allowList;
+
+        $allowList[] = 'qwe.ru';
+
+        if (in_array($domain, $allowList)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -250,9 +286,9 @@ class SecurityController extends AppBaseController
      * @param string $sField
      * @param FormInterface $oForm
      **/
-    public function addFormError(string $sError, string $sField, AppService $appService, ?FormInterface $oForm = null)
+    public function addFormError(string $sError, string $sField, AppService $appService, ?FormInterface $oForm = null, array $params = [])
     {
-        $message = $appService->l(null, $sError, null);
+        $message = $appService->l(null, $sError, null, $params);
         $oError = new \Symfony\Component\Form\FormError($message);
         $this->_oForm->get($sField)->addError($oError);
     }

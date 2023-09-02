@@ -766,6 +766,11 @@ class AppService
             }
         }
 
+        $appType = (int) ($_POST['apptype'] ?? null);
+        if (6 === $appType) {
+            $locale = 'ru';
+        }
+
         return $locale;
     }
 
