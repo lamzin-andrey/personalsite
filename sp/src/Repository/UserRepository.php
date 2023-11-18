@@ -37,8 +37,8 @@ class UserRepository extends ServiceEntityRepository
                            OR $username LIKE(:s2)
                            OR $username LIKE(:s3)
                         ORDER BY ($username = :s) DESC,
-                        CAST($username LIKE(:s2) AS INT) DESC,
-                        CAST($username LIKE(:s3) AS INT) DESC
+                        $username LIKE(:s2)  DESC,
+                        $username LIKE(:s3) DESC
                         LIMIT 3;
                         ';
         /*$queryBuilder = $this->createQueryBuilder('u');
