@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints AS Assert;
  * Ausers
  *
  * @ORM\Table(name="ausers", indexes={@ORM\Index(name="weight_from", columns={"weight_from"}), @ORM\Index(name="growth_from", columns={"growth_from"}), @ORM\Index(name="weight_to", columns={"weight_to"}), @ORM\Index(name="growth_to", columns={"growth_to"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class Ausers implements UserInterface
 {

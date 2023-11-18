@@ -242,6 +242,99 @@
 		<!-- screen settings -->
 		
 		
+		<div class="tc screen d-none hFilePermission" id="hFilePermission">
+			<div class="cim_head_wr">
+				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
+				<div class="cim_head_text" id="hFilePermissionTitle">Longly long multiwords file, very very longest</div>
+			</div>
+			<div class="tl" id="">
+				<div class="clinkW tc">
+					<!--input type="text" id="clink" value="https://andryuxa.ru/d/drive/download?i=4564564"-->
+					<a id="clink" href="https://andryuxa.ru/d/drive/download?i=4564564">https://andryuxa.ru/d/drive/download?i=4564564</a>
+				</div>
+				<div class="pcase">
+					<input type="radio" name="filePermissionGr" value="private" id="bFPPrivate" checked>
+					<label for="bFPPrivate" id="hPrivateCaseLabel">
+						<span class="widelbl">
+							Only for me
+						</span>
+						<span class="pcaseRmBtn">
+							<img src="./i/exit48.png" class="forexit">
+						</span>
+						<div class="cl"></div>
+					</label>
+				</div>
+				<div class="pcase">
+					<input type="radio" name="filePermissionGr" value="public" id="bFPPublic">
+					<label for="bFPPublic" id="hPublicCaseLabel">
+						<span class="widelbl">
+							For all
+						</span>
+						<span class="pcaseRmBtn">
+							<img src="./i/exit48.png" class="forexit">
+						</span>
+						<div class="cl"></div>
+					</label>
+				</div>
+				<div class="pcase">
+					<input type="radio" name="filePermissionGr" value="custom" id="bFPCustom">
+					<label for="bFPCustom" id="hCustomCaseLabel">
+						<span class="widelbl">
+							For users:
+						</span>
+						<span class="pcaseRmBtn">
+							<img src="./i/exit48.png" class="forexit">
+						</span>
+						<div class="cl"></div>
+					</label>
+									</div>
+				<div class="customUsersWrapper"></div>
+				
+				<div class="pairBtnHWr tc">
+					<span class="userCardBtn" id="bAddFileUser">
+						<span class="userCardBtnImgW">
+							<img src="./i/+.png">
+						</span>
+						<span class="userCardBtnImgLbl" id="hAddUserPerm">Добавить</span>
+					</span>
+					
+					<span class="userCardBtn" id="bClosePermScr">
+						<span class="userCardBtnImgW">
+							<img src="./i/exit.png">
+						</span>
+						<span class="userCardBtnImgLbl" id="hExitPerm">Закрыть</span>
+					</span>
+				</div>
+				
+			</div>
+		</div>
+		
+		<!-- Begin add file perm user -->
+		<div class="tc screen d-none hFilePermission" id="hAddFileUser">
+			<div class="cim_head_wr">
+				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
+				<div class="cim_head_text" id="hFileAddUserTitle">Share file for user</div>
+			</div>
+			<div class="tl" id="">
+				<div class="clinkW tc">
+					<input type="text" id="srchuser" placeholder="Type user login and search it">
+				</div>
+				<div id="customUsersSearchWrapper"></div>
+				
+				<div class="pairBtnHWr tc">
+					<span class="userCardBtn" id="bCloseAddFileUserScr">
+						<span class="userCardBtnImgW">
+							<img src="./i/exit.png">
+						</span>
+						<span class="userCardBtnImgLbl" id="hExitAddUserLbl">Close</span>
+					</span>
+				</div>
+				
+			</div>
+		</div>
+		<!-- End add file perm user -->
+		
+		
 		<!-- No, let will many html files!!-->
 		<!-- screen auth -->
 		<div class="tc screen d-none" id="hAuthScreen">
@@ -348,20 +441,20 @@
 		<script src="../a2/j/catalog/sqzdatetime.js"></script>
 		<script src="../a2/j/catalog/filelist.js"></script>
 		<script src="../a2/j/catalog/sortsettingdlg.js"></script>
+		
+		<!-- add file permissions screen -->
+		<script src="../a2/j/catalog/sharelinksetter.js"></script>
+		<script src="../a2/j/catalog/filepermissioncontroller.js"></script>
+		<script src="../a2/j/catalog/filepermissionadduserctrl.js"></script>
+		<!-- /add file permissions screen -->
+		
 		<script src="../a2/j/catalog/filelistitemcmenu.js?v=1"></script>
-		
-		
 		<script src="./j/humanvalue.js"></script>
 		<script src="./j/upload/anim.js"></script>
 		<script src="./j/upload/upload.js?6"></script>
-		
 		<script src="../a2/j/bmenu/dlg/j/a2dlg.js"></script>
 		<script src="../a2/j/cbox/cbox.js"></script>
-		
 		<script src="./j/options.js?v=1"></script>
-		
-		
-		
 		<script src="./j/u.js?v=1"></script>
 	</body>
 </html>

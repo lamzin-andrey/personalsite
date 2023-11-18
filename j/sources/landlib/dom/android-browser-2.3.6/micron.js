@@ -119,7 +119,11 @@ function bod() {
 }
 function stl(o, s, v) {
 	o = e(o);
-	o.style[s] = v;
+	if (v) {
+		o.style[s] = v;
+	}
+	v = o.style[s];
+	return v;
 }
 function show(o, v) {
 	v = v ? v : 'block';
@@ -321,7 +325,7 @@ function wsStorage(table, id, onData, data) {
  * @return * defaultValue if value is undefined
 */
 function def(v, defV) {
-    if ( String( v )  == 'undefined'  ){
+    if (S(v)  == 'undefined'){
       return defV;
     }
     return v;

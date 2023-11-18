@@ -10,21 +10,24 @@ window.fileListItemCmenu = {
 		l('Rename'),
 		l('Download'),
 		l('Move'),
-		l('Exit')
+		l('Exit'),
+		l('Share link')
 	],
 	fileTextMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
 		l('Move'),
-		l('Exit')
+		l('Exit'),
+		l('Share link')
 	],
 	fileUnknownMenuItems: [
 		l('Remove'),
 		l('Rename'),
 		l('Download'),
 		l('Move'),
-		l('Exit')
+		l('Exit'),
+		l('Share link')
 	],
 	/**
 	 * @description Build and show folder or file context menu
@@ -129,6 +132,15 @@ window.fileListItemCmenu = {
 							return false;
 						}
 						self.onClickDownload.call(self, evt);
+					};
+					break;
+				case l('Share link'):
+					menuItem.onclick = function(evt) {
+						if (self.delayForMenuItems) {
+							evt.preventDefault();
+							return false;
+						}
+						self.onClickShareLink.call(self, evt);
 					};
 					break;
 				case l('Exit'):
@@ -495,6 +507,61 @@ window.fileListItemCmenu = {
 		}
 		s = a.reverse().join('');
 		return s;
+	},
+	
+	onClickShareLink:function(evt) {
+		var o = this;
+		showLoader();
+		Rest._get(function(data){o.onSuccessGetFPerm(data);},
+			br + '/drivegetfileprm.json?i=' + this.cmMenuOpenItemId,
+			function(data, responseText, info, xhr){o.onFailGetFPerm(data, responseText, info, xhr)});
+	},
+	onSuccessGetFPerm:function(data){
+		var rd;
+		if (this.onFailGetFPerm(data)) {
+			// TODO set fields
+			W.ShareLinkSetter.setLink(data.flink);
+			
+			rd = e(data.shareMode);
+			if (rd) {
+				rd.checked = true;
+			}
+			this.renderUsers(data.uls);
+			
+			showScreen('hFilePermission');
+		}
+	},
+	
+	renderUsers:function(list){
+		var cont = cs(D, 'customUsersWrapper')[0], i, 
+			SZ = sz(list),
+			tpl = this.userViewTpl(), s;
+		cont.innerHTML = '';
+		for (i = 0; i < SZ; i++) {
+			s = str_replace('{id}', list[i].id, tpl);
+			s = str_replace('{login}', list[i].login, s);
+			s = str_replace('{fid}', this.cmMenuOpenItemId, s);
+			s = str_replace('{root}', W.roota2, s);
+			cont.innerHTML += s;
+		}
+	},
+	
+	userViewTpl:function() {
+		return '<div class="userCardSm" id="usr{id}">\
+						<span class="userCardSmAvatar">\
+							<img src="{root}/i/usr.png">\
+						</span>\
+						<span class="userCardSmNick">{login}</span>\
+						<span class="userCardSmAvatarRmBtn" onclick="FPC.rm(event, {id}, {fid})">\
+							<img src="{root}/i/clos48.png" class="rmu" onclick="FPC.rm(event, {id}, {fid})">\
+						</span>\
+						<div class="cl"></div>\
+					</div>';
+	},
+	
+	onFailGetFPerm:function(data, responseText, info, xhr){
+		showScreen('hCatalogScreen');
+		return defaultResponseError(data, responseText, info, xhr);
 	}
 	
 };

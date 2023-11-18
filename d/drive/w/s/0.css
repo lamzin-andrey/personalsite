@@ -348,3 +348,164 @@ input[type=text],input[type=password], input[type=email] {
 	margin-top:0px!important;
 }
 /** End main menu bitton  */
+
+
+
+/** permissions screen  */
+.pcase label{
+	display: inline-block;
+	height: 48px;
+	width: 86%;
+	line-height: 48px;
+	font-weight: bold;
+}
+
+.pcase {
+	border: solid 3px white;
+	height: 48px;
+	margin: 4px auto;
+	width: 94%;
+	border-radius: 6px;
+	background: #000;
+}
+
+.forexit{
+	height:38px!important;
+}
+
+.pcaseRmBtn {
+  display: inline-block;
+  line-height: 14px;
+  vertical-align: top;
+  width: 38px;
+  margin-top: 3px;
+  background: #5b072e;
+  float: right;
+}
+
+.userCardSmAvatar img{
+	width:44px;
+	height:44px;
+}
+
+.userCardSmAvatarRmBtn {
+	border: solid 1px #DBCFCF;
+	border-radius: 6px;
+	display: inline-block;
+	line-height: 38px;
+	vertical-align: top;
+	width: 38px;
+	margin-top: 4px;
+	border-bottom: solid #DBCFCF 2px;
+	border-right: solid #DBCFCF 3px;
+	background: #5b072e;
+	float:right;
+}
+.userCardSmAvatarRmBtn img{
+  width: 36px;
+  height: 29px;
+  vertical-align: middle;
+}
+
+.userCardSmNick {
+	font-weight: bold;
+	padding: 10px 0px;
+	white-space: nowrap;
+	width: 53%;
+	display:inline-block;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	font-size:12px;
+}
+
+.userCardSm {
+	border: solid 3px #A59EFB;
+	height: 48px;
+	margin: 4px auto;
+	width: 94%;
+	border-radius: 6px;
+	background: #4f70bf/*#4a49a8*/;
+	color: #3cff49;
+}
+
+.userCardBtn {
+	border: solid 1px #DBCFCF;
+	border-radius: 6px;
+	display: inline-block;
+	width: 106px;
+	margin-top: 2px;
+	border-bottom: solid #DBCFCF 2px;
+	border-right: solid #DBCFCF 3px;
+	background: #5b4e54/*#125719*//*#5b072e*/;
+	margin-bottom: 9px;
+}
+.userCardBtnImgW {
+	margin-top: 2px;
+	margin-left: -3px;
+}
+.userCardBtnImgW img{
+	width: 28px;
+	height: 28px;
+	vertical-align: middle;
+}
+
+.userCardBtnImgLbl {
+	font-weight: bold;
+	white-space: nowrap;
+	display: inline-block;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	font-size: 11px;
+	line-height: 48px;
+	vertical-align: middle;
+	width: 63px;
+	text-align: left;
+}
+
+.clinkW input{
+	width: 86%;
+	line-height: 48px;
+	color: aqua;
+	background: #000;
+	border:none;
+}
+.clinkW a{
+	width: 86%;
+	/*line-height: 48px;*/
+	color: aqua;
+	background: #000;
+	border:none;
+}
+
+.clinkW {
+	border: solid 3px white;
+	margin: 4px auto;
+	width: 94%;
+	border-radius: 6px;
+	background: #000;
+	font-weight:bold;
+	font-size:11px;
+	padding-bottom:4px;
+}
+/**  / permissions screen  */
+
+/** add user scr */
+.userCardSmAvatarAddBtn {
+	border: solid 1px #DBCFCF;
+	border-radius: 6px;
+	display: inline-block;
+	line-height: 38px;
+	vertical-align: top;
+	width: 38px;
+	margin-top: 4px;
+	border-bottom: solid #DBCFCF 2px;
+	border-right: solid #DBCFCF 3px;
+	background: #6D83AD;
+	float:right;
+}
+.userCardSmAvatarAddBtn img{
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+}
+/**  / add user scr */

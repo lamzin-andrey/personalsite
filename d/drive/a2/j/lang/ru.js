@@ -64,5 +64,17 @@ window.langRu = {
 	'hByMTimeDesc': 'Сначала новые',
 	'bCloseSortSetings': 'Закрыть',
 	'Your file uploaded to': 'Ваш файл был загружен в каталог',
-	'' : ''
+	
+	'Share link' : 'Поделиться ссылкой',
+	'hFilePermissionTitle' : 'Доступ к файлу',
+	'hPrivateCaseLabel' : 'Только мне',
+	'hPublicCaseLabel' : 'Для всех',
+	'hCustomCaseLabel' : 'Для пользователей:',
+	'hAddUserPerm' : 'Добавить',
+	'hExitPerm' : 'Закрыть',
+	'hFileAddUserTitle' : 'Поиск пользователей',
+	'srchuser' : 'Введите логин пользователя, которому хотите дать права', // placeholder
+	'hExitAddUserLbl' : 'Закрыть',
+	'' : '',
+	'' : '',
 };

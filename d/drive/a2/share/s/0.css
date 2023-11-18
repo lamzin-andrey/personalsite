@@ -1,0 +1,88 @@
+body {
+	background-color:#201F67;
+	color:white;
+	padding:0;
+	margin:0;
+	color: white;
+	padding: 0;
+	margin: 0;
+	
+}
+.day {
+	background-color:#BCCFD9;
+	background-image: url("/d/drive/a2/share/i/heaven.jpg");
+}
+.nig {
+	background-color:#000;
+	background-image: url("/d/drive/a2/share/i/neaven.jpg");
+}
+body.f100, html.f100 {
+	height:100%;
+}
+.hide {
+	display: none;
+}
+.tc {
+	text-align:center;
+}
+.w-image {
+	height:128px;
+	border: 2px solid #002ddd; /* #4f67c6 */
+}
+#hWaitScreen, .vc {
+	margin-top:46px;
+}
+.vc {
+	display:inline-block;
+	/*margin-bottom:26px;*/
+}
+.infoMsg {
+	display:inline-block;
+	margin-bottom:16px;
+	background-color:rgba(0,0,255,0.20);
+	padding:10px;
+	border-radius:7px;
+}
+.errMsg {
+	display:inline-block;
+	margin-bottom:16px;
+	background-color:#FFF;
+	padding:10px;
+	border-radius:7px;
+	color:black;
+}
+.nig .errMsg {
+	background-color:#201F67;
+	color:#FFF;
+}
+.abs {
+	position:absolute;
+}
+.foot {
+	bottom:0px;
+	width:100%;
+	background-color:rgba(0,0,255,0.20);
+	padding:10px 0;
+	border-radius:7px;
+}
+.about {
+	color:white;
+}
+.nig .about {
+	color:aqua;
+}
+
+#chLang {
+	background-color: #FFF;
+	border-radius: 100px;
+	width: 28px;
+	top: 10px;
+	right: 10px;
+	color: #000;
+	height: 25px;
+	font-size: 12px;
+	font-family: arial;
+	line-height: 25px;
+	cursor: pointer;
+	border:#30fdcd 1px solid;
+}

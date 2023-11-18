@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ausers;
 use App\Entity\DrvCatalogs;
 use App\Entity\DrvFile;
+use App\Entity\DrvFilePermissions;
 use App\Entity\PhdMessages;
 use App\Entity\PhdUsers;
 use App\Form\PsdUploadFormType;
@@ -16,6 +17,7 @@ use App\Service\AppService;
 use App\Service\BitReader;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
+use App\WebUSB\Service\FilePermissionService;
 use App\WebUSB\Service\WusbUploadService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\TreeWalkerAdapter;
@@ -33,8 +35,9 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Translation\Translator;
 use \TreeAlgorithms;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Transliterator;
+use StdClass;
 
- 
 class UsbController extends AbstractController
 {
 
@@ -210,14 +213,17 @@ class UsbController extends AbstractController
      * @param $
      * @return
      */
-    public function driveGetFileDowloadLinkAction(Request $request,
-                                               TranslatorInterface $t,
-                                               Filesystem $filesystem,
-                                               CsrfTokenManagerInterface $csrfTokenManager)
+    public function driveGetFileDowloadLinkAction(
+       Request $request,
+       TranslatorInterface $t,
+       Filesystem $filesystem,
+       CsrfTokenManagerInterface $csrfTokenManager,
+       FilePermissionService $filePermissionService
+    )
     {
         $data = [];
         $fileEntity = null;
-        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity)) {
+        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity, $filePermissionService)) {
             return $this->_json($data);
         }
 
@@ -262,10 +268,13 @@ class UsbController extends AbstractController
      * @param Request $request
      * @param TranslatorInterface $t
     */
-    public function downloadSmallFileAction(Request $request,
-                                         TranslatorInterface $t,
-                                         Filesystem $filesystem,
-                                         CsrfTokenManagerInterface $csrfTokenManager)
+    public function downloadSmallFileAction(
+        Request $request,
+        TranslatorInterface $t,
+        Filesystem $filesystem,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        FilePermissionService $filePermissionService
+    )
     {
 
         $data = [];
@@ -273,7 +282,7 @@ class UsbController extends AbstractController
          * @var ?DrvFile $fileEntity
         */
         $fileEntity = null;
-        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity)) {
+        if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity, $filePermissionService)) {
             return $this->_json($data);
         }
 
@@ -297,7 +306,7 @@ class UsbController extends AbstractController
             header('Pragma: public');
             header('Content-Length: ' . strlen($s));
             echo $s;
-            die;
+            exit;
         }
 
         header('Content-Description: File Transfer');
@@ -308,14 +317,21 @@ class UsbController extends AbstractController
         header('Pragma: public');
         header('Content-Length: ' . filesize($path));
         readfile($path);
-        die;
+        exit;
     }
 
     private function _json($aData)
 	{
-		if (!isset($aData['status'])) {
-			$aData['status'] = 'ok';
-		}
+	    if (is_array($aData)) {
+            if (!isset($aData['status'])) {
+                $aData['status'] = 'ok';
+            }
+        } else {
+            if (!isset($aData->status)) {
+                $aData->status = 'ok';
+            }
+        }
+
     	$oResponse = new Response( json_encode($aData) );
     	$oResponse->headers->set("Content-Type", "application/json");
     	return $oResponse;
@@ -409,7 +425,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
      */
-    public function setCalaogsAsIsDeleted(Request $request, TranslatorInterface $t)
+    public function setCalaogsAsIsDeleted(Request $request, TranslatorInterface $t, Filesystem $filesystem)
     {
         if (!$this->getUser()) {
             return $this->_json([
@@ -438,6 +454,8 @@ class UsbController extends AbstractController
              */
             $filesRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
             $filesRepository->removeByCatalogIdList($idList, intval($this->getUser()->getId()));
+            $list = $filesRepository->findBy(['catalogId' => $idList]);
+            $this->removePhisFiles($list, $this->getUser(), $request, $filesystem, $t);
         }
 
         return $this->json(['status' => 'ok']);
@@ -474,12 +492,13 @@ class UsbController extends AbstractController
                 ]);
             }
             $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+
+            $this->removeSymlink($filesystem, $pathObject->symlink);
+
             if (!empty($pathObject->path) && file_exists($pathObject->path)) {
                 $filesystem->remove($pathObject->path);
             }
-            if (!empty($pathObject->symlink) && file_exists($pathObject->symlink)) {
-                $filesystem->remove($pathObject->symlink);
-            }
+
 
             $fileRepository->removeById($fileId, intval($this->getUser()->getId()));
         }
@@ -704,6 +723,11 @@ class UsbController extends AbstractController
         $fileEntity->setSize($size);
         $fileEntity->setUpdatedTime($modifyTime);
         $fileEntity->setCreatedTime(new \DateTime());
+        $fileEntity->setHash($oAppService->getHash(
+            $request,
+            $originalName . $this->getUser()->getId(),
+            'sha1'
+        ));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($fileEntity);
@@ -960,7 +984,20 @@ class UsbController extends AbstractController
 
             return $result;
         }
-        $symlink .= '/' . $fileEntity->getId() . $ext;
+
+        // $symlink .= '/' . $fileEntity->getId() . $ext;
+        $transliterator = Transliterator::create('Any-Latin');
+        $transliteratorToASCII = Transliterator::create('Latin-ASCII');
+        $safeFilename = $transliteratorToASCII->transliterate($transliterator->transliterate($fileEntity->getName()));
+        $safeFilename = preg_replace("#\s#", '_', $safeFilename);
+        $symlink .= '/' . $fileEntity->getHash();
+        $filesystem->mkdir($symlink);
+        if (!$filesystem->exists($symlink) || !is_dir($symlink)) {
+            $result->error = 'Unable create temp catalog (2)';
+
+            return $result;
+        }
+        $symlink .= '/' . $safeFilename;
         $result->symlink = $symlink;
 
         return $result;
@@ -996,7 +1033,14 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function hasAccessToFile(Request $request, CsrfTokenManagerInterface $csrfTokenManager, array &$data, TranslatorInterface $t, ?DrvFile &$fileEntity) : bool
+    protected function hasAccessToFile(
+        Request $request,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        array &$data,
+        TranslatorInterface $t,
+        ?DrvFile &$fileEntity,
+        FilePermissionService $filePermissionService
+    ) : bool
     {
         $csrfToken = $csrfTokenManager
             ? $csrfTokenManager->getToken('authenticate')->getValue()
@@ -1010,7 +1054,12 @@ class UsbController extends AbstractController
 
             return false;
         }*/
-        if (!$this->getUser()) {
+
+        $isPublic = false;
+        if ($fileEntity && $fileEntity->getIsPublic()) {
+            $isPublic = true;
+        }
+        if (!$this->getUser() && !$isPublic) {
             $data = [
                 'status' => 'error',
                 'error' => $this->l($t, 'You have not access to this page', null)
@@ -1024,13 +1073,21 @@ class UsbController extends AbstractController
          */
         $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
         $filter = [
-            'userId' => $this->getUser()->getId(),
             'id' => intval($request->query->get('i')),
             'isDeleted' => false
         ];
 
         $fileEntity = $fileRepository->findOneBy($filter);
-        if ($this->getUser()->getId() !== $fileEntity->getUserId()) {
+
+        if (!$fileEntity) {
+            $data =[
+                'status' => 'error',
+                'error' => $this->l($t, 'File not found', $domain)
+            ];
+            return false;
+        }
+
+        if (!$filePermissionService->hasAccessToFile($this->getUser()->getId(), $fileEntity)) {
             $data =[
                 'status' => 'error',
                 'error' => $this->l($t, 'You have not access to this page', $domain)
@@ -1306,37 +1363,9 @@ class UsbController extends AbstractController
                 'userId' => $user->getId()
             ]);
         }
-
-        foreach ($fileEntities as $fileEntity) {
-            if ($fileEntity->getUserId() != $user->getId()) {
-                continue;
-            }
-            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
-            if (!$filePathObject->error) {
-                $success = false;
-                $error = '';
-                try {
-                    if (file_exists($filePathObject->symlink)) {
-                        $filesystem->remove($filePathObject->symlink);
-                    }
-                    if (file_exists($filePathObject->path)) {
-                        $filesystem->remove($filePathObject->path);
-                    }
-                    $success = true;
-                } catch (\Exception $exception) {
-                    $error = $exception->getMessage();
-                }
-                if (!$success) {
-                    return $this->_json([
-                        'status' => 'error',
-                        'error' => $this->l($t, 'remove failed! ') . $error
-                    ]);
-                }
-
-                // db
-                $fileEntity->setIsDeleted(true);
-
-            }
+        $response = $this->removePhisFiles($fileEntities, $user, $request, $filesystem, $t);
+        if ($response) {
+            return $this->_json($response);
         }
         $em = $this->container->get('doctrine')->getManager();
 
@@ -1425,7 +1454,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function getFileList(int $parentId, int $mode, Request $request, Filesystem $filesystem, Ausers $user) : array
+    protected function getFileList($parentId, $mode, Request $request, Filesystem $filesystem, Ausers $user)
     {
         // Create db record
         /**
@@ -1573,7 +1602,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function l(TranslatorInterface $t, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
+    protected function l(TranslatorInterface $t,  $s,  $domain = 'wusb_filesystem', $params = [])
     {
         $locale = 'en';
         /**
@@ -1647,5 +1676,250 @@ class UsbController extends AbstractController
         $filesystem->mkdir($path);
 
         return $path;
+    }
+
+    private function removeSymlink(Filesystem $filesystem, $path)
+    {
+        if (!empty($path) ) {
+            if (file_exists($path)) {
+                $filesystem->remove($path);
+            }
+            $a = explode('/', $path);
+            unset($a[count($a) - 1]);
+            $symlinkDir = implode('/', $a);
+            if (file_exists($symlinkDir)) {
+                rmdir($symlinkDir);
+            }
+        }
+    }
+
+    private function removePhisFiles($fileEntities, Ausers  $user, Request $request, Filesystem $filesystem, TranslatorInterface $t)
+    {
+        $success = true;
+        foreach ($fileEntities as $fileEntity) {
+            if ($fileEntity->getUserId() != $user->getId()) {
+                continue;
+            }
+            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
+            if (!$filePathObject->error) {
+                $success = false;
+                $error = '';
+                try {
+                    $this->removeSymlink($filesystem, $filePathObject->symlink);
+                    if (file_exists($filePathObject->path)) {
+                        $filesystem->remove($filePathObject->path);
+                    }
+                    $success = true;
+                } catch (\Exception $exception) {
+                    $error = $exception->getMessage();
+                    $success = false;
+                }
+
+                // db
+                $fileEntity->setIsDeleted(true);
+
+            }
+        }
+
+        if (!$success) {
+            return [
+                'status' => 'error',
+                'error' => $this->l($t, 'remove failed! ') . $error
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * @Route("/drivegetfileprm.json", name="drivegetfileprm", methods={"GET"})
+     * Ge tfile permissions
+     * @param $
+     * @return
+     */
+    public function driveGetFilePermission(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+
+        $fileId = intval($request->query->get('i') );
+
+        if ($fileId > 0) {
+            if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+                return $this->_json($response);
+            }
+            /**
+             * @var DrvFileRepository $fileRepository
+             */
+            $fileRepository = $this->get('doctrine')->getRepository(DrvFile::class);
+            // remove phisical + symlink
+            $fileEntity = $fileRepository->find($fileId);
+
+            $response = new StdClass();
+            $response->status = 'ok';
+            $response->shareMode = $filePermissionService->getShareModeAsJstring($fileEntity->getId(), $fileEntity->getIsPublic());
+            $response->flink = $request->server->get('HTTP_HOST')
+                . '/d/drive/?action=share&i=' . $fileId;
+            $response->uls = $filePermissionService->getUsersForLastFile();
+
+
+            return $this->_json($response);
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/drivermfileprm.json", name="drivermfileprm", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveRemoveFilePermission(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+
+        $fileId = intval($request->request->get('f') );
+        $userId = intval($request->request->get('i') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            return $this->_json($response);
+        }
+
+
+        if ($fileId > 0 && $userId > 0) {
+            /**
+             * @var DrvFileRepository $fileRepository
+             */
+            $filePertmissionsRepository = $this->container->get('doctrine')->getRepository(DrvFilePermissions::class);
+            // remove phisical + symlink
+            $entity = $filePertmissionsRepository->findOneBy([
+                'userId' => $userId,
+                'fileId' => $fileId
+            ]);
+            if ($entity) {
+                $em = $this->get('doctrine')->getManager();
+                $em->remove($entity);
+                $em->flush();
+            }
+            $response = new StdClass();
+            $response->status = 'ok';
+            $response->id = $userId;
+
+            return $this->_json($response);
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/drivesavefileprm.json", name="drivesavefileprm", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveSaveFilePermission(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+        $fileId = intval($request->request->get('i') );
+        $permission = intval($request->request->get('p') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            $response['error'] = $this->l($t, $response['error'], null);
+            return $this->_json($response);
+        }
+
+        if ($fileId > 0) {
+            $filePermissionService->saveFilePermission($fileId, (1 == $permission));
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+    /**
+     * @Route("/driveaddfileusr.json", name="driveaddfileuser", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveAddFileUser(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+        $fileId = intval($request->request->get('i') );
+        $userId = intval($request->request->get('u') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            $response['error'] = $this->l($t, $response['error'], null);
+            return $this->_json($response);
+        }
+
+        if ($fileId > 0) {
+            $filePermissionService->addFileUser($fileId, $userId);
+        }
+
+        return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/drivesrchusr.json", name="drivesrchusr", methods={"POST"})
+     * @param $
+     * @return
+     */
+    public function driveSearchUser(
+        Request $request,
+        TranslatorInterface $t,
+        FilePermissionService $filePermissionService)
+    {
+        if (!$this->getUser()) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', '')
+            ]);
+        }
+        $fileId = intval($request->request->get('i') );
+        $fragment = strval($request->request->get('s') );
+
+        if (!$filePermissionService->isOwner($this->getUser()->getId(), $fileId, $response)) {
+            $response['error'] = $this->l($t, $response['error'], null);
+            return $this->_json($response);
+        }
+
+        if ($fileId > 0) {
+            $repository = $this->get('doctrine')->getRepository(Ausers::class);
+            $list = $repository->searchByLogin($fragment);
+            $response = new StdClass();
+            $response->ls = $list;
+            $response->status = 'ok';
+            return $this->_json($response);
+        }
+
+        return $this->_json(['status' => 'ok']);
     }
 }
