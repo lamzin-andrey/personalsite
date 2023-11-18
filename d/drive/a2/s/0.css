@@ -438,6 +438,13 @@ input[type=text],input[type=password], input[type=email] {
 	background: #000;
 	border:none;
 }
+.clinkW a{
+	width: 86%;
+	/*line-height: 48px;*/
+	color: aqua;
+	background: #000;
+	border:none;
+}
 
 .clinkW {
 	border: solid 3px white;

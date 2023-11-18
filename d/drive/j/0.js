@@ -56,6 +56,15 @@ function onCheckSsl(isSSLSupport) {
 			return;
 		}
 		
+		// If it link to promo, locate to share page
+		if (
+			HttpQueryString._GET('action', '') == 'promo'
+		   )
+		{
+			location = hostPrefix + '/d/drive/a2/promo/';
+			return;
+		}
+		
 		// If language not selected, redirect to choose lang
 		lang = storage('lang');
 		if (lang != 'langRu' && lang != 'langEn') {
