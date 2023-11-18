@@ -956,8 +956,15 @@ class UsbController extends AbstractController
      * @param $
      * @return \StdClass {symlink:string, path: string, error: string, ext: string}
     */
-    protected function getFilePathObject(DrvFile $fileEntity, Ausers $user, Request $request, Filesystem $filesystem) : \StdClass
+    protected function getFilePathObject(DrvFile $fileEntity, ?Ausers $user, Request $request, Filesystem $filesystem) : \StdClass
     {
+
+        if (!$user) {
+            $userId = $fileEntity->getUserId();
+            $repository = $this->get('doctrine')->getRepository(AUsers::class);
+            $user = $repository->find($userId);
+        }
+
         $result = new \StdClass();
         $result->symlink = '';
         $result->path = '';
@@ -1042,6 +1049,7 @@ class UsbController extends AbstractController
         FilePermissionService $filePermissionService
     ) : bool
     {
+
         $csrfToken = $csrfTokenManager
             ? $csrfTokenManager->getToken('authenticate')->getValue()
             : null;
@@ -1056,6 +1064,20 @@ class UsbController extends AbstractController
         }*/
 
         $isPublic = false;
+        if (!$fileEntity) {
+            /**
+             * @var DrvFileRepository $fileRepository
+             */
+            $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+            $filter = [
+                'id' => intval($request->query->get('i')),
+                'isDeleted' => false
+            ];
+
+            $fileEntity = $fileRepository->findOneBy($filter);
+        }
+
+
         if ($fileEntity && $fileEntity->getIsPublic()) {
             $isPublic = true;
         }
@@ -1068,16 +1090,7 @@ class UsbController extends AbstractController
             return false;
         }
 
-        /**
-         * @var DrvFileRepository $fileRepository
-         */
-        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
-        $filter = [
-            'id' => intval($request->query->get('i')),
-            'isDeleted' => false
-        ];
 
-        $fileEntity = $fileRepository->findOneBy($filter);
 
         if (!$fileEntity) {
             $data =[
