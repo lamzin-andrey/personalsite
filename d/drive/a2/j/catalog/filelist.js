@@ -74,7 +74,7 @@ window.fileList = {
 			
 			newItem.addEventListener('touchstart', function(evt){self.onStartTouchItem(evt);}, false);
 			newItem.addEventListener('touchend', function(evt){self.onEndTouchItem(evt);}, false);
-			newItem.addEventListener('contextmenu', function(evt){self.onEndTouchItem(evt);}, false);
+			// newItem.addEventListener('contextmenu', function(evt){self.onEndTouchItem(evt);}, false);
 			
 		}
 		e('hPath').innerHTML = path;
@@ -166,7 +166,7 @@ window.fileList = {
 	},
 	
 	onEndTouchItem:function(evt) {
-		evt.preventDefault();
+		// evt.preventDefault();
 		// console.log(evt);
 		try {
 			var id = this.getItemId(evt.currentTarget),
@@ -182,8 +182,8 @@ window.fileList = {
 			
 			
 			startTime = this.touchItemsMap[id] ? this.touchItemsMap[id] : 0;
-			if (1/*Math.abs(this.startY - endY) < 1*/) {
-				if (/*time - startTime < 500*/evt.touches) { // short touch
+			if (Math.abs(this.startY - endY) < 1) {
+				if (time - startTime < 500) { // short touch
 					if (id.indexOf('fi') == -1) { // folder
 						if (!selectedItems[id]) {
 							this.onEnterInFolder({target: e(id)});
