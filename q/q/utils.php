@@ -1141,3 +1141,36 @@ function utils_Imagick(string $srcFilename, string $destFilename, string $destW,
 	
 	return false;
 }
+function utils_groupBy(array $a, string $field): array
+{
+	$r = [];
+	foreach ($a as $row) {
+		$v = $row[$field] ?? null;
+		if (null !== $v) {
+			if (!isset($r[$v])) {
+				$r[$v] = [];
+			}
+			$r[$v][] = $row;
+		}
+	}
+	
+	return $r;
+}
+/**
+ * Create oBject. "o" already busy)
+ */
+function b(): StdClass
+{
+	$args = func_get_args();
+	$sz = func_num_args();
+	$r = new StdClass();
+	for ($i = 0; $i < $sz; $i += 2) {
+		$key = $args[$i] ?? null;
+		$val = $args[$i + 1] ?? null;
+		if ($key !== null && $val !== null) {
+			$r->$key = $val;
+		}
+	}
+	
+	return $r;
+}
