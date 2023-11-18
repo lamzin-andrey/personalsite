@@ -1087,7 +1087,9 @@ class UsbController extends AbstractController
             return false;
         }
 
-        if (!$filePermissionService->hasAccessToFile($this->getUser()->getId(), $fileEntity)) {
+        if ($fileEntity && $fileEntity->getIsPublic()) {
+            return true;
+        } else if (!$filePermissionService->hasAccessToFile($this->getUser()->getId(), $fileEntity)) {
             $data =[
                 'status' => 'error',
                 'error' => $this->l($t, 'You have not access to this page', $domain)
