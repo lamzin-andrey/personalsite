@@ -1454,7 +1454,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function getFileList(int $parentId, int $mode, Request $request, Filesystem $filesystem, Ausers $user) : array
+    protected function getFileList($parentId, $mode, Request $request, Filesystem $filesystem, Ausers $user)
     {
         // Create db record
         /**
@@ -1602,7 +1602,7 @@ class UsbController extends AbstractController
      * @param $
      * @return
     */
-    protected function l(TranslatorInterface $t, string $s, ?string $domain = 'wusb_filesystem', $params = []) : string
+    protected function l(TranslatorInterface $t,  $s,  $domain = 'wusb_filesystem', $params = [])
     {
         $locale = 'en';
         /**
@@ -1678,7 +1678,7 @@ class UsbController extends AbstractController
         return $path;
     }
 
-    private function removeSymlink(Filesystem $filesystem, string $path)
+    private function removeSymlink(Filesystem $filesystem, $path)
     {
         if (!empty($path) ) {
             if (file_exists($path)) {
