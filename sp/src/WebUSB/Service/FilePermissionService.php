@@ -114,7 +114,7 @@ class FilePermissionService
         }
     }
 
-    public function isOwner($userId,  $fileId, ?array &$response = null): bool
+    public function isOwner($userId,  $fileId, &$response = null): bool
     {
         /**
          * @var DrvFileRepository $fileRepository
