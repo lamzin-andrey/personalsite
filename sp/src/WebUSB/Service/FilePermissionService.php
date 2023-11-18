@@ -17,9 +17,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FilePermissionService
 {
-    private Registry $registry;
-    private AppService $appService;
-    private TranslatorInterface $t;
+    private  $registry;
+    private  $appService;
+    private  $t;
 
     /**
      * @var array
