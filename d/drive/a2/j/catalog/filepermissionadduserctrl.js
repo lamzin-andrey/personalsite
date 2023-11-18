@@ -13,10 +13,10 @@ window.AddFileUser = {
 			o.onClose();
 		}
 	},
-	onClose() {
+	onClose:function() {
 		showScreen('hFilePermission');
 	},
-	onInput() {
+	onInput:function() {
 		var s = e('srchuser').value;
 		if (sz(s) > 2) {
 			this.searchUsers(s);
