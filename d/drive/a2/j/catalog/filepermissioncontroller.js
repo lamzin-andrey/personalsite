@@ -11,6 +11,7 @@ window.FPC = {
 			exLs[i].ontouchstart = cb;
 		}
 		mainExit.ontouchstart = cb;
+		mainExit.onclick = cb;
 		
 		e('bAddFileUser').onclick = function(){
 			window.FPC.onClickAddUser();
