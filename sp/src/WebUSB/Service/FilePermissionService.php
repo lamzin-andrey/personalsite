@@ -37,7 +37,7 @@ class FilePermissionService
         $this->t = $t;
     }
 
-    public function hasAccessToFile(int $userId, DrvFile $file): bool
+    public function hasAccessToFile($userId, DrvFile $file): bool
     {
         if ($file->getUserId() == $userId) {
             return true;
@@ -56,7 +56,7 @@ class FilePermissionService
         return false;
     }
 
-    public function getShareModeAsJstring(int $fileId, bool $isPublic): string
+    public function getShareModeAsJstring($fileId, $isPublic): string
     {
         $this->lastFileUsers = [];
         $repository = $this->registry->getRepository(DrvFilePermissions::class);
@@ -101,7 +101,7 @@ class FilePermissionService
         return $result;
     }
 
-    public function saveFilePermission(int $fileId, bool $isPublic): void
+    public function saveFilePermission($fileId, $isPublic): void
     {
         /**
          * @var DrvFileRepository $fileRepository
@@ -114,7 +114,7 @@ class FilePermissionService
         }
     }
 
-    public function isOwner(string $userId, int $fileId, ?array &$response = null): bool
+    public function isOwner($userId,  $fileId, ?array &$response = null): bool
     {
         /**
          * @var DrvFileRepository $fileRepository
@@ -134,7 +134,7 @@ class FilePermissionService
         return true;
     }
 
-    public function addFileUser(int $fileId, int $userId): void
+    public function addFileUser($fileId, $userId): void
     {
         $sql = "INSERT INTO `drv_file_permissions`
                 (`user_id`, `file_id`, `created_time`)
