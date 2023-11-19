@@ -42,8 +42,10 @@ function onSubmit(evt) {
 	return false;
 }
 
-function onChangeLang()
+function onChangeLang(ev)
 {
+	ev.stopImmediatePropagation();
+	ev.preventDefault();
 	var cLang = storage('lang');
 	cLang = cLang ? cLang : 'langRu';
 	
