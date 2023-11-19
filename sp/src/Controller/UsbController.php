@@ -41,7 +41,7 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
-    private const VERSION = '0';
+    private const VERSION = '1';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -891,7 +891,7 @@ class UsbController extends AbstractController
     {
         $pathInfo = pathinfo($s);
 
-        return (isset($pathInfo['extension']) ? ('.' . $pathInfo['extension']) : '');
+        return strtolower(isset($pathInfo['extension']) ? ('.' . $pathInfo['extension']) : '');
     }
 
     /**

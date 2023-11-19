@@ -1,6 +1,5 @@
 window.VersionReq = {
 	onGetVersion: function(data) {
-		console.log(data.v);
 		this.onSuccess.call(this.ctx, data.v);
 	},
 	get: function(ctx, onSuccess) {
