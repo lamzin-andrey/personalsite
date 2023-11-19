@@ -20,6 +20,7 @@ function initApp() {
 
 function setListeners() {
 	e('chLang').ontouchstart = onChangeLang;
+	e('chLang').onclick = onChangeLang;
 }
 
 // ??

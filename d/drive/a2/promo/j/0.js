@@ -15,7 +15,7 @@ function initApp() {
 	setListeners();
 	onLoadA236();
 	// getAuthState();
-  addClass('hWaitScreen', 'hide');
+	addClass('hWaitScreen', 'hide');
 	removeClass('hGLinkScreen', 'hide');
 
 	startBgAnim();
@@ -23,6 +23,7 @@ function initApp() {
 
 function setListeners() {
 	e('chLang').ontouchstart = onChangeLang;
+	e('chLang').onclick = onChangeLang;
 }
 
 // ??

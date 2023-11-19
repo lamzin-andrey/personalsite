@@ -41,6 +41,8 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
+    private const VERSION = '0';
+
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
 
@@ -1936,5 +1938,13 @@ class UsbController extends AbstractController
         }
 
         return $this->_json(['status' => 'ok']);
+    }
+
+    /**
+     * @Route("/driveversion.json", name="driveversion", methods={"GET"})
+     */
+    public function getVersion()
+    {
+        return $this->_json(['v' => self::VERSION]);
     }
 }
