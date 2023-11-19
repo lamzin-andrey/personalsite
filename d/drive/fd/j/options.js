@@ -46,13 +46,11 @@ function onClickOptionSortSetting() {
 
 function onClickOptionLogout() {
 	var lang = storage('lang'), 
-		pwd = storage('pwd'), 
 		ssl = storage('ssl'),
 		updateState = storage('updateState'),
 		vers = storage('vers');
 	localStorage.clear();
 	storage('lang', lang);
-	storage('pwd', pwd); 
 	storage('ssl', ssl);
 	storage('updateState', updateState)
 	storage('vers', vers);
