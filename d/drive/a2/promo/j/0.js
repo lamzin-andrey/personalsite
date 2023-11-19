@@ -191,17 +191,46 @@ function startBgAnim() {
 }
 
 function onTick() {
-	var p = 'background-position-',
+	var 
+		b = 'background-',
+		p = b + 'position-',
 		k = p + 'x',
 		q = p + 'y',
 		i = 'body',
 		x = parseFloat(stl(i, k)),
 		y = parseFloat(stl(i, q)),
 		dy, dx,
-		src;
+		src,
+		wp;
+	W.cnt++;
+	
+	if (W.cnt > 150) {
+		src = attr('im2', 'src');
+		if (src.indexOf('/u.png') != -1) {
+			attr('im2', 'src', '/d/drive/a2/i/uu.png')
+		} else if (src.indexOf('/uu.png') != -1) {
+			attr('im2', 'src', '/d/drive/a2/i/u.png')
+		}
+		W.cnt = 0;
+	}
+	
+	wp = getViewport();
+	W.xlim = 1050 - wp.w;
+	W.ylim = 656 - wp.h;
+	
+	if (wp.w > 1050 || wp.h > 656) {
+		stl(i, b + 'size', 'cover');
+		stl(i, b + 'repeat', 'no-repeat');
+		stl(i, p + 'x', '0');
+		stl(i, p + 'y', '0');
+		return;
+	} else {
+		stl(i, b + 'size', 'auto');
+		stl(i, b + 'repeat', 'auto');
+	}
+		
 	x = isNaN(x) ? 0 : x;
 	y = isNaN(y) ? 0 : y;
-	
 	dx = W.directx * 0.1;
 	x += dx;
 	if (W.directx == -1 && Math.abs(x) >= W.xlim) {
@@ -235,16 +264,7 @@ function onTick() {
 	}
 	stl(i, q, y + 'px');
 	
-	W.cnt++;
-	if (W.cnt > 150) {
-		src = attr('im2', 'src');
-		if (src.indexOf('/u.png') != -1) {
-			attr('im2', 'src', '/d/drive/a2/i/uu.png')
-		} else if (src.indexOf('/uu.png') != -1) {
-			attr('im2', 'src', '/d/drive/a2/i/u.png')
-		}
-		W.cnt = 0;
-	}
+	
 }
 
 function onLoadA236() {
