@@ -1,8 +1,7 @@
-function HumanValue() {
-	
-}
+function HumanValue() {}
+
 HumanValue.getHumanFilesize = function($n, $percision, $maxOrder, $pack) {
-    $percision = String($percision) == 'undefined' ? 3 : $percision;
+	$percision = String($percision) == 'undefined' ? 3 : $percision;
     $maxOrder = String($maxOrder) == 'undefined' ? 3 : $maxOrder;
     $pack = String($pack) == 'undefined' ? true : $pack;
     $percision = __php2js_clone_argument__($percision);
@@ -36,7 +35,7 @@ HumanValue.getHumanValue = function($n, $units, $divider, $percision, $maxOrder,
     if ($pack) {
         $a = explode('.', $r);
         $int = $a[0];
-        $add = $a[1] ?? '';
+        $add = $a[1] ? $a[1] : '';
         $buf = [];
         $buf.push(dechex($int));
         if ($add) {
@@ -46,15 +45,13 @@ HumanValue.getHumanValue = function($n, $units, $divider, $percision, $maxOrder,
         $r = implode('g', $buf);
     }
     
-    
-    
     $unitsSz = count($units);
-    do {
+    do { 
         $n = round($n, $percision);
         $s = strval($n);
         $a = explode('.', $s);
         $int = $a[0];
-        $add = $a[1] ?? '';
+        $add = $a[1] ? $a[1] : '';
         if (strlen($int) <= $maxOrder || $unitIterator > ($unitsSz - 1) ) {
             if ($pack) {
                 $buf = [];
@@ -69,7 +66,7 @@ HumanValue.getHumanValue = function($n, $units, $divider, $percision, $maxOrder,
         }
         $n = $n / $divider;
         $unitIterator++;
-        } while(true);
+    } while(true);
     
     return $r;
 }
