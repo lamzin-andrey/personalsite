@@ -32,7 +32,7 @@ function onClickOptionChangeLanguage() {
 }
 
 function onClickOptionChangeTheme() {
-	goURL(root); // Это не догма, мути что хочешь
+	goURL(roota2 + '/cv/');
 	hideOptions();
 }
 

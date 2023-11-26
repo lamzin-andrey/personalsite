@@ -1,0 +1,87 @@
+body {
+	background-color:#223599;
+	color:white;
+	padding:0;
+	margin:0;
+}
+body.f100, html.f100 {
+	height:100%;
+}
+.hide, .h {
+	display: none;
+}
+.tc {
+	text-align:center;
+}
+.fl {
+	float:left;
+}
+.cf, .c {
+	clear:both;
+}
+.w80 {
+	width: 80%;
+}
+.w60 {
+	width: 60%;
+}
+.w-image {
+	height:128px;
+	border: 2px solid #002ddd; /* #4f67c6 */
+}
+#hWaitScreen {
+	margin-top:46px;
+}
+#hCVersScreen {
+	font-family:Arial;
+	max-width: 890px;
+	margin: auto;
+}
+.dsc {
+	text-align: left;
+	padding-left: 10px;
+	line-height: 1.5em;
+}
+.vlst {
+
+}
+.card {
+	margin-bottom: 22px;
+	border-radius: 10px;
+	background-color: #1a1a6a;
+	padding: 12px 6px;
+}
+.u {
+	background-color: red;
+	color: #FFF;
+	font-weight: bold;
+}
+.o {
+	background-color: green;
+	color: #FFF;
+	font-weight: bold;
+}
+h1 {
+	font-size: 13px;
+	padding:4px 0px;
+	margin:6px 0 0;
+}
+.btn {
+	height: 48px;
+	background-color: #d0d0ff;
+	border-radius: 8px;
+	border: #fff 1px solid;
+}
+
+.s6102 {
+	margin: 2px 0;
+}
+
+a {
+	color:aqua;
+}
+
+.dsc p img {
+	line-height: 1.5em;
+	vertical-align: bottom;
+}

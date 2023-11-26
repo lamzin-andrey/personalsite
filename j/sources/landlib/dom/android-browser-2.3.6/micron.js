@@ -421,3 +421,16 @@ function v(o, s) {
 	
 	return r;
 }
+
+function loc() {
+	return location;
+}
+
+function gto(s) {
+	loc().href = s;
+}
+
+function reload() {
+	loc().reload();
+}
+

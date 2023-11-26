@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="f100">
+	<head>
+		<script src="/a/2+2/js/registersw.js"></script>
+		<meta charset="WINDOWS-1251">
+		<!--meta name="viewport" content="width=device-width,no-scale"-->
+		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height, user-scalable=no, target-densitydpi=device-dpi">
+		<title>Switch version</title>
+		<link rel="stylesheet" type="text/css" href="./s/0.css">
+		<link href=".././i/u.ico" rel="shortcut icon" type="image/x-icon" >
+	</head>
+	<body class="f100">
+		<div class="tc screen" id="hWaitScreen">
+			<img src="../i/u.png" id="im">
+			<div><i id="hWaitLabel">Please wait</i></div>
+		</div>
+		<!-- screen choose version -->
+		<div class="tc screen hide" id="hCVersScreen">
+			<div class="dsc">
+				<p>
+					Здесь вы можете выбрать наиболее подходящий вам режим работы WebUSB.
+					WebUSB пытается сама выбрать наиболее оптимальный режим, в заисимости от вашего устройства.
+					Это почти всегда работает автоматически, но не всегда.
+				</p>
+				<p>Если WebUSB работает не так, как это ожидалось, прочтите описания версий и выберите нужную.</p>
+				<p>Версии разрабатывались для дефолтных браузеров соответствующих операционных систем.</p>
+				<p></p>
+			</div>
+			<div class="vlst">
+				<div id="active">
+					<div class="u">Вы сейчас используете</div>
+				</div><!-- /#active -->
+				<div class="o">Другие варианты</div>
+				<div id="other" class="h">
+					
+					<div class="card" id="a2">
+						
+						<img src="./i/a2.png" class="fl">
+						<div class="fl w80">
+							<h1>Версия для смартфонов с ОС Android 2</h1>
+						</div>
+						<div class="c"></div>
+						<div>
+							<div class="dsc">
+								<p>
+									Самая первая и самая часто используемая версия. WebUSB была создана, когда я понял, 
+									что не могу загружать файлы в облако из смартфона под управлением android 2, 
+									потому что популярные сервисы перестали поддерживать эту систему.
+									Если вы почему-то решили воспользоваться смартфоном с android 2, 
+									используйте эту версию для доступа к вашим файлам в интернете.
+								</p>
+								<p>
+									Предусмотрен малый размер экранов некоторых смартфонов с OC Android 2.
+									Меню приложения вызывается нажатием клавиши 
+									"Назад" <img src="./i/b.jpg"> устройства. 
+									Если же вам действительно хочется уйти туда, окуда вы пришли в WebUSB, надо выбрать 
+									"Опции" -&gt; "Выйти из WebUSB".
+								</p>
+								<p>
+									Так как JavaScript дефолтный браузер android 2 ещё не знал, что такое FormData,
+									эта версия аплоадит файлы без шкалы прогресса.
+									Если у вас более современный смартфон, не стоит её использовать.
+								</p>
+								<p>
+									Версия проверена и отлично работает на устройствах 
+									Samsung Galaxy Young GT-S5363, 
+									Samsung Galaxy Trend GT S7390,
+									Fly Stratus 7, 
+									Xiaomi Redmi Note 7,
+									iPhone 11.
+								</p>
+								<p>
+									На Samsung Galaxy Young GT-S6102 возникли проблемы, поэтому для него была создана отдельная версия.
+								</p>
+							</div>
+							<input type="button" class="btn" value="Использовать эту версию" onclick="chooseV('a2')">
+						</div>
+					</div>
+					
+					<div class="card" id="a2/gts6102">
+						<img src="./i/6102.png" class="fl">
+						<div class="fl w80">
+							<h1 class="s6102">Специальная версия для Samsung Galaxy Young GT-S6102</h1>
+						</div>
+						<div class="c"></div>
+						<div>
+							<div class="dsc">
+								<p>
+									Внезапно выяснилось, что устройство Galaxy Young GT-S6102 имеет особенности.
+									Не исключено, что дело было в поломке конкретного устройства, которое попало в мои руки.
+									Но тем не менее, была создана специальная версия для этого устройства.
+								</p>
+								<p>
+									Используйте эту версию, если 
+									<a href="#a2">основная версия для смартфонов с OC Android 2</a>
+									работает не так, как ожидалось.
+								</p>
+								<p>
+									Версия проверена и отлично работает на устройствах 
+									Samsung Galaxy Young GT-S5363, 
+									Samsung Galaxy Young GT-S6102,
+									Samsung Galaxy Trend GT S7390,
+									Fly Stratus 7, 
+									Xiaomi Redmi Note 7,
+									iPhone 11.
+								</p>
+							</div>
+							<input type="button" class="btn" value="Использовать эту версию" onclick="chooseV('a2/gts6102')">
+						</div>
+					</div>
+					
+					<div class="card" id="fd">
+						<img src="./i/fd.png" class="fl">
+						<div class="fl w80">
+							<h1>Версия для смартфонов с ОС Android 4 и выше</h1>
+						</div>
+						<div class="c"></div>
+						<div>
+							<div class="dsc">
+								<p>
+									Появилась тупо потому, что хотелось шкалу прогресса при аплоаде.
+									К тому же на современных смартфонах экраны гораздо более крупные,
+									чем у Samsung Galaxy Young GT-S5363 с которого всё начиналось,
+									а значит в фиче показа меню по кнопке "Назад" <img src="./i/b.jpg"> устройства
+									никакой необходимости более не было.
+								</p>
+								<p>
+									Если ось на смартфоне новее, чем android 2, смело используйте эту версию.
+								</p>
+								<p>
+									Версия проверена и отлично работает на устройствах 
+									Samsung Galaxy Trend GT S7390,
+									Fly Stratus 7, 
+									Xiaomi Redmi Note 7,
+									iPhone 11.
+								</p>
+							</div>
+							<input type="button" class="btn" value="Использовать эту версию" onclick="chooseV('fd')">
+						</div>
+					</div>
+					
+					<div class="card" id="w">
+						<img src="./i/w.jpg" class="fl">
+						<div class="fl w60">
+							<h1>Временная версия для десктопа</h1>
+						</div>
+						<div class="c"></div>
+						<div>
+							<div class="dsc">
+								<p>
+									Появилась потому, что использовать версию для смартфона на компьютере или ноутбуке было неудобно,
+									а времени писать нормальную версию для десктопа не было.
+								</p>
+								<p>
+									Если хотите загрузить с вашего компьютера файлы, чтобы потом скачать их в смартфон KitKat или, не к ночи будь помянут, Gringerbread, милости просим!
+								</p>
+								<p>
+									Версия проверена и отлично работает на устройствах 
+									Samsung Galaxy Trend GT S7390,
+									Fly Stratus 7, 
+									Xiaomi Redmi Note 7,
+									iPhone 11.
+								</p>
+							</div>
+							<input type="button" class="btn" value="Использовать эту версию" onclick="chooseV('w')">
+						</div>
+					</div>
+					
+					<div class="card" id="k">
+						<img src="./i/k.jpg" class="fl">
+						<div class="fl w60">
+							<h1>Основная версия для десктопа</h1>
+						</div>
+						<div class="c"></div>
+						<div>
+							<div class="dsc">
+								<p>
+									Для последних версий браузеров десктопа.
+								</p>
+								<p>
+									Здесь я впервые <s>отпустил</s> отпущу тормоза и использовал все возможности современного javascript не обременяя себя при этом фреймвёрками.
+								</p>
+								<p>
+									Версия проверена и отлично работает на ноутбуке в браузерах
+									Firefox 120,
+									Chromium 119.0.6045.159
+								</p>
+							</div>
+							<input type="button" class="btn" value="Использовать эту версию" onclick="chooseV('k')">
+						</div>
+					</div>
+					
+				</div><!-- end #other -->
+			</div>
+			
+		</div>
+		
+		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
+		<script src="./j/0.js"></script>
+	</body>
+</html>
+

@@ -31,11 +31,11 @@ function onCheckSsl(isSSLSupport) {
 	} else {
 		// check FormData
 		if (FormData) {
-			savedTheme = 'fd';
+			savedTheme = savedTheme ? savedTheme : 'fd';
 		}
 		vw = getViewport();
 		if (vw.w > 799) {
-			savedTheme = 'w';
+			savedTheme = savedTheme ? savedTheme : 'w';
 		}
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');
@@ -46,6 +46,7 @@ function onCheckSsl(isSSLSupport) {
 	}
 	
 	if (savedTheme) {
+		storage('savedTheme', savedTheme);
 		// If it share link, locate to share page
 		if (
 			HttpQueryString._GET('action', '') == 'share'

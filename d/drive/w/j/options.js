@@ -32,8 +32,8 @@ function onClickOptionChangeLanguage() {
 }
 
 function onClickOptionChangeTheme() {
-	goURL(root); // Это не догма, мути что хочешь
 	hideOptions();
+	goURL(roota2 + '/cv/');
 }
 
 function onClickOptionExit() {

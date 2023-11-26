@@ -33,7 +33,7 @@ function onClickOptionChangeLanguage() {
 }
 
 function onClickOptionChangeTheme() {
-	location.href = root; // Это не догма, мути что хочешь
+	location.href = roota2 + '/cv';
 	hideOptions();
 }
 
