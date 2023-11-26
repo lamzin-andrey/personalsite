@@ -1738,7 +1738,7 @@ class UsbController extends AbstractController
         $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
         $size = $filesRepository->getCurrentSize($user);
         $allowSize = intval($this->getParameter('app.wusb_max_space') );
-        if ($allowSize <= $size) {
+        if (1/*$allowSize <= $size*/) {
             $seconds = $this->getLegalTimeIntervalSeconds();
             return $this->_json([
                 'status' => 'error',
