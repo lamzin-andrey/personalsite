@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Proba test</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta charset="utf-8">
+</head>
+<body>
+	<script src="./probability.js"></script>
+	<script >
+		var n = Probability.placementsCount(2, 6);
+		console.log(n == 30);
+		n = Probability.factorial(4);
+		console.log(n == 24);
+		n = Probability.factorial(0);
+		console.log(n == 1);
+		n = Probability.factorial(1);
+		console.log(n == 1);
+		n = Probability.factorial(2);
+		console.log(n == 2);
+		n = Probability.factorial(3);
+		console.log(n == 6);
+		n = Probability.combinationsCount(2, 10);
+		console.log(n == 45);
+	</script>
+</body>
+</html>

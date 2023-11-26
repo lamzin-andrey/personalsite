@@ -78,7 +78,7 @@ window.TextFormat = {
 	 * 
 	*/
 	capitalize:function(s){
-		let first = s.charAt(0), tail = s.substring(1);
+		var first = s.charAt(0), tail = s.substring(1);
 		return (first.toUpperCase() + tail);
 	},
 	/**
