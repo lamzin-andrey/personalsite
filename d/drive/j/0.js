@@ -30,7 +30,7 @@ function onCheckSsl(isSSLSupport) {
 		}
 	} else {
 		// check FormData
-		if (FormData) {
+		if (window.FormData) {
 			savedTheme = savedTheme ? savedTheme : 'fd';
 		}
 		vw = getViewport();
