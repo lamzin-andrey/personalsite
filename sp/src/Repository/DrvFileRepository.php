@@ -37,6 +37,21 @@ class DrvFileRepository extends ServiceEntityRepository
         return;
     }
 
+    public function setIsDeletedById(int $fileId, int $userId) : void
+    {
+        if (!$fileId || !$userId) {
+            return;
+        }
+        $em = $this->getEntityManager();
+        $sqlQuery = 'UPDATE `drv_file` 
+                        SET is_deleted = 1,
+                            is_no_erased = 0
+                        WHERE id  = ' . $fileId . ' AND user_id = ' . $userId;
+        $statement = $em->getConnection()->prepare($sqlQuery);
+        $statement->execute();
+        return;
+    }
+
     /**
      * @param $
      * @return
@@ -94,7 +109,10 @@ class DrvFileRepository extends ServiceEntityRepository
         return 0;
     }
 
-    public function removeByCatalogIdList(array $catalogIdList, $userId)
+    /**
+     * @param int $legalIntervalSeconds через какое кол-во времени мы можем по закону удалить файл
+    */
+    public function removeByCatalogIdList(array $catalogIdList, int $userId, int $legalIntervalSeconds)
     {
         if (!count($catalogIdList)) {
             return;
@@ -106,6 +124,25 @@ class DrvFileRepository extends ServiceEntityRepository
                 'list' => $catalogIdList,
                 'userId' => $userId
             ],
+            [
+                'list' => Connection::PARAM_INT_ARRAY,
+            ]
+        );
+
+        // И то же самое с учетом нового поля и закона Яровой.
+        $sqlQuery = 'UPDATE `drv_file` SET is_no_erased = 0
+                        WHERE 
+                              catalog_id IN(:list) 
+                              AND user_id = :userId
+                              AND created_time < :legalTime';
+        $legalTime = time() - $legalIntervalSeconds;
+        $legalDateTimeStr = date('Y-m-d H:i:s', $legalTime);
+        $conn = $em->getConnection();
+        $conn->executeUpdate($sqlQuery, [
+            'list' => $catalogIdList,
+            'userId' => $userId,
+            'legalTime' => $legalDateTimeStr
+        ],
             [
                 'list' => Connection::PARAM_INT_ARRAY,
             ]

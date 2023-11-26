@@ -455,7 +455,7 @@ class UsbController extends AbstractController
              * @var DrvFileRepository $filesRepository
              */
             $filesRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
-            $filesRepository->removeByCatalogIdList($idList, intval($this->getUser()->getId()));
+            $filesRepository->removeByCatalogIdList($idList, intval($this->getUser()->getId()), $this->getLegalTimeIntervalSeconds());
             $list = $filesRepository->findBy(['catalogId' => $idList]);
             $this->removePhisFiles($list, $this->getUser(), $request, $filesystem, $t);
         }
@@ -493,16 +493,16 @@ class UsbController extends AbstractController
                     'error' => $this->l($t, 'You have not access to this page', null)
                 ]);
             }
-            $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
-
-            $this->removeSymlink($filesystem, $pathObject->symlink);
-
-            if (!empty($pathObject->path) && file_exists($pathObject->path)) {
-                $filesystem->remove($pathObject->path);
+            if ($this->itIsLegalRm($fileEntity)) {
+                $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+                $this->removeSymlink($filesystem, $pathObject->symlink);
+                if (!empty($pathObject->path) && file_exists($pathObject->path)) {
+                    $filesystem->remove($pathObject->path);
+                }
+                $fileRepository->setIsDeletedById($fileId, intval($this->getUser()->getId()));
+            } else {
+                $fileRepository->removeById($fileId, intval($this->getUser()->getId()));
             }
-
-
-            $fileRepository->removeById($fileId, intval($this->getUser()->getId()));
         }
 
         return $this->json(['status' => 'ok']);
@@ -1375,10 +1375,18 @@ class UsbController extends AbstractController
         // get all user catalogs
         $catalogEntities = [];
         if ($catalogIdList) {
+            $catalogIdList = $this->reachCatalogList($catalogIdList, (int)$user->getId(), $oAppService);
             $catalogEntities = $catalogRepository->findBy([
                 'id' => $catalogIdList,
                 'userId' => $user->getId()
             ]);
+            $addFileEntities = $fileRepository->findBy([
+                'catalogId' => $catalogIdList,
+                'userId' => $user->getId()
+            ]);
+            if ($addFileEntities) {
+                $fileEntities = array_merge($fileEntities, $addFileEntities);
+            }
         }
         $response = $this->removePhisFiles($fileEntities, $user, $request, $filesystem, $t);
         if ($response) {
@@ -1717,24 +1725,28 @@ class UsbController extends AbstractController
             if ($fileEntity->getUserId() != $user->getId()) {
                 continue;
             }
-            $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
-            if (!$filePathObject->error) {
-                $success = false;
-                $error = '';
-                try {
-                    $this->removeSymlink($filesystem, $filePathObject->symlink);
-                    if (file_exists($filePathObject->path)) {
-                        $filesystem->remove($filePathObject->path);
-                    }
-                    $success = true;
-                } catch (\Exception $exception) {
-                    $error = $exception->getMessage();
+            if ($this->itIsLegalRm($fileEntity)) {
+                $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
+                if (!$filePathObject->error) {
                     $success = false;
+                    $error = '';
+
+                    try {
+                        $this->removeSymlink($filesystem, $filePathObject->symlink);
+                        if (file_exists($filePathObject->path)) {
+                            $filesystem->remove($filePathObject->path);
+                        }
+                        $success = true;
+                    } catch (\Exception $exception) {
+                        $error = $exception->getMessage();
+                        $success = false;
+                    }
+                    // db
+                    $fileEntity->setIsDeleted(true);
+                    $fileEntity->setIsNoErased(false);
                 }
-
-                // db
+            } else {
                 $fileEntity->setIsDeleted(true);
-
             }
         }
 
@@ -1946,5 +1958,70 @@ class UsbController extends AbstractController
     public function getVersion()
     {
         return $this->_json(['v' => self::VERSION]);
+    }
+
+    private function getLegalTimeIntervalSeconds(): int
+    {
+        return 3600 * 24 * 193; // 193 = 366/2 + 10
+    }
+
+    private function itIsLegalRm(DrvFile $fileEntity): bool
+    {
+        $createdTime = $fileEntity->getCreatedTime();
+        if (!$createdTime) {
+
+            return false;
+        }
+        $ts = $createdTime->getTimestamp();
+
+        return ((time() - $ts) > $this->getLegalTimeIntervalSeconds());
+    }
+
+    private function reachCatalogList(array $catalogIdList, int $userId, AppService $oAppService): array
+    {
+        TreeAlgorithms::$parentIdFieldName = 'parentId';
+        $aFlatList = $this->reachCatalogListGetFlatSource($userId, $oAppService);
+
+        $aTrees = TreeAlgorithms::buildTreeFromFlatList($aFlatList);
+        
+
+        $res = [];
+        foreach ($catalogIdList as $catalogId) {
+            $subcatalogs = $this->reachCatalogGetBranch($aTrees, $catalogId);
+            $res = array_merge($subcatalogs);
+        }
+
+        $res = array_unique($res);
+
+        return $res;
+    }
+
+    private function reachCatalogGetBranch(array $trees, int $catalogId): array
+    {
+        foreach ($trees as $tree) {
+            $node = TreeAlgorithms::findById($tree, $catalogId);
+            if (!$node) {
+                continue;
+            }
+            $list = TreeAlgorithms::getBranchIdList($node);
+
+            if (!$list) {
+                continue;
+            }
+
+            return $list;
+        }
+
+        return [$catalogId];
+    }
+
+    private function reachCatalogListGetFlatSource(int $userId, AppService $appService): array
+    {
+        /**
+         * @var DrvCatalogsRepository $repository
+        */
+        $repository = $appService->repository(DrvCatalogs::class);
+
+        return $repository->getFlatIdListByUserId($userId);
     }
 }

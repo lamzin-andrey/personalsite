@@ -87,6 +87,11 @@ class DrvFile
      */
     private $hash;
 
+    /**
+     * @ORM\Column(name="is_no_erased", type="boolean", options={"comment"="1 - physical file no erase, 0 - physical file is erase", "default"="1"})
+     */
+    private bool $isNoErased = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -236,6 +241,21 @@ class DrvFile
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    public function getIsNoErased(): bool
+    {
+        return $this->isNoErased;
+    }
+
+    /**
+     * @return DrvFile
+     */
+    public function setIsNoErased(bool $isNoErased): self
+    {
+        $this->isNoErased = $isNoErased;
 
         return $this;
     }
