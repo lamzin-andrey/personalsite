@@ -27,7 +27,7 @@ function showActiveTheme() {
 function chooseV(s) {
 	var dt = new Date();
 		storage('savedTheme', s);
-		gto('/d/drive?r=' + Math.random() + dt.getTime());
+		gto('/d/drive/?r=' + Math.random() + dt.getTime());
 }
 function onClickChooseEn() {
 	storage('lang', 'langEn');
