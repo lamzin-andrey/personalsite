@@ -97,10 +97,10 @@ class DrvFileRepository extends ServiceEntityRepository
         $e = $queryBuilder->expr();
         $queryBuilder->select('SUM(f.size) AS s');
         $queryBuilder->where($e->eq('f.userId', ':userId'));
-        $queryBuilder->andWhere($e->eq('f.isDeleted', ':zero'));
+        $queryBuilder->andWhere($e->eq('f.isNoErased', ':one'));
         $queryBuilder->setParameters([
             ':userId' => $user->getId(),
-            ':zero' => 0
+            ':one' => 1
         ]);
         $rows = $queryBuilder->getQuery()->execute();
         if (count($rows) > 0) {

@@ -207,3 +207,4 @@ function onLoadA236() {
 		w.scrollTo(0, y);
 	}, 1000);
 }
+function DevNull(){}

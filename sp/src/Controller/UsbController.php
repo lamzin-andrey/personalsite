@@ -1410,6 +1410,63 @@ class UsbController extends AbstractController
     }
 
     /**
+     * @Route("/driveers.json", name="driveerasefiles")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveEraseFilesAction(Request $request,
+                                           TranslatorInterface $t,
+                                           AppService $oAppService,
+                                           Filesystem $filesystem,
+                                           CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        $domain = null;
+        if ($csrfToken != $request->request->get('_token')) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page')
+            ]);
+        }
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page')
+            ]);
+        }
+
+        $domain = 'wusb_filesystem';
+        /**
+         * @var DrvFileRepository $fileRepository
+         */
+        $fileRepository = $this->container->get('doctrine')->getRepository(DrvFile::class);
+
+        // get all deleted and no erased user files
+        $fileEntities = $fileRepository->findBy([
+            'userId' => (int)$user->getId(),
+            'isDeleted' => true,
+            'isNoErased' => true
+        ], null, 100);
+
+
+        $response = $this->removePhisFiles($fileEntities, $user, $request, $filesystem, $t);
+        if ($response) {
+            return $this->_json($response);
+        }
+        $em = $this->container->get('doctrine')->getManager();
+        $em->flush();
+
+        // get current dir list
+        return $this->_json([]);
+
+    }
+
+    /**
      * @Route("/wusbsetlang", name="drivechooselang")
      * @param Request $oRequest
      * @param TranslatorInterface $t
@@ -1983,7 +2040,7 @@ class UsbController extends AbstractController
         $aFlatList = $this->reachCatalogListGetFlatSource($userId, $oAppService);
 
         $aTrees = TreeAlgorithms::buildTreeFromFlatList($aFlatList);
-        
+
 
         $res = [];
         foreach ($catalogIdList as $catalogId) {

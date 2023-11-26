@@ -248,11 +248,12 @@ window.fileList = {
 	},
 	
 	onEnterInFolder:function(evt) {
-		var id = attr(evt.target, 'id');
+		var id = attr(evt.target, 'id'), o = this;
 		window.currentDir = id.replace('fi', '').replace('f', '');
 		storage('pwd', currentDir);
 		if (window.currentDir > 0) {
-			this.loadCurrentDir();
+			o.loadCurrentDir();
+			o.eraseOldFiles();
 		}
 	},
 	
@@ -512,5 +513,49 @@ window.fileList = {
 		currentSort = storage('sort');
 		currentSort = currentSort ? currentSort : {t: 'name', d: 'a'};
 		return currentSort;
+	},
+	
+	// TODO erase old files
+	eraseOldFiles: function() {
+		Rest._post(
+			{},
+			DevNull,
+			br + '/driveers.json',
+			DevNull
+		);
+	},
+	
+	onSuccessGetFileList:function(data) {
+		if (!this.onFailGetFileList(data)) {
+			return;
+		}
+		window.parentDir = data.p;
+		if (currentDir == 0) {
+			setUpButtonDisable(this.bUp);
+		} else {
+			setUpButtonEnable(this.bUp);
+		}
+		
+		if (currentDir == homeDir) {
+			setHomeButtonDisable(this.bHome);
+		} else {
+			setHomeButtonEnable(this.bHome);
+		}
+		
+		storage('f' + currentDir, data.ls);
+		this.renderCurrentDir(data.ls, data.bc);
+	},
+
+	renderCurrentDir:function(ls, bc) {
+		var s = '/wcard';
+		path = bc == '/' ? s : (s + bc);
+		this.render(ls);
+		mainMenuBackShowDialog();
+	},
+	
+	onFailGetFileList:function(data, responseText, info, xhr) {
+		hideLoader();
+		return defaultResponseError(data, responseText, info, xhr);
 	}
+
 };

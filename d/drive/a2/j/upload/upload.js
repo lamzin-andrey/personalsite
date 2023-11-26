@@ -72,7 +72,20 @@ window.upload = {
 	onFailUpload:function(data, responseText, info, xhr) {
 		removeClass('hFormUpWr', 'd-none');
 		mainMenuBackPush();
-		return defaultResponseError(data, responseText, info, xhr);
+		//return defaultResponseError(data, responseText, info, xhr);
+		if (data && data.status == 'ok') {
+			return true;
+		}
+		
+		if (data && data.status == 'error') {
+			if (data.error) {
+				showError(data.error);
+			} else if (data.errors && (data.errors instanceof Array) ) {
+				showError(data.errors.join("\n"));
+			}
+		}
+		
+		return false;
 	},
 	onClickCancel:function(evt) {
 		uploadAnimation.stop();

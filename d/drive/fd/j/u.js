@@ -226,3 +226,4 @@ function goURL(url) {
 	
 	location.href = url;
 }
+function DevNull(){}

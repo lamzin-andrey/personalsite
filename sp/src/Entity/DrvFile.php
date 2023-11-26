@@ -6,6 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DrvFileRepository")
+ * @ORM\Table(
+    name="drv_file",
+    indexes={
+        @ORM\Index(name="user_id", columns={"user_id"}),
+        @ORM\Index(name="catalog_id", columns={"catalog_id"})
+    }
+  )
  */
 class DrvFile
 {
