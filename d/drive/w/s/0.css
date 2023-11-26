@@ -10,6 +10,9 @@ body.f100, html.f100 {
 .hide {
 	display: none;
 }
+.va-b {
+	vertical-align:bottom;
+}
 .cl {
 	clear:both;
 }

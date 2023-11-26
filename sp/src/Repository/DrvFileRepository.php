@@ -7,6 +7,7 @@ use App\Entity\DrvFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 
 /**
  * @method DrvFile|null find($id, $lockMode = null, $lockVersion = null)
@@ -147,5 +148,46 @@ class DrvFileRepository extends ServiceEntityRepository
                 'list' => Connection::PARAM_INT_ARRAY,
             ]
         );
+    }
+
+    public function getFreePerDay(int $userId, int $legalIntervalSeconds):int
+    {
+        return $this->getFreePerInterval($userId, $legalIntervalSeconds, 24*3600);
+    }
+
+    public function getFreePerWeek(int $userId, int $legalIntervalSeconds):int
+    {
+        return $this->getFreePerInterval($userId, $legalIntervalSeconds, 7*24*3600);
+    }
+    public function getFreePerMonth(int $userId, int $legalIntervalSeconds):int
+    {
+        return $this->getFreePerInterval($userId, $legalIntervalSeconds, 31*24*3600);
+    }
+    public function getFreePer6Months(int $userId, int $legalIntervalSeconds):int
+    {
+        return $this->getFreePerInterval($userId, $legalIntervalSeconds, 6*31*24*3600);
+    }
+
+    private function getFreePerInterval(int $userId, int $legalIntervalSeconds, int $interval):int
+    {
+        $freeTime = time() + $interval - $legalIntervalSeconds ;
+        $freeDate = date('Y-m-d H:i:s', $freeTime);
+        $sql = 'SELECT SUM(`size`) AS c 
+                FROM drv_file 
+                WHERE 
+                      user_id = :userId
+                      AND is_deleted = 1
+                      AND is_no_erased = 1
+                      AND created_time < :freeTime
+                ';
+        $p = [
+            'freeTime' => $freeDate,
+            'userId' => $userId
+        ];
+
+
+        $r = $this->getEntityManager()->getConnection()->executeQuery($sql, $p)->fetchAll(FetchMode::ASSOCIATIVE);
+
+        return (int)$r[0]['c'];
     }
 }

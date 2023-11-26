@@ -41,7 +41,7 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
-    private const VERSION = '2';
+    private const VERSION = '3';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -1739,11 +1739,17 @@ class UsbController extends AbstractController
         $size = $filesRepository->getCurrentSize($user);
         $allowSize = intval($this->getParameter('app.wusb_max_space') );
         if ($allowSize <= $size) {
+            $seconds = $this->getLegalTimeIntervalSeconds();
             return $this->_json([
                 'status' => 'error',
                 'error' => $this->l($t, 'Your busy all {allowSize}',  'wusb_filesystem', [
                     '{allowSize}' => AppService::getHumanFilesize($allowSize, 0, 3, false)
-                ])
+                ]),
+                'noLeftSpace' => 1,
+                'freePD' => AppService::getHumanFilesize($filesRepository->getFreePerDay((int)$user->getId(), $seconds), 0, 3, false),
+                'freePW' => AppService::getHumanFilesize($filesRepository->getFreePerWeek((int)$user->getId(), $seconds), 0, 3, false),
+                'freePM' => AppService::getHumanFilesize($filesRepository->getFreePerMonth((int)$user->getId(), $seconds), 0, 3, false),
+                'freeP6M' => AppService::getHumanFilesize($filesRepository->getFreePer6Months((int)$user->getId(), $seconds), 0, 3, false)
             ]);
         }
 

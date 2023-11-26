@@ -385,4 +385,24 @@ function array_values(o) {
 	
 	return [];
 }
+function val(i, v) {
+	i = e(i);
+	if (!i) {
+		return undefined;
+	}
+	
+	if (v) {
+		if (i.tagName in In('INPUT', 'TEXTAREA', 'SELECT')) {
+			i.value = v;
+		} else{
+			i.innerHTML = v;
+		}
+	}
+	if (i.tagName in In('INPUT', 'TEXTAREA', 'SELECT')) {
+		return i.value;
+	} else if (i.innerHTML){
+		return i.innerHTML;
+	}
+	return i.value;
+}
 

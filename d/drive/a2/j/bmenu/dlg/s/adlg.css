@@ -17,6 +17,7 @@
   font-size: 18px;
   font-weight: bold;
   margin: 10px;
+  line-height: 32px;
 }
 .a2dlg .line{
   background-image: url('../i/line.jpg');
@@ -39,8 +40,8 @@
 }
 
 .a2dlg .avBtn{
-    height: 48px;
-    min-width: 70px;
-    font-size: 24px;
-    
+	height: 48px;
+	min-width: 62px;
+	font-size: 22px;
+	margin-bottom: 10px;    
 }

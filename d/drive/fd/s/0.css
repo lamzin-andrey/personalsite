@@ -28,6 +28,9 @@ body.f100, html.f100 {
 .d-none {
 	display:none;
 }
+.va-b {
+	vertical-align:bottom;
+}
 input[type=text],input[type=password],input[type=email] {
 	min-height:32px;
 }
