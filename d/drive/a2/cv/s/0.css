@@ -85,3 +85,14 @@ a {
 	line-height: 1.5em;
 	vertical-align: bottom;
 }
+
+
+.cLang {
+	text-align: center;
+	margin-top: 21px;
+}
+
+.lngCase {
+	margin: auto 10px;
+	cursor: pointer;
+}

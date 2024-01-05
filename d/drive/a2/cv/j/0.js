@@ -6,6 +6,7 @@ function initApp() {
 	addClass('hWaitScreen', 'hide');
 	showActiveTheme();
 	removeClass('hCVersScreen', 'hide');
+	initLang();
 }
 
 function showActiveTheme() {
@@ -28,14 +29,6 @@ function chooseV(s) {
 	var dt = new Date();
 		storage('savedTheme', s);
 		goURL('/d/drive/?r=' + Math.random() + dt.getTime());
-}
-function onClickChooseEn() {
-	storage('lang', 'langEn');
-	e('lang').value = 'en';
-}
-function onClickChooseRu() {
-	storage('lang', 'langRu');
-	e('lang').value = 'ru';
 }
 
 function goURL(url) {
@@ -61,4 +54,40 @@ function onLoadA236() {
 	setTimeout(function(){
 		w.scrollTo(0, y);
 	}, 200);
+}
+
+function initLang() {
+	var ru = e('bChooseRu'),
+		en = e('bChooseEn');
+	ru.onclick = ru.ontouchstart = onClickChooseRu;
+	en.onclick = en.ontouchstart = onClickChooseEn;
+}
+function onClickChooseEn() {
+	setLang('langEn');
+}
+function onClickChooseRu() {
+	setLang('langRu');
+}
+
+function setLang(lng) {
+	storage('lang', lng);
+	// e('chLang').innerHTML = displayLng;
+	window.L = window[lng];
+	setDOM();
+	/*if (s) {
+		q = l(s);
+		if (q == s && isErr) {
+			q = 'You have not access to this page';
+		}
+		if (q == s && !isErr) {
+      if('langEn' == lng) {
+        q = '<div>The WebUSB project means a few more gigabytes in the cloud for your files.</div>\
+        <div>Your smartphone may be outdated, but files from WebUSB will still be accessible from its default browser - that\'s the idea of this project.</div>';
+      } else {
+        q = L['Click download button'];
+      }
+			
+		}
+		e('hWaitGetLink').innerHTML = q;
+	}*/
 }
