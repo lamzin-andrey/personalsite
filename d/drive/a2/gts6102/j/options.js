@@ -29,7 +29,7 @@ function onClickOptionLeave() {
 
 function onClickOptionChangeLanguage() {
 	hideOptions();
-	location.href = roota2 + '/clang';
+	goURL(roota2 + '/clang/');
 }
 
 function onClickOptionChangeTheme() {
