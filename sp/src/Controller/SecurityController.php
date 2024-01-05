@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Entity\Ausers;
 use App\Form\ChangeUserFormType;
 use App\Form\RegisterFormType;
+use App\Handler\AuthenticationHandler;
+use App\Security\SecurityToken;
 use App\Service\AppService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +22,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use App\Entity\Ausers AS User;
@@ -441,4 +445,41 @@ class SecurityController extends AppBaseController
         $nRole = $oUser->getRole();
         return (2 == $nRole);
     }
+
+    /**
+     * @Route("/forcelogin", name="forcelogin")
+     */
+    public function fuckLoginAction(
+        AuthenticationHandler $authenticator,
+        GuardAuthenticatorHandler $guardHandler,
+        Request $request
+    )
+    {
+        // TODO здесь нужна настоящая проверка по хешу.
+        $user = $this->container->get('doctrine')->getRepository(Ausers::class)->find(33);
+
+        // TODO $tokenInterface = $userOrSecurityService->login($user);
+        // TODO $response = $authenticator->onAuthenticationSuccess($request, $tokenInterface);
+        // TODO не надо в $userOrSecurityService проверять, существует ли AuthenticationHandler::onAuthenticationSuccess
+        //       т к AuthenticationHandler использует $userOrSecurityService
+
+        $token = new PostAuthenticationGuardToken($user, 'main', ['ROLE_USER']);
+        $guardHandler->authenticateWithToken($token, $request, 'main');
+        $response = $authenticator->onAuthenticationSuccess($request, $token);
+
+        // check that it's a Response or null
+        if ($response instanceof Response || null === $response) {
+            return $response;
+        }
+
+        throw new \UnexpectedValueException(sprintf('The %s::onAuthenticationSuccess method must return null or a Response object. You returned %s.', \get_class($this), \is_object($response) ? \get_class($response) : \gettype($response)));
+/**/
+        /*return $guardHandler->authenticateUserAndHandleSuccess(
+            $user,          // ранее созданный объект User, который вы уже сохранили в базе данных
+            $request,
+            $authenticator, // Аутентификатор, чей onAuthenticationSuccess вы хотите использовать
+            'main'          // имя брандмауэра из security.yaml
+        );/**/
+    }
+
 }
