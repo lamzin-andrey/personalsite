@@ -30,6 +30,6 @@ function gvCheckVersion(v) {
 	var current = String(storage('vers'));
 	if (v != current) {
 		storage('updateState', 1);
-		goURL(roota2 + '/newversion?v=' + v);
+		goURL(roota2 + '/newversion/?v=' + v);
 	}
 }

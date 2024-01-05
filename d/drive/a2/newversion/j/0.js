@@ -21,7 +21,7 @@ function initApp() {
 }
 
 function gotoRoot() {
-	location = '/d/drive/?v=' + $_GET['v'];
+	goURL('/d/drive/?v=' + $_GET['v']);
 }
 
 function setVers() {
@@ -168,4 +168,16 @@ function onLoadA236() {
 	setTimeout(function(){
 		w.scrollTo(0, y);
 	}, 200);
+}
+
+function goURL(url) {
+	var prefix = '';
+	if (HttpQueryString.isSSL()) {
+		url = url.replace('http://', 'https://');
+		if (url.charAt(0) == '/') {
+			url = HttpQueryString.SSLP + HttpQueryString.host() + url;
+		}
+	}
+	
+	gto(url);
 }
