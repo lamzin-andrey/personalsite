@@ -19,7 +19,7 @@ function gVsetUpdateComplete(v) {
 }
 
 function gVreload(v) {
-	var cL = location;
+	var cL = location.href;
 	cL = cL.split('#')[0];
 	storage('updateState', 2);
 	goURL(cL + '?v=' + v);
