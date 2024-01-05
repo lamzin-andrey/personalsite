@@ -27,7 +27,7 @@ function showActiveTheme() {
 function chooseV(s) {
 	var dt = new Date();
 		storage('savedTheme', s);
-		gto('/d/drive/?r=' + Math.random() + dt.getTime());
+		goURL('/d/drive/?r=' + Math.random() + dt.getTime());
 }
 function onClickChooseEn() {
 	storage('lang', 'langEn');
@@ -38,7 +38,17 @@ function onClickChooseRu() {
 	e('lang').value = 'ru';
 }
 
-
+function goURL(url) {
+	var prefix = '', s = HttpQueryString.SSLP;
+	if (HttpQueryString.isSSL()) {
+		url = url.replace('http://', s);
+		if (url.charAt(0) == '/') {
+			url = s + HttpQueryString.host() + url;
+		}
+	}
+	
+	gto(url);
+}
 
 function onLoadA236() {
 	if (nav.userAgent.toLowerCase().indexOf('android 2.3.6') == -1) {

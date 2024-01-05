@@ -216,4 +216,15 @@ function onLoadA236() {
 		w.scrollTo(0, y);
 	}, 1000);
 }
+function goURL(url) {
+	var prefix = '';
+	if (HttpQueryString.isSSL()) {
+		url = url.replace('http://', 'https://');
+		if (url.charAt(0) == '/') {
+			url = HttpQueryString.SSLP + HttpQueryString.host() + url;
+		}
+	}
+	
+	gto(url);
+}
 function DevNull(){}

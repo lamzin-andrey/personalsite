@@ -19,10 +19,10 @@ function gVsetUpdateComplete(v) {
 }
 
 function gVreload(v) {
-	var cL = location.href;
+	var cL = loc();
 	cL = cL.split('#')[0];
 	storage('updateState', 2);
-	location.href = cL + '?v=' + v;
+	goURL(cL + '?v=' + v);
 }
 
 function gvCheckVersion(v) {
@@ -30,6 +30,6 @@ function gvCheckVersion(v) {
 	var current = String(storage('vers'));
 	if (v != current) {
 		storage('updateState', 1);
-		location = roota2 + '/newversion?v=' + v;
+		goURL(roota2 + '/newversion?v=' + v);
 	}
 }
