@@ -7,7 +7,7 @@ function initApp() {
 		cLang = 'langEn';
 		window.L = window[cLang];
 		storage('lang', cLang);
-		onChangeLang({preventDefault:function(){});
+		onChangeLang({preventDefault:function(){}});
 	}
 	
 	setListeners();
