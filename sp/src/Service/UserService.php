@@ -78,10 +78,10 @@ class UserService
         ]);
         if (!$userTempPassword) {
             $userTempPassword = new UserTempPasswords();
-            $userTempPassword->setPassword($user->getPassword());
             $userTempPassword->setUserId($user->getId());
-            $this->save($userTempPassword);
         }
+        $userTempPassword->setPassword($user->getPassword());
+        $this->save($userTempPassword);
         return;
     }
 

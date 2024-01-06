@@ -7,7 +7,6 @@ use App\Entity\Ausers;
 use App\Form\ChangeUserFormType;
 use App\Form\RegisterFormType;
 use App\Handler\AuthenticationHandler;
-use App\Security\SecurityToken;
 use App\Service\AppService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -465,6 +464,28 @@ class SecurityController extends AppBaseController
 
         $token = $userService->login($user);
         return $authenticator->onAuthenticationSuccess($request, $token);
+    }
+
+    /**
+     * @Route("/checkmail", name="checkmail")
+     */
+    public function loginByMailAction(
+        UserService $userService,
+        AppService $appService,
+        Request $request
+    )
+    {
+        $repository = $appService->repository(Ausers::class);
+        $user = $repository->findOneBy([
+            'email' => $request->request->get('email')
+        ]);
+
+        if ($user) {
+            $hash = $appService->getHash($request, uniqid(rand(1000, 9999), true));
+            // TODO send email if valid
+            $user->setPassword($hash);
+            $userService->storePassword($user);
+        }
     }
 
 }
