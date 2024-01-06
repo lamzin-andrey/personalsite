@@ -481,7 +481,8 @@ class SecurityController extends AppBaseController
         ]);
 
         if ($user) {
-            $hash = $appService->getHash($request, uniqid(rand(1000, 9999), true));
+            $hash = $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
+            $hash .= $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
             // TODO send email if valid
             $user->setPassword($hash);
             $userService->storePassword($user);
