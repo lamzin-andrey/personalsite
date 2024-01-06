@@ -7,10 +7,15 @@ namespace App\Service;
 use App\Entity\UserTempPasswords;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\Ausers AS User;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 
 class UserService
@@ -30,14 +35,20 @@ class UserService
      */
     protected $csrfTokenManager;
 
+    protected GuardAuthenticatorHandler $guardHandler;
 
-    public function __construct(ContainerInterface $container,
-                                UserPasswordEncoderInterface $userPasswordEncoderInterface,
-                                CsrfTokenManagerInterface $csrfTokenManager)
+
+    public function __construct(
+        ContainerInterface $container,
+        UserPasswordEncoderInterface $userPasswordEncoderInterface,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        GuardAuthenticatorHandler $guardHandler
+    )
     {
         $this->container = $container;
         $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->guardHandler = $guardHandler;
     }
 
     /**
@@ -119,5 +130,14 @@ class UserService
             $em->flush();
         }
 
+    }
+
+    public function login(UserInterface $user, array $roles = ['ROLE_USER'], string $firewallName = 'main'): TokenInterface
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $token = new PostAuthenticationGuardToken($user, $firewallName, $roles);
+        $this->guardHandler->authenticateWithToken($token, $request, $firewallName);
+
+        return $token;
     }
 }

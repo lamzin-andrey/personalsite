@@ -1,3 +1,4 @@
 #bttimg {
 	width:64px;
 }
+.token.regex, .token.important, .token.variable {color: #61430d!important;}
