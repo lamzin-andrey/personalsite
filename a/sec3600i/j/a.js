@@ -29,6 +29,7 @@ function strt(){
   setListeners();
 }
 function  setListeners() {
+  onClickStart();
   e( 'reset').addEventListener( 'click', onClickStart, true);
   e('stop').addEventListener( 'click', onClickStop, true);
   e('menu').addEventListener( 'click', onClickPoint, true );
