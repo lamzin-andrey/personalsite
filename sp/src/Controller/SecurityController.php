@@ -124,8 +124,6 @@ class SecurityController extends AppBaseController
                     if (!$oRequest->isXmlHttpRequest()) {
                         return $this->redirectToRoute('login');
                     } else {
-                        // TODO здесь добавить флаг, если это форма быстрой регистрации по email
-                        // (в том случае, если будем использовать запрос с клиента)
                         return $this->_json(['success' => true]);
                     }
                 }
@@ -478,16 +476,14 @@ class SecurityController extends AppBaseController
         // TODO uncomment me!$email = $request->request->get('email');
         $repository = $appService->repository(Ausers::class);
         $user = $repository->findOneBy([
-            // 'email' => $request->request->get('email')
             'email' => $email
         ]);
 
-        $hash = $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
-        $hash .= $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
 
         if ($user) {
+            $hash = $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
+            $hash .= $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
             // TODO send email if valid
-
             // Таким образом мы запоминаем токен в уже существующей таблице user_temp_password
             // но он будет вечным - это плохо.
             // TODO но не лучше ли использовать recovery_hash + recovery_hash_created
