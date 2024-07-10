@@ -8,6 +8,7 @@ use App\Entity\UserTempPasswords;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\Ausers AS User;
@@ -82,7 +83,6 @@ class UserService
         }
         $userTempPassword->setPassword($user->getPassword());
         $this->save($userTempPassword);
-        return;
     }
 
     /**
@@ -132,12 +132,93 @@ class UserService
 
     }
 
-    public function login(UserInterface $user, array $roles = ['ROLE_USER'], string $firewallName = 'main'): TokenInterface
+    public function login(UserInterface $user, bool $rememberMe = true, string $firewallName = 'main'): TokenInterface
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        $token = new PostAuthenticationGuardToken($user, $firewallName, $roles);
+        if (!$rememberMe) {
+            $token = new PostAuthenticationGuardToken($user->getRoles(), $firewallName, $roles);
+        } else {
+            $secret = $this->container->getParameter('kernel.secret');
+            $token = new RememberMeToken($user, $firewallName, $secret);
+        }
         $this->guardHandler->authenticateWithToken($token, $request, $firewallName);
 
         return $token;
+    }
+
+    public function createRegisterByEmailUser(string $email, bool $doSave = false): User
+    {
+        $user = new User();
+        $user->setEmail($email);
+        $username = $this->createUniqUsername($email);
+        $user->setUsername($username);
+        $name = explode("@", $username)[0];
+        $user->setName($name);
+        $user->setDateCreate(new \DateTime());
+        $user->setSurname($name);
+        if ($doSave) {
+            $this->save($user);
+        }
+
+        return $user;
+    }
+
+    private function createUniqUsername(string $email): string
+    {
+        $rep = $this->container->get('doctrine')->getRepository(User::class);
+        $n = 0;
+        do {
+            $user = $rep->findOneBy([
+                'username' => $email
+            ]);
+            $n++;
+            $a = explode("@", $email);
+            $email = $a[0] . $n ."@" . $a[1];
+        } while ($user);
+
+        return $email;
+    }
+
+    /**
+     * Генерирует пароль для пользователя
+     */
+    public function generatePassword(int $length = 20): string
+    {
+        do {
+            $s = $this->_generatePassword($length);
+            $isValid = true;
+            if (strtolower($s) == $s || strtoupper($s) == $s) {
+                $isValid = false;
+            }
+            $noN = preg_replace("#[\d]#s", '', $s);
+            if ($noN == $s) {
+                $isValid = false;
+            }
+        } while (!$isValid);
+
+        return $s;
+    }
+
+    /**
+     * Генерирует пароль для пользователя
+     */
+    private function _generatePassword(int $length): string
+    {
+        $L = 0;
+        $chars = 'abcdefghijklmnopqrstuvwxyz';
+        $chars .= strtoupper($chars);
+        $chars .= '1234567890';
+        $rate = [];
+        $str = '';
+        $limit = strlen($chars) - 1;
+        while ($L < $length) {
+            $ch = $chars[ rand(0, $limit) ];
+            if (!isset($rate[$ch]) || $rate[$ch] < 1) {
+                $str .= $ch;
+                $rate[$ch] = isset($rate[$ch]) ? $rate[$ch] + 1 : 1;
+                $L++;
+            }
+        }
+        return $str;
     }
 }

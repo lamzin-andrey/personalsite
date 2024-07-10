@@ -77,7 +77,8 @@ class SecurityController extends AppBaseController
         Request $oRequest,
         UserPasswordEncoderInterface $oEncoder,
         TranslatorInterface $t,
-        AppService $oAppService
+        AppService $oAppService,
+        UserService $userService
     )
     {
         $this->_oAppService = $oAppService;
@@ -117,20 +118,14 @@ class SecurityController extends AppBaseController
                     ]);
                 } else {
                     //Success
-                    // TODO userService!
-                    $sPassword = $oEncoder->encodePassword($oUser, $sPassword);
-                    $oUser->setPassword($sPassword);
-
-                    $this->setRole($oRequest, $oUser);
                     $this->request = $oRequest;
-                    $this->setGuestId($oRequest, $oUser);
+                    $this->finalizeCreateNewUser($userService, $oUser, $sPassword);
 
-                    $oEm = $this->getDoctrine()->getManager();
-                    $oEm->persist($oUser);
-                    $oEm->flush();
                     if (!$oRequest->isXmlHttpRequest()) {
                         return $this->redirectToRoute('login');
                     } else {
+                        // TODO здесь добавить флаг, если это форма быстрой регистрации по email
+                        // (в том случае, если будем использовать запрос с клиента)
                         return $this->_json(['success' => true]);
                     }
                 }
@@ -451,6 +446,7 @@ class SecurityController extends AppBaseController
     }
 
     /**
+     * Сюда будем переходить по ссылке в письме
      * @Route("/loginforce", name="loginforce")
      */
     public function forceLoginAction(
@@ -467,26 +463,54 @@ class SecurityController extends AppBaseController
     }
 
     /**
+     * Если есть уже юзер с таким email сохраняем хеш в user_temp_password
      * @Route("/checkmail", name="checkmail")
      */
     public function loginByMailAction(
         UserService $userService,
         AppService $appService,
-        Request $request
+        Request $request,
+        AuthenticationHandler $authenticator
     )
     {
+        $this->request = $request;
+        $email = $request->query->get('email'); // TODO remove me!
+        // TODO uncomment me!$email = $request->request->get('email');
         $repository = $appService->repository(Ausers::class);
         $user = $repository->findOneBy([
-            'email' => $request->request->get('email')
+            // 'email' => $request->request->get('email')
+            'email' => $email
         ]);
 
+        $hash = $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
+        $hash .= $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
+
         if ($user) {
-            $hash = $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
-            $hash .= $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
             // TODO send email if valid
+
+            // Таким образом мы запоминаем токен в уже существующей таблице user_temp_password
+            // но он будет вечным - это плохо.
+            // TODO но не лучше ли использовать recovery_hash + recovery_hash_created
             $user->setPassword($hash);
             $userService->storePassword($user);
+            //TODO вернуть сообщение, Вам отправлено письмо. success : true не нужен, по нему будем сообщать об успешной авторизации
+        } else {
+            $user = $userService->createRegisterByEmailUser($email);
+            $password = $userService->generatePassword();
+            $this->finalizeCreateNewUser($userService, $user, $password);
+            $token = $userService->login($user);
+            return $authenticator->onAuthenticationSuccess($request, $token);
         }
+    }
+
+    private function finalizeCreateNewUser(UserService $userService, Ausers $user, string $password)
+    {
+        $userService->setPassword($user, $password);
+        $this->setRole($this->request, $user);
+        $this->setGuestId($this->request, $user);
+        $oEm = $this->getDoctrine()->getManager();
+        $oEm->persist($user);
+        $oEm->flush();
     }
 
 }

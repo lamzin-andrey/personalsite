@@ -64,7 +64,6 @@ class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, Au
     {
         $this->userService->restorePassword($token->getUser());
 
-
         if ($request->isXmlHttpRequest()) {
             return new JsonResponse(['success' => true]);
         } else {
