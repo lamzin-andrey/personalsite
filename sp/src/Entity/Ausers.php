@@ -194,7 +194,7 @@ class Ausers implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="recovery_hash", type="string", length=32, nullable=true, options={"comment"="Хэш md5 для восстановления пароля"})
+     * @ORM\Column(name="recovery_hash", type="string", length=100, nullable=true, options={"comment"="Хэш md5 для восстановления пароля"})
      */
     private $recoveryHash;
 

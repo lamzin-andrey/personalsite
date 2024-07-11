@@ -10,6 +10,7 @@ use App\Handler\AuthenticationHandler;
 use App\Service\AppService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mime\Email;
@@ -450,12 +451,21 @@ class SecurityController extends AppBaseController
     public function forceLoginAction(
         AuthenticationHandler $authenticator,
         UserService $userService,
-        Request $request
+        Request $request,
+        AppService $appService
     )
     {
-        // TODO здесь нужна настоящая проверка по хешу.
-        $user = $this->container->get('doctrine')->getRepository(Ausers::class)->find(33);
-
+        $hash = $request->query->get('hash'); // TODO remove me!
+        // TODO uncomment me!$hash = $request->request->get('hash');
+        $user = $this->container->get('doctrine')->getRepository(Ausers::class)->findOneBy([
+            'recoveryHash' => $hash
+        ]);
+        if (!$user) {
+            return new JsonResponse([
+                'error' => true,
+                'message' => $appService->l(null, 'User not found', 'loginforms')
+            ]);
+        }
         $token = $userService->login($user);
         return $authenticator->onAuthenticationSuccess($request, $token);
     }
@@ -475,6 +485,9 @@ class SecurityController extends AppBaseController
         $email = $request->query->get('email'); // TODO remove me!
         // TODO uncomment me!$email = $request->request->get('email');
         $repository = $appService->repository(Ausers::class);
+        /**
+         * @var Ausers $user
+        */
         $user = $repository->findOneBy([
             'email' => $email
         ]);
@@ -483,13 +496,17 @@ class SecurityController extends AppBaseController
         if ($user) {
             $hash = $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
             $hash .= $appService->getHash($request, uniqid(rand(10000, 99999), true), 'sha1');
-            // TODO send email if valid
-            // Таким образом мы запоминаем токен в уже существующей таблице user_temp_password
-            // но он будет вечным - это плохо.
-            // TODO но не лучше ли использовать recovery_hash + recovery_hash_created
-            $user->setPassword($hash);
-            $userService->storePassword($user);
-            //TODO вернуть сообщение, Вам отправлено письмо. success : true не нужен, по нему будем сообщать об успешной авторизации
+            $user->setRecoveryHash($hash);
+            $date = new \DateTime();
+            $date->add(new \DateInterval('P3D'));
+            $user->setRecoveryHashCreated($date);
+            $appService->save($user);
+            $html = $this->getEmailLoginHtml($hash, $appService);
+            $success = $appService->sendEmailFromSite($user->getEmail(), 'Quick login in web USB', $html, $user, 'loginforms');
+            if ($success) {
+                return new JsonResponse(['sended' => true]);
+            }
+            return new JsonResponse(['sended' => false]);
         } else {
             $user = $userService->createRegisterByEmailUser($email);
             $password = $userService->generatePassword();
@@ -507,6 +524,31 @@ class SecurityController extends AppBaseController
         $oEm = $this->getDoctrine()->getManager();
         $oEm->persist($user);
         $oEm->flush();
+    }
+
+    private function getEmailLoginHtml(string $hash, AppService $appService): string
+    {
+        $request = $appService->request();
+        $scheme = $request->server->get('REQUEST_SCHEME') . '://';
+
+        $os = ' ';
+        $tDomain = 'loginforms';
+        $user = $this->getUser();
+        $site = $appService->getParameter('app.siteName');
+        $link = $scheme . $site .'/d/drive/?mailhash=' . $hash;
+        $html = '<p> ' . $appService->l($user, 'Link for login in service', $tDomain)
+            . $os . '<a href="' . $scheme . $site .'" target="_blank">'. $site
+            . '</a>:'
+            . '</p>';
+        $html .= '<p>'
+              . '<a href="' . $link . '" target="_blank">'. $link . '</a>'
+              . '</p>';
+        $html .= '<p>' . $appService->l($user, 'Link will actual in next three days', $tDomain) . '</p>';
+        $html .= '<p>' . $appService->l($user, 'Best regards, site', $tDomain) . $os . $site . '</p>';
+
+
+
+        return $html;
     }
 
 }

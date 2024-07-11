@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\Criteria;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Landlib\SimpleMail;
 
 class AppService
 {
@@ -896,5 +897,24 @@ class AppService
         }
 
         return $result;
+    }
+
+    public function sendEmailFromSite(string $to, string $subject, string $body, AUsers $user, string $translationDomen): bool
+    {
+        return $this->sendEmail($this->getParameter('app.siteAdminEmail'), $to, $subject, $body, $user, $translationDomen);
+    }
+
+    public function sendEmail(string $from, string $to, string $subject, string $body, AUsers $user, string $translationDomen): bool
+    {
+        if (!$this->isValidEmail($to)) {
+            return false;
+        }
+        $message = new SimpleMail();
+        $subject = $this->l($user, $subject, $translationDomen);
+        $message->setSubject($subject);
+        $message->setFrom($from);
+        $message->setTo($to);
+        $message->setBody($body, 'text/html', 'UTF-8');
+        return $message->send();
     }
 }
