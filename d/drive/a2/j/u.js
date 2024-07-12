@@ -55,6 +55,7 @@ function onSuccessGetAuthState(data) {
 			e('register_form[_token]').value = data.token_reg;
 			e('tokenRE').value = data.token_reg;
 			e('reset_password_form[_token]').value = data.token_res;
+			loginByMailhash();
 			return;
 		}
 		window.fileList.loadCurrentDir();

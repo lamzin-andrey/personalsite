@@ -17,6 +17,7 @@ function setListenersAuth() {
 	id = 'bRegisterNowRE';
 	if (e(id))
 		e(id).onclick = onClickRegisterByEmailNow;
+	
 }
 
 function onClickResetForm() {
@@ -176,3 +177,18 @@ function getEmailDomain(s) {
 	return 'https://' + d;
 }
 
+function loginByMailhash() {
+	var h = storage('mailhash');
+	if (h) {
+		Rest._get(onSuccessLoginByMailhash, '/sp/public/loginmailink?hash=' + h, onFailLoginByMailhash);
+		localStorage.removeItem('mailhash');
+	}
+}
+
+function onSuccessLoginByMailhash(data) {
+	if (data && data.success) {
+		reload();
+	}
+}
+
+function onFailLoginByMailhash(data, responseText, info, xhr) {}

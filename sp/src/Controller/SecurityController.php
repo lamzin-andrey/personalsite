@@ -446,7 +446,7 @@ class SecurityController extends AppBaseController
 
     /**
      * Сюда будем переходить по ссылке в письме
-     * @Route("/loginforce", name="loginforce")
+     * @Route("/loginmailink", name="loginforce")
      */
     public function forceLoginAction(
         AuthenticationHandler $authenticator,
@@ -455,8 +455,7 @@ class SecurityController extends AppBaseController
         AppService $appService
     )
     {
-        $hash = $request->query->get('hash'); // TODO remove me!
-        // TODO uncomment me!$hash = $request->request->get('hash');
+        $hash = $request->query->get('hash');
         $user = $this->container->get('doctrine')->getRepository(Ausers::class)->findOneBy([
             'recoveryHash' => $hash
         ]);
@@ -501,6 +500,9 @@ class SecurityController extends AppBaseController
             $user->setRecoveryHashCreated($date);
             $appService->save($user);
             $html = $this->getEmailLoginHtml($hash, $appService);
+
+            file_put_contents('/tmp/alog.log', $html . "\n" . /*print_r($context, 1) .*/ "\n=====\n", FILE_APPEND);
+
             $success = $appService->sendEmailFromSite($user->getEmail(), 'Quick login in web USB', $html, $user, 'loginforms');
             if ($success) {
                 return new JsonResponse(['sended' => true]);

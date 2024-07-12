@@ -6,8 +6,13 @@ function initDirect() {
 	attr(e('im'), 'src', url);
 }
 function onCheckSsl(isSSLSupport) {
+	var mailhash = '';
 	storage('referrer', document.referrer);
 	storage('ssl', (isSSLSupport ? 2 : 1));
+	mailhash = HttpQueryString._GET('mailhash');
+	if (mailhash) {
+		storage('mailhash', mailhash);
+	}
 	if (!isSSLSupport) {
 		e('im').onload = function(){};
 		attr(e('im'), 'src', '/d/drive/i/u.png');
