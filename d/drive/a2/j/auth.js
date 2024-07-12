@@ -4,12 +4,14 @@ function initAuth() {
 	setListenersAuth();
 }
 function setListenersAuth() {
+	var id = 'bShowAuthScreen4';
 	e('bLogin').onclick = onClickLogin;
 	e('bShowRegisterScreen').onclick = onClickShowRegister;
 	e('bShowResetScreen').onclick = onClickShowReset;
 	e('bShowAuthScreen').onclick = onClickShowAuth;
 	e('bShowAuthScreen2').onclick = onClickShowAuth;
-	e('bShowAuthScreen4').onclick = onClickShowAuth;
+	if (e(id))
+		e(id).onclick = onClickShowAuth;
 	e('bReset').onclick = onClickResetForm;
 	e('bRegisterNow').onclick = onClickRegisterNow;
 	e('bRegisterNowRE').onclick = onClickRegisterByEmailNow;
