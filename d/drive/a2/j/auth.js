@@ -14,7 +14,9 @@ function setListenersAuth() {
 		e(id).onclick = onClickShowAuth;
 	e('bReset').onclick = onClickResetForm;
 	e('bRegisterNow').onclick = onClickRegisterNow;
-	e('bRegisterNowRE').onclick = onClickRegisterByEmailNow;
+	id = 'bRegisterNowRE';
+	if (e(id))
+		e(id).onclick = onClickRegisterByEmailNow;
 }
 
 function onClickResetForm() {
