@@ -505,7 +505,7 @@ class SecurityController extends AppBaseController
             if ($success) {
                 return new JsonResponse(['sended' => true]);
             }
-            return new JsonResponse(['sended' => true]);// TODO remove me! false!
+            return new JsonResponse(['sended' => false]);
         } else {
             $user = $userService->createRegisterByEmailUser($email);
             $password = $userService->generatePassword();
