@@ -395,7 +395,7 @@ function v(o, s) {
 	// if (o.tagName == 'INPUT' || o.tagName == 'TEXTAREA' || o.tagName == 'SELECT') {
 	if (o.tagName in In(['INPUT', 'TEXTAREA', 'SELECT'])) {
 		if (o.type != 'checkbox') {
-			if (S(v) !== 'undefined') {
+			if (S(s) !== 'undefined') {
 				o.value = s;
 			} else {
 				r = o.value;

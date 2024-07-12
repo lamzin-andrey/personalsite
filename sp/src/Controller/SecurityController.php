@@ -482,8 +482,7 @@ class SecurityController extends AppBaseController
     )
     {
         $this->request = $request;
-        $email = $request->query->get('email'); // TODO remove me!
-        // TODO uncomment me!$email = $request->request->get('email');
+        $email = $request->request->get('emailRE');
         $repository = $appService->repository(Ausers::class);
         /**
          * @var Ausers $user
@@ -506,7 +505,7 @@ class SecurityController extends AppBaseController
             if ($success) {
                 return new JsonResponse(['sended' => true]);
             }
-            return new JsonResponse(['sended' => false]);
+            return new JsonResponse(['sended' => true]);// TODO remove me! false!
         } else {
             $user = $userService->createRegisterByEmailUser($email);
             $password = $userService->generatePassword();

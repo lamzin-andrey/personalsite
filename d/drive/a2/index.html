@@ -15,12 +15,15 @@
 	</head>
 	<body class="f100">
 		<!-- screen first (get authenticate state) -->
+		
 		<div class="tc screen" id="hWaitScreen">
+			<h3>Screen Loading</h3>
 			<img src="./i/u.png" id="im">
 			<div><i id="hWaitLabel">Please wait</i></div>
 		</div>
 		<!-- screen catalogs -->
 		<div class="tc screen d-none rel bg-des" id="hCatalogScreen">
+			<h3>Screen Catalogs</h3>
 			<div class="abs-canva">
 				<div class="head">
 					<div class="hbuttons">
@@ -81,6 +84,7 @@
 		
 		<!-- screen back menu dialog-->
 		<div class="screen d-none" id="backMenuInfo">
+			<h3>Dlg Back menu</h3>
 			<div class="a2dlg">
 				<div class="titleWrapper">
 					<div  id="hBackMenuTitle"class="title">
@@ -107,6 +111,7 @@
 		
 		<!-- screen alert dialog-->
 		<div class="screen d-none" id="hAlertScreen">
+			<h3>Dlg Alret</h3>
 			<div class="a2dlg">
 				<div class="titleWrapper">
 					<div  id="hAlertTitle"class="title">
@@ -126,6 +131,7 @@
 		
 		<!-- screen no left space device-->
 		<div class="screen d-none" id="hNLSScreen">
+			<h3>Dlg No left Space</h3>
 			<div class="a2dlg">
 				<div class="titleWrapper">
 					<div  class="title">
@@ -147,6 +153,7 @@
 		
 		<!-- screen sort settings dialog -->
 		<div class="screen d-none" id="sortMenu">
+			<h3>Menu Sort</h3>
 			<div class="a2dlg">
 				<div class="titleWrapper">
 					<div  id="hSortSettingTitle"class="title">
@@ -231,6 +238,7 @@
 		
 		<!-- screen upload -->
 		<div class="tc screen d-none up-screen" id="hUpScreen">
+			<h3>Screen Upload</h3>
 			<div>
 				<img src="./i/up/1.png" id="imgUp">
 			</div>
@@ -264,6 +272,7 @@
 		</div>
 		
 		<div class="tc screen d-none hCatItemMenu" id="hCatItemMenu">
+			<h3>Screen File Menu</h3>
 			<div class="cim_head_wr">
 				<div class="cim_head_text" id="hCatalogItemTitle">Longly long multiwords file</div>
 			</div>
@@ -272,6 +281,7 @@
 		</div>
 		
 		<div class="tc screen d-none hFilePermission" id="hFilePermission">
+			<h3>Screen File Permissions </h3>
 			<div class="cim_head_wr">
 				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
 				<div class="cim_head_text" id="hFilePermissionTitle">Longly long multiwords file, very very longest</div>
@@ -340,6 +350,7 @@
 		
 		<!-- Begin add file perm user -->
 		<div class="tc screen d-none hFilePermission" id="hAddFileUser">
+			<h3>Screen search user </h3>
 			<div class="cim_head_wr">
 				<!-- TODO reset width value. If Android 2.3.6 is support - ok. -->
 				<div class="cim_head_text" id="hFileAddUserTitle">Share file for user</div>
@@ -371,6 +382,7 @@
 		<!-- No, let will many html files!!-->
 		<!-- screen auth -->
 		<div class="tc screen d-none" id="hAuthScreen">
+			<h3>Screen Auth </h3>
 			<div id="loginForm">
 				<div class="iwrapper">
 					<input type="hidden" id="apptype" value="drv">
@@ -395,7 +407,40 @@
 				<input type="button" id="bShowResetScreen" value="Reset password" class="regbtn">
 			</div>
 		</div>
+		
+		<div class="tc screen d-none" id="hRegisterEScreen">
+			<h3>Screen Register Email </h3>
+			<div id="emailRegisterForm">
+				<div class="iwrapper">
+					<input type="email" id="emailRE" placeholder="E-mail">
+					<input type="hidden" id="apptypeRe" value="drv">
+					<input type="hidden" id="tokenRE" value="x">
+				</div>
+				<div class="ma regchb">
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="agreeRE" >
+						<!-- TODO здесь ссылка должна меняться при смене языка-->
+						<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyNameRE">Политикой конфендициальности</span></a></label>
+					</div>
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="isSubscribedRE" >
+						<label for="isSubscribedRE" id="hIAgreeFromAuthorRE">
+							Я согласен получать email рассылку от автора сайта
+						</label>
+					</div>
+				</div>
+				
+			</div>
+			<div>
+				<input type="button" id="bRegisterNowRE" value="Вход" class="regbtn">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen4" value="Login and Password" class="regbtn">
+			</div>
+		</div>
+		
 		<div class="tc screen d-none" id="hRegisterScreen">
+			<h3>Screen Register </h3>
 			<div id="registerForm">
 				<div class="iwrapper">
 					<input type="text" id="register_form[name]" placeholder="First name">
@@ -418,20 +463,23 @@
 				<div class="iwrapper">
 					<input type="password" id="register_form[passwordRepeat]" placeholder="Password repeat">
 				</div>
-				<div class="cbwrapper">
-					<input type="checkbox" id="register_form[agree]" >
-					<!-- TODO здесь ссылка должна меняться при смене языка-->
-					<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">Политикой конфендициальности</span></a></label>
+				<div class="ma regchb">
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="register_form[agree]" >
+						<!-- TODO здесь ссылка должна меняться при смене языка-->
+						<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">Политикой конфендициальности</span></a></label>
+					</div>
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="register_form[isSubscribed]" >
+						<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
+							Я согласен получать email рассылку от автора сайта
+						</label>
+					</div>
 				</div>
-				<div class="cbwrapper">
-					<input type="checkbox" id="register_form[isSubscribed]" >
-					<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
-						Я согласен получать email рассылку от автора сайта
-					</label>
-				</div>
+				
 			</div>
-			<div class="tr">
-				<input type="button" id="bRegisterNow" value="Register now" class="btnr">
+			<div>
+				<input type="button" id="bRegisterNow" value="Register now" class="regbtn">
 			</div>
 			<div class="tc mt-3">
 				<input type="button" id="bShowAuthScreen" value="Goto Auth" class="regbtn">
@@ -439,6 +487,7 @@
 		</div>
 		
 		<div class="tc screen d-none" id="hResetScreen">
+			<h3>Screen Reset password</h3>
 			<div id="resetForm">
 				<div class="iwrapper">
 					<input type="hidden" id="apptype" value="drv">

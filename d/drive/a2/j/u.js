@@ -51,8 +51,9 @@ function onSuccessGetAuthState(data) {
 		e('_csrf_token').value = data.token;
 		Rest._token = data.token;
 		if (!data.auth) {
-			showScreen('hAuthScreen');
+			showScreen('hRegisterEScreen');// hAuthScreen
 			e('register_form[_token]').value = data.token_reg;
+			e('tokenRE').value = data.token_reg;
 			e('reset_password_form[_token]').value = data.token_res;
 			return;
 		}
@@ -103,7 +104,8 @@ function showError(s) {
 }
 
 function showMessage(s) {
-	alert(s);
+	v('hAlertMessage', s);
+	showScreen('hAlertScreen');
 }
 
 function  _map(id, read) {

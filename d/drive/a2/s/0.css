@@ -7,7 +7,7 @@ body {
 body.f100, html.f100 {
 	height:100%;
 }
-.hide {
+.hide, h3 {
 	display: none;
 }
 .cl {
@@ -43,6 +43,9 @@ input[type=text],input[type=password], input[type=email] {
 .iwrapper, .cbwrapper {
 	margin:8px 0px
 }
+.cbwrapper a{
+	color: aqua;
+}
 .btnr {
 	margin-right:24px;
 }
@@ -56,6 +59,10 @@ input[type=text],input[type=password], input[type=email] {
 .pl-2 {
 	padding-left: 0.5em;
 }
+.ml-2 {
+	margin-left: 0.5em;
+}
+
 
 /** catalog design start */
 .rel {
@@ -71,6 +78,12 @@ input[type=text],input[type=password], input[type=email] {
 	width:100%;
 	/*height:320px;*/
 	z-index:2;
+}
+.ma {
+	margin:auto;
+}
+.regchb {
+	max-width:500px;
 }
 
 .bg-des {
@@ -225,11 +238,13 @@ input[type=text],input[type=password], input[type=email] {
 	width:78px;
 	/*! height: 49px; */
 	margin:1px;
-	font-family: Arial;
 	font-size: 10px;
 	font-weight: bold;
 	text-align:center;
 	padding-top:36px;
+}
+.arial,.bmb {
+	font-family: arial;
 }
 .menu_paste {
 	color: gray;

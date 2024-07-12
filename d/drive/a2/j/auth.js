@@ -9,8 +9,10 @@ function setListenersAuth() {
 	e('bShowResetScreen').onclick = onClickShowReset;
 	e('bShowAuthScreen').onclick = onClickShowAuth;
 	e('bShowAuthScreen2').onclick = onClickShowAuth;
+	e('bShowAuthScreen4').onclick = onClickShowAuth;
 	e('bReset').onclick = onClickResetForm;
 	e('bRegisterNow').onclick = onClickRegisterNow;
+	e('bRegisterNowRE').onclick = onClickRegisterByEmailNow;
 }
 
 function onClickResetForm() {
@@ -114,3 +116,59 @@ function authDefaultResponseError(data, responseText, info, xhr) {
 	
 	return false;
 }
+
+
+function onClickRegisterByEmailNow() {
+	var data = _map('emailRegisterForm', 1),
+		tokenName = 'tokenRE';
+	Rest[tokenName] = data[tokenName];
+	Rest._token_name = tokenName;
+	// showScreen('hWaitScreen');
+	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
+}
+function onSuccessRegisterByEmail(data) {
+	if (!onFailSendRegisterByEmail(data)) {
+		return;
+	}
+	if (data.success === true) {
+		location.reload();
+		return;
+	}
+	if (data.sended) {
+		showMessage('<a href="' 
+			+ getEmailDomain(v('emailRE'))
+			+ '" target="_blank">'
+			+ l('Email') + '</a>'
+			+ l(' with login link was sent'));
+	} else {
+		showError(l('Unable sent email. Try later.'));
+	}
+}
+function onFailSendRegisterByEmail(data, responseText, info, xhr) {
+	showScreen('hRegisterEScreen');
+	if (data && String(data.sended) != "undefined" || (data && data.success)) {
+		return true;
+	}
+	
+	if (data && !data.success) {
+		var errors = array_values(data.errors);
+		if (data.message) {
+			showError(data.message);
+		} else if (data.errors && (errors instanceof Array) ) {
+			showError(errors.join("\n"));
+		}
+	}
+	
+	return false;
+}
+
+function getEmailDomain(s) {
+	var a = s.split('@'), d = a[1];
+	switch (d) {
+		case 'mail.ru':
+			d = 'm.mail.ru'; 
+			break;
+	}
+	return 'https://' + d;
+}
+

@@ -24,10 +24,13 @@ window.langRu = {
 	'register_form[passwordRaw]' : 'Пароль',
 	'register_form[passwordRepeat]' : 'Пароль повторно',
 	'hIAgree' : 'Я согласен с',
+	'hIAgreeRE' : 'Я согласен с',
 	'hPolicyName' : 'Политикой конфендициальности',
 	'hIAgreeFromAuthor' : 'Я согласен получать email рассылку от автора этого сайта',
+	'hIAgreeFromAuthorRE' : 'Я согласен получать email рассылку от автора этого сайта',
 	'bRegisterNow' : 'Регистрироваться',
 	'bShowAuthScreen' : 'К форме логина',
+	'bShowAuthScreen4' : 'К форме логина',
 	'reset_password_form[email]' : 'E-mail',
 	'bReset' : 'Сбросить пароль',
 	'bShowAuthScreen2' : 'К форме логина',
@@ -101,5 +104,7 @@ window.langRu = {
 						  </p>\
 					  </div>',
 	'bNLSOk' : 'Понятно',
-	'' : '',
+	'Email with login link was sent' : 'Вам отправлен email с ссылкой для входа',
+	'Unable sent email. Try later.' : 'Не удалось отправить email. Попробуйте позже.',
+	'' : ''
 };
