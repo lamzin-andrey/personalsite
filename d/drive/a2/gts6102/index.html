@@ -5,7 +5,7 @@
 		<!--meta name="viewport" content="width=device-width,no-scale"-->
 		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height, user-scalable=no, target-densitydpi=device-dpi">
 		<title>Онлайн флешка для любого вашего устройства</title>
-		<link rel="stylesheet" type="text/css" href="./s/0.css?v=7">
+		<link rel="stylesheet" type="text/css" href="./s/0.css?v=8">
 		<link rel="stylesheet" type="text/css" href="../j/pbar/pbar.css">
 		<link rel="stylesheet" type="text/css" href="../j/bmenu/dlg/s/adlg.css">
 		<link rel="stylesheet" type="text/css" href="../j/bmenu/dlg/s/q.css">
@@ -393,6 +393,38 @@
 				<input type="button" id="bShowResetScreen" value="Reset password" class="regbtn">
 			</div>
 		</div>
+		
+		<div class="tc screen d-none" id="hRegisterEScreen">
+			<h3>Screen Register Email </h3>
+			<div id="emailRegisterForm">
+				<div class="iwrapper">
+					<input type="email" id="emailRE" placeholder="E-mail">
+					<input type="hidden" id="apptypeRe" value="drv">
+					<input type="hidden" id="tokenRE" value="x">
+				</div>
+				<div class="ma regchb">
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="agreeRE" >
+						<!-- TODO здесь ссылка должна меняться при смене языка-->
+						<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyNameRE">Политикой конфендициальности</span></a></label>
+					</div>
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="isSubscribedRE" >
+						<label for="isSubscribedRE" id="hIAgreeFromAuthorRE">
+							Я согласен получать email рассылку от автора сайта
+						</label>
+					</div>
+				</div>
+				
+			</div>
+			<div>
+				<input type="button" id="bRegisterNowRE" value="Вход" class="regbtn">
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen4" value="Login and Password" class="regbtn">
+			</div>
+		</div>
+		
 		<div class="tc screen d-none" id="hRegisterScreen">
 			<div id="registerForm">
 				<div class="iwrapper">
@@ -463,7 +495,7 @@
 		
 		<script src="../j/pbar/pbar.js"></script>
 		
-		<script src="../j/auth.js"></script>
+		<script src="../j/auth.js?v=8"></script>
 		<script src="../j/mmb.js?v=1"></script>
 		<script src="./j/mmenu/menu.js?v=2"></script>
 		<script src="../j/catalog/sqzdatetime.js"></script>
@@ -488,7 +520,7 @@
 		
 		
 		
-		<script src="./j/u.js?v=7"></script>
+		<script src="./j/u.js?v=8"></script>
 		
 		<!-- get new version -->
 		<script src="../j/vers/versionreq.js"></script>

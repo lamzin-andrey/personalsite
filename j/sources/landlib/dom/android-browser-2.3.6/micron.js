@@ -434,3 +434,10 @@ function reload() {
 	loc().reload();
 }
 
+function isU(x) {
+	return String(x) === "undefined";
+}
+
+function isNull(x) {
+	return String(x) === "null";
+}

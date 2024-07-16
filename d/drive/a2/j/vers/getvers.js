@@ -27,8 +27,8 @@ function gVreload(v) {
 
 function gvCheckVersion(v) {
 	v = String(v);
-	var current = String(storage('vers'));
-	if (v != current) {
+	var curr = String(storage('vers'));
+	if (v != curr && !isNull(curr)) {
 		storage('updateState', 1);
 		goURL(roota2 + '/newversion/?v=' + v);
 	}

@@ -128,7 +128,8 @@ function onClickRegisterByEmailNow() {
 		tokenName = 'tokenRE';
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
-	// showScreen('hWaitScreen');
+	attr('im', 'src', root + '/i/clos48.png');
+	showLoader();
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
 function onSuccessRegisterByEmail(data) {
@@ -136,6 +137,8 @@ function onSuccessRegisterByEmail(data) {
 		return;
 	}
 	if (data.success === true) {
+		attr('im', 'src', roota2 + '/i/clos48.png');
+		showLoader();
 		location.reload();
 		return;
 	}
@@ -180,6 +183,8 @@ function getEmailDomain(s) {
 function loginByMailhash() {
 	var h = storage('mailhash');
 	if (h) {
+		attr('im', 'src', roota2 + '/i/clos48.png');
+		showLoader();
 		Rest._get(onSuccessLoginByMailhash, '/sp/public/loginmailink?hash=' + h, onFailLoginByMailhash);
 		localStorage.removeItem('mailhash');
 	}
@@ -191,4 +196,7 @@ function onSuccessLoginByMailhash(data) {
 	}
 }
 
-function onFailLoginByMailhash(data, responseText, info, xhr) {}
+function onFailLoginByMailhash(data, responseText, info, xhr) {
+	attr('im', 'src', roota2 + '/i/u.png');
+	showScreen("hRegisterEScreen");
+}

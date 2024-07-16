@@ -501,6 +501,7 @@ class SecurityController extends AppBaseController
             $appService->save($user);
             $html = $this->getEmailLoginHtml($hash, $appService);
 
+            // TODO remove me!
             file_put_contents('/tmp/alog.log', $html . "\n" . /*print_r($context, 1) .*/ "\n=====\n", FILE_APPEND);
 
             $success = $appService->sendEmailFromSite($user->getEmail(), 'Quick login in web USB', $html, $user, 'loginforms');

@@ -7,7 +7,7 @@ body {
 body.f100, html.f100 {
 	height:100%;
 }
-.hide {
+.hide, h3 {
 	display: none;
 }
 .cl {
@@ -43,6 +43,11 @@ input[type=text],input[type=password], input[type=email] {
 .btnr {
 	margin-right:24px;
 }
+
+.cbwrapper a{
+	color: aqua;
+}
+
 .regbtn {
 	width: 80%;
 }
@@ -53,7 +58,20 @@ input[type=text],input[type=password], input[type=email] {
 .pl-2 {
 	padding-left: 0.5em;
 }
+.ml-2 {
+	margin-left: 0.5em;
+}
 
+.ma {
+	margin:auto;
+}
+.regchb {
+	max-width:500px;
+}
+
+.arial,.bmb {
+	font-family: arial;
+}
 
 /** catalog design start */
 .rel {
