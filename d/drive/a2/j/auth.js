@@ -149,7 +149,12 @@ function onSuccessRegisterByEmail(data) {
 			+ l('Email') + '</a>'
 			+ l(' with login link was sent'));
 	} else {
-		showError(l('Unable sent email. Try later.'));
+		if (data.msg) {
+			showError(data.msg);
+		} else {
+			showError(l('Unable sent email. Try later.'));
+		}
+		
 	}
 }
 function onFailSendRegisterByEmail(data, responseText, info, xhr) {

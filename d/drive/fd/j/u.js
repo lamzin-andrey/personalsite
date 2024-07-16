@@ -54,9 +54,11 @@ function onSuccessGetAuthState(data) {
 		e('_csrf_token').value = data.token;
 		Rest._token = data.token;
 		if (!data.auth) {
-			showScreen('hAuthScreen');
+			showScreen('hRegisterEScreen');// hAuthScreen// hAuthScreen
 			e('register_form[_token]').value = data.token_reg;
 			e('reset_password_form[_token]').value = data.token_res;
+			e('tokenRE').value = data.token_reg;
+			loginByMailhash();
 			return;
 		}
 		window.fileList.loadCurrentDir();
@@ -102,6 +104,11 @@ function defaultResponseError(data, responseText, info, xhr) {
 
 function showError(s) {
 	alert(s);
+}
+
+function showMessage(s) {
+	v('hAlertMessage', s);
+	showScreen('hAlertScreen');
 }
 
 function  _map(id, read) {

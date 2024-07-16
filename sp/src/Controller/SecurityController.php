@@ -470,7 +470,7 @@ class SecurityController extends AppBaseController
     }
 
     /**
-     * Если есть уже юзер с таким email сохраняем хеш в user_temp_password
+     * Если есть уже юзер с таким email сохраняем хеш
      * @Route("/checkmail", name="checkmail")
      */
     public function loginByMailAction(
@@ -482,6 +482,14 @@ class SecurityController extends AppBaseController
     {
         $this->request = $request;
         $email = $request->request->get('emailRE');
+
+        if (!$this->isRussianEmail($email, $allowEmails)) {
+            $message = $appService->l(null, 'email_must_be_russian', null, [
+                '%list%' => implode(",\n",  $allowEmails)
+            ]);
+            return new JsonResponse(['sended' => false, 'msg' => $message]);
+        }
+
         $repository = $appService->repository(Ausers::class);
         /**
          * @var Ausers $user
@@ -501,7 +509,6 @@ class SecurityController extends AppBaseController
             $appService->save($user);
             $html = $this->getEmailLoginHtml($hash, $appService);
 
-            // TODO remove me!
             file_put_contents('/tmp/alog.log', $html . "\n" . /*print_r($context, 1) .*/ "\n=====\n", FILE_APPEND);
 
             $success = $appService->sendEmailFromSite($user->getEmail(), 'Quick login in web USB', $html, $user, 'loginforms');
