@@ -1,5 +1,4 @@
 function initOptions() {
-	e('boLeave').onclick = onClickOptionLeave;
 	e('boChangeLang').onclick = onClickOptionChangeLanguage;
 	e('boChangeTheme').onclick = onClickOptionChangeTheme;
 	e('boCloseOpts').onclick = onClickOptionExit;
@@ -15,15 +14,6 @@ function showOptions() {
 function hideOptions() {
 	addClass(MENU_ID, 'hide');
 	addClass('hBotOptions', 'hide');
-}
-
-function onClickOptionLeave() {
-	var ref = storage('referrer');
-	if (!ref || ref == location.href) {
-		ref = 'https://google.com';
-	}
-	hideOptions();
-	location.href = ref;
 }
 
 function onClickOptionChangeLanguage() {

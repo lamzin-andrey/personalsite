@@ -490,6 +490,16 @@ class SecurityController extends AppBaseController
             return new JsonResponse(['sended' => false, 'msg' => $message]);
         }
 
+        $agreeCondition = $request->request->get('agreeRE');
+        $agreeSubscribe = $request->request->get('isSubscribedRE');
+        $agreeCondition = ($agreeCondition === 'true');
+        $agreeSubscribe = ($agreeSubscribe === 'true');
+
+        if (!$agreeCondition) {
+            $message = $appService->l(null, 'Consent to agree to terms of use', null, []);
+            return new JsonResponse(['sended' => false, 'msg' => $message]);
+        }
+
         $repository = $appService->repository(Ausers::class);
         /**
          * @var Ausers $user
@@ -508,15 +518,17 @@ class SecurityController extends AppBaseController
             $user->setRecoveryHashCreated($date);
             $appService->save($user);
             $html = $this->getEmailLoginHtml($hash, $appService);
-
-            
             $success = $appService->sendEmailFromSite($user->getEmail(), 'Quick login in web USB', $html, $user, 'loginforms');
             if ($success) {
+                if (!$user->getIsSubscribed()) {
+                    $user->setIsSubscribed($agreeSubscribe);
+                    $appService->save($user);
+                }
                 return new JsonResponse(['sended' => true]);
             }
             return new JsonResponse(['sended' => false]);
         } else {
-            $user = $userService->createRegisterByEmailUser($email);
+            $user = $userService->createRegisterByEmailUser($email, $agreeSubscribe, false);
             $password = $userService->generatePassword();
             $this->finalizeCreateNewUser($userService, $user, $password);
             $token = $userService->login($user);

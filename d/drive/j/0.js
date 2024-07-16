@@ -40,7 +40,7 @@ function onCheckSsl(isSSLSupport) {
 		}
 		vw = getViewport();
 		if (vw.w > 799) {
-			savedTheme = savedTheme ? savedTheme : 'w';
+			savedTheme = 'w';
 		}
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');

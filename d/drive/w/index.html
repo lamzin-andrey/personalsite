@@ -5,9 +5,9 @@
 		<!--meta name="viewport" content="width=device-width,no-scale"-->
 		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height, user-scalable=no, target-densitydpi=device-dpi">
 		<title>ќнлайн флешка дл€ любого вашего устройства</title>
-		<link rel="stylesheet" type="text/css" href="./s/0.css?v=8">
+		<link rel="stylesheet" type="text/css" href="./s/0.css?v=9">
 		<link rel="stylesheet" type="text/css" href="../a2/j/pbar/pbar.css">
-		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/adlg.css">
+		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/adlg.css?v=9">
 		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/q.css">
 		<link rel="stylesheet" type="text/css" href="../a2/j/cbox/cbox.css">
 		
@@ -52,7 +52,6 @@
 				<div id="hBotOptions" class="botOptsWr hide tl">
 					<div class="botOptsBg">
 						<div>
-							<div id="boLeave" class="bopt">Leave WebUSB</div>
 							<div id="boSortSetting" class="bopt">Sort setting</div>
 							<div id="boChangeLang" class="bopt">Change language</div>
 							<div id="boChangeTheme" class="bopt">Change mode</div>
@@ -378,6 +377,42 @@
 				<input type="button" id="bShowResetScreen" value="Reset password" class="regbtn">
 			</div>
 		</div>
+		
+		<div class="tc screen d-none" id="hRegisterEScreen">
+			<h3>Screen Register Email </h3>
+			<div id="emailRegisterForm">
+				<div class="iwrapper">
+					<input type="email" id="emailRE" placeholder="E-mail">
+					<input type="hidden" id="apptypeRe" value="drv">
+					<input type="hidden" id="tokenRE" value="x">
+				</div>
+				<div class="ma regchb">
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="agreeRE" >
+						<!-- TODO здесь ссылка должна мен€тьс€ при смене €зыка-->
+						<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyNameRE">ѕолитикой конфендициальности</span></a></label>
+					</div>
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="isSubscribedRE" >
+						<label for="isSubscribedRE" id="hIAgreeFromAuthorRE">
+							я согласен получать email рассылку от автора сайта
+						</label>
+					</div>
+				</div>
+				
+			</div>
+			<div>
+				<input type="button" id="bRegisterNowRE" value="¬ход" class="regbtn">
+			</div>
+			<div class="tc mt-3">
+				<hr>
+				<div id="hOr"> or </div>
+			</div>
+			<div class="tc mt-3">
+				<input type="button" id="bShowAuthScreen4" value="Login and Password" class="regbtn">
+			</div>
+		</div>
+		
 		<div class="tc screen d-none" id="hRegisterScreen">
 			<div id="registerForm">
 				<div class="iwrapper">
@@ -401,17 +436,21 @@
 				<div class="iwrapper">
 					<input type="password" id="register_form[passwordRepeat]" placeholder="Password repeat">
 				</div>
-				<div class="cbwrapper">
-					<input type="checkbox" id="register_form[agree]" >
-					<!-- TODO здесь ссылка должна мен€тьс€ при смене €зыка-->
-					<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">ѕолитикой конфендициальности</span></a></label>
+				
+				<div class="ma regchb">
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="register_form[agree]" >
+						<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">ѕолитикой конфендициальности</span></a></label>
+					</div>
+				
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="register_form[isSubscribed]" >
+						<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
+							я согласен получать email рассылку от автора сайта
+						</label>
+					</div>
 				</div>
-				<div class="cbwrapper">
-					<input type="checkbox" id="register_form[isSubscribed]" >
-					<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
-						я согласен получать email рассылку от автора сайта
-					</label>
-				</div>
+				
 			</div>
 			<div class="tr">
 				<input type="button" id="bRegisterNow" value="Register now" class="btnr">
@@ -437,7 +476,7 @@
 			</div>
 		</div>
 		
-		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js?v=8"></script>
+		<script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js?v=9"></script>
 		<script src="/j/sources/landlib/net/httpquerystring.es5.js"></script>
 		<script src="/j/sources/landlib/net/rest.es5.js?vF"></script>
 		<script src="../a2/j/php.js"></script>
@@ -451,7 +490,7 @@
 		
 		<script src="../a2/j/pbar/pbar.js"></script>
 		
-		<script src="../a2/j/auth.js"></script>
+		<script src="../a2/j/auth.js?v=9"></script>
 		<script src="./j/mmb.js?v=1"></script>
 		<script src="./j/mmenu/menu.js?v=2"></script>
 		<script src="../a2/j/catalog/sqzdatetime.js"></script>
@@ -475,11 +514,11 @@
 		<script src="../a2/j/bmenu/dlg/j/a2dlg.js"></script>
 		<script src="../a2/j/cbox/cbox.js"></script>
 		
-		<script src="./j/options.js?v=8"></script>
+		<script src="./j/options.js?v=9"></script>
 		
 		
 		
-		<script src="./j/u.js?v=8"></script>
+		<script src="./j/u.js?v=9"></script>
 		
 		<!-- get new version -->
 		<script src="../a2/j/vers/versionreq.js"></script>

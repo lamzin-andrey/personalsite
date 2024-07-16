@@ -7,7 +7,7 @@
 		<title>ќнлайн флешка дл€ любого вашего устройства</title>
 		<link rel="stylesheet" type="text/css" href="./s/0.css?v=b">
 		<link rel="stylesheet" type="text/css" href="../a2/j/pbar/pbar.css">
-		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/adlg.css?v=9">
+		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/adlg.css?v=b">
 		<link rel="stylesheet" type="text/css" href="../a2/j/bmenu/dlg/s/q.css">
 		<link rel="stylesheet" type="text/css" href="../a2/j/cbox/cbox.css">
 		
@@ -52,7 +52,6 @@
 				<div id="hBotOptions" class="botOptsWr hide tl">
 					<div class="botOptsBg">
 						<div>
-							<div id="boLeave" class="bopt">Leave WebUSB</div>
 							<div id="boSortSetting" class="bopt">Sort setting</div>
 							<div id="boChangeLang" class="bopt">Change language</div>
 							<div id="boChangeTheme" class="bopt">Change mode</div>
@@ -395,7 +394,6 @@
 				<div class="ma regchb">
 					<div class="cbwrapper tl ml-2 arial">
 						<input type="checkbox" id="agreeRE" >
-						<!-- TODO здесь ссылка должна мен€тьс€ при смене €зыка-->
 						<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyNameRE">ѕолитикой конфендициальности</span></a></label>
 					</div>
 					<div class="cbwrapper tl ml-2 arial">
@@ -408,7 +406,11 @@
 				
 			</div>
 			<div>
-				<input type="button" id="bRegisterNowRE" value="¬ход" class="regbtn">
+				<input type="button" id="bRegisterNowRE" value="Quick login" class="regbtn">
+			</div>
+			<div class="tc mt-3">
+				<hr>
+				<div id="hOr"> or </div>
 			</div>
 			<div class="tc mt-3">
 				<input type="button" id="bShowAuthScreen4" value="Login and Password" class="regbtn">
@@ -438,17 +440,21 @@
 				<div class="iwrapper">
 					<input type="password" id="register_form[passwordRepeat]" placeholder="Password repeat">
 				</div>
-				<div class="cbwrapper">
-					<input type="checkbox" id="register_form[agree]" >
-					<!-- TODO здесь ссылка должна мен€тьс€ при смене €зыка-->
-					<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">ѕолитикой конфендициальности</span></a></label>
+				<div class="ma regchb">
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="register_form[agree]" >
+						<!-- TODO здесь ссылка должна мен€тьс€ при смене €зыка-->
+						<label for="register_form[agree]"><span id="hIAgree">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyName">ѕолитикой конфендициальности</span></a></label>
+					</div>
+				
+					<div class="cbwrapper tl ml-2 arial">
+						<input type="checkbox" id="register_form[isSubscribed]" >
+						<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
+							я согласен получать email рассылку от автора сайта
+						</label>
+					</div>
 				</div>
-				<div class="cbwrapper">
-					<input type="checkbox" id="register_form[isSubscribed]" >
-					<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">
-						я согласен получать email рассылку от автора сайта
-					</label>
-				</div>
+				
 			</div>
 			<div class="tr">
 				<input type="button" id="bRegisterNow" value="Register now" class="btnr">
