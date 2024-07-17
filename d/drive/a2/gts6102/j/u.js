@@ -52,6 +52,8 @@ function onSuccessGetAuthState(data) {
 			e('tokenRE').value = data.token_reg;
 			loginByMailhash();
 			return;
+		} else {
+			v('_csrf_token_uf', data.token);
 		}
 		window.fileList.loadCurrentDir();
 		mainMenuBackPush();

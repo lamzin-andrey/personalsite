@@ -57,6 +57,8 @@ function onSuccessGetAuthState(data) {
 			e('reset_password_form[_token]').value = data.token_res;
 			loginByMailhash();
 			return;
+		} else {
+			v('_csrf_token_uf', data.token);
 		}
 		window.fileList.loadCurrentDir();
 		mainMenuBackPush();
