@@ -16,6 +16,7 @@ window.langRu = {
 	'rememberMeLabel' : 'Запомнить меня',
 	'bLogin' : 'Войти',
 	'bShowRegisterScreen' : 'Регистрация',
+	'Email required' : 'Email необходим',
 	'bShowResetScreen' : 'Сброс пароля',
 	'register_form[name]' : 'Имя',
 	'register_form[surname]' : 'Фамилия',

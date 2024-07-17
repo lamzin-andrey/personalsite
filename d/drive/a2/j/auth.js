@@ -122,10 +122,20 @@ function authDefaultResponseError(data, responseText, info, xhr) {
 	return false;
 }
 
+function checkMail(sEmail) {
+    var reg = /^[\w\.]+[^\.]@[\w]+\.[\w]{2,4}/mig;
+    if (reg.test(sEmail)) {
+		return true;
+	}
+}
 
 function onClickRegisterByEmailNow() {
 	var data = _map('emailRegisterForm', 1),
 		tokenName = 'tokenRE';
+	if (!checkMail(v("emailRE"))) {
+		showError(l("Email required"));
+		return;
+	}
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
 	attr('im', 'src', root + '/i/clos48.png');
