@@ -101,8 +101,8 @@ function ce(parent, tag, id, obj, dataObj) {
 	return appendChild(parent, tag, '', obj, dataObj);
 }
 function rm(DOMNode) {
-	var o = DOMNode;
-	o.parentNode.removeChild(o);
+	var o = e(DOMNode);
+	o ? o.parentNode.removeChild(o) : 0;
 }
 function attr(o, name, val) {
 	o = e(o);

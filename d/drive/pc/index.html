@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru" style="height: 100%;background-color: #000031;">
+	<head>
+		<meta charset="UTF-8" encoding="UTF-8">
+		<title>WebUSB - ещё один ваш гигабайт в облаке</title>
+	</head>
+	<body style="padding:0; margin:0;height: 100%;" id="body">
+		<div class="scr" style="background-color:#000031;height: 100%;display: flex;flex-direction: column;">
+			<div id="logoWr" style="text-align: center;height: 80%;display: flex;justify-content: center;">
+				<img src="./i/logo.jpg" style="width:312px;height:312px;margin: auto;" id="slg">
+			</div>
+			<div style="display:block;height:80%;">
+				<canvas width="312" height="312" style="display:none;margin:auto;" id="btlg"></canvas>
+			</div>
+			<div  style="height: 20%;margin-left: 18px;">
+				<img src="./i/webDisk.png" style="margin: auto;display: block;width: 240px;">
+			</div>
+			<i id="s" style="position:absolute;bottom:10px;right:34px;display:block;font-weight:bold;color:#FFF;">
+				micron
+			</i>
+		</div>
+	</body>
+	<!-- dev tool -->
+    <script src="./j/dev/j.js"></script>
+    <script src="./j/dev/os.js"></script>
+    <script src="./j/dev/qt.js"></script>
+    <script src="./j/dev/phpi.js"></script>
+    <script src="./j/dev/start.js"></script>
+    
+    <!-- /dev tool -->
+    
+    <!--script src="./j/vendor/micron.js"></script-->
+    <script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js?v=4"></script>
+    <script>v("s", "lang")</script>
+    <script src="./j/vendor/lang.js"></script>
+    <script src="../a2/j/php.js"></script>
+    <script>v("s", "dom")</script>
+    <script src="./j/vendor/se2d/dom.js"></script>
+    <script src="./j/vendor/se2d/se2d.js"></script>
+    <script src="./j/src/objects/bootlogo.js"></script>
+    <script src="./j/src/objects/fmhtml.js"></script>
+    
+    <script src="./j/vendor/objects/recentdir.js"></script>
+    <script src="./j/vendor/objects/texttransform.js"></script>
+    <script src="./j/vendor/objects/settings.js"></script>
+    <script src="./j/vendor/objects/cmenu.js"></script>
+    <script src="./j/vendor/objects/env/appenv.js"></script>
+    <script src="./j/vendor/files.js"></script>
+    <script src="./j/src/lang/local.js"></script>
+    <script src="./j/src/lang/localru.js"></script>
+    
+    <!-- FileManagerApp -->
+    <script src="./j/src/classes/contentarea/filelist/procs/abstractlistproc.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/procs/listproc.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/procs/hiddenlistproc.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/procs/copypasteproc.js"></script>
+    <script src="./j/src/classes/procmanager.js"></script>
+    
+    <script src="./j/src/classes/sidebar/bookmarks/abstractlist.js"></script>
+    <script src="./j/src/classes/sidebar/bookmarks/bookmarks.js"></script>
+    <script src="./j/src/classes/sidebar/bookmarks/devices.js"></script>
+    
+    <script src="./j/src/classes/sidebar/navbarpanel.js"></script>
+    
+    <script src="./j/src/classes/kblistener.js"></script>
+    
+    <script src="./j/src/classes/contentarea/addrespanel/buttonaddress.js"></script>
+    <script src="./j/src/classes/contentarea/addrespanel/textaddress.js"></script>
+    <script src="./j/src/classes/contentarea/addrespanel/addressswitcher.js"></script>
+    <script src="./j/src/classes/contentarea/addrespanel/addresspanel.js"></script>
+    
+    <script src="./j/src/objects/types.js"></script>
+    <script src="./j/src/classes/contentarea/tabpanelitem.js"></script>
+    <script src="./j/src/classes/contentarea/tabpanel.js"></script>
+    
+    <script src="./j/src/classes/contentarea/tab.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/sort.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/listrenderer.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/listupdater.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/fileheader.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/cm/copypaste.js"></script>
+    <script src="./j/src/classes/contentarea/filelist/list.js"></script>
+    <script src="./j/src/classes/contentarea/contextmenucontent.js"></script>
+    <script src="./j/src/classes/contentarea/special/specialtabmanager.js"></script>
+    <script src="./j/src/classes/contentarea/special/htmltab.js"></script>
+    
+    <script src="./j/src/classes/filemanager.js"></script>
+    <!-- / FileManagerApp -->
+    
+    
+    
+    <!-- TODO add msg -->
+    <link href="./s/dev.css" type="text/css" rel="stylesheet"></link>
+    <link href="./s/layout.css" type="text/css" rel="stylesheet"></link>
+    <link href="./s/table.css" type="text/css" rel="stylesheet"></link>
+    <link href="./s/sidebar.css" type="text/css" rel="stylesheet"></link>
+    <link href="./s/content.css" type="text/css" rel="stylesheet"></link>
+    <link href="./s/contextmenu.css" type="text/css" rel="stylesheet"></link>
+    
+    <script src="./j/main.js"></script>
+</html>
