@@ -20,9 +20,10 @@ function main() {
 		alert(err);
 	}/**/
 	
-	setTimeout( function(){
+	initApp();
+	/*setTimeout( function(){
 		showScreen("fmgr");
-	}, 1000);
+	}, 1000);*/
 	
 	try {
 		window.onresize = onResize;

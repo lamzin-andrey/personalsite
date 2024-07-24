@@ -180,3 +180,4 @@ NavbarPanel.prototype.actualizeView = function(s) {
 		o.setEnabled(this.btnBack);
 	}
 }
+q("kblistener");

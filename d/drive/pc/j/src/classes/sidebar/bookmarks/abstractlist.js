@@ -73,3 +73,4 @@ AbstractList.prototype.tpl = function()  {
 	return '<img src="{img}" class="i24 {opacity}">\
 						<span class="i24Text">{name}</span>';
 }
+q("bookmarks");

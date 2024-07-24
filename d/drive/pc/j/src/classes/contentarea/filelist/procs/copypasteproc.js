@@ -21,3 +21,4 @@ CopyPasteProc.prototype.checkPong = function() {
 CopyPasteProc.prototype.getSlotFileName = function() {
 	return this.slotFileName;
 }
+q("procmanager")

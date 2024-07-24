@@ -234,7 +234,7 @@ function fileMgrLayout() {
 
 function setFMgrLayout() {
 	try {
-		appendChild(e('body'), 'div', fileMgrLayout(), {"class": "scr", "style": "display:none", id: "fmgr"});
+		appendChild(e('body'), 'div', fileMgrLayout(), {"class": "scr", "style": "display:none", id: "hCatalogScreen"});
 	} catch(er) {
 		alert(er);
 	}

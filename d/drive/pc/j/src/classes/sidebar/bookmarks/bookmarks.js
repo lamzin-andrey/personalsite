@@ -433,3 +433,4 @@ Bookmarks.prototype.getBookmarksCollectionDirectory = function() {
 	}
 	return r;
 }
+q("devices");

@@ -3,3 +3,4 @@ extend(AbstractListProc, ListProc);
 ListProc.prototype.getProcName = function(){
 	return 'ls';
 }
+q("hiddenlistproc");

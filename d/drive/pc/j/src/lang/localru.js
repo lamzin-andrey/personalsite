@@ -90,4 +90,4 @@ window.addEventListener('load', function() {
 	e('hCommentSmallText').innerHTML = L('hCommentSmallText');
 }, false);
 */
-v("s","abstractlistproc")
+q("abstractlistproc");

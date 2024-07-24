@@ -1,0 +1,102 @@
+#regScr {
+  background-image: url('../i/wp.jpg');
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+  display: flex;
+}
+#emailRE {
+	height:32px;
+	width:78%;
+	margin: auto;
+}
+h3 {
+	display:none;
+}
+#emailRegisterForm {
+  background: rgba(104, 139, 183, 0.75);
+  width: 394px;
+  height: 250px;
+  margin: auto;
+  border-radius: 10px 10px 0px 0px;
+  color: white;
+  box-shadow: 0px 0px 10px 0px #2a619b;
+}
+.regTitle {
+	padding: 10px;
+  border-bottom: 2px solid white;
+  margin-bottom: 10px;
+}
+.ma {
+	margin:auto;
+}
+.regchb {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.regchb a{
+	color: #23243c;
+}
+.iwrapper {
+  display: flex;
+  align-items: normal;
+  padding: 0px 10px;
+}
+.iwrapper img{
+	height: 40px;
+	/*! width: 40px; */
+}
+.cbwrapper {margin-top: 10px;}
+.tl {}
+.ml-2 {
+	margin-left: 0.5rem;
+}
+.rel {
+	position:relative;
+}
+.abs {
+	position:absolute;
+}
+.arial {
+	font-family: arial;
+}
+
+.regbtnplace {
+  border-top: 2px solid white;
+  padding-top: 10px;
+  display: flex;
+  justify-content: right;
+}
+
+.regbtnplace input{
+	
+  height: 32px;
+  margin-right: 10px;
+  background-color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0px 0px 10px 0px #000;
+}
+
+img.dogmsg {
+	width: 200px;
+	height: 73px;
+}
+#hMsg {
+	color: white;
+	top: 7px;
+	left: 65px;
+	display: block;
+	width: 135px;
+	height: 73px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 17px;
+}
+#baloon {
+	top: -73px;
+	left: 131px;
+}

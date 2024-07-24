@@ -532,4 +532,4 @@ Devices.prototype.onClickEject = function() {
 		jexec(sh, DevNull, DevNull, [this, this.onErrMount]);
 	}
 }
-
+q("navbarpanel");

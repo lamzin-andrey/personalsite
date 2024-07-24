@@ -78,3 +78,4 @@ AbstractListProc.prototype.read = function(path, dbg) {
 	
 	return '';
 }
+q("listproc");
