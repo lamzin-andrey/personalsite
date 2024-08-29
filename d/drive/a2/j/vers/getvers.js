@@ -33,7 +33,8 @@ function gvCheckVersion(v) {
 		goURL(roota2 + '/newversion/?v=' + v);
 	} else {
 		if ($_GET['v'] != v) {
-			location.href = HttpQueryString.setVariable(location.href, 'v', v);
+			storage('vers', v);
+			goURL(HttpQueryString.setVariable(location.href, 'v', v));
 		}
 	}
 }
