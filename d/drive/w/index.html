@@ -481,38 +481,38 @@
 		<script src="/j/sources/landlib/net/rest.es5.js?vF"></script>
 		<script src="../a2/j/php.js"></script>
 		
-		<script src="/j/sources/landcache/sources/js/land_cache_client.es5.js"></script>
-		<script src="/d/drive/fd/j/cachesw.es5.js"></script>
+		<script src="/j/sources/landcache/sources/js/land_cache_client.es5.js?v=9"></script>
+		<script src="/d/drive/fd/j/cachesw.es5.js?v=9"></script>
 		
-		<script src="../a2/j/lang/ru.js?v=2" charset="UTF-8"></script>
-		<script src="../a2/j/lang/en.js"></script>
-		<script src="../a2/j/lang/l.js"></script>
+		<script src="../a2/j/lang/ru.js?v=9" charset="UTF-8"></script>
+		<script src="../a2/j/lang/en.js?v=9"></script>
+		<script src="../a2/j/lang/l.js?v=9"></script>
 		
-		<script src="../a2/j/pbar/pbar.js"></script>
+		<script src="../a2/j/pbar/pbar.js?v=9"></script>
 		
-		<script src="../a2/j/auth.js?v=a"></script>
-		<script src="./j/mmb.js?v=1"></script>
-		<script src="./j/mmenu/menu.js?v=2"></script>
-		<script src="../a2/j/catalog/sqzdatetime.js"></script>
-		<script src="../a2/j/catalog/filelist.js"></script>
-		<script src="./j/catalog/filelist.js"></script>
-		<script src="../a2/j/catalog/sortsettingdlg.js"></script>
+		<script src="../a2/j/auth.js?v=9"></script>
+		<script src="./j/mmb.js?v=9"></script>
+		<script src="./j/mmenu/menu.js?v=9"></script>
+		<script src="../a2/j/catalog/sqzdatetime.js?v=9"></script>
+		<script src="../a2/j/catalog/filelist.js?v=9"></script>
+		<script src="./j/catalog/filelist.js?v=9"></script>
+		<script src="../a2/j/catalog/sortsettingdlg.js?v=9"></script>
 		
 		<!-- add file permissions screen -->
-		<script src="../a2/j/catalog/sharelinksetter.js"></script>
-		<script src="../a2/j/catalog/filepermissioncontroller.js"></script>
-		<script src="../a2/j/catalog/filepermissionadduserctrl.js"></script>
+		<script src="../a2/j/catalog/sharelinksetter.js?v=9"></script>
+		<script src="../a2/j/catalog/filepermissioncontroller.js?v=9"></script>
+		<script src="../a2/j/catalog/filepermissionadduserctrl.js?v=9"></script>
 		<!-- /add file permissions screen -->
 		
-		<script src="../a2/j/catalog/filelistitemcmenu.js?v=1"></script>
+		<script src="../a2/j/catalog/filelistitemcmenu.js?v=9"></script>
 		
 		
-		<script src="./j/humanvalue.js"></script>
-		<script src="./j/upload/anim.js"></script>
-		<script src="./j/upload/upload.js?v=8"></script>
+		<script src="./j/humanvalue.js?v=9"></script>
+		<script src="./j/upload/anim.js?v=9"></script>
+		<script src="./j/upload/upload.js?v=9"></script>
 		
-		<script src="../a2/j/bmenu/dlg/j/a2dlg.js"></script>
-		<script src="../a2/j/cbox/cbox.js"></script>
+		<script src="../a2/j/bmenu/dlg/j/a2dlg.js?v=9"></script>
+		<script src="../a2/j/cbox/cbox.js?v=9"></script>
 		
 		<script src="./j/options.js?v=9"></script>
 		
@@ -524,6 +524,13 @@
 		<script src="../a2/j/vers/versionreq.js"></script>
 		<script src="../a2/j/vers/getvers.js"></script>
 		<!-- /get new version -->
+		<script>
+			try {
+				new CacheSw();
+			} catch(err) {
+				console.log("CSW Error: " + err);
+			}
+		</script>
 	</body>
 </html>
 
