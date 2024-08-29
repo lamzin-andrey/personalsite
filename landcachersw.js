@@ -62,7 +62,7 @@ self.lastModUrlList = {};
 */
 self.contentLengthUrlList = {};
 
-self.verbose = false;
+self.verbose = true;
 
 
 /**
