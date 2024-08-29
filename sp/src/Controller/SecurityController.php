@@ -554,7 +554,8 @@ class SecurityController extends AppBaseController
     private function getEmailLoginHtml(string $hash, AppService $appService): string
     {
         $request = $appService->request();
-        $scheme = $request->server->get('REQUEST_SCHEME') . '://';
+        $protocol = 2 == $request->request->get("scheme") ? 'https' : 'http';
+        $scheme = $protocol . '://';
 
         $os = ' ';
         $tDomain = 'loginforms';

@@ -140,6 +140,7 @@ function onClickRegisterByEmailNow() {
 	Rest._token_name = tokenName;
 	attr('im', 'src', root + '/i/clos48.png');
 	showLoader();
+	data.scheme = HttpQueryString.isSSL() ? '2' : '1';
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
 function onSuccessRegisterByEmail(data) {
