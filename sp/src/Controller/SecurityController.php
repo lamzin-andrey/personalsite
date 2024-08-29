@@ -241,7 +241,12 @@ class SecurityController extends AppBaseController
                     $subject = $this->getRecoveryMailSubject($oUser, $oAppService);
 
                     // Ваш забытый пароль
-                    $sHtml = '<p> ' . $oAppService->l($oUser, 'Your forgotten password', 'loginforms')  . ' '. $sPasswordRaw . '</p>';
+                    $sHtml = '<p> ' .
+                        $oAppService->l($oUser, 'Your login', 'loginforms')
+                        . ' '. $oUser->getUsername() . '</p>';
+                    $sHtml .= '<p> ' .
+                        $oAppService->l($oUser, 'Your forgotten password', 'loginforms')
+                        . ' '. $sPasswordRaw . '</p>';
                     $oMessage = new SimpleMail();
                     $oMessage->setSubject($subject);
                     $oMessage->setFrom($siteAdminEmail);

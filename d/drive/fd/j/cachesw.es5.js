@@ -12,7 +12,14 @@ var P = CacheSw.prototype;
 P.getExcludeFilterList = function() {
 	var o = new Object();
 	o.type = 'filterlist';
-	o.data = ['*.jn/', '*.jn', '*.json'];
+	o.data = [
+		'*.jn/',
+		'*.jn',
+		'*.json',
+		this.schemeHost() + '/sp/public/reset',
+		this.schemeHost() + '/sp/public/login_check',
+		this.schemeHost() + '/sp/public/register'
+	];
 	
 	return o;
 }
