@@ -18,7 +18,8 @@ P.getExcludeFilterList = function() {
 		'*.json',
 		this.schemeHost() + '/sp/public/reset',
 		this.schemeHost() + '/sp/public/login_check',
-		this.schemeHost() + '/sp/public/register'
+		this.schemeHost() + '/sp/public/register',
+		this.schemeHost() + '/sp/public/checkmail'
 	];
 	
 	return o;
