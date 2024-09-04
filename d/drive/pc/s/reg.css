@@ -1,4 +1,4 @@
-#regScr {
+.lformbg {
   background-image: url('../i/wp.jpg');
   height: 100%;
   width: 100%;
@@ -7,23 +7,45 @@
   background-repeat: no-repeat;
   display: flex;
 }
-#emailRE {
-	height:32px;
-	width:78%;
+
+.lformw {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  z-index: 5;
+  position:fixed;
+}
+.lform input[type=email],
+.lform input[type=text],
+.lform input[type=password]{
+	height: 32px;
 	margin: auto;
+}
+.emailRE {
+	width:78%;
 }
 h3 {
 	display:none;
 }
-#emailRegisterForm {
+.lform {
   background: rgba(104, 139, 183, 0.75);
-  width: 394px;
-  height: 250px;
   margin: auto;
   border-radius: 10px 10px 0px 0px;
   color: white;
   box-shadow: 0px 0px 10px 0px #2a619b;
+  
 }
+
+.qenter {
+  width: 394px;
+  height: 250px;
+}
+
+.regf {
+  width: 640px;
+  height: 298px;
+}
+
 .regTitle {
 	padding: 10px;
   border-bottom: 2px solid white;
@@ -32,9 +54,13 @@ h3 {
 .ma {
 	margin:auto;
 }
+.df {
+	display:flex;
+}
 .regchb {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  margin-right: 25px;
 }
 .regchb a{
 	color: #23243c;
@@ -44,11 +70,21 @@ h3 {
   align-items: normal;
   padding: 0px 10px;
 }
-.iwrapper img{
+.iwrapper-lp {
+	display: flex;
+	justify-content: center;
+	margin-top: 0.6rem;
+}
+.iwrapper img, .iwrapper-lp img{
 	height: 40px;
 	/*! width: 40px; */
 }
 .cbwrapper {margin-top: 10px;}
+.cbwrapper-lp {
+	margin-top: 10px;
+	justify-content: end;
+	display: flex;
+}
 .tl {}
 .ml-2 {
 	margin-left: 0.5rem;
@@ -71,7 +107,6 @@ h3 {
 }
 
 .regbtnplace input{
-	
   height: 32px;
   margin-right: 10px;
   background-color: white;
@@ -79,6 +114,15 @@ h3 {
   border-radius: 4px;
   cursor: pointer;
   box-shadow: 0px 0px 10px 0px #000;
+  background: linear-gradient(to top, #0064ff, white,white,white,white, white, white, white, #0064ff);
+}
+
+.regbtnplace input:active{
+	background: linear-gradient(to top, #0064ff, white,white,white,white,white, #0064ff);
+}
+
+.regbtnplace input[disabled=disabled]:active{
+	background: linear-gradient(to top, #0064ff, white,white,white,white, white, white, white, #0064ff);
 }
 
 img.dogmsg {
@@ -96,7 +140,51 @@ img.dogmsg {
 	font-size: 14px;
 	line-height: 17px;
 }
-#baloon {
+#lbaloon {
 	top: -73px;
 	left: 131px;
+	display: none;
+}
+
+.password {
+	width: 340px;
+}
+.username {
+	width: 300px;
+}
+
+
+.twocol {
+	display: flex;
+}
+
+.lcol {
+	border-right: 1px solid white;
+	padding-right: 12px;
+}
+
+.rcol {
+	/*! border-left: 1px solid red; */
+	margin-left: 8px;
+}
+
+
+.password-r {
+	width: 303px;
+	margin-bottom: 1px!important;
+}
+.username-r {
+	width: 262px;
+	margin-bottom: 1px!important;
+}
+.email-r {
+	width:262px;
+}
+
+.username-r-name {
+	margin-top: 1px!important;
+}
+
+.reset-spacer {
+	height:86px;
 }
