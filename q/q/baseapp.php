@@ -258,5 +258,43 @@ class BaseApp {
 	}
 	
 	
+	protected function createPaginationData(int $perPage, string $getPageVarName = 'page') : array
+	{
+		$total = $this->getTotal();
+		$maxPageNumber = intval(ceil($total / $perPage));
+		$firstPageNumber = 1;
+		$current = ireq($getPageVarName);
+		$current = $current ? $current : 1;
+		
+		$this->currentPage = $current;
+		
+		// Хочу 1 .. 2 3 4 .. 10 (если всего страниц 10 а юзер на третьей)
+		// Хочу 1 2 .. 10 (если всего страниц 10 а юзер на первой)
+		
+		// Вобщем от текущей отсчитываем -5 и +5.
+		// Если уходим за пределы, останавливаемся
+		// Если левый больше 1, добавляем слева 1 .. 
+		// Если правый меньше max добавляем слева max
+		
+		
+		$r = [];
+		for ($i = ($current - 5); $i < ($current + 5); $i++) {
+			if ($i >= 1 && $i <= $maxPageNumber) {
+				$r[] = $i;
+			}
+		}
+		
+		if ($r[0] != 1) {
+			array_unshift($r, 1, "..");
+		}
+		
+		if ($r[count($r) - 1] != $maxPageNumber) {
+			$r[] = "..";
+			$r[] = $maxPageNumber;
+		}
+		
+		return $r;
+	}
+	
 }
 

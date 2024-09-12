@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,height=device-height,no-scale"/>
+<link rel="stylesheet" type="text/css" href="./s/xplayout/xplayout.css">
+<link rel="stylesheet" type="text/css" href="./s/std24.css">
+<link rel="stylesheet" type="text/css" href="./s/swagger.css">
+<title>Swagger calculator</title>
+<!--script src="/a/reader24/j/v/registersw.js"></script-->
+<!--link rel="manifest" href="/a/reader24/manifest.json"-->
+<link href="/portfolio/web/calculators/swagger/i/favicon.ico" rel="shortcut icon" type="image/x-icon" >
+</head>
+<body>
+	<div id="hJsonParse" class="scr" style="display:block">
+		<h3>Form parsing</h3>
+		
+		<div class="xp formc">
+			<fieldset>
+				<legend>Json to Response 200</legend>
+				<div>
+					<span>
+						<label for="iMethod">Метод</label>
+						<select id="iMethod">
+							<option value="POST">POST</option>
+							<option value="GET">GET</option>
+						</select>
+					</span>
+					<span>
+						<label for="iUrl">URL запроса</label>
+						<input type="text" id="iUrl" class="long">
+					</span>
+				</div>
+				<div>
+					<label for="iJson">Вставьте JSON Response</label>
+					<textarea id="iJson" rows="7"></textarea>
+				</div>
+				
+				<div>
+					<label for="iYamlResp200">Yaml 200 response для swwager</label>
+					<textarea id="iYamlResp200" rows="7"></textarea>
+				</div>
+			</fieldset>
+			<div class="buttons">
+				<input type="button" id="bCalculate" value="Вычислить">
+			</div>
+		</div>
+	
+	
+	
+	<script type="text/javascript" src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
+	<script type="text/javascript" src="./j/v/micron2.js"></script>
+	<script type="text/javascript" src="./j/v/php.js"></script>
+	<script type="text/javascript" src="./j/v/screens.js"></script>
+	<script type="text/javascript" src="./j/v/lang.js"></script>
+	<script type="text/javascript" src="./j/s/lang/local.js"></script>
+	<script type="text/javascript" src="./j/s/lang/localru.js"></script>
+	<script type="text/javascript" src="./j/s/calc.js"></script>
+	<script type="text/javascript" src="./j/s/app.js"></script>
+	
+	<!--script src="/a/reader18/j/cache_client.js"></script>
+	<script src="/a/reader18/j/cache_conf.js"></script>
+	<script>
+		try{
+			console.log('Run CC@');
+			new CacheClient();
+		} catch(e){console.log('Here no here');}
+	</script-->
+</body>
+
+</html>

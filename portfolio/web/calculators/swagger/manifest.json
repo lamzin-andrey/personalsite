@@ -1,0 +1,13 @@
+{
+  "name": "Swagger Calc",
+  "short_name": "SwClc",
+  "icons": [{
+    "src": "i/cat-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }],
+  "start_url": "/portfolio/web/calculators/swagger/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#3D5455"
+}
