@@ -48,5 +48,6 @@ const RegScreenAnim = {
 		}, 44);
 		
 	}
-};
+}
 
+q("RegScreen")
