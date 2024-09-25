@@ -4,8 +4,8 @@ function main() {
 	window.AppStartTime = time();
 	try {
 		var lang = Settings.get('currentLang');
-		if (lang == 'ru' || lang == 'en') {
-			onClickChangeLang(lang);
+		if (lang != 'ru' && lang != 'en') {
+			lang = 'ru';
 		}
 	} catch (err) {
 		alert(err);
@@ -21,6 +21,9 @@ function main() {
 	}/**/
 	
 	initApp();
+	if (lang == 'ru' || lang == 'en') {
+		onClickChangeLang(lang);
+	}
 	/*setTimeout( function(){
 		showScreen("fmgr");
 	}, 1000);*/
@@ -252,7 +255,8 @@ function onClickChangeLang(lang) {
 	}
 	e('sidebarWrapper').innerHTML = s;
 	try {
-		Search.init();
+		console.log("here may be In itSearch...");
+		//Search.init();
 	} catch(err) {
 		alert(err);
 	}

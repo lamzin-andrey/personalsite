@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="ru" style="height: 100%;background-color: #000031;">
-	<head>
-		<meta charset="Windows-1251" encoding="Windows-1251">
-		<title>WebUSB - ещё один ваш гигабайт в облаке</title>
-		<link type="text/css" rel="stylesheet" href="./s/reg.css?v=2">
-	</head>
-	<body style="padding:0; margin:0;height: 100%;" id="body">
-		<div class="scr lformbg" >
-			<h3>Quick Login</h3>
+function regScrLayout() {
+	return `<h3>Quick Login</h3>
 			<div class="lformw" id="qLogForm" style="display:flex">
 				
 				<div  class="lform qenter">
@@ -114,7 +106,7 @@
 			<div class="lformw" id="regForm" style="display:none">
 				
 				<div  class="lform regf">
-					<div class="regTitle">Регистрация</div>
+					<div class="regTitle" id="hRegisterTitle">Регистрация</div>
 					
 					<div class="twocol">
 						<div class="lcol">
@@ -135,10 +127,11 @@
 								<input type="text" id="register_form[username]" placeholder="Login" class="username-r">
 							</div>
 							<div class="iwrapper rel">
-								<input type="password" id="register_form[passwordRaw]" placeholder="Пароль" class="password-r">
+								<input type="password" id="register_form[passwordRaw]" placeholder="Password" class="password-r">
 							</div>
 							<div class="iwrapper rel">
 								<input type="password" id="register_form[passwordRepeat]" placeholder="Пароль повторно" class="password-r">
+								<input type="hidden" id="register_form[_token]">
 							</div>
 						</div><!-- / rcol-->
 					</div>
@@ -208,13 +201,18 @@
 				</div>
 				
 				<!-- end -->
-				
-				
-			</div>
-			
-		</div> <!-- /lformbg -->
-		
-		<script src="../../../j/sources/landlib/dom/android-browser-2.3.6/micron.js?v=4"></script>
-		<script src="./j/animtest.js?v=1"></script>
-	</body>
-</html>
+			</div>`;
+}
+
+
+function setRegScrLayout() {
+	try {
+		appendChild(e('body'), 'div', regScrLayout(), {"class": "scr lformbg", "style": "display:none", id: "hRegisterEScreen"});
+	} catch(er) {
+		alert(er);
+	}
+}
+
+setRegScrLayout();
+//setRegScrListeners();
+RegScreenAnim.setListeners();

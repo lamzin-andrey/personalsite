@@ -1,5 +1,5 @@
 window.upload = {
-	init:function() {
+	init:function() {console.log("Skip init upload");return;
 		var o = this,
 			iFile = e('iFile');
 		o.iFile = iFile;

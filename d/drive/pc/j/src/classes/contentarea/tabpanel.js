@@ -3,19 +3,23 @@ function TabPanel() {
 	this.tabs = [];
 	this.activeIndex = -1;
 	
-	e('tabsNavRight').onclick = function(evt) {
-		try {
-			return o.onClickRightButton(evt);
-		} catch (err) {
-			alert(err);
+	if (e('tabsNavRight')) {
+		e('tabsNavRight').onclick = function(evt) {
+			try {
+				return o.onClickRightButton(evt);
+			} catch (err) {
+				alert(err);
+			}
 		}
 	}
 	
-	e('tabsNavLeft').onclick = function(evt) {
-		try {
-			return o.onClickLeftButton(evt);
-		} catch (err) {
-			alert(err);
+	if (e('tabsNavLeft')) {
+		e('tabsNavLeft').onclick = function(evt) {
+			try {
+				return o.onClickLeftButton(evt);
+			} catch (err) {
+				alert(err);
+			}
 		}
 	}
 }
