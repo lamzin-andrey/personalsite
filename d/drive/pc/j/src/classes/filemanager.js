@@ -105,6 +105,9 @@ FileManager.prototype.onResize = function() {
 	this.setSidebarScrollbar();
 }
 FileManager.prototype.setTabWidths = function() {
+	if (!e('tabContentHeaderDate')) {
+		return;
+	}
 	e('tabContentHeaderDate').style.width = null;
 	e('tabContentHeaderDate').style.minWidth = null;
 	

@@ -749,7 +749,7 @@ function SimpleEngine2D (canvasId, fps) {
 		this.levelsInfo = {};
 		/** @property {Number} DEFAULT_LEVEL хранит уровень по умолчанию, который будет рисваиваться Sprite._level*/
 		this.DEFAULT_LEVEL = 0;
-		setInterval(this.tick, 1000 / fps);
+		this.mainInterval = setInterval(this.tick, 1000 / fps);
 	} else {
 		//alert("Object canvas with id '" + canvasId + "' not found");
 	}

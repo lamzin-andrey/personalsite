@@ -13,14 +13,16 @@ function main() {
 	Qt.setWindowIconImage(Qt.appDir() + '/i/folder32.png');
 	Qt.maximize();
 	
+	
+	
 	//try {
 		window.app = new FileManager();
 		window.app.init();
 	/*} catch(err) {
 		alert(err);
 	}/**/
-	
 	initApp();
+	
 	if (lang == 'ru' || lang == 'en') {
 		onClickChangeLang(lang);
 	}
@@ -233,27 +235,7 @@ function onClickSelectRu() {
 }
 
 function onClickChangeLang(lang) {
-	var root = App.dir(), 
-		path = root + '/doc/lang/' + lang + '/content.htm',
-		t = 'F:/dev-11-2014/qt/DTOxp/release/default', 
-		s;
-	s = FS.readfile(path);
-	while (s.indexOf(t) != -1) {
-		if (t == root) {
-			break;
-		}
-		s = s.replace(t, appDir);
-	}
-	e('contentArea').innerHTML = s;
-	
-	s = FS.readfile(App.dir() + '/doc/lang/' + lang + '/navbar.htm');
-	while (s.indexOf(t) != -1) {
-		if (t == root) {
-			break;
-		}
-		s = s.replace(t, appDir);
-	}
-	e('sidebarWrapper').innerHTML = s;
+	var s;
 	try {
 		console.log("here may be In itSearch...");
 		//Search.init();
@@ -261,13 +243,13 @@ function onClickChangeLang(lang) {
 		alert(err);
 	}
 	
-	// change menu language
-	var indexFile = root + '/index.html',
-		s = FS.readfile(indexFile);
-	s = s.replace(/<html lang="[a-z]{2}">/, '<html lang="' + lang +'">');
-	FS.writefile(indexFile, s);
-	
-	Settings.set('currentLang', lang);
+	if ('ru' == lang) {
+		storage('lang', 'langRu');
+		//jaqedLang = langRu;
+	} else {
+		//jaqedLang = langEn;
+		storage('lang', 'langEn');
+	}
 }
 
 function getScrollLineHeight() {

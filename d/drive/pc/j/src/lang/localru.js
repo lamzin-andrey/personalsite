@@ -108,6 +108,8 @@ var langRu = {
 	"hRegisterTitle" : "Регистрация",
 	"bRegisterNow" : "Зарегистрироваться",
 	"bShowAuthScreen" : "К форме логина",
+	"You must agree to the terms of use" : "Необходимо согласиться с условиями использования",
+	"Unable sent email. Try later." : "Невозможно отправить письмо. Попробуйте позже.",
 	"" : ""
 };
 

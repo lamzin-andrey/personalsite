@@ -52,6 +52,9 @@ table.layout td {
 .fl {
 	float:left;
 }
+.w100 {
+	width:100%;
+}
 
 .pointer {
 	cursor:url('../i/pointer.png'), auto;

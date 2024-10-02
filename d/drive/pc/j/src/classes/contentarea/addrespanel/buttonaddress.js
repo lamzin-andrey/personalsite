@@ -40,6 +40,9 @@ ButtonAddress.prototype.renderButtonsData = function(noAll){
 		tpl = '{img}{name}', s,
 		parent = e('addressButtonPlacer'),
 		btn, w = 0, o = this;
+	if (!parent) {
+		return;
+	}
 	parent.innerHTML = "";
 	for (i = 0, j = this.nRightButton - this.nDisplayedButtons; i < SZ; i++, j++) {
 		s = tpl.replace("{name}", this.renderButtonName(a[i].name));
@@ -247,7 +250,7 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath){
 
 ButtonAddress.prototype.setPlacerWidth = function(){
 	// return getViewport().w - e('sidebarWrapper').offsetWidth; 
-	return e('addressButtonPlacer').offsetWidth;
+	return e('addressButtonPlacer') ? e('addressButtonPlacer').offsetWidth : 0;
 }
 ButtonAddress.prototype.trimLeft = function(a, n){
 	var i;

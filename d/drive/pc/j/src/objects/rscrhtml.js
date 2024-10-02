@@ -1,6 +1,6 @@
 function regScrLayout() {
 	return `<h3>Quick Login</h3>
-			<div class="lformw" id="qLogForm" style="display:flex">
+			<div class="lformw" id="emailRegisterForm" style="display:flex">
 				
 				<div  class="lform qenter">
 					<div class="regTitle">Ѕыстрый вход</div>
@@ -14,7 +14,10 @@ function regScrLayout() {
 						</div>
 						
 						<img src="./i/lock.png">
-						<input type="email" id="emailRE" placeholder="E-mail" class="emailRE">
+						<div class="w100">
+							<input type="email" id="emailRE" placeholder="E-mail" class="emailRE">
+							<div id="hSendedEmail" style="display:none" class="hSendedEmail">—сылка отправлена вам на &nbsp;<a id="resetLinkMailbox" href="#" target="_blank">Email</a></div>
+						</div>
 						<input type="hidden" id="apptypeRe" value="drv">
 						<input type="hidden" id="tokenRE" value="x">
 					</div>
@@ -49,7 +52,7 @@ function regScrLayout() {
 			</div>
 			
 			<h3>Form LP Login </h3>
-			<div class="lformw" id="logForm" style="display:none">
+			<div class="lformw" id="loginForm" style="display:none">
 				<div  class="lform qenter">
 					<div class="regTitle">¬ход по паролю</div>
 					<div class="iwrapper-lp rel" >

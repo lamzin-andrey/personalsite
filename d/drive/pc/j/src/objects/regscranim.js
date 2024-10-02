@@ -2,23 +2,23 @@ const RegScreenAnim = {
 	setListeners() {
 		let o = this;
 		e('bShowAuthScreen4').onclick = () => {
-			o.switchRegForm('qLogForm', 'logForm');
+			o.switchRegForm('emailRegisterForm', 'loginForm');
 		}
 
 		e('bShowAuthScreen').onclick = () => {
-			o.switchRegForm('regForm', 'logForm');
+			o.switchRegForm('regForm', 'loginForm');
 		}
 
 		e('bShowRegisterScreen').onclick = () => {
-			o.switchRegForm('logForm', 'regForm');
+			o.switchRegForm('loginForm', 'regForm');
 		}
 
 		e('bShowResetScreen').onclick = () => {
-			o.switchRegForm('logForm', 'rsetForm');
+			o.switchRegForm('loginForm', 'rsetForm');
 		}
 
 		e('bShowAuthScreen2').onclick = () => {
-			o.switchRegForm('rsetForm', 'logForm');
+			o.switchRegForm('rsetForm', 'loginForm');
 		}
 	},
 	switchRegForm(idForHide, idForShow){

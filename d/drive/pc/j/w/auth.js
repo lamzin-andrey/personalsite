@@ -6,14 +6,23 @@ function initAuth() {
 function setListenersAuth() {
 	var id = 'bShowAuthScreen4';
 	e('bLogin').onclick = onClickLogin;
-	
-	
 	e('bReset').onclick = onClickResetForm;
 	e('bRegisterNow').onclick = onClickRegisterNow;
 	id = 'bRegisterNowRE';
 	if (e(id))
 		e(id).onclick = onClickRegisterByEmailNow;
+	e('agreeRE').onchange = onChangeIAgree;
 	
+}
+
+function onChangeIAgree(evt) {
+	var st = evt.currentTarget.checked;
+	if (!st) {
+		st = "You must agree to the terms of use";
+		showBalloonError(L(st), 336, -26);
+	} else {
+		hide('lbaloon');
+	}
 }
 
 function onClickResetForm() {
@@ -56,9 +65,11 @@ function onSuccessRegister(data) {
 
 function onClickLogin() {
 	var data = _map('loginForm', 1);
+	console.log(data);
 	Rest._csrf_token = data._csrf_token;
 	Rest._token_name = '_csrf_token';
-	showScreen('hWaitScreen');
+	// showScreen('hWaitScreen');
+	disableRegFormButtons();
 	Rest._post(data, onSuccessLogin, '/sp/public/login_check', onFailSendLogin);
 }
 
@@ -67,14 +78,12 @@ function onSuccessLogin(data) {
 		return;
 	}
 	if (data.success === true) {
-		location.reload();
-		//showScreen('hCatalogScreen');
-		//mainMenuBackPush();
+		showScreen('hCatalogScreen');
 	}
 }
 
 function onFailSendLogin(data, responseText, info, xhr) {
-	showScreen('hAuthScreen');
+	enableRegFormButtons();
 	return authDefaultResponseError(data, responseText, info, xhr);
 }
 
@@ -114,7 +123,7 @@ function checkMail(sEmail) {
 }
 
 function onClickRegisterByEmailNow() {
-	var data = _map('emailRegisterForm', 1),
+	var fid = 'emailRegisterForm', data = _map(fid, 1),
 		tokenName = 'tokenRE';
 	if (!checkMail(v("emailRE"))) {
 		showError(l("Email required"));
@@ -122,38 +131,34 @@ function onClickRegisterByEmailNow() {
 	}
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
-	attr('im', 'src', root + '/i/clos48.png');
-	showLoader();
+	disForm(fid, 1);
 	data.scheme = HttpQueryString.isSSL() ? '2' : '1';
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
 function onSuccessRegisterByEmail(data) {
+	var msg = data.msg;
 	if (!onFailSendRegisterByEmail(data)) {
 		return;
 	}
 	if (data.success === true) {
-		attr('im', 'src', roota2 + '/i/clos48.png');
-		showLoader();
-		location.reload();
+		showScreen('hCatalogScreen');
 		return;
 	}
 	if (data.sended) {
-		showMessage('<a href="' 
-			+ getEmailDomain(v('emailRE'))
-			+ '" target="_blank">'
-			+ l('Email') + '</a>'
-			+ l(' with login link was sent'));
+		attr('resetLinkMailbox', 'href', getEmailDomain(v('emailRE')));
+		hide('emailRE');
+		show('hSendedEmail', 'flex');
 	} else {
-		if (data.msg) {
-			showError(data.msg);
+		if (msg) {
+			showBalloonError(msg, 336, -26);
 		} else {
-			showError(l('Unable sent email. Try later.'));
+			showError(L('Unable sent email. Try later.'));
 		}
 		
 	}
 }
 function onFailSendRegisterByEmail(data, responseText, info, xhr) {
-	showScreen('hRegisterEScreen');
+	disForm("emailRegisterForm", 0);
 	if (data && String(data.sended) != "undefined" || (data && data.success)) {
 		return true;
 	}
@@ -161,6 +166,7 @@ function onFailSendRegisterByEmail(data, responseText, info, xhr) {
 	if (data && !data.success) {
 		var errors = array_values(data.errors);
 		if (data.message) {
+			alert(data.message);
 			showError(data.message);
 		} else if (data.errors && (errors instanceof Array) ) {
 			showError(errors.join("\n"));
@@ -174,7 +180,7 @@ function getEmailDomain(s) {
 	var a = s.split('@'), d = a[1];
 	switch (d) {
 		case 'mail.ru':
-			d = 'm.mail.ru'; 
+			d = 'light.mail.ru'; 
 			break;
 	}
 	return 'https://' + d;
@@ -199,4 +205,23 @@ function onSuccessLoginByMailhash(data) {
 function onFailLoginByMailhash(data, responseText, info, xhr) {
 	attr('im', 'src', roota2 + '/i/u.png');
 	showScreen("hRegisterEScreen");
+}
+
+function disableRegFormButtons()
+{
+	disForm('loginForm', 1);
+}
+
+function enableRegFormButtons()
+{
+	disForm('loginForm', 0);
+}
+
+function showBalloonError(s, x, y) {
+	var i = 'lbaloon', j = 'hMsg';
+	stl(i, 'left', (x + 'px'));
+	stl(i, 'top', (y + 'px'));
+	stl(j, 'font-size', ('11px'));
+	v(j, s);
+	show(i);
 }

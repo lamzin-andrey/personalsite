@@ -19,7 +19,7 @@ AddressPanel.prototype.showTextAddress = function() {
 	this.textAddress.show();
 }
 
-AddressPanel.prototype.showButtonAddress = function() {
+AddressPanel.prototype.showButtonAddress = function() {return;
 	this.textAddress.hide();
 	this.buttonAddress.show();
 }

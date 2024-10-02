@@ -29,7 +29,7 @@ TestSm.prototype.onInit = function() {
 		this.app.dx = 1;
 		
 		
-		setInterval(function(){
+		this.app.logoRtIval =  setInterval(function(){
 		  o.app.dr += o.app.dx;
 		  if (o.app.dr > 16 || o.app.dr < 3) {
 			  o.app.dx *= -1;
@@ -56,6 +56,6 @@ TestSm.prototype.onEnterFrame = function(e) {
 v("s", "recentdir")
 
 window.addEventListener("load", function() {
-	new SimpleEngine2D("btlg", 44);
+	window.bootSe2d =  new SimpleEngine2D("btlg", 44);
 	new TestSm();
 });

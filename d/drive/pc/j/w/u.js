@@ -51,6 +51,8 @@ function onSuccessGetAuthState(data) {
 		e('_csrf_token').value = data.token;
 		Rest._token = data.token;
 		if (!data.auth) {
+			clearInterval(window.bootSe2d.mainInterval);
+			clearInterval(window.bootSe2d.app.logoRtIval);
 			showScreen('hRegisterEScreen');// hAuthScreen
 			e('register_form[_token]').value = data.token_reg;
 			e('reset_password_form[_token]').value = data.token_res;
@@ -219,4 +221,23 @@ function goURL(url) {
 	
 	location.href = url;
 }
+
+// To micron
+function disForm(id, disabled) {
+	disFormHlp(id, disabled, 'input');
+	disFormHlp(id, disabled, 'button');
+	disFormHlp(id, disabled, 'textarea');
+	disFormHlp(id, disabled, 'select');
+}
+function disFormHlp(id, disabled, tag) {
+	var ls = ee(id, tag), i, SZ = sz(ls), m = "disabled", s = (disabled ? m : "");
+	for (i = 0; i < SZ; i++) {
+		if (s) {
+			attr(ls[i], s, s);
+		} else {
+			ls[i].removeAttribute(m);
+		}
+	}
+}
+
 function DevNull(){}

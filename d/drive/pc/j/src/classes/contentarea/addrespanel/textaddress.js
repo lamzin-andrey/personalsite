@@ -1,4 +1,4 @@
-function TextAddress(){console.log('Was init textaddress'); return;
+function TextAddress(){
 	var o = this;
 	this.input = e('iAddressLine');
 	this.container = e('addressContainer');
