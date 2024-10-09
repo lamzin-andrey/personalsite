@@ -19,7 +19,7 @@ function onChangeIAgree(evt) {
 	var st = evt.currentTarget.checked;
 	if (!st) {
 		st = "You must agree to the terms of use";
-		showBalloonError(L(st), 336, -26);
+		showBalloonError(L(st), 263, -54);
 	} else {
 		hide('lbaloon');
 	}
@@ -158,7 +158,7 @@ function onSuccessRegisterByEmail(data) {
 		show('hSendedEmail', 'flex');
 	} else {
 		if (msg) {
-			showBalloonError(msg, 336, -26);
+			showBalloonError(msg, 263, -54);
 		} else {
 			showError(L('Unable sent email. Try later.'));
 		}
@@ -230,7 +230,7 @@ function showBalloonError(s, x, y, id, tdx) {
 	tdx = tdx ? tdx : 0;
 	stl(i, 'left', (x + 'px'));
 	stl(i, 'top', (y + 'px'));
-	stl(j, 'font-size', ('11px'));
+	//stl(j, 'font-size', ('11px'));
 	stl(j, 'left', ((txtX + intval(tdx)) + 'px'));
 	v(j, s);
 	show(i);
@@ -255,18 +255,18 @@ function showRegisterError(data, responseText, info, xhr) {
 	switch(firstFieldName) {
 		case "name":
 		case "username":
-			y = -23;
+			y = -40;
 			break;
 		case "surname":
 		case "passwordRaw":
-			y = 18;
+			y = 0;
 			break;
 		case "email":
 		case "passwordRepeat":
-			y = 58;
+			y = 39;
 			break;
 		case "agree":
-			y = 107;
+			y = 78;
 			break;
 	}
 	if (e(i)) {

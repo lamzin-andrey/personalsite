@@ -5,11 +5,19 @@ function regScrLayout() {
 				<div  class="lform qenter">
 					<div class="regTitle">Быстрый вход</div>
 					<div class="iwrapper rel" >
-						<!-- -25 373, -79 131-->
-						<div class="abs" id="lbaloon">
+						
+						<div class="abs" id="zlbaloon">
 							<div class="rel">
 								<img src="./i/reg/dogball.png" class="dogmsg">
 								<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
+							</div>
+						</div>
+						
+						<div class="abs lbaloon" id="lbaloon" >
+							<div class="rel">
+								<img src="./i/reg/dogball2.png" class="lvatar">
+								<img src="./i/reg/msgcrn.png" class="hilow">
+								<div  class="hMsg tHMsg"></div>
 							</div>
 						</div>
 						
@@ -56,11 +64,19 @@ function regScrLayout() {
 				<div  class="lform qenter">
 					<div class="regTitle">Вход по паролю</div>
 					<div class="iwrapper-lp rel" >
-						<!-- -25 373, -79 131-->
-						<div class="abs" id="lpbaloon">
+						
+						<div class="abs" id="zlpbaloon">
 							<div class="rel">
 								<img src="./i/reg/dogball.png" class="dogmsg">
 								<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
+							</div>
+						</div>
+						
+						<div class="abs lbaloon" id="lpbaloon" >
+							<div class="rel">
+								<img src="./i/reg/dogball2.png" class="lvatar">
+								<img src="./i/reg/msgcrn.png" class="hilow">
+								<div  class="hMsg tHMsg"></div>
 							</div>
 						</div>
 						
@@ -112,12 +128,22 @@ function regScrLayout() {
 				
 				<div  class="lform regf">
 					<div class="regTitle" id="hRegisterTitle">Регистрация</div>
-					<div class="abs" id="rbaloon">
+					
+					<div class="abs" id="zrbaloon">
 						<div class="rel">
 							<img src="./i/reg/dogball.png" class="dogmsg">
 							<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
 						</div>
 					</div>
+					
+					<div class="abs lbaloon" id="rbaloon" >
+						<div class="rel">
+							<img src="./i/reg/dogball2.png" class="lvatar">
+							<img src="./i/reg/msgcrn.png" class="hilow">
+							<div  class="hMsg tHMsg"></div>
+						</div>
+					</div>
+					
 					<div class="twocol">
 						<div class="lcol">
 							<div class="iwrapper rel">
@@ -192,12 +218,22 @@ function regScrLayout() {
 				
 				<div  class="lform qenter">
 					<div class="regTitle">Сброс пароля</div>
-					<div class="abs" id="rsbaloon">
+					
+					<div class="abs" id="zrsbaloon">
 						<div class="rel">
 							<img src="./i/reg/dogball.png" class="dogmsg">
 							<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
 						</div>
 					</div>
+					
+					<div class="abs lbaloon" id="rsbaloon" >
+						<div class="rel">
+							<img src="./i/reg/dogball2.png" class="lvatar">
+							<img src="./i/reg/msgcrn.png" class="hilow">
+							<div  class="hMsg tHMsg"></div>
+						</div>
+					</div>
+					
 					<div class="iwrapper rel" >
 						<img src="./i/lock.png">
 						<input type="email" id="reset_password_form[email]" placeholder="E-mail" class="emailRE">

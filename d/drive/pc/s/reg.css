@@ -143,14 +143,57 @@ img.dogmsg {
 	font-size: 14px;
 	line-height: 17px;
 }
-#lbaloon {
+#lbaloon, #zlbaloon, #zlpbaloon, #zrsbaloon {
 	top: -73px;
 	left: 131px;
 	display: none;
 }
-
+/*
 #lbaloon, #rbaloon, #rsbaloon, #lpbaloon {
 	z-index: 6;
+}*/
+
+.lbaloon {
+	background-color: #5d948e;
+	border: 1px solid black;
+	left:183px;
+	top: -23px;
+	width: 200px;
+	min-height: 48px;
+	border-radius: 4px;
+	padding: 8px;
+	z-index: 6;
+	display: none;
+}
+
+.tHMsg {
+	color: white;
+	/*! top: 7px; */
+	/*! left: 65px; */
+	display: block;
+	width: 135px;
+	min-height: 58px;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 17px;
+	margin-left: 65px;
+	margin-top: 5px;
+}
+
+.hilow{
+  position: absolute;
+  bottom: -20px;
+  left: -10px;
+  width: 17px;
+  height: 13px!important;
+}
+
+.lvatar {
+  position: absolute;
+  left: 7px;
+  top: 0px;
+  /*! width: 40px; */
+  /*! height: 40px; */
 }
 
 .password {
