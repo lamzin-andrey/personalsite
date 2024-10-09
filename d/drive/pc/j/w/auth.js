@@ -47,9 +47,10 @@ function onSuccessReset(data) {
 	if (!onFailSendReset(data)) {
 		return;
 	}
-	if (data.success === true) {
-		showScreen('hAuthScreen');
-		showSuccess(data.message + ' <a href="' + data.emailHostLink + '" target="_blank">Email</a>');
+	if (data.success === true) {//TODO надо сделать красиво 
+		//showScreen('hAuthScreen');
+		//showSuccess(data.message + ' <a href="' + data.emailHostLink + '" target="_blank">Email</a>');
+		//RegScreenAnim.switchregisterForm('registerForm', 'loginForm');
 	}
 }
 
@@ -88,8 +89,9 @@ function onFailSendLogin(data, responseText, info, xhr) {
 }
 
 function onFailSendRegister(data, responseText, info, xhr) {
-	showScreen('hRegisterScreen');
-	return authDefaultResponseError(data, responseText, info, xhr);
+	// showScreen('hRegisterScreen');
+	//return authDefaultResponseError(data, responseText, info, xhr); TODO в итоге станет не нужным
+	return showRegisterError(data, responseText, info, xhr);
 }
 
 function onFailSendReset(data, responseText, info, xhr) {
@@ -225,4 +227,22 @@ function showBalloonError(s, x, y) {
 	stl(j, 'font-size', ('11px'));
 	v(j, s);
 	show(i);
+}
+
+function showRegisterError(data, responseText, info, xhr) {
+	var firstFieldName, v, i;
+	if (data && data.success == true) {
+		return true;
+	}
+	if (data.errors) {
+		for (firstFieldName in data.errors) {
+			v = data.errors[firstFieldName];
+			break;
+		}
+	}
+	
+	i = "register_form[" + firstFieldName + "]";
+	if (e(i)) {
+		showBalloonError(v, 336, -26);
+	}
 }
