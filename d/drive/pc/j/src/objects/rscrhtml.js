@@ -106,7 +106,7 @@ function regScrLayout() {
 		
 			
 			<h3>Form register </h3>
-			<div class="lformw" id="regForm" style="display:none">
+			<div class="lformw" id="registerForm" style="display:none">
 				
 				<div  class="lform regf">
 					<div class="regTitle" id="hRegisterTitle">Регистрация</div>
