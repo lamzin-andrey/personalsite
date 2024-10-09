@@ -9,7 +9,7 @@ function regScrLayout() {
 						<div class="abs" id="lbaloon">
 							<div class="rel">
 								<img src="./i/reg/dogball.png" class="dogmsg">
-								<div id="hMsg" class="abs">E-mail об€зателен дл€ заполнени€</div>
+								<div id="hMsg" class="abs hMsg">E-mail об€зателен дл€ заполнени€</div>
 							</div>
 						</div>
 						
@@ -57,10 +57,10 @@ function regScrLayout() {
 					<div class="regTitle">¬ход по паролю</div>
 					<div class="iwrapper-lp rel" >
 						<!-- -25 373, -79 131-->
-						<div class="abs" id="lbaloon">
+						<div class="abs" id="lpbaloon">
 							<div class="rel">
 								<img src="./i/reg/dogball.png" class="dogmsg">
-								<div id="hMsg" class="abs">E-mail об€зателен дл€ заполнени€</div>
+								<div id="hMsg" class="abs hMsg">E-mail об€зателен дл€ заполнени€</div>
 							</div>
 						</div>
 						
@@ -73,6 +73,8 @@ function regScrLayout() {
 						<input type="hidden" id="apptypeRe" value="drv">
 						<input type="hidden" id="tokenRE" value="x">
 					</div>
+					
+					<div class="gbox" id="lsucess"></div>
 					<div class="iwrapper-lp rel" >
 						<div>
 							<input type="password" id="_password" placeholder="ѕароль" class="password">
@@ -110,7 +112,12 @@ function regScrLayout() {
 				
 				<div  class="lform regf">
 					<div class="regTitle" id="hRegisterTitle">–егистраци€</div>
-					
+					<div class="abs" id="rbaloon">
+						<div class="rel">
+							<img src="./i/reg/dogball.png" class="dogmsg">
+							<div id="hMsg" class="abs hMsg">E-mail об€зателен дл€ заполнени€</div>
+						</div>
+					</div>
 					<div class="twocol">
 						<div class="lcol">
 							<div class="iwrapper rel">
@@ -185,6 +192,12 @@ function regScrLayout() {
 				
 				<div  class="lform qenter">
 					<div class="regTitle">—брос парол€</div>
+					<div class="abs" id="rsbaloon">
+						<div class="rel">
+							<img src="./i/reg/dogball.png" class="dogmsg">
+							<div id="hMsg" class="abs hMsg">E-mail об€зателен дл€ заполнени€</div>
+						</div>
+					</div>
 					<div class="iwrapper rel" >
 						<img src="./i/lock.png">
 						<input type="email" id="reset_password_form[email]" placeholder="E-mail" class="emailRE">

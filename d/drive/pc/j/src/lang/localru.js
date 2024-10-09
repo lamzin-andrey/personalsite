@@ -17,6 +17,7 @@ var langRu = {
 	'MB' : 'МБ',
 	'KB' : 'КБ',
 	'b' : '',
+	'Email required' : 'Email обязателен',
 	'Desktop file' : 'Файл настроек рабочего стола',
 	'Shockwave Flash Application' : 'Приложение Shockwave Flash',
 	'Bytes' : 'Байт',
@@ -84,7 +85,7 @@ var langRu = {
 	"bShowAuthScreen4" : "Вход по логину и паролю",
 	"hIAgreeRE" : "Я согласен с",
 	"hPolicyNameRE" : "Политикой конфендициальности",
-	"hIAgreeFromAuthorRE" : "Я согласен получать email рассылку от автора сайта ",
+	"hIAgreeFromAuthorRE" : "Я согласен получать email рассылку от автора сайта",
 	"bRegisterNowRE" : "Быстрый первый вход",
 	"Login" : "Логин",
 	"emailRE" : "Email",
@@ -104,12 +105,13 @@ var langRu = {
 	"register_form[passwordRaw]" : "Пароль",
 	"register_form[passwordRepeat]" : "Пароль повторно",
 	"hIAgree" : "Я согласен с",
-	"hIAgreeFromAuthor" : "Политикой конфендициальности",
+	"hIAgreeFromAuthor" : "Я согласен получать email рассылку от автора сайта",
 	"hRegisterTitle" : "Регистрация",
 	"bRegisterNow" : "Зарегистрироваться",
 	"bShowAuthScreen" : "К форме логина",
 	"You must agree to the terms of use" : "Необходимо согласиться с условиями использования",
 	"Unable sent email. Try later." : "Невозможно отправить письмо. Попробуйте позже.",
+	"Registration success, we can login": "Успешная регистрация, вы можете войти",
 	"" : ""
 };
 

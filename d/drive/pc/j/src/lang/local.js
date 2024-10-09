@@ -32,7 +32,7 @@ var langEn = {
 	"register_form[passwordRaw]" : "Password",
 	"register_form[passwordRepeat]" : "Password repeat",
 	"hIAgree" : "I agree with",
-	"hIAgreeFromAuthor" : "the Privacy Policy",
+	"hIAgreeFromAuthor" : "I agree to receive email newsletters from the author of the site",
 	"hRegisterTitle" : "Sign Up",
 	"bRegisterNow" : "Sign Up",
 	"bShowAuthScreen" : "Go to login form",

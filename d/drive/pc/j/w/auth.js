@@ -39,7 +39,7 @@ function onClickRegisterNow() {
 		tokenName = 'register_form[_token]';
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
-	// showScreen('hWaitScreen');
+	authDisForm("registerForm", 1);
 	Rest._post(data, onSuccessRegister, '/sp/public/register', onFailSendRegister);
 }
 
@@ -55,12 +55,16 @@ function onSuccessReset(data) {
 }
 
 function onSuccessRegister(data) {
+	var id = "lsucess";
 	if (!onFailSendRegister(data)) {
 		return;
 	}
 	if (data.success === true) {
-		showScreen('hAuthScreen');
-		showSuccess(l('Registration success, we can login'));
+		//showSuccess(l('Registration success, we can login'));
+		v(id, L('Registration success, we can login'));
+		show(id);
+		v("_username", v("register_form[username]"));
+		RegScreenAnim.switchregisterForm('registerForm', 'loginForm');
 	}
 }
 
@@ -85,10 +89,12 @@ function onSuccessLogin(data) {
 
 function onFailSendLogin(data, responseText, info, xhr) {
 	enableRegFormButtons();
-	return authDefaultResponseError(data, responseText, info, xhr);
+	// return authDefaultResponseError(data, responseText, info, xhr);
+	return showLoginError(data, responseText, info, xhr);
 }
 
 function onFailSendRegister(data, responseText, info, xhr) {
+	authDisForm("registerForm", 0);
 	// showScreen('hRegisterScreen');
 	//return authDefaultResponseError(data, responseText, info, xhr); TODO в итоге станет не нужным
 	return showRegisterError(data, responseText, info, xhr);
@@ -128,13 +134,12 @@ function onClickRegisterByEmailNow() {
 	var fid = 'emailRegisterForm', data = _map(fid, 1),
 		tokenName = 'tokenRE';
 	if (!checkMail(v("emailRE"))) {
-		showError(l("Email required"));
+		showBalloonError(L("Email required"), 182, -74);
 		return;
 	}
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
-	disForm(fid, 1);
-	hide('lbaloon');
+	authDisForm(fid, 1);
 	data.scheme = HttpQueryString.isSSL() ? '2' : '1';
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
@@ -220,17 +225,19 @@ function enableRegFormButtons()
 	disForm('loginForm', 0);
 }
 
-function showBalloonError(s, x, y) {
-	var i = 'lbaloon', j = 'hMsg';
+function showBalloonError(s, x, y, id, tdx) {
+	var i = (id ? id : 'lbaloon'), j = cs(e(i), 'hMsg')[0], txtX = 65;
+	tdx = tdx ? tdx : 0;
 	stl(i, 'left', (x + 'px'));
 	stl(i, 'top', (y + 'px'));
 	stl(j, 'font-size', ('11px'));
+	stl(j, 'left', ((txtX + intval(tdx)) + 'px'));
 	v(j, s);
 	show(i);
 }
 
 function showRegisterError(data, responseText, info, xhr) {
-	var firstFieldName, v, i;
+	var firstFieldName, v, i, x = 403, y = 403;
 	if (data && data.success == true) {
 		return true;
 	}
@@ -242,7 +249,46 @@ function showRegisterError(data, responseText, info, xhr) {
 	}
 	
 	i = "register_form[" + firstFieldName + "]";
-	if (e(i)) {
-		showBalloonError(v, 336, -26);
+	if (firstFieldName in In(["name", "surname", "email", "agree"])) {
+		x = 204;
 	}
+	switch(firstFieldName) {
+		case "name":
+		case "username":
+			y = -23;
+			break;
+		case "surname":
+		case "passwordRaw":
+			y = 18;
+			break;
+		case "email":
+		case "passwordRepeat":
+			y = 58;
+			break;
+		case "agree":
+			y = 107;
+			break;
+	}
+	if (e(i)) {
+		showBalloonError(v, x, y, 'rbaloon', -7);
+	}
+}
+
+function showLoginError(data, responseText, info, xhr) {
+	var firstFieldName, v, i, x = 403, y = 403;
+	if (data && data.success == true) {
+		return true;
+	}
+	v = data.message;
+	if (v) {
+		showBalloonError(v, 132, -71, 'lpbaloon');
+	}
+}
+
+function authDisForm(f, v) {
+	disForm(f, v);
+	hide('lbaloon');
+	hide('lpbaloon');
+	hide('rbaloon');
+	hide('rsbaloon');
 }

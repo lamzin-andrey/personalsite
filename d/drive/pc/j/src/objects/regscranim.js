@@ -24,7 +24,10 @@ const RegScreenAnim = {
 	switchregisterForm(idForHide, idForShow){
 		let ivl, qLogAlpha = 1.0, logAlpha = 0.0,
 			f = 'flex', o = 'opacity', d = 'display';
-		
+		hide('lbaloon');
+		hide('rbaloon');
+		hide('rsbaloon');
+		hide('lpbaloon');
 		stl(idForHide, o, qLogAlpha);
 		stl(idForShow, o, logAlpha);
 		
