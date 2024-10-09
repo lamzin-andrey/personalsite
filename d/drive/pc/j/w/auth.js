@@ -132,6 +132,7 @@ function onClickRegisterByEmailNow() {
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
 	disForm(fid, 1);
+	hide('lbaloon');
 	data.scheme = HttpQueryString.isSSL() ? '2' : '1';
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
