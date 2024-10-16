@@ -4,15 +4,7 @@ function regScrLayout() {
 				
 				<div  class="lform qenter">
 					<div class="regTitle">Быстрый вход</div>
-					<div class="iwrapper rel" >
-						
-						<div class="abs" id="zlbaloon">
-							<div class="rel">
-								<img src="./i/reg/dogball.png" class="dogmsg">
-								<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
-							</div>
-						</div>
-						
+					<div class="iwrapper rel" >						
 						<div class="abs lbaloon" id="lbaloon" >
 							<div class="rel">
 								<img src="./i/reg/dogball2.png" class="lvatar">
@@ -64,14 +56,6 @@ function regScrLayout() {
 				<div  class="lform qenter">
 					<div class="regTitle">Вход по паролю</div>
 					<div class="iwrapper-lp rel" >
-						
-						<div class="abs" id="zlpbaloon">
-							<div class="rel">
-								<img src="./i/reg/dogball.png" class="dogmsg">
-								<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
-							</div>
-						</div>
-						
 						<div class="abs lbaloon" id="lpbaloon" >
 							<div class="rel">
 								<img src="./i/reg/dogball2.png" class="lvatar">
@@ -128,14 +112,6 @@ function regScrLayout() {
 				
 				<div  class="lform regf">
 					<div class="regTitle" id="hRegisterTitle">Регистрация</div>
-					
-					<div class="abs" id="zrbaloon">
-						<div class="rel">
-							<img src="./i/reg/dogball.png" class="dogmsg">
-							<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
-						</div>
-					</div>
-					
 					<div class="abs lbaloon" id="rbaloon" >
 						<div class="rel">
 							<img src="./i/reg/dogball2.png" class="lvatar">
@@ -214,17 +190,11 @@ function regScrLayout() {
 		
 		
 			<h3>Reset</h3>
-			<div class="lformw" id="rsetForm" style="display:none">
+			<div class="lformw" id="resetForm" style="display:none">
 				
 				<div  class="lform qenter">
 					<div class="regTitle">Сброс пароля</div>
 					
-					<div class="abs" id="zrsbaloon">
-						<div class="rel">
-							<img src="./i/reg/dogball.png" class="dogmsg">
-							<div id="hMsg" class="abs hMsg">E-mail обязателен для заполнения</div>
-						</div>
-					</div>
 					
 					<div class="abs lbaloon" id="rsbaloon" >
 						<div class="rel">

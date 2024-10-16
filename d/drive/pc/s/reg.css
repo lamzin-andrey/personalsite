@@ -143,18 +143,9 @@ img.dogmsg {
 	font-size: 14px;
 	line-height: 17px;
 }
-#lbaloon, #zlbaloon, #zlpbaloon, #zrsbaloon, #zrbaloon {
-	top: -73px;
-	left: 131px;
-	display: none;
-}
-/*
-#lbaloon, #rbaloon, #rsbaloon, #lpbaloon {
-	z-index: 6;
-}*/
 
 .lbaloon {
-	background-color: #5d948e;
+	background-color: #589785;
 	border: 1px solid black;
 	left:183px;
 	top: -23px;

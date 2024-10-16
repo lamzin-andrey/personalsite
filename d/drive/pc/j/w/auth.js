@@ -12,16 +12,46 @@ function setListenersAuth() {
 	if (e(id))
 		e(id).onclick = onClickRegisterByEmailNow;
 	e('agreeRE').onchange = onChangeIAgree;
-	
+	e('emailRE').oninput = hideBallons;
+	e('emailRE').onfocus = hideBallons;
+	e('_username').oninput = hideBallons;
+	e('_username').onfocus = hideBallons;
+	e('_password').oninput = hideBallons;
+	e('_password').onfocus = hideBallons;
+	e('register_form[name]').oninput = hideBallons;
+	e('register_form[name]').onfocus = hideBallons;
+	e('register_form[surname]').oninput = hideBallons;
+	e('register_form[surname]').onfocus = hideBallons;
+	e('register_form[email]').oninput = hideBallons;
+	e('register_form[email]').onfocus = hideBallons;
+	e('register_form[username]').oninput = hideBallons;
+	e('register_form[username]').onfocus = hideBallons;
+	e('register_form[passwordRaw]').oninput = hideBallons;
+	e('register_form[passwordRaw]').onfocus = hideBallons;
+	e('register_form[passwordRepeat]').oninput = hideBallons;
+	e('register_form[passwordRepeat]').onfocus = hideBallons;
+	e('register_form[agree]').onchange = onChangeIAgree;
+	e('reset_password_form[email]').onfocus = hideBallons;
+	e('reset_password_form[email]').oninput = hideBallons;
+	/*
+	e('register_form[]').onfocus = hideBallons;
+	e('register_form[]').oninput = hideBallons;
+	e('register_form[]').onfocus = hideBallons;*/
 }
 
 function onChangeIAgree(evt) {
-	var st = evt.currentTarget.checked;
+	var t = evt.currentTarget, st = t.checked, k = 'lbaloon', c = 'rbaloon',
+		y = 78, x = 204;
+	if (t.id == 'agreeRE') {
+		c = k;
+		x = 263;
+		y = -54;
+	}
 	if (!st) {
 		st = "You must agree to the terms of use";
-		showBalloonError(L(st), 263, -54);
+		showBalloonError(L(st), x, y, c);
 	} else {
-		hide('lbaloon');
+		hideBallons()
 	}
 }
 
@@ -30,7 +60,7 @@ function onClickResetForm() {
 		tokenName = 'reset_password_form[_token]';
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
-	// showScreen('hWaitScreen');
+	hideBallons();
 	Rest._post(data, onSuccessReset, '/sp/public/reset', onFailSendReset);
 }
 
@@ -102,8 +132,9 @@ function onFailSendRegister(data, responseText, info, xhr) {
 
 function onFailSendReset(data, responseText, info, xhr) {
 	e('reset_password_form[_token]').value = data.token;
-	showScreen('hResetScreen');
-	return authDefaultResponseError(data, responseText, info, xhr);
+	// TODO showScreen('hResetScreen');
+	// return authDefaultResponseError(data, responseText, info, xhr);
+	return showResetError(data, responseText, info, xhr);
 }
 
 function authDefaultResponseError(data, responseText, info, xhr) {
@@ -269,6 +300,10 @@ function showRegisterError(data, responseText, info, xhr) {
 			y = 78;
 			break;
 	}
+	
+	if (~v.indexOf('narod.ru')) {
+		y -= 150;
+	}
 	if (e(i)) {
 		showBalloonError(v, x, y, 'rbaloon', -7);
 	}
@@ -285,10 +320,28 @@ function showLoginError(data, responseText, info, xhr) {
 	}
 }
 
+
+function showResetError(data, responseText, info, xhr) {
+	var firstFieldName, v, i;
+	if (data && data.success == true) {
+		return true;
+	}
+	v = data.message;
+	if (v) {
+		showBalloonError(v, 132, -42, 'rsbaloon');
+	}
+}
+
 function authDisForm(f, v) {
 	disForm(f, v);
+	hideBallons();
+}
+
+function hideBallons()
+{
 	hide('lbaloon');
 	hide('lpbaloon');
 	hide('rbaloon');
 	hide('rsbaloon');
 }
+

@@ -14,11 +14,11 @@ const RegScreenAnim = {
 		}
 
 		e('bShowResetScreen').onclick = () => {
-			o.switchregisterForm('loginForm', 'rsetForm');
+			o.switchregisterForm('loginForm', 'resetForm');
 		}
 
 		e('bShowAuthScreen2').onclick = () => {
-			o.switchregisterForm('rsetForm', 'loginForm');
+			o.switchregisterForm('resetForm', 'loginForm');
 		}
 	},
 	switchregisterForm(idForHide, idForShow){
