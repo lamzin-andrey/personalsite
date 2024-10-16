@@ -284,7 +284,8 @@ Tab.prototype.createItem = function(s) {
 		item.cmId = typeData.c;
 	}
 	
-	item.sz = (app.devicesManager ? app.devicesManager.pluralizeSize(item.rsz, 1) : '0');
+	console.log("Was used devicesManager.pluralizeSize");
+	item.sz = '0';
 	
 	item.o = a[2];
 	item.g = a[3];

@@ -147,7 +147,8 @@ ListUpdater.prototype.renderPart = function(){
 		this.renderProcessIval = 0;
 		this.cutTail();
 		
-		freeSpaceText = app.devicesManager.getPluralFreeSpaceOfDiskPartByPath(this.tab.currentPath);
+		freeSpaceText = "TODO FreeSpace - updater";
+		console.log("here used DevM.getPluralFreeSpaceOfDiskPartByPath");
 		if (freeSpaceText) {
 			freeSpaceText = ', ' + freeSpaceText;
 		}

@@ -66,7 +66,8 @@ ListRenderer.prototype.renderPart = function(){
 				this.incSize(item.sz);
 			}
 		}
-		freeSpaceText = app.devicesManager.getPluralFreeSpaceOfDiskPartByPath(app.tab.currentPath);
+		freeSpaceText = 'TODO free space text';
+		console.log("here used DevM.getPluralFreeSpaceOfDiskPartByPath");
 		if (freeSpaceText) {
 			freeSpaceText = ', ' + freeSpaceText;
 		}
@@ -88,13 +89,7 @@ ListRenderer.prototype.renderPart = function(){
 }
 
 ListRenderer.prototype.onDiskData = function(stdout, stderr){
-	var listDisks = app.devicesManager.parseDfhOut(stdout), i;
-	for (i in listDisks) {
-		if (app.devicesManager.listDisks[i]) {
-			app.devicesManager.listDisks[i].f = listDisks[i].f;
-		}
-	}
-	this.dfProc = 0;
+	// Was update disk list
 }
 
 ListRenderer.prototype.run = function(sz, context, ls, firstItemIdx, skipCalcSize){

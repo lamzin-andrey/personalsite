@@ -11,8 +11,6 @@ FileManager.prototype.init = function() {
 	this.fileHeader = new FileHeader();
 	this.procManager = new ProcManager();
 	
-	this.devicesManager = new Devices();
-	this.devicesManager.run();
 	this.setMainMenu();
 	/*this.scrollIval = setInterval(function(){
 		o.watchScrollX();
@@ -41,9 +39,6 @@ FileManager.prototype.setActivePath = function(path, aExcludes) {
 	}
 	if (emitter != 'bookmarksManager') {
 		this.bookmarksManager.setPath(path);
-	}
-	if (emitter != 'devicesManager') {
-		this.devicesManager.setPath(path);
 	}
 	if (emitter != 'addresspanel') {
 		this.addressPanel.setPath(path);
@@ -272,7 +267,7 @@ FileManager.prototype.setMainMenu = function() {
 
 FileManager.prototype.setSidebarScrollbar = function() {
 	var maxHeight = intval(e('sidebarWrapper').style.maxHeight) - 36, // 36 - height navbar
-		devicesHeight = this.devicesManager.getHeight(),
+		devicesHeight = 0,
 		bookmarksHeight = this.bookmarksManager.getHeight();
 	if (devicesHeight + bookmarksHeight + (15 + 7 + 7) > maxHeight) {
 		e('sbScroller').style.maxHeight = maxHeight + 'px';
@@ -797,40 +792,9 @@ FileManager.prototype.addContextMenuHtml = function() {
 				\
 			</div>\
 		</div>\
-		' + this.contextMenuContent.getBookmarkItemMenuHtml() 
-		  + this.contextMenuContent.getDeviceItemMenuHtml() + 
+		' + this.contextMenuContent.getBookmarkItemMenuHtml() + 
 		'\
 		<div id="cmUsbMenu" style="display:none">\
-			<div class="contextMenu">\
-				<div class="contextMenuItem" onclick="app.devicesManager.onClickOpen()">\
-					<div class="contextMenuItemIcon">\
-						<!--img src="./i/cm/sh16.png"-->\
-					</div>\
-					<div class="contextMenuItemText">' + L("Open") + '</div>\
-					<div class="cf"></div>\
-				</div>\
-				<div class="contextMenuItem" onclick="app.devicesManager.onClickMount()">\
-					<div class="contextMenuItemIcon">\
-						<!--img src="./i/cm/folder_new16.png"-->\
-					</div>\
-					<div class="contextMenuItemText">' + L("Mount device") + '</div>\
-					<div class="cf"></div>\
-				</div>\
-				<div class="contextMenuItem" onclick="app.devicesManager.onClickUnmount()">\
-					<div class="contextMenuItemIcon">\
-						<!--img src="./i/cm/filenew16.png"-->\
-					</div>\
-					<div class="contextMenuItemText">' + L("Unmount device") + '</div>\
-					<div class="cf"></div>\
-				</div>\
-				<div class="contextMenuItem" onclick="app.devicesManager.onClickEject()">\
-					<div class="contextMenuItemIcon">\
-						<!--img src="./i/cm/filenew16.png"-->\
-					</div>\
-					<div class="contextMenuItemText">' + L("Eject device") + '</div>\
-					<div class="cf"></div>\
-				</div>\
-			</div>\
 			' + this.contextMenuContent.getHtmlTabMenuHtml()  + '\
 		</div>';
 	//ee(document, 'body')[0].innerHTML += html;

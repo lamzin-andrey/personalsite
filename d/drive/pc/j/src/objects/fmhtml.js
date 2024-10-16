@@ -29,26 +29,6 @@ function fileMgrLayout() {
 						\
 					</div>\
 				</div>\
-				\
-				<div class="section" id="devicesBlock">\
-					<div class="sectionTitle devText">Устройства</div>\
-					<div class="sectionContent">\
-						<div class="sectionItem ">\
-							<img src="./i/disk32.png" class="i24">\
-							<span class="i24Text">Файловая система</span>\
-						</div>\
-						<div class="sectionItem ">\
-							<img src="./i/phone32.png" class="i24">\
-							<span class="i24Text">SDM660 MTP SN:571746FA</span>\
-						</div>\
-						<div class="sectionItem selected">\
-							<img src="./i/usb32.png" class="i24">\
-							<span class="i24Text">KINGSTON</span>\
-						</div>\
-						\
-					</div>\
-				</div>\
-				\
 			</div>\
 			\
 		</div>\
