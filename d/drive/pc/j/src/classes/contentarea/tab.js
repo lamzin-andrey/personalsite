@@ -29,12 +29,12 @@ function Tab() {
 
 Tab.prototype.setPath = function(path) {
 	var o = this,
-		cmd = '#! /bin/bash\nls -lh --full-time "' + path + '"',
-		slot = App.dir()  + '/sh/ls.sh',
-		slot2 = App.dir()  + '/sh/lsh.sh',
+		cmd = '#! /bin/bash\nls -lh --full-time "' + path + '"',// TODO --
+		slot = App.dir()  + '/sh/ls.sh',// TODO --
+		slot2 = App.dir()  + '/sh/lsh.sh',// TODO --
 		pathInfo = pathinfo(path);
-	cmd = this.setInitSort(cmd);
-	this.listUpdater.stop();
+	cmd = this.setInitSort(cmd);// TODO setInitSort-- (?)
+	//this.listUpdater.stop(); TODO выпилить апдейтер как таковый
 	this.currentPath = path;
 	this.list = [];
 	this.hideList = [];
@@ -49,14 +49,14 @@ Tab.prototype.setPath = function(path) {
 	this.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	this.partListListen = 1;
 	
-	MW.setTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
+	appSetTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
 	if (this.isSpecialTab()) {
 		
 		return;
 	}
 	
-	MW.setIconImage(App.dir() + '/i/folder32.png');
 	
+	//TODO здесь внимательно, могут быть всякие штуки впоследствии
 	if (this.skipRequestList && this.skipRequestHList) {
 		this.showList = mclone(this.skipRequestList);
 		this.hideList = mclone(this.skipRequestHList);
@@ -71,18 +71,11 @@ Tab.prototype.setPath = function(path) {
 		return;
 	}
 	
-	FS.writefile(slot, cmd);
 	jexec(slot, [this, this.onFileList], [this, this.onFileListPart], DevNull);
+	// TODO onFileListPart - сразу в минуса
 	
-	cmd = '#! /bin/bash\nls -alh --full-time "' + path + '"';
-	cmd = this.setInitSort(cmd);
-	FS.writefile(slot2, cmd);
 	jexec(slot2, [this, this.onHideFileList], [this, this.onHideFileListPart], DevNull);
 	
-	if (FS.fileExists(path + '/.qdjssz')) {
-		FS.unlink(path + '/.qdjssz');
-	}
-	this.listUpdater.removeSizeFile(path);
 }
 
 Tab.prototype.onFileList = function(stdout, stderr) {
@@ -652,7 +645,7 @@ Tab.prototype.onClickOpenTerm = function(inCurrentFolder) {
 	jexec(sh, DevNull, DevNull, DevNull);
 }
 
-// TODO сделать через диалог
+
 Tab.prototype.onClickRemove = function() {
 	var id,
 		path,
@@ -834,7 +827,7 @@ Tab.prototype.setSelection = function(evt, needClearSelection) {
 			}
 		}
 		
-		this.clearSelections(); // TODO
+		this.clearSelections();
 		
 		if (lastId == -1 || nextId == -1) {
 			
@@ -1128,7 +1121,7 @@ Tab.prototype.setTabItem = function(tabItem) {
 
 Tab.prototype.isSpecialTab = function() {
 	if (this.tabItem && this.tabItem.type != TabPanelItem.TYPE_CATALOG) {
-		this.specialTabManager.process(); // TODO
+		this.specialTabManager.process();
 		return true;
 	}
 }

@@ -23,7 +23,7 @@ FileManager.prototype.init = function() {
 	AppEnv.init([this, this.onGetActualEnv], [this, this.onGetSavedEnv]);
 }
 
-FileManager.PRODUCT_LABEL = 'QT5 WEB VIEW File Explorer';
+FileManager.PRODUCT_LABEL = 'WebUSB - ещё один ваш гигабайт в облаке';
 
 /**
  * @param {String} path

@@ -286,6 +286,10 @@ function body(o) {
 }
 
 
+function appSetTitle(s) {
+	ee(document, 'title')[0].innerHTML = s;
+}
+
 window.addEventListener("load",  main);
 
 
