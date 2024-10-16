@@ -113,6 +113,7 @@ function onSuccessLogin(data) {
 		return;
 	}
 	if (data.success === true) {
+		storage("username", v('_username'));
 		showScreen('hCatalogScreen');
 	}
 }
@@ -180,6 +181,7 @@ function onSuccessRegisterByEmail(data) {
 		return;
 	}
 	if (data.success === true) {
+		storage("username", v("emailRE"));
 		showScreen('hCatalogScreen');
 		return;
 	}
@@ -237,6 +239,7 @@ function loginByMailhash() {
 
 function onSuccessLoginByMailhash(data) {
 	if (data && data.success) {
+		storage("username", "wusb");
 		reload();
 	}
 }

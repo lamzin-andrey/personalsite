@@ -22,7 +22,7 @@ FileManager.prototype.init = function() {
 		o.actualizeScrollX();
 	}
 	this.kbListener = new KBListener();
-	//AppEnv.init([this, this.onGetActualEnv], [this, this.onGetSavedEnv]);
+	AppEnv.init([this, this.onGetActualEnv], [this, this.onGetSavedEnv]);
 }
 
 FileManager.PRODUCT_LABEL = 'QT5 WEB VIEW File Explorer';

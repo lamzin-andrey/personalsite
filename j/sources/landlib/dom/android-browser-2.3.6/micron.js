@@ -441,3 +441,7 @@ function isU(x) {
 function isNull(x) {
 	return String(x) === "null";
 }
+
+function ctrg(ev) {
+	return ev.currentTarget;
+}

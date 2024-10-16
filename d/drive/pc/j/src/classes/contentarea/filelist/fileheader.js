@@ -40,7 +40,7 @@ FileHeader.prototype.setImgVisible = function(tab, v){
 		removeClass(img, c);
 	}
 }
-FileHeader.prototype.setListeners = function() {console.log("Was init file header"); return;
+FileHeader.prototype.setListeners = function() {
 	var o = this;
 	this.tabFile = e('tabContentHeaderFileName');
 	this.tabSize = e('tabContentHeaderSize');
