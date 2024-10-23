@@ -10,6 +10,7 @@ FileManager.prototype.init = function() {
 	window.app.sort = this.sort;
 	this.fileHeader = new FileHeader();
 	this.procManager = new ProcManager();
+	o.isActive = false;
 	
 	this.setMainMenu();
 	/*this.scrollIval = setInterval(function(){

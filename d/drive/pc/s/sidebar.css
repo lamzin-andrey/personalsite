@@ -55,6 +55,10 @@
 	font-size: 13px;
 	vertical-align: top;
 	margin-left: -2px;
+	overflow-x: hidden;
+	max-width: 157px;
+	display: inline-block;
+	/*! max-height: 32px; */
 }
 
 

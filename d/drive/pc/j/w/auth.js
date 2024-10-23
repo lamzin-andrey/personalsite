@@ -116,7 +116,7 @@ function onSuccessLogin(data) {
 	if (data.success === true) {
 		storage("username", u);
 		patchUsername(u);
-		showScreen("hCatalogScreen");
+		showFileManager();
 	}
 }
 
@@ -185,7 +185,7 @@ function onSuccessRegisterByEmail(data) {
 	if (data.success === true) {
 		storage("username", u);
 		patchUsername(u);
-		showScreen('hCatalogScreen');
+		showFileManager();
 		return;
 	}
 	if (data.sended) {
@@ -362,3 +362,7 @@ function hideBallons()
 	hide('rsbaloon');
 }
 
+function showFileManager() {
+	showScreen("hCatalogScreen");
+	app.isActive = true;
+}
