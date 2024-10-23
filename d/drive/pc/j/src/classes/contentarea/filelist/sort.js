@@ -36,7 +36,6 @@ Sort.prototype.cmpSize = function(a, b, m){
 	return 0;
 }
 Sort.prototype.calcSize = function(s){
-	console.log('.calcSize', s);
 	s = String(s).replace(' ', '');
 	var n = floatval(String(s).replace(',', '.'));
 	n *= 1.0;

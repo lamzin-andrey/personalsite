@@ -84,11 +84,10 @@ Tab.prototype.onFileList = function(data) {
 		return;
 	}
 	this.setStatus(L('Load catalog data') + '. ' + L('Start build list') + '.', 1);
-	o.list = o.buildList(data); // TODO
-	o.listComplete = true;
+	o.list = o.buildList(data);	o.listComplete = true;
 	o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
 	o.listCount += 2;
-	o.renderByMode();// TODO
+	o.renderByMode();
 	onResize();
 }
 

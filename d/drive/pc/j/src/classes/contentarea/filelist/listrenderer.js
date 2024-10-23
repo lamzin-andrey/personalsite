@@ -38,7 +38,7 @@ ListRenderer.prototype.renderPart = function(){
 	if (done) {
 		this.processing = false;
 		if (!this.skipCalcSize) {
-			for (i = 0; i < this.sz; i++) {
+			for (i = 0; i < end; i++) {
 				item = this.ls[i];
 				this.incSize(item.sz);
 			}
@@ -81,17 +81,16 @@ ListRenderer.prototype.incSize = function(sz){
 	aSz[1] = (aSz[1] ? aSz[1] : '').replace(/\D/mig, '');
 	fSz = aSz[0] + '.' + aSz[1];
 	fSz = parseFloat(fSz);
-	if (sz.indexOf(L('K')) != -1) {
+	if (sz.indexOf('K') != -1) {
 		fSz *= m;
-	} else if (sz.indexOf(L('M')) != -1) {
+	} else if (sz.indexOf('M') != -1) {
 		fSz *= m * m;
-	} else if (sz.indexOf(L('G')) != -1) {
+	} else if (sz.indexOf('G') != -1) {
 		fSz *= m * m * m;
-	} else if (sz.indexOf(L('T')) != -1) {
+	} else if (sz.indexOf('T') != -1) {
 		fSz *= m * m * m * m;
 	}
 	this.filesSize += fSz;
-	
 	return fSz;
 }
 
