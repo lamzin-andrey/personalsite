@@ -109,12 +109,14 @@ function onClickLogin() {
 }
 
 function onSuccessLogin(data) {
+	var u = v("_username");
 	if (!onFailSendLogin(data)) {
 		return;
 	}
 	if (data.success === true) {
-		storage("username", v('_username'));
-		showScreen('hCatalogScreen');
+		storage("username", u);
+		patchUsername(u);
+		showScreen("hCatalogScreen");
 	}
 }
 
@@ -176,12 +178,13 @@ function onClickRegisterByEmailNow() {
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
 function onSuccessRegisterByEmail(data) {
-	var msg = data.msg;
+	var msg = data.msg, u = v("emailRE");
 	if (!onFailSendRegisterByEmail(data)) {
 		return;
 	}
 	if (data.success === true) {
-		storage("username", v("emailRE"));
+		storage("username", u);
+		patchUsername(u);
 		showScreen('hCatalogScreen');
 		return;
 	}
@@ -234,6 +237,17 @@ function loginByMailhash() {
 		showLoader();
 		Rest._get(onSuccessLoginByMailhash, '/sp/public/loginmailink?hash=' + h, onFailLoginByMailhash);
 		localStorage.removeItem('mailhash');
+	}
+}
+
+function patchUsername(u) {
+	var ctab, i = "tb2";
+	window.USER = u;
+	v(ee("bm0", "span")[0], u);
+	ctab = ee(i, "span")[0];
+	if (v(ctab) == "wusb") {
+		v(ctab, u);
+		attr(i, "title", u);
 	}
 }
 
