@@ -29,75 +29,75 @@ function Tab() {
 
 Tab.prototype.setPath = function(path) {
 	var o = this,
-		cmd = '#! /bin/bash\nls -lh --full-time "' + path + '"',// TODO --
-		slot = App.dir()  + '/sh/ls.sh',// TODO --
-		slot2 = App.dir()  + '/sh/lsh.sh',// TODO --
 		pathInfo = pathinfo(path);
-	cmd = this.setInitSort(cmd);// TODO setInitSort-- (?)
-	this.currentPath = path;
-	this.list = [];
-	this.hideList = [];
-	this.showList = [];
-	this.oSelectionItems = {};
-	this.activeItem = null;
-	this.cutItems = [];
-	this.listCount = 0;
-	this.listComplete = false;
-	this.hideListComplete = false;
-	// this.contentBlock.innerHTML = '';
-	this.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
-	this.partListListen = 1;
+	o.currentPath = path;
+	o.list = [];
+	o.hideList = [];
+	o.showList = [];
+	o.oSelectionItems = {};
+	o.activeItem = null;
+	o.cutItems = [];
+	o.listCount = 0;
+	o.listComplete = false;
+	o.hideListComplete = false;
+	o.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	
 	appSetTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
-	if (this.isSpecialTab()) {
+	if (o.isSpecialTab()) {
+		return;
+	}
 		
-		return;
-	}
-	
-	
 	//TODO здесь внимательно, могут быть всякие штуки впоследствии
-	if (this.skipRequestList && this.skipRequestHList) {
-		this.showList = mclone(this.skipRequestList);
-		this.hideList = mclone(this.skipRequestHList);
-		this.list = this.showList;
-		this.skipRequestList = 0;
-		this.skipRequestHList = 0;
-		this.hideListComplete = true;
-		this.listComplete = true;
-		this.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
-		this.listCount = 2;
-		this.renderByMode();
+	if (o.skipRequestList && o.skipRequestHList) {
+		o.showList = mclone(o.skipRequestList);
+		o.hideList = mclone(o.skipRequestHList);
+		o.list = o.showList;
+		o.skipRequestList = 0;
+		o.skipRequestHList = 0;
+		o.hideListComplete = true;
+		o.listComplete = true;
+		o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
+		o.listCount = 2;
+		o.renderByMode();
 		return;
 	}
 	
-	jexec(slot, [this, this.onFileList], [this, this.onFileListPart], DevNull);
-	// TODO onFileListPart - сразу в минуса
-	
-	jexec(slot2, [this, this.onHideFileList], [this, this.onHideFileListPart], DevNull);
+	// jexec(slot, [this, this.onFileList], [this, this.onFileListPart], DevNull);
+	// TODO c && m 
+	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=158&m=0", o.onFailGetList, o);
 	
 }
 
-Tab.prototype.onFileList = function(stdout, stderr) {
+Tab.prototype.onFailGetList = function(status, responseText, info, xhr, readyState) {
+	return defaultResponseError(0, responseText, info, xhr);
+}
+
+Tab.prototype.onFileList = function(data) {
+	var o = this;
+	if (!defaultResponseError(data)) {
+		showError("tab.js onFileList TODO надо подумать, что тут написать");
+		return;
+	}
 	this.setStatus(L('Load catalog data') + '. ' + L('Start build list') + '.', 1);
-	this.list = this.buildList(stdout);
-	this.listComplete = true;
-	this.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
-	this.listCount++;
-	this.renderByMode();
-}
-Tab.prototype.onHideFileList = function(stdout, stderr) {
-	this.hideList = this.buildList(stdout);
-	this.hideListComplete = true;
-	this.listCount++;
-	this.renderByMode();
+	o.list = o.buildList(data); // TODO
+	o.listComplete = true;
+	o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
+	o.listCount += 2;
+	o.renderByMode();// TODO
 }
 
+Tab.prototype.isHidden = function(s) {
+	return (S(s).charAt(0) == '.');
+}
+
+// TODO ccut
 Tab.prototype.redraw = function() {
 	this.rebuildList('list');
 	this.rebuildList('hideList');
 	
 	this.renderByMode();
 }
+// TODO cut
 Tab.prototype.rebuildList = function(key) {
 	var SZ , i, files = [], dirs = [],
 		list = this[key];
@@ -120,69 +120,76 @@ Tab.prototype.rebuildList = function(key) {
 	this[key] = dirs;
 }
 
-Tab.prototype.onFileListPart = function(stdout) {
-	if (this.partListListen == 0) {
-		return;
-	}
-	if (this.listRenderer.processing) {
-		return;
-	}
-	var ls = this.buildList(stdout), i, SZ = sz(ls);
-	for (i = 0; i < SZ; i++) {
-		this.list.push(ls[i]);
-	}
-	this.renderByMode(true);
-	this.partListListen = 0;
-}
-Tab.prototype.onHideFileListPart = function(stdout) {
-	if (this.listRenderer.processing) {
-		return;
-	}
-	var ls = this.buildList(stdout), i, SZ = sz(ls);
-	for (i = 0; i < SZ; i++) {
-		this.hideList.push(ls[i]);
-	}
-	this.renderByMode(true);
-}
 
-Tab.prototype.buildList = function(lsout, calcDirSizes) {
-	var lines = lsout.split('\n'), i, buf, SZ = sz(lines), dirs = [], files = [], item, t;
+Tab.prototype.buildList = function(data, calcDirSizes) {
+	var lines = data.ls, i, buf, SZ = sz(lines), dirs = [], files = [],
+		item, t, o = this, hFiles = [], hDirs = [];
 	for (i = 0; i < SZ; i++) {
-		item = this.createItem(lines[i]);
+		item = o.createItem(lines[i]);
 		if (item) {
 			if (item.name == '.' || item.name == '..') {
 				continue;
 			}
 			if (item.type != L('Catalog')) {
 				files.push(item);
+				if (o.isHidden(item.name)) {
+					hFiles.push(item);
+				}
 			} else {
 				if (calcDirSizes ) {
-					item.sz = this.listRenderer.getHumanFilesize(item.rsz, 1, 3, false);
+					item.sz = o.listRenderer.getHumanFilesize(item.rsz, 1, 3, false);
 					item.rsz = item.sz;
 					t = item.rsz;
 					if (item.sz == 'NaN Байт') {
 						item.sz = t;
 					}
 				}
+				if (o.isHidden(item.name)) {
+					hDirs.push(item);
+				}
 				dirs.push(item);
 			}
 		}
 	}
-	this.sort.apply(files);
+	o.sort.apply(files);
 	
-	if (Settings.get("noShowDir") == 1) {
+	// TODO 2 cut Settings
+	if (storage("noShowDir") == 1) {
 		return files;
 	}
 	
-	this.sort.apply(dirs);
+	o.sort.apply(dirs);
 	SZ = sz(files);
 	for (i = 0; i < SZ; i++) {
 		dirs.push(files[i]);
 	}
 	
+	o.sort.apply(hDirs);
+	SZ = sz(hFiles);
+	for (i = 0; i < SZ; i++) {
+		hDirs.push(hFiles[i]);
+	}
+	this.hideList = hDirs;
+	
 	return dirs;
 }
 
+Tab.prototype.unpackHexSz = function(n) {
+	var a = String(n).split('g'), i, r, SZ;
+	SZ = sz(a);
+	for (i = 0; i < SZ - 1; i++) {
+		a[i] = parseInt(a[i], 16);
+	}
+	
+	if (SZ > 2) {
+		r = TextFormatU.money(S(a[0])) + ',' + a[1] + ' ' + a[2];
+	} else {
+		r = TextFormatU.money(S(a[0])) + ' ' + a[1];
+	}
+	
+	return r;
+}
+	
 Tab.prototype.getClickedItem = function(id) {
 	var i, SZ;
 	id = id.replace('f', '');
@@ -197,15 +204,17 @@ Tab.prototype.renderByMode = function(skipCheckCount) {
 		return;
 	}
 	
-	if (1 === intval(Settings.get('hMode'))) {
+	if (1 === intval(storage('hMode'))) {
 		o.showList = JSON.parse(JSON.stringify(o.list));
 		o.list = JSON.parse(JSON.stringify(o.hideList));
 		list = o.list;
 		SZ = sz(list);
 	}
 	if (skipCheckCount) {
-		this.listRenderer.skipRunUpdater = true;
+		// TODO --
+		o.listRenderer.skipRunUpdater = true;
 	}
+	console.log("TODO before listRenderer.run");
 	this.listRenderer.run(SZ, this, list, 0);
 }
 Tab.prototype.onClickItem = function(evt) {
@@ -256,18 +265,14 @@ Tab.prototype.createItem = function(s) {
 			i:'',
 			src: s
 		},
-		i, buf, a, typeData;
-	buf = s.split('->');
-	a = buf[0].split(/\s+/);
-	if (sz(a) < 9) {
-		return;
-	}
-	item.name = a.slice(8).join(' ').replace(/^'/, '').replace(/'$/, '');
+		i, buf, a, typeData, o = this;
 	
-	item.rsz = a[4];
-	if (a[0][0] == 'd') {
+	item.name = s.name;
+	
+	item.rsz = o.unpackHexSz(s.s);
+	if (s.type == 'c') {
 		item.type = L('Catalog');
-		item.i = App.dir() + '/i/folder32.png';
+		item.i = window.root + '/i/folder32.png';
 		item.cmId = 'cmCatalog';
 	} else {
 		typeData = Types.get(this.currentPath + '/' + item.name);
@@ -277,14 +282,17 @@ Tab.prototype.createItem = function(s) {
 	}
 	
 	console.log("Was used devicesManager.pluralizeSize");
-	item.sz = '0';
+	item.sz = item.rsz;
 	
-	item.o = a[2];
-	item.g = a[3];
+	item.o = USER;
+	item.g = USER;
 	
 	
-	item.mt = a[5] + ' ' + a[6].split('.')[0];
-	item.nSubdirs = a[1] - 2;
+	//item.mt = a[5] + ' ' + a[6].split('.')[0];
+	item.mt = SqzDatetime.desqzDatetime(s.ct, 0);
+	ut = SqzDatetime.desqzDatetime(s.ut, 0);
+	item.mt = item.mt < ut ? ut : item.mt;
+	item.nSubdirs = s.qc;
 	
 	return item;
 }
@@ -1269,32 +1277,3 @@ Tab.prototype.onLoadPreview = function(i) {
 	}
 }
 
-Tab.prototype.setInitSort = function(cmd) {
-	var arg = '', k = this.sort.field;
-	
-	if (this.sort.field == 'DESC') {
-		switch (k) {
-			case 'name':
-				arg = '-r';
-			case 'rsz':
-				arg = '-S';
-			case 'type':
-				arg = '-X';
-			case 'mt':
-				arg = '-t';
-		}
-	} else {
-		switch (k) {
-			case 'rsz':
-				arg = '-Sr';
-			case 'type':
-				arg = '-Xr';
-			case 'mt':
-				arg = '-tr';
-		}
-	}
-	
-	cmd = cmd.replace('--full-time', '--full-time ' + arg);
-	
-	return cmd;
-}

@@ -92,6 +92,15 @@ function onFailGetAuthState(data, responseText, info, xhr) {
 
 
 function defaultResponseError(data, responseText, info, xhr) {
+	
+	if (!data) {
+		try {
+			data = JSON.parse(responseText);
+		}catch(err) {
+			;
+		}
+	}
+	
 	if (data && data.status == 'ok') {
 		return true;
 	}
