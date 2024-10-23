@@ -76,11 +76,7 @@ ListRenderer.prototype.renderPart = function(){
 						+ ' (' + this.getHumanFilesize(intval(this.filesSize), 2, 3, false) + ')'
 						+ freeSpaceText;
 		this.context.setStatus.call(this.context, statusText);
-		if (!this.skipRunUpdater) {
-			this.context.listUpdater.run.call(this.context.listUpdater);
-		} else {
-			this.skipRunUpdater = false;
-		}
+		
 		if (!this.dfProc) {
 			this.dfProc = 1;
 			jexec('df -h', [this, this.onDiskData], DevNull, DevNull);

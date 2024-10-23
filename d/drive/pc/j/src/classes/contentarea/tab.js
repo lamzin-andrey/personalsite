@@ -7,7 +7,6 @@ function Tab() {
 	this.navbarPanelManager = new NavbarPanel();
 	this.addressPanel = new AddressPanel();
 	this.listRenderer = new ListRenderer();
-	this.listUpdater = new ListUpdater(this);
 	this.sort = window.app.sort;
 	this.list = [];
 	this.hideList = [];
@@ -35,7 +34,6 @@ Tab.prototype.setPath = function(path) {
 		slot2 = App.dir()  + '/sh/lsh.sh',// TODO --
 		pathInfo = pathinfo(path);
 	cmd = this.setInitSort(cmd);// TODO setInitSort-- (?)
-	//this.listUpdater.stop(); TODO выпилить апдейтер как таковый
 	this.currentPath = path;
 	this.list = [];
 	this.hideList = [];
@@ -158,9 +156,9 @@ Tab.prototype.buildList = function(lsout, calcDirSizes) {
 			if (item.type != L('Catalog')) {
 				files.push(item);
 			} else {
-				if (calcDirSizes && this.listUpdater) {
-					item.rsz = this.listUpdater.calculateSubdirSz(item.name, item.rsz);
+				if (calcDirSizes ) {
 					item.sz = this.listRenderer.getHumanFilesize(item.rsz, 1, 3, false);
+					item.rsz = item.sz;
 					t = item.rsz;
 					if (item.sz == 'NaN Байт') {
 						item.sz = t;
@@ -430,14 +428,10 @@ Tab.prototype.getNewName = function(newName) {
 }
 
 Tab.prototype.onClickCopy = function() {
-	this.listUpdater.pause();
 	this.copyPaste.copyAction(window.currentCmTargetId);
-	this.listUpdater._continue();
 }
 Tab.prototype.onClickCut = function() {
-	this.listUpdater.pause();
 	this.copyPaste.cutAction(window.currentCmTargetId);
-	this.listUpdater._continue();
 }
 Tab.prototype.onClickPaste = function() {
 	this.copyPaste.pasteAction();
@@ -671,7 +665,6 @@ Tab.prototype.onClickRemove = function() {
 		keys = array_keys(this.oSelectionItems);
 		
 		SZ = sz(keys);
-		this.listUpdater.run();
 		ival = setInterval(function(){
 			var id, j;
 			if (i >= SZ) {
