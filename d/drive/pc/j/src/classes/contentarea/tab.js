@@ -1,4 +1,4 @@
-// TODO надо добавить нативный скроллинг, а потом всё остальное. Но можно попробовать выпилить апдейтер сначала.
+// TODO надо добавить нативный скроллинг, а потом всё остальное.
 function Tab() {
 	var o = this;
 	this.cName = 'tabContentItem';
@@ -27,7 +27,7 @@ function Tab() {
 	*/
 }
 
-Tab.prototype.setPath = function(path) {
+Tab.prototype.setPath = function(path, fid) {
 	var o = this,
 		pathInfo = pathinfo(path);
 	o.currentPath = path;
@@ -42,8 +42,13 @@ Tab.prototype.setPath = function(path) {
 	o.hideListComplete = false;
 	o.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	
+	console.log("Tab.setPath:", path);
+	
 	appSetTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
 	if (o.isSpecialTab()) {
+		return;
+	}
+	if (!app.isActive) {
 		return;
 	}
 		
@@ -64,7 +69,7 @@ Tab.prototype.setPath = function(path) {
 	
 	// jexec(slot, [this, this.onFileList], [this, this.onFileListPart], DevNull);
 	// TODO c && m 
-	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=158&m=0", o.onFailGetList, o);
+	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=" + fid + "&m=0", o.onFailGetList, o);
 	
 }
 
@@ -84,6 +89,7 @@ Tab.prototype.onFileList = function(data) {
 	o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
 	o.listCount += 2;
 	o.renderByMode();// TODO
+	onResize();
 }
 
 Tab.prototype.isHidden = function(s) {
@@ -174,17 +180,35 @@ Tab.prototype.buildList = function(data, calcDirSizes) {
 	return dirs;
 }
 
-Tab.prototype.unpackHexSz = function(n) {
+Tab.prototype.unpackHexSz = function(n, skipHuman) {
 	var a = String(n).split('g'), i, r, SZ;
 	SZ = sz(a);
 	for (i = 0; i < SZ - 1; i++) {
 		a[i] = parseInt(a[i], 16);
 	}
 	
-	if (SZ > 2) {
-		r = TextFormatU.money(S(a[0])) + ',' + a[1] + ' ' + a[2];
+	if (!skipHuman) {
+		if (SZ > 2) {
+			r = TextFormatU.money(S(a[0])) + ',' + a[1] + ' ' + a[2];
+		} else {
+			r = TextFormatU.money(S(a[0])) + ' ' + a[1];
+		}
 	} else {
-		r = TextFormatU.money(S(a[0])) + ' ' + a[1];
+		r = parseFloat(S(a[0])) + '.' + (a[1] ? a[1] : '0');
+		if (SZ > 2) {
+			switch(a[2]) {
+				case "Kb":
+					r *= 1024;
+					break;
+				case "Mb":
+					r *= 1024*1024;
+					break;
+				case "Gb":
+					r *= 1024*1024*1024;
+					break;
+			}
+			r = round(r);
+		}
 	}
 	
 	return r;
@@ -196,11 +220,11 @@ Tab.prototype.getClickedItem = function(id) {
 	return this.list[id];
 }
 
-Tab.prototype.renderByMode = function(skipCheckCount) {
+Tab.prototype.renderByMode = function() {
 	var o = this, list = o.list, i, SZ = sz(list), item, s, block;
 	o.oSelectionItems = {};
 	
-	if (o.listCount != 2 && !skipCheckCount) {
+	if (o.listCount != 2) {
 		return;
 	}
 	
@@ -210,12 +234,7 @@ Tab.prototype.renderByMode = function(skipCheckCount) {
 		list = o.list;
 		SZ = sz(list);
 	}
-	if (skipCheckCount) {
-		// TODO --
-		o.listRenderer.skipRunUpdater = true;
-	}
-	console.log("TODO before listRenderer.run");
-	this.listRenderer.run(SZ, this, list, 0);
+	this.listRenderer.run(SZ, o, list, 0);
 }
 Tab.prototype.onClickItem = function(evt) {
 	var trg = ctrg(evt),
@@ -229,7 +248,7 @@ Tab.prototype.onClickItem = function(evt) {
 	this.setSelection(evt);
 	
 	if (ct - this.clicktime > 50 && ct - this.clicktime < 400 && trg.id == this.currentTargetId) {
-		this.openAction(trg.id);
+		this.openAction(trg.id, attr(trg.firstChild, "data-d"));
 	} else {
 		targetModel = this.getClickedItem(trg.id);
 		if (targetModel) {
@@ -263,13 +282,15 @@ Tab.prototype.createItem = function(s) {
 			mt:'',
 			nSubdirs: 0,
 			i:'',
-			src: s
+			src: s,
+			id: 0
 		},
 		i, buf, a, typeData, o = this;
 	
 	item.name = s.name;
 	
-	item.rsz = o.unpackHexSz(s.s);
+	item.rsz = o.unpackHexSz(s.s, 1);
+	item.id = s.i;
 	if (s.type == 'c') {
 		item.type = L('Catalog');
 		item.i = window.root + '/i/folder32.png';
@@ -281,16 +302,15 @@ Tab.prototype.createItem = function(s) {
 		item.cmId = typeData.c;
 	}
 	
-	console.log("Was used devicesManager.pluralizeSize");
-	item.sz = item.rsz;
+	item.sz = o.unpackHexSz(s.s);
 	
 	item.o = USER;
 	item.g = USER;
 	
 	
 	//item.mt = a[5] + ' ' + a[6].split('.')[0];
-	item.mt = SqzDatetime.desqzDatetime(s.ct, 0);
-	ut = SqzDatetime.desqzDatetime(s.ut, 0);
+	item.mt = SqzDatetime.desqzDatetime(s.ct, 1);
+	ut = SqzDatetime.desqzDatetime(s.ut, 1);
 	item.mt = item.mt < ut ? ut : item.mt;
 	item.nSubdirs = s.qc;
 	
@@ -315,7 +335,7 @@ Tab.prototype.getUser = function(s) {
 	return this.username;
 }
 
-Tab.prototype.openAction = function(id) {
+Tab.prototype.openAction = function(id, fid) {
 	var item, path, cmd, slot, 
 		pathInfo, runner = 'xdg-open';
 	
@@ -323,7 +343,7 @@ Tab.prototype.openAction = function(id) {
 	path = this.currentPath + '/' + item.name;
 	pathInfo = pathinfo(path)
 	if (item.type == L('Catalog')) {
-		app.setActivePath(path, ['']);
+		app.setActivePath(path, [''], fid);
 	} else {
 		path = str_replace('//', '/', path);
 		cmd = '#!/bin/bash\n' + runner + ' \'' + path + '\'';
@@ -740,7 +760,7 @@ Tab.prototype.setStatus = function(s, showLoader) {
 }
 
 Tab.prototype.tpl = function() {
-	return '<div class="tabContentItem {active}" title="{name} id=f{id}">\
+	return '<div class="tabContentItem {active}" title="{name} id=f{id}" data-d="{did}">\
 						<div class="tabContentItemNameMain fl">\
 							<div class="tabContentItemIcon fl">\
 								<img class="imgTabContentItemIcon" src="{img}" onload="app.tab.onLoadPreview({id})">\
@@ -860,7 +880,7 @@ Tab.prototype.normalizeSelectionItems = function() {
 }
 
 Tab.prototype.onKeyDown = function(evt) {
-	var pathInfo;
+	var pathInfo, idData;
 	if (evt.keyCode == 40) {
 		this.onPushArrowDown(evt);
 		return;
@@ -881,27 +901,29 @@ Tab.prototype.onKeyDown = function(evt) {
 		
 	}
 	if (evt.keyCode == 13) {
-		this.openAction(this.getActiveItemId());
+		idData = this.getActiveItemId();
+		this.openAction(idData.domId, idData.fid);
 	}
 	if (MW.getLastKeyChar() != '' 
 		&& !this.isFilterBoxShown()
 		&& evt.keyCode != 27 
 		&& evt.keyCode != 13
+		&& evt.keyCode != 16
 		&& evt.keyCode != 9
 		&& evt.keyCode != 8
 		&& !evt.ctrlKey
 		&& MW.getLastKeyCode() != 16777223
 		&& app.isActive
 	) {
-		
+		console.log(evt.keyCode);
 		this.showFilterBox(MW.getLastKeyChar());
 		this.processFilterBoxInput();
-	}
+	} 
 }
 Tab.prototype.onPushArrowDown = function(evt) {
-	evt.preventDefault();
-	var id;
-	id = this.getActiveItemId();
+	//evt.preventDefault();
+	var id, o = this;
+	id = this.getActiveItemId().domId;
 	if (!id) {
 		id = 'f0';
 		this.setSelection({
@@ -910,19 +932,22 @@ Tab.prototype.onPushArrowDown = function(evt) {
 		}, !evt.shiftKey);
 	
 		this.scrollToItem(id);
-		return;
+		return true;
 	}
 	id = this.getNextId(id);
 	if (!id) {
-		return;
+		return true;
 	}
-	this.scrollToItem(id, true);
+	//this.scrollToItem(id, true);
 	if (e(id)) {
 		this.setSelection({
 			currentTarget: e(id),
 			shiftKey: evt.shiftKey
 		}, !evt.shiftKey);
 	}
+	
+	o.contentBlock.scrollBy(0, ListRenderer.ONE_ITEM_HEIGHT);
+	return true;
 }
 
 Tab.prototype.onScrollDown = function() {
@@ -967,16 +992,15 @@ Tab.prototype.onScrollUp = function() {
 }
 
 Tab.prototype.onPushArrowUp = function(evt) {
-	evt.preventDefault();
-	var id;
-	id = this.getActiveItemId();
+	var id, o = this;
+	id = this.getActiveItemId().domId;
 	if (!id) {
 		id = 'f0';
 		this.setSelection({
 			currentTarget: e(id),
 			shiftKey: evt.shiftKey
 		}, !evt.shiftKey);
-		this.scrollToItem(id);
+		// this.scrollToItem(id);
 		return;
 	}
 	id = this.getPrevId(id);
@@ -984,7 +1008,7 @@ Tab.prototype.onPushArrowUp = function(evt) {
 		return;
 	}
 	if (!evt.shiftKey) {
-		this.scrollToItem(id);
+		//this.scrollToItem(id);
 	}
 	if (e(id)) {
 		this.setSelection({
@@ -992,13 +1016,19 @@ Tab.prototype.onPushArrowUp = function(evt) {
 			shiftKey: evt.shiftKey
 		}, !evt.shiftKey);
 	}
-	
+	o.contentBlock.scrollBy(0, -1*ListRenderer.ONE_ITEM_HEIGHT);
 }
 Tab.prototype.getActiveItemId = function() {
+	var r = {};
 	if(!this.activeItem) {
-		return '';
+		r.domId = '';
+		r.fid = '';
+		return r;
 	}
-	return this.toI(this.activeItem.parentNode.id);
+	console.log("Tab.prototype.getActiveItemId:", this.activeItem);
+	r.domId = this.toI(this.activeItem.parentNode.id);
+	r.fid = intval(attr(this.activeItem, "data-d"));
+	return r;
 }
 
 Tab.prototype.getNextId = function(id) {
@@ -1023,30 +1053,8 @@ Tab.prototype.getPrevId = function(id) {
 }
 
 Tab.prototype.scrollToItem = function(id, toBtm) {
-	var line = e(id), nId = this.toI(id),
-		tabItems = this.contentBlock,
-		activeItemId;
-	if (!line) {
-		activeItemId = this.getActiveItemId();
-		if (!activeItemId) {
-			this.listRenderer.run(sz(this.list), this, this.list, nId, true);
-		} else {
-			if (toBtm) {
-				if (nId - activeItemId == 1) {
-					this.listRenderer.shiftDown(this.list[nId], nId);
-					return;
-				} else {
-					nId = nId - this.listRenderer.part + 1;
-					nId = nId >= 0 ? nId : 0;
-				}
-			} else if (nId - activeItemId == -1) {
-				this.listRenderer.shiftUp(this.list[nId], nId);
-				return;
-			}
-			
-			this.listRenderer.run(sz(this.list), this, this.list, nId, true);
-		}
-	}
+	id = this.toI(id);
+	this.contentBlock.scrollTo(0, id * ListRenderer.ONE_ITEM_HEIGHT);
 }
 
 Tab.prototype.isFilterBoxShown = function() {
@@ -1061,7 +1069,7 @@ Tab.prototype.showFilterBox = function(ch) {
 	filterBox = appendChild(body(), 'div', o.getFilterBoxHtml(ch), {"id": "hFilterBox", "style" : o.getFilterBoxStyle()});
 	input = e('hFilterBoxInput');
 	input.onkeydown = function(evt) {
-		if (evt.keyCode == 27) {
+		if (evt.keyCode in In(27, 40, 38)) {
 			evt.preventDefault();
 			rm("hFilterBoxInput");
 			rm("hFilterBox");

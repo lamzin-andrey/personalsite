@@ -188,6 +188,9 @@ function showLoader() {
 function hideLoader(screenId) {
 	screenId = screenId ? screenId : 'hCatalogScreen';
 	showScreen(screenId);
+	app.isActive = 1;
+	// TODO
+	app.setActivePath(path, [''], 0);
 }
 
 function setUpButtonDisable(bUp) {

@@ -79,8 +79,10 @@ function onResize() {
 	contentTopAreaH = (tabsContainer ? tabsContainer.offsetHeight : 0) + e('addressContainer').offsetHeight;
 	if (e('tabItems')) {
 		e('tabItems').style.height = (vpH - contentTopAreaH - 1.7*dY) + 'px';
+		e('tabItems').style["max-height"] = (vpH - contentTopAreaH - 1.7*dY) + 'px';
 		// resizeTabItemsWidth();
 		e('tabItems').style.height = (e('contentArea').offsetHeight - contentTopAreaH - 0.7*dY) + 'px';
+		e('tabItems').style["max-height"] = (e('contentArea').offsetHeight - contentTopAreaH - 0.7*dY) + 'px';
 	}
 	app.onResize();
 	
@@ -107,7 +109,9 @@ function onKeyUp(evt) {
 			onPaste();
 		}
 		if (65 == evt.keyCode || 1060 == MW.getLastKeyCode()) {
+			evt.preventDefault();
 			app.tab.selectAll();
+			return;
 		}
 		if (88 == evt.keyCode || 1063 == MW.getLastKeyCode()) {
 			app.tab.onClickCut();

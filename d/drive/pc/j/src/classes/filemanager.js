@@ -13,9 +13,7 @@ FileManager.prototype.init = function() {
 	o.isActive = false;
 	
 	this.setMainMenu();
-	/*this.scrollIval = setInterval(function(){
-		o.watchScrollX();
-	}, 42);*/
+	
 	
 	e('tabItems').onscroll = function(){
 		o.actualizeScrollX();
@@ -30,13 +28,13 @@ FileManager.PRODUCT_LABEL = 'WebUSB - ещё один ваш гигабайт в облаке';
  * @param {String} path
  * @param {Array} aExcludes - идентификатор(ы) элементов управления, для которых не надо применять setPath
 */
-FileManager.prototype.setActivePath = function(path, aExcludes) {
+FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
 	var emitter = aExcludes[0];
 	if (emitter != 'navbarPanelManager') {
 		this.tab.navbarPanelManager.setPath(path);
 	}
 	if (emitter != 'tab') {
-		this.tab.setPath(path);
+		this.tab.setPath(path, fid);
 	}
 	if (emitter != 'bookmarksManager') {
 		this.bookmarksManager.setPath(path);
@@ -99,6 +97,7 @@ FileManager.prototype.onResize = function() {
 	this.setTabWidths();
 	this.setAddressLineWidth();
 	this.setSidebarScrollbar();
+	//this.setSidebarScrollbar();
 }
 FileManager.prototype.setTabWidths = function() {
 	if (!e('tabContentHeaderDate')) {

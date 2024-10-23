@@ -1,5 +1,4 @@
 function ListRenderer(){
-	this.iterator = 0;
 	this.context = null;
 	this.sz = 0;
 	this.part = 0;
@@ -12,48 +11,26 @@ function ListRenderer(){
 ListRenderer.ONE_ITEM_HEIGHT = 30;
 
 ListRenderer.prototype.renderPart = function(){
-	var start = this.iterator,
-		end = intval(this.iterator) + this.part, i, j,
+	var start = 0,
+		end = sz(this.ls), i, j,
 		item, block, s,
-		done = true,
+		done = 1,
 		o, self = this,
 		statusText, freeSpaceText = '', sizeText = '',
 		cmId,
 		createdItemFound = -1, el, domLs, domEl;
-	if (end >= this.sz) {
-		end = this.sz;
-	}
 	domLs = cs(this.context.contentBlock, this.context.cName);
-	this.context.setStatus.call(this.context, this.iterator + ' / ' + this.sz, 1);
 	o = this.context;
 	for (i = start, j = 0; i < end; i++, j++) {
 		item = this.ls[i];
 		domEl = domLs[j];
-		// if (!domEl) {
-			el = this.appendNew(i, item);
-		/*} else {
-			this.updateItem(i, item, domEl);
-			el = domEl;
-		}*/
+		el = this.appendNew(i, item);
 		
-		if (i == start) {
-			this.firstRenderedEl = el;
-		}
-		if (i == end - 1) {
-			this.lastRenderedEl = el;
-		}
 		if (item.name == app.tab.createdItemName) {
 			createdItemFound = i;
 		}
 		
-		this.iterator++;
 	}
-	/*while (j < sz(domLs)) {
-		domLs[j].removeAttribute('id');
-		stl(domLs[j], 'display', 'none');
-		j++;
-	}*/
-	// this.setStatus();
 	if (createdItemFound > -1) {
 		app.tab.selectItemByIdx(createdItemFound);
 	}
@@ -77,34 +54,23 @@ ListRenderer.prototype.renderPart = function(){
 						+ freeSpaceText;
 		this.context.setStatus.call(this.context, statusText);
 		
-		if (!this.dfProc) {
-			this.dfProc = 1;
-			jexec('df -h', [this, this.onDiskData], DevNull, DevNull);
-		}
 	}
 }
 
-ListRenderer.prototype.onDiskData = function(stdout, stderr){
-	// Was update disk list
-}
 
 ListRenderer.prototype.run = function(sz, context, ls, firstItemIdx, skipCalcSize){
-	/*if (this.processing) {
-		return false;
-	}*/
-	context.contentBlock.innerHTML = '';
-	this.iterator = firstItemIdx;
-	this.context = context;
-	this.sz = sz;
-	this.ls = ls;
-	if (!skipCalcSize) {
-		this.filesSize = 0;
-	}
-	this.skipCalcSize = skipCalcSize;
-	
 	var o = this;
-	this.processing = true;
-	this.calculatePart();
+	
+	context.contentBlock.innerHTML = '';
+	o.context = context;
+	o.sz = sz;
+	o.ls = ls;
+	if (!skipCalcSize) {
+		o.filesSize = 0;
+	}
+	o.skipCalcSize = skipCalcSize;
+	
+	o.processing = true;
 	o.renderPart();
 	
 	return true;
@@ -163,6 +129,7 @@ ListRenderer.prototype.createElement = function(item, i) {
 	s = s.replace('{active}', active);
 	s = s.replace('{id}', i);
 	s = s.replace('{id}', i);
+	s = s.replace('{did}', item.id);
 	block = appendChild(this.context.contentBlock, 'div', s, {
 		'data-cmid': item.cmId,
 		'data-id': "f" + i,
@@ -259,64 +226,5 @@ ListRenderer.prototype.appendNew = function(i, item) {
 	return block;
 }
 
-ListRenderer.prototype.calculatePart = function() {
-	this.part = Math.ceil(this.context.contentBlock.offsetHeight / ListRenderer.ONE_ITEM_HEIGHT) - 1;
-	
-}
 
-ListRenderer.prototype.shiftDown = function(itemData, nId) {
-	var firstItem, ls, el;
-	el = this.appendNew(nId, itemData);
-	this.lastRenderedEl = el;
-	ls = cs(this.context.contentBlock, this.context.cName);
-	firstItem = ls[0];
-	if (firstItem) {
-		this.firstRenderedEl = ls[1].parentNode;
-		rm(firstItem.parentNode);
-	}
-	/*var firstItem, ls, el, start, i, j;
-	ls = cs(this.context.contentBlock, this.context.cName);
-	firstItem = ls[0];
-	// alert(this.context.toI(firstItem.parentNode.id));
-	start = intval(this.context.toI(firstItem.parentNode.id)) + 1;
-	for (i = start, j = 0; j < sz(ls); i++, j++) {
-		if (this.context.list[i] && ls[j]) {
-			this.updateItem(i, this.context.list[i], ls[j].parentNode);
-		} else if (!this.context.list[i] && ls[j]) {
-			ls[j].removeAttribute('id');
-			stl(ls[j], 'display', 'none');
-		}
-		
-	}*/
-}
 
-ListRenderer.prototype.shiftUp = function(itemData, nId) {
-	var ls = cs(this.context.contentBlock, this.context.cName),
-		firstItem = ls[0],
-		lastItem = ls[sz(ls) - 1],
-		newItem;
-	if (lastItem) {
-		this.lastRenderedEl = ls[sz(ls) - 2].parentNode;
-		rm(lastItem.parentNode);
-	}
-	if (firstItem) {
-		newItem = this.createElement(itemData, nId);
-		insertBefore(firstItem.parentNode, newItem);
-		this.setListeners(newItem);
-		this.firstRenderedEl = newItem;
-	}
-	/*var firstItem, ls, el, start, i, j;
-	ls = cs(this.context.contentBlock, this.context.cName);
-	firstItem = ls[0];
-	// alert(this.context.toI(firstItem.parentNode.id));
-	start = intval(this.context.toI(firstItem.parentNode.id)) - 1;
-	for (i = start, j = 0; j < sz(ls); i++, j++) {
-		if (this.context.list[i] && ls[j]) {
-			this.updateItem(i, this.context.list[i], ls[j].parentNode);
-		} else if (!this.context.list[i] && ls[j]) {
-			ls[j].removeAttribute('id');
-			stl(ls[j], 'display', 'none');
-		}
-		
-	}*/
-}
