@@ -15,11 +15,14 @@ window.HttpQueryString = {
 		var a, i, GET = {}, aB;
 		a = s.split('#');
 		a = a[0].split('?');
-		a = String(a[1]).split('&');
-		for (i = 0; i < a.length; i++) {
-			aB = a[i].split('=');
-			GET[aB[0]] = aB[1];
+		if (a.length > 1) {
+			a = String(a[1]).split('&');
+			for (i = 0; i < a.length; i++) {
+				aB = a[i].split('=');
+				GET[aB[0]] = aB[1];
+			}
 		}
+		
 		return GET;
 	},
 	/**

@@ -15,8 +15,11 @@ class SwaggerCalcUI {
 	
 	onClickCaculate(ev){
 		let o = this, r;
-		r  =  o.calc.process(v('iMethod'), v('iUrl'), v('iJson'));
+		r  =  o.calc.processResponse200(v('iMethod'), v('iUrl'), v('iJson'));
 		v('iYamlResp200', r);
+		r  =  o.calc.processParameters(v('iMethod'), v('iUrl'), v('iJsonRequest'));
+		v('iYamlConcreteParameters', r["concreteProps"]);
+		v('iYamlParameters', r["props"]);
 	}
 }
 
