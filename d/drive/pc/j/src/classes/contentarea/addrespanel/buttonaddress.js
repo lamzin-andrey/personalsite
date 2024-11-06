@@ -256,11 +256,10 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 	var o, path = '/', imgSrc = '', imgClass = '', title, addClass = '';
 	
 	path = aPath.join('/');
-	if (!name && path == "") {
-		name = "";
+	if (name == USER) {
 		title = L("Filesystem");
-		path = '/';
-		imgSrc = App.dir() + "/i/hdd_mount32.png";
+		path = USER;
+		imgSrc = App.dir() + "/i/usb32.png";
 		imgClass = "addressButtonIcon";
 	} else {
 		console.log(aPath, path);
