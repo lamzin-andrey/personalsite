@@ -30,6 +30,9 @@ FileManager.PRODUCT_LABEL = 'WebUSB - ещё один ваш гигабайт в облаке';
 */
 FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
 	var emitter = aExcludes[0];
+	
+	path = path.replace("/home/", "");
+	
 	if (emitter != 'navbarPanelManager') {
 		this.tab.navbarPanelManager.setPath(path);
 	}
@@ -69,11 +72,8 @@ FileManager.prototype.onGetActualEnv = function() {
 			this.bookmarksManager.setUser(USER);
 			this.bookmarksManager.run();
 			this.tab.setUser(USER);
-			//try {
-				window.app.setActivePath('/home/' + USER, ['']);
-			/*} catch (err) {
-				alert(err);
-			}*/
+			window.app.setActivePath('/home/' + USER, ['']);
+			
 		}
 	}
 }
@@ -172,13 +172,9 @@ FileManager.prototype.corectTabWidth = function() {
 }
 
 FileManager.prototype.setColWidth = function(nameColWidth, dateColWidth) {
-	//try {
-		this.setColNameWidth(nameColWidth);
-		this.setColDateWidth(dateColWidth);
-		this.actualizeScrollX();
-	/*} catch(err) {
-		alert(err);
-	}*/
+	this.setColNameWidth(nameColWidth);
+	this.setColDateWidth(dateColWidth);
+	this.actualizeScrollX();
 }
 
 FileManager.prototype.setColNameWidth = function(nameColWidth) {

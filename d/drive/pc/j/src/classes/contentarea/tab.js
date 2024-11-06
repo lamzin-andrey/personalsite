@@ -42,6 +42,9 @@ Tab.prototype.setPath = function(path, fid) {
 	o.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	
 	console.log("Tab.setPath:", path);
+	if (path == "/wcard") {
+		throw Error("dbg");
+	}
 	
 	appSetTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
 	if (o.isSpecialTab()) {
@@ -406,11 +409,7 @@ Tab.prototype.exec = function(cmd, src, dest, onFinish, onStd, onErr) {
 }
 
 Tab.prototype.onClickNewFolder = function() {
-	try {
-		this.newFolderAction();
-	} catch(err) {
-		alert(err);
-	}
+	this.newFolderAction();
 }
 
 Tab.prototype.onClickNewFile = function() {
@@ -703,15 +702,13 @@ Tab.prototype.onClickRemove = function() {
 				return;
 			}
 			id = keys[i].replace('f', '');
-			try {
-				if (o.list[id]) {
-					path = o.currentPath + "/" + o.list[id].name;
-					o.removeOneItem(path, e(keys[i]));
-					deletedKeys.push(keys[i]);
-				}
-			} catch(err) {
-				alert(err);
+			
+			if (o.list[id]) {
+				path = o.currentPath + "/" + o.list[id].name;
+				o.removeOneItem(path, e(keys[i]));
+				deletedKeys.push(keys[i]);
 			}
+			
 			i++;
 		}, 100);
 	}
@@ -1246,11 +1243,7 @@ Tab.prototype.onMouseWheel = function(evt) {
 	}
 	this.scrollWheelProc = 1;
 	if (evt.wheelDeltaY < 0) {
-		try {
-			this.onScrollDown();
-		} catch(err) {
-			alert(err);
-		}
+		this.onScrollDown();
 	} else {
 		this.onScrollUp();
 	}

@@ -2,42 +2,29 @@ window.SCROLL_LINE_HEIGHT = 18;
 window.VERTICAL_SCROLL_COUNT = 1;
 function main() {
 	window.AppStartTime = time();
-	try {
-		var lang = Settings.get('currentLang');
-		if (lang != 'ru' && lang != 'en') {
-			lang = 'ru';
-		}
-	} catch (err) {
-		alert(err);
+	
+	var lang = Settings.get('currentLang');
+	if (lang != 'ru' && lang != 'en') {
+		lang = 'ru';
 	}
+	
 	Qt.setWindowIconImage(Qt.appDir() + '/i/folder32.png');
 	Qt.maximize();
 	
 	
 	
-	//try {
-		window.app = new FileManager();
-		window.app.init();
-	/*} catch(err) {
-		alert(err);
-	}/**/
+	
+	window.app = new FileManager();
+	window.app.init();
+	
 	initApp();
 	
 	if (lang == 'ru' || lang == 'en') {
 		onClickChangeLang(lang);
 	}
-	/*setTimeout( function(){
-		showScreen("fmgr");
-	}, 1000);*/
-	
-	try {
-		window.onresize = onResize;
-		window.onkeydown = onKeyUp;
-		onResize();
-	} catch(err) {
-		//TODO 
-		console.log(err);
-	}
+	window.onresize = onResize;
+	window.onkeydown = onKeyUp;
+	onResize();
 	//showScreen("fmgr");
 }
 
@@ -240,12 +227,10 @@ function onClickSelectRu() {
 
 function onClickChangeLang(lang) {
 	var s;
-	try {
-		console.log("here may be In itSearch...");
-		//Search.init();
-	} catch(err) {
-		alert(err);
-	}
+	
+	console.log("here may be In itSearch...");
+	//Search.init();
+	
 	
 	if ('ru' == lang) {
 		storage('lang', 'langRu');

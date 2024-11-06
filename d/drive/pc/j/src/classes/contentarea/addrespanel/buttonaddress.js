@@ -10,11 +10,31 @@ function ButtonAddress(){
 	this.currentId = 0;
 }
 ButtonAddress.prototype.setPath = function(s, id){
-	this.stack.push(id);
+	this.push(id);
 	this.currentPath = s;
 	this.currentId = id;
 	this.buttonsData = this.createButtonsData(s);
 	this.render();
+}
+ButtonAddress.prototype.push = function(id){
+	var i, SZ, o = this;
+	if (isU(id)) {
+		return;
+	}
+	SZ = sz(o.stack);
+	if (SZ == 0) {
+		o.stack.push(id);
+		return;
+	}
+	for (i = 0; i < SZ; i++) {
+		if (o.stack[i] == o.currentId) {
+			o.stack[i + 1] = id;
+			o.stack.splice(i + 2);
+			break;
+		}
+	}
+	
+	
 }
 // TODO also call it on resize
 ButtonAddress.prototype.render = function(){
@@ -58,7 +78,7 @@ ButtonAddress.prototype.renderButtonsData = function(noAll){
 			"class": "addressButton" + (a[i].addClass ? (' ' + a[i].addClass) : ''),
 			"id": ("tb" + j),
 			"title" : (a[i].title ? (' ' + a[i].title) : ''),
-			"data-fid": (a[i].fid ? a[i].fid : -1)
+			"data-fid": (a[i].fid ? a[i].fid : 0)
 		});
 		if (a[i].isLeftButton) {
 			btn.onclick = function(evt){
@@ -178,20 +198,29 @@ ButtonAddress.prototype.onClickLeftButton = function(evt) {
 }
 
 ButtonAddress.prototype.onClickButton = function(evt) {
-	var trg = ctrg(evt), id, path, i, SZ = sz(this.buttonsData) + 2,
+	var o = this, trg = ctrg(evt), id, path, i, SZ = sz(o.buttonsData) + 2,
 		fid = attr(trg, "data-fid");
 	id = trg.id.replace("tb", '');
-	path = this.buttonsData[id].path;
-	// alert(id + ', p = ' + path);
+	path = o.buttonsData[id].path;
 	
 	for (i = 0; i < SZ; i++) {
 		if (e("tb" + i)) {
-			removeClass(e("tb" + i), this.activeButtonClass);
+			removeClass(e("tb" + i), o.activeButtonClass);
 		}
 	}
-	addClass(trg, this.activeButtonClass);
+	addClass(trg, o.activeButtonClass);
 	if (path) {
+		o.currentId = fid;
 		window.app.setActivePath(path, ['addresspanel'], fid);
+		SZ = sz(o.buttonsData);
+		for (i = 0; i < SZ; i++) {
+			if (o.buttonsData[i].fid == fid) {
+				trg  = "addressButtonActive";
+			} else {
+				trg  = "";
+			}
+			o.buttonsData[i].addClass  = trg;
+		}
 	}
 }
 
@@ -199,8 +228,8 @@ ButtonAddress.prototype.createButtonsData = function(s){
 	var a, i, SZ, r = [], item, p = [],
 		j, stack, diffJ, cid;
 	s = s.replace('//', '/');
-	
 	a = s.split("/");
+	
 	if (s == "/"){
 		a.splice(1, 1);
 	}
@@ -211,7 +240,7 @@ ButtonAddress.prototype.createButtonsData = function(s){
 	
 	for (i = 0; i < SZ; i++) {
 		p.push(a[i]);
-		cid = -1;
+		cid = 0;
 		if (i >= diffJ) {
 			cid = stack[i - diffJ];
 		}
@@ -244,6 +273,7 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 		imgSrc = App.dir() + "/i/home32.png";
 		imgClass = "addressButtonIcon";
 	}
+	console.log("activeBtn", window.app.tab.currentPath, path);
 	if (path == window.app.tab.currentPath) {
 		addClass = "addressButtonActive";
 	}

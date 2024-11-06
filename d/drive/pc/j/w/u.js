@@ -43,7 +43,7 @@ function getAuthState() {
 	Rest._get(onSuccessGetAuthState, br + '/dast.json', onFailGetAuthState);
 }
 function onSuccessGetAuthState(data) {
-	try {
+	
 		if (!onFailGetAuthState(data)) {
 			return;
 		}
@@ -63,9 +63,7 @@ function onSuccessGetAuthState(data) {
 		// TODO call for qdjsFM window.fileList.loadCurrentDir();
 		// ? showScreen('hRegisterEScreen');
 		hideLoader();
-	} catch(err) {
-		alert(err);
-	}
+	
 }
 function showMessage(s) {
 	v('hAlertMessage', s);
@@ -190,7 +188,12 @@ function hideLoader(screenId) {
 	showScreen(screenId);
 	app.isActive = 1;
 	// TODO
+	window.USER = window.USER ? window.USER : storage("username");
+	path = "/home/" + USER;
 	app.setActivePath(path, [''], 0);
+	
+	clearInterval(window.bootSe2d.mainInterval);
+	clearInterval(window.bootSe2d.app.logoRtIval);
 }
 
 function setUpButtonDisable(bUp) {
