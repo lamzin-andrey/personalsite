@@ -73,7 +73,7 @@ Bookmarks.prototype.addItem = function(user, name, locale, displayName, userCmId
 		srcName = name;
 	if (!name) {
 		item.displayName = user;
-		item.icon = App.dir() + '/i/home32.png';
+		item.icon = App.dir() + '/i/usb32.png';
 		item.path = '/home/' + user;
 		item.stack = [];
 		item.fid = 0;
