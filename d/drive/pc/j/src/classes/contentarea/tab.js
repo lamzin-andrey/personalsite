@@ -1,4 +1,3 @@
-// TODO надо добавить нативный скроллинг, а потом всё остальное.
 function Tab() {
 	var o = this;
 	this.cName = 'tabContentItem';
@@ -68,7 +67,7 @@ Tab.prototype.setPath = function(path, fid) {
 	}
 	
 	// jexec(slot, [this, this.onFileList], [this, this.onFileListPart], DevNull);
-	// TODO c && m 
+	// TODO  m=?
 	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=" + fid + "&m=0", o.onFailGetList, o);
 	
 }

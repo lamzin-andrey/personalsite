@@ -40,7 +40,7 @@ FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
 		this.bookmarksManager.setPath(path);
 	}
 	if (emitter != 'addresspanel') {
-		this.addressPanel.setPath(path);
+		this.addressPanel.setPath(path, fid);
 	}
 	if (emitter != 'tabpanel') {
 		this.tabPanel.setPath(path);

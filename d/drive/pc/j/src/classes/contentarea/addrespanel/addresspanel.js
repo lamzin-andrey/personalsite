@@ -4,9 +4,9 @@ function AddressPanel() {
 	this.textAddress     = new TextAddress();
 	this.addressSwitcher = new AddressSwitcher(this.textAddress, this.buttonAddress);
 }
-AddressPanel.prototype.setPath = function(s) {
-	this.buttonAddress.setPath(s);
-	this.textAddress.setPath(s);
+AddressPanel.prototype.setPath = function(s, id) {
+	this.buttonAddress.setPath(s, id);
+	this.textAddress.setPath(s); // TODO  remove
 }
 
 AddressPanel.prototype.resize = function(s) {

@@ -3,8 +3,6 @@ class SwaggerCalc {
         this.bus = ctx;
     }
     
-    
-    
     processParameters(method, url, json) {
         let o = this, parameters, concreteParameters,
 			props = [], propsText = "", capName,
@@ -78,6 +76,11 @@ class SwaggerCalc {
             propText = propTpl.replace("{{name}}", name);
             propText = propText.replace("{{type}}", type);
             propText = propText.replace("{{value}}", value);
+            if (type == "TODO null") {
+				propText = propText.replace("{{nullable}}", "\n  nullable: true");
+			} else {
+				propText = propText.replace("{{nullable}}", "");
+			}
             props.push(propText);
         }
         propText = props.join("\n", props);
@@ -102,6 +105,10 @@ class SwaggerCalc {
 		
 		if (vl instanceof Object) {
 			return "object";
+		}
+		
+		if (String(vl) == "null") {
+			return "TODO null";
 		}
 		
 		return "string";
@@ -184,7 +191,7 @@ class SwaggerCalc {
     responseOnePropertyTpl() {
         return `{{name}}:
   type: {{type}}
-  example: {{value}}
+  example: {{value}}{{nullable}}
   description: TODO`;
     }
     

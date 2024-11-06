@@ -6,10 +6,13 @@ function ButtonAddress(){
 	this.buttonsDataForRender = [];
 	this.placer = e('addressButtonPlacer');
 	this.activeButtonClass = "addressButtonActive";
+	this.stack = [];
+	this.currentId = 0;
 }
-ButtonAddress.prototype.setPath = function(s){
-	// alert('BA setP = ' + s);
+ButtonAddress.prototype.setPath = function(s, id){
+	this.stack.push(id);
 	this.currentPath = s;
+	this.currentId = id;
 	this.buttonsData = this.createButtonsData(s);
 	this.render();
 }
@@ -54,19 +57,20 @@ ButtonAddress.prototype.renderButtonsData = function(noAll){
 		btn = appendChild(parent, "div", s, {
 			"class": "addressButton" + (a[i].addClass ? (' ' + a[i].addClass) : ''),
 			"id": ("tb" + j),
-			"title" : (a[i].title ? (' ' + a[i].title) : '')
+			"title" : (a[i].title ? (' ' + a[i].title) : ''),
+			"data-fid": (a[i].fid ? a[i].fid : -1)
 		});
 		if (a[i].isLeftButton) {
 			btn.onclick = function(evt){
-				return o.onClickLeftButton(evt); // TODO
+				return o.onClickLeftButton(evt);
 			}
 		} else if (a[i].isRightButton) {
 			btn.onclick = function(evt){
-				return o.onClickRightButton(evt); // TODO
+				return o.onClickRightButton(evt);
 			}
 		} else {
 			btn.onclick = function(evt){
-				return o.onClickButton(evt); // TODO
+				return o.onClickButton(evt);
 			}
 		}
 		w += btn.offsetWidth + 4.5;
@@ -174,7 +178,8 @@ ButtonAddress.prototype.onClickLeftButton = function(evt) {
 }
 
 ButtonAddress.prototype.onClickButton = function(evt) {
-	var trg = ctrg(evt), id, path, i, SZ = sz(this.buttonsData) + 2;
+	var trg = ctrg(evt), id, path, i, SZ = sz(this.buttonsData) + 2,
+		fid = attr(trg, "data-fid");
 	id = trg.id.replace("tb", '');
 	path = this.buttonsData[id].path;
 	// alert(id + ', p = ' + path);
@@ -185,16 +190,14 @@ ButtonAddress.prototype.onClickButton = function(evt) {
 		}
 	}
 	addClass(trg, this.activeButtonClass);
-	
-	
 	if (path) {
-		window.app.setActivePath(path, ['addresspanel']);
+		window.app.setActivePath(path, ['addresspanel'], fid);
 	}
-	
 }
 
 ButtonAddress.prototype.createButtonsData = function(s){
-	var a, i, SZ, r = [], item, p = [];
+	var a, i, SZ, r = [], item, p = [],
+		j, stack, diffJ, cid;
 	s = s.replace('//', '/');
 	
 	a = s.split("/");
@@ -202,16 +205,25 @@ ButtonAddress.prototype.createButtonsData = function(s){
 		a.splice(1, 1);
 	}
 	SZ = sz(a);
+	
+	stack = mclone(this.stack);
+	diffJ = SZ - sz(stack);
+	
 	for (i = 0; i < SZ; i++) {
 		p.push(a[i]);
-		item = this.createButtonDataItem(a[i], p);
+		cid = -1;
+		if (i >= diffJ) {
+			cid = stack[i - diffJ];
+		}
+		
+		item = this.createButtonDataItem(a[i], p, cid);
 		r.push(item);
 	}
 	
 	return r;
 }
 
-ButtonAddress.prototype.createButtonDataItem = function(name, aPath){
+ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 	var o, path = '/', imgSrc = '', imgClass = '', title, addClass = '';
 	
 	path = aPath.join('/');
@@ -242,7 +254,8 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath){
 		path: path,
 		addClass: addClass,
 		imgClass: imgClass,
-		imgSrc: imgSrc
+		imgSrc: imgSrc,
+		fid: currentId
 	};
 	
 	return o;
