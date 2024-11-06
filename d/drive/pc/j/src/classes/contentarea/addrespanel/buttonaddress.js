@@ -219,7 +219,7 @@ ButtonAddress.prototype.onClickButton = function(evt) {
 			} else {
 				trg  = "";
 			}
-			o.buttonsData[i].addClass  = trg;
+			o.buttonsData[i].addClass = trg;
 		}
 	}
 }

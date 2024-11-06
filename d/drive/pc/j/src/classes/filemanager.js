@@ -33,17 +33,20 @@ FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
 	
 	path = path.replace("/home/", "");
 	
+	
+	if (emitter != 'addresspanel') {
+		this.tab.currentPath = path;
+		this.addressPanel.setPath(path, fid);
+	}
+	
 	if (emitter != 'navbarPanelManager') {
-		this.tab.navbarPanelManager.setPath(path);
+		this.tab.navbarPanelManager.setPath(path, fid);
 	}
 	if (emitter != 'tab') {
 		this.tab.setPath(path, fid);
 	}
 	if (emitter != 'bookmarksManager') {
-		this.bookmarksManager.setPath(path);
-	}
-	if (emitter != 'addresspanel') {
-		this.addressPanel.setPath(path, fid);
+		this.bookmarksManager.setPath(path, fid);
 	}
 	if (emitter != 'tabpanel') {
 		this.tabPanel.setPath(path);

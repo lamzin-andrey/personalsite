@@ -38,8 +38,12 @@ Bookmarks.prototype.run = function() {
 
 Bookmarks.prototype.onClick = function(event) {
 	var trg = ctrg(event),
-		n = str_replace(this.itemIdPrefix, '', trg.id);
-	app.setActivePath(this.list[n].path, 'bookmarksManager');
+		o = this,
+		n = str_replace(o.itemIdPrefix, '', trg.id);
+	
+	app.addressPanel.buttonAddress.stack = mclone(o.list[n].stack);
+	//app.addressPanel.buttonAddress.currentId = o.list[n].fid;
+	app.setActivePath(o.list[n].path, 'bookmarksManager', o.list[n].fid);
 }
 
 
@@ -47,12 +51,6 @@ Bookmarks.prototype.createList = function(locale, user) {
 	var userBookmarks = [], i, SZ = 0;
 	this.list = [];
 	this.addItem(user, '', locale, '', '', 'cmBmSysMenu');
-	this.addItem(user, 'Downloads', locale, '', '', 'cmBmSysMenu');
-	this.addItem(user, 'Desktop', locale, '', '', 'cmBmSysMenu');
-	this.addItem(user, 'Documents', locale, '', '', 'cmBmSysMenu');
-	this.addItem(user, 'Music', locale, '', '', 'cmBmSysMenu');
-	this.addItem(user, 'Images', locale, '', '', 'cmBmSysMenu');
-	this.addItem(user, 'Videos', locale, '', '', 'cmBmSysMenu');
 	
 	userBookmarks = this.readUserBookmarks();
 	// alert(JSON.stringify(userBookmarks));
@@ -69,13 +67,17 @@ Bookmarks.prototype.addItem = function(user, name, locale, displayName, userCmId
 	var item = {
 			displayName : '',
 			icon: App.dir() + '/i/folder32.png',
-			path: ''
+			path: '',
+			stack: []
 		}, 
 		srcName = name;
 	if (!name) {
 		item.displayName = user;
 		item.icon = App.dir() + '/i/home32.png';
 		item.path = '/home/' + user;
+		item.stack = [];
+		item.fid = 0;
+		item.stack.push(0);
 		if (sysCmId) {
 			item.cmId = sysCmId;
 		}

@@ -54,9 +54,13 @@ NavbarPanel.prototype.setEnabled = function(img) {
 /**
  * Важно, никогда не вызывать здесь другие setPath
 */
-NavbarPanel.prototype.setPath = function(path) {
-	var s = path;
-	this.history.push(s);
+NavbarPanel.prototype.setPath = function(path, fid) {
+	var o = this, s = path, stack = mclone(app.addressPanel.buttonAddress.stack);
+	if (sz(o.history) == 1 && path == USER && o.history[0][0] == USER) {
+		return;
+	}
+	console.log("Set stack", stack);
+	this.history.push([s, fid, stack]);
 	this.historyIterator = sz(this.history) - 1;
 	
 	this.checkUpButtonState(s);
@@ -64,7 +68,7 @@ NavbarPanel.prototype.setPath = function(path) {
 	this.checkHistoryNavButtonsState(s);
 }
 NavbarPanel.prototype.checkUpButtonState = function(path) {
-	if ('/' == path) {
+	if (USER == path) {
 		this.setDisabled(this.btnUp);
 	} else {
 		this.setEnabled(this.btnUp);
@@ -77,42 +81,52 @@ NavbarPanel.prototype.checkHomeButtonState = function(path) {
 		this.setEnabled(this.btnHome);
 	}
 }
+
+NavbarPanel.prototype.isHome = function(n) {
+	return (n == 1 && this.history[0][0] == USER);
+}
+
 NavbarPanel.prototype.checkHistoryNavButtonsState = function(path) {
-	var SZ = sz(this.history);
-	if (SZ == 0) {
-		this.setDisabled(this.btnBack);
-		this.setDisabled(this.btnFwd);
+	var o = this, SZ = sz(o.history);
+	if (SZ == 0 || o.isHome(SZ)) { // TODO
+		o.setDisabled(o.btnBack);
+		o.setDisabled(o.btnFwd);
 	} else {
-		if (this.historyIterator == SZ - 1) {
-			this.setDisabled(this.btnFwd);
+		if (o.historyIterator == SZ - 1) {
+			o.setDisabled(o.btnFwd);
 		} else {
-			this.setEnabled(this.btnFwd);
+			o.setEnabled(o.btnFwd);
 		}
-		if (this.historyIterator == 0) {
-			this.setDisabled(this.btnBack);
+		if (o.historyIterator == 0) {
+			o.setDisabled(o.btnBack);
 		} else {
-			this.setEnabled(this.btnBack);
+			o.setEnabled(o.btnBack);
 		}
 	}
 }
 
 NavbarPanel.prototype.onClickFwd = function(evt) {
-	var n = this.historyIterator + 1, s;
+	var n = this.historyIterator + 1, s, p;
 	if (n <= sz(this.history) - 1) {
 		this.historyIterator++;
-		s = this.history[this.historyIterator];
-		app.setActivePath(s, ['navbarPanelManager']);
+		p = this.history[this.historyIterator];
+		s = p[0];
+		app.addressPanel.buttonAddress.stack = mclone(p[2]);
+		app.setActivePath(s, ['navbarPanelManager'], p[1]);
 		this.checkUpButtonState(s);
 		this.checkHomeButtonState(s);
 		this.checkHistoryNavButtonsState(s);
 	}
 }
 NavbarPanel.prototype.onClickBack = function(evt) {
-	var n = this.historyIterator - 1, s;
+	var n = this.historyIterator - 1, s, p, fid;
 	if (n > - 1) {
 		this.historyIterator--;
-		s = this.history[this.historyIterator];
-		app.setActivePath(s, ['navbarPanelManager']);
+		p = this.history[this.historyIterator];
+		s = p[0];
+		fid = p[1];
+		app.addressPanel.buttonAddress.stack = mclone(p[2]);
+		app.setActivePath(s, ['navbarPanelManager'], fid);
 		this.checkUpButtonState(s);
 		this.checkHomeButtonState(s);
 		this.checkHistoryNavButtonsState(s);
@@ -120,7 +134,9 @@ NavbarPanel.prototype.onClickBack = function(evt) {
 }
 
 NavbarPanel.prototype.onClickUp = function(evt) {
-	var s = this.history[this.historyIterator],
+	var p = this.history[this.historyIterator],
+		s = p[0],
+		fid = p[1],
 		a;
 	
 	a = s.split('/');
@@ -128,11 +144,13 @@ NavbarPanel.prototype.onClickUp = function(evt) {
 	if (sz(a) > 1) {
 		s = a.join('/');
 	} else {
-		s = '/';
+		s = USER;
 	}
 	
-	
-	app.setActivePath(s, ['']);
+	a = mclone(p[2]);
+	fid = a.pop();
+	app.addressPanel.buttonAddress.stack = mclone(a);
+	app.setActivePath(s, [''], a.pop());
 }
 
 NavbarPanel.prototype.onClickHome = function(evt) {
@@ -141,7 +159,9 @@ NavbarPanel.prototype.onClickHome = function(evt) {
 		return true;
 	}
 	
-	app.setActivePath(path, ['']);
+	app.addressPanel.buttonAddress.stack = [];
+	app.addressPanel.buttonAddress.stack[0] = 0;
+	app.setActivePath(path, [''], 0);
 }
 
 NavbarPanel.prototype.clearHistory = function(s) {
