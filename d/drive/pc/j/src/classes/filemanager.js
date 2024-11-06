@@ -237,6 +237,8 @@ FileManager.prototype.actualizeScrollX = function() {
  * Set unconstant main menu items
 */
 FileManager.prototype.setMainMenu = function() {
+	app.addressPanel.showButtonAddress();
+	return;
 	var mode = intval(Settings.get('hMode')), text, ival;
 	if (1 === mode) {
 		text = L('Hide hidden files Ctrl+H');

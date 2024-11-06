@@ -103,9 +103,8 @@ function onKeyUp(evt) {
 		if (88 == evt.keyCode || 1063 == MW.getLastKeyCode()) {
 			app.tab.onClickCut();
 		}
-		if (76 == evt.keyCode || 1044 == MW.getLastKeyCode()) {
-			onClickDisplayPath();
-		}
+		
+		
 		if (84 == evt.keyCode || 1045 == MW.getLastKeyCode()) {
 			app.tabPanel.addTabItem( app.tab.currentPath );
 		}
@@ -162,30 +161,6 @@ function onClickNoShowCatalogs() {
 	}
 }
 
-function onClickChangeAddressMode() {
-	var mode = intval(Settings.get('addressLineMode')), text;
-	if (1 === mode) {
-		mode = 0;
-		text = L('Display address line');
-	} else {
-		mode = 1;
-		text = L('Display address as row buttons');
-	}
-	Settings.set('addressLineMode', mode);
-	
-	if (app && app.addressPanel) {
-		if (1 === mode) {
-			app.addressPanel.showTextAddress();
-		} else {
-			app.addressPanel.showButtonAddress();
-		}
-		Qt.renameMenuItem(1, 1, text);
-	}
-}
-
-function onClickDisplayPath(){
-	app.addressPanel.showTextAddressShort();
-}
 
 function onCopy() {
 	app.tab.onClickCopy();

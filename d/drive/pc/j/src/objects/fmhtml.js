@@ -37,11 +37,6 @@ function fileMgrLayout() {
     <div id="contentArea">\
 		\
 		<div id="addressContainer" class="addressContainer">\
-			<div id="addressLine" class="addressLine">\
-				<img src="./i/folder32.png" id="addressLineIcon" class="addressLineIcon">\
-				<input id="iAddressLine" class="iAddressLine">\
-				<img src="./i/reload32.png" id="addressLineReloadIcon" class="addressLineIcon">\
-			</div>\
 			<div id="addressButtonPlacer" class="addressButtonPlacer">\
 				<div class="addressButton addressButtonLeft">\
 					<img id="addressButtonLeft" class="addressButtonLeftIcon" src="./i/addressButtonLeft.png">\

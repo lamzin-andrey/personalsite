@@ -304,6 +304,4 @@ ButtonAddress.prototype.show = function() {
 	this.placer.style.display = 'block';
 	this.render();
 }
-ButtonAddress.prototype.hide = function() {
-	this.placer.style.display = 'none';
-}
+q("addresspanel");
