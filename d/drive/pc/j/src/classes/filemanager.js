@@ -238,30 +238,6 @@ FileManager.prototype.actualizeScrollX = function() {
 */
 FileManager.prototype.setMainMenu = function() {
 	app.addressPanel.showButtonAddress();
-	return;
-	var mode = intval(Settings.get('hMode')), text, ival;
-	if (1 === mode) {
-		text = L('Hide hidden files Ctrl+H');
-	} else {
-		text = L('Show hidden files Ctrl+H');
-	}
-	Qt.renameMenuItem(1, 0, text);
-	
-	mode = intval(Settings.get('addressLineMode'));
-	ival = setInterval(function(){
-		if (app.addressPanel) {
-			if (1 === mode) {
-				text = L('Display address as row buttons');
-				app.addressPanel.showTextAddress();
-			} else {
-				text = L('Display address line');
-				app.addressPanel.showButtonAddress();
-			}
-			Qt.renameMenuItem(1, 1, text);
-			clearInterval(ival);
-		}
-		
-	}, 100);
 	
 }
 

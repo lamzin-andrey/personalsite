@@ -53,6 +53,7 @@ AbstractList.prototype.setActiveView = function(evt)  {
 
 AbstractList.prototype.setPath = function(path)  {
 	var ls = cs(this.contentBlock, 'sectionItem'), i, SZ = sz(ls), sel = 'selected', targetItem;
+	path = `/home/${path}`;
 	for (i = 0; i < SZ; i++) {
 		removeClass(ls[i], sel);
 		if (this.list[i] && this.list[i].path == path) {
