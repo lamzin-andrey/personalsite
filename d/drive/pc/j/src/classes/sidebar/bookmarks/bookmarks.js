@@ -41,14 +41,14 @@ Bookmarks.prototype.onClick = function(event) {
 		o = this,
 		n = str_replace(o.itemIdPrefix, '', trg.id);
 	
+	app.addressPanel.buttonAddress.currentId = o.list[n].stack[sz(o.list[n].stack) - 1];
 	app.addressPanel.buttonAddress.stack = mclone(o.list[n].stack);
-	//app.addressPanel.buttonAddress.currentId = o.list[n].fid;
 	app.setActivePath(o.list[n].path, 'bookmarksManager', o.list[n].fid);
 }
 
 
 Bookmarks.prototype.createList = function(locale, user) {
-	var userBookmarks = [], i, SZ = 0;
+	var userBookmarks = [], i, SZ = 0, st, fid;
 	this.list = [];
 	this.addItem(user, '', locale, '', '', 'cmBmSysMenu');
 	
@@ -58,12 +58,14 @@ Bookmarks.prototype.createList = function(locale, user) {
 		SZ = sz(userBookmarks);
 	}
 	for (i = 0; i < SZ; i++) {
-		this.addItem(user, userBookmarks[i].path.trim(), locale, userBookmarks[i].displayName, 'cmBmMenu');
+		fid = userBookmarks[i].fid;
+		st = mclone(userBookmarks[i].stack);
+		this.addItem(user, userBookmarks[i].path.trim(), locale, userBookmarks[i].displayName, 'cmBmMenu', 0, fid, st);
 	}
 	
 }
 // sysCmId - задействуем потом
-Bookmarks.prototype.addItem = function(user, name, locale, displayName, userCmId, sysCmId) {
+Bookmarks.prototype.addItem = function(user, name, locale, displayName, userCmId, sysCmId, fid, stack) {
 	var item = {
 			displayName : '',
 			icon: App.dir() + '/i/folder32.png',
@@ -84,20 +86,17 @@ Bookmarks.prototype.addItem = function(user, name, locale, displayName, userCmId
 	} else {
 		name = this.getLocaleFolderName(name, locale);
 		item.displayName = name;
-		item.path = '/home/' + user + '/' + name;
-		if (!FS.fileExists(item.path)) {
-			item.path = '/home/' + user + '/' + srcName;
-		}
-		if (srcName.indexOf('/') == 0) {
+		item.path = '/home/' + name;
+		item.fid = fid;
+		item.stack = stack;
+		
+		if (srcName.indexOf(USER) == 0) {
 			item.path = srcName.trim();
 			if (userCmId) {
 				item.cmId = userCmId;
 			}
 		} else if (sysCmId) {
 			item.cmId = sysCmId;
-		}
-		if (!FS.fileExists(item.path)) {
-			item.path = '';
 		}
 		if (displayName) {
 			item.displayName = displayName;
@@ -164,27 +163,23 @@ Bookmarks.prototype.getLocale = function(user) {
 	return 'en';
 }
 
-Bookmarks.prototype.addNewBm = function(path, name) {
+Bookmarks.prototype.addNewBm = function(path, name, fid, stack) {
 	var uaBm;
-	try {
-		uaBm = this.readUserBookmarks();
+	uaBm = this.readUserBookmarks();
+	uaBm.splice(0, 0, {
+		path:path,
+		name: name,
+		displayName: name,
+		fid:fid,
+		stack, stack
+	});
 	
+	this.saveBookmarks(uaBm);
 	
-		uaBm.splice(0, 0, {
-			path:path,
-			name: name,
-			displayName: name
-		});
-		
-		this.saveBookmarks(uaBm);
-	} catch (er) {
-		alert(er);
-	}
 }
 
 Bookmarks.prototype.readUserBookmarks = function() {
 	var bookmarksKey,
-		// bookmarks = Settings.get('bms') || {},
 		bookmarks = this.getUserBookmarks(),
 		uaBmData,
 		uaBm;
@@ -350,89 +345,43 @@ Bookmarks.prototype.onClickExportBookmarks = function() {
 	Settings.set('activeBmFileName', newPath);
 }
 
-Bookmarks.prototype.onClickImportBookmarks = function() {
-	var bookmarksCollectionDirectory = this.getBookmarksCollectionDirectory(),
-		newPath, activePath, c;
-	if (!window.USER) {
-		alert(L("Unable detect user. Restart application and try again."));
-		return;
-	}
-	activePath = bookmarksCollectionDirectory.replace('/collection', '/active.json');
-	if (!FS.fileExists(bookmarksCollectionDirectory)) {
-		FS.mkdir(bookmarksCollectionDirectory);
-	}
-	if (!FS.fileExists(bookmarksCollectionDirectory) || !FS.isDir(bookmarksCollectionDirectory)) {
-		alert(L("Unable read directory") + ' "' + bookmarksCollectionDirectory + '". ' + L("Restart application and try again."));
-		return;
-	}
-	newPath = Env.openFileDialog(L('Select file with early seaved bookmarks'), bookmarksCollectionDirectory, "*.json");
+Bookmarks.prototype.onClickImportBookmarks = function(evt) {
+	var activePath = this.getBookmarksCollectionDirectory(),
+		newPath, c, fs;
+	// TODO continue here
+	//newPath = Env.openFileDialog(L('Select file with early seaved bookmarks'), bookmarksCollectionDirectory, "*.json");
 	
-	if (FS.fileExists(newPath)) {
-		c = FS.readfile(newPath);
-		FS.writefile(activePath, c);
-		Settings.set('activeBmFileName', newPath);
+	//if (FS.fileExists(newPath)) {
+		fs = new LandFileInputFS();
+		c = fs.readfile(/*newPath*/ctrg(evt));
+		storage(activePath, c);
+		newPath = ctrg(evt).files[0]
+		storage('activeBmFileName', newPath);
 		// reload on view
 		this.createList(this.getLocale(USER), USER);
 		this.render();
 		app.setSidebarScrollbar();
-	}
-	
+	//}
 }
 
 Bookmarks.prototype.getUserBookmarks = function() {
-	var bookmarksCollectionDirectory = this.getBookmarksCollectionDirectory(),
-		newPath, activePath, c;
-	if (!window.USER) {
-		// alert(L("Unable detect user. Restart application and try again."));
-		return {};
-	}
-	activePath = bookmarksCollectionDirectory.replace('/collection', '/active.json');
-	if (!FS.fileExists(bookmarksCollectionDirectory)) {
-		FS.mkdir(bookmarksCollectionDirectory);
-	}
-	
-	if (!FS.fileExists(activePath)) {
-		return {};
-	}
-	
-	c = FS.readfile(activePath);
-	try {
-		return JSON.parse(c);
-	} catch(err) {
-		return {};
-	}
+	var activePath = this.getBookmarksCollectionDirectory(),
+		newPath, c;
+	c = storage(activePath);
+	c = c ? c : {};
+	return c;
 }
 
 
 Bookmarks.prototype.setUserBookmarks = function(bookmarks) {
-	var bookmarksCollectionDirectory = this.getBookmarksCollectionDirectory(),
-		activePath, activeBmFileName;
-	if (!window.USER) {
-		alert(L("Unable detect user. Restart application and try again."));
-		return;
-	}
-	activePath = bookmarksCollectionDirectory.replace('/collection', '/active.json');
-	if (!FS.fileExists(bookmarksCollectionDirectory)) {
-		FS.mkdir(bookmarksCollectionDirectory);
-	}
-	
-	try {
-		bookmarks = JSON.stringify(bookmarks);
-		FS.writefile(activePath, bookmarks);
-		activeBmFileName = Settings.get('activeBmFileName') || '';
-		if (activeBmFileName && FS.fileExists(activeBmFileName)) {
-			FS.writefile(activeBmFileName, bookmarks);
-		}
-	} catch(err) {
-		alert(L("Unable save file") + ' ' + activePath);
-	}
+	var activePath = this.getBookmarksCollectionDirectory(),
+		activeBmFileName;
+	storage(activePath, bookmarks);
+	activeBmFileName = storage("activeBmFileName") || "";
+	storage(activeBmFileName, bookmarks);
 }
 
 Bookmarks.prototype.getBookmarksCollectionDirectory = function() {
-	var r = '/home/{user}/.config/qdjsFM/bmarks/collection';
-	if (window.USER) {
-		r = r.replace('{user}', USER);
-	}
-	return r;
+	return "bmActivePath";
 }
 q("devices");

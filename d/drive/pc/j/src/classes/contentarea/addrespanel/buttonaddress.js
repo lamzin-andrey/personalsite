@@ -272,7 +272,6 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 		imgSrc = App.dir() + "/i/home32.png";
 		imgClass = "addressButtonIcon";
 	}
-	console.log("activeBtn", window.app.tab.currentPath, path);
 	if (path == window.app.tab.currentPath) {
 		addClass = "addressButtonActive";
 	}

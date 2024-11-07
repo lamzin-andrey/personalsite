@@ -182,14 +182,15 @@ ContextMenuContent.prototype.getBookmarkItemMenuHtml = function() {
 					</div>\
 					<div class="contextMenuItemText">' + L("Export bookmarks") + '</div>\
 					<div class="cf"></div>\
-				</div>\
-				<div class="contextMenuItem" onclick="app.bookmarksManager.onClickImportBookmarks()">\
-					<div class="contextMenuItemIcon">\
-						<img src="./i/cm/undo22.png">\
-					</div>\
-					<div class="contextMenuItemText">' + L("Import bookmarks") + '</div>\
-					<div class="cf"></div>\
-				</div>\
+				</div>' +
+				`<label for="importBmFi" class="contextMenuItem">
+					<div class="contextMenuItemIcon">
+						<img src="./i/cm/undo22.png">
+					</div>
+					<div class="contextMenuItemText">` + L("Import bookmarks") + `</div>
+					<div class="cf"></div>
+					<input type="file" id="importBmFi" accept=".json, .txt" style="display:none" onchange="app.bookmarksManager.onClickImportBookmarks(window.event)">
+				</label>` + '\
 			</div>\
 		</div>\
 		<!-- System Bookmark menu -->\

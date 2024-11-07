@@ -640,13 +640,19 @@ Tab.prototype.onClickExtractArch = function() {
 }
 
 Tab.prototype.onClickAddBookmark = function() {
-	var idx, srcName, pathInfo, shortName;
-	
+	var idx, srcName, pathInfo, shortName, o = this,
+		trg, fid,
+		stack = mclone(app.addressPanel.buttonAddress.stack);
+	trg = e(window.currentCmTargetId);
+	fid = attr(trg.firstChild, "data-d");
+	if (!sz(stack)) {
+		stack.push(0);
+	}
 	idx = currentCmTargetId.replace('f', '');
-	srcName = this.currentPath + '/' + this.list[idx].name;
+	srcName = o.currentPath + '/' + o.list[idx].name;
 	pathInfo = pathinfo(srcName);
 	shortName = pathInfo.basename;
-	app.bookmarksManager.addNewBm(srcName, shortName);
+	app.bookmarksManager.addNewBm(srcName, shortName, fid, stack);
 }
 
 Tab.prototype.onClickOpenTerm = function(inCurrentFolder) {
