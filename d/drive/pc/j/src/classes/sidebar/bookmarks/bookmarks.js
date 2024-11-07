@@ -1,387 +1,381 @@
-function Bookmarks() {
-	this.username = '';
-	this.itemIdPrefix = 'bm';
-	this.list = [];
-	this.is_run = false;
-}
-extend(AbstractList, Bookmarks);
-Bookmarks.prototype.setUser = function(s) {
-	this.username = s;
-}
-
-Bookmarks.prototype.isRun = function() {
-	return this.is_run;
-}
-Bookmarks.prototype.run = function() {
-	// console.log('Bookmarks run');
-	var user = this.username,
-		locale, title;
-	if (!user && window.USER) {
-		user = window.USER;
+class Bookmarks extends AbstractList{
+	constructor() {
+		super();
+		this.username = '';
+		this.itemIdPrefix = 'bm';
+		this.list = [];
+		this.is_run = false;
 	}
-	
-	if (!user) {
-		return;
-	}
-	this.init('bookmarksBlock', L('Bookmarks'));
-	
-	locale = this.getLocale(user);
-	title = L('Bookmarks');
-	this.createList(locale, user);
-	try {
-		this.render();
-		this.is_run = true;
-	} catch (err) {
-		alert(err);
-	}
-}
-
-Bookmarks.prototype.onClick = function(event) {
-	var trg = ctrg(event),
-		o = this,
-		n = str_replace(o.itemIdPrefix, '', trg.id);
-	
-	app.addressPanel.buttonAddress.currentId = o.list[n].stack[sz(o.list[n].stack) - 1];
-	app.addressPanel.buttonAddress.stack = mclone(o.list[n].stack);
-	app.setActivePath(o.list[n].path, 'bookmarksManager', o.list[n].fid);
-}
 
 
-Bookmarks.prototype.createList = function(locale, user) {
-	var userBookmarks = [], i, SZ = 0, st, fid;
-	this.list = [];
-	this.addItem(user, '', locale, '', '', 'cmBmSysMenu');
-	
-	userBookmarks = this.readUserBookmarks();
-	// alert(JSON.stringify(userBookmarks));
-	if (userBookmarks) {
-		SZ = sz(userBookmarks);
+	setUser(s) {
+		this.username = s;
 	}
-	for (i = 0; i < SZ; i++) {
-		fid = userBookmarks[i].fid;
-		st = mclone(userBookmarks[i].stack);
-		this.addItem(user, userBookmarks[i].path.trim(), locale, userBookmarks[i].displayName, 'cmBmMenu', 0, fid, st);
+
+	isRun() {
+		return this.is_run;
 	}
-	
-}
-// sysCmId - задействуем потом
-Bookmarks.prototype.addItem = function(user, name, locale, displayName, userCmId, sysCmId, fid, stack) {
-	var item = {
-			displayName : '',
-			icon: App.dir() + '/i/folder32.png',
-			path: '',
-			stack: []
-		}, 
-		srcName = name;
-	if (!name) {
-		item.displayName = user;
-		item.icon = App.dir() + '/i/usb32.png';
-		item.path = '/home/' + user;
-		item.stack = [];
-		item.fid = 0;
-		item.stack.push(0);
-		if (sysCmId) {
-			item.cmId = sysCmId;
+	run() {
+		// console.log('Bookmarks run');
+		let user = this.username,
+			locale, title;
+		if (!user && window.USER) {
+			user = window.USER;
 		}
-	} else {
-		name = this.getLocaleFolderName(name, locale);
-		item.displayName = name;
-		item.path = '/home/' + name;
-		item.fid = fid;
-		item.stack = stack;
 		
-		if (srcName.indexOf(USER) == 0) {
-			item.path = srcName.trim();
-			if (userCmId) {
-				item.cmId = userCmId;
+		if (!user) {
+			return;
+		}
+		this.init('bookmarksBlock', L('Bookmarks'));
+		
+		locale = this.getLocale(user);
+		title = L('Bookmarks');
+		this.createList(locale, user);
+		try {
+			this.render();
+			this.is_run = true;
+		} catch (err) {
+			alert(err);
+		}
+	}
+
+	onClick(event) {
+		let trg = ctrg(event),
+			o = this,
+			n = str_replace(o.itemIdPrefix, '', trg.id);
+		
+		app.addressPanel.buttonAddress.currentId = o.list[n].stack[sz(o.list[n].stack) - 1];
+		app.addressPanel.buttonAddress.stack = mclone(o.list[n].stack);
+		app.setActivePath(o.list[n].path, 'bookmarksManager', o.list[n].fid);
+	}
+
+
+	createList(locale, user) {
+		let userBookmarks = [], i, SZ = 0, st, fid;
+		this.list = [];
+		this.addItem(user, '', locale, '', '', 'cmBmSysMenu');
+		
+		userBookmarks = this.readUserBookmarks();
+		// alert(JSON.stringify(userBookmarks));
+		if (userBookmarks) {
+			SZ = sz(userBookmarks);
+		}
+		for (i = 0; i < SZ; i++) {
+			fid = userBookmarks[i].fid;
+			st = mclone(userBookmarks[i].stack);
+			this.addItem(user, userBookmarks[i].path.trim(), locale, userBookmarks[i].displayName, 'cmBmMenu', 0, fid, st);
+		}
+		
+	}
+	
+
+	addItem(user, name, locale, displayName, userCmId, sysCmId, fid, stack) {
+		let item = {
+				displayName : '',
+				icon: App.dir() + '/i/folder32.png',
+				path: '',
+				stack: []
+			}, 
+			srcName = name;
+		if (!name) {
+			item.displayName = user;
+			item.icon = App.dir() + '/i/usb32.png';
+			item.path = '/home/' + user;
+			item.stack = [];
+			item.fid = 0;
+			item.stack.push(0);
+			if (sysCmId) {
+				item.cmId = sysCmId;
 			}
-		} else if (sysCmId) {
-			item.cmId = sysCmId;
-		}
-		if (displayName) {
-			item.displayName = displayName;
-		}
-	}
-	
-	if (item.path != '') {
-		if (name) {
-			item.icon = this.getIconByName(srcName);
-		}
-		this.list.push(item);
-	}
-}
-Bookmarks.prototype.getIconByName = function(name) {
-	switch (name) {
-		case 'Desktop':
-			return App.dir() + '/i/desktop32.png';
-		case 'Documents':
-			return App.dir() + '/i/documents32.png';
-		case 'Music':
-			return App.dir() + '/i/music32.png';
-		case 'Images':
-			return App.dir() + '/i/images32.png';
-		case 'Videos':
-			return App.dir() + '/i/videos32.png';
-		case 'Downloads':
-			return App.dir() + '/i/downArrow32.png';
-	}
-	return App.dir() + '/i/folder32.png';
-}
-
-Bookmarks.prototype.getLocaleFolderName = function(name, locale) {
-	var pathInfo;
-	if ('ru' != locale) {
-		return name;
-	}
-	switch (name) {
-		case 'Desktop':
-			return 'Рабочий стол';
-		case 'Documents':
-			return 'Документы';
-		case 'Music':
-			return 'Музыка';
-		case 'Images':
-			return 'Изображения';
-		case 'Videos':
-			return 'Видео';
-		case 'Downloads':
-			return 'Загрузки';
-	}
-	pathInfo = pathinfo(name);
-	return pathInfo.basename;
-	
-}
-
-/**
- * Поддерживаем только ru и en
-*/
-Bookmarks.prototype.getLocale = function(user) {
-	if (FS.fileExists('/home/' + user + '/Загрузки')) {
-		return 'ru';
-	}
-	
-	return 'en';
-}
-
-Bookmarks.prototype.addNewBm = function(path, name, fid, stack) {
-	var uaBm;
-	uaBm = this.readUserBookmarks();
-	uaBm.splice(0, 0, {
-		path:path,
-		name: name,
-		displayName: name,
-		fid:fid,
-		stack, stack
-	});
-	
-	this.saveBookmarks(uaBm);
-	
-}
-
-Bookmarks.prototype.readUserBookmarks = function() {
-	var bookmarksKey,
-		bookmarks = this.getUserBookmarks(),
-		uaBmData,
-		uaBm;
-	if (!window.USER) {
-		return;
-	}
-	uaBmData = bookmarks[USER] || {};
-	bookmarksKey = uaBmData['k'] || 'def';
-	uaBm = uaBmData['L'] || {};
-	uaBm = uaBm[bookmarksKey] || [];
-	return uaBm;
-}
-
-Bookmarks.prototype.writeUserBookmarks = function(list, newKey) {
-	var bookmarksKey,
-		// bookmarks = Settings.get('bms') || {},
-		bookmarks = this.getUserBookmarks(),
-		uaBmData,
-		uaBm;
-	if (!window.USER) {
-		return;
-	}
-	uaBmData = bookmarks[USER] || {};
-	bookmarksKey = uaBmData['k'] || 'def';
-	uaBm = uaBmData['L'] || {};
-	// uaBm = uaBm[bookmarksKey] || [];
-	if (newKey) {
-		bookmarksKey = newKey;
-	}
-	uaBm[bookmarksKey] = list;
-	uaBmData['L'] = uaBm;
-	bookmarks[USER] = uaBmData;
-	// Settings.set('bms', bookmarks);/
-	this.setUserBookmarks(bookmarks);
-}
-
-Bookmarks.prototype.saveBookmarks = function(uaBm) {
-	this.writeUserBookmarks(uaBm);
-	this.createList(this.getLocale(USER), USER);
-	this.render();
-	app.setSidebarScrollbar();
-}
-
-Bookmarks.prototype.onClickRename = function() {
-	var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, newName;
-	if (!e(id) || !data) {
-		return;
-	}
-	ls = this.readUserBookmarks();
-	SZ = sz(ls);
-	for (i = 0; i < SZ; i++) {
-		if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
-			newName = prompt(L("Enter new name"), data.displayName);
-			if (newName) {
-				ls[i].displayName = newName;
-				this.saveBookmarks(ls);
+		} else {
+			name = this.getLocaleFolderName(name, locale);
+			item.displayName = name;
+			item.path = '/home/' + name;
+			item.fid = fid;
+			item.stack = stack;
+			
+			if (srcName.indexOf(USER) == 0) {
+				item.path = srcName.trim();
+				if (userCmId) {
+					item.cmId = userCmId;
+				}
+			} else if (sysCmId) {
+				item.cmId = sysCmId;
 			}
-			break;
-		}
-	}
-}
-
-Bookmarks.prototype.onClickRemove = function() {
-	var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, newName;
-	if (!e(id) || !data) {
-		return;
-	}
-	ls = this.readUserBookmarks();
-	SZ = sz(ls);
-	for (i = 0; i < SZ; i++) {
-		if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
-			if (confirm(L("Are you sure remove bookmark") + " " + data.displayName + '?')) {
-				ls.splice(i, 1);
-				this.saveBookmarks(ls);
+			if (displayName) {
+				item.displayName = displayName;
 			}
-			break;
 		}
-	}
-}
-
-Bookmarks.prototype.onClickUp = function() {
-	var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, buf;
-	if (!e(id) || !data) {
-		return;
-	}
-	ls = this.readUserBookmarks();
-	SZ = sz(ls);
-	for (i = 0; i < SZ; i++) {
-		if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
-			if (i - 1 > -1) {
-				buf = ls[i - 1];
-				ls[i - 1] = ls[i];
-				ls[i] = buf;
-				this.saveBookmarks(ls);
+		
+		if (item.path != '') {
+			if (name) {
+				item.icon = this.getIconByName(srcName);
 			}
-			break;
+			this.list.push(item);
 		}
 	}
-}
 
-Bookmarks.prototype.onClickDown = function() {
-	var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, buf;
-	if (!e(id) || !data) {
-		return;
-	}
-	ls = this.readUserBookmarks();
-	SZ = sz(ls);
-	for (i = 0; i < SZ; i++) {
-		if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
-			if (i + 1 < SZ) {
-				buf = ls[i + 1];
-				ls[i + 1] = ls[i];
-				ls[i] = buf;
-				this.saveBookmarks(ls);
-			}
-			break;
+	getIconByName(name) {
+		switch (name) {
+			case 'Desktop':
+				return App.dir() + '/i/desktop32.png';
+			case 'Documents':
+				return App.dir() + '/i/documents32.png';
+			case 'Music':
+				return App.dir() + '/i/music32.png';
+			case 'Images':
+				return App.dir() + '/i/images32.png';
+			case 'Videos':
+				return App.dir() + '/i/videos32.png';
+			case 'Downloads':
+				return App.dir() + '/i/downArrow32.png';
 		}
+		return App.dir() + '/i/folder32.png';
 	}
-}
 
-Bookmarks.prototype.onClickOpen = function() {
-	var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, buf;
-	if (!e(id) || !data) {
-		return;
+	getLocaleFolderName(name, locale) {
+		let pathInfo;
+		if ('ru' != locale) {
+			return name;
+		}
+		switch (name) {
+			case 'Desktop':
+				return 'Рабочий стол';
+			case 'Documents':
+				return 'Документы';
+			case 'Music':
+				return 'Музыка';
+			case 'Images':
+				return 'Изображения';
+			case 'Videos':
+				return 'Видео';
+			case 'Downloads':
+				return 'Загрузки';
+		}
+		pathInfo = pathinfo(name);
+		return pathInfo.basename;
+		
 	}
-	app.setActivePath(data.path, ['']);
-}
 
-Bookmarks.prototype.onClickOpenInTerm = function() {
-	var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, cmd,
-			sh = App.dir() + "/sh/o.sh"
-			;
-	if (!e(id) || !data) {
-		return;
+	/**
+	 * Поддерживаем только ru и en
+	*/
+	getLocale(user) {
+		if (FS.fileExists('/home/' + user + '/Загрузки')) {
+			return 'ru';
+		}
+		
+		return 'en';
 	}
-	cmd = app.tab.createOpenTermCommand(data.path);
-	FS.writefile(sh, cmd);
-	jexec(sh, DevNull, DevNull, DevNull);
-}
 
-// ============= IMPORT / EXPORT Bmarks
-Bookmarks.prototype.onClickExportBookmarks = function() {
-	var bookmarksCollectionDirectory = this.getBookmarksCollectionDirectory(),
-		newPath, activePath, c;
-	if (!window.USER) {
-		alert(L("Unable detect user. Restart application and try again."));
-		return;
+	addNewBm(path, name, fid, stack) {
+		let uaBm;
+		uaBm = this.readUserBookmarks();
+		uaBm.splice(0, 0, {
+			path:path,
+			name: name,
+			displayName: name,
+			fid:fid,
+			stack, stack
+		});
+		this.saveBookmarks(uaBm);
 	}
-	activePath = bookmarksCollectionDirectory.replace('/collection', '/active.json');
-	if (!FS.fileExists(bookmarksCollectionDirectory)) {
-		FS.mkdir(bookmarksCollectionDirectory);
-	}
-	if (!FS.fileExists(bookmarksCollectionDirectory) || !FS.isDir(bookmarksCollectionDirectory)) {
-		alert(L("Unable read directory") + ' "' + bookmarksCollectionDirectory + '". ' + L("Restart application and try again."));
-		return;
-	}
-	newPath = Env.saveFileDialog(L('Export bookmarks'), bookmarksCollectionDirectory + "/" + date('Y.m.d') + '.json', "*.json");
-	c = '{}';
-	if (FS.fileExists(activePath)) {
-		c = FS.readfile(activePath);
-	}
-	FS.writefile(newPath, c);
-	Settings.set('activeBmFileName', newPath);
-}
 
-Bookmarks.prototype.onClickImportBookmarks = function(evt) {
-	var activePath = this.getBookmarksCollectionDirectory(),
-		newPath, c, fs;
-	// TODO continue here
-	//newPath = Env.openFileDialog(L('Select file with early seaved bookmarks'), bookmarksCollectionDirectory, "*.json");
-	
-	//if (FS.fileExists(newPath)) {
-		fs = new LandFileInputFS();
-		c = fs.readfile(/*newPath*/ctrg(evt));
-		storage(activePath, c);
-		newPath = ctrg(evt).files[0]
-		storage('activeBmFileName', newPath);
-		// reload on view
+	readUserBookmarks() {
+		let bookmarksKey,
+			bookmarks = this.getUserBookmarks(),
+			uaBmData,
+			uaBm;
+		if (!window.USER) {
+			return;
+		}
+		uaBmData = bookmarks[USER] || {};
+		bookmarksKey = uaBmData['k'] || 'def';
+		uaBm = uaBmData['L'] || {};
+		uaBm = uaBm[bookmarksKey] || [];
+		return uaBm;
+	}
+
+	writeUserBookmarks(list, newKey) {
+		let bookmarksKey,
+			// bookmarks = Settings.get('bms') || {},
+			bookmarks = this.getUserBookmarks(),
+			uaBmData,
+			uaBm;
+		if (!window.USER) {
+			return;
+		}
+		uaBmData = bookmarks[USER] || {};
+		bookmarksKey = uaBmData['k'] || 'def';
+		uaBm = uaBmData['L'] || {};
+		if (newKey) {
+			bookmarksKey = newKey;
+		}
+		uaBm[bookmarksKey] = list;
+		uaBmData['L'] = uaBm;
+		bookmarks[USER] = uaBmData;
+		this.setUserBookmarks(bookmarks);
+	}
+
+	saveBookmarks(uaBm) {
+		this.writeUserBookmarks(uaBm);
 		this.createList(this.getLocale(USER), USER);
 		this.render();
 		app.setSidebarScrollbar();
-	//}
-}
+	}
 
-Bookmarks.prototype.getUserBookmarks = function() {
-	var activePath = this.getBookmarksCollectionDirectory(),
-		newPath, c;
-	c = storage(activePath);
-	c = c ? c : {};
-	return c;
-}
+	onClickRename() {
+		let id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, newName;
+		if (!e(id) || !data) {
+			return;
+		}
+		ls = this.readUserBookmarks();
+		SZ = sz(ls);
+		for (i = 0; i < SZ; i++) {
+			if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
+				newName = prompt(L("Enter new name"), data.displayName);
+				if (newName) {
+					ls[i].displayName = newName;
+					this.saveBookmarks(ls);
+				}
+				break;
+			}
+		}
+	}
+
+	onClickRemove() {
+		let id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, newName;
+		if (!e(id) || !data) {
+			return;
+		}
+		ls = this.readUserBookmarks();
+		SZ = sz(ls);
+		for (i = 0; i < SZ; i++) {
+			if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
+				if (confirm(L("Are you sure remove bookmark") + " " + data.displayName + '?')) {
+					ls.splice(i, 1);
+					this.saveBookmarks(ls);
+				}
+				break;
+			}
+		}
+	}
+
+	onClickUp() {
+		var id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, buf;
+		if (!e(id) || !data) {
+			return;
+		}
+		ls = this.readUserBookmarks();
+		SZ = sz(ls);
+		for (i = 0; i < SZ; i++) {
+			if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
+				if (i - 1 > -1) {
+					buf = ls[i - 1];
+					ls[i - 1] = ls[i];
+					ls[i] = buf;
+					this.saveBookmarks(ls);
+				}
+				break;
+			}
+		}
+	}
+
+	onClickDown() {
+		let id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, buf;
+		if (!e(id) || !data) {
+			return;
+		}
+		ls = this.readUserBookmarks();
+		SZ = sz(ls);
+		for (i = 0; i < SZ; i++) {
+			if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
+				if (i + 1 < SZ) {
+					buf = ls[i + 1];
+					ls[i + 1] = ls[i];
+					ls[i] = buf;
+					this.saveBookmarks(ls);
+				}
+				break;
+			}
+		}
+	}
+
+	onClickOpen() {
+		let id = 'bm' + currentCmTargetId, i, data = this.list[currentCmTargetId], SZ, ls, buf;
+		if (!e(id) || !data) {
+			return;
+		}
+		app.setActivePath(data.path, ['']);
+	}
+
+	onClickOpenInTerm() {
+		//TODO remove me!
+	}
+
+	// ============= IMPORT / EXPORT Bmarks
+	onClickExportBookmarks() {
+		let bookmarksCollectionDirectory = this.getBookmarksCollectionDirectory(),
+			newPath, activePath, c;
+		if (!window.USER) {
+			alert(L("Unable detect user. Restart application and try again."));
+			return;
+		}
+		activePath = bookmarksCollectionDirectory.replace('/collection', '/active.json');
+		if (!FS.fileExists(bookmarksCollectionDirectory)) {
+			FS.mkdir(bookmarksCollectionDirectory);
+		}
+		if (!FS.fileExists(bookmarksCollectionDirectory) || !FS.isDir(bookmarksCollectionDirectory)) {
+			alert(L("Unable read directory") + ' "' + bookmarksCollectionDirectory + '". ' + L("Restart application and try again."));
+			return;
+		}
+		newPath = Env.saveFileDialog(L('Export bookmarks'), bookmarksCollectionDirectory + "/" + date('Y.m.d') + '.json', "*.json");
+		c = '{}';
+		if (FS.fileExists(activePath)) {
+			c = FS.readfile(activePath);
+		}
+		FS.writefile(newPath, c);
+		Settings.set('activeBmFileName', newPath);
+	}
+
+	async onClickImportBookmarks(evt) {
+		let activePath = this.getBookmarksCollectionDirectory(),
+			newPath, c, fs;
+		
+		
+		//if (FS.fileExists(newPath)) {
+			fs = new LandFileInputFS();
+			c = await fs.readfile(/*newPath*/ctrg(evt));
+			alert("c = "+ c);
+			storage(activePath, c);
+			//newPath = ctrg(evt).files[0];
+			storage('activeBmFileName', newPath);
+			// reload on view
+			this.createList(this.getLocale(USER), USER);
+			this.render();
+			app.setSidebarScrollbar();
+		//}
+	}
+
+	getUserBookmarks() {
+		let activePath = this.getBookmarksCollectionDirectory(),
+			newPath, c;
+		c = storage(activePath);
+		c = c ? c : {};
+		return c;
+	}
 
 
-Bookmarks.prototype.setUserBookmarks = function(bookmarks) {
-	var activePath = this.getBookmarksCollectionDirectory(),
-		activeBmFileName;
-	storage(activePath, bookmarks);
-	activeBmFileName = storage("activeBmFileName") || "";
-	storage(activeBmFileName, bookmarks);
-}
+	setUserBookmarks(bookmarks) {
+		let activePath = this.getBookmarksCollectionDirectory(),
+			activeBmFileName;
+		storage(activePath, bookmarks);
+		activeBmFileName = storage("activeBmFileName") || "";
+		storage(activeBmFileName, bookmarks);
+	}
 
-Bookmarks.prototype.getBookmarksCollectionDirectory = function() {
-	return "bmActivePath";
+	getBookmarksCollectionDirectory() {
+		return "bmActivePath";
+	}
 }
-q("devices");
+	q("devices");
