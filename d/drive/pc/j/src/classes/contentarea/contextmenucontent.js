@@ -141,13 +141,6 @@ ContextMenuContent.prototype.getBookmarkItemMenuHtml = function() {
 					<div class="contextMenuItemText">' + L("Open") + '</div>\
 					<div class="cf"></div>\
 				</div>\
-				<div class="contextMenuItem" onclick="app.bookmarksManager.onClickOpenInTerm()">\
-					<div class="contextMenuItemIcon">\
-						<img src="./i/cm/sh16.png">\
-					</div>\
-					<div class="contextMenuItemText">' + L("Open terminal") + '</div>\
-					<div class="cf"></div>\
-				</div>\
 				<div class="contextMenuItem" onclick="app.bookmarksManager.onClickRemove()">\
 					<div class="contextMenuItemIcon">\
 						<!--img src="./i/cm/folder_new16.png"-->\
@@ -189,7 +182,7 @@ ContextMenuContent.prototype.getBookmarkItemMenuHtml = function() {
 					</div>
 					<div class="contextMenuItemText">` + L("Import bookmarks") + `</div>
 					<div class="cf"></div>
-					<input type="file" id="importBmFi" accept=".json, .txt" style="display:none" onchange="app.bookmarksManager.onClickImportBookmarks(window.event)">
+					<input type="file" id="importBmFi" accept=".json" style="display:none" onchange="app.bookmarksManager.onClickImportBookmarks(window.event)">
 				</label>` + '\
 			</div>\
 		</div>\
@@ -201,13 +194,6 @@ ContextMenuContent.prototype.getBookmarkItemMenuHtml = function() {
 						<!--img src="./i/cm/sh16.png"-->\
 					</div>\
 					<div class="contextMenuItemText">' + L("Open") + '</div>\
-					<div class="cf"></div>\
-				</div>\
-				<div class="contextMenuItem" onclick="app.bookmarksManager.onClickOpenInTerm()">\
-					<div class="contextMenuItemIcon">\
-						<img src="./i/cm/sh16.png">\
-					</div>\
-					<div class="contextMenuItemText">' + L("Open terminal") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 			</div>\

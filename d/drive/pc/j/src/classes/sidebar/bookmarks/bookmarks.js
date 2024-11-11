@@ -15,6 +15,7 @@ class Bookmarks extends AbstractList{
 	isRun() {
 		return this.is_run;
 	}
+	
 	run() {
 		// console.log('Bookmarks run');
 		let user = this.username,
@@ -43,7 +44,6 @@ class Bookmarks extends AbstractList{
 		let trg = ctrg(event),
 			o = this,
 			n = str_replace(o.itemIdPrefix, '', trg.id);
-		
 		app.addressPanel.buttonAddress.currentId = o.list[n].stack[sz(o.list[n].stack) - 1];
 		app.addressPanel.buttonAddress.stack = mclone(o.list[n].stack);
 		app.setActivePath(o.list[n].path, 'bookmarksManager', o.list[n].fid);
@@ -80,7 +80,7 @@ class Bookmarks extends AbstractList{
 		if (!name) {
 			item.displayName = user;
 			item.icon = App.dir() + '/i/usb32.png';
-			item.path = '/home/' + user;
+			item.path = user;
 			item.stack = [];
 			item.fid = 0;
 			item.stack.push(0);
@@ -161,11 +161,11 @@ class Bookmarks extends AbstractList{
 	 * Поддерживаем только ru и en
 	*/
 	getLocale(user) {
-		if (FS.fileExists('/home/' + user + '/Загрузки')) {
-			return 'ru';
+		if (storage("lang") == "langRu") {
+			return "ru";
 		}
 		
-		return 'en';
+		return "en";
 	}
 
 	addNewBm(path, name, fid, stack) {
@@ -315,46 +315,25 @@ class Bookmarks extends AbstractList{
 
 	// ============= IMPORT / EXPORT Bmarks
 	onClickExportBookmarks() {
-		let bookmarksCollectionDirectory = this.getBookmarksCollectionDirectory(),
-			newPath, activePath, c;
-		if (!window.USER) {
-			alert(L("Unable detect user. Restart application and try again."));
-			return;
-		}
-		activePath = bookmarksCollectionDirectory.replace('/collection', '/active.json');
-		if (!FS.fileExists(bookmarksCollectionDirectory)) {
-			FS.mkdir(bookmarksCollectionDirectory);
-		}
-		if (!FS.fileExists(bookmarksCollectionDirectory) || !FS.isDir(bookmarksCollectionDirectory)) {
-			alert(L("Unable read directory") + ' "' + bookmarksCollectionDirectory + '". ' + L("Restart application and try again."));
-			return;
-		}
-		newPath = Env.saveFileDialog(L('Export bookmarks'), bookmarksCollectionDirectory + "/" + date('Y.m.d') + '.json', "*.json");
+		let activePath = this.getBookmarksCollectionDirectory(),
+			newPath, c, fs = new LandFileInputFS(), activeData;
 		c = '{}';
-		if (FS.fileExists(activePath)) {
-			c = FS.readfile(activePath);
+		activeData = storage(activePath);
+		if (activeData) {
+			c = activeData;
 		}
-		FS.writefile(newPath, c);
-		Settings.set('activeBmFileName', newPath);
+		fs.writefile(date('Y.m.d') + ".json", c);
 	}
 
 	async onClickImportBookmarks(evt) {
 		let activePath = this.getBookmarksCollectionDirectory(),
 			newPath, c, fs;
-		
-		
-		//if (FS.fileExists(newPath)) {
-			fs = new LandFileInputFS();
-			c = await fs.readfile(/*newPath*/ctrg(evt));
-			alert("c = "+ c);
-			storage(activePath, c);
-			//newPath = ctrg(evt).files[0];
-			storage('activeBmFileName', newPath);
-			// reload on view
-			this.createList(this.getLocale(USER), USER);
-			this.render();
-			app.setSidebarScrollbar();
-		//}
+		fs = new LandFileInputFS();
+		c = await fs.readfile(/*newPath*/ctrg(evt));
+		storage(activePath, c);
+		this.createList(this.getLocale(USER), USER);
+		this.render();
+		app.setSidebarScrollbar();
 	}
 
 	getUserBookmarks() {
@@ -365,13 +344,10 @@ class Bookmarks extends AbstractList{
 		return c;
 	}
 
-
 	setUserBookmarks(bookmarks) {
 		let activePath = this.getBookmarksCollectionDirectory(),
 			activeBmFileName;
 		storage(activePath, bookmarks);
-		activeBmFileName = storage("activeBmFileName") || "";
-		storage(activeBmFileName, bookmarks);
 	}
 
 	getBookmarksCollectionDirectory() {

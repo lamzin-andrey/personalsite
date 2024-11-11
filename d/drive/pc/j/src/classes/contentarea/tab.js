@@ -336,6 +336,7 @@ Tab.prototype.getUser = function(s) {
 	return this.username;
 }
 
+// TODO почистить
 Tab.prototype.openAction = function(id, fid) {
 	var item, path, cmd, slot, 
 		pathInfo, runner = 'xdg-open';
@@ -356,7 +357,6 @@ Tab.prototype.openAction = function(id, fid) {
 		
 		// cmd = '#!/bin/bash\n' + runner + ' \'' + path + '\'';
 		slot = App.dir() + '/sh/o.sh';
-		FS.writefile(slot, cmd);
 		jexec(slot, DevNull, DevNull, DevNull);
 	}
 }

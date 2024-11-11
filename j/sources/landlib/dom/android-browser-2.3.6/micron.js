@@ -177,7 +177,7 @@ function storage(key, data) {
 		if (data === null) {
 			L.removeItem(key);
 		}
-		if (!(data instanceof String)) {
+		if (!(typeof(data) == "string")) {
 			data = JSON.stringify(data);
 		}
 		if (!data) {
