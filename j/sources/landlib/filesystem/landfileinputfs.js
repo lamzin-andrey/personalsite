@@ -1,5 +1,6 @@
 /**
  * @depends https://github.com/eligrey/FileSaver.js/blob/master/src/FileSaver.js
+ *  (Copy https://github.com/lamzin-andrey/personalsite/blob/master/j/vendor/eligrey.com/FileSaver.js)
  * */
 class LandFileInputFS {
 	/**
