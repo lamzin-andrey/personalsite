@@ -16,8 +16,8 @@ class DlgMgr {
 	 * */
 	create(html, handler) {
 		let o = this, html, n = sz(o.ls);
-		html = o.zHtml(html); // TODO
-		o.ls.push(new DlgFrame(html, handler, n, o.maxZ));
+		html = o.zHtml(html);
+		o.ls.push(new DlgFrame(o, html, handler, n, o.maxZ));
 		o.maxZ++;
 		handler.setListeners(n);
 		o.panel.add(n, handler); // handler.getIcon(), getUniqName, getName()
