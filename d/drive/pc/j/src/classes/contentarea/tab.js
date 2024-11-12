@@ -18,9 +18,6 @@ function Tab() {
 	this.cutItems = [];
 	this.copyPaste = new CopyPaste(this);
 	
-	this.contentBlock.addEventListener('mousewheel', function(evt){
-		o.onMouseWheel(evt);
-	}, true);
 	/**
 	 * @property {Array} selectionItems; Get item id: selectionItems[i].parentNode.id
 	*/
@@ -388,13 +385,7 @@ Tab.prototype.onClickOpenNewTab = function() {
 		app.setActivePath(this.currentPath + '/' + this.list[n].name, ["tabpanel"], cid);
 	}
 }
-Tab.prototype.onClickSendDesktop = function() {
-	var n = this.toI(window.currentCmTargetId), desktopPath;
-	if (n && window.USER) {
-		desktopPath = '/home/' + USER + '/' + app.bookmarksManager.getLocaleFolderName("Desktop", app.getCurrentLocale());
-		this.exec('ln -s', (this.currentPath + '/' + this.list[n].name.trim()), desktopPath);
-	}
-}
+
 Tab.prototype.exec = function(cmd, src, dest, onFinish, onStd, onErr) {
 	var slot;
 	onFinish = onFinish ? onFinish : DevNull;
@@ -418,16 +409,11 @@ Tab.prototype.onClickNewFolder = function() {
 	this.newFolderAction();
 }
 
-Tab.prototype.onClickNewFile = function() {
-	this.newFileAction();
-}
 
 Tab.prototype.newFolderAction = function() {
 	this.newItemAction(L("New catalog"), L("Enter catalog name"), "mkdir", true);
 }
-Tab.prototype.newFileAction = function() {
-	this.newItemAction(L("New file"), L("Enter file name"), "echo '' >", false);
-}
+// TODO only folders
 Tab.prototype.newItemAction = function(newName, label, command, isDir) {
 	var slot, cmd, o = this, shortName;
 	newName = prompt(label, newName);
@@ -466,6 +452,9 @@ Tab.prototype.onClickCut = function() {
 }
 Tab.prototype.onClickPaste = function() {
 	this.copyPaste.pasteAction();
+}
+
+Tab.prototype.onClickUpload = function() {
 }
 
 Tab.prototype.onClickRename = function() {
@@ -523,128 +512,6 @@ Tab.prototype.onClickRename = function() {
 }
 
 
-Tab.prototype.onClickCreateArch = function() {
-	var 
-		currentCmTargetId,
-		idx,
-		srcName,
-		pathInfo,
-		shortName,
-		newName,
-		cmd,
-		sh = App.dir() + "/sh/o.sh",
-		newPath,
-		cmId,
-		item,
-		aSelectionItems = [],
-		i,
-		SZ;
-
-	if (!currentCmTargetId) {
-		currentCmTargetId = this.activeItem.parentNode.id;
-	}
-	if (!currentCmTargetId) {
-		var firstId = firstKey(this.oSelectionItems);
-		if (firstId) {
-			currentCmTargetId = firstId;
-		}
-	}
-	
-	if (!currentCmTargetId) {
-		currentCmTargetId = window.currentCmTargetId;
-	}
-	if (!currentCmTargetId) {
-		return;
-	}
-	
-	
-	for (i in this.oSelectionItems) {
-		idx = i.replace('f', '');
-		srcName = this.list[idx].name;
-		aSelectionItems.push('"' + srcName + '"');
-	}
-	
-	
-	idx = currentCmTargetId.replace('f', '');
-	srcName = this.currentPath + '/' + this.list[idx].name;
-	pathInfo = pathinfo(srcName);
-	shortName = pathInfo.basename;
-	newName = prompt(L("Enter new name"), shortName + '.tar.gz');
-	
-	if (newName) {
-		newPath = this.currentPath + '/' + newName;
-		if (FS.fileExists(newPath)) {
-			alert(L("File or folder already exists"));
-			return;
-		}
-		newName = newName.replace(/\.tar\.gz$/, '');
-		newPath = this.currentPath + '/' + newName;
-		cmd = "#!/bin/bash\ncd \"" + this.currentPath + "\"\ntar -cvzf  \"" + newPath + ".tar.gz\" " + aSelectionItems.join(' ') + "\n";
-		FS.writefile(sh, cmd);
-		jexec(sh, function() {
-			alert(newName + ".tar.gz " + L("created"));
-		}, DevNull, DevNull);
-		
-	}
-}
-
-
-Tab.prototype.onClickExtractArch = function() {
-	var 
-		currentCmTargetId,
-		idx,
-		srcName,
-		pathInfo,
-		shortName,
-		newName,
-		cmd,
-		sh = App.dir() + "/sh/o.sh",
-		newPath,
-		cmId,
-		item,
-		aSelectionItems = [],
-		i,
-		SZ;
-
-	if (!currentCmTargetId) {
-		currentCmTargetId = this.activeItem.parentNode.id;
-	}
-	if (!currentCmTargetId) {
-		var firstId = firstKey(this.oSelectionItems);
-		if (firstId) {
-			currentCmTargetId = firstId;
-		}
-	}
-	
-	if (!currentCmTargetId) {
-		currentCmTargetId = window.currentCmTargetId;
-	}
-	if (!currentCmTargetId) {
-		return;
-	}
-	
-	
-	idx = currentCmTargetId.replace('f', '');
-	srcName = this.currentPath + '/' + this.list[idx].name;
-	pathInfo = pathinfo(srcName);
-	shortName = pathInfo.basename;// ??
-	// ?? newName = prompt(L("Enter new name"), shortName + '.tar.gz');
-	
-	// if (newName) {
-		/*newPath = this.currentPath + '/' + newName;
-		if (FS.fileExists(newPath)) {
-			alert(L("File or folder already exists"));
-			return;
-		}*/
-		cmd = "#!/bin/bash\ncd \"" + this.currentPath + "\"\ntar -xvzf  \"" + srcName + "\"";
-		FS.writefile(sh, cmd);
-		jexec(sh, function() {
-			alert(shortName + ".tar.gz " + L("extracted"));
-		}, DevNull, DevNull);
-		
-	// }
-}
-
 Tab.prototype.onClickAddBookmark = function() {
 	var idx, srcName, pathInfo, shortName, o = this,
 		trg, fid,
@@ -661,21 +528,6 @@ Tab.prototype.onClickAddBookmark = function() {
 	app.bookmarksManager.addNewBm(srcName, shortName, fid, stack);
 }
 
-Tab.prototype.onClickOpenTerm = function(inCurrentFolder) {
-	var cmd,
-		sh = App.dir() + "/sh/o.sh",
-		idx
-		;
-	if (inCurrentFolder) {
-		cmd = this.createOpenTermCommand(this.currentPath);
-	} else {
-		idx = this.activeItem.parentNode.id.replace('f', '');
-		// cmd = "#!/bin/bash\nxfce4-terminal --working-directory=\"" + this.currentPath + '/' + this.list[idx].name + '"';
-		cmd = this.createOpenTermCommand(this.currentPath + '/' + this.list[idx].name);
-	}
-	FS.writefile(sh, cmd);
-	jexec(sh, DevNull, DevNull, DevNull);
-}
 
 
 Tab.prototype.onClickRemove = function() {
@@ -922,7 +774,6 @@ Tab.prototype.onKeyDown = function(evt) {
 		&& MW.getLastKeyCode() != 16777223
 		&& app.isActive
 	) {
-		console.log(evt.keyCode);
 		this.showFilterBox(MW.getLastKeyChar());
 		this.processFilterBoxInput();
 	} 
@@ -955,47 +806,6 @@ Tab.prototype.onPushArrowDown = function(evt) {
 	
 	o.contentBlock.scrollBy(0, ListRenderer.ONE_ITEM_HEIGHT);
 	return true;
-}
-
-Tab.prototype.onScrollDown = function() {
-	var id, lastItem;
-	lastItem = this.listRenderer.lastRenderedEl;
-	if (!lastItem) {
-		lastItem = this.getLastItem();
-	}
-	
-	if (!lastItem) {
-		return;
-	}
-	this.activeItem = cs(lastItem, this.cName)[0];
-	id = lastItem.id;
-	
-	id = this.getNextId(id);
-	if (!id) {
-		return;
-	}
-	this.scrollToItem(id, true);
-}
-Tab.prototype.onScrollUp = function() {
-	var id = '', firstItem;
-	firstItem = this.listRenderer.firstRenderedEl;
-	
-	if (!firstItem) {
-		firstItem = this.getFirstItem();
-	}
-	
-	if (firstItem) {
-		this.activeItem = cs(firstItem, this.cName)[0];
-		id = firstItem.id;
-	}
-	// MW.setTitle('id = ' + id);
-	
-	
-	id = this.getPrevId(id);
-	if (!id) {
-		return;
-	}
-	this.scrollToItem(id);
 }
 
 Tab.prototype.onPushArrowUp = function(evt) {
@@ -1186,9 +996,6 @@ Tab.prototype.onCreateNewItem = function(name, isDir) {
 	
 }
 
-Tab.prototype.createOpenTermCommand = function(s) {
-	return "#!/bin/bash\nxfce4-terminal --working-directory=\"" + s + '"';
-}
 
 
 Tab.prototype.selectItemByIdx = function(createdItemFound) {
@@ -1245,22 +1052,6 @@ Tab.prototype.setScrollY = function(y) {
 	}
 }
 
-Tab.prototype.onMouseWheel = function(evt) {
-	// MW.setTitle(evt.wheelDeltaY);
-	if (this.listRenderer.processing) {
-		return;
-	}
-	if (this.scrollWheelProc) {
-		return;
-	}
-	this.scrollWheelProc = 1;
-	if (evt.wheelDeltaY < 0) {
-		this.onScrollDown();
-	} else {
-		this.onScrollUp();
-	}
-	this.scrollWheelProc = 0;
-}
 
 Tab.prototype.clearSelections = function() {
 	var i, buf, cname = this.cName;
