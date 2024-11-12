@@ -1,6 +1,9 @@
-function TabPanelItem(path, nType) {
+function TabPanelItem(path, nType, fid, st) {
 	this.history = [];
 	this.path = path;
+	console.log("YPI cid", fid);
+	this.fid = fid;
+	this.stack = st;
 	if (path) {
 		if (sz(this.history) == 0) {
 			this.history.push(path);
@@ -54,7 +57,6 @@ TabPanelItem.prototype.setView = function(btn, closeBtn) {
 TabPanelItem.prototype.copyHistory = function() {
 	this.history = mclone(app.tab.navbarPanelManager.history);
 	this.historyIterator = app.tab.navbarPanelManager.historyIterator;
-	// alert('copy History: ' + JSON.stringify(this.history));
 }
 TabPanelItem.prototype.restoreHistory = function() {
 	// alert(JSON.stringify(this.history));

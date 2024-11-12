@@ -67,16 +67,17 @@ TabPanel.prototype.setPath = function(s) {
 	this.render(mclone(this.dataForRender));
 }
 
-TabPanel.prototype.addTabItem = function(s, tabType) {
+// TODO find all calls
+TabPanel.prototype.addTabItem = function(s, tabType, fid, stack) {
 	// alert('Add tab item type ' + tabType);
 	var tabItem;
 	this.getActiveTab();
-	tabItem = new TabPanelItem(s, tabType);
+	tabItem = new TabPanelItem(s, tabType, fid, stack);
 	this.tabs.splice(this.activeIndex + 1, 0, tabItem);
 	
 	try {
 		this.tabs[this.activeIndex].copyHistory();
-		app.tab.navbarPanelManager.clearHistory(s);
+		app.tab.navbarPanelManager.clearHistory(s, fid, stack);
 	} catch (err) {
 		alert(err);
 	} 
@@ -85,7 +86,7 @@ TabPanel.prototype.addTabItem = function(s, tabType) {
 		this.tab = new Tab();
 	}
 	this.render();
-	this.tab.setTabItem(this.tabs[this.activeIndex]);
+	this.tab.setTabItem(this.tabs[this.activeIndex]);// TODO fid
 	// tabItem.render(); ?
 }
 
@@ -141,6 +142,7 @@ TabPanel.prototype.renderTabs = function(noAll){
 			"class": "tab" + (a[i].idx == this.activeIndex ? ' active' : ''),
 			"id": ("tab" + j),
 			"data-idx": a[i].idx,
+			"data-fid": a[i].fid,
 			"title" : (a[i].path ? a[i].path : '')
 		};
 		if (a[i].type == TabPanelItem.TYPE_HTML) {
@@ -178,7 +180,8 @@ TabPanel.prototype.initTabsData = function() {
 			path: this.tabs[i].path,
 			name: this.tabs[i].getName(),
 			idx: i,
-			type: this.tabs[i].type
+			type: this.tabs[i].type,
+			fid: this.tabs[i].fid
 		};
 		this.tabsData.push(item);
 	}
@@ -193,6 +196,7 @@ TabPanel.prototype.onClickButton = function(evt){
 		i,
 		ls = cs('tabsPlacer', 'tab'),
 		SZ = sz(ls),
+		cid = attr(trg, 'data-fid'),
 		safeScrollY;
 	// alert('idx = ' + idx + ' id = ' + id);
 	this.tabs[this.activeIndex].copyHistory();
@@ -220,7 +224,8 @@ TabPanel.prototype.onClickButton = function(evt){
 		app.tab.skipRequestList = this.tabs[idx].listCopy;
 		app.tab.skipRequestHList = this.tabs[idx].listHCopy;
 	}
-	app.setActivePath(this.tabs[idx].path, ["tabpanel"]);
+	console.log("CID: ", cid);
+	app.setActivePath(this.tabs[idx].path, ["tabpanel"], cid);
 	
 	this.activeIndex = idx;
 	this.tabs[idx].restoreHistory();

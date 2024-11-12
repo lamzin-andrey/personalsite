@@ -68,8 +68,6 @@ Tab.prototype.setPath = function(path, fid) {
 		o.renderByMode();
 		return;
 	}
-	
-	// jexec(slot, [this, this.onFileList], [this, this.onFileListPart], DevNull);
 	// TODO  m=?
 	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=" + fid + "&m=0", o.onFailGetList, o);
 	
@@ -374,12 +372,19 @@ Tab.prototype.onClickOpenWebNewTab = function() {
 }
 
 Tab.prototype.onClickOpen = function() {
-	this.openAction(window.currentCmTargetId);
+	var i = window.currentCmTargetId;
+	this.openAction(i, attr(e(i).firstChild, "data-d"));
 }
 Tab.prototype.onClickOpenNewTab = function() {
-	var n = this.toI(window.currentCmTargetId);
+	var i = window.currentCmTargetId, 
+		n = this.toI(i),
+		cid,
+		st;
 	if (n) {
-		app.tabPanel.addTabItem(this.currentPath + '/' + this.list[n].name);
+		st = mclone(app.addressPanel.buttonAddress.stack);
+		cid = attr(e(i).firstChild, "data-d");
+		app.tabPanel.addTabItem(this.currentPath + '/' + this.list[n].name, 1, cid, st);
+		app.setActivePath(this.currentPath + '/' + this.list[n].name, ["tabpanel"], cid);
 	}
 }
 Tab.prototype.onClickSendDesktop = function() {

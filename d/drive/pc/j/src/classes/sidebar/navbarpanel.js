@@ -164,12 +164,12 @@ NavbarPanel.prototype.onClickHome = function(evt) {
 	app.setActivePath(path, [''], 0);
 }
 
-NavbarPanel.prototype.clearHistory = function(s) {
+NavbarPanel.prototype.clearHistory = function(s, fid, stack) {
 	var o = this;
 	this.actualizeView(s);
 	
 	o.history = [];
-	o.history.push(s);
+	o.history.push([s, fid, stack]);
 	o.historyIterator = 0;
 }
 
