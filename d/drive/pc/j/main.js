@@ -24,6 +24,8 @@ function main() {
 	}
 	window.onresize = onResize;
 	window.onkeydown = onKeyUp;
+	/*window.onkeyup = fixUp;
+	window.onkeypress = fixUp;*/
 	onResize();
 	//showScreen("fmgr");
 }
@@ -79,7 +81,6 @@ function onKeyUp(evt) {
     if (evt.ctrlKey) {
 		switch(evt.keyCode) {
 			case 79:	//O
-			// onClickChangeEnv();
 			break;
 			case 81:	//Q
 			onClickExitMenu();
@@ -104,9 +105,12 @@ function onKeyUp(evt) {
 			app.tab.onClickCut();
 		}
 		
-		
-		if (84 == evt.keyCode || 1045 == MW.getLastKeyCode()) {
-			app.tabPanel.addTabItem( app.tab.currentPath );
+		console.log(evt);
+		if (evt.keyCode in In(84) || evt.code == 'KeyT') {
+			evt.preventDefault();
+			evt.stopImmediatePropagation();
+			app.tabPanel.addTabItem(app.tab.currentPath, 1, app.tab.currentFid, mclone(app.addressPanel.buttonAddress.stack));
+			return;
 		}
 		
     }
@@ -121,6 +125,12 @@ function onKeyUp(evt) {
 	
 	app.kbListener.onKeyDown(evt);
 	
+}
+
+function fixUp(evt) {
+	evt.preventDefault();
+	evt.stopImmediatePropagation();
+	return false;
 }
 
 function onClickExitMenu() {

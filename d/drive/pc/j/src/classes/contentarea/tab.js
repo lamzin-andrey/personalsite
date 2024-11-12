@@ -39,6 +39,7 @@ Tab.prototype.setPath = function(path, fid) {
 	o.listCount = 0;
 	o.listComplete = false;
 	o.hideListComplete = false;
+	o.currentFid = fid;
 	o.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	
 	console.log("Tab.setPath:", path);
@@ -55,7 +56,7 @@ Tab.prototype.setPath = function(path, fid) {
 	}
 		
 	//TODO здесь внимательно, могут быть всякие штуки впоследствии
-	if (o.skipRequestList && o.skipRequestHList) {
+	/*if (o.skipRequestList && o.skipRequestHList) {
 		o.showList = mclone(o.skipRequestList);
 		o.hideList = mclone(o.skipRequestHList);
 		o.list = o.showList;
@@ -67,7 +68,7 @@ Tab.prototype.setPath = function(path, fid) {
 		o.listCount = 2;
 		o.renderByMode();
 		return;
-	}
+	}*/
 	// TODO  m=?
 	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=" + fid + "&m=0", o.onFailGetList, o);
 	
