@@ -25,20 +25,20 @@ CopyPaste.prototype.copycutAction = function(cmd) {
 	
 	if (sz(r)) {
 		this.tab.bufferSources = r.join('\n');
-		Qt.writeClipboard(this.tab.bufferSources);
 	}
 	
 	this.lastAction = cmd;
 }
 
 CopyPaste.prototype.pasteAction = function(targetId) {
-	if (this.lastAction == "") {
+	var o = this;
+	if (o.lastAction == "") {
 		return;
 	}
-	var o = this;
-	if (this.tab.bufferSources) {
-		this.message = this.lastAction + '\n' + this.tab.currentPath + '\n' + this.tab.bufferSources;
-		this.ival = setInterval(function() {
+	
+	if (o.tab.bufferSources) {
+		o.message = o.lastAction + '\n' + o.tab.currentPath + '\n' + o.tab.bufferSources;
+		o.ival = setInterval(function() {
 			o.onTick();
 		}, 500);
 		o.onTick();
@@ -46,17 +46,22 @@ CopyPaste.prototype.pasteAction = function(targetId) {
 }
 
 CopyPaste.prototype.onTick = function() {
-	var file = window.app.copyPasteProc.getSlotFileName();
+	var key = "copyProc", o = this, app;
 	
-	if (!this.message) {
-		this.stopTimer();
+	if (!o.message) {
+		o.stopTimer();
 		return;
 	}
 	
-	if (!FS.fileExists(file)) {
-		this.stopTimer();
-		FS.writefile(file, this.message);
-		this.message = '';
+	if (!localStorage.getItem(key)) {
+		o.stopTimer();
+		// 1 Create handler
+		app = new CopyPasteApp();
+		// 2 Create window
+		window.dlgMgr.create(o.getCopyPasteHtml(), app);
+		// 3 put message to handler
+		app.setCopyMessage(o.message); // TODO
+		o.message = "";
 	}
 }
 
@@ -65,4 +70,9 @@ CopyPaste.prototype.stopTimer = function() {
 		clearInterval(this.ival);
 		this.ival = null;
 	}
+}
+
+// TODO 
+CopyPaste.prototype.getCopyPasteHtml = function() {
+	return `<div class="dbgBg">Hello World, I Copy</div>`;
 }

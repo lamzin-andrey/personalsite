@@ -12,6 +12,7 @@ var langRu = {
 	'Audio' : 'Аудио',
 	'Video' : 'Видео',
 	'Archive' : 'Архив',
+	'Copying' : 'Koпирование',
 	'Web page' : 'Web страница',
 	'GB' : 'ГБ',
 	'MB' : 'МБ',

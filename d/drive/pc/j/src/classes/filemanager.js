@@ -2,17 +2,19 @@ function FileManager() {}
 
 FileManager.prototype.init = function() {
 	var o = this;
-	this.addContextMenuHtml();
-	this.bookmarksManager = new Bookmarks();
-	this.tabPanel = new TabPanel();
-	this.addressPanel = new AddressPanel();
-	this.sort = new Sort();
+	o.addContextMenuHtml();
+	o.bookmarksManager = new Bookmarks();
+	o.tabPanel = new TabPanel();
+	o.addressPanel = new AddressPanel();
+	o.sort = new Sort();
 	window.app.sort = this.sort;
-	this.fileHeader = new FileHeader();
-	this.procManager = new ProcManager();
+	o.fileHeader = new FileHeader();
+	o.procManager = new ProcManager();
 	o.isActive = false;
 	
-	this.setMainMenu();
+	o.setMainMenu(); // TODO -- ?
+	window.oPanel = new PanelPatch();
+	window.dlgMgr = new DlgMgr(window.oPanel);
 	
 	
 	e('tabItems').onscroll = function(){

@@ -54,6 +54,7 @@ window.langRu = {
 	'Exit' : 'Закрыть',
 	'Catalogs' : 'Папок',
 	'Files' : 'Файлов',
+	'Copying' : 'Копирование',
 	'Uploading...' : 'Загрузка...',
 	'Uploaded' : 'Загружен',
 	'Modify' : 'Изменен',

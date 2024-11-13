@@ -26,6 +26,9 @@
        Если это callable, вызвать и получить HTML
        
       classHandler - это экземпляр класса, который имеет setListeners(id);
+															getDlgBtns() // 111 -> Min Max Close
+															getDefaultTitle
+															getIcon
       id - это id блока окна.
       
       Например, для диалога свойств он по id надёт блок,

@@ -1,8 +1,26 @@
 class DlgMgr {
 	constructor (panel) {
-		this.panel = panel;
-		this.maxZ = 1000;
-		this.ls = [];
+		let o = this;
+		o.panel = panel;
+		o.maxZ = 1000;
+		o.ls = [];
+		o.movedN = -1;
+		window.addEventListener("mousemove", (evt) => {o.onMouseMove(evt);});
+		window.addEventListener("mouseup", (evt) => {o.onMouseUp(evt);});
+	}
+	
+	onMouseMove(evt) {
+		let o = this;
+		if (o.movedN != -1) {
+			o.ls[o.movedN].move(evt.pageX - o.prevX, evt.pageY - o.prevY);
+			o.prevX = evt.pageX;
+			o.prevY = evt.pageY;
+		}
+	}
+	
+	onMouseUp(evt) {
+		console.log("UP!");
+		this.movedN = -1;
 	}
 	
 	/**
@@ -15,12 +33,14 @@ class DlgMgr {
 	 * @property {Object} handler
 	 * */
 	create(html, handler) {
-		let o = this, html, n = sz(o.ls);
+		let o = this, n = sz(o.ls);
 		html = o.zHtml(html);
 		o.ls.push(new DlgFrame(o, html, handler, n, o.maxZ));
 		o.maxZ++;
 		handler.setListeners(n);
 		o.panel.add(n, handler); // handler.getIcon(), getUniqName, getName()
+		
+		return n;
 	}
 	
 	activate(n) {
@@ -69,6 +89,10 @@ class DlgMgr {
 		o.activate(n);
 	}
 	
+	setTitle(n, s) {
+		this.ls[n].setTitle(s);
+	}
+	
 	zHtml(s) {
 		let obj;
 		if (typeof(s) == "string") {
@@ -93,5 +117,9 @@ class DlgMgr {
 		}
 		
 		return "";
+	}
+	
+	getIdPref(){
+		return "LandDlgMgr";
 	}
 }
