@@ -43,13 +43,15 @@ class CopyPasteApp {
 		o.ival = setInterval(() => {o.zOnTick()}, 1000);
 	}
 	
-	finalize() {
+	finalize(context, method) {
 		let o = this;
+		o.finalCtx = context;
+		o.finalMethod = method;
 		if (o.ival) {
 			clearInterval(o.ival);
 		}
 		o.isFin = 1;
-		o.step = 2;
+		o.step = 4;
 		o.ival = setInterval(() => {o.zOnTick()}, 100);
 	}
 	
@@ -57,13 +59,13 @@ class CopyPasteApp {
 		let o = this, SZ, i, a, cw;
 		a = o.message.split("\n");
 		SZ = sz(a);
-		o.it += o.step;
-		if (o.it > SZ) {
+		o.it += 1;
+		if (o.it >= SZ) {
 			o.it = 1;
 		}
 		
-		
-		v(o.progressStateLabel, a[o.it]);
+		//v(o.progressStateLabel, a[o.it].split(',')[0]);
+		o.zSetCurrentFileName(a[o.it].split(',')[0]);
 		cw = intval(o.dompb.style.width) + o.step;
 		cw = cw < 101 ? cw : 100;
 		o.dompb.style.width = cw + "%";
@@ -73,8 +75,28 @@ class CopyPasteApp {
 		v(o.hFrom, "из");
 		
 		if (o.isFin && cw == 100) {
+			o.finalMethod.call(o.finalCtx);
 			window.dlgMgr.close(o.n);
 		}
+	}
+	
+	zSetCurrentFileName(s){
+		let i, q = '', SZ, a = [], j;
+		s = String(s);
+		SZ = sz(s);
+		if (SZ < 50) {
+			v(this.progressStateLabel, s);
+			return;
+		}
+		for (i = SZ - 1, j = 0; i > -1; i--, j++) {
+			a.push(s.charAt(i));
+			if (j > 49) {
+				break;
+			}
+		}
+		a.reverse();
+		s = a.join('');
+		v(this.progressStateLabel, '...' + s);
 	}
 	
 	zAddE(s) {

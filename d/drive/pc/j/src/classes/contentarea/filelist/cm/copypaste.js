@@ -2,18 +2,16 @@ function CopyPaste(tab) {
 	this.tab = tab;
 	this.lastAction = "";
 }
-CopyPaste.prototype.copyAction = function(targetId) {
-	this.copycutAction("cp");
-}
 CopyPaste.prototype.cutAction = function(targetId) {
 	this.copycutAction("mv");
 }
 
 CopyPaste.prototype.copycutAction = function(cmd) {
-	var i, items = this.tab.oSelectionItems,  r = [], id, el;
+	var i, items = this.tab.oSelectionItems,  r = [], id, el, type;
 	for (i in items) {
 		id = i.replace('f', '');
-		r.push(this.tab.currentPath + '/' + this.tab.list[id].name);
+		type = this.tab.list[id].src.type == 'c' ? "f" : "fi";
+		r.push(this.tab.currentPath + '/' + this.tab.list[id].name + ',' + type + this.tab.list[id].id);
 		if (cmd == "mv") {
 			el = e(i);
 			if (el) {
@@ -37,7 +35,8 @@ CopyPaste.prototype.pasteAction = function(targetId) {
 	}
 	
 	if (o.tab.bufferSources) {
-		o.message = o.lastAction + '\n' + o.tab.currentPath + '\n' + o.tab.bufferSources;
+		o.message = o.lastAction + '\n' + o.tab.currentPath + ',' + this.tab.currentFid + '\n' + o.tab.bufferSources;
+		o.tab.bufferSources = "";
 		o.ival = setInterval(function() {
 			o.onTick();
 		}, 500);
@@ -53,18 +52,55 @@ CopyPaste.prototype.onTick = function() {
 		return;
 	}
 	
-	if (!localStorage.getItem(key)) {
+	if (!o[key]) {
 		o.stopTimer();
 		// 1 Create handler
-		app = new CopyPasteApp();
+		o.cpApp = new CopyPasteApp();
 		// 2 Create window
-		window.dlgMgr.create(o.getCopyPasteHtml(), app);
+		o.dlgId = window.dlgMgr.create(o.getCopyPasteHtml(), o.cpApp);
 		// 3 put message to handler
-		app.setCopyMessage(o.message); // TODO
+		o.cpApp.setCopyMessage(o.message);
+		o[key] = 1;
+		Rest2._post(o.converMvMessage(), o.onMoveFiles, window.br + "/drivemv.json", o.onFailMoveFiles, o);
 		o.message = "";
 	}
 }
 
+CopyPaste.prototype.converMvMessage = function() {
+	var o = this, s = o.message, a = s.split("\n"),
+		SZ = sz(a), r = {}, b = [];
+	r.t = a[1].split(',')[1];
+	for (i = 2; i < SZ; i++) {
+		b.push(a[i].split(',')[1]);
+	}
+	r.ls = b.join(',');
+	return r;
+}
+
+CopyPaste.prototype.unsetCopyProc = function(data) {
+	this.copyProc = 0;
+}
+
+CopyPaste.prototype.onMoveFiles = function(data) {
+	var o = this;
+	if (!o.onFailMoveFiles(data)) {
+		return;
+	}
+	// TODO refresh or redraw
+	
+	this.cpApp.finalize(o, o.unsetCopyProc);
+	
+	this.tab.onFileList(data);
+}
+
+CopyPaste.prototype.onFailMoveFiles = function(data) {
+	
+	//window.dlgMgr.close(this.dlgId);
+	// TODO default fail
+	
+	return true;
+}
+	
 CopyPaste.prototype.stopTimer = function() {
 	if (this.ival) {
 		clearInterval(this.ival);
@@ -75,7 +111,7 @@ CopyPaste.prototype.stopTimer = function() {
 
 CopyPaste.prototype.getCopyPasteHtml = function() {
 	return `<div class="ePb">
-	  <div class="text-center progressStateLabel" >&nbsp;</div>
+	  <div class="progressStateLabel" >&nbsp;</div>
 	  <div class="pbarandtextwr">
 		 <div class="pbarwrap">
 			<div style="width:0%;" class="dompb">&nbsp;</div>

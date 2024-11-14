@@ -148,23 +148,6 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemText">' + L("Add bookmark") + '</div>\
 					<div class="cf"></div>\
 				</div>\
-				\
-				<div class="contextMenuItem" onclick="app.tab.onClickCut()">\
-					<div class="contextMenuItemIcon">\
-						<img src="./i/cm/cut16.png">\
-					</div>\
-					<div class="contextMenuItemText">Вырезать</div>\
-					<div class="cf"></div>\
-				</div>\
-				\
-				<div class="contextMenuItem" onclick="app.tab.onClickCopy()">\
-					<div class="contextMenuItemIcon">\
-						<img src="./i/cm/copy16.png">\
-					</div>\
-					<div class="contextMenuItemText">Копировать</div>\
-					<div class="cf"></div>\
-				</div>\
-				\
 				<div class="contextMenuItem" onclick="app.tab.onClickPaste()">\
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pst16.png">\
@@ -225,15 +208,6 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 					<div class="contextMenuItemText">Вырезать</div>\
 					<div class="cf"></div>\
 				</div>\
-				\
-				<div class="contextMenuItem" onclick="app.tab.onClickCopy()">\
-					<div class="contextMenuItemIcon">\
-						<img src="./i/cm/copy16.png">\
-					</div>\
-					<div class="contextMenuItemText">Копировать</div>\
-					<div class="cf"></div>\
-				</div>\
-				\
 				<div class="contextMenuItem" onclick="app.tab.onClickPaste()">\
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pst16.png">\

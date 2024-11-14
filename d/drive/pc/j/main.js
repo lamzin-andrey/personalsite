@@ -90,9 +90,6 @@ function onKeyUp(evt) {
 		if (72 == evt.keyCode || 1056 == MW.getLastKeyCode()) {
 			onClickChangeHideMode();
 		}
-		if (67 == evt.keyCode || 1057 == MW.getLastKeyCode()) {
-			onCopy();
-		}
 		if (86 == evt.keyCode || 1052 == MW.getLastKeyCode()) {
 			onPaste();
 		}
@@ -172,9 +169,6 @@ function onClickNoShowCatalogs() {
 }
 
 
-function onCopy() {
-	app.tab.onClickCopy();
-}
 function onPaste() {
 	app.tab.onClickPaste();
 }

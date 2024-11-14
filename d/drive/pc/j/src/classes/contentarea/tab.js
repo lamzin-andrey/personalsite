@@ -84,7 +84,7 @@ Tab.prototype.onFileList = function(data) {
 	this.setStatus(L('Load catalog data') + '. ' + L('Start build list') + '.', 1);
 	o.list = o.buildList(data);	o.listComplete = true;
 	o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
-	o.listCount += 2;
+	o.listCount = 2;
 	o.renderByMode();
 	onResize();
 }
@@ -444,9 +444,7 @@ Tab.prototype.getNewName = function(newName) {
 	return next;
 }
 
-Tab.prototype.onClickCopy = function() {
-	this.copyPaste.copyAction(window.currentCmTargetId);
-}
+
 Tab.prototype.onClickCut = function() {
 	this.copyPaste.cutAction(window.currentCmTargetId);
 }
