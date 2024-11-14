@@ -30,6 +30,10 @@ CopyPaste.prototype.copycutAction = function(cmd) {
 
 CopyPaste.prototype.pasteAction = function(targetId) {
 	var o = this;
+	if (app.tab.currentFid == 0) {
+		showError(L("Unable paste files in root. Select a catalog."));
+		return;
+	}
 	if (o.lastAction == "") {
 		return;
 	}
@@ -56,7 +60,7 @@ CopyPaste.prototype.onTick = function() {
 		o.stopTimer();
 		// 1 Create handler
 		o.cpApp = new CopyPasteApp();
-		// 2 Create window
+		// 2 Create dialog window
 		o.dlgId = window.dlgMgr.create(o.getCopyPasteHtml(), o.cpApp);
 		// 3 put message to handler
 		o.cpApp.setCopyMessage(o.message);
@@ -86,19 +90,33 @@ CopyPaste.prototype.onMoveFiles = function(data) {
 	if (!o.onFailMoveFiles(data)) {
 		return;
 	}
-	// TODO refresh or redraw
-	
 	this.cpApp.finalize(o, o.unsetCopyProc);
-	
 	this.tab.onFileList(data);
 }
 
 CopyPaste.prototype.onFailMoveFiles = function(data) {
+	if (!data) {
+		try {
+			data = JSON.parse(responseText);
+		}catch(err) {
+			;
+		}
+	}
 	
-	//window.dlgMgr.close(this.dlgId);
-	// TODO default fail
+	if (data && data.status == 'ok') {
+		return true;
+	}
 	
-	return true;
+	if (data && data.status == 'error') {
+		if (data.error) {
+			showError(data.error);
+		} else if (data.errors && (data.errors instanceof Array) ) {
+			showError(data.errors.join("\n"));
+		}
+	}
+	this.copyProc = 0;
+	window.dlgMgr.close(this.dlgId);
+	return false;
 }
 	
 CopyPaste.prototype.stopTimer = function() {

@@ -13,6 +13,7 @@ var langRu = {
 	'Video' : 'Видео',
 	'Archive' : 'Архив',
 	'Copying' : 'Koпирование',
+	"Unable paste files in root. Select a catalog." : "Нельзя вставить файлы в корень. Выберите каталог.",
 	'Web page' : 'Web страница',
 	'GB' : 'ГБ',
 	'MB' : 'МБ',
