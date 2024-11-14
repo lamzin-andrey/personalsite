@@ -765,11 +765,12 @@ Tab.prototype.onKeyDown = function(evt) {
 		&& !this.isFilterBoxShown()
 		&& evt.keyCode != 27 
 		&& evt.keyCode != 13
+		&& evt.keyCode != 18
 		&& evt.keyCode != 16
 		&& evt.keyCode != 9
 		&& evt.keyCode != 8
 		&& !evt.ctrlKey
-		&& MW.getLastKeyCode() != 16777223
+		&& !evt.altKey
 		&& app.isActive
 	) {
 		this.showFilterBox(MW.getLastKeyChar());

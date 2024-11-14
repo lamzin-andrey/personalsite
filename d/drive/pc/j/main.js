@@ -78,6 +78,7 @@ function onResize() {
 }
 
 function onKeyUp(evt) {
+	console.log(evt.keyCode);
     if (evt.ctrlKey) {
 		switch(evt.keyCode) {
 			case 79:	//O
