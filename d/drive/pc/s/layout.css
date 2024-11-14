@@ -8,7 +8,7 @@
   src: url('../fonts/arialbd.ttf') format('truetype');
 }
 
-body {
+body, .ePb {
 	padding:0px;
 	margin:0px;
 	overflow-y:hidden;
@@ -17,6 +17,7 @@ body {
 	background-color: #e8e8e7;
 	-webkit-user-select: none;
 }
+
 table.layout {
 	height:100%;
 	width:100%;
@@ -26,8 +27,6 @@ table.layout td {
 }
 .sidebar {
 	width:218px;
-	/*background-color:#AABEF8;*/
-	/*overflow-y:scroll;*/
 	color:white;
 	font-weight:bold;
 	border-right: 0.5px solid #b6b6b3;

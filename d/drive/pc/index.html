@@ -57,7 +57,6 @@
     <script>v("s", "Auth")</script>
     
     <!-- webUSB -->
-    <!--script src="../a2/j/pbar/pbar.js?v=5"></script точно небесполезен, но пока рано-->
     <script src="./j/w/auth.js?v=5"></script>
     <script>v("s", "sqzdatetime")</script>
     <!-- script src="./j/w/mmenu/menu.js?v=5"></script-->
@@ -135,7 +134,10 @@
     <script src="./j/src/classes/contentarea/filelist/sort.js"></script>
     <script src="./j/src/classes/contentarea/filelist/listrenderer.js"></script>
     <script src="./j/src/classes/contentarea/filelist/fileheader.js"></script>
-    <script src="./j/src/classes/contentarea/filelist/cm/copypasteapp.js"></script>
+    <script>q("PBar")</script>
+    <script src="./j/vendor/objects/pbar/pbar.es6.js?v=5"></script>
+    <script>q("CopyPaste")</script>
+    <script src="./j/src/classes/contentarea/filelist/cm/copypasteapp.js" charset="UTF-8"></script>
     <script src="./j/src/classes/contentarea/filelist/cm/copypaste.js"></script>
     <script src="./j/src/classes/contentarea/filelist/list.js"></script>
     <script src="./j/src/classes/contentarea/contextmenucontent.js"></script>
@@ -162,6 +164,7 @@
     <link href="./s/sidebar.css?v=5" type="text/css" rel="stylesheet"></link>
     <link href="./s/content.css?v=5" type="text/css" rel="stylesheet"></link>
     <link href="./s/contextmenu.css?v=5" type="text/css" rel="stylesheet"></link>
+    <link href="./j/vendor/objects/pbar/pbar.css?v=5" type="text/css" rel="stylesheet"></link>
     <link href="/j/sources/landlib/dom/dlgmgr/s/dlgmgr.css?v=5" type="text/css" rel="stylesheet"></link>
     
     

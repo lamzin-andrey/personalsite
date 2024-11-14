@@ -72,7 +72,15 @@ CopyPaste.prototype.stopTimer = function() {
 	}
 }
 
-// TODO 
+
 CopyPaste.prototype.getCopyPasteHtml = function() {
-	return `<div class="dbgBg">Hello World, I Copy</div>`;
+	return `<div class="ePb">
+	  <div class="text-center progressStateLabel" >&nbsp;</div>
+	  <div class="pbarandtextwr">
+		 <div class="pbarwrap">
+			<div style="width:0%;" class="dompb">&nbsp;</div>
+		 </div>
+		 <span class="hSrcSz">2</span> <span class="hFrom">from</span> <span class="hDestSz">7</span> 
+	  </div>
+	</div>`;
 }
