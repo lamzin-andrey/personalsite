@@ -51,9 +51,6 @@ window.upload = {
 		o.currentInput = o.currentInput == -1 ? 0 : o.currentInput;
 		o.totalCounter = o.totalCounter == -1 ? 0 : o.totalCounter;
 		
-		console.log("o.currentFile", o.currentFile);
-		console.log("o.currentInput", o.currentInput);
-		
 		SZ = sz(o.iFiles);		
 		o.totalLength = 0;
 		for (i = 0; i < SZ; i++) {
@@ -109,7 +106,7 @@ window.upload = {
 	onSuccessUpload:function(data) {
 		var o = this, needNext = 0;
 		if (!o.onFailUpload(data)) {
-			// o.onClickCancel(); TODO!
+			o.onClickCancel();
 			return;
 		}
 		if (!e('f' + data.file.i)) {
@@ -152,6 +149,7 @@ window.upload = {
 			o.uploadDlgApp.reset();
 			o.totalCounter = 0;
 			o.uploadProcessing = 0;
+			o.iFiles = [];
 		}
 	},
 	
@@ -217,7 +215,7 @@ window.upload = {
 		return false;
 	},
 	onClickCancel:function(evt) {
-		dlgMgr.close(this.uploadProcessDlgN);
+		dlgMgr.hide(this.uploadProcessDlgN);
 	},
 	// TODO Вынести в модалку
 	showNoLeftSpaceScreen:function(data) {
