@@ -8,23 +8,6 @@ window.upload = {
 		o.totalCounter = -1;
 		o.uploadedSize = 0;
 		o.uploadedCounter = 0;
-		// TODO этот listener надо вешать сразу после отрисовки меню
-		// Или в пункте прямо написать upload.onSelectFile
-		/*iFile.onchange = function(evt){
-			o.onSelectFile(evt);
-		}*/
-		
-		/*
-		o.bCancel = e('bUploadCancel'); // TODO это кнопка закрытия экрана аплоада... её кажется что нет.
-		o.bCancel.onclick = function(evt){
-			o.onClickCancel(evt); // Но можно скрывать плашку... Не нужно.
-		}
-		o.progressStateLabel = e('progressStateLabel'); // TODO скорее всего другая выборка
-		
-		o.bCloseSpaceInfo = e('bNLSOk'); // ПОчему бы не запилить диалог с сообщением. Но тогда логику в него конечно.
-		o.bCloseSpaceInfo.onclick = function(evt){
-			o.onClickCloseSpaceInfo();
-		}*/
 	},
 	onSelectFile:function(evt) {
 		var o = window.upload;
@@ -79,10 +62,10 @@ window.upload = {
 					o.onSuccessUpload(data);
 				},
 				function(data) {
-					o.onFailUpload(data);// TODO see
+					o.onFailUpload(data);// TODO туда кажется надо как можно больше из success перенести. Ifiles = [] cutrrent{X} = 0
 				},
 				function(percents, current, total) {
-					o.onProgressUpload(percents, current, total); // TODO see
+					o.onProgressUpload(percents, current, total);
 				},
 				'_csrf_token_uf',
 				e('_csrf_token').value,
@@ -143,13 +126,7 @@ window.upload = {
 		if (needNext) {
 			o.uploadOneFile();
 		} else {
-			o.currentFile = 0;
-			o.currentInput = 0;
 			o.onClickCancel();
-			o.uploadDlgApp.reset();
-			o.totalCounter = 0;
-			o.uploadProcessing = 0;
-			o.iFiles = [];
 		}
 	},
 	
@@ -215,7 +192,14 @@ window.upload = {
 		return false;
 	},
 	onClickCancel:function(evt) {
-		dlgMgr.hide(this.uploadProcessDlgN);
+		var o = this;
+		dlgMgr.hide(o.uploadProcessDlgN);
+		o.currentFile = 0;
+		o.currentInput = 0;
+		o.uploadDlgApp.reset();
+		o.totalCounter = 0;
+		o.uploadProcessing = 0;
+		o.iFiles = [];
 	},
 	// TODO Вынести в модалку
 	showNoLeftSpaceScreen:function(data) {
