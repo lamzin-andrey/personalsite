@@ -10,6 +10,7 @@ var langRu = {
 	'Text file' : 'Текстовый файл',
 	'Document' : 'Документ',
 	'Audio' : 'Аудио',
+	'ChooseFile' : 'Выберите файл',
 	'Video' : 'Видео',
 	'Archive' : 'Архив',
 	'Copying' : 'Koпирование',

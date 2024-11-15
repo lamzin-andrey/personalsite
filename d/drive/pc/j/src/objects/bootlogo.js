@@ -55,7 +55,7 @@ TestSm.prototype.onEnterFrame = function(e) {
 }
 v("s", "recentdir")
 
-window.addEventListener("load", function() {
+//window.addEventListener("load", function() {
 	window.bootSe2d =  new SimpleEngine2D("btlg", 44);
 	new TestSm();
-});
+//});

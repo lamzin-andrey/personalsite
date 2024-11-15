@@ -1,7 +1,6 @@
 function TabPanelItem(path, nType, fid, st) {
 	this.history = [];
 	this.path = path;
-	console.log("YPI cid", fid);
 	this.fid = fid;
 	this.stack = st;
 	if (path) {

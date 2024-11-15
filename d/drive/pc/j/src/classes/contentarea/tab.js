@@ -39,7 +39,6 @@ Tab.prototype.setPath = function(path, fid) {
 	o.currentFid = fid;
 	o.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	
-	console.log("Tab.setPath:", path);
 	if (path == "/wcard") {
 		throw Error("dbg");
 	}
@@ -452,7 +451,9 @@ Tab.prototype.onClickPaste = function() {
 	this.copyPaste.pasteAction();
 }
 
-Tab.prototype.onClickUpload = function() {
+Tab.prototype.onClickUpload = function(evt) {
+	
+	upload.onSelectFile(evt);
 }
 
 Tab.prototype.onClickRename = function() {

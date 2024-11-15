@@ -128,8 +128,8 @@ CopyPaste.prototype.stopTimer = function() {
 
 
 CopyPaste.prototype.getCopyPasteHtml = function() {
-	return `<div class="ePb">
-	  <div class="progressStateLabel" >&nbsp;</div>
+	return `<div class="ePb copypaste">
+	  <div class="progressStateLabel w270" >&nbsp;</div>
 	  <div class="pbarandtextwr">
 		 <div class="pbarwrap">
 			<div style="width:0%;" class="dompb">&nbsp;</div>

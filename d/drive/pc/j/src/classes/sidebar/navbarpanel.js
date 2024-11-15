@@ -36,7 +36,6 @@ function NavbarPanel() {
 }
 NavbarPanel.prototype.setDisabled = function(img) {
 	var s = img.src;
-	console.log(s);
 	if (s.indexOf('32d.png') == -1) {
 		s = s.replace('32.png', '32d.png');
 		attr(img, 'src', s);
@@ -59,7 +58,6 @@ NavbarPanel.prototype.setPath = function(path, fid) {
 	if (sz(o.history) == 1 && path == USER && o.history[0][0] == USER) {
 		return;
 	}
-	console.log("Set stack", stack);
 	this.history.push([s, fid, stack]);
 	this.historyIterator = sz(this.history) - 1;
 	

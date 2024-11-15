@@ -19,7 +19,6 @@ class DlgMgr {
 	}
 	
 	onMouseUp(evt) {
-		console.log("UP!");
 		this.movedN = -1;
 	}
 	
@@ -50,13 +49,13 @@ class DlgMgr {
 			return;
 		}
 		
-		o.ls[n].setCurrentZ(o.maxZ);
 		for (i = 0; i < SZ; i++) {
 			if (o.ls[i].getCurrentZ() == o.maxZ) {
 				o.ls[i].setCurrentZ(currentZ);
 				break;
 			}
 		}
+		o.ls[n].setCurrentZ(o.maxZ);
 	}
 	
 	hide(n) {
@@ -91,6 +90,11 @@ class DlgMgr {
 	
 	setTitle(n, s) {
 		this.ls[n].setTitle(s);
+	}
+	
+	move(n, x, y) {
+		this.ls[n].div.style.top = y + "px";
+		this.ls[n].div.style.left = x + "px";
 	}
 	
 	zHtml(s) {

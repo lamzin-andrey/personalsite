@@ -116,7 +116,7 @@ ContextMenuContent.prototype.getUploadItemHtml = function() {
 					</div>
 					<div class="contextMenuItemText">` + L("Upload here") + `</div>
 					<div class="cf"></div>
-					<input type="file" style="display:none" onchange="app.tab.onClickUpload(window.event)">
+					<input id="iFile" multiple type="file" style="display:none" onchange="app.tab.onClickUpload(window.event)">
 				</label>`;
 }
 ContextMenuContent.prototype.getCatalogMenuHtml = function() {

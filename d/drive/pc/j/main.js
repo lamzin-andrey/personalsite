@@ -16,6 +16,7 @@ function main() {
 	
 	window.app = new FileManager();
 	window.app.init();
+	window.fmgr = app;
 	
 	initApp();
 	
@@ -78,7 +79,7 @@ function onResize() {
 }
 
 function onKeyUp(evt) {
-	console.log(evt.keyCode);
+	// console.log(evt.keyCode);
     if (evt.ctrlKey) {
 		switch(evt.keyCode) {
 			case 79:	//O

@@ -42,10 +42,10 @@ class DlgFrame {
 	}
 	
 	onMouseDown(ev) {
-		console.log("Start!", ev);
 		this.dm.movedN = this.nId;
 		this.dm.prevX = ev.pageX;
 		this.dm.prevY = ev.pageY;
+		this.dm.activate(this.nId);
 	}
 	
 	move(dx, dy) {
