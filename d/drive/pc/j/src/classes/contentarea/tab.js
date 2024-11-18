@@ -95,7 +95,6 @@ Tab.prototype.isHidden = function(s) {
 // TODO ccut
 Tab.prototype.redraw = function() {
 	this.rebuildList('list');
-	this.rebuildList('hideList');
 	
 	this.renderByMode();
 }
@@ -621,7 +620,7 @@ Tab.prototype.tpl = function() {
 	return '<div class="tabContentItem {active}" title="{name} id=f{id}" data-d="{did}">\
 						<div class="tabContentItemNameMain fl">\
 							<div class="tabContentItemIcon fl">\
-								<img class="imgTabContentItemIcon" src="{img}" onload="app.tab.onLoadPreview({id})">\
+								<img class="imgTabContentItemIcon" src="{img}" onerror="app.tab.onErrLoadPreview({id})">\
 							</div>\
 							<div class="tabContentItemName fl">{name}</div>\
 							<div class="cf"></div>\
@@ -1065,17 +1064,15 @@ Tab.prototype.clearSelections = function() {
 	this.oSelectionItems = {};
 }
 
-Tab.prototype.onLoadPreview = function(i) {
+Tab.prototype.onErrLoadPreview = function(i) {
 	
 	var s, cI;
-	if (this.list[i].type.indexOf(L("Image")) != -1) {
-		s = this.currentPath + '/' + this.list[i].name;
-		if (FS.filesize(s) < 1024*512) {
-			cI = this.listRenderer.getCurrentIcon(i);
-			if (cI != s) {
-				this.listRenderer.setCurrentIcon(i, s);
-			}
+		s = root + "/i/mi/unknown32.png";
+		cI = this.listRenderer.getCurrentIcon(i);
+		if (cI != s) {
+			this.listRenderer.setCurrentIcon(i, s);
 		}
-	}
+		
+	
 }
 

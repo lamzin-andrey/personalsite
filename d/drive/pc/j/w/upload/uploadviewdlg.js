@@ -75,11 +75,6 @@ class UploadViewDlg {
 		this.setTotalProgressValue(0, 0, 0);
 	}
 	
-	// TODO ?
-	finalize(context, method) {
-		let o = this;
-		
-	}
 	
 	zAddE(s) {
 		this[s] = cs(this.p, s)[0];

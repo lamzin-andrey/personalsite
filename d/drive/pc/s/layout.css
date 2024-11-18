@@ -35,8 +35,10 @@ table.layout td {
 	color:white;
 }
 .content {
-	/*overflow:scroll;*/
 	padding-left: 4px;
+	background-color: #e8e8e7;
+}
+.no-left-dlg {
 	background-color: #e8e8e7;
 }
 .tc {
@@ -58,3 +60,4 @@ table.layout td {
 .pointer {
 	cursor:url('../i/pointer.png'), auto;
 }
+

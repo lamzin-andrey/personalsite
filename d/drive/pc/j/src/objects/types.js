@@ -4,7 +4,7 @@ window.Types = {
 			ext = a[sz(a) - 1].toLowerCase(),
 			r = {
 				t: L('File'),
-				i: App.dir() + '/i/mi/unknown32.png',
+				i: root +  '/i/mi/unknown32.png',
 				c: 'cmDefault'
 			},
 			targetIcon,
@@ -23,31 +23,31 @@ window.Types = {
 			r.c = 'cmImage';
 		} else if (texts[ext]) {
 			r.t = L('Text file');
-			r.i = App.dir() + '/i/mi/txt32.png';
+			r.i = root +  '/i/mi/txt32.png';
 			r.c = 'cmText';
 		} else if (docs[ext]) {
 			r.t = L('Document') + ' ' + ext.toUpperCase();
-			r.i = App.dir() + '/i/mi/document32.png';
+			r.i = root +  '/i/mi/document32.png';
 			r.c = 'cmDocument';
 		} else if (audio[ext]) {
 			r.t = L('Audio') + ' ' + ext.toUpperCase();
-			r.i = App.dir() + '/i/mi/sound32.png';
+			r.i = root +  '/i/mi/sound32.png';
 			r.c = 'cmAudio';
 		} else if (video[ext]) {
 			r.t = L('Video') + ' ' + ext.toUpperCase();
-			r.i = App.dir() + '/i/mi/video32.png';
+			r.i = root +  '/i/mi/video32.png';
 			r.c = 'cmVideo';
 		} else if (arch[ext]) {
 			r.t = L('Archive') + ' ' + ext.toUpperCase();
-			r.i = App.dir() + '/i/mi/tar32.png';
+			r.i = root + '/i/mi/tar32.png';
 			r.c = 'cmArch';
 		} else if (web[ext]) {
 			r.t = L('Web page') + ' ' + ext.toUpperCase();
-			r.i = App.dir() + '/i/mi/html32.png';
+			r.i = root + '/i/mi/html32.png';
 			r.c = 'cmWeb';
 		} else if (ext == 'desktop') {
 			r.t = L('Desktop file');
-			r.i = App.dir() + '/i/exec32.png';
+			r.i = root + '/i/exec32.png';
 			r.c = 'cmDesktop';
 		} else if (ext == 'swf') {
 			r.t = L('Shockwave Flash Application');
@@ -57,17 +57,18 @@ window.Types = {
 			r.t = L("Executable Jar File");
 		} else if (ext == 'mts') {
 			r.t = L('Top Box video record');
-			r.i = App.dir() + '/i/cm/vlc32.png';
+			r.i = root + '/i/cm/vlc32.png';
 		}
 		if (ext == 'mov') {
 			r.t = L('Quick Time video');
-			r.i = App.dir() + '/i/cm/vlc32.png';
+			r.i = root + '/i/cm/vlc32.png';
 		}
 		
-		targetIcon = App.dir() + '/i/mi/' + ext + '32.png';
-		if (FS.fileExists(targetIcon)) {
-			r.i = targetIcon;
-		}
+		targetIcon = root + '/i/mi/' + ext + '32.png';
+		
+		
+		r.i = targetIcon;
+		
 		
 		return r;
 	}
