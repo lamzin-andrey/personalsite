@@ -176,7 +176,7 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pencil16.png">\
 					</div>\
-					<div class="contextMenuItemText">Свойства</div>\
+					<div class="contextMenuItemText">' + L("Properties") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\
@@ -236,7 +236,7 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pencil16.png">\
 					</div>\
-					<div class="contextMenuItemText">Свойства</div>\
+					<div class="contextMenuItemText">' + L("Properties") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\

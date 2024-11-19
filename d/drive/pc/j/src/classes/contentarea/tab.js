@@ -471,8 +471,14 @@ Tab.prototype.onClickPaste = function() {
 	this.copyPaste.pasteAction();
 }
 
+Tab.prototype.onClickProps = function() {
+	/*var k;
+	fmgr.dlgProp ? (delete fmgr.dlgProp) : 0;
+	k = fmgr.dlgProp = new PropsDlg();
+	dlgMgr.create(k.h(this.list[this.toI(currentCmTargetId)]), k);*/
+}
+
 Tab.prototype.onClickUpload = function(evt) {
-	
 	upload.onSelectFile(evt);
 }
 

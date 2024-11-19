@@ -64,6 +64,7 @@ var langRu = {
 	"Remove bookmark" : "Удалить закладку",
 	"Rename bookmark" : "Переименовать закладку",
 	"Rename" : "Переименовать",
+	"Properties" : "Свойства",
 	"Move up" : "Переместить вверх",
 	"Move down" : "Переместить вниз",
 	"Are you sure remove bookmark" : "Вы уверены, что хотите удалить закладку",
