@@ -31,14 +31,18 @@ class DlgFrame {
 			"class": "landDlgMgr"
 		});
 		o.div.style.zIndex = o.z;
-		w = getViewport();
-		o.div.style.top = (w.h - o.div.offsetHeight) / 2 + x;
-		o.div.style.left = (w.w - o.div.offsetWidth) / 2 + x;
+		o.center();
 		
 		cs(o.div, 'bMin')[0] ? cs(o.div, 'bMin')[0].onclick = (evt) => {o.onClickMin(evt)} : 0;
 		cs(o.div, 'bMax')[0] ? cs(o.div, 'bMax')[0].onclick = (evt) => {o.onClickMax(evt)} : 0;
 		cs(o.div, 'bCls')[0] ? cs(o.div, 'bCls')[0].onclick = (evt) => {o.onClickClose(evt)} : 0;
 		cs(o.div, 'topBrd')[0] ? cs(o.div, 'topBrd')[0].onmousedown = (evt) => {o.onMouseDown(evt)} : 0;
+	}
+	
+	center() {
+		let w = getViewport(), o = this;
+		o.div.style.top = (w.h - o.div.offsetHeight - o.CAPTION_H) / 2 + "px";
+		o.div.style.left = (w.w - o.div.offsetWidth) / 2 + "px";
 	}
 	
 	onMouseDown(ev) {

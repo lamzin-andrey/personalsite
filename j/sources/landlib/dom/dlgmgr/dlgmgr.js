@@ -77,6 +77,11 @@ class DlgMgr {
 		o.activate(n);
 	}
 	
+	center(n) {
+		let o = this, trg = o.ls[n];
+		trg.center();
+	}
+	
 	minimize(n) {
 		this.hide(n);
 	}

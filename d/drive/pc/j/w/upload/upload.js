@@ -209,29 +209,26 @@ window.upload = {
 		fmgr.noSpaceLeftDlg = new NoSpaceLeftDlg();
 		fmgr.noSpaceLeftDlgN = dlgMgr.create(this.getNoSpaceLeftHtml(), fmgr.noSpaceLeftDlg);
 		fmgr.noSpaceLeftDlg.translate(a.freePD, a.freePW, a.freePM, a.freeP6M);
+		dlgMgr.center(fmgr.noSpaceLeftDlgN);
 		
 	},
 	getNoSpaceLeftHtml:function(){
 		return `<div class="no-left-dlg">
-			<div><span class="title">На WebUSB закончилось место</span> <img src="/d/drive/a2/i/facesad.png"></div>
-			<div class="p1">Попробуйте удалить файлы.</div>
-			<div class="p2">Если вы удаляете файлы, но снова видите это сообщение, ознакомьтесь с информацией ниже. </div>
-			<div class="p3">Согласно Федеральному Закону 374-ФЗ я должен хранить все ваши файлы не менее 6 месяцев.</div>
-			<div class="p4">Поэтому даже если вы недавно удалили файл и не видите его среди своих файлов, он занимает место на диске.</div>
-			<div class="p5">
-				Через сутки освободится <span></span>	
+			<div class="fp"><span class="p0">На WebUSB закончилось место</span> <img src="/d/drive/a2/i/facesad.png"></div>
+			<div class="p p1">Попробуйте удалить файлы.</div>
+			<div class="p p2"></div>
+			<div class="p p3"></div>
+			<div class="p p4"></div>
+			<div class="p p5">
 			</div>
-			<div class="p6">
-				Через неделю освободится <span></span>	
+			<div class="p p6">
 			</div>
-			<div class="p7">
-				Через месяц освободится <span></span>	
+			<div class="p p7">
 			</div>
-			<div class="p8">
-				Через полгода освободится <span></span>	
+			<div class="p p8">
 			</div>
 			<div class="tr btns">
-				<input type="button" value="Понятно">
+				<input type="button" value="">
 			</div>
 		</div>`;
 	},

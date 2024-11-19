@@ -115,7 +115,19 @@ var langRu = {
 	"You must agree to the terms of use" : "Необходимо согласиться с условиями использования",
 	"Unable sent email. Try later." : "Невозможно отправить письмо. Попробуйте позже.",
 	"Registration success, we can login": "Успешная регистрация, вы можете войти",
-	"" : ""
+	"No left space on WebUSB" : "На WebUSB закончилось место",
+	"Try delete files." : "Попробуйте удалить файлы.",
+	"If you deleted files, but see it message, read more." : "Если вы удаляете файлы, но снова видите это сообщение, ознакомьтесь с информацией ниже.",
+	"According to Federal Law 374 of the Russian Federation, I must store all your files for at least 6 months." : "Согласно Федеральному Закону 374-ФЗ я должен хранить все ваши файлы не менее 6 месяцев.",
+	"So even if you recently deleted a file and don't see it among your files, it's still taking up disk space." : "Поэтому даже если вы недавно удалили файл и не видите его среди своих файлов, он занимает место на диске.",
+	"Will be available in 24 hours <span></span>" : "Через сутки освободится <span></span>",
+	"Will be free in a week <span></span>" : "Через неделю освободится <span></span>",
+	"Will be free in a month <span></span>" : "Через месяц освободится <span></span>",
+	"Will be released in six months <span></span>" : "Через полгода освободится <span></span>",
+	"I understand" : "Понятно",
+	"" : "",
+	"" : "",
+	"" : "",
 };
 
 var jaqedLang = langRu; // TODO потом в зависимости от настроек

@@ -149,6 +149,24 @@
 	margin-top: 1px;
 }
 
-ePb {
-	
+.no-left-dlg .p{
+  margin: 8px 0px 0px 8px;
+}
+
+.no-left-dlg .fp{
+  margin-left: 8px;
+  padding-top: 8px;
+}
+
+.no-left-dlg .fp span{
+  line-height: 32px;
+  vertical-align: text-bottom;
+}
+
+.no-left-dlg .btns{
+  text-align: right;
+}
+
+.no-left-dlg input{
+  margin: 0 6px 6px 0;
 }

@@ -5,6 +5,7 @@ class NoSpaceLeftDlg {
 		o.n = n;
 		o.p = e(window.dlgMgr.getIdPref() + n);
 		o.zAddE("title");
+		o.zAddE("p0");
 		o.zAddE("p1");
 		o.zAddE("p2");
 		o.zAddE("p3");
@@ -14,6 +15,11 @@ class NoSpaceLeftDlg {
 		o.zAddE("p7");
 		o.zAddE("p8");
 		o.zAddE("btns");
+		ee(o.btns, "input")[0].onclick = (evt) => {o.onClickUnderstand();}
+	}
+	
+	onClickUnderstand() {
+		dlgMgr.close(this.n);
 	}
 	
 	getDlgBtns() {
@@ -40,8 +46,9 @@ class NoSpaceLeftDlg {
 	// /interface
 	
 	translate(freePD, freePW, freePM, freeP6M) {
-		let o = this;
-		v(o.title, L("No left space on WebUSB"));
+		let o = this, s = "No left space on WebUSB";
+		v(o.title, L(s));
+		v(o.p0, L(s));
 		v(o.p1, L("Try delete files."));
 		v(o.p2, L("If you deleted files, but see it message, read more."));
 		v(o.p3, L("According to Federal Law 374 of the Russian Federation, I must store all your files for at least 6 months."));
