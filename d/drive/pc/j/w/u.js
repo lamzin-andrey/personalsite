@@ -111,8 +111,14 @@ function defaultResponseError(data, responseText, info, xhr) {
 		}
 	}
 	
+	showError(defErr());
 	return false;
 }
+
+function defErr() {
+	return L("Restart application and try again.");
+}
+
 
 function showError(s) {
 	alert(s);
