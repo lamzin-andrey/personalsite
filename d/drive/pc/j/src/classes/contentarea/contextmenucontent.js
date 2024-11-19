@@ -160,7 +160,7 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/cross16.png">\
 					</div>\
-					<div class="contextMenuItemText">Удалить</div>\
+					<div class="contextMenuItemText">' + L("Remove") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\
@@ -220,7 +220,7 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/cross16.png">\
 					</div>\
-					<div class="contextMenuItemText">Удалить</div>\
+					<div class="contextMenuItemText">' + L("Remove") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\

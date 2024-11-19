@@ -666,7 +666,7 @@ function array_values(v) {
 	return r;
 }
 
-function array_keys(arr){
+function array_keys(v){
 	var r = [];
 	if (v instanceof Array) {
 		for (var i = 0; i < v.length; i++) {

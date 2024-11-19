@@ -4,6 +4,7 @@ var langRu = {
 	'hLangE' : 'English',
 	'hLangR' : 'Russian',
 	'bRemove' : 'Удалить',
+	'Remove' : 'Удалить',
 	'Bookmarks' : 'Закладки',
 	'Devices' : 'Устройства',
 	'Image' : 'Изображение',
@@ -86,6 +87,8 @@ var langRu = {
 	"No show catalogs" : "Не показывать каталоги",
 	// reg screen
 	"bShowAuthScreen4" : "Вход по логину и паролю",
+	"Error remove file" : "Ошибка удаления файла",
+	"Error remove files" : "Ошибка удаления файлов",
 	"hIAgreeRE" : "Я согласен с",
 	"hPolicyNameRE" : "Политикой конфендициальности",
 	"hIAgreeFromAuthorRE" : "Я согласен получать email рассылку от автора сайта",

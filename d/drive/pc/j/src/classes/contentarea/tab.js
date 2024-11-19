@@ -95,7 +95,6 @@ Tab.prototype.isHidden = function(s) {
 // TODO ccut
 Tab.prototype.redraw = function() {
 	this.rebuildList('list');
-	
 	this.renderByMode();
 }
 // TODO cut
@@ -385,11 +384,12 @@ Tab.prototype.onClickOpenNewTab = function() {
 }
 
 Tab.prototype.getFid = function(n) {
+	n = !isU(n) ? n : window.currentCmTargetId;
 	return intval(this.list[this.toI(n)].id);
 }
 
 Tab.prototype.onClickDownload = function() {
-	var o = this, n = o.getFid(window.currentCmTargetId),
+	var o = this, n = o.getFid(),
 		url = `${br}/drivegetlink.json?i=${n}`;
 	Rest2._get(o.onSuccessGetDLink, url, o.onFailGetDLink, o);
 }
@@ -557,68 +557,75 @@ Tab.prototype.onClickRemove = function() {
 		o = this,
 		ival,
 		path,
-		i, SZ, keys, parentNode, deletedKeys = [];
+		i, SZ, keys, parentNode, deletedKeys = [],
+		isMult = 0;
 		
 	if (count(this.oSelectionItems) > 1) {
 		msg = L("Are you sure you want to permanently delete files") + "?";
+		isMult = 1;
 	} else if (count(this.oSelectionItems) == 1) {
-		id = this.toI(firstKey(this.oSelectionItems));
-		msg = L("Are you sure you want to permanently delete file") + sp + '"' + this.list[id].name + sp + "\"?";
+		id = this.getFid();
+		msg = L("Are you sure you want to permanently delete file") + sp + '"' + o.list[o.toI(currentCmTargetId)].name + sp + "\"?";
 	} else {
 		return;
 	}
  		
 	if (confirm(msg)) {
-		i = 0;
-		keys = array_keys(this.oSelectionItems);
-		
-		SZ = sz(keys);
-		ival = setInterval(function(){
-			var id, j;
-			if (i >= SZ) {
-				clearInterval(ival);
-				SZ = sz(deletedKeys);
-				for (j = SZ - 1; j > -1; j--) {
-					o.list.splice(o.toI(deletedKeys[j]), 1);
-				}
-				o.listRenderer.run(sz(o.list), o, o.list, o.toI(o.listRenderer.firstRenderedEl.id));
-				return;
-			}
-			id = keys[i].replace('f', '');
-			
-			if (o.list[id]) {
-				path = o.currentPath + "/" + o.list[id].name;
-				o.removeOneItem(path, e(keys[i]));
-				deletedKeys.push(keys[i]);
-			}
-			
-			i++;
-		}, 100);
+		keys = array_keys(o.oSelectionItems);
+		if (isMult) {
+			o.removeItems(keys);
+		} else {
+			o.removeOneItem(id, e(currentCmTargetId), currentCmTargetId);
+		}
 	}
 }
-Tab.prototype.removeOneItem = function(path, node) {
-	var arg = 'f',
-		cmd,
-		sh = App.dir() + "/sh/o.sh",
-		o = this;
-	if (FS.isDir(path)) {
-		arg = "rf";
-	}
-	cmd = "#!/bin/bash\nrm -" + arg + " \"" + path.trim() + "\"\n";
-	FS.writefile(sh, cmd);
-	jexec(sh, [o, o.onFinishRemove], DevNull, [o.onErrorRemove]);
-	
-	if (node) {
-		rm(node);
-		/*node.removeAttribute('id');
-		stl(node, 'display', 'none');*/
-	}
+Tab.prototype.removeOneItem = function(i, node, idx) {
+	var o = this;
+	o.removingNodes = o.removingNodes ? o.removingNodes : [];
+	o.removingNodes.push(mclone(o.list[o.toI(idx)].src));
+	o.list.splice(idx, 1);
+	rm(node);
+	o.failRmMsg = L("Error remove file");
+	Rest2._post({i}, o.onFinishRemove, `${br}/driverm.json`, o.onErrorRemove, o);
 }
-Tab.prototype.onFinishRemove = function(stdout, stderr) {
-	
+Tab.prototype.onFinishRemove = function(data) {
+	var o = this;
+	o.removingNodes = [];
 }
-Tab.prototype.onErrorRemove = function(stdout, stderr) {
-	alert(L("Error remove file"));
+Tab.prototype.onErrorRemove = function(data) {
+	var o = this, i, SZ, a = o.removingNodes;
+	a = a ? a : [];
+	SZ = sz(a);
+	for (i = 0; i < SZ; i++) {
+		o.list.push(o.createItem(a[i]));
+		o.redraw();
+	}
+	showError(o.failRmMsg);
+	o.removingNodes = [];
+}
+
+
+
+Tab.prototype.removeItems = function(ls) {
+	var o = this, i, SZ = sz(ls), b = {}, list2 = [], c = [];
+	o.removingNodes = o.removingNodes ? o.removingNodes : [];
+	for (i = 0; i < SZ; i++) {
+		o.removingNodes.push(mclone(o.list[o.toI(ls[i])].src));
+		//o.list.splice(o.toI(ls[i]), 1);
+		b[o.toI(ls[i])] = 1;
+	}
+	SZ = sz(o.list);
+	for (i = 0; i < SZ; i++) {
+		if (b[i] != 1) {
+			list2.push(o.list[i]);
+		} else {
+			rm("f" + i);
+			c.push((o.list[i].src.type == "c" ? "f" : "fi") + o.getFid(i));
+		}
+	}
+	o.list = list2;
+	o.failRmMsg = L("Error remove files");
+	Rest2._post({t:o.currentFid, ls:c.join(',')}, o.onFinishRemove, `${br}/drivermls.json`, o.onErrorRemove, o);
 }
 
 Tab.prototype.setStatus = function(s, showLoader) {
