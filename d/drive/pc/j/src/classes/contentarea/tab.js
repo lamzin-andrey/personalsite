@@ -479,22 +479,20 @@ Tab.prototype.onClickUpload = function(evt) {
 Tab.prototype.onClickRename = function() {
 	var 
 		currentCmTargetId,
+		o = this,
 		idx,
 		srcName,
 		pathInfo,
 		shortName,
 		newName,
-		cmd,
-		sh = App.dir() + "/sh/o.sh",
-		newPath,
 		cmId,
 		item;
 
 	if (!currentCmTargetId) {
-		currentCmTargetId = this.activeItem.parentNode.id;
+		currentCmTargetId = o.activeItem.parentNode.id;
 	}
 	if (!currentCmTargetId) {
-		var firstId = firstKey(this.oSelectionItems);
+		var firstId = firstKey(o.oSelectionItems);
 		if (firstId) {
 			currentCmTargetId = firstId;
 		}
@@ -507,25 +505,27 @@ Tab.prototype.onClickRename = function() {
 		return;
 	}
 	idx = currentCmTargetId.replace('f', '');
-	srcName = this.currentPath + '/' + this.list[idx].name;
+	srcName = o.currentPath + '/' + o.list[idx].name;
 	pathInfo = pathinfo(srcName);
 	shortName = pathInfo.basename;
 	newName = prompt(L("Enter new name"), shortName)
 	
 	if (newName) {
-		newPath = this.currentPath + '/' + newName;
-		if (FS.fileExists(newPath)) {
-			alert(L("File or folder already exists"));
-			return;
-		}
-		cmd = "#!/bin/bash\nmv \"" + srcName + "\" \"" + newPath + '"';
-		FS.writefile(sh, cmd);
-		jexec(sh, DevNull, DevNull, DevNull);
+		Rest2._post({
+				i: o.getFid(idx),
+				s: newName,
+				c: o.currentFid,
+				t: (o.list[idx].src.type == "c" ? 'c' : 'f')
+			},
+			DevNull, `${br}/drivern.json`, defaultResponseError, o
+		);
+		
 		cmId = attr(currentCmTargetId, 'data-cmid');
 		if (cmId) {
-			item = this.list[idx];
+			item = o.list[idx];
 			item.name = newName
-			this.listRenderer.updateItem(idx, item);
+			item.src.name = newName
+			o.listRenderer.updateItem(idx, item);
 		}
 	}
 }

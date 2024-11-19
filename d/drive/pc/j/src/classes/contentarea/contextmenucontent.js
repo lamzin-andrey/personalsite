@@ -168,7 +168,7 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemIcon">\
 						&nbsp;\
 					</div>\
-					<div class="contextMenuItemText">Переименовать</div>\
+					<div class="contextMenuItemText">' + L("Rename") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\
@@ -228,7 +228,7 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 					<div class="contextMenuItemIcon">\
 						&nbsp;\
 					</div>\
-					<div class="contextMenuItemText">Переименовать</div>\
+					<div class="contextMenuItemText">' + L("Rename") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\
