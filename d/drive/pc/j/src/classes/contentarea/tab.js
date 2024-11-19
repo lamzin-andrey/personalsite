@@ -508,26 +508,31 @@ Tab.prototype.onClickRename = function() {
 	srcName = o.currentPath + '/' + o.list[idx].name;
 	pathInfo = pathinfo(srcName);
 	shortName = pathInfo.basename;
-	newName = prompt(L("Enter new name"), shortName)
 	
-	if (newName) {
-		Rest2._post({
-				i: o.getFid(idx),
-				s: newName,
-				c: o.currentFid,
-				t: (o.list[idx].src.type == "c" ? 'c' : 'f')
-			},
-			DevNull, `${br}/drivern.json`, defaultResponseError, o
-		);
-		
-		cmId = attr(currentCmTargetId, 'data-cmid');
-		if (cmId) {
-			item = o.list[idx];
-			item.name = newName
-			item.src.name = newName
-			o.listRenderer.updateItem(idx, item);
+	
+	setTimeout(() => {
+		newName = prompt(L("Enter new name"), shortName)
+		if (newName) {
+			Rest2._post({
+					i: o.getFid(idx),
+					s: newName,
+					c: o.currentFid,
+					t: (o.list[idx].src.type == "c" ? 'c' : 'f')
+				},
+				DevNull, `${br}/drivern.json`, defaultResponseError, o
+			);
+			
+			cmId = attr(currentCmTargetId, 'data-cmid');
+			if (cmId) {
+				item = o.list[idx];
+				item.name = newName
+				item.src.name = newName
+				o.listRenderer.updateItem(idx, item);
+			}
 		}
-	}
+	}, 10);
+		
+	
 }
 
 
