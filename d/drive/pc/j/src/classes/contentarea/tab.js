@@ -384,6 +384,27 @@ Tab.prototype.onClickOpenNewTab = function() {
 	}
 }
 
+Tab.prototype.getFid = function(n) {
+	return intval(this.list[this.toI(n)].id);
+}
+
+Tab.prototype.onClickDownload = function() {
+	var o = this, n = o.getFid(window.currentCmTargetId),
+		url = `${br}/drivegetlink.json?i=${n}`;
+	Rest2._get(o.onSuccessGetDLink, url, o.onFailGetDLink, o);
+}
+
+Tab.prototype.onSuccessGetDLink = function(data) {
+	if (this.onFailGetDLink(data)) {
+		window.location.href = data.link;
+	}
+}
+
+Tab.prototype.onFailGetDLink = function(data, responseText, info, xhr) {
+	return defaultResponseError(data, responseText, info, xhr);
+},
+
+
 Tab.prototype.exec = function(cmd, src, dest, onFinish, onStd, onErr) {
 	var slot;
 	onFinish = onFinish ? onFinish : DevNull;

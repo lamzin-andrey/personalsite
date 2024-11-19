@@ -125,7 +125,7 @@ var langRu = {
 	"Will be free in a month <span></span>" : "Через месяц освободится <span></span>",
 	"Will be released in six months <span></span>" : "Через полгода освободится <span></span>",
 	"I understand" : "Понятно",
-	"" : "",
+	"Download" : "Скачать",
 	"" : "",
 	"" : "",
 };
