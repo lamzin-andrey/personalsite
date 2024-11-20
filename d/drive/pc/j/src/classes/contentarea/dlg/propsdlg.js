@@ -8,8 +8,13 @@ class PropsDlg {
 		o.zAddE("bShared");
 		o.zAddE("tPerm");
 		o.zAddE("tProps");
+		o.zAddE("bOk");
+		o.zAddE("bCc");
+		o.zAddE("nm");
 		o.bShared.onclick = () => {o.showShared()}
 		o.bPerm.onclick = () => {o.showPerm()}
+		o.bOk.onclick = () => {o.onClickOk()}
+		o.bCc.onclick = () => {o.onClickCancel()}
 	}
 	
 	getDlgBtns() {
@@ -36,6 +41,11 @@ class PropsDlg {
 	
 	h(d, i, id) {
 	   let tpl, meas, bSz, szBytes, o = this;
+	   o.id = id;
+	   o.currentCid = fmgr.tab.currentFid;
+	   o.srcName = d.name;
+	   o.srcType = (d.type == "c" ? 'c' : 'f');
+	   o.wid = currentCmTargetId;
 	   bSz = o.zToBytesFrm(d.s);
 	   szBytes = bSz.b;
 	   meas = bSz.meas;
@@ -81,7 +91,7 @@ class PropsDlg {
 			 </div><!-- /white -->
 			 <div c="btns">
 			   <input type="button" value="${L("OK")}" c="bOk">
-			   <input type="button" value="${L("Cancel")}" c="bOk">
+			   <input type="button" value="${L("Cancel")}" c="bCc">
 			 </div>
 	   </div>`;
 	   tpl = str_replace(" c=\"", " class=\"", tpl);
@@ -142,6 +152,10 @@ class PropsDlg {
 			}
 	}
 	
+	onQuit() {
+		fmgr.kbListener.activeArea = KBListener.AREA_TAB;
+	}
+	
 	showShared() {
 		let o = this;
 		removeClass(o.bPerm, "a");
@@ -156,5 +170,36 @@ class PropsDlg {
 		addClass(o.bPerm, "a");
 		hide(o.tProps);
 		show(o.tPerm);
+	}
+	
+	onClickCancel() {
+		fmgr.kbListener.activeArea = KBListener.AREA_TAB;
+		dlgMgr.close(this.n);
+	}
+	
+	onClickOk() {
+		let o =  this, idx, cmId, newName, item;
+		newName = v(o.nm);
+		idx = intval(fmgr.tab.toI(o.wid));
+		if (o.srcName != newName) {
+			Rest2._post({
+					i: o.id,
+					s: newName,
+					c: o.currentCid,
+					t: o.srcType
+				},
+				DevNull, `${br}/drivern.json`, defaultResponseError, o
+			);
+			
+			cmId = attr(o.wid, 'data-cmid');
+			if (cmId) {
+				item = fmgr.tab.list[idx];
+				item.name = newName
+				item.src.name = newName
+				fmgr.tab.listRenderer.updateItem(idx, item);
+			}
+		}
+		fmgr.kbListener.activeArea = KBListener.AREA_TAB;
+		dlgMgr.close(o.n);
 	}
 }

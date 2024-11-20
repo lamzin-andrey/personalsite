@@ -6,6 +6,7 @@ KBListener.AREA_BOOKMARKS = 1;
 KBListener.AREA_DEVICES = 2;
 KBListener.AREA_TAB = 3;
 KBListener.AREA_ADDRESS_LINE = 4;
+KBListener.AREA_PROPS_DLG = 5;
 KBListener.prototype.onKeyDown = function(evt) {
 	if (this.activeArea == 0) {
 		this.activeArea = KBListener.AREA_TAB;

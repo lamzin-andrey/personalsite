@@ -67,6 +67,9 @@ class DlgMgr {
 		let o = this, trg = o.ls[n];
 		o.activate(n);
 		trg.destroy();
+		if (trg.app.onQuit instanceof Function) {
+			trg.app.onQuit();
+		}
 		o.maxZ--;
 		this.panel.close(n);
 	}

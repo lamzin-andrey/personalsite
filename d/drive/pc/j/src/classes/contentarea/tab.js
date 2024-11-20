@@ -479,6 +479,7 @@ Tab.prototype.onClickProps = function() {
 	o = this.list[this.toI(currentCmTargetId)];
 	k = dlgMgr.create(k.h(o.src, o.i, o.id), k);
 	dlgMgr.center(k);
+	fmgr.kbListener.activeArea = KBListener.AREA_PROPS_DLG;
 }
 
 Tab.prototype.onClickUpload = function(evt) {
