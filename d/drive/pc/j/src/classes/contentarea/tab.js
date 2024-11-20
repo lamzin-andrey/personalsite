@@ -188,8 +188,9 @@ Tab.prototype.unpackHexSz = function(n, skipHuman) {
 			r = TextFormatU.money(S(a[0])) + ' ' + a[1];
 		}
 	} else {
-		r = parseFloat(S(a[0])) + '.' + (a[1] ? a[1] : '0');
+		r = parseFloat(S(a[0]) + '.0');
 		if (SZ > 2) {
+			r = parseFloat(S(a[0]) + '.' + (a[1] ? a[1] : '0'));
 			switch(a[2]) {
 				case "Kb":
 					r *= 1024;
@@ -472,10 +473,12 @@ Tab.prototype.onClickPaste = function() {
 }
 
 Tab.prototype.onClickProps = function() {
-	/*var k;
+	var k, o;
 	fmgr.dlgProp ? (delete fmgr.dlgProp) : 0;
 	k = fmgr.dlgProp = new PropsDlg();
-	dlgMgr.create(k.h(this.list[this.toI(currentCmTargetId)]), k);*/
+	o = this.list[this.toI(currentCmTargetId)];
+	k = dlgMgr.create(k.h(o.src, o.i, o.id), k);
+	dlgMgr.center(k);
 }
 
 Tab.prototype.onClickUpload = function(evt) {

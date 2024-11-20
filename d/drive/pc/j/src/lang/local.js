@@ -24,6 +24,7 @@ var langEn = {
 	"reset_password_form[email]" : "Email",
 	"bReset" : "Reset",
 	"bShowAuthScreen2" : "Go to login form",
+	'bytesMore19' : 'bytes',
 	
 	"register_form[name]" : "Name",
 	"register_form[surname]" : "Surname",

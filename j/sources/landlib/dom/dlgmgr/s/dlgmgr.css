@@ -25,6 +25,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	max-width: 400px;
+	font-size: 15px;
 }
 
 .landDlgMgr .topBrd img{

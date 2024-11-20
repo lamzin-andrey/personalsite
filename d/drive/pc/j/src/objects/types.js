@@ -4,17 +4,16 @@ window.Types = {
 			ext = a[sz(a) - 1].toLowerCase(),
 			r = {
 				t: L('File'),
-				i: root +  '/i/mi/unknown32.png',
+				i: 0,
 				c: 'cmDefault'
 			},
-			targetIcon,
 			images = In('png', 'jpg', 'jpe', 'jpeg', 'jfif', 'gif', 'bmp'),
 			texts  = In('txt', 'cpp', 'c', 'py', 'pas', 'json', 'rb', 'cs', 'pl', 'ini', 'conf', 'php'),
 			docs   = In('doc', 'docx', 'odf', 'xlsx', 'xls', 'csv', 'pdf', 'ppt'),
 			audio  = In('mp3', 'wav', 'ogg', 'flac', ''),
 			video  = In('mp4', 'avi', 'wma', 'mov', 'vob'),
 			exe    = In('exe', 'run'),
-			arch    = In('gz', 'zip', 'bzip', 'tar', '7z', 'rar'),
+			arch    = In('gz', 'bzip', 'tar', '7z', 'rar'),
 			web    = In('html', 'htm'),
 			sh     = In('bat', 'sh');
 		if (images[ext]) {
@@ -64,10 +63,9 @@ window.Types = {
 			r.i = root + '/i/cm/vlc32.png';
 		}
 		
-		targetIcon = root + '/i/mi/' + ext + '32.png';
-		
-		
-		r.i = targetIcon;
+		if (!r.i) {
+			r.i = root + '/i/mi/' + ext + '32.png';
+		}
 		
 		
 		return r;
