@@ -4,10 +4,12 @@ class PropsDlg {
 		let o = this, fr = "из";
 		o.n = n;
 		o.p = e(window.dlgMgr.getIdPref() + n);
+		//Share tab
 		o.zAddE("bPerm");
 		o.zAddE("bShared");
 		o.zAddE("tPerm");
 		o.zAddE("tProps");
+		o.zAddE("tLdr");
 		o.zAddE("bOk");
 		o.zAddE("bCc");
 		o.zAddE("nm");
@@ -15,6 +17,20 @@ class PropsDlg {
 		o.bPerm.onclick = () => {o.showPerm()}
 		o.bOk.onclick = () => {o.onClickOk()}
 		o.bCc.onclick = () => {o.onClickCancel()}
+		//Perm tab
+		o.zAddE("clink");
+		o.zAddE("bClosePermScr");
+		//o.zAddE("bAddFileUser");
+		o.zAddE("bFPPrivate");
+		o.zAddE("bFPPublic");
+		o.zAddE("hPrivateCaseLabel");
+		o.zAddE("hPublicCaseLabel");
+		o.zAddE("hCustomCaseLabel");
+		o.zAddE("bFPCustom");
+		o.zAddE("srchuser");
+		o.zAddE("bCloseAddFileUserScr");
+		o.zAddE("customUsersWrapper");
+		o.zAddE("customUsersSearchWrapper");
 	}
 	
 	getDlgBtns() {
@@ -86,7 +102,10 @@ class PropsDlg {
 				   </div>
 				 </div><!-- tProps -->
 				 <div c="tPerm d-none">
-					Here will permissions screen
+					${o.zGetPermissionsHtml()}
+				 </div>
+				 <div c="tLdr d-none">
+					${o.zGetLdrHtml()}
 				 </div>
 			 </div><!-- /white -->
 			 <div c="btns">
@@ -99,6 +118,66 @@ class PropsDlg {
 	   return tpl;
 	}
 	
+	zGetPermissionsHtml() {
+		return `<div class="tl" id="">
+				<div class="clinkW tc">
+					<a c="clink" href="#"></a>
+				</div>
+				<div c="pcase">
+					<input type="radio" name="filePermissionGr" value="private" c="bFPPrivate" id="bFPPrivate" checked>
+					<label for="bFPPrivate" c="hPrivateCaseLabel">
+						<span c="widelbl">
+						</span>
+					</label>
+				</div>
+				<div c="pcase">
+					<input type="radio" name="filePermissionGr" value="public" c="bFPPublic" id="bFPPublic">
+					<label for="bFPPublic" c="hPublicCaseLabel">
+						<span c="widelbl">
+						</span>
+					</label>
+				</div>
+				<div c="pcase">
+					<input type="radio" name="filePermissionGr" value="custom" id="bFPCustom" c="bFPCustom">
+					<label for="bFPCustom" c="hCustomCaseLabel">
+						<span c="widelbl">
+						</span>
+					</label>
+				</div>
+				<div c="tl">
+					<div c="clinkW">
+						<input type="text" c="srchuser" placeholder="Type user login and search it">
+					</div>
+					<div c="customUsersSearchWrapper"></div>
+					
+				</div>
+			
+				
+				<div c="customUsersWrapper"></div>
+				
+				<div c="pairBtnHWr tc">
+					<span c="userCardBtn bAddFileUser">
+						<span c="userCardBtnImgW">
+							<img src="../a2/i/+.png">
+						</span>
+						<span c="userCardBtnImgLbl hAddUserPerm"></span>
+					</span>
+					
+					<span c="userCardBtn bClosePermScr" >
+						<span class="userCardBtnImgW">
+							<img src="../a2/i/exit.png">
+						</span>
+						<span c="userCardBtnImgLbl hExitPerm"></span>
+					</span>
+				</div>
+			</div>`;
+	}
+	
+	zGetLdrHtml() {
+		return `<div c="ldrw">
+			<img src="${root}/i/ld/s.gif">
+		</div>`;
+	}
 	zToBytesFrm(s) {
 		let r;
 		r = {};
@@ -166,10 +245,24 @@ class PropsDlg {
 	
 	showPerm() {
 		let o = this;
+		if (o.noHavePermData) {
+			showError(L("Error get file information" + '. ' + L("Try close and open props dialog again") + '.'));
+			return;
+		}
 		removeClass(o.bShared, "a");
 		addClass(o.bPerm, "a");
 		hide(o.tProps);
+		hide(o.tLdr);
 		show(o.tPerm);
+	}
+	
+	showLdrScr() {
+		let o = this;
+		removeClass(o.bShared, "a");
+		addClass(o.bPerm, "a");
+		hide(o.tProps);
+		hide(o.tPerm);
+		show(o.tLdr, "flex");
 	}
 	
 	onClickCancel() {

@@ -5,6 +5,9 @@ var langRu = {
 	'hLangR' : 'Russian',
 	'bRemove' : 'Удалить',
 	'Remove' : 'Удалить',
+	'Cut' : 'Вырезать',
+	'Paste' : 'Вставить',
+	'Sharing' : 'Поделиться',
 	'Bookmarks' : 'Закладки',
 	'Devices' : 'Устройства',
 	'Image' : 'Изображение',
@@ -14,6 +17,14 @@ var langRu = {
 	'byte' : 'байт',
 	'bytes' : 'байта',
 	'bytesMore19' : 'байт',
+	'Upload' : 'Загрузить',
+	
+	"Only for me" : "Только для меня",
+	"For all" : "Для всех",
+	"For users" : "Для пользователей",
+	"Error get file information" : "Ошибка получения информации о файле",
+	"Try close and open props dialog again" : "Попробуйте закрыть и открыть снова диалог свойств файла",
+	
 	'ChooseFile' : 'Выберите файл',
 	'Video' : 'Видео',
 	'Archive' : 'Архив',
@@ -90,6 +101,7 @@ var langRu = {
 	"Select file with early seaved bookmark" : "Выбрать файл с ранними сохраненными закладками",
 	"Show catalogs" : "Показывать каталоги",
 	"No show catalogs" : "Не показывать каталоги",
+	
 	// reg screen
 	"bShowAuthScreen4" : "Вход по логину и паролю",
 	"Error remove file" : "Ошибка удаления файла",

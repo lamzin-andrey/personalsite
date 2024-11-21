@@ -114,7 +114,7 @@ ContextMenuContent.prototype.getUploadItemHtml = function() {
 					<div class="contextMenuItemIcon">
 						<img src="./i/cm/undo16.png">
 					</div>
-					<div class="contextMenuItemText">` + L("Upload here") + `</div>
+					<div class="contextMenuItemText">` + L("Upload") + `</div>
 					<div class="cf"></div>
 					<input id="iFile" multiple type="file" style="display:none" onchange="app.tab.onClickUpload(window.event)">
 				</label>`;
@@ -201,18 +201,25 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 					<div class="contextMenuItemText">'+ L('Download') + '</div>\
 					<div class="cf"></div>\
 				</div>\
+				<div class="contextMenuItem" onclick="app.tab.onClickSharing()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/web16.png">\
+					</div>\
+					<div class="contextMenuItemText">'+ L('Sharing') + '</div>\
+					<div class="cf"></div>\
+				</div>\
 				<div class="contextMenuItem" onclick="app.tab.onClickCut()">\
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/cut16.png">\
 					</div>\
-					<div class="contextMenuItemText">Вырезать</div>\
+					<div class="contextMenuItemText">'+ L('Cut') + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				<div class="contextMenuItem" onclick="app.tab.onClickPaste()">\
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pst16.png">\
 					</div>\
-					<div class="contextMenuItemText">Вставить</div>\
+					<div class="contextMenuItemText">'+ L('Paste') + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\

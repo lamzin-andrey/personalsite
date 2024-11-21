@@ -171,7 +171,7 @@
   margin: 0 6px 6px 0;
 }
 
-
+/* --  props-- */
 .props-dlg {
 	background-color: #e8e8e7;
 	font-size: 12px;
@@ -255,4 +255,59 @@
 
 .props-dlg .w .kv{
 	margin-top: 10px;
+}
+
+.props-dlg .w .tLdr{
+	width:100%;
+	height:100%;
+	display:flex;
+	align-items: center;
+}
+
+.props-dlg .w .tLdr .ldrw{
+	width: 100%;
+	text-align: center;
+}
+
+.props-dlg .w .tPerm .customUsersWrapper, .props-dlg .w .tPerm .customUsersSearchWrapper {
+  max-height: 84px;
+  overflow-y: scroll;
+  border: solid 1px gray;
+  margin-top: 9px;
+}
+
+.props-dlg .w .tPerm .customUsersSearchWrapper {
+	min-height: 84px;
+}
+
+.props-dlg .w .tPerm .userCardSm {
+	border-bottom: gray 1px solid;
+}
+
+.props-dlg .w .tPerm .userCardSmAvatar img {
+	float:left;
+}
+
+.props-dlg .w .tPerm .userCardSmAvatar img {
+	max-height: 24px;
+}
+
+.props-dlg .w .tPerm .rmu{
+	cursor:pointer;
+}
+.props-dlg .w .tPerm .userCardSmNick{
+  line-height: 26px;
+  margin-left: 10px;
+  color: #13122b;
+}
+
+.props-dlg .w .tPerm .userCardSmAvatarAddBtn{
+  float:right;
+  padding-top: 4px;
+  margin-right: 4px;
+}
+
+.props-dlg .w .tPerm .userCardSmAvatarAddBtn img{
+	max-height: 22px;
+	cursor:pointer;
 }

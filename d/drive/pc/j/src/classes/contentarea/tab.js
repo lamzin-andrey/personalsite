@@ -473,14 +473,26 @@ Tab.prototype.onClickPaste = function() {
 }
 
 Tab.prototype.onClickProps = function() {
+	this.showPropsDlg(0);	
+}
+Tab.prototype.onClickSharing = function() {
+	this.showPropsDlg(1);
+}
+Tab.prototype.showPropsDlg = function(bm) {
 	var k, o;
 	fmgr.dlgProp ? (delete fmgr.dlgProp) : 0;
 	k = fmgr.dlgProp = new PropsDlg();
 	o = this.list[this.toI(currentCmTargetId)];
 	k = dlgMgr.create(k.h(o.src, o.i, o.id), k);
+	FPC.init();
+	AddFileUser.init();
+	if (bm == 1) {
+		fmgr.dlgProp.showLdrScr();
+	}
 	dlgMgr.center(k);
 	fmgr.kbListener.activeArea = KBListener.AREA_PROPS_DLG;
 }
+
 
 Tab.prototype.onClickUpload = function(evt) {
 	upload.onSelectFile(evt);
