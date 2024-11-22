@@ -18,12 +18,15 @@ var langRu = {
 	'bytes' : 'байта',
 	'bytesMore19' : 'байт',
 	'Upload' : 'Загрузить',
+	"Save" : "Сохранить",
 	
 	"Only for me" : "Только для меня",
 	"For all" : "Для всех",
 	"For users" : "Для пользователей",
 	"Error get file information" : "Ошибка получения информации о файле",
 	"Try close and open props dialog again" : "Попробуйте закрыть и открыть снова диалог свойств файла",
+	"Type user login and search": "Введите логин пользователя и найдите его",
+	"Your browser does not support copying. But you can click link and copy adress line in opened tab." : "Ваш браузер не поддерживает копирование. Но вы можете уликнуть на ссылку и скопировать её из адресной строки новой вкладки.",
 	
 	'ChooseFile' : 'Выберите файл',
 	'Video' : 'Видео',

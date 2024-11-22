@@ -466,7 +466,7 @@ Tab.prototype.getNewName = function(newName) {
 
 
 Tab.prototype.onClickCut = function() {
-	this.copyPaste.cutAction(window.currentCmTargetId);
+	this.copyPaste.cutAction(currentCmTargetId);
 }
 Tab.prototype.onClickPaste = function() {
 	this.copyPaste.pasteAction();
@@ -484,10 +484,12 @@ Tab.prototype.showPropsDlg = function(bm) {
 	k = fmgr.dlgProp = new PropsDlg();
 	o = this.list[this.toI(currentCmTargetId)];
 	k = dlgMgr.create(k.h(o.src, o.i, o.id), k);
-	FPC.init();
+	FPC.init(bm);
 	AddFileUser.init();
 	if (bm == 1) {
 		fmgr.dlgProp.showLdrScr();
+	} else {
+		fmgr.dlgProp.showShared();
 	}
 	dlgMgr.center(k);
 	fmgr.kbListener.activeArea = KBListener.AREA_PROPS_DLG;

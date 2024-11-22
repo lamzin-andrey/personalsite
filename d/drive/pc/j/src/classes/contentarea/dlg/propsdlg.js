@@ -17,10 +17,10 @@ class PropsDlg {
 		o.bPerm.onclick = () => {o.showPerm()}
 		o.bOk.onclick = () => {o.onClickOk()}
 		o.bCc.onclick = () => {o.onClickCancel()}
+		o.nm.onkeydown = (ev) => {o.onEnter(ev)}
 		//Perm tab
 		o.zAddE("clink");
-		o.zAddE("bClosePermScr");
-		//o.zAddE("bAddFileUser");
+		o.zAddE("bSavePermScr");
 		o.zAddE("bFPPrivate");
 		o.zAddE("bFPPublic");
 		o.zAddE("hPrivateCaseLabel");
@@ -31,6 +31,7 @@ class PropsDlg {
 		o.zAddE("bCloseAddFileUserScr");
 		o.zAddE("customUsersWrapper");
 		o.zAddE("customUsersSearchWrapper");
+		o.zAddE("bCopy");
 	}
 	
 	getDlgBtns() {
@@ -57,6 +58,8 @@ class PropsDlg {
 	
 	h(d, i, id) {
 	   let tpl, meas, bSz, szBytes, o = this;
+	   PropsDlg.I = PropsDlg.I || 0;
+	   PropsDlg.I++;
 	   o.id = id;
 	   o.currentCid = fmgr.tab.currentFid;
 	   o.srcName = d.name;
@@ -66,7 +69,7 @@ class PropsDlg {
 	   szBytes = bSz.b;
 	   meas = bSz.meas;
 	   tpl = `<div c="props-dlg">
-		   ${o.zTabsHtml()}
+		   ${o.zTabsHtml(d.type)}
 			<div c="w">
 				<div c="tProps">
 				   <div c="rLogo r">
@@ -104,7 +107,7 @@ class PropsDlg {
 				 <div c="tPerm d-none">
 					${o.zGetPermissionsHtml()}
 				 </div>
-				 <div c="tLdr d-none">
+				 <div c="tLdr">
 					${o.zGetLdrHtml()}
 				 </div>
 			 </div><!-- /white -->
@@ -119,31 +122,34 @@ class PropsDlg {
 	}
 	
 	zGetPermissionsHtml() {
+		let n, o = this;
+		n = PropsDlg.I;
 		return `<div class="tl" id="">
 				<div class="clinkW tc">
-					<a c="clink" href="#"></a>
+					<a c="clink" href="#" target="_blank"></a> <input type="image"  src="${root}/i/copy.png" c="bCopy">
 				</div>
 				<div c="pcase">
-					<input type="radio" name="filePermissionGr" value="private" c="bFPPrivate" id="bFPPrivate" checked>
-					<label for="bFPPrivate" c="hPrivateCaseLabel">
+					<input type="radio" name="filePermissionGr" value="private" c="bFPPrivate" id="bFPPrivate${n}" checked>
+					<label for="bFPPrivate${n}" c="hPrivateCaseLabel">
 						<span c="widelbl">
 						</span>
 					</label>
 				</div>
 				<div c="pcase">
-					<input type="radio" name="filePermissionGr" value="public" c="bFPPublic" id="bFPPublic">
-					<label for="bFPPublic" c="hPublicCaseLabel">
+					<input type="radio" name="filePermissionGr" value="public" c="bFPPublic" id="bFPPublic${n}">
+					<label for="bFPPublic${n}" c="hPublicCaseLabel">
 						<span c="widelbl">
 						</span>
 					</label>
 				</div>
 				<div c="pcase">
-					<input type="radio" name="filePermissionGr" value="custom" id="bFPCustom" c="bFPCustom">
-					<label for="bFPCustom" c="hCustomCaseLabel">
+					<input type="radio" name="filePermissionGr" value="custom" id="bFPCustom${n}" c="bFPCustom">
+					<label for="bFPCustom${n}" c="hCustomCaseLabel">
 						<span c="widelbl">
 						</span>
 					</label>
 				</div>
+				<div c="customUsersWrapper"></div>
 				<div c="tl">
 					<div c="clinkW">
 						<input type="text" c="srchuser" placeholder="Type user login and search it">
@@ -153,22 +159,10 @@ class PropsDlg {
 				</div>
 			
 				
-				<div c="customUsersWrapper"></div>
 				
-				<div c="pairBtnHWr tc">
-					<span c="userCardBtn bAddFileUser">
-						<span c="userCardBtnImgW">
-							<img src="../a2/i/+.png">
-						</span>
-						<span c="userCardBtnImgLbl hAddUserPerm"></span>
-					</span>
-					
-					<span c="userCardBtn bClosePermScr" >
-						<span class="userCardBtnImgW">
-							<img src="../a2/i/exit.png">
-						</span>
-						<span c="userCardBtnImgLbl hExitPerm"></span>
-					</span>
+				
+				<div c="pairBtnHWr">
+					<input type="button" c="bSavePermScr" value="${L("Save")}">
 				</div>
 			</div>`;
 	}
@@ -210,10 +204,10 @@ class PropsDlg {
 		return L(a[m]);
 	}
 	
-	zTabsHtml() {
+	zTabsHtml(tp) {
 		return `<div c="tbs">
 			<div c="bShared a">${L("Share")}</div>
-			<div c="bPerm">${L("Permissions")}</div>
+			<div c="bPerm" ${tp == 'c' ? 'style="display:none"' : ''}>${L("Permissions")}</div>
 			<div c="cf"></div>
 		</div>`;
 	}
@@ -239,8 +233,9 @@ class PropsDlg {
 		let o = this;
 		removeClass(o.bPerm, "a");
 		addClass(o.bShared, "a");
-		hide(o.tPerm);
 		show(o.tProps);
+		hide(o.tPerm);
+		hide(o.tLdr);
 	}
 	
 	showPerm() {
@@ -268,6 +263,12 @@ class PropsDlg {
 	onClickCancel() {
 		fmgr.kbListener.activeArea = KBListener.AREA_TAB;
 		dlgMgr.close(this.n);
+	}
+	
+	onEnter(ev) {
+		if (ev.keyCode == 13) {
+			this.onClickOk();
+		}
 	}
 	
 	onClickOk() {

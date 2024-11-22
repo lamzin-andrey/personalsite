@@ -9,13 +9,7 @@ window.AddFileUser = {
 				100
 			);
 		}
-		/*dlg.bCloseAddFileUserScr.onclick = () => {
-			o.onClose();
-		}*/
 	},
-	/*onClose:function() {
-		showScreen('hFilePermission');
-	},*/
 	onInput() {
 		let s = fmgr.dlgProp.srchuser.value;
 		if (sz(s) > 2) {
@@ -37,7 +31,7 @@ window.AddFileUser = {
 			SZ = sz(data.ls);
 			cont.innerHTML = '';
 			for (i = 0; i < SZ; i++) {
-				s = str_replace('{id}', data.ls[i].id, tpl);
+				s = str_replace('{id}', data.ls[i].id + '-' + PropsDlg.I, tpl);
 				s = str_replace('{login}', data.ls[i].login, s);
 				s = str_replace('{fid}', dlg.id, s);
 				s = str_replace('{root}', roota2, s);
@@ -52,6 +46,7 @@ window.AddFileUser = {
 	
 	add(evt, userId, fileId){
 		let o = this, trg = ctrg(evt), s;
+		userId = userId.split('-')[0];
 		ee(trg, "img")[0].src = root + "/i/ld/s.gif";
 		o.cAppendUserId = userId;
 		s = attr(trg, "onclick");
@@ -66,7 +61,7 @@ window.AddFileUser = {
 		if (o.onFailAddUsers(data)) {
 			// TODO здесь видимо добавляют юзера в список
 			//W.fileListItemCmenu.onClickShareLink();
-			i = e('usr' + o.cAppendUserId);
+			i = e('usr' + o.cAppendUserId + '-' + PropsDlg.I);
 			if (i) {
 				ee(i, "img")[1].src = roota2 + "/i/exit.png";
 				s = attr(ee(i, "span")[2], "onclick");
@@ -80,7 +75,7 @@ window.AddFileUser = {
 	{
 		let r = defaultResponseError(data, responseText, info, xhr), i;
 		if (!r) {
-			i = e('usr' + this.cAppendUserId);
+			i = e('usr' + this.cAppendUserId + '-' + PropsDlg.I);
 			if (i) {
 				ee(i, "img")[1].src = roota2 + "/i/+.png";
 				i.parentNode = d.customUsersSearchWrapper;
@@ -95,7 +90,7 @@ window.AddFileUser = {
 							<img src="{root}/i/usr.png">\
 						</span>\
 						<span class="userCardSmNick">{login}</span>\
-						<span class="userCardSmAvatarAddBtn tc" onclick="AddFileUser.add(window.event, {id}, {fid})">\
+						<span class="userCardSmAvatarAddBtn tc" onclick="AddFileUser.add(window.event, \'{id}\', {fid})">\
 							<img src="{root}/i/+.png" class="rmu" >\
 						</span>\
 						<div class="cf"></div>\

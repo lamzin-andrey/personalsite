@@ -1,35 +1,29 @@
 window.FPC = {
-	init() {
-		let cb = () => {
-				window.FPC.onClickSave();
-			},
-			mainExit = fmgr.dlgProp.bClosePermScr,
+	init(silent) {
+		let bSave = fmgr.dlgProp.bSavePermScr,
 			d = fmgr.dlgProp,
-			exLs = cs(d.p, 'pcaseRmBtn'),
-			i, o = this,
-			SZ = sz(exLs);
-		for (i = 0; i < SZ; i++) {
-			exLs[i].onclick = cb;
-		}
+			i, o = this;
+		o.silent = silent;
 		
-		// Translate labels
 		v(d.hPrivateCaseLabel, L("Only for me"));
 		v(d.hPublicCaseLabel, L("For all"));
 		v(d.hCustomCaseLabel, L("For users") + ":");
-		// / Translate labels
+		attr(fmgr.dlgProp.srchuser, "placeholder", L("Type user login and search"));
 		
-		// get data
 		Rest2._get(o.onLinkData, `${br}/drivegetfileprm.json?i=${d.id}`, o.onFailGetLinkData, o);
-		// get data
-				
-		mainExit.onclick = cb;
-		/*fmgr.dlgProp.onclick = () => {
-			window.FPC.onClickAddUser();
-		}*/
+		bSave.onclick = () => {window.FPC.onClickSave();}
+		d.bCopy.onclick = () => {window.FPC.onClickCopy();}
+		
 	},
-	/*onClickAddUser() {
-		showScreen('hAddFileUser');
-	},*/
+	
+	onClickCopy(){
+		try {
+			navigator.clipboard.writeText(attr(fmgr.dlgProp.clink, "href"));
+		} catch(err) {
+			showError(L("Your browser does not support copying. But you can click link and copy adress line in opened tab."));
+		}
+	},
+	
 	onLinkData(data) {
 		let o = this, d = fmgr.dlgProp;
 		if (!o.onFailGetLinkData(data)) {
@@ -40,7 +34,9 @@ window.FPC = {
 		ShareLinkSetter.setLink(data.flink);
 		d[data.shareMode].checked = true;
 		o.renderUsers(data.uls, data.shareMode);
-		d.showPerm();
+		if (o.silent) {
+			d.showPerm();
+		}
 	},
 	onFailGetLinkData(data, rt, inf, xhr) {
 		return defaultResponseError(data, rt, inf, xhr);
@@ -68,6 +64,7 @@ window.FPC = {
 		trg = ctrg(evt);
 		ee(trg, "img")[0].src = root + "/i/ld/s.gif";
 		evt.preventDefault();
+		uid = uid.split('-')[0];
 		Rest2._post({i:uid, f:fileId}, o.onSuccessRmFileUser,
 			br + '/drivermfileprm.json',
 			o.onFailRmFileUser, o);
@@ -76,7 +73,7 @@ window.FPC = {
 	onSuccessRmFileUser(data){
 		let o = this;
 		if (o.onFailRmFileUser(data)) {
-			o = e('usr' + data.id);
+			o = e('usr' + data.id + '-' + PropsDlg.I);
 			o ? rm(o) : 0;
 		}
 	},
@@ -92,7 +89,7 @@ window.FPC = {
 							<img src="{root}/i/usr.png">\
 						</span>\
 						<span class="userCardSmNick">{login}</span>\
-						<span class="userCardSmAvatarAddBtn tc" onclick="FPC.rm(window.event, {id}, {fid})">\
+						<span class="userCardSmAvatarAddBtn tc" onclick="FPC.rm(window.event, \'{id}\', {fid})">\
 							<img src="{root}/i/exit.png" class="rmu" >\
 						</span>\
 						<div class="cf"></div>\
@@ -109,7 +106,7 @@ window.FPC = {
 			if (mode != "bFPPrivate") {
 				dlg["bFPCustom"].checked = true;
 			}
-			s = str_replace('{id}', ls[i].id, tpl);
+			s = str_replace('{id}', ls[i].id + '-' + PropsDlg.I, tpl);
 			s = str_replace('{login}', ls[i].login, s);
 			s = str_replace('{fid}', dlg.id, s);
 			s = str_replace('{root}', W.roota2, s);

@@ -311,3 +311,31 @@
 	max-height: 22px;
 	cursor:pointer;
 }
+
+.props-dlg .w .tPerm .pairBtnHWr {
+	text-align: right;
+	margin-top:8px;
+}
+
+.props-dlg .w .tPerm .clinkW {
+	padding-top:6px;
+}
+.props-dlg .w .tPerm .clink {
+  font-size: 14px;
+  vertical-align: top;
+  line-height: 22px;
+}
+.props-dlg .w .tPerm .srchuser {
+	width: 88%;
+}
+.props-dlg .w .tPerm .clink {
+	cursor: pointer;
+}
+
+.props-dlg input[type=button] {
+	border: 1px gray solid;
+	background: linear-gradient(to bottom, #b4bfce, #FFF, #FFF, #b4bfce);
+	font-size: 12px;
+	height: 26px;
+	min-width: 36px;
+}
