@@ -103,7 +103,7 @@ window.FPC = {
 		SZ = sz(ls);
 		cont.innerHTML = '';
 		for (i = 0; i < SZ; i++) {
-			if (mode != "bFPPrivate") {
+			if (mode != "bFPPublic") {
 				dlg["bFPCustom"].checked = true;
 			}
 			s = str_replace('{id}', ls[i].id + '-' + PropsDlg.I, tpl);

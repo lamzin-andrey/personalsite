@@ -49,7 +49,7 @@ ListRenderer.prototype.renderPart = function(){
 			freeSpaceText = ', ' + freeSpaceText;
 		}
 		statusText = this.sz + ' ' 
-						+ TextTransform.pluralize(this.sz, L('Objects'), L('Objects-voice1'), L('Objects-voice2'))
+						+ TextFormatU.pluralize(this.sz, L('Objects'), L('Objects-voice1'), L('Objects-voice2'))
 						+ ' (' + this.getHumanFilesize(intval(this.filesSize), 2, 3, false) + ')'
 						+ freeSpaceText;
 		this.context.setStatus.call(this.context, statusText);

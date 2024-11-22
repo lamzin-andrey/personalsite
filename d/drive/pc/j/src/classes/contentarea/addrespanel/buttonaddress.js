@@ -130,7 +130,7 @@ ButtonAddress.prototype.createLeftButton = function() {
 		path: '',
 		addClass: 'addressButtonLeft',
 		imgClass: 'addressButtonLeftIcon',
-		imgSrc: App.dir() + '/i/addressButtonLeft.png',
+		imgSrc: root + '/i/addressButtonLeft.png',
 		isLeftButton: true
 	};
 	
@@ -143,7 +143,7 @@ ButtonAddress.prototype.createRightButton = function() {
 		path: '',
 		addClass: 'addressButtonRight',
 		imgClass: 'addressButtonRightIcon',
-		imgSrc: App.dir() + '/i/addressButtonRight.png',
+		imgSrc: root + '/i/addressButtonRight.png',
 		isRightButton: true
 	};
 	
@@ -259,7 +259,7 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 	if (name == USER) {
 		title = L("Filesystem");
 		path = USER;
-		imgSrc = App.dir() + "/i/usb32.png";
+		imgSrc = root + "/i/usb32.png";
 		imgClass = "addressButtonIcon";
 	} else {
 		console.log(aPath, path);
@@ -268,10 +268,10 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 		title = name;
 	}
 	
-	if (path == ('/home/' + USER)) {
-		imgSrc = App.dir() + "/i/home32.png";
+	/*if (path == ('/home/' + USER)) {
+		imgSrc = root + "/i/home32.png";
 		imgClass = "addressButtonIcon";
-	}
+	}*/
 	if (path == window.app.tab.currentPath) {
 		addClass = "addressButtonActive";
 	}

@@ -50,12 +50,9 @@ TestSm.prototype.onEnterFrame = function(e) {
 	  return;
   }
   app.t.rotation += app.dr;
-  
-  //console.log(app.dr);
 }
-v("s", "recentdir")
 
-//window.addEventListener("load", function() {
-	window.bootSe2d =  new SimpleEngine2D("btlg", 44);
-	new TestSm();
-//});
+
+window.bootSe2d =  new SimpleEngine2D("btlg", 44);
+new TestSm();
+

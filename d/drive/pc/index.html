@@ -75,13 +75,15 @@
 	<script>q("humanvalue")</script>
 	<!-- /add file permissions screen -->
 	
-	<script>q("upload")</script>
+	<script>q("UploadDlg")</script>
 	<script src="./j/w/upload/uploadviewdlg.js?v=5" charset="UTF-8"></script>
+	<script>q("SpaceControl")</script>
 	<script src="./j/w/upload/nospaceleftdlg.js?v=5" charset="UTF-8"></script>
+	<script>q("UploadDlg")</script>
 	<script src="./j/w/upload/upload.js?v=5" charset="UTF-8"></script>
-	<script>q("a2dlg")</script>
+	<!--script>q("a2dlg")</script-->
 	<!--script src="../a2/j/bmenu/dlg/j/a2dlg.js?v=5"></script может быть -->
-	<script>q("options")</script>
+	<!--script>q("options")</script-->
 	<!-- script src="./j/w/options.js?v=5"></script может быть -->
 	<script>q("wusbrunner")</script>
 	<script src="./j/w/u.js?v=5"></script>
@@ -103,9 +105,6 @@
     
     
     <!-- qdjFM -->
-    <script src="./j/vendor/objects/recentdir.js?v=5"></script>
-    <script src="./j/vendor/objects/texttransform.js?v=5"></script>
-    <script src="./j/vendor/objects/settings.js?v=5"></script>
     <script src="./j/vendor/objects/cmenu.js?v=5"></script>
     <script src="./j/vendor/objects/env/appenv.js?v=5"></script>
     <script src="./j/vendor/files.js?v=5"></script>
@@ -114,34 +113,23 @@
     <script src="./j/src/lang/localru.js?v=5"></script>
     
     <!-- FileManagerApp -->
-    <script src="./j/src/classes/contentarea/filelist/procs/abstractlistproc.js?v=5"></script>
-    <script src="./j/src/classes/contentarea/filelist/procs/listproc.js?v=5"></script>
-    <script src="./j/src/classes/contentarea/filelist/procs/hiddenlistproc.js?v=5"></script>
-    <script src="./j/src/classes/contentarea/filelist/procs/copypasteproc.js?v=5"></script>
-    <script src="./j/src/classes/procmanager.js?v=5"></script>
-    
     <script>q("Bookmarks")</script>
     <script src="./j/src/classes/sidebar/bookmarks/abstractlist.js?v=5"></script>
     <script src="./j/src/classes/sidebar/bookmarks/bookmarks.js?v=5"></script>
-    
     <script>q("Navbarpanel")</script>
     <script src="./j/src/classes/sidebar/navbarpanel.js?v=5"></script>
-    
     <script>q("kblistener")</script>
     <script src="./j/src/classes/kblistener.js?v=5"></script>
-    
     <script>q("buttonaddress")</script>
     <script src="./j/src/classes/contentarea/addrespanel/buttonaddress.js"></script>
     <script>q("addresspanel")</script>
     <script src="./j/src/classes/contentarea/addrespanel/addresspanel.js"></script>
-    
     <script>q("(File)Types")</script>
-    <script src="./j/src/objects/types.js"></script><!-- call q() stop here-->
+    <script src="./j/src/objects/types.js"></script>
     <script>q("tabpanelitem")</script>
     <script src="./j/src/classes/contentarea/tabpanelitem.js"></script>
     <script>q("tabpanel")</script>
     <script src="./j/src/classes/contentarea/tabpanel.js"></script>
-    
     <script>q("PropsDlg")</script>
     <script src="./j/src/classes/contentarea/dlg/propsdlg.js"></script>
     <script>q("Tab")</script>
@@ -157,34 +145,39 @@
     <script>q("CopyPaste")</script>
     <script src="./j/src/classes/contentarea/filelist/cm/copypasteapp.js" charset="UTF-8"></script>
     <script src="./j/src/classes/contentarea/filelist/cm/copypaste.js"></script>
+    <script>q("FileList")</script>
     <script src="./j/src/classes/contentarea/filelist/list.js"></script>
+    <script>q("Context")</script>
     <script src="./j/src/classes/contentarea/contextmenucontent.js"></script>
-    <script src="./j/src/classes/contentarea/special/specialtabmanager.js"></script>
-    <script src="./j/src/classes/contentarea/special/htmltab.js"></script>
-    
+    <script>q("Filemanager")</script>
     <script src="./j/src/classes/filemanager.js"></script>
-    
     <!-- / FileManagerApp -->
     
     
     <!-- Wusb -->
     <!-- Эти переделать, v=X должна прокидыватсья во все редиректы -->
+    <script>q("VersReq")</script>
 	<script src="../a2/j/vers/versionreq.js?v=5"></script>
-	<script>q("")</script>
+	<script>q("VersionGetter")</script>
 	<script src="../a2/j/vers/getvers.js?v=5"></script>
-	<script>q("")</script>
     
     <!-- TODO add msg -->
+    <script>q("Registration")</script>
     <link href="./s/reg.css?v=5" type="text/css" rel="stylesheet" >
-    <link href="./s/dev.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("Layout")</script>
     <link href="./s/layout.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("Tables")</script>
     <link href="./s/table.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("Sidebar")</script>
     <link href="./s/sidebar.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("ContentArea")</script>
     <link href="./s/content.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("ContextMenu")</script>
     <link href="./s/contextmenu.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("ProgressBar")</script>
     <link href="./j/vendor/objects/pbar/pbar.css?v=5" type="text/css" rel="stylesheet"></link>
+    <script>q("DialogManager")</script>
     <link href="/j/sources/landlib/dom/dlgmgr/s/dlgmgr.css?v=5" type="text/css" rel="stylesheet"></link>
-    
-    
+    <script>q("FileMan Legacy")</script>
     <script src="./j/main.js"></script>
 </html>

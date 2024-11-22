@@ -72,14 +72,14 @@ class Bookmarks extends AbstractList{
 	addItem(user, name, locale, displayName, userCmId, sysCmId, fid, stack) {
 		let item = {
 				displayName : '',
-				icon: App.dir() + '/i/folder32.png',
+				icon: root + '/i/folder32.png',
 				path: '',
 				stack: []
 			}, 
 			srcName = name;
 		if (!name) {
 			item.displayName = user;
-			item.icon = App.dir() + '/i/usb32.png';
+			item.icon = root + '/i/usb32.png';
 			item.path = user;
 			item.stack = [];
 			item.fid = 0;
@@ -118,19 +118,19 @@ class Bookmarks extends AbstractList{
 	getIconByName(name) {
 		switch (name) {
 			case 'Desktop':
-				return App.dir() + '/i/desktop32.png';
+				return root + '/i/desktop32.png';
 			case 'Documents':
-				return App.dir() + '/i/documents32.png';
+				return root + '/i/documents32.png';
 			case 'Music':
-				return App.dir() + '/i/music32.png';
+				return root + '/i/music32.png';
 			case 'Images':
-				return App.dir() + '/i/images32.png';
+				return root + '/i/images32.png';
 			case 'Videos':
-				return App.dir() + '/i/videos32.png';
+				return root + '/i/videos32.png';
 			case 'Downloads':
-				return App.dir() + '/i/downArrow32.png';
+				return root + '/i/downArrow32.png';
 		}
-		return App.dir() + '/i/folder32.png';
+		return root + '/i/folder32.png';
 	}
 
 	getLocaleFolderName(name, locale) {
@@ -198,7 +198,6 @@ class Bookmarks extends AbstractList{
 
 	writeUserBookmarks(list, newKey) {
 		let bookmarksKey,
-			// bookmarks = Settings.get('bms') || {},
 			bookmarks = this.getUserBookmarks(),
 			uaBmData,
 			uaBm;

@@ -3,16 +3,13 @@ window.VERTICAL_SCROLL_COUNT = 1;
 function main() {
 	window.AppStartTime = time();
 	
-	var lang = Settings.get('currentLang');
+	var lang = storage('currentLang');
 	if (lang != 'ru' && lang != 'en') {
 		lang = 'ru';
 	}
 	
 	Qt.setWindowIconImage(Qt.appDir() + '/i/folder32.png');
 	Qt.maximize();
-	
-	
-	
 	
 	window.app = new FileManager();
 	window.app.init();
@@ -25,10 +22,7 @@ function main() {
 	}
 	window.onresize = onResize;
 	window.onkeydown = onKeyUp;
-	/*window.onkeyup = fixUp;
-	window.onkeypress = fixUp;*/
 	onResize();
-	//showScreen("fmgr");
 }
 
 function showScreen(id) {
@@ -114,7 +108,7 @@ function onKeyUp(evt) {
 		
     }
     // After press Enter in Confirm dialog '||' not work
-    if (46 == evt.keyCode && 16777223 == MW.getLastKeyCode()) {
+    if (46 == evt.keyCode) {
 		onDelete();
 	}
 	
@@ -137,7 +131,7 @@ function onClickExitMenu() {
 }
 
 function onClickChangeHideMode() {
-	var mode = intval(Settings.get('hMode')), text;
+	var mode = intval(storage('hMode')), text;
 	if (1 === mode) {
 		mode = 0;
 		text = L('Show hidden files Ctrl+H');
@@ -145,28 +139,11 @@ function onClickChangeHideMode() {
 		mode = 1;
 		text = L('Hide hidden files Ctrl+H');
 	}
-	Settings.set('hMode', mode);
+	storage('hMode', mode);
 	
 	if (app && app.tab) {
 		app.tab.setPath(app.tab.currentPath);
 		Qt.renameMenuItem(1, 0, text);
-	}
-}
-
-function onClickNoShowCatalogs() {
-	var sName = "noShowDir", mode = intval(Settings.get(sName)), text;
-	if (1 === mode) {
-		mode = 0;
-		text = L("No show catalogs");
-	} else {
-		mode = 1;
-		text = L("Show catalogs");
-	}
-	Settings.set(sName, mode);
-	
-	if (app && app.tab) {
-		app.tab.setPath(app.tab.currentPath);
-		Qt.renameMenuItem(1, 3, text);
 	}
 }
 

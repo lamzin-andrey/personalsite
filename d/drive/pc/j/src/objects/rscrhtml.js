@@ -238,4 +238,4 @@ function setRegScrLayout() {
 setRegScrLayout();
 //setRegScrListeners();
 RegScreenAnim.setListeners();
-q("RecentDir");
+

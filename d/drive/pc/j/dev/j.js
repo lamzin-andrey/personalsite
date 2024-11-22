@@ -587,17 +587,6 @@ window.Env = {
 	}
 };
 
-window.App = {
-	dir: function(){
-		return Qt.appDir();
-	},
-	getArgs: function(){
-		return Qt.getArgs();
-	},
-	quit:function(){
-		Qt.quit();
-	}
-};
 
 window.MW = {
 	getLastKeyChar: function(){

@@ -1,8 +1,8 @@
 function FileHeader() {
 	this.name = 'FileHeader';
 	this.sort = window.app.sort;
-	this.activeTabKey = Settings.get('tabSortKey') ? Settings.get('tabSortKey') : 'name';
-	this.direct = Settings.get('tabSortDirect') ? Settings.get('tabSortDirect') : 'ASC';
+	this.activeTabKey = storage('tabSortKey') ? storage('tabSortKey') : 'name';
+	this.direct = storage('tabSortDirect') ? storage('tabSortDirect') : 'ASC';
 	this.sort.field = this.activeTabKey;
 	this.sort.direct = this.direct;
 	this.setListeners();
@@ -30,9 +30,9 @@ FileHeader.prototype.showImage = function(activeTab){
 FileHeader.prototype.setImgVisible = function(tab, v){
 	var img = cs(tab, 'imgTabContentHeaderImg')[0], c = 'd-none';
 	if (this.direct == 'ASC') {
-		attr(img, 'src', App.dir() + '/i/tabContentHeaderImgB.png');
+		attr(img, 'src', root + '/i/tabContentHeaderImgB.png');
 	} else {
-		attr(img, 'src', App.dir() + '/i/tabContentHeaderImgT.png');
+		attr(img, 'src', root + '/i/tabContentHeaderImgT.png');
 	}
 	if (!v) {
 		addClass(img, c);
@@ -77,8 +77,8 @@ FileHeader.prototype.onClickTab = function(tab, key){
 	
 	this.sort.direct = this.direct;
 	this.sort.field = this.activeTabKey;
-	Settings.set('tabSortKey', this.activeTabKey);
-	Settings.set('tabSortDirect', this.direct);
+	storage('tabSortKey', this.activeTabKey);
+	storage('tabSortDirect', this.direct);
 	app.tab.redraw();
 }
 FileHeader.prototype.onClickTabSize = function(){

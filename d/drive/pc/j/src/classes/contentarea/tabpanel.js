@@ -124,7 +124,7 @@ TabPanel.prototype.renderTabs = function(noAll){
 	var a = this.dataForRender, i, SZ = sz(a), j,
 		tpl = '<div class="tabName">{name}</div>\
 					<div class="tabClose">\
-						<img id="tabc{id}" data-idx="{idx}" class="pointer imgBtnTabClose" src="' + App.dir() + '/i/tabClose.png">\
+						<img id="tabc{id}" data-idx="{idx}" class="pointer imgBtnTabClose" src="' + root + '/i/tabClose.png">\
 					</div>', s,
 		parent = e('tabsPlacer'),
 		btn, w = 0, o = this, closeBtn, elPrps;

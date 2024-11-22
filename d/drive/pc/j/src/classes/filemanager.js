@@ -9,7 +9,6 @@ FileManager.prototype.init = function() {
 	o.sort = new Sort();
 	window.app.sort = this.sort;
 	o.fileHeader = new FileHeader();
-	o.procManager = new ProcManager();
 	o.isActive = false;
 	
 	o.setMainMenu(); // TODO -- ?
@@ -68,7 +67,6 @@ FileManager.prototype.initActiveTab = function() {
  * Вызывается когда получены последние данные об окружении AppEnv (USER, HOME и т. п)
 */
 FileManager.prototype.onGetActualEnv = function() {
-	this.procManager.run();
 	if (!this.bookmarksManager.isRun()) {
 		this.bookmarksManager.run();
 		this.initActiveTab();

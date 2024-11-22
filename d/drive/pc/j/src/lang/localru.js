@@ -172,10 +172,4 @@ var langRu = {
 };
 
 var jaqedLang = langRu; // TODO потом в зависимости от настроек
-/*
 
-window.addEventListener('load', function() {
-	e('hCommentSmallText').innerHTML = L('hCommentSmallText');
-}, false);
-*/
-q("abstractlistproc");

@@ -2,7 +2,6 @@ function Tab() {
 	var o = this;
 	this.cName = 'tabContentItem';
 	this.username = '';
-	this.specialTabManager = new SpecialTabManager();
 	this.navbarPanelManager = new NavbarPanel();
 	this.addressPanel = new AddressPanel();
 	this.listRenderer = new ListRenderer();
@@ -44,9 +43,7 @@ Tab.prototype.setPath = function(path, fid) {
 	}
 	
 	appSetTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
-	if (o.isSpecialTab()) {
-		return;
-	}
+	
 	if (!app.isActive) {
 		return;
 	}
@@ -332,26 +329,13 @@ Tab.prototype.getUser = function(s) {
 
 // TODO почистить
 Tab.prototype.openAction = function(id, fid) {
-	var item, path, cmd, slot, 
-		pathInfo, runner = 'xdg-open';
+	var item, path,	pathInfo;
 	
 	item = this.getClickedItem(id);
 	path = this.currentPath + '/' + item.name;
 	pathInfo = pathinfo(path)
 	if (item.type == L('Catalog')) {
 		app.setActivePath(path, [''], fid);
-	} else {
-		path = str_replace('//', '/', path);
-		cmd = '#!/bin/bash\n' + runner + ' \'' + path + '\'';
-		if (pathInfo.extension == 'mts' || pathInfo.extension == 'mov') {
-			// runner = 'vlc &;\n sleep 1;\n vlc --started-from-file';
-			runner = 'killall vlc; vlc --started-from-file';
-			cmd = '#!/bin/bash\n' + runner + ' "' + path + '"';
-		}
-		
-		// cmd = '#!/bin/bash\n' + runner + ' \'' + path + '\'';
-		slot = App.dir() + '/sh/o.sh';
-		jexec(slot, DevNull, DevNull, DevNull);
 	}
 }
 
@@ -359,12 +343,8 @@ Tab.prototype.onClickOpenWebNewTab = function() {
 	var item, path;
 	item = this.getClickedItem(currentCmTargetId);
 	path = this.currentPath + '/' + item.name;
-	if (FS.fileExists(path)) {
-		// add spec tab
-		// set tab spec tab
-		app.tabPanel.addTabItem(path, TabPanelItem.TYPE_HTML);
-		app.tab.setPath(path);
-	}
+	app.tabPanel.addTabItem(path, TabPanelItem.TYPE_HTML);
+	app.tab.setPath(path);
 }
 
 Tab.prototype.onClickOpen = function() {
@@ -385,7 +365,13 @@ Tab.prototype.onClickOpenNewTab = function() {
 }
 
 Tab.prototype.getFid = function(n) {
+	var i, o = this;
 	n = !isU(n) ? n : window.currentCmTargetId;
+	if (isU(n)) {
+		for (n in o.oSelectionItems) {
+			break;
+		}
+	}
 	return intval(this.list[this.toI(n)].id);
 }
 
@@ -406,24 +392,6 @@ Tab.prototype.onFailGetDLink = function(data, responseText, info, xhr) {
 },
 
 
-Tab.prototype.exec = function(cmd, src, dest, onFinish, onStd, onErr) {
-	var slot;
-	onFinish = onFinish ? onFinish : DevNull;
-	onStd = onStd ? onStd : DevNull;
-	onErr = onErr ? onErr : DevNull;
-	
-	cmd = '#!/bin/bash\n' + cmd;
-	if (src) {
-		cmd += ' "' + src + '"';
-	}
-	if (dest) {
-		cmd += ' "' + dest + '"';
-	}
-	cmd += '\n';
-	slot = App.dir() + '/sh/o.sh';
-	FS.writefile(slot, cmd);
-	jexec(slot, onFinish, onStd, onErr);
-}
 
 Tab.prototype.onClickNewFolder = function() {
 	this.newFolderAction();
@@ -431,25 +399,29 @@ Tab.prototype.onClickNewFolder = function() {
 
 
 Tab.prototype.newFolderAction = function() {
-	this.newItemAction(L("New catalog"), L("Enter catalog name"), "mkdir", true);
+	this.newItemAction(L("New catalog"), L("Enter catalog name"));
 }
 // TODO only folders
-Tab.prototype.newItemAction = function(newName, label, command, isDir) {
-	var slot, cmd, o = this, shortName;
+Tab.prototype.newItemAction = function(newName, label) {
+	var slot, cmd, o = this, i, SZ;
 	newName = prompt(label, newName);
 	if (newName) {
-		if (FS.fileExists(this.currentPath + '/' + newName)) {
-			alert(L("File or folder already exists"));
-			return;
+		SZ = sz(o.list);
+		for (i = 0; i < SZ; i++) {
+			if (o.list[i].name == newName) {
+				alert(L("File or folder already exists"));
+				return;
+			}
 		}
 		shortName = newName;
-		newName = this.currentPath + '/' + newName;
-		cmd = "#!/bin/bash\n" + command + " \"" + newName + '"';
-		slot = App.dir() + '/sh/o.sh';
-		FS.writefile(slot, cmd);
-		jexec(slot, function(){
+		
+		/*jexec(slot, function(){
 			o.onCreateNewItem(shortName, isDir);
-		}, DevNull, function(err){alert(err)});
+		}, DevNull, function(err){alert(err)});*/
+		// TODO request
+		Rest2._post({name: newName, c: o.currentFid}, (data) => {
+			o.onCreateNewItem(newName, 1, data);
+		}, `${br}/driveaddcatalog.json`, o.onFailCreateNewItem, o);
 	}
 }
 
@@ -588,13 +560,18 @@ Tab.prototype.onClickRemove = function() {
 		path,
 		i, SZ, keys, parentNode, deletedKeys = [],
 		isMult = 0;
-		
-	if (count(this.oSelectionItems) > 1) {
+	i = W.currentCmTargetId;
+	if (count(o.oSelectionItems) > 1) {
 		msg = L("Are you sure you want to permanently delete files") + "?";
 		isMult = 1;
-	} else if (count(this.oSelectionItems) == 1) {
-		id = this.getFid();
-		msg = L("Are you sure you want to permanently delete file") + sp + '"' + o.list[o.toI(currentCmTargetId)].name + sp + "\"?";
+	} else if (count(o.oSelectionItems) == 1) {
+		id = o.getFid();
+		if (isU(i)) {
+			for (i in o.oSelectionItems) {
+				break;
+			}
+		}
+		msg = L("Are you sure you want to permanently delete file") + sp + '"' + o.list[o.toI(i)].name + sp + "\"?";
 	} else {
 		return;
 	}
@@ -604,7 +581,7 @@ Tab.prototype.onClickRemove = function() {
 		if (isMult) {
 			o.removeItems(keys);
 		} else {
-			o.removeOneItem(id, e(currentCmTargetId), currentCmTargetId);
+			o.removeOneItem(id, e(i), i);
 		}
 	}
 }
@@ -660,7 +637,7 @@ Tab.prototype.removeItems = function(ls) {
 Tab.prototype.setStatus = function(s, showLoader) {
 	var ldr = '';
 	if (showLoader) {
-		ldr = '<img src="' + App.dir() + '/i/ld/s.gif">';
+		ldr = '<img src="' + root + '/i/ld/s.gif">';
 		if (this.lastLoader != ldr) {
 			this.statusLdrPlacer.innerHTML = ldr;
 			this.lastLoader == ldr;
@@ -818,12 +795,13 @@ Tab.prototype.onKeyDown = function(evt) {
 		idData = this.getActiveItemId();
 		this.openAction(idData.domId, idData.fid);
 	}
-	if (MW.getLastKeyChar() != '' 
-		&& !this.isFilterBoxShown()
+	console.log(evt.keyCode);
+	if (!this.isFilterBoxShown()
 		&& evt.keyCode != 27 
 		&& evt.keyCode != 13
 		&& evt.keyCode != 18
 		&& evt.keyCode != 16
+		&& evt.keyCode != 46
 		&& evt.keyCode != 9
 		&& evt.keyCode != 8
 		&& !evt.ctrlKey
@@ -1003,27 +981,22 @@ Tab.prototype.setTabItem = function(tabItem) {
 	this.tabItem = tabItem;
 }
 
-Tab.prototype.isSpecialTab = function() {
-	if (this.tabItem && this.tabItem.type != TabPanelItem.TYPE_CATALOG) {
-		this.specialTabManager.process();
-		return true;
-	}
-}
 
-Tab.prototype.onCreateNewItem = function(name, isDir) {
-	var item, typeData, idx = 0;
+Tab.prototype.onFailCreateNewItem = function(data, responseText, info, xhr) {
+	return defaultResponseError(data, responseText, info, xhr);
+}
+Tab.prototype.onCreateNewItem = function(name, isDir, data) {
+	var item, typeData, idx = 0, o = this;
+	if (!o.onFailCreateNewItem(data)) {
+		return;
+	}
 	// item = mclone(this.list[0]);
 	item = item ? item : {};
 
 	if (isDir) {
 		item.type = L('Catalog');
-		item.i = App.dir() + '/i/folder32.png';
+		item.i = root + '/i/folder32.png';
 		item.cmId = 'cmCatalog';
-	} else {
-		typeData = Types.get(this.currentPath + '/' + name);
-		item.type = typeData.t;
-		item.i = typeData.i;
-		item.cmId = typeData.c;
 	}
 	
 	item.g = 0;
@@ -1033,22 +1006,27 @@ Tab.prototype.onCreateNewItem = function(name, isDir) {
 	item.o = window.USER;
 	item.rsz = 0;
 	item.sz = '0';
-	item.src = '';
-	this.contentBlock.innerHTML = '';
-	if (sz(this.list) > 0) {
+	item.src = data;
+	item.id = data.i;
+	
+	o.list.push(item);
+	o.redraw();
+	
+	/*o.contentBlock.innerHTML = '';
+	if (sz(o.list) > 0) {
 		if (window.currentCmTargetId) {
-			idx = this.toI(window.currentCmTargetId);
+			idx = o.toI(window.currentCmTargetId);
 			idx--;
 			idx = idx > 0 ? idx : 0;
 		}
-		this.list.splice(idx, 0, item);
+		o.list.splice(idx, 0, item);
 	} else {
-		this.list.push(item);
-	}
+		o.list.push(item);
+	}*/
 	
-	this.createdItemName = name;
-	this.listRenderer.run(sz(this.list), this, this.list, intval(this.getFirstItemId()));
-	this.createdItemName = name;
+	/*o.createdItemName = name;
+	o.listRenderer.run(sz(o.list), o, o.list, intval(o.getFirstItemId()));
+	o.createdItemName = name;*/
 	
 }
 
