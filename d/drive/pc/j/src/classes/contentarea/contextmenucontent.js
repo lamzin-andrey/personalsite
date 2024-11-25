@@ -129,7 +129,7 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/open16.png">\
 					</div>\
-					<div class="contextMenuItemText">Открыть</div>\
+					<div class="contextMenuItemText">' + L("Open") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\
@@ -152,7 +152,7 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pst16.png">\
 					</div>\
-					<div class="contextMenuItemText">Вставить</div>\
+					<div class="contextMenuItemText">' + L("Paste") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\

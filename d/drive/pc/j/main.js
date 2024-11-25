@@ -3,9 +3,14 @@ window.VERTICAL_SCROLL_COUNT = 1;
 function main() {
 	window.AppStartTime = time();
 	
-	var lang = storage('currentLang');
-	if (lang != 'ru' && lang != 'en') {
+	var lang = storage("lang");
+	if (lang != 'langRu' && lang != 'langEn') {
 		lang = 'ru';
+	}
+	lang = strtolower(lang.replace("lang", ""));
+	
+	if (lang == 'ru' || lang == 'en') {
+		onClickChangeLang(lang);
 	}
 	
 	window.app = new FileManager();
@@ -14,9 +19,7 @@ function main() {
 	
 	initApp();
 	
-	if (lang == 'ru' || lang == 'en') {
-		onClickChangeLang(lang);
-	}
+	
 	window.onresize = onResize;
 	window.onkeydown = onKeyUp;
 	onResize();
@@ -168,6 +171,8 @@ function onClickNewWindowMenu() {
 	app.openNewWindow();
 }
 
+
+
 function onClickSelectEn() {
 	onClickChangeLang('en');
 }
@@ -178,17 +183,17 @@ function onClickSelectRu() {
 
 function onClickChangeLang(lang) {
 	var s;
-	
-	console.log("here may be In itSearch...");
-	//Search.init();
-	
-	
 	if ('ru' == lang) {
 		storage('lang', 'langRu');
-		//jaqedLang = langRu;
+		jaqedLang = langRu;
 	} else {
-		//jaqedLang = langEn;
+		jaqedLang = langEn;
 		storage('lang', 'langEn');
+	}
+	
+	if (e("ctxTplBlock") && fmgr) {
+		rm("ctxTplBlock");
+		fmgr.addContextMenuHtml();
 	}
 }
 

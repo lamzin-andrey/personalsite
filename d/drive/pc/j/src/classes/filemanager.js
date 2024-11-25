@@ -299,7 +299,7 @@ FileManager.prototype.addContextMenuHtml = function() {
 			' + this.contextMenuContent.getHtmlTabMenuHtml()  + '\
 		</div>';
 	//ee(document, 'body')[0].innerHTML += html;
-	el = appendChild(ee(document, 'body')[0], 'div', html, {});
+	el = appendChild(ee(document, 'body')[0], 'div', html, {id: "ctxTplBlock"});
 	//el.parentNode.parentNode.appendChild(el);
 	ee(document, 'body')[0].appendChild(el);
 }

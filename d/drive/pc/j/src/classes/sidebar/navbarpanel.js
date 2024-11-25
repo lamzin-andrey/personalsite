@@ -4,6 +4,7 @@ function NavbarPanel() {
 	o.btnBack = e('btnBack');
 	o.btnFwd  = e('btnFwd');
 	o.btnHome = e('btnHome');
+	o.btnCLang = e('btnCLang');
 	
 	o.setDisabled(this.btnUp);
 	o.setDisabled(this.btnBack);
@@ -32,6 +33,21 @@ function NavbarPanel() {
 		}catch(err) {
 			alert(err);
 		}
+	}
+	
+	o.btnCLang.onclick = function(evt) {
+		var l = storage("lang"), c, ol;
+		if (!l) {
+			l = "ru";
+			storage("lang", "langRu");
+		} else {
+			l = strtolower(l.replace("lang", ""));
+		}
+		ol = l;
+		l = l == "ru" ? "en" : "ru";
+		onClickChangeLang(l);
+		c = ctrg(evt);
+		c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
 	}
 }
 NavbarPanel.prototype.setDisabled = function(img) {
