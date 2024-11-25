@@ -586,13 +586,24 @@ Tab.prototype.onClickRemove = function() {
 	}
 }
 Tab.prototype.removeOneItem = function(i, node, idx) {
-	var o = this;
+	var o = this, t, n = o.toI(idx);
 	o.removingNodes = o.removingNodes ? o.removingNodes : [];
 	o.removingNodes.push(mclone(o.list[o.toI(idx)].src));
-	o.list.splice(idx, 1);
+	t = o.list[n].src.type;
+	o.list.splice(n, 1);
 	rm(node);
 	o.failRmMsg = L("Error remove file");
-	Rest2._post({i}, o.onFinishRemove, `${br}/driverm.json`, o.onErrorRemove, o);
+	if (t != 'c') {
+		Rest2._post({i}, o.onFinishRemove, `${br}/driverm.json`, o.onErrorRemove, o);
+	} else {
+		Rest2._get(o.onListForRemove, `${br}/driveremid.json?i=${i}`, o.onErrorRemove, o);
+	}
+}
+Tab.prototype.onListForRemove = function(data) {
+	var r = defaultResponseError(data), o = this;
+	if (r) {
+		Rest2._post({list:data.list.join(',')}, o.onFinishRemove, `${br}/drivermrf.json`, o.onErrorRemove, o);
+	}
 }
 Tab.prototype.onFinishRemove = function(data) {
 	var o = this;
