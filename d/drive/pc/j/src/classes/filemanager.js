@@ -287,7 +287,7 @@ FileManager.prototype.addContextMenuHtml = function() {
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/pst16.png">\
 					</div>\
-					<div class="contextMenuItemText">Вставить</div>\
+					<div class="contextMenuItemText">' + L("Paste") + '</div>\
 					<div class="cf"></div>\
 				</div>' +
 				this.contextMenuContent.getUploadItemHtml() + 

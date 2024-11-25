@@ -399,7 +399,10 @@ Tab.prototype.onClickNewFolder = function() {
 
 
 Tab.prototype.newFolderAction = function() {
-	this.newItemAction(L("New catalog"), L("Enter catalog name"));
+	setTimeout(() => {
+		this.newItemAction(L("New catalog"), L("Enter catalog name"));
+	}, 100);
+	
 }
 // TODO only folders
 Tab.prototype.newItemAction = function(newName, label) {
@@ -414,11 +417,6 @@ Tab.prototype.newItemAction = function(newName, label) {
 			}
 		}
 		shortName = newName;
-		
-		/*jexec(slot, function(){
-			o.onCreateNewItem(shortName, isDir);
-		}, DevNull, function(err){alert(err)});*/
-		// TODO request
 		Rest2._post({name: newName, c: o.currentFid}, (data) => {
 			o.onCreateNewItem(newName, 1, data);
 		}, `${br}/driveaddcatalog.json`, o.onFailCreateNewItem, o);
@@ -1022,22 +1020,6 @@ Tab.prototype.onCreateNewItem = function(name, isDir, data) {
 	
 	o.list.push(item);
 	o.redraw();
-	
-	/*o.contentBlock.innerHTML = '';
-	if (sz(o.list) > 0) {
-		if (window.currentCmTargetId) {
-			idx = o.toI(window.currentCmTargetId);
-			idx--;
-			idx = idx > 0 ? idx : 0;
-		}
-		o.list.splice(idx, 0, item);
-	} else {
-		o.list.push(item);
-	}*/
-	
-	/*o.createdItemName = name;
-	o.listRenderer.run(sz(o.list), o, o.list, intval(o.getFirstItemId()));
-	o.createdItemName = name;*/
 	
 }
 
