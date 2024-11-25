@@ -83,10 +83,9 @@ FileManager.prototype.onGetActualEnv = function() {
 
 
 /**
- * TODO ¬ызываетс€ когда получены предварительно сохраненные данные об окружении AppEnv (USER, HOME и т. п)
+ * ¬ызываетс€ когда получены предварительно сохраненные данные об окружении AppEnv (USER, HOME и т. п)
 */
 FileManager.prototype.onGetSavedEnv = function() {
-	//console.log(this);
 	this.bookmarksManager.setUser(AppEnv.config.USER);
 	this.bookmarksManager.run();
 	this.initActiveTab();

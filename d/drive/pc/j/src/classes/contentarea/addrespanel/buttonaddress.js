@@ -268,10 +268,6 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 		title = name;
 	}
 	
-	/*if (path == ('/home/' + USER)) {
-		imgSrc = root + "/i/home32.png";
-		imgClass = "addressButtonIcon";
-	}*/
 	if (path == window.app.tab.currentPath) {
 		addClass = "addressButtonActive";
 	}

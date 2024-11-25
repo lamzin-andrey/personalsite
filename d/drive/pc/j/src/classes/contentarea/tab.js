@@ -423,16 +423,6 @@ Tab.prototype.newItemAction = function(newName, label) {
 	}
 }
 
-Tab.prototype.getNewName = function(newName) {
-	var n = 0, next = this.currentPath + '/' + newName;
-	
-	while (FS.fileExists(next)) {
-		n++;
-		next = this.currentPath + '/' + newName + " (" + n + ')';
-	}
-	
-	return next;
-}
 
 
 Tab.prototype.onClickCut = function() {
@@ -804,7 +794,7 @@ Tab.prototype.onKeyDown = function(evt) {
 		idData = this.getActiveItemId();
 		this.openAction(idData.domId, idData.fid);
 	}
-	console.log(evt.keyCode);
+
 	if (!this.isFilterBoxShown()
 		&& evt.keyCode != 27 
 		&& evt.keyCode != 13
@@ -817,12 +807,12 @@ Tab.prototype.onKeyDown = function(evt) {
 		&& !evt.altKey
 		&& app.isActive
 	) {
-		this.showFilterBox(MW.getLastKeyChar());
+		this.showFilterBox(evt.key);
 		this.processFilterBoxInput();
-	} 
+	}
 }
+
 Tab.prototype.onPushArrowDown = function(evt) {
-	//evt.preventDefault();
 	var id, o = this;
 	id = this.getActiveItemId().domId;
 	if (!id) {

@@ -230,7 +230,7 @@ TabPanel.prototype.onClickButton = function(evt){
 	this.activeIndex = idx;
 	this.tabs[idx].restoreHistory();
 	safeScrollY = this.tabs[this.activeIndex].scrollY;
-	// MW.setTitle('safeScrollY = ' + safeScrollY);
+	
 	setTimeout(function(){
 		if (safeScrollY) {
 			app.tab.setScrollY(safeScrollY);
@@ -246,7 +246,7 @@ TabPanel.prototype.onClickCloseButton = function(evt){
 	evt.preventDefault();
 	var trg = ctrg(evt), id = trg.id, idx = attr(trg, 'data-idx'), SZ = sz(this.tabs);
 	if (SZ - 1 == 0) {
-		MW.close();
+		window.close();
 		return;
 	}
 	rm(id);

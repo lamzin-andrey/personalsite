@@ -8,9 +8,6 @@ function main() {
 		lang = 'ru';
 	}
 	
-	Qt.setWindowIconImage(Qt.appDir() + '/i/folder32.png');
-	Qt.maximize();
-	
 	window.app = new FileManager();
 	window.app.init();
 	window.fmgr = app;
@@ -83,18 +80,18 @@ function onKeyUp(evt) {
 			break;
 		}
 		
-		if (72 == evt.keyCode || 1056 == MW.getLastKeyCode()) {
+		if (72 == evt.keyCode) {
 			onClickChangeHideMode();
 		}
-		if (86 == evt.keyCode || 1052 == MW.getLastKeyCode()) {
+		if (86 == evt.keyCode) {
 			onPaste();
 		}
-		if (65 == evt.keyCode || 1060 == MW.getLastKeyCode()) {
+		if (65 == evt.keyCode) {
 			evt.preventDefault();
 			app.tab.selectAll();
 			return;
 		}
-		if (88 == evt.keyCode || 1063 == MW.getLastKeyCode()) {
+		if (88 == evt.keyCode) {
 			app.tab.onClickCut();
 		}
 		
@@ -126,9 +123,6 @@ function fixUp(evt) {
 	return false;
 }
 
-function onClickExitMenu() {
-	Qt.quit();
-}
 
 function onClickChangeHideMode() {
 	var mode = intval(storage('hMode')), text;
@@ -142,8 +136,7 @@ function onClickChangeHideMode() {
 	storage('hMode', mode);
 	
 	if (app && app.tab) {
-		app.tab.setPath(app.tab.currentPath);
-		Qt.renameMenuItem(1, 0, text);
+		app.tab.redraw();
 	}
 }
 
@@ -219,9 +212,7 @@ function resizetabItemsWidth() {
 }
 
 function log(s) {
-	var c = FS.readfile(App.dir() + '/log.log');
-	c += date('H:i:s') + ' ' + s + "\n";
-	FS.writefile(App.dir() + '/log.log', c)
+	console.log(s);
 }
 
 function mclone(o) {
