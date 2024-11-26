@@ -46,7 +46,7 @@ ListRenderer.prototype.renderPart = function(){
 		}
 		freeSpaceText = fmgr.tab.unpackHexSz(gts(), 1);
 		if (freeSpaceText) {
-			freeSpaceText = ", " + L("free") + " " + this.getHumanFilesize(freeSpaceText - this.filesSize, 2, 3, false);
+			freeSpaceText = ", " + L("free") + " " + this.getHumanFilesize(freeSpaceText, 2, 3, false);
 		}
 		statusText = this.sz + ' ' 
 						+ TextFormatU.pluralize(this.sz, L('Objects'), L('Objects-voice1'), L('Objects-voice2'))

@@ -89,10 +89,14 @@ class UsbController extends AbstractController
                     'token_res' => $csrfResetToken
                 ];
             } else {
+                /**
+                 * @var DrvFileRepository $filesRepository
+                 */
+                $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
                 $data = [
                     'auth' => true,
                     'token' => $csrfToken,
-                    't' => AppService::getHumanFilesize($this->getTotalSize($user), 0, 3, true),
+                    't' => AppService::getHumanFilesize($this->getTotalSize($user) - $filesRepository->getCurrentSize($user), 0, 3, true),
                     'uid' => $user->getId()
                 ];
             }

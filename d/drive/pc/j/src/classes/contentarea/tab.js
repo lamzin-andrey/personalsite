@@ -38,16 +38,13 @@ Tab.prototype.setPath = function(path, fid) {
 	o.currentFid = fid;
 	o.setStatus(L('Load catalog data') + '. ' + L('Request') + '.', 1);
 	
-	if (path == "/wcard") {
-		throw Error("dbg");
-	}
 	
 	appSetTitle(pathInfo.basename + ' - ' + FileManager.PRODUCT_LABEL);
 	
 	if (!app.isActive) {
 		return;
 	}
-		
+	v(o.contentBlock, "");
 	//TODO здесь внимательно, могут быть всякие штуки впоследствии
 	/*if (o.skipRequestList && o.skipRequestHList) {
 		o.showList = mclone(o.skipRequestList);
@@ -89,18 +86,17 @@ Tab.prototype.isHidden = function(s) {
 	return (S(s).charAt(0) == '.');
 }
 
-// TODO ccut
+
 Tab.prototype.redraw = function() {
 	this.rebuildList('list');
 	this.renderByMode();
 }
-// TODO cut
+
 Tab.prototype.rebuildList = function(key) {
 	var SZ , i, files = [], dirs = [],
 		list = this[key];
 	
 	SZ = sz(list);
-	console.log(list);
 	for (i = 0; i < SZ; i++) {
 		if (list[i].type == L("Catalog")) {
 			dirs.push(mclone(list[i]));
@@ -150,7 +146,7 @@ Tab.prototype.buildList = function(data, calcDirSizes) {
 	}
 	o.sort.apply(files);
 	
-	// TODO 2 cut Settings
+	
 	if (storage("noShowDir") == 1) {
 		return files;
 	}
