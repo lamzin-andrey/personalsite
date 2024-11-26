@@ -25,7 +25,9 @@ var langEn = {
 	"bReset" : "Reset",
 	"bShowAuthScreen2" : "Go to login form",
 	'bytesMore19' : 'bytes',
-	
+	'Objects' : 'object',
+	'Objects-voice1' : 'objects',
+	'Objects-voice2' : 'objects',
 	"register_form[name]" : "Name",
 	"register_form[surname]" : "Surname",
 	"register_form[email]" : "Email",

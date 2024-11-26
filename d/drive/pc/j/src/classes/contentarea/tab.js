@@ -244,7 +244,7 @@ Tab.prototype.onClickItem = function(evt) {
 	} else {
 		targetModel = this.getClickedItem(trg.id);
 		if (targetModel) {
-			this.setStatus('«' + targetModel.name + '» (' + targetModel.sz + ') ' + targetModel.type);
+			this.setStatus('&laquo;' + targetModel.name + '&raquo; (' + targetModel.sz + ') ' + targetModel.type);
 		}
 	}
 	this.clicktime = ct;
