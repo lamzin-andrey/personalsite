@@ -448,8 +448,10 @@ Tab.prototype.showPropsDlg = function(bm) {
 	k = fmgr.dlgProp = new PropsDlg();
 	o = this.list[this.toI(currentCmTargetId)];
 	k = dlgMgr.create(k.h(o.src, o.i, o.id), k);
-	FPC.init(bm);
-	AddFileUser.init();
+	if (fmgr.dlgProp.srcType != 'c') {
+		FPC.init(bm);
+		AddFileUser.init();
+	}
 	if (bm == 1) {
 		fmgr.dlgProp.showLdrScr();
 	} else {

@@ -62,8 +62,6 @@ function onSuccessGetAuthState(data) {
 		}
 		storage("tsz", data.t);
 		window.tsz = data.t;
-		// TODO call for qdjsFM window.fileList.loadCurrentDir();
-		// ? showScreen('hRegisterEScreen');
 		hideLoader();
 	
 }
@@ -197,13 +195,26 @@ function showLoader() {
 	showScreen('hWaitScreen');
 }
 function hideLoader(screenId) {
+	var path, lastLoc, ex = [""], st;
 	screenId = screenId ? screenId : 'hCatalogScreen';
 	showScreen(screenId);
 	app.isActive = 1;
 	// TODO
 	window.USER = window.USER ? window.USER : storage("username");
 	path = "/home/" + USER;
-	app.setActivePath(path, [''], 0);
+	
+	lastLoc = storage("lastLoc");
+	if (lastLoc && fmgr) {
+		lastLoc.st = mclone(lastLoc.st);
+		lastLoc.st.pop();
+		fmgr.addressPanel.buttonAddress.stack = lastLoc.st;
+		fmgr.addressPanel.buttonAddress.currentId = lastLoc.st[sz(lastLoc.st) - 1];
+		fmgr.tab.currentFid = fmgr.addressPanel.buttonAddress.currentId;
+		path = lastLoc.path;
+		fid = lastLoc.fid;
+		ex = [""];
+	}
+	fmgr.setActivePath(path, ex, fid);
 	
 	clearInterval(window.bootSe2d.mainInterval);
 	clearInterval(window.bootSe2d.app.logoRtIval);

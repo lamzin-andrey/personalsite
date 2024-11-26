@@ -14,12 +14,7 @@ window.AppEnv = {
 	init:function(aCallback, aPreCallback) {
 		this.config = {};
 		this.readLastSettings();
-		if (this.config && this.config.USER && aPreCallback && (aPreCallback[1] instanceof Function)) {
-			aPreCallback[1].apply(aPreCallback[0]);
-		}
 		this.aCallback = aCallback;
-		//jexec(App.dir() + '/j/vendor/objects/env/data/user.sh', [this, this.onUserData], DevNull, DevNull);
-		// Rest2._get(this.onUserData, TODO, this.onFailGetUserData, this);
 		this.onUserData();
 	},
 	onUserData:function() {

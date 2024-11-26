@@ -30,34 +30,34 @@ FileManager.PRODUCT_LABEL = 'WebUSB - ещё один ваш гигабайт в облаке';
  * @param {Array} aExcludes - идентификатор(ы) элементов управления, для которых не надо применять setPath
 */
 FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
-	var emitter = aExcludes[0];
-	
+	var emitter = In(aExcludes), lastLoc = {}, st;
 	path = path.replace("/home/", "");
+	//throw new Error("dbg")
 	
-	
-	if (emitter != 'addresspanel') {
+	if (!emitter['addresspanel']) {
 		this.tab.currentPath = path;
 		this.addressPanel.setPath(path, fid);
 	}
-	
-	if (emitter != 'navbarPanelManager') {
+	if (!emitter['navbarPanelManager']) {
 		this.tab.navbarPanelManager.setPath(path, fid);
 	}
-	if (emitter != 'tab') {
+	if (!emitter['tab']) {
 		this.tab.setPath(path, fid);
 	}
-	if (emitter != 'bookmarksManager') {
+	if (!emitter['bookmarksManager']) {
 		this.bookmarksManager.setPath(path, fid);
 	}
-	if (emitter != 'tabpanel') {
+	if (!emitter['tabpanel']) {
 		this.tabPanel.setPath(path);
 	}
+	
+	lastLoc.st = fmgr.addressPanel.buttonAddress.stack;
+	lastLoc.fid = fmgr.addressPanel.buttonAddress.currentId;
+	lastLoc.path = fmgr.addressPanel.buttonAddress.currentPath;
+	storage("lastLoc", lastLoc);
+		
 }
 
-
-FileManager.prototype.openNewWindow = function() {
-	Qt.newWindow("/home/andrey/hdata/programs/my/qdjs/qdjsFM", []);
-}
 
 FileManager.prototype.initActiveTab = function() {
 	window.tab = this.tab = this.tabPanel.getActiveTab();
@@ -67,6 +67,7 @@ FileManager.prototype.initActiveTab = function() {
  * Вызывается когда получены последние данные об окружении AppEnv (USER, HOME и т. п)
 */
 FileManager.prototype.onGetActualEnv = function() {
+	var lastLoc, path, fid;
 	if (!this.bookmarksManager.isRun()) {
 		this.bookmarksManager.run();
 		this.initActiveTab();
@@ -75,7 +76,16 @@ FileManager.prototype.onGetActualEnv = function() {
 			this.bookmarksManager.setUser(USER);
 			this.bookmarksManager.run();
 			this.tab.setUser(USER);
-			window.app.setActivePath('/home/' + USER, ['']);
+			
+			lastLoc = storage("lastLoc");
+			path = '/home/' + USER;
+			if (lastLoc) {
+				fmgr.addressPanel.buttonAddress.currentId = lastLoc.st[sz(lastLoc.st) - 1];
+				fmgr.addressPanel.buttonAddress.stack = mclone(lastLoc.st);
+				path = lastLoc.path;
+				fid = lastLoc.fid;
+			}
+			fmgr.setActivePath(path, [''], fid);
 			
 		}
 	}

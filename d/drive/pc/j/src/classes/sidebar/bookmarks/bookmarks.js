@@ -45,10 +45,22 @@ class Bookmarks extends AbstractList{
 	onClick(event) {
 		let trg = ctrg(event),
 			o = this,
-			n = str_replace(o.itemIdPrefix, '', trg.id);
-		app.addressPanel.buttonAddress.currentId = o.list[n].stack[sz(o.list[n].stack) - 1];
+			n = str_replace(o.itemIdPrefix, '', trg.id), j, i, SZ;
+		SZ = sz(o.list[n].stack);
+		j = sz(o.list[n].stack) - 1;
+		if (o.list[n].fid == o.list[n].stack[j]) {
+			j--;
+		}
+		for (i = 0; i < SZ; i++) {
+			if (o.list[n].fid == o.list[n].stack[i]) {
+				j = i - 1;
+				j = j < 0 ? 0 : j;
+				break;
+			}
+		}
+		app.addressPanel.buttonAddress.currentId = o.list[n].stack[j];
 		app.addressPanel.buttonAddress.stack = mclone(o.list[n].stack);
-		app.setActivePath(o.list[n].path, 'bookmarksManager', o.list[n].fid);
+		app.setActivePath(o.list[n].path, ["bookmarksManager"], o.list[n].fid);
 	}
 
 
