@@ -18,7 +18,8 @@ ListRenderer.prototype.renderPart = function(){
 		o, self = this,
 		statusText, freeSpaceText = '', sizeText = '',
 		cmId,
-		createdItemFound = -1, el, domLs, domEl;
+		createdItemFound = -1, el, domLs, domEl,
+		fileSize = new FileSize();
 	domLs = cs(this.context.contentBlock, this.context.cName);
 	o = this.context;
 	for (i = start, j = 0; i < end; i++, j++) {
@@ -43,10 +44,9 @@ ListRenderer.prototype.renderPart = function(){
 				this.incSize(item.sz);
 			}
 		}
-		freeSpaceText = 'TODO free space text';
-		console.log("here used DevM.getPluralFreeSpaceOfDiskPartByPath");
+		freeSpaceText = fmgr.tab.unpackHexSz(gts(), 1);
 		if (freeSpaceText) {
-			freeSpaceText = ', ' + freeSpaceText;
+			freeSpaceText = ", " + L("free") + " " + this.getHumanFilesize(freeSpaceText - this.filesSize, 2, 3, false);
 		}
 		statusText = this.sz + ' ' 
 						+ TextFormatU.pluralize(this.sz, L('Objects'), L('Objects-voice1'), L('Objects-voice2'))

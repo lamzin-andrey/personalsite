@@ -172,7 +172,7 @@ Tab.prototype.buildList = function(data, calcDirSizes) {
 }
 
 Tab.prototype.unpackHexSz = function(n, skipHuman) {
-	var a = String(n).split('g'), i, r, SZ;
+	var a = String(n).split('g'), i, r, SZ, m;
 	SZ = sz(a);
 	for (i = 0; i < SZ - 1; i++) {
 		a[i] = parseInt(a[i], 16);
@@ -186,21 +186,23 @@ Tab.prototype.unpackHexSz = function(n, skipHuman) {
 		}
 	} else {
 		r = parseFloat(S(a[0]) + '.0');
+		m = a[1];
 		if (SZ > 2) {
 			r = parseFloat(S(a[0]) + '.' + (a[1] ? a[1] : '0'));
-			switch(a[2]) {
-				case "Kb":
-					r *= 1024;
-					break;
-				case "Mb":
-					r *= 1024*1024;
-					break;
-				case "Gb":
-					r *= 1024*1024*1024;
-					break;
-			}
-			r = round(r);
+			m = a[2];
 		}
+		switch(m) {
+			case "Kb":
+				r *= 1024;
+				break;
+			case "Mb":
+				r *= 1024*1024;
+				break;
+			case "Gb":
+				r *= 1024*1024*1024;
+				break;
+		}
+		r = round(r);
 	}
 	
 	return r;

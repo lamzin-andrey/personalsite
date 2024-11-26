@@ -60,11 +60,18 @@ function onSuccessGetAuthState(data) {
 			loginByMailhash();
 			return;
 		}
+		storage("tsz", data.t);
+		window.tsz = data.t;
 		// TODO call for qdjsFM window.fileList.loadCurrentDir();
 		// ? showScreen('hRegisterEScreen');
 		hideLoader();
 	
 }
+
+function gts() {
+	return window.tsz ||  storage("tsz");
+}
+
 function showMessage(s) {
 	v('hAlertMessage', s);
 	showScreen('hAlertScreen');

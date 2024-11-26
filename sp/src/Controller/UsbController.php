@@ -41,7 +41,7 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
-    private const VERSION = '27';
+    private const VERSION = '28';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -68,8 +68,6 @@ class UsbController extends AbstractController
                                               AppService $oAppService,
                                               CsrfTokenManagerInterface $csrfTokenManager)
 	{
-	    // $aData['errors'] = $oAppService->getFormErrorsAsArray($oForm);
-        // $this->_json($aData)
 		if ($oRequest->getMethod() == 'POST') {
 			return $this->_json([
 			    'message' => 'oops'
@@ -94,6 +92,7 @@ class UsbController extends AbstractController
                 $data = [
                     'auth' => true,
                     'token' => $csrfToken,
+                    't' => AppService::getHumanFilesize($this->getTotalSize($user), 0, 3, true),
                     'uid' => $user->getId()
                 ];
             }
@@ -1737,7 +1736,7 @@ class UsbController extends AbstractController
         */
         $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
         $size = $filesRepository->getCurrentSize($user);
-        $allowSize = intval($this->getParameter('app.wusb_max_space') );
+        $allowSize = $this->getTotalSize($user);
         if ($allowSize <= $size) {
             $seconds = $this->getLegalTimeIntervalSeconds();
             return $this->_json([
@@ -2086,5 +2085,14 @@ class UsbController extends AbstractController
         $repository = $appService->repository(DrvCatalogs::class);
 
         return $repository->getFlatIdListByUserId($userId);
+    }
+
+    private function getTotalSize(Ausers  $user): int
+    {
+        /*if (in_array($user->getId(), [1,13,19,7,8,11])) {
+            return 1024*1024*1024 * 100;
+        }*/
+        return intval($this->getParameter('app.wusb_max_space') );
+
     }
 }
