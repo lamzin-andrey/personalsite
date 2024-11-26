@@ -22,6 +22,7 @@ var langRu = {
 	
 	"Only for me" : "Только для меня",
 	"For all" : "Для всех",
+	"from" : "из",
 	"For users" : "Для пользователей",
 	"Error get file information" : "Ошибка получения информации о файле",
 	"Try close and open props dialog again" : "Попробуйте закрыть и открыть снова диалог свойств файла",

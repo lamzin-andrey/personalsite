@@ -35,6 +35,10 @@ function NavbarPanel() {
 		}
 	}
 	
+	if (storage("lang") == "langEn") {
+		o.btnCLang.src = o.btnCLang.src.replace("ru64.png", "en64.png");
+	}
+	
 	o.btnCLang.onclick = function(evt) {
 		var l = storage("lang"), c, ol;
 		if (!l) {
@@ -48,6 +52,7 @@ function NavbarPanel() {
 		onClickChangeLang(l);
 		c = ctrg(evt);
 		c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
+		fmgr.tab.redraw();
 	}
 }
 NavbarPanel.prototype.setDisabled = function(img) {

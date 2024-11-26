@@ -58,11 +58,9 @@ CopyPaste.prototype.onTick = function() {
 	
 	if (!o[key]) {
 		o.stopTimer();
-		// 1 Create handler
 		o.cpApp = new CopyPasteApp();
-		// 2 Create dialog window
 		o.dlgId = window.dlgMgr.create(o.getCopyPasteHtml(), o.cpApp);
-		// 3 put message to handler
+		dlgMgr.center(o.dlgId);
 		o.cpApp.setCopyMessage(o.message);
 		o[key] = 1;
 		Rest2._post(o.converMvMessage(), o.onMoveFiles, window.br + "/drivemv.json", o.onFailMoveFiles, o);

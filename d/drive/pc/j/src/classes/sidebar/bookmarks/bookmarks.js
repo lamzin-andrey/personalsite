@@ -7,6 +7,9 @@ class Bookmarks extends AbstractList{
 		this.is_run = false;
 	}
 
+	setTitle(s) {
+		v(this.titleBlock, s);
+	}
 
 	setUser(s) {
 		this.username = s;
@@ -18,8 +21,7 @@ class Bookmarks extends AbstractList{
 	
 	run() {
 		// console.log('Bookmarks run');
-		let user = this.username,
-			locale, title;
+		let locale, title, user = this.username;
 		if (!user && window.USER) {
 			user = window.USER;
 		}
@@ -51,7 +53,7 @@ class Bookmarks extends AbstractList{
 
 
 	createList(locale, user) {
-		let userBookmarks = [], i, SZ = 0, st, fid;
+		let i, SZ = 0, st, fid, userBookmarks = [];
 		this.list = [];
 		this.addItem(user, '', locale, '', '', 'cmBmSysMenu');
 		

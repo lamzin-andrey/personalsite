@@ -426,7 +426,13 @@ Tab.prototype.newItemAction = function(newName, label) {
 
 
 Tab.prototype.onClickCut = function() {
-	this.copyPaste.cutAction(currentCmTargetId);
+	var i = W.currentCmTargetId;
+	if (isU(i)) {
+		for (i in this.oSelectionItems) {
+			break;
+		}
+	}
+	this.copyPaste.cutAction(i);
 }
 Tab.prototype.onClickPaste = function() {
 	this.copyPaste.pasteAction();

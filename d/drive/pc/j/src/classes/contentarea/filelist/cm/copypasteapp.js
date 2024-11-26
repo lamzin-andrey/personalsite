@@ -34,7 +34,6 @@ class CopyPasteApp {
 	// /interface
 	
 	setCopyMessage(s) {
-		console.log(s);
 		let o = this;
 		o.message = s;
 		o.step = 1;

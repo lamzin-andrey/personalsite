@@ -73,7 +73,6 @@ function onResize() {
 }
 
 function onKeyUp(evt) {
-	// console.log(evt.keyCode);
     if (evt.ctrlKey) {
 		switch(evt.keyCode) {
 			case 79:	//O
@@ -98,7 +97,6 @@ function onKeyUp(evt) {
 			app.tab.onClickCut();
 		}
 		
-		console.log(evt);
 		if (evt.keyCode in In(84) || evt.code == 'KeyT') {
 			evt.preventDefault();
 			evt.stopImmediatePropagation();
@@ -184,8 +182,8 @@ function onClickSelectRu() {
 function onClickChangeLang(lang) {
 	var s;
 	if ('ru' == lang) {
-		storage('lang', 'langRu');
 		jaqedLang = langRu;
+		storage('lang', 'langRu');
 	} else {
 		jaqedLang = langEn;
 		storage('lang', 'langEn');
@@ -194,6 +192,9 @@ function onClickChangeLang(lang) {
 	if (e("ctxTplBlock") && fmgr) {
 		rm("ctxTplBlock");
 		fmgr.addContextMenuHtml();
+		if (fmgr.bookmarksManager) {
+			fmgr.bookmarksManager.setTitle(L("Bookmarks"));
+		}
 	}
 }
 

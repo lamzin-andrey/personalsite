@@ -1,7 +1,7 @@
 class UploadViewDlg {
 	// interface
 	setListeners(n) {
-		let o = this, fr = "из";
+		let o = this, fr = L("from");
 		o.n = n;
 		o.p = e(window.dlgMgr.getIdPref() + n);
 		o.zAddE("tpcsz");
