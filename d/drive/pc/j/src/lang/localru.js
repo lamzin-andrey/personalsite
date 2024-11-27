@@ -24,6 +24,7 @@ var langRu = {
 	"For all" : "Для всех",
 	"from" : "из",
 	"For users" : "Для пользователей",
+	"Are you sure you want to exit?" : "Вы уверены, что хотите выйти?",
 	"Error get file information" : "Ошибка получения информации о файле",
 	"Try close and open props dialog again" : "Попробуйте закрыть и открыть снова диалог свойств файла",
 	"Type user login and search": "Введите логин пользователя и найдите его",

@@ -33,10 +33,6 @@ function setListenersAuth() {
 	e('register_form[agree]').onchange = onChangeIAgree;
 	e('reset_password_form[email]').onfocus = hideBallons;
 	e('reset_password_form[email]').oninput = hideBallons;
-	/*
-	e('register_form[]').onfocus = hideBallons;
-	e('register_form[]').oninput = hideBallons;
-	e('register_form[]').onfocus = hideBallons;*/
 }
 
 function onChangeIAgree(evt) {
@@ -186,6 +182,7 @@ function onSuccessRegisterByEmail(data) {
 		storage("username", u);
 		patchUsername(u);
 		showFileManager();
+		
 		return;
 	}
 	if (data.sended) {
@@ -241,8 +238,11 @@ function loginByMailhash() {
 }
 
 function patchUsername(u) {
-	var ctab, i = "tb2";
+	var ctab, i = "tb2", bm0 = "bm0";
 	window.USER = u;
+	if (!e(bm0) || !e(i)) {
+		return;
+	}
 	v(ee("bm0", "span")[0], u);
 	ctab = ee(i, "span")[0];
 	if (v(ctab) == "wusb") {
@@ -278,7 +278,6 @@ function showBalloonError(s, x, y, id, tdx) {
 	tdx = tdx ? tdx : 0;
 	stl(i, 'left', (x + 'px'));
 	stl(i, 'top', (y + 'px'));
-	//stl(j, 'font-size', ('11px'));
 	stl(j, 'left', ((txtX + intval(tdx)) + 'px'));
 	v(j, s);
 	show(i);
@@ -365,4 +364,5 @@ function hideBallons()
 function showFileManager() {
 	showScreen("hCatalogScreen");
 	app.isActive = true;
+	hideLoader();
 }

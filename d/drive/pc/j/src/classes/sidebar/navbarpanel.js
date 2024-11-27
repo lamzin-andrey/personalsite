@@ -5,6 +5,7 @@ function NavbarPanel() {
 	o.btnFwd  = e('btnFwd');
 	o.btnHome = e('btnHome');
 	o.btnCLang = e('btnCLang');
+	o.btnMainExit = e('btnMainExit');
 	
 	o.setDisabled(this.btnUp);
 	o.setDisabled(this.btnBack);
@@ -54,7 +55,19 @@ function NavbarPanel() {
 		c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
 		fmgr.tab.redraw();
 	}
+	
+	o.btnMainExit.onclick = function(evt) {
+		if (confirm(L("Are you sure you want to exit?"))) {
+			Rest2._get(o.onLogout, `${br}/logout?rd=/d/drive/`, o.onLogout);
+		}
+	}
 }
+
+NavbarPanel.prototype.onLogout = function(data) {
+	//location.reload();
+	showScreen("hRegisterEScreen");
+}
+
 NavbarPanel.prototype.setDisabled = function(img) {
 	var s = img.src;
 	if (s.indexOf('32d.png') == -1) {

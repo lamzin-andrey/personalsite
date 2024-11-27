@@ -30,7 +30,8 @@ FileManager.PRODUCT_LABEL = 'WebUSB - ещё один ваш гигабайт в облаке';
  * @param {Array} aExcludes - идентификатор(ы) элементов управления, для которых не надо применять setPath
 */
 FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
-	var emitter = In(aExcludes), lastLoc = {}, st;
+	var emitter = In(aExcludes), lastLoc = {}, st, i, SZ, b = [], 
+		ap = [], apr = [];
 	path = path.replace("/home/", "");
 	//throw new Error("dbg")
 	
@@ -51,11 +52,22 @@ FileManager.prototype.setActivePath = function(path, aExcludes, fid) {
 		this.tabPanel.setPath(path);
 	}
 	
-	lastLoc.st = fmgr.addressPanel.buttonAddress.stack;
+	st = fmgr.addressPanel.buttonAddress.stack;
 	lastLoc.fid = fmgr.addressPanel.buttonAddress.currentId;
-	lastLoc.path = fmgr.addressPanel.buttonAddress.currentPath;
+	//lastLoc.path = fmgr.addressPanel.buttonAddress.currentPath;
+	ap = fmgr.addressPanel.buttonAddress.currentPath.split("/");
+	SZ = sz(st);
+	for (i = 0; i < SZ; i++) {
+		b.push(st[i]);
+		apr.push(ap[i]);
+		if (st[i] == lastLoc.fid) {
+			break;
+		}
+	}
+	lastLoc.st = b;
+	lastLoc.path = apr.join("/");
+	
 	storage("lastLoc", lastLoc);
-		
 }
 
 

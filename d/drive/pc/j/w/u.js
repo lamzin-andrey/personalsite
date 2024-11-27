@@ -20,21 +20,7 @@ function initApp() {
 	// styling
 	
 	initAuth();
-	//initMainMenu(); later
-	
-	//fileList.initUpButton(e('bUp')); nothing
-	//fileList.initHomeButton(e('bHome')); nothing
-	
-	//initOptions(); later?
-	
 	upload.init();
-	//window.uploadAnimation = new LoaderAnim('imgUp', 1, 5, 'dompb', -41, 100); nothing (?)
-	
-	//e('hAlertScreen').onclick = onClickShowSuccessBtn;
-	
-	//setRadioBehaviorForCboxes(['chSortByNameAsc', 'chSortByNameDesc', 'chSortBySizeAsc', 'chSortBySizeDesc', 'chSortByModifyTimeAsc', 'chSortByModifyTimeDesc']);
-	//sortSettingDlgInit();
-	
 	getAuthState();
 }
 
