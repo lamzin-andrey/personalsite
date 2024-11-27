@@ -63,9 +63,12 @@ function NavbarPanel() {
 	}
 }
 
-NavbarPanel.prototype.onLogout = function(data) {
-	//location.reload();
-	showScreen("hRegisterEScreen");
+NavbarPanel.prototype.onLogout = function(code, rt) {
+	if (~rt.indexOf("Please wait")) {
+		app.isActive = 0;
+		showScreen("hRegisterEScreen");
+		getAuthState();	
+	}
 }
 
 NavbarPanel.prototype.setDisabled = function(img) {

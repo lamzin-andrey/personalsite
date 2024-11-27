@@ -155,7 +155,6 @@ window.Rest = {
                         onSuccess(response, xhr);
                         return;
                     } catch(err) {
-                        console.log(err);
                         error.state = 1;
                         error.info = 'Fail parse JSON';
                     }
