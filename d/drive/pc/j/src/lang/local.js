@@ -39,6 +39,12 @@ var langEn = {
 	"hRegisterTitle" : "Sign Up",
 	"bRegisterNow" : "Sign Up",
 	"bShowAuthScreen" : "Go to login form",
+	
+	"ColNameH" : "Name",
+	"ColSizeH" : "Size",
+	"ColTypeH" : "Type",
+	"ColDateH" : "Date modfify",
+	
 	"" : "",
 	
 };

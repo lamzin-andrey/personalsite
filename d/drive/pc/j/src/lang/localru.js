@@ -20,6 +20,11 @@ var langRu = {
 	'Upload' : 'Загрузить',
 	"Save" : "Сохранить",
 	
+	"ColNameH" : "Название",
+	"ColSizeH" : "Размер",
+	"ColTypeH" : "Тип",
+	"ColDateH" : "Дата изменения",
+	
 	"Only for me" : "Только для меня",
 	"For all" : "Для всех",
 	"from" : "из",

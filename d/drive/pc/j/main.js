@@ -17,6 +17,10 @@ function main() {
 	window.app.init();
 	window.fmgr = app;
 	
+	if (lang == 'ru' || lang == 'en') {
+		onClickChangeLang(lang);
+	}
+	
 	initApp();
 	
 	
@@ -180,7 +184,7 @@ function onClickSelectRu() {
 }
 
 function onClickChangeLang(lang) {
-	var s;
+	var s, cn = "tabContentHeaderName";
 	if ('ru' == lang) {
 		jaqedLang = langRu;
 		storage('lang', 'langRu');
@@ -195,6 +199,11 @@ function onClickChangeLang(lang) {
 		if (fmgr.bookmarksManager) {
 			fmgr.bookmarksManager.setTitle(L("Bookmarks"));
 		}
+		
+		v(cs("tabContentHeaderFileName", cn)[0], L("ColNameH"));
+		v(cs("tabContentHeaderSize", cn)[0], L("ColSizeH"));
+		v(cs("tabContentHeaderType", cn)[0], L("ColTypeH"));
+		v(cs("tabContentHeaderDate", cn)[0], L("ColDateH"));
 	}
 }
 
