@@ -339,3 +339,15 @@
 	height: 26px;
 	min-width: 36px;
 }
+
+.props-dlg input[type=button].ac {
+  border: 1px black solid;
+  border-top: 3px solid black;
+  border-left: 2px solid black;
+}
+
+.ldrw2 {
+  vertical-align: middle;
+  margin-right: 6px;
+  display:none;
+}

@@ -11,7 +11,7 @@ window.FPC = {
 		attr(fmgr.dlgProp.srchuser, "placeholder", L("Type user login and search"));
 		
 		Rest2._get(o.onLinkData, `${br}/drivegetfileprm.json?i=${d.id}`, o.onFailGetLinkData, o);
-		bSave.onclick = () => {window.FPC.onClickSave();}
+		bSave.onclick = () => {window.FPC.onClickSave(bSave);}
 		d.bCopy.onclick = () => {window.FPC.onClickCopy();}
 		
 	},
@@ -41,14 +41,15 @@ window.FPC = {
 	onFailGetLinkData(data, rt, inf, xhr) {
 		return defaultResponseError(data, rt, inf, xhr);
 	},
-	onClickSave() {
+	onClickSave(bSave) {
 		let perm, o;
 		o = this;
 		perm = fmgr.dlgProp.bFPPrivate.checked ? 0 : 1
 		if (fmgr.dlgProp.bFPCustom.checked) {
 			perm = 0;
 		}
-		o.showLoader();// TODO
+		addClass(bSave, "ac");
+		o.showLoader();
 		Rest2._post({i:fmgr.dlgProp.id, p:perm}, o.onSuccessSaveFilePrm,
 			br + '/drivesavefileprm.json',
 			o.onFailSaveFilePrm, o);
@@ -57,6 +58,8 @@ window.FPC = {
 		this.onFailSaveFilePrm(data);
 	},
 	onFailSaveFilePrm(data, responseText, info, xhr){
+		hide(fmgr.dlgProp.ldrw2);
+		removeClass(fmgr.dlgProp.bSavePermScr, "ac");
 		return defaultResponseError(data, responseText, info, xhr);
 	},
 	rm(evt, uid, fileId){
@@ -81,7 +84,7 @@ window.FPC = {
 		return defaultResponseError(data, responseText, info, xhr);
 	},
 	showLoader() {
-		console.log("Will show small loader");
+		show(fmgr.dlgProp.ldrw2, 'inline-block');
 	},
 	userViewTpl() {
 		return '<div class="userCardSm" id="usr{id}">\

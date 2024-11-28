@@ -32,6 +32,7 @@ class PropsDlg {
 		o.zAddE("customUsersWrapper");
 		o.zAddE("customUsersSearchWrapper");
 		o.zAddE("bCopy");
+		o.zAddE("ldrw2");
 	}
 	
 	getDlgBtns() {
@@ -157,12 +158,8 @@ class PropsDlg {
 					<div c="customUsersSearchWrapper"></div>
 					
 				</div>
-			
-				
-				
-				
 				<div c="pairBtnHWr">
-					<input type="button" c="bSavePermScr" value="${L("Save")}">
+					<img c="ldrw2" src="${root}/i/ld/s.gif"><input type="button" c="bSavePermScr" value="${L("Save")}">
 				</div>
 			</div>`;
 	}
