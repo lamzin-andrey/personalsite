@@ -95,12 +95,12 @@ class PropsDlg {
 				   <div class="r">
 					 <div c="kv">
 					   <div c="k">${L("Changed")}:</div>
-					   <div c="v">${o.zDt(d.ct)}</div>
+					   <div c="v">${o.zDt(d.ut)}</div>
 					   <div c="cf"></div>
 					 </div>
 					 <div c="kv">
 					   <div c="k">${L("Uploaded")}:</div>
-					   <div c="v">${o.zDt(d.ut)}</div>
+					   <div c="v">${o.zDt(d.ct)}</div>
 					   <div c="cf"></div>
 					 </div>
 				   </div>
