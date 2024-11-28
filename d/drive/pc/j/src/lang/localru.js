@@ -130,6 +130,9 @@ var langRu = {
 	"reset_password_form[email]" : "Email",
 	"bReset" : "Сбросить пароль",
 	"bShowAuthScreen2" : "К форме логина",
+	"hRememberMeLabel" : "Запомнить меня",
+	"hLoginFrmHeading" : "Вход по паролю",
+	"tRegTitle" : "Быстрый вход",
 	
 	"register_form[name]" : "Имя",
 	"register_form[surname]" : "Фамилия",
@@ -141,6 +144,7 @@ var langRu = {
 	"hIAgreeFromAuthor" : "Я согласен получать email рассылку от автора сайта",
 	"hRegisterTitle" : "Регистрация",
 	"bRegisterNow" : "Зарегистрироваться",
+	"hResetPwdHead" : "Сброс пароля",
 	"bShowAuthScreen" : "К форме логина",
 	"You must agree to the terms of use" : "Необходимо согласиться с условиями использования",
 	"Unable sent email. Try later." : "Невозможно отправить письмо. Попробуйте позже.",

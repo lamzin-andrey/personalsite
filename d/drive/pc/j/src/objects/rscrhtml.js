@@ -3,7 +3,7 @@ function regScrLayout() {
 			<div class="lformw" id="emailRegisterForm" style="display:flex">
 				
 				<div  class="lform qenter">
-					<div class="regTitle">Быстрый вход</div>
+					<div class="regTitle" id="tRegTitle">Быстрый вход</div>
 					<div class="iwrapper rel" >						
 						<div class="abs lbaloon" id="lbaloon" >
 							<div class="rel">
@@ -54,7 +54,7 @@ function regScrLayout() {
 			<h3>Form LP Login </h3>
 			<div class="lformw" id="loginForm" style="display:none">
 				<div  class="lform qenter">
-					<div class="regTitle">Вход по паролю</div>
+					<div class="regTitle" id="hLoginFrmHeading">Вход по паролю</div>
 					<div class="iwrapper-lp rel" >
 						<div class="abs lbaloon" id="lpbaloon" >
 							<div class="rel">
@@ -83,7 +83,7 @@ function regScrLayout() {
 					<div class="ma regchb">
 						<div class="cbwrapper-lp tl ml-2 arial">
 							<input type="checkbox" id="_remember_me" checked>
-							<label for="_remember_me" id="rememberMeLabel">Запомнить меня</label>
+							<label for="_remember_me" id="hRememberMeLabel">Запомнить меня</label>
 						</div>
 					</div>
 				
@@ -193,7 +193,7 @@ function regScrLayout() {
 			<div class="lformw" id="resetForm" style="display:none">
 				
 				<div  class="lform qenter">
-					<div class="regTitle">Сброс пароля</div>
+					<div class="regTitle" id="hResetPwdHead">Сброс пароля</div>
 					
 					
 					<div class="abs lbaloon" id="rsbaloon" >

@@ -204,6 +204,7 @@ function onClickChangeLang(lang) {
 		v(cs("tabContentHeaderSize", cn)[0], L("ColSizeH"));
 		v(cs("tabContentHeaderType", cn)[0], L("ColTypeH"));
 		v(cs("tabContentHeaderDate", cn)[0], L("ColDateH"));
+		setLocale();
 	}
 }
 

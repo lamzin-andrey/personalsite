@@ -6,7 +6,6 @@ function L(s) {
 	return s;
 }
 
-window.addEventListener('load', setLocale, false);
 
 function setLocale() {
 	var ls = ee(document, 'legend'), i, sZ = sz(ls),
@@ -19,7 +18,7 @@ function setLocale() {
 	
 	setLocaleE('label');
 	setLocaleE('span');
-	//setLocaleE('div');
+	setLocaleDivs();
 	
 	ls = ee(document, 'input');
 	sZ = sz(ls);
@@ -66,6 +65,18 @@ function setLocaleE(tag) {
 		if (isTranslateId(ls[i])) {
 			ls[i].innerHTML = L(ls[i].id);
 		}
+	}
+}
+
+function setLocaleDivs() {
+	var i, a = [
+		"hLoginFrmHeading",
+		"hRegisterTitle",
+		"hResetPwdHead",
+		"tRegTitle"
+	], SZ = sz(a);
+	for (i = 0; i < SZ; i++) {
+		e(a[i]).innerHTML = L(e(a[i]).id);
 	}
 }
 

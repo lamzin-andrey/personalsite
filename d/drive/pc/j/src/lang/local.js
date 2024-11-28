@@ -19,7 +19,7 @@ var langEn = {
 	"_username" : "Login",
 	"Логин" : "Login",
 	"_password" : "Password",
-	"bShowRegisterScreen" : "SignUp",
+	"bShowRegisterScreen" : "Sign Up",
 	"bShowResetScreen" : "Reset password",
 	"reset_password_form[email]" : "Email",
 	"bReset" : "Reset",
@@ -39,6 +39,15 @@ var langEn = {
 	"hRegisterTitle" : "Sign Up",
 	"bRegisterNow" : "Sign Up",
 	"bShowAuthScreen" : "Go to login form",
+	
+	// reg screen
+	"bReset" : "Reset password",
+	"bShowAuthScreen2" : "Goto login form",
+	"hRememberMeLabel" : "Remember me",
+	"hLoginFrmHeading" : "Login and password",
+	"hResetPwdHead" : "Reset password",
+	"tRegTitle" : "Quick register",
+	"bLogin" : "Login",
 	
 	"ColNameH" : "Name",
 	"ColSizeH" : "Size",
