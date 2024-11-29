@@ -111,6 +111,9 @@ var langRu = {
 	"Select file with early seaved bookmark" : "Выбрать файл с ранними сохраненными закладками",
 	"Show catalogs" : "Показывать каталоги",
 	"No show catalogs" : "Не показывать каталоги",
+	"This value is not a valid email address." : "Значение адреса электронной почты недопустимо.",
+	"Unable send email" : "Не могу отправить email.",
+	"Bad credentials." : "Не верные логин или пароль.",
 	
 	// reg screen
 	"bShowAuthScreen4" : "Вход по логину и паролю",

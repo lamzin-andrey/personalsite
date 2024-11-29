@@ -279,7 +279,7 @@ function showBalloonError(s, x, y, id, tdx) {
 	stl(i, 'left', (x + 'px'));
 	stl(i, 'top', (y + 'px'));
 	stl(j, 'left', ((txtX + intval(tdx)) + 'px'));
-	v(j, s);
+	v(j, L(s));
 	show(i);
 }
 

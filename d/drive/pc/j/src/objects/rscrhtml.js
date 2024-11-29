@@ -3,7 +3,11 @@ function regScrLayout() {
 			<div class="lformw" id="emailRegisterForm" style="display:flex">
 				
 				<div  class="lform qenter">
-					<div class="regTitle" id="tRegTitle">Быстрый вход</div>
+					<div class="regTitle">
+						<span id="tRegTitle">Быстрый вход</span> ${regScrLSw()}
+						<div class="cf"></div>
+					</div>
+					
 					<div class="iwrapper rel" >						
 						<div class="abs lbaloon" id="lbaloon" >
 							<div class="rel">
@@ -54,7 +58,10 @@ function regScrLayout() {
 			<h3>Form LP Login </h3>
 			<div class="lformw" id="loginForm" style="display:none">
 				<div  class="lform qenter">
-					<div class="regTitle" id="hLoginFrmHeading">Вход по паролю</div>
+					<div class="regTitle">
+						<span id="hLoginFrmHeading">Вход по паролю</span> ${regScrLSw()}
+						<div class="cf"></div>
+					</div>
 					<div class="iwrapper-lp rel" >
 						<div class="abs lbaloon" id="lpbaloon" >
 							<div class="rel">
@@ -111,7 +118,10 @@ function regScrLayout() {
 			<div class="lformw" id="registerForm" style="display:none">
 				
 				<div  class="lform regf">
-					<div class="regTitle" id="hRegisterTitle">Регистрация</div>
+					<div class="regTitle">
+						<span id="hRegisterTitle">Регистрация</span> ${regScrLSw()}
+						<div class="cf"></div>
+					</div>
 					<div class="abs lbaloon" id="rbaloon" >
 						<div class="rel">
 							<img src="./i/reg/dogball2.png" class="lvatar">
@@ -193,7 +203,10 @@ function regScrLayout() {
 			<div class="lformw" id="resetForm" style="display:none">
 				
 				<div  class="lform qenter">
-					<div class="regTitle" id="hResetPwdHead">Сброс пароля</div>
+					<div class="regTitle">
+						<span id="hResetPwdHead">Сброс пароля</span> ${regScrLSw()}
+						<div class="cf"></div>
+					</div>
 					
 					
 					<div class="abs lbaloon" id="rsbaloon" >
@@ -223,6 +236,16 @@ function regScrLayout() {
 				</div>
 				
 				<!-- end -->
+			</div>`;
+}
+
+function regScrLSw() {
+	return `<div class="lfLng">
+				<div class="block">
+					<span>Ru</span>
+					<img src="/d/drive/a2/clang/i/ru64.png">
+					<div class="cf"></div>
+				</div>
 			</div>`;
 }
 

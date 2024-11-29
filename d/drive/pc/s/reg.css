@@ -45,13 +45,14 @@ h3 {
 
 .regf {
   width: 640px;
-  height: 298px;
+  height: 320px;
 }
 
 .regTitle {
 	padding: 10px;
   border-bottom: 2px solid white;
   margin-bottom: 10px;
+	min-height: 32px;
 }
 .ma {
 	margin:auto;
@@ -255,4 +256,32 @@ img.dogmsg {
   border-radius: 4px;
   margin-top: 9px;
   display: none;
+}
+
+.lfLng {
+	float:right;
+	margin-right: 10px;
+	cursor: pointer;
+	height: 24px;
+}
+.lfLng span{
+  background: #FFF;
+  color: #000;
+  font-weight:bold;
+  height: 23px;
+  line-height: 23px;
+  padding: 0 3px;
+  float: left;
+}
+.lfLng img{
+  max-height: 30px;
+  float: right;
+  margin-top: -3px;
+}
+.regTitle span{
+	/*! float:left; */
+}
+
+.block {
+	display:block;
 }

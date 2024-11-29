@@ -1,5 +1,5 @@
 function NavbarPanel() {
-	var o = this;
+	var o = this, i, SZ;
 	o.btnUp   = e('btnUp');
 	o.btnBack = e('btnBack');
 	o.btnFwd  = e('btnFwd');
@@ -37,23 +37,19 @@ function NavbarPanel() {
 	}
 	
 	if (storage("lang") == "langEn") {
-		o.btnCLang.src = o.btnCLang.src.replace("ru64.png", "en64.png");
+		//o.btnCLang.src = o.btnCLang.src.replace("ru64.png", "en64.png");
+		o.setFlag("ru", "en");
 	}
 	
-	o.btnCLang.onclick = function(evt) {
-		var l = storage("lang"), c, ol;
-		if (!l) {
-			l = "ru";
-			storage("lang", "langRu");
-		} else {
-			l = strtolower(l.replace("lang", ""));
+	o.btnCLang.onclick = function() {
+		o.onClickChangeLang();
+	}
+	ol = cs(document, "lfLng");
+	SZ = sz(ol);
+	for (i = 0; i < SZ; i++) {
+		ol[i].onclick = function() {
+			o.onClickChangeLang();
 		}
-		ol = l;
-		l = l == "ru" ? "en" : "ru";
-		onClickChangeLang(l);
-		c = ctrg(evt);
-		c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
-		fmgr.tab.redraw();
 	}
 	
 	o.btnMainExit.onclick = function(evt) {
@@ -63,6 +59,40 @@ function NavbarPanel() {
 	}
 }
 
+NavbarPanel.prototype.onClickChangeLang = function() {
+	var l = storage("lang"), c, ol, i, SZ, ls,
+		o = this;
+	if (!l) {
+		l = "ru";
+		storage("lang", "langRu");
+	} else {
+		l = strtolower(l.replace("lang", ""));
+	}
+	ol = l;
+	l = l == "ru" ? "en" : "ru";
+	onClickChangeLang(l);		
+	o.setFlag(ol, l);
+}
+NavbarPanel.prototype.setFlag = function(ol, l) {
+	var c, o = this, i, SZ, ls;
+	Rest2._post({lang: l}, o.onChangeLang, `${br}/wusbsetlang`, o.onChangeLang, o);
+	c = o.btnCLang;
+	c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
+	window.fmgr ? fmgr.tab.redraw() : 0;
+	ls = cs(document, "lfLng");
+	SZ = sz(ls);
+	for (i = 0; i < SZ; i++) {
+		v(ee(ls[i], 'span')[0], TextFormatU.capitalize(l));
+		c = ee(ls[i], 'img')[0];
+		c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
+	}
+}
+NavbarPanel.prototype.onChangeLang = function(d, h) {
+	if (~h.indexOf("Please wait")) {
+		return;
+	}
+	defaultResponseError(d, h);
+}
 NavbarPanel.prototype.onLogout = function(code, rt) {
 	if (~rt.indexOf("Please wait")) {
 		app.isActive = 0;
