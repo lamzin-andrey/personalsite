@@ -98,7 +98,7 @@ Tab.prototype.rebuildList = function(key) {
 	
 	SZ = sz(list);
 	for (i = 0; i < SZ; i++) {
-		if (list[i].type == L("Catalog")) {
+		if (list[i].src.type == "c") {
 			dirs.push(mclone(list[i]));
 		} else {
 			files.push(mclone(list[i]));
@@ -332,7 +332,7 @@ Tab.prototype.openAction = function(id, fid) {
 	item = this.getClickedItem(id);
 	path = this.currentPath + '/' + item.name;
 	pathInfo = pathinfo(path)
-	if (item.type == L('Catalog')) {
+	if (item.src.type == 'c') {
 		app.setActivePath(path, [''], fid);
 	}
 }
