@@ -11,7 +11,7 @@ function regScrLayout() {
 					<div class="iwrapper rel" >						
 						<div class="abs lbaloon" id="lbaloon" >
 							<div class="rel">
-								<img src="./i/reg/dogball2.png" class="lvatar">
+								<img src="./i/reg/dogball2.png" class="lvatar" title="${L("Like a watchdog")}">
 								<img src="./i/reg/msgcrn.png" class="hilow">
 								<div  class="hMsg tHMsg"></div>
 							</div>
@@ -65,7 +65,7 @@ function regScrLayout() {
 					<div class="iwrapper-lp rel" >
 						<div class="abs lbaloon" id="lpbaloon" >
 							<div class="rel">
-								<img src="./i/reg/dogball2.png" class="lvatar">
+								<img src="./i/reg/dogball2.png" class="lvatar" title="${L("Like a watchdog")}">
 								<img src="./i/reg/msgcrn.png" class="hilow">
 								<div  class="hMsg tHMsg"></div>
 							</div>
@@ -124,7 +124,7 @@ function regScrLayout() {
 					</div>
 					<div class="abs lbaloon" id="rbaloon" >
 						<div class="rel">
-							<img src="./i/reg/dogball2.png" class="lvatar">
+							<img src="./i/reg/dogball2.png" class="lvatar" title="${L("Like a watchdog")}">
 							<img src="./i/reg/msgcrn.png" class="hilow">
 							<div  class="hMsg tHMsg"></div>
 						</div>
@@ -211,7 +211,7 @@ function regScrLayout() {
 					
 					<div class="abs lbaloon" id="rsbaloon" >
 						<div class="rel">
-							<img src="./i/reg/dogball2.png" class="lvatar">
+							<img src="./i/reg/dogball2.png" class="lvatar" title="${L("Like a watchdog")}">
 							<img src="./i/reg/msgcrn.png" class="hilow">
 							<div  class="hMsg tHMsg"></div>
 						</div>

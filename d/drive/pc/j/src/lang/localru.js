@@ -114,6 +114,7 @@ var langRu = {
 	"This value is not a valid email address." : "Значение адреса электронной почты недопустимо.",
 	"Unable send email" : "Не могу отправить email.",
 	"Bad credentials." : "Не верные логин или пароль.",
+	"Like a watchdog" : "Как бы сторожевой пёс",
 	
 	// reg screen
 	"bShowAuthScreen4" : "Вход по логину и паролю",

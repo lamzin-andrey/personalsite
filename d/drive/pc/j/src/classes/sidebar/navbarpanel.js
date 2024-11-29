@@ -39,6 +39,8 @@ function NavbarPanel() {
 	if (storage("lang") == "langEn") {
 		//o.btnCLang.src = o.btnCLang.src.replace("ru64.png", "en64.png");
 		o.setFlag("ru", "en");
+	} else {
+		o.setFlag("en", "ru");
 	}
 	
 	o.btnCLang.onclick = function() {
@@ -87,6 +89,13 @@ NavbarPanel.prototype.setFlag = function(ol, l) {
 		c = ee(ls[i], 'img')[0];
 		c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);
 	}
+	ls = cs(document, "lvatar");
+	SZ = sz(ls);
+	c = 'title';
+	for (i = 0; i < SZ; i++) {
+		attr(ls[i], c, L("Like a watchdog"));
+	}
+	
 }
 NavbarPanel.prototype.onChangeLang = function(d, h) {
 	if (~h.indexOf("Please wait")) {
