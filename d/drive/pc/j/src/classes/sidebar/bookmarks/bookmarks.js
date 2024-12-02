@@ -345,13 +345,16 @@ class Bookmarks extends AbstractList{
 
 	async onClickImportBookmarks(evt) {
 		let activePath = this.getBookmarksCollectionDirectory(),
-			newPath, c, fs;
+			newPath, c, fs, ls;
 		fs = new LandFileInputFS();
 		c = await fs.readfile(/*newPath*/ctrg(evt));
 		storage(activePath, c);
 		this.createList(this.getLocale(USER), USER);
 		this.render();
 		app.setSidebarScrollbar();
+		ls = mclone(this.list);
+		ls.splice(0, 1);
+		Rest._post({ls: json_encode(ls)}, DevNull, `${br}/wisbmark.json`, DevNull);
 	}
 
 	getUserBookmarks() {
