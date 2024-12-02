@@ -117,6 +117,7 @@ var langRu = {
 	"Like a watchdog" : "Как бы сторожевой пёс",
 	"Value does not may be blank." : "Значение не может быть пустым",
 	"All values required." : "Все значения обязательны для заполнения",
+	"Your file uploaded to" : "Ваш файл загружен в",
 	
 	// reg screen
 	"bShowAuthScreen4" : "Вход по логину и паролю",

@@ -91,7 +91,9 @@ window.upload = {
 		if (!o.onFailUpload(data)) {
 			return;
 		}
-		if (!e('f' + data.file.i)) {
+
+		o.cid = data.file.i;
+		if (!fmgr.tab.checkBool(o.existsByFid, o)) {
 			up = fmgr.tab.createItem(data.file);
 			fmgr.tab.list.push(up);
 			fmgr.tab.redraw();
@@ -99,20 +101,16 @@ window.upload = {
 		
 		if (data.isRt) {
 			setTimeout(function(){
-				showSuccess(l("Your file uploaded to") + " " + data.file.name);
-			}, 1500);
+				showSuccess(L("Your file uploaded to") + " " + data.file.name);
+			}, 500);
 		}
 		
 		
 		if (sz(o.iFiles[o.currentInput].files) - 1 > o.currentFile) {
-			
-			//console.log("needNext = 1; V1");
-			
 			needNext = 1;
 			o.currentFile++;
 			o.totalCounter++;
 		} else {
-			//console.log("needNext = 1; V2");
 			needNext = 1;
 			o.currentInput++;
 			o.currentFile = 0;
@@ -127,6 +125,12 @@ window.upload = {
 			o.uploadOneFile();
 		} else {
 			o.onClickCancel();
+		}
+	},
+	
+	existsByFid:function(it) {
+		if (this.cid == it.src.i) {
+			return true;
 		}
 	},
 	

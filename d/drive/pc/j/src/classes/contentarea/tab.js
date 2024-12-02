@@ -1088,15 +1088,22 @@ Tab.prototype.clearSelections = function() {
 	this.oSelectionItems = {};
 }
 
+
+Tab.prototype.checkBool = function(fn, ctx) {
+	var j, o = this, SZ = sz(o.list);
+	for (j = 0; j < SZ; j++) {
+		if (fn.call(ctx, o.list[j])) {
+			return true;
+		}
+	}
+}
+
 Tab.prototype.onErrLoadPreview = function(i) {
-	
 	var s, cI;
 		s = root + "/i/mi/unknown32.png";
 		cI = this.listRenderer.getCurrentIcon(i);
 		if (cI != s) {
 			this.listRenderer.setCurrentIcon(i, s);
-		}
-		
-	
+		}	
 }
 

@@ -165,8 +165,7 @@ function  _map(id, read) {
 }
 
 function showSuccess(s) {
-	e('hAlertMessage').innerHTML = s;
-	showScreen('hAlertScreen');
+	alert(s);
 }
 function onClickShowSuccessBtn() {
 	var s = window.prevScreen;
