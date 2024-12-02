@@ -1,16 +1,30 @@
 // @depends u.js
-// @depends mmb.js
 function initAuth() {
 	setListenersAuth();
 }
 function setListenersAuth() {
-	var id = 'bShowAuthScreen4';
+	var id = 'bShowAuthScreen4', k = 'onkeypress';
+	
 	e('bLogin').onclick = onClickLogin;
+	e('_username')[k] = onClickLogin;
+	e('_password')[k] = onClickLogin;
+	
 	e('bReset').onclick = onClickResetForm;
+	e('reset_password_form[email]')[k] = onClickResetForm;
+	
 	e('bRegisterNow').onclick = onClickRegisterNow;
+	e("register_form[name]")[k] = onClickRegisterNow;
+	e("register_form[surname]")[k] = onClickRegisterNow;
+	e("register_form[email]")[k] = onClickRegisterNow;
+	e("register_form[username]")[k] = onClickRegisterNow;
+	e("register_form[passwordRaw]")[k] = onClickRegisterNow;
+	e("register_form[passwordRepeat]")[k] = onClickRegisterNow;
+	
 	id = 'bRegisterNowRE';
-	if (e(id))
+	if (e(id)) {
 		e(id).onclick = onClickRegisterByEmailNow;
+		e('emailRE')[k] = onClickRegisterByEmailNow;
+	}
 	e('agreeRE').onchange = onChangeIAgree;
 	e('emailRE').oninput = hideBallons;
 	e('emailRE').onfocus = hideBallons;
@@ -51,18 +65,46 @@ function onChangeIAgree(evt) {
 	}
 }
 
-function onClickResetForm() {
-	var data = _map('resetForm', 1),
-		tokenName = 'reset_password_form[_token]';
+function onClickResetForm(ev) {
+	var data,
+		tokenName = 'reset_password_form[_token]',
+		v;
+	if (ev.keyCode && ev.keyCode != 13) {
+		return;
+	}
+	data = _map('resetForm', 1);
+	v = data["reset_password_form[email]"].trim();
+	if (!v) {
+		showResetError({message: L("Value does not may be blank.")});
+		return;
+	}
+	if (!checkMail(v)) {
+		showResetError({message: L("This value is not a valid email address.")});
+		return;
+	}
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
 	hideBallons();
 	Rest._post(data, onSuccessReset, '/sp/public/reset', onFailSendReset);
 }
 
-function onClickRegisterNow() {
-	var data = _map('registerForm', 1),
+function onClickRegisterNow(evt) {
+	var data,
 		tokenName = 'register_form[_token]';
+	if (evt.keyCode && evt.keyCode != 13) {
+		return;
+	}
+	data = _map('registerForm', 1);
+	if (!data["register_form[name]"].trim()
+	  ||!data["register_form[surname]"].trim()
+	  ||!data["register_form[email]"].trim()
+	  ||!data["register_form[username]"].trim()
+	  ||!data["register_form[passwordRaw]"].trim()
+	  ||!data["register_form[passwordRepeat]"].trim()
+	) {
+		showRegisterError({errors:{name: L("All values required.")}});
+		return;
+	}
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
 	authDisForm("registerForm", 1);
@@ -94,9 +136,16 @@ function onSuccessRegister(data) {
 	}
 }
 
-function onClickLogin() {
-	var data = _map('loginForm', 1);
-	console.log(data);
+function onClickLogin(evt) {
+	var data;
+	if (evt.keyCode && evt.keyCode != 13) {
+		return;
+	}
+	data = _map('loginForm', 1);
+	if (!data._username.trim() && ! data._password.trim()) {
+		showLoginError({message: L("Value does not may be blank.")});
+		return;
+	}
 	Rest._csrf_token = data._csrf_token;
 	Rest._token_name = '_csrf_token';
 	// showScreen('hWaitScreen');
@@ -160,9 +209,13 @@ function checkMail(sEmail) {
 	}
 }
 
-function onClickRegisterByEmailNow() {
+function onClickRegisterByEmailNow(evt) {
 	var fid = 'emailRegisterForm', data = _map(fid, 1),
 		tokenName = 'tokenRE';
+	if (evt.keyCode && evt.keyCode != 13) {
+		return;
+	}
+	
 	if (!checkMail(v("emailRE"))) {
 		showBalloonError(L("Email required"), 182, -74);
 		return;

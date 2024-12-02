@@ -115,6 +115,8 @@ var langRu = {
 	"Unable send email" : "Не могу отправить email.",
 	"Bad credentials." : "Не верные логин или пароль.",
 	"Like a watchdog" : "Как бы сторожевой пёс",
+	"Value does not may be blank." : "Значение не может быть пустым",
+	"All values required." : "Все значения обязательны для заполнения",
 	
 	// reg screen
 	"bShowAuthScreen4" : "Вход по логину и паролю",
