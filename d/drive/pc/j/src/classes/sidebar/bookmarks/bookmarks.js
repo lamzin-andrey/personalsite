@@ -43,9 +43,9 @@ class Bookmarks extends AbstractList{
 	}
 
 	onClick(event) {
-		let trg = ctrg(event),
+		let j, i, SZ, trg = ctrg(event),
 			o = this,
-			n = str_replace(o.itemIdPrefix, '', trg.id), j, i, SZ;
+			n = str_replace(o.itemIdPrefix, '', trg.id);
 		SZ = sz(o.list[n].stack);
 		j = sz(o.list[n].stack) - 1;
 		if (o.list[n].fid == o.list[n].stack[j]) {
@@ -193,13 +193,14 @@ class Bookmarks extends AbstractList{
 			stack, stack
 		});
 		this.saveBookmarks(uaBm);
+		Rest._post({ls: json_encode(uaBm)}, DevNull, `${br}/wisbmark.json`, DevNull);
 	}
 
 	readUserBookmarks() {
 		let bookmarksKey,
-			bookmarks = this.getUserBookmarks(),
 			uaBmData,
-			uaBm;
+			uaBm, 
+			bookmarks = this.getUserBookmarks();
 		if (!window.USER) {
 			return;
 		}
@@ -212,9 +213,9 @@ class Bookmarks extends AbstractList{
 
 	writeUserBookmarks(list, newKey) {
 		let bookmarksKey,
-			bookmarks = this.getUserBookmarks(),
 			uaBmData,
-			uaBm;
+			uaBm,
+			bookmarks = this.getUserBookmarks();
 		if (!window.USER) {
 			return;
 		}
@@ -250,6 +251,7 @@ class Bookmarks extends AbstractList{
 				if (newName) {
 					ls[i].displayName = newName;
 					this.saveBookmarks(ls);
+					Rest._post({ls: json_encode(ls)}, DevNull, `${br}/wisbmark.json`, DevNull);
 				}
 				break;
 			}
@@ -268,6 +270,7 @@ class Bookmarks extends AbstractList{
 				if (confirm(L("Are you sure remove bookmark") + " " + data.displayName + '?')) {
 					ls.splice(i, 1);
 					this.saveBookmarks(ls);
+					Rest._post({ls: json_encode(ls)}, DevNull, `${br}/wisbmark.json`, DevNull);
 				}
 				break;
 			}
@@ -288,6 +291,7 @@ class Bookmarks extends AbstractList{
 					ls[i - 1] = ls[i];
 					ls[i] = buf;
 					this.saveBookmarks(ls);
+					Rest._post({ls: json_encode(ls)}, DevNull, `${br}/wisbmark.json`, DevNull);
 				}
 				break;
 			}
@@ -308,6 +312,7 @@ class Bookmarks extends AbstractList{
 					ls[i + 1] = ls[i];
 					ls[i] = buf;
 					this.saveBookmarks(ls);
+					Rest._post({ls: json_encode(ls)}, DevNull, `${br}/wisbmark.json`, DevNull);
 				}
 				break;
 			}

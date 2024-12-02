@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Ausers;
+use App\Entity\DrvBookmark;
 use App\Entity\DrvCatalogs;
 use App\Entity\DrvFile;
 use App\Entity\DrvFilePermissions;
@@ -93,6 +94,7 @@ class UsbController extends AbstractController
                  * @var DrvFileRepository $filesRepository
                  */
                 $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
+
                 $data = [
                     'auth' => true,
                     'token' => $csrfToken,
@@ -1676,10 +1678,22 @@ class UsbController extends AbstractController
         }
         $breadCrumbs = '/' . implode('/', $breadCrumbs);
 
+
+        /**
+         * @var DrvCatalogsRepository $catalogRepository
+         */
+        $repository = $this->container->get('doctrine')->getRepository(DrvBookmark::class);
+        $entity = $repository->findOneBy(["userId" => $user->getId()]);
+        $bm = [];
+        if ($entity) {
+            $bm = unserialize($entity->getBm());
+        }
+
         return [
             'ls' => $list,
             'p' => $realParentId,
-            'bc' => $breadCrumbs
+            'bc' => $breadCrumbs,
+            "bm" => $bm
         ];
     }
 
@@ -2097,6 +2111,41 @@ class UsbController extends AbstractController
             return 1024*1024*1024 * 100;
         }*/
         return intval($this->getParameter('app.wusb_max_space') );
+
+    }
+
+    /**
+     * @Route("/wisbmark.json", name="drivesyncbookmark")
+     * @param Request $oRequest
+     * @param TranslatorInterface $t
+     * @param $
+     * @return
+     */
+    public function driveSyncBookmarksAction(Request $request,
+                                          TranslatorInterface $t,
+                                          CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $csrfToken = $csrfTokenManager
+            ? $csrfTokenManager->getToken('authenticate')->getValue()
+            : null;
+        if ($csrfToken != $request->request->get('_token')) {
+            $domain = null;
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page', $domain)
+            ]);
+        }
+
+        // Create db record
+        /**
+         * @var DrvCatalogsRepository $catalogRepository
+         */
+        $repository = $this->container->get('doctrine')->getRepository(DrvBookmark::class);
+        $repository->save(serialize(json_decode($request->get('ls'))), $this->getUser()->getId());
+
+        return $this->_json([
+            "status" => "ok"
+        ]);
 
     }
 }

@@ -29,26 +29,27 @@ function getAuthState() {
 	Rest._get(onSuccessGetAuthState, br + '/dast.json', onFailGetAuthState);
 }
 function onSuccessGetAuthState(data) {
+	var bm0, bm;
+	if (!onFailGetAuthState(data)) {
+		return;
+	}
+	// no auth
+	e('_csrf_token').value = data.token;
+	Rest._token = data.token;
+	if (!data.auth) {
+		clearInterval(window.bootSe2d.mainInterval);
+		clearInterval(window.bootSe2d.app.logoRtIval);
+		showScreen('hRegisterEScreen');
+		e('register_form[_token]').value = data.token_reg;
+		e('reset_password_form[_token]').value = data.token_res;
+		e('tokenRE').value = data.token_reg;
+		loginByMailhash();// TODO а здесь как будет?
+		return;
+	}
 	
-		if (!onFailGetAuthState(data)) {
-			return;
-		}
-		// no auth
-		e('_csrf_token').value = data.token;
-		Rest._token = data.token;
-		if (!data.auth) {
-			clearInterval(window.bootSe2d.mainInterval);
-			clearInterval(window.bootSe2d.app.logoRtIval);
-			showScreen('hRegisterEScreen');// hAuthScreen
-			e('register_form[_token]').value = data.token_reg;
-			e('reset_password_form[_token]').value = data.token_res;
-			e('tokenRE').value = data.token_reg;
-			loginByMailhash();
-			return;
-		}
-		storage("tsz", data.t);
-		window.tsz = data.t;
-		hideLoader();
+	storage("tsz", data.t);
+	window.tsz = data.t;
+	hideLoader();
 	
 }
 
@@ -180,7 +181,7 @@ function showLoader() {
 	showScreen('hWaitScreen');
 }
 function hideLoader(screenId) {
-	var path, lastLoc, ex = [""], st;
+	var path, lastLoc, ex = [""], st, fid = 0;
 	screenId = screenId ? screenId : 'hCatalogScreen';
 	showScreen(screenId);
 	app.isActive = 1;

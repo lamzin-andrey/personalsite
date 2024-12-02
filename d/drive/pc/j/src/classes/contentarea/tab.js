@@ -79,6 +79,12 @@ Tab.prototype.onFileList = function(data) {
 	o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
 	o.listCount = 2;
 	o.renderByMode();
+	
+	
+	if (sz(data.bm)) {
+		fmgr.bookmarksManager.saveBookmarks(data.bm);
+	}
+	
 	onResize();
 }
 

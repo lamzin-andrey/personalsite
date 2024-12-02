@@ -161,6 +161,8 @@ function onSuccessLogin(data) {
 	if (data.success === true) {
 		storage("username", u);
 		patchUsername(u);
+		
+		
 		showFileManager();
 	}
 }
@@ -416,6 +418,6 @@ function hideBallons()
 
 function showFileManager() {
 	showScreen("hCatalogScreen");
-	app.isActive = true;
+	fmgr.isActive = true;
 	hideLoader();
 }
