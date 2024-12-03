@@ -449,10 +449,18 @@ Tab.prototype.onClickSharing = function() {
 	this.showPropsDlg(1);
 }
 Tab.prototype.showPropsDlg = function(bm) {
-	var k, o;
+	var k, o, i, s = this;
 	fmgr.dlgProp ? (delete fmgr.dlgProp) : 0;
 	k = fmgr.dlgProp = new PropsDlg();
-	o = this.list[this.toI(currentCmTargetId)];
+	
+	i = W.currentCmTargetId;
+	if (isU(i)) {
+		for (i in s.oSelectionItems) {
+			break;
+		}
+	}
+	
+	o = s.list[s.toI(i)];
 	k = dlgMgr.create(k.h(o.src, o.i, o.id), k);
 	if (fmgr.dlgProp.srcType != 'c') {
 		FPC.init(bm);

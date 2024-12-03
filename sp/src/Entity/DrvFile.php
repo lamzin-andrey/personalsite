@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
     name="drv_file",
     indexes={
         @ORM\Index(name="user_id", columns={"user_id"}),
-        @ORM\Index(name="catalog_id", columns={"catalog_id"})
+        @ORM\Index(name="catalog_id", columns={"catalog_id"}),
+        @ORM\Index(name="moderatus", columns={"moderatus"})
     }
   )
  */
@@ -93,6 +94,11 @@ class DrvFile
      * @ORM\Column(name="hash", type="string", length=255, nullable=false, options={"comment"="Хеш файла", "default"=""})
      */
     private $hash;
+
+    /**
+     * @ORM\Column(name="moderatus", type="boolean", options={"comment"="0 - ок (не требует модерации), 1 - требует модерации, 2 - одобрено, 3 - запрещено", "default"="0"})
+     */
+    private $moderatus = 0;
 
     /**
      * @ORM\Column(name="is_no_erased", type="boolean", options={"comment"="1 - physical file no erase, 0 - physical file is erase", "default"="1"})
@@ -263,6 +269,18 @@ class DrvFile
     public function setIsNoErased(bool $isNoErased): self
     {
         $this->isNoErased = $isNoErased;
+
+        return $this;
+    }
+
+    public function getModeratus(): ?int
+    {
+        return $this->moderatus;
+    }
+
+    public function setModeratus(int $moderatus): self
+    {
+        $this->moderatus = $moderatus;
 
         return $this;
     }

@@ -18,6 +18,7 @@ use App\Service\AppService;
 use App\Service\BitReader;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
+use App\Service\UserService;
 use App\WebUSB\Service\FilePermissionService;
 use App\WebUSB\Service\WusbUploadService;
 use Doctrine\Common\Collections\Criteria;
@@ -2146,6 +2147,20 @@ class UsbController extends AbstractController
         return $this->_json([
             "status" => "ok"
         ]);
+
+    }
+
+    public function driveGetModerationListAction(Request $request,
+                                          TranslatorInterface $t,
+                                          UserService $userService)
+    {
+        if (!$userService->isAdmin($this->getUser())) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page')
+            ]);
+        }
+
 
     }
 }

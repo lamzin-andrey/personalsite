@@ -110,6 +110,12 @@ class FilePermissionService
         $fileEntity = $fileRepository->find($fileId);
         if ($fileEntity) {
             $fileEntity->setIsPublic($isPublic);
+            if ($isPublic && $fileEntity->getModeratus() == 0) {
+                $fileEntity->setModeratus(1);
+            }
+            if (!$isPublic && $fileEntity->getModeratus() == 1) {
+                $fileEntity->setModeratus(0);
+            }
             $this->appService->save($fileEntity);
         }
     }

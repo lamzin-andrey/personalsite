@@ -222,4 +222,13 @@ class UserService
         }
         return $str;
     }
+
+    public function isAdmin($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        $nRole = $user->getRole();
+        return ( $nRole == 3 || $nRole == 2);
+    }
 }
