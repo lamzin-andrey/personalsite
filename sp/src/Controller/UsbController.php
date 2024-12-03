@@ -2150,9 +2150,15 @@ class UsbController extends AbstractController
 
     }
 
+    /**
+     * @Route("/wusbmodls.json", name="drivelsmod")
+     */
     public function driveGetModerationListAction(Request $request,
+                                          AppService $appService,
                                           TranslatorInterface $t,
-                                          UserService $userService)
+                                          Filesystem $filesystem,
+                                          UserService $userService
+    )
     {
         if (!$userService->isAdmin($this->getUser())) {
             return $this->_json([
@@ -2160,7 +2166,204 @@ class UsbController extends AbstractController
                 'error' => $this->l($t, 'You have not access to this page')
             ]);
         }
+        $r = $appService->repository(DrvFile::class);
+        $raw = $r->findBy([
+            "moderatus" => 1
+        ], ["createdTime" => "DESC"]);
+        $ls = [];
+        /**
+         * @var DrvFile $ent
+        */
+        foreach ($raw as $ent) {
+            $ls[] = [
+                "name" => $ent->getName(),
+                "i" => (int)$ent->getId(),
+                "L" => $this->getAdminFileLink($ent, $request, $filesystem, $t)
+            ];
+        }
+
+        return $this->_json([
+            "status" => "ok",
+            "ls" => $ls
+        ]);
+    }
+
+    /**
+     * @Route("/moderatus", name="wusbmoderatus")
+     */
+    public function index(UserService $userService)
+    {
+        if (!$userService->isAdmin($this->getUser())) {
+            return $this->redirectToRoute('home');
+        }
+        return $this->render('wusb_moderatus/index.html.twig', [
+            'controller_name' => 'UsbController',
+            'pageHeading' => 'Понашерили...',
+        ]);
+    }
+
+    private function getAdminFileLink(DrvFile $fileEntity, Request $request, Filesystem $filesystem, TranslatorInterface $t): string
+    {
+        $filePathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+        $path = $filePathObject->path;
+
+        if (!empty($filePathObject->error)) {
+            return "javascript:alert({$this->l($t, $filePathObject->error)})";;
+        }
+        $symlink = $filePathObject->symlink;
+
+        if (!$filesystem->exists($symlink)) {
+            symlink($path, $symlink);
+        }
+        if (!$filesystem->exists($symlink)) {
+            return "javascript:alert({$this->l($t, 'Unable create copy')})";;
+
+        }
+
+        return str_replace($request->server->get('DOCUMENT_ROOT'), '', $symlink);
+    }
+
+    /**
+     * @Route("/wusbmodrm.json", name="drivemodrm")
+     */
+    public function driveModerationRmAction(Request $request,
+                                                 AppService $appService,
+                                                 TranslatorInterface $t,
+                                                 UserService $userService
+    )
+    {
+        if (!$userService->isAdmin($this->getUser())) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page')
+            ]);
+        }
+        $r = $appService->repository(DrvFile::class);
+        $id = $request->get('i');
+        $ent = $r->find($id);
+        if ($ent) {
+            $ent->setModeratus(3);
+            $appService->save($ent);
+            return $this->_json([
+                "status" => "ok",
+                "i" => $id
+            ]);
+        }
+
+        return $this->_json([
+            "status" => "err"
+        ]);
+    }
+
+    /**
+     * @Route("/wusbmodok.json", name="wusbmodok")
+     */
+    public function driveModerationOkAction(Request $request,
+                                            AppService $appService,
+                                            TranslatorInterface $t,
+                                            UserService $userService
+    )
+    {
+        if (!$userService->isAdmin($this->getUser())) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page')
+            ]);
+        }
+        $r = $appService->repository(DrvFile::class);
+        $id = $request->get('i');
+        $ent = $r->find($id);
+        if ($ent) {
+            $ent->setModeratus(2);
+            $appService->save($ent);
+            return $this->_json([
+                "status" => "ok",
+                "i" => $id
+            ]);
+        }
+
+        return $this->_json([
+            "status" => "err"
+        ]);
+    }
+
+    /**
+     * @Route("/wusbmodjpg.json", name="wusbmodjpg")
+     */
+    public function driveModerationGetJpgAction(Request $request,
+                                            AppService $appService,
+                                            Filesystem $filesystem,
+                                            TranslatorInterface $t,
+                                            UserService $userService
+    )
+    {
+        if (!$userService->isAdmin($this->getUser())) {
+            return $this->_json([
+                'status' => 'error',
+                'error' => $this->l($t, 'You have not access to this page')
+            ]);
+        }
+        $r = $appService->repository(DrvFile::class);
+        $id = $request->get('i');
+        $ent = $r->find($id);
+        if ($ent) {
+            $filePathObject = $this->getFilePathObject($ent, $this->getUser(), $request, $filesystem);
+            $path = $filePathObject->path;
+
+            if (!empty($filePathObject->error)) {
+                return $this->_json([
+                    "status" => "err",
+                    "msg" => $this->l($t, $filePathObject->error)
+                ]);
+            }
+
+            $tmp = sys_get_temp_dir() . '/tmp.jpg';
+            $this->resizeAndAddBg($path, $tmp, 320, 480, [0, 0, 0]);
+            $data = base64_encode(file_get_contents($tmp));
 
 
+            return $this->_json([
+                "status" => "ok",
+                "d" => $data
+            ]);
+        }
+
+        return $this->_json([
+            "status" => "err"
+        ]);
+    }
+
+    private function resizeAndAddBg($srcPath, $destPath, $nWidth, $nHeight, $color)
+    {
+        if (!file_exists($srcPath)) {
+            return;
+        }
+        $image = new \Imagick($srcPath);
+        $sz = $image->getImageGeometry();
+        $srcW = $sz['width'];
+        $srcH = $sz['height'];
+        $isLandscape = $srcW > $srcH;
+
+        $isSrcLgBg = $srcW > $nWidth || $srcH > $nHeight;
+        $newW = $srcW;
+        $newH = $srcH;
+
+        //это случай, когда изображение больше фона
+        if ($isSrcLgBg) {
+            if ($isLandscape) {
+                $nScale = $nWidth / $srcW;
+            } else {
+                $nScale = $nHeight / $srcH;
+            }
+            $newW = round($srcW * $nScale);
+            $newH = round($srcH * $nScale);
+        }
+
+        $im = new \Imagick();
+        $im->readImage($srcPath);
+        $im->resizeImage($newW, $newH,\Imagick::FILTER_CATROM , 1,TRUE );
+        $im->setImageFormat("jpg");
+        $im->writeImage($destPath);
     }
 }
+

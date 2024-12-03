@@ -2,7 +2,7 @@ window.Rest2 = {
 	/**
 	 * @description Set _token and _tiken_name in Rest
 	*/
-	_setToken(sT, sN){
+	_setToken:function(sT, sN){
 		Rest._token = sT;
 		Rest._token_name = sN;
 	},
@@ -10,21 +10,21 @@ window.Rest2 = {
 	 * @description Set Rest._fileIndex
 	 * @property {Number} nFor multiupload uploading input.files[_fileIndex]
 	*/
-	_setFileIndex(n){
+	_setFileIndex:function(n){
 		Rest._fileIndex = n;
 	},
 	/**
 	 * @description Set Rest._fileIndex
 	 * @property {String} sLng
 	*/
-	_setLang(sLng){
+	_setLang:function(sLng){
 		Rest._lang = sLng;
 	},
 	/**
 	 * @description Set Rest.root
 	 * @property {String} sRoot
 	*/
-	_setRoot(sRoot){
+	_setRoot:function(sRoot){
 		Rest.root = sRoot;
 	},
 	/**

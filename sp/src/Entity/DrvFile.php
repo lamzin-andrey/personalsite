@@ -96,7 +96,7 @@ class DrvFile
     private $hash;
 
     /**
-     * @ORM\Column(name="moderatus", type="boolean", options={"comment"="0 - ок (не требует модерации), 1 - требует модерации, 2 - одобрено, 3 - запрещено", "default"="0"})
+     * @ORM\Column(name="moderatus", type="smallint", options={"comment"="0 - ок (не требует модерации), 1 - требует модерации, 2 - одобрено, 3 - запрещено", "default"="0"})
      */
     private $moderatus = 0;
 

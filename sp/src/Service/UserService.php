@@ -229,6 +229,6 @@ class UserService
             return false;
         }
         $nRole = $user->getRole();
-        return ( $nRole == 3 || $nRole == 2);
+        return ($nRole == 2);
     }
 }
