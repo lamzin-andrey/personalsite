@@ -2178,7 +2178,9 @@ class UsbController extends AbstractController
             $ls[] = [
                 "name" => $ent->getName(),
                 "i" => (int)$ent->getId(),
-                "L" => $this->getAdminFileLink($ent, $request, $filesystem, $t)
+                "L" => $this->getAdminFileLink($ent, $request, $filesystem, $t),
+                "s" => AppService::getHumanFilesize($ent->getSize(), 1, 2, false)
+
             ];
         }
 
