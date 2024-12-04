@@ -43,7 +43,7 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
-    private const VERSION = '28';
+    private const VERSION = '28t';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -2256,9 +2256,14 @@ class UsbController extends AbstractController
         }
         $r = $appService->repository(DrvFile::class);
         $id = $request->get('i');
+        /**
+         * @var DrvFile $ent
+        */
         $ent = $r->find($id);
         if ($ent) {
             $ent->setModeratus(3);
+            $ent->setIsDeleted(true);
+            $ent->setIsNoErased(true);
             $appService->save($ent);
             return $this->_json([
                 "status" => "ok",
