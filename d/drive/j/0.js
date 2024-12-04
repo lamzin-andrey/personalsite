@@ -1,8 +1,28 @@
-window.onload = initDirect;
+window.onload = checkVers;
+function checkVers() {
+	w.br = "/sp/public";
+	VersionReq.get(w, onV);
+}
+function onV(v) {
+	var s, h = "http://", H = HttpQueryString;
+	if ($_GET['v'] != v) {
+		s = H.setVariable(location.href, 'v', v);
+		if (H.isSSL()) {
+			if (s.indexOf(h) == 0) {
+				s = s.replace(h, H.SSLP);
+			} else if (s.indexOf(H.SSLP) != 0) {
+				s = H.SSLP + H.host() + s;
+			}
+		}
+		gto(s);
+		return;
+	}
+	initDirect();
+}
 function initDirect() {
+	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png';
 	e('im').onload = function() {onCheckSsl(true)};
 	e('im').onerror = function() {onCheckSsl(false)};
-	var url = HttpQueryString.SSLP + HttpQueryString.host() + '/d/drive/i/u.png';
 	attr(e('im'), 'src', url);
 }
 function onCheckSsl(isSSLSupport) {
@@ -45,7 +65,7 @@ function onCheckSsl(isSSLSupport) {
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');
 	}
-	var hostPrefix = '';
+	var hostPrefix = '', s;
 	if (isSSLSupport) {
 		hostPrefix = HttpQueryString.SSLP + HttpQueryString.host();
 	}
@@ -77,7 +97,8 @@ function onCheckSsl(isSSLSupport) {
 			location = hostPrefix + '/d/drive/a2/clang/';
 			return;
 		}
-		location = hostPrefix + '/d/drive/' + savedTheme + '/';
+		s = hostPrefix + '/d/drive/' + savedTheme + '/';
+		gto(HttpQueryString.setVariable(s, 'v', $_GET['v']));
 		return;
 	}
 	

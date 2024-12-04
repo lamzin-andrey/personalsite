@@ -1,6 +1,25 @@
 window.root = '/d/drive/a2/clang';
 window.br = window.backRoot = '/sp/public';
-window.onload = initApp;
+window.onload = cv;
+function cv() {
+	VersionReq.get(w, onV);
+}
+function onV(v) {
+	var s, h = "http://", H = HttpQueryString;
+	if ($_GET['v'] != v) {
+		s = H.setVariable(location.href, 'v', v);
+		if (H.isSSL()) {
+			if (s.indexOf(h) == 0) {
+				s = s.replace(h, H.SSLP);
+			} else if (s.indexOf(H.SSLP) != 0) {
+				s = H.SSLP + H.host() + s;
+			}
+		}
+		gto(s);
+		return;
+	}
+	initApp();
+}
 function initApp() {
 	setListeners();
 	onLoadA236();

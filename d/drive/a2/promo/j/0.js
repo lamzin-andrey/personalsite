@@ -1,6 +1,26 @@
 window.root = '/d/drive/a2/share';
 window.br = window.backRoot = '/sp/public';
-window.onload = initApp;
+window.onload = gv;
+function gv() {
+	w.br = "/sp/public";
+	VersionReq.get(w, onV);	
+}
+function onV(v) {
+	var s, h = "http://", H = HttpQueryString;
+	if ($_GET['v'] != v) {
+		s = H.setVariable(location.href, 'v', v);
+		if (H.isSSL()) {
+			if (s.indexOf(h) == 0) {
+				s = s.replace(h, H.SSLP);
+			} else if (s.indexOf(H.SSLP) != 0) {
+				s = H.SSLP + H.host() + s;
+			}
+		}
+		gto(s);
+		return;
+	}
+	initApp();
+}
 function initApp() {
 	var cLang = storage('lang');
 	if (!cLang) {
