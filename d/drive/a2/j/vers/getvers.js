@@ -8,7 +8,7 @@ function gVonVersion(v){
 		goURL(roota2 + '/newversion/?v=' + v);
 		return;
 	}
-	if (HttpQueryString.$_GET['v'] != v) {
+	if ($_GET['v'] != v) {
 		goURL(HttpQueryString.setVariable(location.href, 'v', v));
 	}
 }
