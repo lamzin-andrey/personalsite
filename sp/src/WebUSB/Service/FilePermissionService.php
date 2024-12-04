@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class FilePermissionService
 {
     private  $registry;
-    private  $appService;
+    private  AppService $appService;
     private  $t;
 
     /**
@@ -101,7 +101,7 @@ class FilePermissionService
         return $result;
     }
 
-    public function saveFilePermission($fileId, $isPublic): void
+    public function saveFilePermission(int $fileId, bool $isPublic): void
     {
         /**
          * @var DrvFileRepository $fileRepository
@@ -113,7 +113,8 @@ class FilePermissionService
             if ($isPublic && $fileEntity->getModeratus() == 0) {
                 $fileEntity->setModeratus(1);
             }
-            if (!$isPublic && $fileEntity->getModeratus() == 1) {
+            $countSharedUsers = $this->appService->count(DrvFilePermissions::class, ["fileId" => $fileId]);
+            if (!$isPublic && $fileEntity->getModeratus() == 1 && $countSharedUsers == 0) {
                 $fileEntity->setModeratus(0);
             }
             $this->appService->save($fileEntity);
@@ -157,6 +158,15 @@ class FilePermissionService
         */
         $conn = $this->registry->getConnection();
         $conn->executeUpdate($sql, $parameters);
+
+        /**
+         * @var DrvFile $fileEnt
+        */
+        $fileEnt = $this->appService->find(DrvFile::class, $fileId);
+        if ($fileEnt->getModeratus() == 0) {
+            $fileEnt->setModeratus(1);
+            $this->appService->save($fileEnt);
+        }
     }
 }
 

@@ -411,6 +411,39 @@ class AppService
 		$oEm->flush();
 	}
 
+	public function find(string $className, string $id)
+    {
+        $r = $this->repository($className);
+        return $r->find($id);
+    }
+
+    /**
+     * @param array<string, string> $orderBy ["id" => "DESC"]
+    */
+    public function findOneBy(string $className, array $criteria, ?array $orderBy = null)
+    {
+        $r = $this->repository($className);
+        return $r->findOneBy($criteria, $orderBy);
+    }
+
+    /**
+     * @param array<string, string> $orderBy ["id" => "DESC"]
+     */
+    public function findBy(string $className, array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
+    {
+        $r = $this->repository($className);
+        return $r->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param array<string, string> $orderBy ["id" => "DESC"]
+     */
+    public function count(string $className, array $criteria): int
+    {
+        $r = $this->repository($className);
+        return $r->count($criteria);
+    }
+
 	/**
 	 * Останавливает текущую задачу пользователя и запускает переданную
 	 * @param CrnTask $oTask

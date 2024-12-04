@@ -1894,6 +1894,7 @@ class UsbController extends AbstractController
     public function driveRemoveFilePermission(
         Request $request,
         TranslatorInterface $t,
+        AppService $appService,
         FilePermissionService $filePermissionService)
     {
         if (!$this->getUser()) {
@@ -1913,7 +1914,7 @@ class UsbController extends AbstractController
 
         if ($fileId > 0 && $userId > 0) {
             /**
-             * @var DrvFileRepository $fileRepository
+             * @var DrvFileRepository $filePertmissionsRepository
              */
             $filePertmissionsRepository = $this->container->get('doctrine')->getRepository(DrvFilePermissions::class);
             // remove phisical + symlink
@@ -1926,6 +1927,18 @@ class UsbController extends AbstractController
                 $em->remove($entity);
                 $em->flush();
             }
+
+            $qnt = $filePertmissionsRepository->count([
+                "fileId" => $fileId
+            ]);
+            if ($qnt == 0) {
+                $entFile = $appService->find(DrvFile::class, $fileId);
+                if ($entFile->getModeratus() == 1 && $entFile->getIsPublic() != 1) {
+                    $entFile->setModeratus(0);
+                    $appService->save($entFile);
+                }
+            }
+
             $response = new StdClass();
             $response->status = 'ok';
             $response->id = $userId;
@@ -1992,6 +2005,7 @@ class UsbController extends AbstractController
 
         if ($fileId > 0) {
             $filePermissionService->addFileUser($fileId, $userId);
+
         }
 
         return $this->_json(['status' => 'ok']);
