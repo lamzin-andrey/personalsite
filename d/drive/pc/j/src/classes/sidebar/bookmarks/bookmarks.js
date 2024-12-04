@@ -264,7 +264,7 @@ class Bookmarks extends AbstractList{
 		ls = this.readUserBookmarks();
 		SZ = sz(ls);
 		for (i = 0; i < SZ; i++) {
-			if (ls[i].displayName == data.displayName && ls[i].path == data.path) {
+			if (ls[i].displayName == data.displayName && ls[i].fid == data.fid) {
 				if (confirm(L("Are you sure remove bookmark") + " " + data.displayName + '?')) {
 					ls.splice(i, 1);
 					this.saveBookmarks(ls);
