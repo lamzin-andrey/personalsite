@@ -8,7 +8,7 @@ function fileMgrLayout() {
 				<img id="btnFwd" class="pointer imgHomeP imgHomeRight" src="./i/rightArrow32.png">\
 				<img id="btnUp" class="pointer imgHomeP imgHomeUp" src="./i/upArrow32d.png">\
 				<img id="btnHome" class="pointer imgHomeP imgHome" src="./i/home32.png">\
-				<a href="/d/drive/a2/cv" target="_blank">\
+				<a href="/d/drive/a2/cv/" target="_blank">\
 					<img class="pointer imgHomeP imgHome" src="./i/reboot-2.png">\
 				</a>\
 				<img id="btnMainExit" class="pointer imgHomeP imgHome" src="../a2/i/exit.png">\
