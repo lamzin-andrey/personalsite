@@ -223,7 +223,7 @@ function onTick() {
 		y = parseFloat(stl(i, q)),
 		dy, dx,
 		src,
-		wp;
+		wp, pr, bf;
 	W.cnt++;
 	
 	if (W.cnt > 150) {
@@ -237,18 +237,30 @@ function onTick() {
 	}
 	
 	wp = getViewport();
-	W.xlim = 1050 - wp.w;
-	W.ylim = 656 - wp.h;
+	pr = getParams(wp.w, wp.h);
 	
-	if (wp.w > 1050 || wp.h > 656) {
+	W.xlim = pr.vlim - wp.w;
+	W.ylim = pr.hlim - wp.h;
+	
+	if (wp.w > wp.h) {
+		bf = pr.vlim;
+		pr.vlim = 0;
+		pr.hlim = bf;
+		W.xlim = pr.vlim - wp.w;
+		W.ylim = pr.hlim - wp.h;
+	}
+	
+	
+	
+	if (wp.w > pr.vlim || wp.h > pr.hlim) {
 		stl(i, b + 'size', 'cover');
 		stl(i, b + 'repeat', 'no-repeat');
 		stl(i, p + 'x', '0');
 		stl(i, p + 'y', '0');
 		return;
 	} else {
-		stl(i, b + 'size', 'auto');
-		stl(i, b + 'repeat', 'auto');
+		stl(i, b + 'size', pr.size);
+		stl(i, b + 'repeat', pr.repeat);
 	}
 		
 	x = isNaN(x) ? 0 : x;
@@ -272,21 +284,66 @@ function onTick() {
 	
 	dy = W.directy * 0.2;
 	y += dy;
-	if (W.directy == -1 && Math.abs(y) >= W.ylim) {
+	if (wp.w <= wp.h) {
+		bf = Math.abs(y);
+	} else {
+		bf = y;
+	}
+	
+	if (W.directy == -1 && bf >= W.ylim) {
 		y -= dy;
 		W.directy = 1;
 		stl(i, q, y + 'px');
 		return;
 	}
+	
 	if (W.directy == 1 && y >= 0) {
 		y = 0;
 		W.directy = -1;
 		stl(i, q, y + 'px');
 		return;
 	}
-	stl(i, q, y + 'px');
+	
+	if (!pr.b) {
+		stl(i, q, y + 'px');
+	}
 	
 	
+}
+
+
+function getParams(w, h) {
+	var r = {}, a = 'auto';
+	r.hlim = 656;
+	r.vlim = 1050;
+	r.size = a;
+	r.repeat = a;
+	
+	if (w >= 320) {
+		r.hlim = 860;
+		r.size = 'cover';
+		r.repeat = 'no-repeat';
+		r.b = 1;
+		if (w < h && w > 390) {
+			if (!hasClass("hWaitGetLink", "b")) {
+				removeClass("hWaitGetLink", "m");
+				addClass("hWaitGetLink", "b");
+			}
+		} else if (w < h && w >= 240) {
+			if (!hasClass("hWaitGetLink", "m")) {
+				removeClass("hWaitGetLink", "b");
+				addClass("hWaitGetLink", "m");
+			}
+		}
+		if (w > h && w < 500) {
+			removeClass("hWaitGetLink", "b");
+			removeClass("hWaitGetLink", "m");
+		} else if (w > h && w >= 500) {
+			addClass("hWaitGetLink", "b");
+		}
+	}
+	
+	return r;
 }
 
 function onLoadA236() {

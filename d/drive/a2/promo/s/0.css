@@ -88,3 +88,18 @@ body.f100, html.f100 {
 	cursor: pointer;
 	border:#30fdcd 1px solid;
 }
+.b {
+	font-size:14px;
+	line-height:28px;
+}
+.b div{
+	margin-top:30px;
+}
+
+.m {
+	font-size:13px;
+	line-height:26px;
+}
+.m div{
+	margin-top:28px;
+}
