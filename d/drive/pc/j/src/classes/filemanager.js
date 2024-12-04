@@ -21,6 +21,7 @@ FileManager.prototype.init = function() {
 	}
 	this.kbListener = new KBListener();
 	AppEnv.init([this, this.onGetActualEnv], [this, this.onGetSavedEnv]);
+	FileManager.PRODUCT_LABEL = L("WebUSB - another gigabyte of yours in the cloud");
 }
 
 FileManager.PRODUCT_LABEL = L("WebUSB - another gigabyte of yours in the cloud");

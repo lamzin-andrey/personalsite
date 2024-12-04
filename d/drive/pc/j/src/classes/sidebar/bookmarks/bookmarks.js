@@ -107,12 +107,10 @@ class Bookmarks extends AbstractList{
 			item.path = '/home/' + name;
 			item.fid = fid;
 			item.stack = stack;
+			item.cmId = userCmId;
 			
 			if (srcName.indexOf(USER) == 0) {
 				item.path = srcName.trim();
-				if (userCmId) {
-					item.cmId = userCmId;
-				}
 			} else if (sysCmId) {
 				item.cmId = sysCmId;
 			}
