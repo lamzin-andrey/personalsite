@@ -63,12 +63,14 @@ body.f100, html.f100 {
 .foot {
 	bottom:0px;
 	width:100%;
-	background-color:rgba(0,0,255,0.20);
+	background-color:rgba(0, 0, 0, 0.4);
 	padding:10px 0;
 	border-radius:7px;
 }
 .about {
-	color:white;
+	color:gold;
+	font-weight:bold;
+	font-family:Arial;
 }
 .nig .about {
 	color:aqua;
