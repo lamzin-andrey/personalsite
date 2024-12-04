@@ -23,7 +23,7 @@ FileManager.prototype.init = function() {
 	AppEnv.init([this, this.onGetActualEnv], [this, this.onGetSavedEnv]);
 }
 
-FileManager.PRODUCT_LABEL = 'WebUSB - ещё один ваш гигабайт в облаке';
+FileManager.PRODUCT_LABEL = L("WebUSB - another gigabyte of yours in the cloud");
 
 /**
  * @param {String} path
