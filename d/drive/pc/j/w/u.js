@@ -48,6 +48,7 @@ function onSuccessGetAuthState(data) {
 	}
 	
 	storage("tsz", data.t);
+	storage("username", data.u);
 	window.tsz = data.t;
 	hideLoader();
 	

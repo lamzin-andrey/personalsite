@@ -160,9 +160,6 @@ function onSuccessLogin(data) {
 	}
 	if (data.success === true) {
 		storage("username", u);
-		patchUsername(u);
-		
-		
 		showFileManager();
 	}
 }
@@ -235,7 +232,6 @@ function onSuccessRegisterByEmail(data) {
 	}
 	if (data.success === true) {
 		storage("username", u);
-		patchUsername(u);
 		showFileManager();
 		
 		return;
@@ -292,23 +288,11 @@ function loginByMailhash() {
 	}
 }
 
-function patchUsername(u) {
-	var ctab, i = "tb2", bm0 = "bm0";
-	window.USER = u;
-	if (!e(bm0) || !e(i)) {
-		return;
-	}
-	v(ee("bm0", "span")[0], u);
-	ctab = ee(i, "span")[0];
-	if (v(ctab) == "wusb") {
-		v(ctab, u);
-		attr(i, "title", u);
-	}
-}
 
-function onSuccessLoginByMailhash(data) {
-	if (data && data.success) {
-		storage("username", "wusb");
+
+function onSuccessLoginByMailhash(d) {
+	if (d && d.success) {
+		storage("username", d.username); // TODO
 		reload();
 	}
 }

@@ -12,16 +12,23 @@ function DevNull(){}
  * */
 window.AppEnv = {
 	init:function(aCallback, aPreCallback) {
-		this.config = {};
-		this.readLastSettings();
-		this.aCallback = aCallback;
-		this.onUserData();
+		var o = this;
+		o.n = "username";
+		o.config = {};
+		o.readLastSettings();
+		o.aCallback = aCallback;
+		o.wi = setInterval(() => {
+			o.c = storage(o.n);
+			if (o.c && o.c != 'wusb') {
+				clearInterval(o.wi);
+				o.onUserData();
+			}
+		}, 100);
+		aPreCallback[1].apply(aPreCallback[0]);
 	},
 	onUserData:function() {
 		var envObject = {}, F = false;
-		window.USER = storage("username");
-		window.USER = window.USER ? window.USER : "wusb";
-		
+		window.USER = storage(this.n);
 		envObject.USER = window.USER;
 		envObject.IS_KDE = F;
 		envObject.IS_KDE5 = envObject.IS_KDE5 = F;

@@ -81,7 +81,8 @@ Tab.prototype.onFileList = function(data) {
 	o.renderByMode();
 	
 	
-	if (sz(data.bm)) {
+	if (sz(data.bm) && !o.bmarksUpdated) {
+		o.bmarksUpdated = 1;
 		fmgr.bookmarksManager.saveBookmarks(data.bm);
 	}
 	

@@ -43,7 +43,7 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
-    private const VERSION = '36';
+    private const VERSION = '37';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -100,7 +100,8 @@ class UsbController extends AbstractController
                     'auth' => true,
                     'token' => $csrfToken,
                     't' => AppService::getHumanFilesize($this->getTotalSize($user) - $filesRepository->getCurrentSize($user), 0, 3, true),
-                    'uid' => $user->getId()
+                    'uid' => $user->getId(),
+                    'u' => $user->getUsername()
                 ];
             }
 			return $this->_json($data);
