@@ -50,6 +50,7 @@ window.langRu = {
 	'boChangeLang': 'Change language',
 	'boChangeTheme': 'Выбрать устройство',
 	'boCloseOpts': 'Закрыть меню',
+	'boAbout': 'О проекте',
 	'Properties' : 'Свойства',
 	'Exit' : 'Закрыть',
 	'Catalogs' : 'Папок',

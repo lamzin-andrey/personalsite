@@ -4,6 +4,7 @@ function initOptions() {
 	e('boChangeTheme').onclick = onClickOptionChangeTheme;
 	e('boCloseOpts').onclick = onClickOptionExit;
 	e('boLogout').onclick = onClickOptionLogout;
+	e('boAbout').onclick = onClickOptionAbout;
 	var E = e('boSortSetting');
 	E.onclick = onClickOptionSortSetting;
 }
@@ -47,4 +48,8 @@ function onClickOptionLogout() {
 	storage('updateState', updateState)
 	storage('vers', vers);
 	location.href = window.backRoot + '/logout?rd=/d/drive/';
+}
+
+function onClickOptionAbout() {
+	goURL(roota2 + "/promo/");
 }
