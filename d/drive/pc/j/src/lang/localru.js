@@ -187,7 +187,8 @@ var langRu = {
 	"october" : "октября",
 	"november" : "ноября",
 	"december" : "декабря",
-	"WebUSB - another gigabyte of yours in the cloud" : "WebUSB - ещё один ваш гигабайт в облаке"
+	"WebUSB - another gigabyte of yours in the cloud" : "WebUSB - ещё один ваш гигабайт в облаке",
+	"About" : "О проекте"
 };
 
 var jaqedLang = langRu; // TODO потом в зависимости от настроек

@@ -542,6 +542,9 @@ Tab.prototype.onClickRename = function() {
 }
 
 
+Tab.prototype.onClickAbout = function() {
+	goURL(roota2 + "/promo/");
+}
 Tab.prototype.onClickAddBookmark = function() {
 	var idx, srcName, pathInfo, shortName, o = this,
 		trg, fid,

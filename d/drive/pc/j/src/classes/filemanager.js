@@ -314,6 +314,13 @@ FileManager.prototype.addContextMenuHtml = function() {
 				</div>' +
 				this.contextMenuContent.getUploadItemHtml() + 
 				'\
+				<div class="contextMenuItem" onclick="app.tab.onClickAbout()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/info16.png">\
+					</div>\
+					<div class="contextMenuItemText">' + L("About") + '</div>\
+					<div class="cf"></div>\
+				</div>\
 			</div>\
 		</div>\
 		' + this.contextMenuContent.getBookmarkItemMenuHtml() + 

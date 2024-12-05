@@ -179,6 +179,13 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemText">' + L("Properties") + '</div>\
 					<div class="cf"></div>\
 				</div>\
+				<div class="contextMenuItem" onclick="app.tab.onClickAbout()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/info16.png">\
+					</div>\
+					<div class="contextMenuItemText">' + L("About") + '</div>\
+					<div class="cf"></div>\
+				</div>\
 				\
 			</div>\
 		</div>\
@@ -244,6 +251,14 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 						<img src="./i/cm/pencil16.png">\
 					</div>\
 					<div class="contextMenuItemText">' + L("Properties") + '</div>\
+					<div class="cf"></div>\
+				</div>\
+				\
+				<div class="contextMenuItem" onclick="app.tab.onClickAbout()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/info16.png">\
+					</div>\
+					<div class="contextMenuItemText">' + L("About") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				\
