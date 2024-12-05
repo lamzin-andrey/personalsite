@@ -212,7 +212,12 @@ NavbarPanel.prototype.onClickUp = function(evt) {
 	var p = this.history[this.historyIterator],
 		s = p[0],
 		fid = p[1],
+		t = ctrg(evt),
 		a;
+	
+	if (~t.src.indexOf("d.png")) {
+		return;
+	}
 	
 	a = s.split('/');
 	a.splice(sz(a) - 1, 1);
