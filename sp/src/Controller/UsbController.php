@@ -1412,8 +1412,8 @@ class UsbController extends AbstractController
         $em->flush();
 
         // get current dir list
-        return $this->_json($this->getFileList($targetCatalogId, 0, $request, $filesystem, $user));
-
+        $r  = $this->getFileList($targetCatalogId, 0, $request, $filesystem, $user);
+        return $this->_json($r);
     }
 
     /**
@@ -2079,12 +2079,10 @@ class UsbController extends AbstractController
         $aFlatList = $this->reachCatalogListGetFlatSource($userId, $oAppService);
 
         $aTrees = TreeAlgorithms::buildTreeFromFlatList($aFlatList);
-
-
         $res = [];
         foreach ($catalogIdList as $catalogId) {
             $subcatalogs = $this->reachCatalogGetBranch($aTrees, $catalogId);
-            $res = array_merge($subcatalogs);
+            $res = array_merge($res, $subcatalogs);
         }
 
         $res = array_unique($res);

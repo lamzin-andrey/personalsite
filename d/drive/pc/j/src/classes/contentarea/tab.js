@@ -254,6 +254,7 @@ Tab.prototype.onClickItem = function(evt) {
 	}
 	this.clicktime = ct;
 	this.currentTargetId = trg.id;
+	W.currentCmTargetId = trg.id;
 }
 
 Tab.prototype.selectAll = function() {
@@ -836,8 +837,12 @@ Tab.prototype.onKeyDown = function(evt) {
 Tab.prototype.onPushArrowDown = function(evt) {
 	var id, o = this;
 	id = this.getActiveItemId().domId;
+	if (S(id).charAt(0) != 'f' && count(o.oSelectionItems) == 0) {
+		id = '';
+	}
 	if (!id) {
 		id = 'f0';
+		W.currentCmTargetId = id;
 		this.setSelection({
 			currentTarget: e(id),
 			shiftKey: evt.shiftKey
@@ -850,12 +855,12 @@ Tab.prototype.onPushArrowDown = function(evt) {
 	if (!id) {
 		return true;
 	}
-	//this.scrollToItem(id, true);
 	if (e(id)) {
 		this.setSelection({
 			currentTarget: e(id),
 			shiftKey: evt.shiftKey
 		}, !evt.shiftKey);
+		W.currentCmTargetId = id;
 	}
 	
 	o.contentBlock.scrollBy(0, ListRenderer.ONE_ITEM_HEIGHT);
