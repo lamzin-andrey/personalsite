@@ -28,8 +28,11 @@ function regScrLayout() {
 					<div class="ma regchb">
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="agreeRE" >
-							<!-- TODO здесь ссылка должна меняться при смене языка-->
 							<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyNameRE">Политикой конфендициальности</span></a></label>
+						</div>
+						<div class="cbwrapper tl ml-2 arial">
+							<input type="checkbox" id="agreeCC" >
+							<label for="agreeCC"><span id="hIAgreeCC">I accept all cookies.</span> <a target="_blank" href="/d/drive/a2/cookie/"><span id="hCCLink">More info about cookies</span></a></label>
 						</div>
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="isSubscribedRE" >
@@ -165,7 +168,6 @@ function regScrLayout() {
 					<div class="ma regchb">
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="register_form[agree]" >
-							<!-- TODO здесь ссылка должна меняться при смене языка-->
 							<label for="register_form[agree]">
 								<span id="hIAgree">I agree with</span>
 								<a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc">
@@ -173,6 +175,17 @@ function regScrLayout() {
 								</a>
 							</label>
 						</div>
+						
+						<div class="cbwrapper tl ml-2 arial">
+							<input type="checkbox" id="register_form[agreeCC]" >
+							<label for="register_form[agreeCC]">
+								<span id="hIAgreeCCRE">I agree with</span>
+								<a target="_blank" href="/d/drive/a2/cookie/">
+									<span id="hCCLinkRE"></span>
+								</a>
+							</label>
+						</div>
+						
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="register_form[isSubscribed]">
 							<label for="register_form[isSubscribed]" id="hIAgreeFromAuthor">

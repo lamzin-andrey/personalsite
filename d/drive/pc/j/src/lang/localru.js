@@ -34,6 +34,11 @@ var langRu = {
 	"Try close and open props dialog again" : "Попробуйте закрыть и открыть снова диалог свойств файла",
 	"Type user login and search": "Введите логин пользователя и найдите его",
 	"Your browser does not support copying. But you can click link and copy adress line in opened tab." : "Ваш браузер не поддерживает копирование. Но вы можете уликнуть на ссылку и скопировать её из адресной строки новой вкладки.",
+	"hCCLink" : "Подробнее о cookies",
+	"hCCLinkRE" : "Подробнее о cookies",
+	"hIAgreeCC" : "Я принимаю все cookie",
+	"hIAgreeCCRE" : "Я принимаю все cookie",
+	"You must accept all cookies for use this site" : "Вы должны согласиться хранить куки на вашем устройстве, чтобы пользоваться этим сервисом",
 	
 	'ChooseFile' : 'Выберите файл',
 	'Video' : 'Видео',

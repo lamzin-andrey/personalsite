@@ -39,6 +39,10 @@ var langEn = {
 	"hRegisterTitle" : "Sign Up",
 	"bRegisterNow" : "Sign Up",
 	"bShowAuthScreen" : "Go to login form",
+	"hCCLink" : "More info about cookies",
+	"hCCLinkRE" : "More info about cookies",
+	"hIAgreeCC" : "I accept all cookies",
+	"hIAgreeCCRE" : "I accept all cookies",
 	
 	// reg screen
 	"bReset" : "Reset password",

@@ -26,6 +26,7 @@ function setListenersAuth() {
 		e('emailRE')[k] = onClickRegisterByEmailNow;
 	}
 	e('agreeRE').onchange = onChangeIAgree;
+	e('agreeCC').onchange = onChangeIAgreeCC;
 	e('emailRE').oninput = hideBallons;
 	e('emailRE').onfocus = hideBallons;
 	e('_username').oninput = hideBallons;
@@ -59,6 +60,24 @@ function onChangeIAgree(evt) {
 	}
 	if (!st) {
 		st = "You must agree to the terms of use";
+		showBalloonError(L(st), x, y, c);
+	} else {
+		hideBallons()
+	}
+}
+
+onChangeIAgreeCC
+
+function onChangeIAgreeCC(evt) {
+	var t = evt.currentTarget, st = t.checked, k = 'lbaloon', c = 'rbaloon',
+		y = 78, x = 204;
+	if (t.id == 'agreeCC') {
+		c = k;
+		x = 263;
+		y = -4;
+	}
+	if (!st) {
+		st = "You must accept all cookies for use this site";
 		showBalloonError(L(st), x, y, c);
 	} else {
 		hideBallons()
