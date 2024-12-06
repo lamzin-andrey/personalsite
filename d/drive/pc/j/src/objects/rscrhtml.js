@@ -60,7 +60,7 @@ function regScrLayout() {
 			
 			<h3>Form LP Login </h3>
 			<div class="lformw" id="loginForm" style="display:none">
-				<div  class="lform qenter">
+				<div  class="lform qenterlf">
 					<div class="regTitle">
 						<span id="hLoginFrmHeading">¬ход по паролю</span> ${regScrLSw()}
 						<div class="cf"></div>

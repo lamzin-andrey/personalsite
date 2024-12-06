@@ -46,6 +46,7 @@ function setListenersAuth() {
 	e('register_form[passwordRepeat]').oninput = hideBallons;
 	e('register_form[passwordRepeat]').onfocus = hideBallons;
 	e('register_form[agree]').onchange = onChangeIAgree;
+	e('register_form[agreeCC]').onchange = onChangeIAgreeCC;
 	e('reset_password_form[email]').onfocus = hideBallons;
 	e('reset_password_form[email]').oninput = hideBallons;
 }
@@ -74,7 +75,7 @@ function onChangeIAgreeCC(evt) {
 	if (t.id == 'agreeCC') {
 		c = k;
 		x = 263;
-		y = -4;
+		y = -54;
 	}
 	if (!st) {
 		st = "You must accept all cookies for use this site";
@@ -354,7 +355,7 @@ function showRegisterError(data, responseText, info, xhr) {
 	}
 	
 	i = "register_form[" + firstFieldName + "]";
-	if (firstFieldName in In(["name", "surname", "email", "agree"])) {
+	if (firstFieldName in In(["name", "surname", "email", "agree", "agreeCC"])) {
 		x = 204;
 	}
 	switch(firstFieldName) {
@@ -372,6 +373,8 @@ function showRegisterError(data, responseText, info, xhr) {
 			break;
 		case "agree":
 			y = 78;
+		case "agreeCC":
+			y = 88;
 			break;
 	}
 	

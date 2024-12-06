@@ -208,6 +208,13 @@ class Ausers implements UserInterface
     /**
      * @var \DateTime|null
      *
+     * @ORM\Column(name="is_accept_all_cookies_time", type="datetime", nullable=true, options={"comment"="Метка, когда пользователь согласился использовать куки"})
+     */
+    private $isAcceptAllCookiesTime;
+
+    /**
+     * @var \DateTime|null
+     *
      * @ORM\Column(name="country_id", type="datetime", nullable=true, options={"comment"="Страна"})
      */
     private $countryId;
@@ -239,6 +246,13 @@ class Ausers implements UserInterface
      * @ORM\Column(name="is_subscribed", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен получать письма от ЛАНд-а","default"="0"})
     */
     private $isSubscribed = '0';
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_accept_all_cookies", type="boolean", nullable=false, options={"comment"="1 когда пользователь согласен хранить куки","default"="0"})
+     */
+    private $isAcceptAllCookies = '0';
     
     /**
      * @var int
@@ -595,6 +609,30 @@ class Ausers implements UserInterface
     public function setIsSubscribed(bool $isSubscribed): self
     {
         $this->isSubscribed = $isSubscribed;
+
+        return $this;
+    }
+
+    public function getIsAcceptAllCookies(): ?bool
+    {
+        return $this->isAcceptAllCookies;
+    }
+
+    public function setIsAcceptAllCookies(bool $acceptCookies): self
+    {
+        $this->isAcceptAllCookies = $acceptCookies;
+
+        return $this;
+    }
+
+    public function getIsAcceptAllCookiesTime(): ?\DateTimeInterface
+    {
+        return $this->isAcceptAllCookiesTime;
+    }
+
+    public function setIsAcceptAllCookiesTime(?\DateTimeInterface $time): self
+    {
+        $this->isAcceptAllCookiesTime = $time;
 
         return $this;
     }

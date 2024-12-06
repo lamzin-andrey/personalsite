@@ -146,7 +146,7 @@ class UserService
         return $token;
     }
 
-    public function createRegisterByEmailUser(string $email, bool $agreeSubscribe, bool $doSave = false): User
+    public function createRegisterByEmailUser(string $email, bool $agreeSubscribe, bool $acceptCookies, bool $doSave = false): User
     {
         $user = new User();
         $user->setEmail($email);
@@ -157,6 +157,8 @@ class UserService
         $user->setDateCreate(new \DateTime());
         $user->setSurname($name);
         $user->setIsSubscribed($agreeSubscribe);
+        $user->setIsAcceptAllCookies($acceptCookies);
+        $user->setIsAcceptAllCookiesTime(new \DateTime());
         if ($doSave) {
             $this->save($user);
         }

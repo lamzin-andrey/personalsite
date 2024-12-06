@@ -87,6 +87,7 @@ class SecurityController extends AppBaseController
         $this->_oForm = $oForm = $this->createForm(get_class(new RegisterFormType()), $oUser);
         $this->translator = $t;
         $agree = $oRequest->request->get('register_form')['agree'] ?? null;
+        $acceptAllCookies = $oRequest->request->get('register_form')['agreeCC'] ?? null;
         if ($oRequest->getMethod() == 'POST') {
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
@@ -113,6 +114,8 @@ class SecurityController extends AppBaseController
                     $this->addFormError('Passwords is different', 'passwordRaw', $oAppService);
                 } else if ('true' !== $agree) {
                     $this->addFormError('Consent to agree to terms of use', 'agree', $oAppService);
+                } else if ('true' !== $acceptAllCookies) {
+                    $this->addFormError('You must accept all cookies for use this site', 'agreeCC', $oAppService);
                 } else if (!$this->isRussianEmail($sEmail, $allowEmails)) {
                     $this->addFormError('email_must_be_russian' , 'email', $oAppService, null, [
                         '%list%' => implode(",\n",  $allowEmails)
@@ -120,6 +123,8 @@ class SecurityController extends AppBaseController
                 } else {
                     //Success
                     $this->request = $oRequest;
+                    $oUser->setIsAcceptAllCookies(true);
+                    $oUser->setIsAcceptAllCookiesTime(new \DateTime());
                     $this->finalizeCreateNewUser($userService, $oUser, $sPassword);
 
                     if (!$oRequest->isXmlHttpRequest()) {
@@ -497,11 +502,18 @@ class SecurityController extends AppBaseController
 
         $agreeCondition = $request->request->get('agreeRE');
         $agreeSubscribe = $request->request->get('isSubscribedRE');
+        $acceptCookies = $request->request->get('agreeCC');
         $agreeCondition = ($agreeCondition === 'true');
         $agreeSubscribe = ($agreeSubscribe === 'true');
+        $acceptCookies  = ($acceptCookies === 'true');
 
         if (!$agreeCondition) {
             $message = $appService->l(null, 'Consent to agree to terms of use', null, []);
+            return new JsonResponse(['sended' => false, 'msg' => $message]);
+        }
+
+        if (!$acceptCookies) {
+            $message = $appService->l(null, 'You must accept all cookies for use this site', null, []);
             return new JsonResponse(['sended' => false, 'msg' => $message]);
         }
 
@@ -533,7 +545,7 @@ class SecurityController extends AppBaseController
             }
             return new JsonResponse(['sended' => false]);
         } else {
-            $user = $userService->createRegisterByEmailUser($email, $agreeSubscribe, false);
+            $user = $userService->createRegisterByEmailUser($email, $agreeSubscribe, $acceptCookies, false);
             $password = $userService->generatePassword();
             $this->finalizeCreateNewUser($userService, $user, $password);
             $token = $userService->login($user);

@@ -39,13 +39,19 @@ h3 {
 
 .qenter {
   width: 394px;
+  min-height: 282px;
+  padding-bottom: 14px;
+}
+
+.qenterlf {
+  width: 394px;
   min-height: 250px;
   padding-bottom: 14px;
 }
 
 .regf {
   width: 640px;
-  height: 320px;
+  height: 344px;
 }
 
 .regTitle {
