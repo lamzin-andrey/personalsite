@@ -43,7 +43,7 @@ use StdClass;
 class UsbController extends AbstractController
 {
 
-    private const VERSION = '38';
+    private const VERSION = '39';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
