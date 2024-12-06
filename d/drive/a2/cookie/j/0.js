@@ -106,8 +106,9 @@ function setLang(lng, displayLng) {
 		}
 		if (q == s && !isErr) {
       if('langEn' == lng) {
-        q = '<div>The WebUSB project means a few more gigabytes in the cloud for your files.</div>\
-        <div>Your smartphone may be outdated, but files from WebUSB will still be accessible from its default browser - that\'s the idea of this project.</div>';
+        q = '<div>The Site uses cookies and similar methods to recognize visitors and remember preferences.</div>\
+<div>The Site may also use them in the future to measure campaign effectiveness and analyze site traffic.</div>\
+<div>By selecting "Accept", you agree to our and trusted third parties\' use of these methods.</div>';
       } else {
         q = L['Click download button'];
       }
