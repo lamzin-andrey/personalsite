@@ -11,6 +11,10 @@ window.langEn = {
 	'bmOptions' : 'Options',
 	'progressStateLabel' : 'Choose file',
 	'bUploadCancel' : 'Cancel',
+	"hCCLink" : "More info about cookies",
+	"hCCLinkRE" : "More info about cookies",
+	"hIAgreeCC" : "I accept all cookies",
+	"hIAgreeCCRE" : "I accept all cookies",
 	
 	'_password' : 'Password',
 	'rememberMeLabel' : 'Remember me',

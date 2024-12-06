@@ -71,7 +71,11 @@ window.langRu = {
 	'hByMTimeDesc': 'Сначала новые',
 	'bCloseSortSetings': 'Закрыть',
 	'Your file uploaded to': 'Ваш файл был загружен в каталог',
-	
+	"hCCLink" : "Подробнее о cookies",
+	"hCCLinkRE" : "Подробнее о cookies",
+	"hIAgreeCC" : "Я принимаю все cookie",
+	"hIAgreeCCRE" : "Я принимаю все cookie",
+	"You must accept all cookies for use this site" : "Вы должны согласиться хранить куки на вашем устройстве, чтобы пользоваться этим сервисом",
 	'Share link' : 'Поделиться ссылкой',
 	'hFilePermissionTitle' : 'Доступ к файлу',
 	'hPrivateCaseLabel' : 'Только мне',
