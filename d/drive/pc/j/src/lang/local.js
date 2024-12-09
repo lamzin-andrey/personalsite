@@ -44,6 +44,7 @@ var langEn = {
 	"hIAgreeCC" : "I accept all cookies",
 	"hIAgreeCCRE" : "I accept all cookies",
 	"hLinkSendedPhraseStart" : "The link has been sent to your",
+	"hLinkSendedPhraseStartRs" : "The link has been sent to your",
 	
 	// reg screen
 	"bReset" : "Reset password",

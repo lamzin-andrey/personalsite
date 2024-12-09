@@ -28,6 +28,7 @@ var langRu = {
 	"Only for me" : "Только для меня",
 	"Link expired" : "Ссылка устарела",
 	"hLinkSendedPhraseStart" : "Ссылка отправлена вам на",
+	"hLinkSendedPhraseStartRs" : "Ссылка отправлена вам на",
 	"For all" : "Для всех",
 	"from" : "из",
 	"For users" : "Для пользователей",

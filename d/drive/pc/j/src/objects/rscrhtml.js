@@ -233,10 +233,14 @@ function regScrLayout() {
 					<div class="iwrapper rel" >
 						<img src="./i/lock.png">
 						<input type="email" id="reset_password_form[email]" placeholder="E-mail" class="emailRE">
+						<div id="hSendedEmailRs" style="display:none" class="hSendedEmail"><span id="hLinkSendedPhraseStartRs"></span> &nbsp;<a id="resetLinkMailboxRs" href="#" target="_blank">Email</a></div>
+						
 						<input type="hidden" id="apptype" value="drv">
 						<input type="hidden" id="reset_password_form[_token]" value="x">
 					</div>					
+					
 					<div class="reset-spacer">&nbsp;</div>
+					
 					<div class="regbtnplace">
 						<div>
 							<input type="button" id="bReset" value="—бросить пароль" class="regbtn">

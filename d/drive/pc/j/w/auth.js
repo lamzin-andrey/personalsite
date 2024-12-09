@@ -88,12 +88,12 @@ function onChangeIAgreeCC(evt) {
 function onClickResetForm(ev) {
 	var data,
 		tokenName = 'reset_password_form[_token]',
-		v;
+		v, i = "reset_password_form[email]";
 	if (ev.keyCode && ev.keyCode != 13) {
 		return;
 	}
 	data = _map('resetForm', 1);
-	v = data["reset_password_form[email]"].trim();
+	v = data[i].trim();
 	if (!v) {
 		showResetError({message: L("Value does not may be blank.")});
 		return;
@@ -105,6 +105,7 @@ function onClickResetForm(ev) {
 	Rest[tokenName] = data[tokenName];
 	Rest._token_name = tokenName;
 	hideBallons();
+	authDisForm("resetForm", 1);
 	Rest._post(data, onSuccessReset, '/sp/public/reset', onFailSendReset);
 }
 
@@ -131,14 +132,16 @@ function onClickRegisterNow(evt) {
 	Rest._post(data, onSuccessRegister, '/sp/public/register', onFailSendRegister);
 }
 
-function onSuccessReset(data) {
-	if (!onFailSendReset(data)) {
+function onSuccessReset(d) {
+	var s = "hLinkSendedPhraseStartRs";
+	if (!onFailSendReset(d)) {
 		return;
 	}
-	if (data.success === true) {//TODO надо сделать красиво 
-		//showScreen('hAuthScreen');
-		//showSuccess(data.message + ' <a href="' + data.emailHostLink + '" target="_blank">Email</a>');
-		//RegScreenAnim.switchregisterForm('registerForm', 'loginForm');
+	if (d.success === true) {
+		hide("reset_password_form[email]");
+		v(s, L(s));
+		attr("resetLinkMailboxRs", "href", getEmailDomain(v("reset_password_form[email]")));
+		show("hSendedEmailRs");
 	}
 }
 
@@ -199,8 +202,7 @@ function onFailSendRegister(data, responseText, info, xhr) {
 
 function onFailSendReset(data, responseText, info, xhr) {
 	e('reset_password_form[_token]').value = data.token;
-	// TODO showScreen('hResetScreen');
-	// return authDefaultResponseError(data, responseText, info, xhr);
+	authDisForm("resetForm", 0);
 	return showResetError(data, responseText, info, xhr);
 }
 

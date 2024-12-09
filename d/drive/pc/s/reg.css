@@ -39,7 +39,7 @@ h3 {
 
 .qenter {
   width: 394px;
-  min-height: 282px;
+  min-height: 196px;
   padding-bottom: 14px;
 }
 
@@ -234,7 +234,7 @@ img.dogmsg {
 }
 
 .reset-spacer {
-	height:86px;
+	height:31px;
 }
 .hSendedEmail {
   display: flex;

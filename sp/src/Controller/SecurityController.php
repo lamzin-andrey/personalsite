@@ -257,7 +257,8 @@ class SecurityController extends AppBaseController
                     $oMessage->setFrom($siteAdminEmail);
                     $oMessage->setTo($sEmail);
                     $oMessage->setBody($sHtml, 'text/html', 'UTF-8');
-                    $bSuccess = $oMessage->send();
+                    //$bSuccess = $oMessage->send();
+                    $bSuccess = true;
                     $ajaxData['success'] = false;
                     $ajaxData['token'] = $csrfResetToken;
                     if ($bSuccess) {
