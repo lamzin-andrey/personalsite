@@ -2121,9 +2121,9 @@ class UsbController extends AbstractController
 
     private function getTotalSize(Ausers  $user): int
     {
-        /*if (in_array($user->getId(), [1,13,19,7,8,11])) {
+        if (in_array($user->getId(), [33])) {
             return 1024*1024*1024 * 100;
-        }*/
+        }
         return intval($this->getParameter('app.wusb_max_space') );
 
     }

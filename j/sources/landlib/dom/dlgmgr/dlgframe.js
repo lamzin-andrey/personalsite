@@ -37,6 +37,7 @@ class DlgFrame {
 		cs(o.div, 'bMax')[0] ? cs(o.div, 'bMax')[0].onclick = (evt) => {o.onClickMax(evt)} : 0;
 		cs(o.div, 'bCls')[0] ? cs(o.div, 'bCls')[0].onclick = (evt) => {o.onClickClose(evt)} : 0;
 		cs(o.div, 'topBrd')[0] ? cs(o.div, 'topBrd')[0].onmousedown = (evt) => {o.onMouseDown(evt)} : 0;
+		cs(o.div, 'bod')[0] ? cs(o.div, 'bod')[0].addEventListener("mousedown", (evt) => {o.onMouseDownBod(evt)}) : 0;
 	}
 	
 	center() {
@@ -49,6 +50,10 @@ class DlgFrame {
 		this.dm.movedN = this.nId;
 		this.dm.prevX = ev.pageX;
 		this.dm.prevY = ev.pageY;
+		this.dm.activate(this.nId);
+	}
+	
+	onMouseDownBod(ev) {
 		this.dm.activate(this.nId);
 	}
 	
