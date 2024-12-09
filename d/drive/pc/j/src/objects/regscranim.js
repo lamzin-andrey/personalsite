@@ -45,6 +45,14 @@ const RegScreenAnim = {
 			stl(idForHide, o, qLogAlpha);
 			stl(idForShow,  o, logAlpha);
 			if (logAlpha == 1) {
+				f = 'register_form[name]';
+				if ('loginForm' == idForShow) {
+					f = "_username";
+				}
+				if ('resetForm' == idForShow) {
+					f = 'reset_password_form[email]';
+				}
+				foc(f);
 				clearInterval(ivl);
 				stl(idForHide, d, 'none');
 			}

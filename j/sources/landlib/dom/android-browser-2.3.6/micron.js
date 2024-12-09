@@ -426,6 +426,10 @@ function loc() {
 	return location;
 }
 
+function foc(i){
+	e(i) ? e(i).focus() : 0;
+}
+
 function gto(s) {
 	loc().href = s;
 }
