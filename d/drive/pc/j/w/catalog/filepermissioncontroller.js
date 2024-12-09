@@ -17,8 +17,26 @@ window.FPC = {
 	},
 	
 	onClickCopy(){
+		var b = fmgr.dlgProp.bCopy, W = 22, cw = W, hh, dr = -1;
 		try {
 			navigator.clipboard.writeText(attr(fmgr.dlgProp.clink, "href"));
+			stl(b, "width", W + "px");
+			stl(b, "height", "22px");
+			hh = setInterval(() => {
+				cw += dr;
+				if (cw < 0) {
+					dr *= -1;
+					cw = 1;
+					attr(b, "src", root + "/i/success.png");
+				} 
+				if (cw > W) {
+					stl(b, "width", W + "px");
+					clearInterval(hh);
+					setTimeout(() => {attr(b, "src", root + "/i/copy.png");}, 1000);
+				}
+				stl(b, "width", cw + "px")
+				//attr(b, "src", root + "/i/copy.png");
+			}, 1000/72);
 		} catch(err) {
 			showError(L("Your browser does not support copying. But you can click link and copy adress line in opened tab."));
 		}

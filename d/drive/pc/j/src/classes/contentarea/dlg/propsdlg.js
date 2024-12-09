@@ -127,7 +127,7 @@ class PropsDlg {
 		n = PropsDlg.I;
 		return `<div class="tl" id="">
 				<div class="clinkW tc">
-					<a c="clink" href="#" target="_blank"></a> <input type="image"  src="${root}/i/copy.png" c="bCopy">
+					<a c="clink" href="#" target="_blank"></a> <span class="ws22px"><input type="image"  src="${root}/i/copy.png" c="bCopy"><span>
 				</div>
 				<div c="pcase">
 					<input type="radio" name="filePermissionGr" value="private" c="bFPPrivate" id="bFPPrivate${n}" checked>
