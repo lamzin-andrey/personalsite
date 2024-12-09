@@ -246,7 +246,7 @@ function onClickRegisterByEmailNow(evt) {
 	Rest._post(data, onSuccessRegisterByEmail, '/sp/public/checkmail', onFailSendRegisterByEmail);
 }
 function onSuccessRegisterByEmail(data) {
-	var msg = data.msg, u = v("emailRE");
+	var msg = data.msg, u = v("emailRE"), s;
 	if (!onFailSendRegisterByEmail(data)) {
 		return;
 	}
@@ -257,6 +257,8 @@ function onSuccessRegisterByEmail(data) {
 		return;
 	}
 	if (data.sended) {
+		s = "hLinkSendedPhraseStart";
+		v(s, L(s));
 		attr('resetLinkMailbox', 'href', getEmailDomain(v('emailRE')));
 		hide('emailRE');
 		show('hSendedEmail', 'flex');
@@ -294,6 +296,11 @@ function getEmailDomain(s) {
 		case 'mail.ru':
 			d = 'light.mail.ru'; 
 			break;
+		case 'yandex.ru':
+		case 'ya.ru':
+		case 'narod.ru':
+			d = 'mail.yandex.ru'; 
+			break;
 	}
 	return 'https://' + d;
 }
@@ -301,10 +308,8 @@ function getEmailDomain(s) {
 function loginByMailhash() {
 	var h = storage('mailhash');
 	if (h) {
-		attr('im', 'src', roota2 + '/i/clos48.png');
-		showLoader();
-		Rest._get(onSuccessLoginByMailhash, '/sp/public/loginmailink?hash=' + h, onFailLoginByMailhash);
 		localStorage.removeItem('mailhash');
+		Rest._get(onSuccessLoginByMailhash, '/sp/public/loginmailink?hash=' + h, onFailLoginByMailhash);
 	}
 }
 
@@ -318,8 +323,7 @@ function onSuccessLoginByMailhash(d) {
 }
 
 function onFailLoginByMailhash(data, responseText, info, xhr) {
-	attr('im', 'src', roota2 + '/i/u.png');
-	showScreen("hRegisterEScreen");
+	showError(L("Link expired"));
 }
 
 function disableRegFormButtons()

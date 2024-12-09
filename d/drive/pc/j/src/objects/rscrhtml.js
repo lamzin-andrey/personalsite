@@ -20,7 +20,7 @@ function regScrLayout() {
 						<img src="./i/lock.png">
 						<div class="w100">
 							<input type="email" id="emailRE" placeholder="E-mail" class="emailRE">
-							<div id="hSendedEmail" style="display:none" class="hSendedEmail">—сылка отправлена вам на &nbsp;<a id="resetLinkMailbox" href="#" target="_blank">Email</a></div>
+							<div id="hSendedEmail" style="display:none" class="hSendedEmail"><span id="hLinkSendedPhraseStart"></span> &nbsp;<a id="resetLinkMailbox" href="#" target="_blank">Email</a></div>
 						</div>
 						<input type="hidden" id="apptypeRe" value="drv">
 						<input type="hidden" id="tokenRE" value="x">
