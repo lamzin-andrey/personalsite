@@ -618,12 +618,17 @@ Tab.prototype.onListForRemove = function(data) {
 		Rest2._post({list:data.list.join(',')}, o.onFinishRemove, `${br}/drivermrf.json`, o.onErrorRemove, o);
 	}
 }
-Tab.prototype.onFinishRemove = function(data) {
-	var o = this;
-	o.removingNodes = [];
+Tab.prototype.onFinishRemove = function(d) {
+	if (!this.onErrorRemove(d)) {
+		return;
+	}
+	this.removingNodes = [];
 }
-Tab.prototype.onErrorRemove = function(data) {
+Tab.prototype.onErrorRemove = function(d) {
 	var o = this, i, SZ, a = o.removingNodes;
+	if (d.status == "ok") {
+		return 1;
+	}
 	a = a ? a : [];
 	SZ = sz(a);
 	for (i = 0; i < SZ; i++) {
@@ -632,6 +637,11 @@ Tab.prototype.onErrorRemove = function(data) {
 	}
 	showError(o.failRmMsg);
 	o.removingNodes = [];
+	if (d.status == "error") {
+		if (d.error == "You have not access to this page") {
+			Rest._get(onSuccessGetAuthStateLite, br + '/dast.json', onFailGetAuthState);
+		}
+	}
 }
 
 
@@ -828,6 +838,9 @@ Tab.prototype.onKeyDown = function(evt) {
 		&& evt.keyCode != 46
 		&& evt.keyCode != 9
 		&& evt.keyCode != 8
+		&& evt.key != "Control"
+		&& evt.key != "Shift"
+		&& !(evt.key.charAt(0) == "F" && sz(evt.key) > 1)
 		&& !evt.ctrlKey
 		&& !evt.altKey
 		&& app.isActive
@@ -971,7 +984,7 @@ Tab.prototype.showFilterBox = function(ch) {
 }
 
 Tab.prototype.getFilterBoxHtml = function(ch) {
-	var s = '<input style="height:32px; border: 2px solid #8ba8df; font-size:13px; border-radius:2px;" value="' + ch + '" id="hFilterBoxInput">';
+	var s = '<input style="height:32px; border: 2px solid #8ba8df; font-size:13px; border-radius:2px;" value="' + '" id="hFilterBoxInput">';
 	return s;
 }
 

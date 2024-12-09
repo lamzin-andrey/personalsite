@@ -183,6 +183,7 @@ function onSuccessLogin(data) {
 	}
 	if (data.success === true) {
 		storage("username", u);
+		Rest._get(onSuccessGetAuthStateLite, br + '/dast.json', onFailGetAuthState);
 		showFileManager();
 	}
 }
@@ -319,8 +320,9 @@ function loginByMailhash() {
 
 function onSuccessLoginByMailhash(d) {
 	if (d && d.success) {
-		storage("username", d.username); // TODO
-		reload();
+		storage("username", d.username);
+		Rest._get(onSuccessGetAuthStateLite, br + '/dast.json', onFailGetAuthState);
+		showFileManager();
 	}
 }
 

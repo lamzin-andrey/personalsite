@@ -48,7 +48,7 @@ class LogoutHandler implements LogoutSuccessHandlerInterface
      */
     public function onLogoutSuccess(Request $request)
     {
-        $referer = $request->query->get('rd', '/public/sp');
+        $referer = $request->query->get('rd', '/sp/public/');
 
         return new RedirectResponse($referer);
     }

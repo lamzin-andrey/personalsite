@@ -28,6 +28,7 @@ function getAuthState() {
 	Rest._token = '';
 	Rest._get(onSuccessGetAuthState, br + '/dast.json', onFailGetAuthState);
 }
+
 function onSuccessGetAuthState(data) {
 	var bm0, bm;
 	if (!onFailGetAuthState(data)) {
@@ -52,6 +53,12 @@ function onSuccessGetAuthState(data) {
 	window.tsz = data.t;
 	hideLoader();
 	
+}
+
+function onSuccessGetAuthStateLite(d) {
+	if (d.auth) {
+		Rest2._setToken(d.token, "_token");
+	}
 }
 
 function gts() {
