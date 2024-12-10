@@ -82,6 +82,7 @@ window.langEn = {
 	'hVersDesktopTempDsc' : '<p>It appeared because it was inconvenient to use the version for a smartphone on a computer or laptop,\
 									and there was no time to write a normal version for the desktop.\
 								</p>\
+								<p>I now recommend using the <a href="#pc">preview version for desktop</a>, but if it doesn\'t work for you, you can try this one.</p>\
 								<p>\
 									If you want to upload files from your computer and then download them to your KitKat smartphone or, never mind, Gringerbread, you’re welcome!\
 								</p>\
@@ -99,7 +100,14 @@ window.langEn = {
 									Firefox 119,\
 									Chromium 119.0.6044.159\
 								</p>',
-	'' : '',
-	'' : '',
+	'hVersDesktop2T' : 'Preview version for desktop',
+	'hVersDesktop2Dsc' : '<p>For the latest versions of desktop browsers (i.e. those in laptops and computers). Chrome 131+ or Firefox 133+</p>\
+<p>Work in other browsers is not guaranteed.</p>\
+<p>Use it if you want to upload files from your computer to then download them to a KitKat or earlier smartphone.</p>\
+<p>In terms of implementation, this is an intermediate version between es5 and es6. I wanted to throw out all the legacy and write from scratch in es6, \
+but I have a self-written file manager for the desktop in javascript es5 and I wanted to cross its code with webUSB and see what happens. \
+I definitely like what I got more than the <a href="#w">temporary desktop version</a>, so I\'m making it the default desktop version.\</p>\
+',
+	'bUTVPC' : 'Try this version',
 	'' : ''
 };

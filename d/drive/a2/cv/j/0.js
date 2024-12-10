@@ -35,6 +35,9 @@ function showActiveTheme() {
 		ot = e('other');
 	t = t ? t : 'a2';
 	t = e(t);
+	if (!t) {
+		t = e('a2');
+	}
 	ct = cs(aB, 'card')[0];
 	if (ct) {
 		ot.appendChild(ct);
@@ -93,20 +96,4 @@ function setLang(lng) {
 	// e('chLang').innerHTML = displayLng;
 	window.L = window[lng];
 	setDOM();
-	/*if (s) {
-		q = l(s);
-		if (q == s && isErr) {
-			q = 'You have not access to this page';
-		}
-		if (q == s && !isErr) {
-      if('langEn' == lng) {
-        q = '<div>The WebUSB project means a few more gigabytes in the cloud for your files.</div>\
-        <div>Your smartphone may be outdated, but files from WebUSB will still be accessible from its default browser - that\'s the idea of this project.</div>';
-      } else {
-        q = L['Click download button'];
-      }
-			
-		}
-		e('hWaitGetLink').innerHTML = q;
-	}*/
 }
