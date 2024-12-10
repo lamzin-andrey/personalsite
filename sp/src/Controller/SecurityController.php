@@ -37,6 +37,9 @@ use Landlib\SimpleMail;
 
 class SecurityController extends AppBaseController
 {
+
+    const MAX_ALLOW_WUSB_USERS = 10;
+
     /**
      * @Route("/login", name="login")
      */
@@ -106,6 +109,7 @@ class SecurityController extends AppBaseController
                 );
                 //$oExistsUser = $oRepository->findBy(['username' => $sUsername]);
                 $oExistsUser = $oRepository->matching($oCriteria)->get(0);
+                $this->request = $oRequest;
                 if ($oExistsUser) {
                     //$this->addFlash('notice', $t->trans('User with login or email already exists'));
                     $this->addFormError('User with login or email already exists', 'username', $oAppService);
@@ -120,9 +124,11 @@ class SecurityController extends AppBaseController
                     $this->addFormError('email_must_be_russian' , 'email', $oAppService, null, [
                         '%list%' => implode(",\n",  $allowEmails)
                     ]);
-                } else {
+                } else if ($this->isMaxUsersRegistred()) {
+                    $this->addFormError('max_quantity_users_registred' , 'email', $oAppService, null, []);
+                }
+                else {
                     //Success
-                    $this->request = $oRequest;
                     $oUser->setIsAcceptAllCookies(true);
                     $oUser->setIsAcceptAllCookiesTime(new \DateTime());
                     $this->finalizeCreateNewUser($userService, $oUser, $sPassword);
@@ -517,6 +523,12 @@ class SecurityController extends AppBaseController
             return new JsonResponse(['sended' => false, 'msg' => $message]);
         }
 
+        $this->_oAppService = $appService;
+        if ($this->isMaxUsersRegistred()) {
+            $message = $appService->l(null, 'max_quantity_users_registred', null, []);
+            return new JsonResponse(['sended' => false, 'msg' => $message]);
+        }
+
         $repository = $appService->repository(Ausers::class);
         /**
          * @var Ausers $user
@@ -589,4 +601,19 @@ class SecurityController extends AppBaseController
         return $html;
     }
 
+    private function isMaxUsersRegistred(): bool
+    {
+        $sql = "SELECT COUNT(id) AS c FROM ausers
+            WHERE
+                role = :role
+                AND email NOT LIKE(:testdomain);";
+
+        $count = $this->_oAppService->dbvalue($sql,
+            [
+                "role" => User::ROLE_WEB_DRIVE_USER,
+                "testdomain" => "%@qwe.ru"
+            ]
+        );
+        return $count >= self::MAX_ALLOW_WUSB_USERS;
+     }
 }

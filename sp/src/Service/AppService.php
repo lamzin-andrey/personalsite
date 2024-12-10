@@ -5,6 +5,8 @@ use App\Entity\Ausers;
 use App\Entity\CrnIntervals;
 use App\Entity\CrnTasks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Entity;
 use \Symfony\Component\DependencyInjection\ContainerInterface;
@@ -415,6 +417,47 @@ class AppService
     {
         $r = $this->repository($className);
         return $r->find($id);
+    }
+
+    public function dbvalue(string $sql, array $parameters, array $types = [])
+    {
+        $nR = 0;
+        $rows = $this->query($sql, $nR, $parameters, $types);
+        if (is_array($rows)) {
+            $row = current($rows);
+            if (is_array($row)) {
+                return current($row);
+            }
+        }
+        return null;
+    }
+
+    public function dbrow(string $sql, array $parameters, array $types = [])
+    {
+        $nR = 0;
+        $rows = $this->query($sql, $nR, $parameters, $types);
+        if (is_array($rows)) {
+            $row = current($rows);
+            return $row;
+        }
+        return null;
+    }
+
+    public function query(string $sql, int &$numRows, array $parameters, array $types = [])
+    {
+        /**
+         * @var Connection $conn
+        */
+        $conn = $this->oContainer->get("doctrine")->getManager()->getConnection();
+        $lowerSql = strtolower($sql);
+        if (strpos("insert", $sql) !== false || strpos("update", $sql) !== false) {
+            $numRows = $conn->executeUpdate($sql, $parameters, $types);
+            return $conn->lastInsertId();
+        }
+
+        $rows = $conn->executeQuery($sql, $parameters, $types)->fetchAll(FetchMode::ASSOCIATIVE);
+        $numRows = count($rows);
+        return $rows;
     }
 
     /**
