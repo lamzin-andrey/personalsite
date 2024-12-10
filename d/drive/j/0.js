@@ -61,6 +61,9 @@ function onCheckSsl(isSSLSupport) {
 		vw = getViewport();
 		if (vw.w > 799) {
 			savedTheme = 'w';
+			if (window.t && window.LAE && window.LST) {
+				savedTheme = 'pc';
+			}
 		}
 		savedTheme = savedTheme ? savedTheme : 'a2';
 		// alert('Unknown theme!');
