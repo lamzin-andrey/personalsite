@@ -8,8 +8,6 @@ window.homeDir = 0;
 window.selectMode = 0;
 window.selectedItems = {};
 function initApp() {
-	//TODO ubcomment me window.cacheClient = new CacheSw();
-	// check ssl from LS
 	if (intval(storage('ssl')) === 2 && !HttpQueryString.isSSL()) {
 		var s = location.href;
 		s = s.replace('http://', 'https://');
@@ -44,7 +42,7 @@ function onSuccessGetAuthState(data) {
 		e('register_form[_token]').value = data.token_reg;
 		e('reset_password_form[_token]').value = data.token_res;
 		e('tokenRE').value = data.token_reg;
-		loginByMailhash();// TODO а здесь как будет?
+		loginByMailhash();
 		return;
 	}
 	
@@ -193,7 +191,7 @@ function hideLoader(screenId) {
 	screenId = screenId ? screenId : 'hCatalogScreen';
 	showScreen(screenId);
 	app.isActive = 1;
-	// TODO
+	
 	window.USER = window.USER ? window.USER : storage("username");
 	path = "/home/" + USER;
 	

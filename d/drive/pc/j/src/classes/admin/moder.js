@@ -11,7 +11,7 @@ function onGetToken(d){
 }
 function onList(d) {
 	var i, SZ = sz(d.ls), t, b = e("hContent"), s;
-	t = getTpl(); // TODO
+	t = getTpl();
 	t = str_replace(" c=\"", " class=\"", t);
 	for (i = 0; i < SZ; i++) {
 		s = str_replace("{name}", d.ls[i].name, t);

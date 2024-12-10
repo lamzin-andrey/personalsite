@@ -20,7 +20,6 @@ class Bookmarks extends AbstractList{
 	}
 	
 	run() {
-		// console.log('Bookmarks run');
 		let locale, title, user = this.username;
 		if (!user && window.USER) {
 			user = window.USER;
@@ -325,9 +324,6 @@ class Bookmarks extends AbstractList{
 		app.setActivePath(data.path, ['']);
 	}
 
-	onClickOpenInTerm() {
-		//TODO remove me!
-	}
 
 	// ============= IMPORT / EXPORT Bmarks
 	onClickExportBookmarks() {

@@ -6,7 +6,6 @@ function FileHeader() {
 	this.sort.field = this.activeTabKey;
 	this.sort.direct = this.direct;
 	this.setListeners();
-	//this.initView();// TODO showImage( switch(activeTabKey) )
 }
 FileHeader.prototype.initView = function(){
 	switch (this.activeTabKey) {

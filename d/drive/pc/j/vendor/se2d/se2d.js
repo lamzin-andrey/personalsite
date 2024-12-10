@@ -177,7 +177,7 @@ Graphics.prototype.moveTo = function (x, y) {
 	var t = this.TYPE_POINT, params = {}, point, o;
 	this._applyLineStyle(params);
 	point = this._createPoint(t, x, y, params.clr, params.thi, true);
-	//console.log(params);
+	
 	o = this._last_object;
 	//пока забил на оптимизацию
 	/*if ($o && isset($o['is_start'])) { //rewrite
@@ -496,10 +496,10 @@ Sprite.prototype.go = function (x, y) {
 /**
  * @description Добавить клип
 */
-//TODO remove clip from previous parent (doublicate!)
+//remove clip from previous parent (doublicate!)
 Sprite.prototype.addChild = function (sprite) {
 	var s, o = this, c = o.childs, L = c.length;
-	//console.log( 'remove sprite #' + sprite.id );
+	
 	sprite.removeFromParentScope();
 	if (!sprite.id) {
 		sprite.id = 's' + L;
@@ -543,7 +543,7 @@ Sprite.prototype.removeFromParentScope = function () {
 			}
 			parent[mapName] = oBuf;
 		} else if(parent.isRoot) {
-			//console.log( 'remove sprite #' + sprite.id );
+			
 			for (i in parent) {
 				if (i !== sprite.id) {
 					oBuf[i] = parent[i];
@@ -606,7 +606,7 @@ Sprite.prototype.fromObject = function(parentSprite, dump) {
 	if (dump.text) {
 		s.text = dump.text;
 	}
-	//console.log(s);
+	
 	for (i = 0; i < dump.numChildren; i++) {
 		this.fromObject(s, dump.children[i]);
 	}
@@ -886,7 +886,7 @@ SimpleEngine2D.prototype.sortByDepth = function () {
  * @param {String} rastrId
 */
 SimpleEngine2D.prototype.addRastr = function (src, rastrId) {
-	//console.log(rastrId);
+	
 	
 	var i = new Image();
 	this.rastrData.push(i);
@@ -911,8 +911,6 @@ SimpleEngine2D.prototype.addGraphResources = function (args) {
 	//просто добавляем очередной кадр se2d._root[img.id].addFrame(img);
 	
 	var sz = U.sz(args), i = 0, half = sz / 2;
-	/*console.log(half + ", " + Math.round(half) + ", " + sz);
-	console.log(args);*/
 	
 	if (half != Math.round(half)) {
 		throw "Need odd count items in first arument for SE2D.addGraphResources";
@@ -936,7 +934,6 @@ SimpleEngine2D.prototype.onLoadImage = function () {
 	o.parentClip = se2d._root;
 	se2d.__images_count--;
 	SE2D.onLoadRastrResource(img.id);
-	//console.log(se2d.__images_count);
 	if (se2d.__images_count == 0) {
 		se2d.orderImagesByDepth();
 		se2d.onLoadImages();
@@ -1118,7 +1115,6 @@ SimpleEngine2D.prototype.drawGraphics = function(graphics, dx, dy, dbg) {
 					c.fillStyle = color;
 					c.fillRect( p.x * scaleX + dx, p.y * scaleY + dy, p.w * scaleX, p.h * scaleY);
 				} else {
-					//console.log(p);
 					c.strokeStyle = this.parseColor(p.color);
 					c.strokeRect( p.x * scaleX + dx, p.y * scaleY + dy, p.w * scaleX, p.h * scaleY);
 				}
@@ -1132,7 +1128,7 @@ SimpleEngine2D.prototype.drawGraphics = function(graphics, dx, dy, dbg) {
 	}
 }
 SimpleEngine2D.prototype.parseColor = function(c) {
-	//console.log('call parseColor ' + c);
+	
 	if (c == 0) {
 		return '#000001';
 	}

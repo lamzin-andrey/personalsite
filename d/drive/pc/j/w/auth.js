@@ -196,8 +196,6 @@ function onFailSendLogin(data, responseText, info, xhr) {
 
 function onFailSendRegister(data, responseText, info, xhr) {
 	authDisForm("registerForm", 0);
-	// showScreen('hRegisterScreen');
-	//return authDefaultResponseError(data, responseText, info, xhr); TODO в итоге станет не нужным
 	return showRegisterError(data, responseText, info, xhr);
 }
 

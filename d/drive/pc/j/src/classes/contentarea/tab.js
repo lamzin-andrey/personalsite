@@ -45,21 +45,8 @@ Tab.prototype.setPath = function(path, fid) {
 		return;
 	}
 	v(o.contentBlock, "");
-	//TODO здесь внимательно, могут быть всякие штуки впоследствии
-	/*if (o.skipRequestList && o.skipRequestHList) {
-		o.showList = mclone(o.skipRequestList);
-		o.hideList = mclone(o.skipRequestHList);
-		o.list = o.showList;
-		o.skipRequestList = 0;
-		o.skipRequestHList = 0;
-		o.hideListComplete = true;
-		o.listComplete = true;
-		o.setStatus(L('Load catalog data') + '. ' + L('Рендерим') + '.', 1);
-		o.listCount = 2;
-		o.renderByMode();
-		return;
-	}*/
-	// TODO  m=?
+	// m=1 может показывать скрытые файлы, но фактически у нас их пока нигде нет, хотя на бэкенде как-бы есть
+	// Если приспичит, добавлю.
 	Rest2._get(o.onFileList, window.br + "/drivelist.json?c=" + fid + "&m=0", o.onFailGetList, o);
 	
 }
@@ -71,7 +58,7 @@ Tab.prototype.onFailGetList = function(status, responseText, info, xhr, readySta
 Tab.prototype.onFileList = function(data) {
 	var o = this;
 	if (!defaultResponseError(data)) {
-		showError("tab.js onFileList TODO надо подумать, что тут написать");
+		showError(L("Restart application and try again."));
 		return;
 	}
 	this.setStatus(L('Load catalog data') + '. ' + L('Start build list') + '.', 1);
@@ -333,7 +320,7 @@ Tab.prototype.getUser = function(s) {
 	return this.username;
 }
 
-// TODO почистить
+
 Tab.prototype.openAction = function(id, fid) {
 	var item, path,	pathInfo;
 	
@@ -410,7 +397,7 @@ Tab.prototype.newFolderAction = function() {
 	}, 100);
 	
 }
-// TODO only folders
+
 Tab.prototype.newItemAction = function(newName, label) {
 	var slot, cmd, o = this, i, SZ;
 	newName = prompt(label, newName);
@@ -917,7 +904,6 @@ Tab.prototype.getActiveItemId = function() {
 		r.fid = '';
 		return r;
 	}
-	console.log("Tab.prototype.getActiveItemId:", this.activeItem);
 	r.domId = this.toI(this.activeItem.parentNode.id);
 	r.fid = intval(attr(this.activeItem, "data-d"));
 	return r;
@@ -1018,8 +1004,9 @@ Tab.prototype.processFilterBoxInput = function() {
 	}
 }
 
-Tab.prototype.setTabItem = function(tabItem) {
+Tab.prototype.setTabItem = function(tabItem, fid) {
 	this.tabItem = tabItem;
+	this.currentFid = fid;
 }
 
 

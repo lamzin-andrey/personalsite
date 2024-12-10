@@ -227,9 +227,7 @@ function resizetabItemsWidth() {
 	) + 'px';
 }
 
-function log(s) {
-	console.log(s);
-}
+function log(s) {}
 
 function mclone(o) {
 	return JSON.parse( JSON.stringify(o) );

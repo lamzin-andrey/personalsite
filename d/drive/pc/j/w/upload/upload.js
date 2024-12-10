@@ -1,5 +1,5 @@
 window.upload = {
-	init:function() {console.log("Skip init upload");
+	init:function() {
 		var o = this;
 		o.iFile = 0;
 		o.iFiles = [];
@@ -13,7 +13,6 @@ window.upload = {
 		var o = window.upload;
 		o.showUploadProgressDialog();
 		o.iFiles.push(ctrg(evt));
-		console.log(o.iFiles);
 		Rest._get(
 			function(data){o.onSuccessGetSpace(data);},
 			br + '/space.json',
@@ -21,8 +20,8 @@ window.upload = {
 		);
 	},
 	onSuccessGetSpace:function(data){
-		if (!this.onFailUpload(data)) {// TODO see
-			// this.onClickCancel();
+		if (!this.onFailUpload(data)) {
+			this.onClickCancel();
 			return;
 		}
 		this.onSpaceOk();
@@ -55,14 +54,14 @@ window.upload = {
 			o.uploadDlgApp.setFilename(o.iFiles[o.currentInput].files[o.currentFile].name);
 			o.uploadDlgApp.setXFromY(o.totalCounter + 1, o.totalLength);
 			Rest._fileIndex = o.currentFile;
-			//console.log(`Upload input ${o.currentInput}, fileN = ${o.currentFile}`);
+			
 			o.uploadProcessing = 1;
 			Rest._postSendFile(o.iFiles[o.currentInput], br + '/drvupload.json', {c: fmgr.tab.currentFid, lang: lang}, 
 				function(data) {
 					o.onSuccessUpload(data);
 				},
 				function(data) {
-					o.onFailUpload(data);// TODO туда кажется надо как можно больше из success перенести. Ifiles = [] cutrrent{X} = 0
+					o.onFailUpload(data);
 				},
 				function(percents, current, total) {
 					o.onProgressUpload(percents, current, total);
@@ -204,7 +203,7 @@ window.upload = {
 		o.uploadProcessing = 0;
 		o.iFiles = [];
 	},
-	// TODO Вынести в модалку
+	
 	showNoLeftSpaceScreen:function(data) {
 		var a = data;
 		if (fmgr.noSpaceLeftDlg) {
@@ -243,13 +242,12 @@ window.upload = {
 	showUploadProgressDialog:function() {
 		var o = this, dlg = o.uploadProcessDlgN, v = getViewport();
 		if (isU(dlg)) {
-			o.uploadDlgApp = new UploadViewDlg(); // TODO
+			o.uploadDlgApp = new UploadViewDlg();
 			dlg = o.uploadProcessDlgN = window.dlgMgr.create(o.getUploadDialogHtml(), o.uploadDlgApp);
 		} else {
-			// o.uploadDlgApp.reset(0); // TODO
+			o.uploadDlgApp.reset();
 			window.dlgMgr.show(dlg);
 		}
-		console.log("v.h", v.h);
 		dlgMgr.move(dlg, v.w - 20 - 440, v.h - (111 + dlgMgr.ls[dlg].CAPTION_H * 2));
 	},
 	

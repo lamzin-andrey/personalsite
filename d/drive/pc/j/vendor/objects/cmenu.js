@@ -1,6 +1,6 @@
 window.oncontextmenu = function(event) {
 	event.preventDefault();
-	// console.log(event);
+	
 	
 	var s = ContextMenuManager.getTpl(event),
 		id = ContextMenuManager.id, cmWrapper, vp = getViewport(),
@@ -50,7 +50,7 @@ window.ContextMenuManager = {
 	
 	getTpl:function(event) {
 		var htmlElement = this.getCurrentTarget(event);
-		// console.log(htmlElement);
+		
 		if (!htmlElement) {
 			return '';
 		}

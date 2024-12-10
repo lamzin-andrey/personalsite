@@ -67,7 +67,6 @@ TabPanel.prototype.setPath = function(s) {
 	this.render(mclone(this.dataForRender));
 }
 
-// TODO find all calls
 TabPanel.prototype.addTabItem = function(s, tabType, fid, stack) {
 	// alert('Add tab item type ' + tabType);
 	var tabItem;
@@ -86,8 +85,7 @@ TabPanel.prototype.addTabItem = function(s, tabType, fid, stack) {
 		this.tab = new Tab();
 	}
 	this.render();
-	this.tab.setTabItem(this.tabs[this.activeIndex]);// TODO fid
-	// tabItem.render(); ?
+	this.tab.setTabItem(this.tabs[this.activeIndex], fid);
 }
 
 TabPanel.prototype.render = function(altDataForRender) {
@@ -224,7 +222,7 @@ TabPanel.prototype.onClickButton = function(evt){
 		app.tab.skipRequestList = this.tabs[idx].listCopy;
 		app.tab.skipRequestHList = this.tabs[idx].listHCopy;
 	}
-	console.log("CID: ", cid);
+	
 	app.setActivePath(this.tabs[idx].path, ["tabpanel"], cid);
 	
 	this.activeIndex = idx;

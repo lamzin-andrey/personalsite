@@ -36,14 +36,14 @@ ButtonAddress.prototype.push = function(id){
 	
 	
 }
-// TODO also call it on resize
+
 ButtonAddress.prototype.render = function(){
 	var buttonsWidth, placeWidth, n = 0, 
 		leftButton = this.createLeftButton(),
 		rightButton = this.createRightButton();
 	placeWidth = this.setPlacerWidth();
 	this.buttonsDataForRender = mclone(this.buttonsData);
-	buttonsWidth = this.renderButtonsData(); // TODO with margin 4.5 здесь не надо рендерить (все), надо рендерить одну и считать
+	buttonsWidth = this.renderButtonsData();
 	while (buttonsWidth > placeWidth && sz(this.buttonsDataForRender) > 3) {
 		n++;
 		this.buttonsDataForRender = mclone(this.buttonsData);
@@ -69,7 +69,7 @@ ButtonAddress.prototype.renderButtonsData = function(noAll){
 	parent.innerHTML = "";
 	for (i = 0, j = this.nRightButton - this.nDisplayedButtons; i < SZ; i++, j++) {
 		s = tpl.replace("{name}", this.renderButtonName(a[i].name));
-		s = s.replace("{img}", this.renderButtonImage(a[i].imgSrc, a[i].imgClass)); // TODO
+		s = s.replace("{img}", this.renderButtonImage(a[i].imgSrc, a[i].imgClass));
 		if (!noAll) {
 			parent.innerHTML = "";
 		}
@@ -262,7 +262,6 @@ ButtonAddress.prototype.createButtonDataItem = function(name, aPath, currentId){
 		imgSrc = root + "/i/usb32.png";
 		imgClass = "addressButtonIcon";
 	} else {
-		console.log(aPath, path);
 		imgSrc = "";
 		imgClass = "";
 		title = name;

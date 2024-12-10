@@ -163,7 +163,7 @@ NavbarPanel.prototype.isHome = function(n) {
 
 NavbarPanel.prototype.checkHistoryNavButtonsState = function(path) {
 	var o = this, SZ = sz(o.history);
-	if (SZ == 0 || o.isHome(SZ)) { // TODO
+	if (SZ == 0 || o.isHome(SZ)) {
 		o.setDisabled(o.btnBack);
 		o.setDisabled(o.btnFwd);
 	} else {

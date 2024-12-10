@@ -59,8 +59,6 @@ window.AddFileUser = {
 	onSuccessAddUsers(data){
 		let o = this, i, d = fmgr.dlgProp, s;
 		if (o.onFailAddUsers(data)) {
-			// TODO здесь видимо добавляют юзера в список
-			//W.fileListItemCmenu.onClickShareLink();
 			i = e('usr' + o.cAppendUserId + '-' + PropsDlg.I);
 			if (i) {
 				ee(i, "img")[1].src = roota2 + "/i/exit.png";
@@ -98,7 +96,7 @@ window.AddFileUser = {
 	},
 	
 	showLoader() {
-		console.log('here show small loader for add');
+		'here show small loader for add';
 	}
 	
 };

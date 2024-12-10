@@ -11,7 +11,7 @@ FileManager.prototype.init = function() {
 	o.fileHeader = new FileHeader();
 	o.isActive = false;
 	
-	o.setMainMenu(); // TODO -- ?
+	o.setMainMenu();
 	window.oPanel = new PanelPatch();
 	window.dlgMgr = new DlgMgr(window.oPanel);
 	
@@ -115,8 +115,8 @@ FileManager.prototype.onGetSavedEnv = function() {
 }
 
 /**
- * TODO Изменяет размеры кнопок "строки адреса"
- * TODO Изменяет размеры табов
+ * Изменяет размеры кнопок "строки адреса"
+ * Изменяет размеры табов
 */
 FileManager.prototype.onResize = function() {
 	this.setTabWidths();
@@ -260,7 +260,6 @@ FileManager.prototype.actualizeScrollX = function() {
 */
 FileManager.prototype.setMainMenu = function() {
 	app.addressPanel.showButtonAddress();
-	
 }
 
 

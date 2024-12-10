@@ -70,7 +70,7 @@ class UploadViewDlg {
 	}
 	
 	reset() {
-		v(this.fname, s);
+		v(this.fname, "");
 		this.setProgressValue(0, 0, 0);
 		this.setTotalProgressValue(0, 0, 0);
 	}

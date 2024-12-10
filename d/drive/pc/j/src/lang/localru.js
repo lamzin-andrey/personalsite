@@ -36,7 +36,7 @@ var langRu = {
 	"Error get file information" : "Ошибка получения информации о файле",
 	"Try close and open props dialog again" : "Попробуйте закрыть и открыть снова диалог свойств файла",
 	"Type user login and search": "Введите логин пользователя и найдите его",
-	"Your browser does not support copying. But you can click link and copy adress line in opened tab." : "Ваш браузер не поддерживает копирование. Но вы можете уликнуть на ссылку и скопировать её из адресной строки новой вкладки.",
+	"Your browser does not support copying. But you can click link and copy adress line in opened tab." : "Ваш браузер не поддерживает копирование. Но вы можете кликнуть на ссылку и скопировать её из адресной строки новой вкладки.",
 	"hCCLink" : "Подробнее о cookies",
 	"hCCLinkRE" : "Подробнее о cookies",
 	"hIAgreeCC" : "Я принимаю все cookie",
@@ -115,7 +115,7 @@ var langRu = {
 	"Import bookmarks" : "Импорт закладок",
 	"Unable detect user. Restart application and try again." : "Не удалось определить пользователя. Перезапустите приложение и попробуйте снова.",
 	"Unable read directory" : "Невозможно прочитать каталог",
-	"Restart application and try again." : "Перезапустите приложение и попробуйте снова.",
+	"Restart application and try again." : "Обновите страницу и попробуйте снова.",
 	"Select file with early seaved bookmark" : "Выбрать файл с ранними сохраненными закладками",
 	"Show catalogs" : "Показывать каталоги",
 	"No show catalogs" : "Не показывать каталоги",
@@ -199,5 +199,4 @@ var langRu = {
 	"About" : "О проекте"
 };
 
-var jaqedLang = langRu; // TODO потом в зависимости от настроек
 
