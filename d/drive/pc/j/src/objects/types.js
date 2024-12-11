@@ -13,7 +13,7 @@ window.Types = {
 			audio  = In('mp3', 'wav', 'ogg', 'flac', ''),
 			video  = In('mp4', 'avi', 'wma', 'mov', 'vob'),
 			exe    = In('exe', 'run'),
-			arch    = In('gz', 'bzip', 'tar', '7z', 'rar'),
+			arch    = In('gz', 'bzip', 'tar', '7z', 'rar', 'zip'),
 			web    = In('html', 'htm'),
 			sh     = In('bat', 'sh');
 		if (images[ext]) {
@@ -61,6 +61,9 @@ window.Types = {
 		if (ext == 'mov') {
 			r.t = L('Quick Time video');
 			r.i = root + '/i/cm/vlc32.png';
+		}
+		if (ext == 'zip') {
+			r.i = root + '/i/mi/zip32.png';
 		}
 		
 		if (!r.i) {

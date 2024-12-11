@@ -196,7 +196,7 @@ class PropsDlg {
 	}
 	
 	zM(m) {
-		let a = [0, "january", "february", "march", "april", "may", "june", "july", "august", "septemper", "october", "november", "december"];
+		let a = [0, "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
 		m = this.zZ(m);
 		return L(a[m]);
 	}
