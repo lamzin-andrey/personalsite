@@ -16,7 +16,7 @@ class CopyPasteApp {
 	}
 	
 	getDefaultTitle() {
-		return L("Copying");
+		return L("Moving");
 	}
 	
 	getIcon() {
@@ -28,7 +28,7 @@ class CopyPasteApp {
 	}
 	
 	getName() {
-		return L("Copying");
+		return L("Moving");
 	}
 	
 	// /interface
