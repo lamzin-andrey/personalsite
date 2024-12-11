@@ -197,6 +197,14 @@ var langRu = {
 	"november" : "ноября",
 	"december" : "декабря",
 	"WebUSB - another gigabyte of yours in the cloud" : "WebUSB - ещё один ваш гигабайт в облаке",
+	"After" : "Через",
+	"day" : "день",
+	"days2" : "дня",
+	"days" : "дней",
+	"WebUSB will stop working" : "WebUSB перестанет работать",
+	"You have time to download your files" : "У вас есть время, чтобы скачать свои файлы",
+	"How to change this" : "Как это изменить",
+	"Information" : "Информация",
 	"About" : "О проекте"
 };
 

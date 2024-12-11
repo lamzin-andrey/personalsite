@@ -59,6 +59,7 @@ var langEn = {
 	"ColSizeH" : "Size",
 	"ColTypeH" : "Type",
 	"ColDateH" : "Date modfify",
+	"days2" : "days",
 	
 	"" : "",
 	

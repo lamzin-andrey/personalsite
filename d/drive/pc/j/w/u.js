@@ -50,7 +50,12 @@ function onSuccessGetAuthState(data) {
 	storage("username", data.u);
 	window.tsz = data.t;
 	hideLoader();
-	
+	bm = data.f;
+	if (bm > 0) {
+		showSuccess(L(`<p> ${L("After")} ${bm} ${TextFormatU.pluralize(bm, L("day"), L("days2"), L("days"))} ${L("WebUSB will stop working")}.</p> <p>${L("You have time to download your files")}.</p>
+			<p><a href="#" target="_blank">${L("How to change this")}</a></p>
+		`));
+	}
 }
 
 function onSuccessGetAuthStateLite(d) {
@@ -173,9 +178,26 @@ function  _map(id, read) {
 	return data;
 }
 
-function showSuccess(s) {
-	alert(s);
+function showSuccess(s, t) {
+	var k, o;
+	
+	if (!window.fmgr) {
+		alert(s);
+		return;
+	}
+	
+	fmgr.dlgInfo ? (delete fmgr.dlgInfo) : 0;
+	k = fmgr.dlgInfo = new InfoDlg();
+	o = dlgMgr.create(k.h(), k);
+	if (t) {
+		k.setTitle(t);
+	}
+	k.setMsg(s);
+	dlgMgr.center(o);
+	
+	fmgr.kbListener.activeArea = KBListener.AREA_PROPS_DLG;
 }
+
 function onClickShowSuccessBtn() {
 	var s = window.prevScreen;
 	if (s && e(s)) {

@@ -101,7 +101,8 @@ class UsbController extends AbstractController
                     'token' => $csrfToken,
                     't' => AppService::getHumanFilesize($this->getTotalSize($user) - $filesRepository->getCurrentSize($user), 0, 3, true),
                     'uid' => $user->getId(),
-                    'u' => $user->getUsername()
+                    'u' => $user->getUsername(),
+                    'f' => 0 // TODO days to date close project
                 ];
             }
 			return $this->_json($data);

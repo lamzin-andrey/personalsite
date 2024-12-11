@@ -356,3 +356,30 @@
   margin-right: 6px;
   display:none;
 }
+
+.info-dlg {
+	background-color: #e8e8e7;
+	font-size: 12px;
+	width: 360px;
+	min-height: 137px;
+}
+
+.info-dlg .tInfo .ic{
+	margin: 14px 0 0 14px;
+	/*! margin-top: 14px; */
+}
+
+.info-dlg .tInfo .hTxt{
+	max-width: 290px;
+	display: inline-block;
+	margin-left: 14px;
+	min-height: 91px;
+}
+
+.info-dlg  .btns{
+	text-align: right;
+	margin-right: 10px;
+}
+
+.info-dlg .tInfo .hTxt p{
+}
