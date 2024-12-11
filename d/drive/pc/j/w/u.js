@@ -56,6 +56,8 @@ function onSuccessGetAuthState(data) {
 function onSuccessGetAuthStateLite(d) {
 	if (d.auth) {
 		Rest2._setToken(d.token, "_token");
+		storage("tsz", d.t);
+		storage("username", d.u);
 	}
 }
 
