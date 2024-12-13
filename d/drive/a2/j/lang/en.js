@@ -29,7 +29,7 @@ window.langEn = {
 	'register_form[passwordRepeat]' : 'Password repeat',
 	'hIAgree' : 'I agree with',
 	'hOr' : 'or',
-	'hPolicyName' : 'Comfindential policy',
+	'hPolicyName' : 'User Agreement',
 	'hIAgreeFromAuthor' : 'I agree to receive email newsletters from the author of this site',
 	'bRegisterNow' : 'Sign up',
 	'bRegisterNowRE' : 'Quick login',
@@ -72,5 +72,9 @@ window.langEn = {
 						  </p>\
 					  </div>',
 	'bNLSOk' : 'It\'s clear',
+	'hPolicyNameRE' : 'User Agreement',
+	'hIAgreeFromAuthorRE' : 'I agree to receive email newsletters from the author of the site',
+	'hPK' : 'Privace Policy',
+	'hPKRF' : 'Privace Policy',
 	'' : ''
 };
