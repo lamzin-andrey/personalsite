@@ -207,6 +207,8 @@ function onClickChangeLang(lang) {
 		
 		v("hUAName", L("hUAName"));
 		v("hPPName", L("hPPName"));
+		v("hFootUA", L("hUAName"));
+		v("hFootPP", L("hPPName"));
 		setLocale();
 	}
 }

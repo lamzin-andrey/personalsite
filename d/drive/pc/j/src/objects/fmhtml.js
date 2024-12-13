@@ -198,7 +198,16 @@ function fileMgrLayout() {
 				\
 		</div> <!-- /#tabContent -->\
 		<div class="tabContentStatus">\
-			<div class="tabContentStatusText" ><span id="statusLdrPlacer"></span> <span id="statusText">12 объектов, свободно 119 ГБ</span></div>\
+			<div class="tabContentStatusText" >\
+			  <div class="fl iblock statusCont">\
+			    <span id="statusLdrPlacer"></span> <span id="statusText">12 объектов, свободно 119 ГБ</span>\
+			  </div>\
+			  <div class="fr iblock tr linksCont">\
+			    <a href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2024-12-12.doc" id="hFootPP"></a>&nbsp;\
+			    <a href="/files/Polzovatelskoe_soglashenie_2024-12-12.docx" id="hFootUA"></a>\
+			  </div>\
+			  <div class="cf"></div>\
+			</div>\
 		</div>\
 		\
 		\
