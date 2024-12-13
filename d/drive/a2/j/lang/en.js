@@ -73,6 +73,7 @@ window.langEn = {
 					  </div>',
 	'bNLSOk' : 'It\'s clear',
 	'hPolicyNameRE' : 'User Agreement',
+	'hUALink' : 'User Agreement',
 	'hIAgreeFromAuthorRE' : 'I agree to receive email newsletters from the author of the site',
 	'hPK' : 'Privace Policy',
 	'hPKRF' : 'Privace Policy',
