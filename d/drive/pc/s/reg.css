@@ -291,3 +291,28 @@ img.dogmsg {
 .block {
 	display:block;
 }
+.ai {
+  display: block;
+  text-decoration: none;
+  color: #FFF;
+  text-align: center;
+  width: 128px;
+  position: absolute;
+  z-index:12;
+  top: 10px;
+}
+.ua {
+	left: 10px;
+}
+
+.pp {
+	left: 148px;
+}
+
+.ai div {
+	max-width: 128px;
+	font-size: 12px;
+	margin-top: 8px;
+	text-align: center;
+	line-height: 19px;
+}

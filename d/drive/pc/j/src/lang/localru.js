@@ -205,6 +205,8 @@ var langRu = {
 	"You have time to download your files" : "У вас есть время, чтобы скачать свои файлы",
 	"How to change this" : "Как это изменить",
 	"Information" : "Информация",
+	"hPPName" : "Политика конфендициальности",
+	"hUAName" : "Пользовательское соглашение",
 	"About" : "О проекте"
 };
 

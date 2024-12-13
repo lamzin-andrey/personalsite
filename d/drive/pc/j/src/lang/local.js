@@ -60,8 +60,9 @@ var langEn = {
 	"ColTypeH" : "Type",
 	"ColDateH" : "Date modfify",
 	"days2" : "days",
-	
-	"" : "",
+	"hPPName" : "Privace Policy",
+	"hUAName" : "User Agreement",
+	"" : ""
 	
 };
 
