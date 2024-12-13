@@ -42,6 +42,7 @@ function onCheckSsl(isSSLSupport) {
 		h = Math.round(o.h / 2) - 64,
 		ua = navigator.userAgent.toLowerCase(),
 		savedTheme = storage('savedTheme'),
+		rSavedThene = savedTheme,
 		lang,
 		vw;
 	savedTheme = savedTheme ? savedTheme : '';
@@ -53,7 +54,7 @@ function onCheckSsl(isSSLSupport) {
 		if (~ua.indexOf('gt-s6102')) {
 			savedTheme = 'a2/gts6102';
 		}
-	} else {
+	} else if (!rSavedThene){
 		// check FormData
 		if (window.FormData) {
 			savedTheme = savedTheme ? savedTheme : 'fd';
