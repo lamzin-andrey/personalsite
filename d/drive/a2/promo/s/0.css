@@ -45,6 +45,20 @@ body.f100, html.f100 {
 	line-height: 18px;
 	font-size:12px;
 }
+.infoMsg a{
+    color: gold;
+    font-weight:bold;
+}
+.infoMsg.links{
+	width:100%;
+	padding:0;
+	background-color:rgba(0, 0, 0, 0.4);
+}
+.infoMsg.links div{
+	margin-top:3px;
+	margin-bottom:4px;
+}
+
 .errMsg {
 	display:inline-block;
 	margin-bottom:16px;
