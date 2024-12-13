@@ -40,7 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Transliterator;
 use StdClass;
 
-class UsbController extends AbstractController
+class UsbController extends AppBaseController
 {
 
     private const VERSION = '49';
@@ -330,7 +330,7 @@ class UsbController extends AbstractController
         exit;
     }
 
-    private function _json($aData)
+    protected function _json($aData)
 	{
 	    if (is_array($aData)) {
             if (!isset($aData['status'])) {
@@ -2207,14 +2207,16 @@ class UsbController extends AbstractController
     /**
      * @Route("/moderatus", name="wusbmoderatus")
      */
-    public function index(UserService $userService)
+    public function index(UserService $userService, AppService $appService)
     {
+        $this->_oAppService = $appService;
         if (!$userService->isAdmin($this->getUser())) {
             return $this->redirectToRoute('home');
         }
         return $this->render('wusb_moderatus/index.html.twig', [
             'controller_name' => 'UsbController',
             'pageHeading' => 'Понашерили...',
+            'bEnableChooseSiteVersionButton' => true,
         ]);
     }
 
