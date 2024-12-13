@@ -9,6 +9,7 @@ window.langEn = {
 	'bmSelectMode' : 'Select mode',
 	'bmPaste' : 'Paste',
 	'bmOptions' : 'Options',
+	'bmDonate' : 'Donate',
 	'progressStateLabel' : 'Choose file',
 	'bUploadCancel' : 'Cancel',
 	"hCCLink" : "More info about cookies",

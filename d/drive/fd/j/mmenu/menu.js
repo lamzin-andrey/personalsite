@@ -21,6 +21,7 @@ function initMainMenu() {
 	e('bmSelectMode').onclick = onClickMainSelectMode;
 	e('bmPaste').onclick = onClickMainPaste;
 	e('bmOptions').onclick = onClickMainOptions;
+	e('bmDonate').onclick = onClickMainDonate;
 	e('bMainMenu').onclick = onClickMainMenuToggler;
 }
 
@@ -135,4 +136,8 @@ function onClickMainMenuToggler() {
 	} else {
 		addClass(MENU_ID, 'hide');
 	}
+}
+
+function onClickMainDonate() {
+	alert('TODO /fd/j/mmenu');
 }

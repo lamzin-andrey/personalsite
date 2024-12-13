@@ -9,6 +9,7 @@ window.langRu = {
 	'bmSelectMode' : 'Режим выбора',
 	'bmPaste' : 'Вставить',
 	'bmOptions' : 'Опции',
+	'bmDonate' : 'Помочь проекту',
 	'progressStateLabel' : 'Выберите файл',
 	'bUploadCancel' : 'Отмена',
 	
