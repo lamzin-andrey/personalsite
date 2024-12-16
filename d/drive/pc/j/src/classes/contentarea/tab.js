@@ -672,7 +672,7 @@ Tab.prototype.setStatus = function(s, showLoader) {
 }
 
 Tab.prototype.tpl = function() {
-	return '<div class="tabContentItem {active}" title="{name} id=f{id}" data-d="{did}">\
+	return '<div class="tabContentItem {active}" title="{name}" data-d="{did}">\
 						<div class="tabContentItemNameMain fl">\
 							<div class="tabContentItemIcon fl">\
 								<img class="imgTabContentItemIcon" src="{img}" onerror="app.tab.onErrLoadPreview({id})">\

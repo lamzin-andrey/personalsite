@@ -209,7 +209,7 @@ ListRenderer.prototype.setCurrentIcon = function(i, src) {
 ListRenderer.prototype.renderItemName = function(i, name) {	
 	var child = cs(e('f' + i), this.context.cName)[0];
 	if (child) {
-		attr(child, 'title', name + ' id = f' + i);
+		attr(child, 'title', name);
 		this.setSubValue(child, 'tabContentItemNameMain', name);
 	}
 }
