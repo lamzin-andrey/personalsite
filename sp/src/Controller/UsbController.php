@@ -2334,10 +2334,6 @@ class UsbController extends AppBaseController
         $mail->setFrom($siteAdminEmail);
         $mail->setTo($user->getEmail());
         $mail->setBody($sHtml, 'text/html', 'UTF-8');
-
-        // TODO remove me!
-        file_put_contents(__DIR__ . '/log.log', $sHtml . "\n" . /*print_r($context, 1) .*/ "\n=====\n");
-
         $mail->send();
     }
 
