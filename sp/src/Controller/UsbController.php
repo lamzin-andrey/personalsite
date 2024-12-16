@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Ausers;
+use App\Entity\BanUsers;
 use App\Entity\DrvBookmark;
 use App\Entity\DrvCatalogs;
 use App\Entity\DrvFile;
@@ -14,6 +15,7 @@ use App\Form\RegisterFormType;
 use App\Form\ResetPasswordFormType;
 use App\Repository\DrvCatalogsRepository;
 use App\Repository\DrvFileRepository;
+use App\Repository\UserRepository;
 use App\Service\AppService;
 use App\Service\BitReader;
 use App\Service\PayService;
@@ -23,6 +25,7 @@ use App\WebUSB\Service\FilePermissionService;
 use App\WebUSB\Service\WusbUploadService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\TreeWalkerAdapter;
+use Landlib\SimpleMail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -43,7 +46,7 @@ use StdClass;
 class UsbController extends AppBaseController
 {
 
-    private const VERSION = '49';
+    private const VERSION = '50';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -2192,7 +2195,7 @@ class UsbController extends AppBaseController
             $ls[] = [
                 "name" => $ent->getName(),
                 "i" => (int)$ent->getId(),
-                "L" => $this->getAdminFileLink($ent, $request, $filesystem, $t),
+                "L" => $this->getAdminFileLink($ent, $request, $filesystem, $t, $appService),
                 "s" => AppService::getHumanFilesize($ent->getSize(), 1, 2, false)
 
             ];
@@ -2220,9 +2223,13 @@ class UsbController extends AppBaseController
         ]);
     }
 
-    private function getAdminFileLink(DrvFile $fileEntity, Request $request, Filesystem $filesystem, TranslatorInterface $t): string
+    private function getAdminFileLink(DrvFile $fileEntity, Request $request, Filesystem $filesystem, TranslatorInterface $t, AppService  $appService): string
     {
-        $filePathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
+        $user = $appService->find(Ausers::class, $fileEntity->getUserId());
+        if (null === $user) {
+            return '#';
+        }
+        $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
         $path = $filePathObject->path;
 
         if (!empty($filePathObject->error)) {
@@ -2267,6 +2274,38 @@ class UsbController extends AppBaseController
             $ent->setIsDeleted(true);
             $ent->setIsNoErased(true);
             $appService->save($ent);
+
+            $userId = $ent->getUserId();
+            /**
+             * @var Ausers $user
+            */
+            $user = $appService->find(Ausers::class, strval($userId));
+            if ($user) {
+                $cnt = $user->getBanCount();
+                ++$cnt;
+                $user->setBanCount($cnt);
+                if ($cnt >= 3) {
+                    $bannedUser = new BanUsers();
+                    $methods = get_class_methods($user);
+                    foreach($methods as $method) {
+                        if (strpos($method, 'get') === 0) {
+                            $v = $user->$method();
+                            $method = str_replace('get', 'set', $method);
+                            if(method_exists($user, $method)) {
+                                $bannedUser->$method($v);
+                            }
+                        }
+                    }
+                    $appService->save($bannedUser);
+                    if ($user->getRole() != 2 && $user->getRole() != 1) {
+                        $this->sendBanLetter($user, $appService);
+                        $appService->remove($user);
+                    }
+                } else {
+                    $appService->save($user);
+                }
+            }
+
             return $this->_json([
                 "status" => "ok",
                 "i" => $id
@@ -2276,6 +2315,30 @@ class UsbController extends AppBaseController
         return $this->_json([
             "status" => "err"
         ]);
+    }
+
+    public function sendBanLetter(Ausers $user, AppService $appService)
+    {
+        $siteAdminEmail = $this->getParameter('app.siteAdminEmail');
+        $subject = $appService->l($user, 'You banned in service ') . $this->getParameter('app.siteName');
+
+        $sHtml = '<p> ' .
+            $appService->l($user, 'You banned in service') . ' '
+            . ' '. $this->getParameter('app.siteName') . '</p>';
+        $sHtml .= '<p> ' .
+            $appService->l($user, 'Reason') . ': '
+            . $appService->l($user, 'Inappropriate content.')
+            . '</p>';
+        $mail = new SimpleMail();
+        $mail->setSubject($subject);
+        $mail->setFrom($siteAdminEmail);
+        $mail->setTo($user->getEmail());
+        $mail->setBody($sHtml, 'text/html', 'UTF-8');
+
+        // TODO remove me!
+        file_put_contents(__DIR__ . '/log.log', $sHtml . "\n" . /*print_r($context, 1) .*/ "\n=====\n");
+
+        $mail->send();
     }
 
     /**

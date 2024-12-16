@@ -413,6 +413,19 @@ class AppService
 		$oEm->flush();
 	}
 
+    public function remove()
+    {
+        $em = $this->oContainer->get('doctrine')->getManager();
+        $nSz = func_num_args();
+        for ($i = 0; $i < $nSz; $i++) {
+            $o = func_get_arg($i);
+            if ($o) {
+                $em->remove($o);
+            }
+        }
+        $em->flush();
+    }
+
 	public function find(string $className, string $id)
     {
         $r = $this->repository($className);

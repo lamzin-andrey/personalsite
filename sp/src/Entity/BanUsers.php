@@ -8,18 +8,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints AS Assert;
 
 /**
- * Ausers
  *
- * @ORM\Table(name="ausers", indexes={@ORM\Index(name="weight_from", columns={"weight_from"}), @ORM\Index(name="growth_from", columns={"growth_from"}), @ORM\Index(name="weight_to", columns={"weight_to"}), @ORM\Index(name="growth_to", columns={"growth_to"})})
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="ban_users", indexes={@ORM\Index(name="weight_from", columns={"weight_from"}), @ORM\Index(name="growth_from", columns={"growth_from"}), @ORM\Index(name="weight_to", columns={"weight_to"}), @ORM\Index(name="growth_to", columns={"growth_to"})})
+ * @ORM\Entity(repositoryClass="App\Repository\BanUserRepository")
  */
-class Ausers implements UserInterface
+class BanUsers implements UserInterface
 {
-    const ROLE_USER = 0;
-    const ROLE_MODERATOR = 1;
-    const ROLE_ADMIN = 2;
-    const ROLE_ADMIN_PSD_TO_HTML = 3;
-    const ROLE_WEB_DRIVE_USER = 4;
     /**
      * @var int
      *

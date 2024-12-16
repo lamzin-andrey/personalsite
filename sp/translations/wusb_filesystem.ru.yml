@@ -3,3 +3,6 @@ Unable create catalog (db): Невозможно создать каталог (
 Unable create catalog: Невозможно создать каталог
 File with name {name} already exists: Файл с именем {name} уже существует
 Your busy all {allowSize}: У вас заняты все {allowSize}
+You banned in service: Вы забанены в сервисе
+Reason: Причина
+Inappropriate content.: Недопустимый контент.

@@ -78,6 +78,7 @@ NavbarPanel.prototype.onClickChangeLang = function() {
 NavbarPanel.prototype.setFlag = function(ol, l) {
 	var c, o = this, i, SZ, ls;
 	hideBallons();
+	Rest._token_name = '_token';
 	Rest2._post({lang: l}, o.onChangeLang, `${br}/wusbsetlang`, o.onChangeLang, o);
 	c = o.btnCLang;
 	c.src = c.src.replace(`${ol}64.png`, `${l}64.png`);

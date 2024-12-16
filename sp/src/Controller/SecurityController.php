@@ -38,7 +38,7 @@ use Landlib\SimpleMail;
 class SecurityController extends AppBaseController
 {
 
-    const MAX_ALLOW_WUSB_USERS = 10;
+    const MAX_ALLOW_WUSB_USERS = 20;
 
     /**
      * @Route("/login", name="login")
