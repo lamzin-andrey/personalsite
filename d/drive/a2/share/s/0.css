@@ -5,8 +5,7 @@ body {
 	margin:0;
 	color: white;
 	padding: 0;
-	margin: 0;
-	
+	margin: 0;	
 }
 .day {
 	background-color:#BCCFD9;
@@ -94,11 +93,39 @@ iframe {
 
 iframe.fs{
 	width:100%;
-	height: 100%;
+	height: calc(100% - 48px);
 	z-index:10000;
 	top:0;
 	left:0;
 }
 iframe.d{
     
+}
+.fr {
+	float:right;
+}
+.cf {
+	clear:both;
+}
+#advH {
+	background: #0000AA;
+	color: #FFF;
+	height: 48px;
+	display:none;
+}
+.shore {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width:100%;
+	height:100%;
+	z-index:1000;
+}
+#advH .fr{
+	margin-right: 10px;
+	margin-top: 13px;
+	font-size: 19px;
+	font-weight: bold;
+	font-family: arial;
+	cursor:pointer;
 }

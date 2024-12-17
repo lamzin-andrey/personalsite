@@ -19,7 +19,7 @@ function initApp() {
 }
 
 function getAdv() {
-	var t = "pc", src, cn = "d", h = "252px";
+	var t = "pc", src, cn = "d", h = "252px", id = "advPlace", sh = "shore";
 	if (!window.adv) {
 		return;
 	}
@@ -30,13 +30,39 @@ function getAdv() {
 			h = "100%";
 		}
 		src = "/d/drive/" + t + "/adv/";
-		appendChild("advPlace", "iframe", 0, {
+		appendChild(id, "iframe", 0, {
 			src: src,
 			"class": cn,
 			width: "100%",
-			height: h
+			height: h,
+			scrolling: "no"
 		});
+		if (isSmart()) {
+			addClass(id, sh);
+			show("advH");
+		} else {
+			removeClass(id, sh);
+		}
+		w.advIval = setInterval(onTickAdvIval, 1000);
+		e("cntDwn").onclick = onClickCloseAdv;
 	}
+}
+
+function onClickCloseAdv() {
+	var n = parseInt(v("cntDwn"));
+	if (isNaN(n)) {
+		hide("advPlace");
+	}
+}
+
+function onTickAdvIval() {
+	var i = "cntDwn", n = parseInt(v(i));
+	if (n) {
+		v(i, --n);
+		return;
+	}
+	v(i, "X");
+	clearInterval(w.advIval);
 }
 
 function setListeners() {
@@ -121,13 +147,12 @@ function onSuccessGetAuthState(d) {
 		}
 		w.adv = d.adv;
 		getAdv();
-		// no auth
 		e('_csrf_token').value = d.token;
 		Rest._token = d.token;
 		if (!w.adv) {
 			getLink();
 		} else {
-			setTimeout(getLink, 5*1000);
+			setTimeout(getLink, 5000);
 		}
 	} catch(err) {
 		alert(err);

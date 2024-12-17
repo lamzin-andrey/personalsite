@@ -73,6 +73,7 @@ class UsbController extends AppBaseController
                                               AppService $oAppService,
                                               CsrfTokenManagerInterface $csrfTokenManager)
 	{
+        $adv = 0; //1 self, 2 VK
 		if ($oRequest->getMethod() == 'POST') {
 			return $this->_json([
 			    'message' => 'oops'
@@ -91,7 +92,8 @@ class UsbController extends AppBaseController
 		            'auth' => false,
                     'token' => $csrfToken,
                     'token_reg' => $csrfRegToken,
-                    'token_res' => $csrfResetToken
+                    'token_res' => $csrfResetToken,
+                    'adv' => $adv,
                 ];
             } else {
                 /**
@@ -105,7 +107,7 @@ class UsbController extends AppBaseController
                     't' => AppService::getHumanFilesize($this->getTotalSize($user) - $filesRepository->getCurrentSize($user), 0, 3, true),
                     'uid' => $user->getId(),
                     'u' => $user->getUsername(),
-                    'adv' => 1,
+                    'adv' => $adv,
                     'f' => 0 // TODO days to date close project
                 ];
             }
