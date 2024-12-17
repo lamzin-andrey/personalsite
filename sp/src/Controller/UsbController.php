@@ -73,7 +73,7 @@ class UsbController extends AppBaseController
                                               AppService $oAppService,
                                               CsrfTokenManagerInterface $csrfTokenManager)
 	{
-        $adv = 0; //1 self, 2 VK
+        $adv = 1; //1 self, 2 VK, 0 off
 		if ($oRequest->getMethod() == 'POST') {
 			return $this->_json([
 			    'message' => 'oops'
