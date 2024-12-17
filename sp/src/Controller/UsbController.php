@@ -105,6 +105,7 @@ class UsbController extends AppBaseController
                     't' => AppService::getHumanFilesize($this->getTotalSize($user) - $filesRepository->getCurrentSize($user), 0, 3, true),
                     'uid' => $user->getId(),
                     'u' => $user->getUsername(),
+                    'adv' => 1,
                     'f' => 0 // TODO days to date close project
                 ];
             }

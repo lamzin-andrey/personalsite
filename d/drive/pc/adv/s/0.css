@@ -1,0 +1,16 @@
+body {
+	padding:0;
+	margin:0;
+	height: 100%;
+	background:#000;
+	color:#FFF;
+	text-align: center;
+	font-size: 30px;
+}
+a {
+ text-decoration:none;
+ color: #FFF;
+ padding-top: 78px;
+ display: block;
+ height:100%;
+}

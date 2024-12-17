@@ -18,6 +18,27 @@ function initApp() {
 	startBgAnim();
 }
 
+function getAdv() {
+	var t = "pc", src, cn = "d", h = "252px";
+	if (!window.adv) {
+		return;
+	}
+	if (adv == 1) {
+		if (isSmart()) {
+			t = "fd";
+			cn = "fs abs";
+			h = "100%";
+		}
+		src = "/d/drive/" + t + "/adv/";
+		appendChild("advPlace", "iframe", 0, {
+			src: src,
+			"class": cn,
+			width: "100%",
+			height: h
+		});
+	}
+}
+
 function setListeners() {
 	e('chLang').ontouchstart = onChangeLang;
 	e('chLang').onclick = onChangeLang;
@@ -87,21 +108,27 @@ function setLang(lng, displayLng) {
 		e('hWaitGetLink').innerHTML = q;
 	}
 }
-
+ 
 function getAuthState() {
 	Rest._token = '';
 	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json', onFailGetAuthState);
 }
 
-function onSuccessGetAuthState(data) {
+function onSuccessGetAuthState(d) {
 	try {
-		if (!onFailGetAuthState(data)) {
+		if (!onFailGetAuthState(d)) {
 			return;
 		}
+		w.adv = d.adv;
+		getAdv();
 		// no auth
-		e('_csrf_token').value = data.token;
-		Rest._token = data.token;
-		getLink();
+		e('_csrf_token').value = d.token;
+		Rest._token = d.token;
+		if (!w.adv) {
+			getLink();
+		} else {
+			setTimeout(getLink, 5*1000);
+		}
 	} catch(err) {
 		alert(err);
 	}

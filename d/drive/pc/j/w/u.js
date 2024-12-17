@@ -45,7 +45,7 @@ function onSuccessGetAuthState(data) {
 		loginByMailhash();
 		return;
 	}
-	
+	w.adv = data.adv;
 	storage("tsz", data.t);
 	storage("username", data.u);
 	window.tsz = data.t;

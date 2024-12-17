@@ -449,3 +449,12 @@ function isNull(x) {
 function ctrg(ev) {
 	return ev.currentTarget;
 }
+
+function nv() {
+	return navigator;
+}
+
+function isSmart() {
+	var s = nv().userAgent.toLowerCase();
+	return !!(~s.indexOf("iphone") || ~s.indexOf("android"));
+}
