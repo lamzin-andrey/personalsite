@@ -2240,7 +2240,7 @@ class UsbController extends AppBaseController
         }
         $symlink = $filePathObject->symlink;
 
-        if (!$filesystem->exists($symlink)) {
+        if (!$filesystem->exists($symlink) && $filesystem->exists($path)) {
             symlink($path, $symlink);
         }
         if (!$filesystem->exists($symlink)) {
