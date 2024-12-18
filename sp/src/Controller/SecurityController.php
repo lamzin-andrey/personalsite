@@ -91,6 +91,7 @@ class SecurityController extends AppBaseController
         $this->translator = $t;
         $agree = $oRequest->request->get('register_form')['agree'] ?? null;
         $acceptAllCookies = $oRequest->request->get('register_form')['agreeCC'] ?? null;
+        $acceptAdv = $oRequest->request->get('register_form')['agreeAdv'] ?? null;
         if ($oRequest->getMethod() == 'POST') {
             $oForm->handleRequest($oRequest);
             if ($oForm->isValid()) {
@@ -120,6 +121,8 @@ class SecurityController extends AppBaseController
                     $this->addFormError('Consent to agree to terms of use', 'agree', $oAppService);
                 } else if ('true' !== $acceptAllCookies) {
                     $this->addFormError('You must accept all cookies for use this site', 'agreeCC', $oAppService);
+                } else if ('true' !== $acceptAdv) {
+                    $this->addFormError('You must accept advertising on this site', 'agreeAdv', $oAppService);
                 } else if (!$this->isRussianEmail($sEmail, $allowEmails)) {
                     $this->addFormError('email_must_be_russian' , 'email', $oAppService, null, [
                         '%list%' => implode(",\n",  $allowEmails)
@@ -131,6 +134,7 @@ class SecurityController extends AppBaseController
                     //Success
                     $oUser->setIsAcceptAllCookies(true);
                     $oUser->setIsAcceptAllCookiesTime(new \DateTime());
+                    $oUser->setAdvAgree(1);
                     $this->finalizeCreateNewUser($userService, $oUser, $sPassword);
 
                     if (!$oRequest->isXmlHttpRequest()) {

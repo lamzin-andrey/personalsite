@@ -63,6 +63,16 @@ class RegisterFormType extends AbstractType
                     ])
                 ]
             ])
+            ->add('agreeAdv', CheckboxType::class, [
+                'mapped' => false,
+                'required' => true,
+                'constraints' => [
+                    new EqualTo([
+                        'value' => 'true',
+                        'message' => 'You must accept all cookies for use this site'
+                    ])
+                ]
+            ])
 			->add('isSubscribed', CheckboxType::class, [
 				'required' => false
 			])

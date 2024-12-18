@@ -257,7 +257,7 @@ class Ausers implements UserInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="bsettings", type="integer", nullable=false, options={"comment"="Настройки типа bool. Хранятся в битах числа. Бит 0: бот в чате Полиглот 0 - выключен, 1 - включен. Бит 1: язык webUSB. 0 - en, 1 - ru","default"="0"})
+     * @ORM\Column(name="bsettings", type="integer", nullable=false, options={"comment"="Настройки типа bool. Хранятся в битах числа. Бит 0: бот в чате Полиглот 0 - выключен, 1 - включен. Бит 1: язык webUSB. 0 - en, 1 - ru. Бит 2 зарезервирован т. к. кажется что используется. Бит 3: 1 - согласен на получение рекламы, 0 - не согласен","default"="0"})
     */
     private $bsettings = 0;
 
@@ -700,5 +700,21 @@ class Ausers implements UserInterface
         $this->banCnt = $banCnt;
 
         return $this;
+    }
+
+    public function setAdvAgree(int $agreeFlag)
+    {
+        $n = intval($this->getBSettings());
+        $currentValue = BitReader::get($n, 3);
+        if ($currentValue != $agreeFlag) {
+            $n = $n ^ 4;
+            $this->setBSettings($n);
+        }
+    }
+
+    public function getAdvAgree(): int
+    {
+        $n = intval($this->getBSettings());
+        return BitReader::get($n, 3);
     }
 }

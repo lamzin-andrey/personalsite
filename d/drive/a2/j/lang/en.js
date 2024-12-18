@@ -78,5 +78,7 @@ window.langEn = {
 	'hIAgreeFromAuthorRE' : 'I agree to receive email newsletters from the author of the site',
 	'hPK' : 'Privace Policy',
 	'hPKRF' : 'Privace Policy',
+	'agreeAdv' : 'I agree',
+	'hAdvDocLink' : 'to Receive Advertising',
 	'' : ''
 };
