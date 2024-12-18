@@ -15,7 +15,7 @@ class BitReader
         if ($n < 0) {
             return 1;
         }
-        $n = $n >> ($bitInInt - 1);
+        $n = $n >> ($bitInInt -  $bitPos + 1);
 
         return $n;
     }

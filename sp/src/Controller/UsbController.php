@@ -73,12 +73,15 @@ class UsbController extends AppBaseController
                                               AppService $oAppService,
                                               CsrfTokenManagerInterface $csrfTokenManager)
 	{
-        $adv = 0; //1 adv self, 2 VK adv, 0 off
+        $adv = 1; //1 adv self, 2 VK adv, 0 off
 		if ($oRequest->getMethod() == 'POST') {
 			return $this->_json([
 			    'message' => 'oops'
             ]);
 		} else {
+		    /**
+             * @var AUsers $user
+		    */
 		    $user = $this->getUser();
             $csrfToken = $csrfTokenManager
                 ? $csrfTokenManager->getToken('authenticate')->getValue()
@@ -101,6 +104,9 @@ class UsbController extends AppBaseController
                  */
                 $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
 
+                if (0 == $user->getAdvAgree()) {
+                    $adv = 0;
+                }
                 $data = [
                     'auth' => true,
                     'token' => $csrfToken,
@@ -2449,6 +2455,27 @@ class UsbController extends AppBaseController
         $im->resizeImage($newW, $newH,\Imagick::FILTER_CATROM , 1,TRUE );
         $im->setImageFormat("jpg");
         $im->writeImage($destPath);
+    }
+
+    /**
+     * @Route("/drivesetadv.json", name="drivesetadvstate")
+     */
+    public function driveSetAdvStateAction(
+      Request $request,
+      TranslatorInterface $t,
+      AppService $appService
+    )
+    {
+        $state = intval($request->request->get("s"));
+        $user = $this->getUser();
+        /**
+         * @var AUsers $user
+        */
+        if ($user && method_exists($user, 'setAdvAgree')) {
+            $user->setAdvAgree($state);
+            $appService->save($user);
+        }
+        return $this->_json(["state" => $state]);
     }
 }
 

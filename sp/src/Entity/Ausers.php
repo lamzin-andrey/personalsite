@@ -715,6 +715,7 @@ class Ausers implements UserInterface
     public function getAdvAgree(): int
     {
         $n = intval($this->getBSettings());
-        return BitReader::get($n, 3);
+        $r =  BitReader::get($n, 3);
+        return $r;
     }
 }
