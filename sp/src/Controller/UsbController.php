@@ -73,7 +73,7 @@ class UsbController extends AppBaseController
                                               AppService $oAppService,
                                               CsrfTokenManagerInterface $csrfTokenManager)
 	{
-        $adv = 1; //1 adv self, 2 VK adv, 0 off
+        $adv = 0; //1 adv self, 2 VK adv, 0 off
 		if ($oRequest->getMethod() == 'POST') {
 			return $this->_json([
 			    'message' => 'oops'
@@ -651,12 +651,14 @@ class UsbController extends AppBaseController
          */
         $filesRepository = $this->getDoctrine()->getRepository(DrvFile::class);
         $size = $filesRepository->getCurrentSize($user) + $file->getSize();
-        $allowSize = intval($this->getParameter('app.wusb_max_space') );
+        //$allowSize = intval($this->getParameter('app.wusb_max_space') );
+        $allowSize = $this->getTotalSize($user);
+
         if ($allowSize <= $size) {
             return $this->mixResponse($request, [
                 'status' => 'error',
                 'error' => $this->l($t, 'Your busy all {allowSize}',  'wusb_filesystem', [
-                    '{allowSize}' => AppService::getHumanFilesize($allowSize, 0, 3, false)
+                    '{allowSize}' => AppService::getHumanFilesize($this->getTotalSize($user) - $filesRepository->getCurrentSize($user), 0, 3, false)
                 ])
             ]);
         }
