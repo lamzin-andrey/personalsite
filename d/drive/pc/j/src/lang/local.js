@@ -19,6 +19,7 @@ var langEn = {
 	"hIAgreeAdvRE": "I agree",
 	"hIAgreeFromAuthorRE" : "I agree to receive email newsletters from the author of the site",
 	"hAAName": "Consent to receive advertising",
+	"hFootAA": "Consent to receive advertising",
 	"bRegisterNowRE" : "Quick register",
 	"emailRE" : "Email",
 	"_username" : "Login",

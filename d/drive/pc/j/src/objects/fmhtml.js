@@ -205,6 +205,7 @@ function fileMgrLayout() {
 			  <div class="fr iblock tr linksCont">\
 			    <a href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2024-12-12.doc" id="hFootPP"></a>&nbsp;\
 			    <a href="/files/Polzovatelskoe_soglashenie_2024-12-12.docx" id="hFootUA"></a>\
+			    <a href="/files/Soglasie_na_poluchenie_reklamy.docx" id="hFootAA"></a>\
 			    <a href="javascript:alert(\'TODO\')" id="hFootHelp"></a>\
 			  </div>\
 			  <div class="cf"></div>\
