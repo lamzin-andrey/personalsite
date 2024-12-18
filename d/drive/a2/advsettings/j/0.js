@@ -122,6 +122,7 @@ function onSuccessGetAuthState(d) {
 		Rest._token = d.token;
 		if (d.auth) {
 			removeClass("dBtnWrap", "hidei");
+			addClass("dBtnWrap", "blocki");
 			e("bAgreeAdv").checked = !(d.adv == 0);
 		}
 		//getLink();

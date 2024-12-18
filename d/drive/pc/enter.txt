@@ -13,8 +13,7 @@ https://help.mail.ru/legal/terms/cloud/LA
   https://docs.ozon.ru/common/pravila-prodayoi-i-rekvizity/soglasie-na-reklamy/?country=RU
 
 
-И страница https://andryuxa.ru/d/drive/a2/advsettings/
-[х]«Хочу получать сообщения рекламного и информационного характера»
+И страница /d/drive/a2/advsettings/[х]«Хочу получать сообщения рекламного и информационного характера»
 
 Соответственно работа по возврату .adv становится чуть сложнее (надо or User.isAdvLock)
       

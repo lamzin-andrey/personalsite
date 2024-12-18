@@ -25,6 +25,9 @@ body.f100, html.f100 {
 .hidei {
 	display: none!important;
 }
+.blocki {
+	display: block!important;
+}
 .tc {
 	text-align:center;
 }
