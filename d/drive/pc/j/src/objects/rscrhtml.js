@@ -37,11 +37,15 @@ function regScrLayout() {
 					<div class="ma regchb">
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="agreeRE" >
-							<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2019-04-12.doc"><span id="hPolicyNameRE">Политикой конфендициальности</span></a></label>
+							<label for="agreeRE"><span id="hIAgreeRE">I agree with</span> <a target="_blank" href="/files/Polzovatelskoe_soglashenie_2024-12-12.docx"><span id="hPolicyNameRE">Пользовательским сог</span></a></label>
 						</div>
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="agreeCC" >
 							<label for="agreeCC"><span id="hIAgreeCC">I accept all cookies.</span> <a target="_blank" href="/d/drive/a2/cookie/"><span id="hCCLink">More info about cookies</span></a></label>
+						</div>
+						<div class="cbwrapper tl ml-2 arial">
+							<input type="checkbox" id="agreeAdvRE" >
+							<label for="agreeAdvRE"><span id="hIAgreeAdvRE">I accept all cookies.</span> <a target="_blank" href="/files/Soglasie_na_poluchenie_reklamy.docx"><span id="hAdvDocLinkRE">More info about cookies</span></a></label>
 						</div>
 						<div class="cbwrapper tl ml-2 arial">
 							<input type="checkbox" id="isSubscribedRE" >
@@ -191,6 +195,16 @@ function regScrLayout() {
 								<span id="hIAgreeCCRE">I agree with</span>
 								<a target="_blank" href="/d/drive/a2/cookie/">
 									<span id="hCCLinkRE"></span>
+								</a>
+							</label>
+						</div>
+						
+						<div class="cbwrapper tl ml-2 arial">
+							<input type="checkbox" id="register_form[agreeAdv]" >
+							<label for="register_form[agreeAdv]">
+								<span id="hIAgreeAdvRE">I agree with</span>
+								<a target="_blank" href="/files/Soglasie_na_poluchenie_reklamy.docx">
+									<span id="hAdvDocLinkRE"></span>
 								</a>
 							</label>
 						</div>

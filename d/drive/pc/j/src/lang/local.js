@@ -12,7 +12,11 @@ var langEn = {
 	// regScr
 	"bShowAuthScreen4" : "Enter with login and Password",
 	"hIAgreeRE" : "I agree with",
-	"hPolicyNameRE" : "the Privacy Policy",
+	"hPolicyNameRE" : "the User Agreement",
+	"hAdvDocLink": "to Receive Advertising",
+	"hIAgreeAdv": "I agree",
+	"hAdvDocLinkRE": "to Receive Advertising",
+	"hIAgreeAdvRE": "I agree",
 	"hIAgreeFromAuthorRE" : "I agree to receive email newsletters from the author of the site",
 	"bRegisterNowRE" : "Quick register",
 	"emailRE" : "Email",

@@ -27,6 +27,7 @@ function setListenersAuth() {
 	}
 	e('agreeRE').onchange = onChangeIAgree;
 	e('agreeCC').onchange = onChangeIAgreeCC;
+	e('agreeAdvRE').onchange = onChangeIAgreeAdv;
 	e('emailRE').oninput = hideBallons;
 	e('emailRE').onfocus = hideBallons;
 	e('_username').oninput = hideBallons;
@@ -47,6 +48,7 @@ function setListenersAuth() {
 	e('register_form[passwordRepeat]').onfocus = hideBallons;
 	e('register_form[agree]').onchange = onChangeIAgree;
 	e('register_form[agreeCC]').onchange = onChangeIAgreeCC;
+	e('register_form[agreeAdv]').onchange = onChangeIAgreeAdv;
 	e('reset_password_form[email]').onfocus = hideBallons;
 	e('reset_password_form[email]').oninput = hideBallons;
 }
@@ -79,6 +81,22 @@ function onChangeIAgreeCC(evt) {
 	}
 	if (!st) {
 		st = "You must accept all cookies for use this site";
+		showBalloonError(L(st), x, y, c);
+	} else {
+		hideBallons()
+	}
+}
+
+function onChangeIAgreeAdv(evt) {
+	var t = evt.currentTarget, st = t.checked, k = 'lbaloon', c = 'rbaloon',
+		y = 78, x = 204;
+	if (t.id == 'agreeAdvRE') {
+		c = k;
+		x = 163;
+		y = 14;
+	}
+	if (!st) {
+		st = "You must accept advertising on this site";
 		showBalloonError(L(st), x, y, c);
 	} else {
 		hideBallons()
@@ -361,7 +379,7 @@ function showRegisterError(data, responseText, info, xhr) {
 	}
 	
 	i = "register_form[" + firstFieldName + "]";
-	if (firstFieldName in In(["name", "surname", "email", "agree", "agreeCC"])) {
+	if (firstFieldName in In(["name", "surname", "email", "agree", "agreeCC", "agreeAdv"])) {
 		x = 204;
 	}
 	switch(firstFieldName) {
@@ -381,6 +399,9 @@ function showRegisterError(data, responseText, info, xhr) {
 			y = 78;
 		case "agreeCC":
 			y = 88;
+			break;
+		case "agreeAdv":
+			y = 168;
 			break;
 	}
 	
