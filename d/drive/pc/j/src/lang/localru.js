@@ -137,6 +137,7 @@ var langRu = {
 	"hIAgreeFromAuthorRE" : "Я согласен получать email рассылку от автора сайта",
 	"hAdvDocLinkRE": "Согласие на получение рекламы",
 	"You must accept advertising on this site": "Вы должны принять рекламу на этом сайте",
+	"hAAName": "Согласие на получение рекламы",
 	"hIAgreeAdvRE": "Я даю",
 	"bRegisterNowRE" : "Быстрый первый вход",
 	"Login" : "Логин",

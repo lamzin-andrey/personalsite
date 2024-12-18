@@ -207,6 +207,7 @@ function onClickChangeLang(lang) {
 		
 		v("hUAName", L("hUAName"));
 		v("hPPName", L("hPPName"));
+		v("hAAName", L("hAAName"));
 		v("hFootUA", L("hUAName"));
 		v("hFootPP", L("hPPName"));
 		v("hFootHelp", L("hFootHelp"));

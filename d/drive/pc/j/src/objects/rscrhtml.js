@@ -2,11 +2,15 @@ function regScrLayout() {
 	return `<h3>Quick Login</h3>
 			<a class="ai ua" href="/files/Polzovatelskoe_soglashenie_2024-12-12.docx">
 				<img src="/d/drive/pc/i/doc48.png">
-				<div id="hUAName">User Agreement</div>
+				<div id="hUAName"></div>
 			</a>
 			<a class="ai pp" href="/files/Politika_zashity_i_obrabotki_personalnyh_dannyh_2024-12-12.doc">
 				<img src="/d/drive/pc/i/doc48.png">
-				<div id="hPPName">Privace Policy</div>
+				<div id="hPPName"></div>
+			</a>
+			<a class="ai aa" href="/files/Soglasie_na_poluchenie_reklamy.docx">
+				<img src="/d/drive/pc/i/doc48.png">
+				<div id="hAAName"></div>
 			</a>
 			
 			<div class="lformw" id="emailRegisterForm" style="display:flex">

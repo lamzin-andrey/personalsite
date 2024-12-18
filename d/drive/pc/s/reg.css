@@ -309,10 +309,19 @@ img.dogmsg {
 	left: 148px;
 }
 
+
+.aa {
+	left: 10px;
+  top:148px;
+}
+
 .ai div {
 	max-width: 128px;
 	font-size: 12px;
 	margin-top: 8px;
 	text-align: center;
 	line-height: 19px;
+	background-color: rgba(47, 36, 6, 0.61);
+	border-radius: 7px;
+	padding-bottom: 5px;
 }
