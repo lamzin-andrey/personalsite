@@ -89,7 +89,7 @@ function onChangeIAgreeCC(evt) {
 
 function onChangeIAgreeAdv(evt) {
 	var t = evt.currentTarget, st = t.checked, k = 'lbaloon', c = 'rbaloon',
-		y = 78, x = 204;
+		y = 158, x = 163;
 	if (t.id == 'agreeAdvRE') {
 		c = k;
 		x = 163;
