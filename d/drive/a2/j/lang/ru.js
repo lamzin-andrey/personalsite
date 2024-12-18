@@ -122,5 +122,7 @@ window.langRu = {
 	'hUALink' : 'Пользовательским соглашением',
 	'hIAgreeAdv' : 'Я даю',
 	'hAdvDocLink' : 'Согласие на получение рекламы',
+	'hAdvDocLinkRE' : 'Согласие на получение рекламы',
+	'hIAgreeAdvRE' : 'Я даю',
 	'' : ''
 };

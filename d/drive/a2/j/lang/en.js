@@ -80,5 +80,7 @@ window.langEn = {
 	'hPKRF' : 'Privace Policy',
 	'agreeAdv' : 'I agree',
 	'hAdvDocLink' : 'to Receive Advertising',
+	'hAdvDocLinkRE' : 'to Receive Advertising',
+	'hIAgreeAdvRE' : 'I agree',
 	'' : ''
 };

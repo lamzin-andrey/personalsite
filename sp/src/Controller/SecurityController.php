@@ -513,9 +513,11 @@ class SecurityController extends AppBaseController
         $agreeCondition = $request->request->get('agreeRE');
         $agreeSubscribe = $request->request->get('isSubscribedRE');
         $acceptCookies = $request->request->get('agreeCC');
+        $acceptAdv = $request->request->get('agreeAdvRE');
         $agreeCondition = ($agreeCondition === 'true');
         $agreeSubscribe = ($agreeSubscribe === 'true');
         $acceptCookies  = ($acceptCookies === 'true');
+        $acceptAdv      = ($acceptAdv === 'true');
 
         if (!$agreeCondition) {
             $message = $appService->l(null, 'Consent to agree to terms of use', null, []);
@@ -526,6 +528,11 @@ class SecurityController extends AppBaseController
             $message = $appService->l(null, 'You must accept all cookies for use this site', null, []);
             return new JsonResponse(['sended' => false, 'msg' => $message]);
         }
+        if (!$acceptAdv) {
+            $message = $appService->l(null, 'You must accept advertising on this site', null, []);
+            return new JsonResponse(['sended' => false, 'msg' => $message]);
+        }
+
 
         $this->_oAppService = $appService;
         if ($this->isMaxUsersRegistred()) {
