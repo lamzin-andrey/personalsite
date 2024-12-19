@@ -105,6 +105,11 @@ class DrvFile
      */
     private bool $isNoErased = true;
 
+    /**
+     * @ORM\Column(name="dwn_cnt", type="integer", options={"comment"="Quantity downloads!", "default"=0})
+     */
+    private $dwnCnt = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -281,6 +286,18 @@ class DrvFile
     public function setModeratus(int $moderatus): self
     {
         $this->moderatus = $moderatus;
+
+        return $this;
+    }
+
+    public function getDwnCnt(): int
+    {
+        return $this->dwnCnt;
+    }
+
+    public function setDwnCnt(int $dwnCnt): self
+    {
+        $this->dwnCnt = $dwnCnt;
 
         return $this;
     }

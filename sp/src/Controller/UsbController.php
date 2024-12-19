@@ -245,6 +245,7 @@ class UsbController extends AppBaseController
        TranslatorInterface $t,
        Filesystem $filesystem,
        CsrfTokenManagerInterface $csrfTokenManager,
+       AppService $appService,
        FilePermissionService $filePermissionService
     )
     {
@@ -259,6 +260,8 @@ class UsbController extends AppBaseController
         $path = $filePathObject->path;
 
         if (filesize($path) < 40 * pow(1024, 2)) {
+            $fileEntity->setDwnCnt($fileEntity->getDwnCnt() + 1);
+            $appService->save($fileEntity);
             return $this->_json([
                 'link' => $this->backendRoot . '/drivedwnlsmall?i=' . $request->query->get('i')
             ]);
@@ -282,6 +285,8 @@ class UsbController extends AppBaseController
             ]);
         }
 
+        $fileEntity->setDwnCnt($fileEntity->getDwnCnt() + 1);
+        $appService->save($fileEntity);
         return $this->_json([
             'link' => str_replace($request->server->get('DOCUMENT_ROOT'), '', $symlink)
         ]);

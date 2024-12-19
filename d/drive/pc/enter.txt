@@ -30,16 +30,6 @@ https://help.mail.ru/legal/terms/cloud/LA
        Ерир.
       
       Стата. 
-       Хотим знать, какой у юзера ua.
-        ua
-         id, ua
-        ua_stat
-         user_id, screen, vwp, url, _date
-        (url считаем без qs и без хоста) 
-      Отправляем при запросе dast
-      
-      user_id - индекс
-      iip - индекс
       
       Хотим ещё считать кол-во скачиваний файлов.
        
