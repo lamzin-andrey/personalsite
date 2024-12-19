@@ -23,7 +23,7 @@ ORDER BY c DESC
 LIMIT 10;
 
 -- Most popular agents
-SELECT ua_id, ua, COUNT(DISTINCT user_id) AS c FROM `stat_ua_view` AS v
+SELECT ua_id, ua, SUBSTRING(ua, 50, 50) AS vrs, COUNT(DISTINCT user_id) AS c FROM `stat_ua_view` AS v
  INNER JOIN drv_ua AS s  
    ON s.id = v.ua_id
 
