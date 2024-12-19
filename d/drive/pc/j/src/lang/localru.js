@@ -48,6 +48,7 @@ var langRu = {
 	'Archive' : 'Архив',
 	'Copying' : 'Koпирование',
 	'Moving' : 'Перемещение',
+	'Uploading' : 'Выгрузка',
 	"Unable paste files in root. Select a catalog." : "Нельзя вставить файлы в корень. Выберите каталог.",
 	'Web page' : 'Web страница',
 	'GB' : 'ГБ',
