@@ -21,6 +21,7 @@ use App\Service\BitReader;
 use App\Service\PayService;
 use App\Service\FileUploaderService;
 use App\Service\UserService;
+use App\Stat\Service\StatService;
 use App\WebUSB\Service\FilePermissionService;
 use App\WebUSB\Service\WusbUploadService;
 use Doctrine\Common\Collections\Criteria;
@@ -71,6 +72,7 @@ class UsbController extends AppBaseController
 	public function driveCheckAuthStateAction(Request $oRequest,
                                               TranslatorInterface $t,
                                               AppService $oAppService,
+                                              StatService $statService,
                                               CsrfTokenManagerInterface $csrfTokenManager)
 	{
         $adv = 0; //1 adv self, 2 VK adv, 0 off
@@ -117,6 +119,9 @@ class UsbController extends AppBaseController
                     'f' => 0 // TODO days to date close project
                 ];
             }
+
+            $statService->write($user);
+
 			return $this->_json($data);
 		}
 	}

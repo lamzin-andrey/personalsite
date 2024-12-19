@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method DrvBookmark|null find($id, $lockMode = null, $lockVersion = null)

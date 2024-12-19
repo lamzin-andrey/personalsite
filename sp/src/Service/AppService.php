@@ -463,9 +463,10 @@ class AppService
         */
         $conn = $this->oContainer->get("doctrine")->getManager()->getConnection();
         $lowerSql = strtolower($sql);
-        if (strpos("insert", $sql) !== false || strpos("update", $sql) !== false) {
+        if (strpos($lowerSql, "insert") !== false || strpos($lowerSql, "update") !== false) {
             $numRows = $conn->executeUpdate($sql, $parameters, $types);
-            return $conn->lastInsertId();
+            $lid =  $conn->lastInsertId();
+            return $lid;
         }
 
         $rows = $conn->executeQuery($sql, $parameters, $types)->fetchAll(FetchMode::ASSOCIATIVE);
