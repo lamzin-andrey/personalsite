@@ -140,12 +140,26 @@ ContextMenuContent.prototype.getCatalogMenuHtml = function() {
 					<div class="contextMenuItemText">' + L("Open in new tab") + '</div>\
 					<div class="cf"></div>\
 				</div>\
+				<div class="contextMenuItem" onclick="app.tab.onClickNewFolder()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/folder_new16.png">\
+					</div>\
+					<div class="contextMenuItemText">' + L("Create catalog") + '</div>\
+					<div class="cf"></div>\
+				</div>\
 				\
 				<div class="contextMenuItem" onclick="app.tab.onClickAddBookmark()">\
 					<div class="contextMenuItemIcon">\
 						<img src="./i/cm/folderStar16.png">\
 					</div>\
 					<div class="contextMenuItemText">' + L("Add bookmark") + '</div>\
+					<div class="cf"></div>\
+				</div>\
+				<div class="contextMenuItem" onclick="app.tab.onClickCut()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/cut16.png">\
+					</div>\
+					<div class="contextMenuItemText">'+ L('Cut') + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				<div class="contextMenuItem" onclick="app.tab.onClickPaste()">\
@@ -213,6 +227,13 @@ ContextMenuContent.prototype.getDefaultFileCm = function(i) {
 						<img src="./i/cm/web16.png">\
 					</div>\
 					<div class="contextMenuItemText">'+ L('Sharing') + '</div>\
+					<div class="cf"></div>\
+				</div>\
+				<div class="contextMenuItem" onclick="app.tab.onClickNewFolder()">\
+					<div class="contextMenuItemIcon">\
+						<img src="./i/cm/folder_new16.png">\
+					</div>\
+					<div class="contextMenuItemText">' + L("Create catalog") + '</div>\
 					<div class="cf"></div>\
 				</div>\
 				<div class="contextMenuItem" onclick="app.tab.onClickCut()">\
