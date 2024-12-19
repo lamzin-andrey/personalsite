@@ -134,10 +134,22 @@ function setLang(lng, displayLng) {
 		e('hWaitGetLink').innerHTML = q;
 	}
 }
+function st() {
+	var v = getViewport();
+	return "h=" + (dechex(screen.width) + '-'
+	     + dechex(screen.height) + '-'
+	     + dechex(v.w) + '-'
+	     + dechex(v.h))
+	     + "&u=" + HttpQueryString.requestUri();
+}
+
+function dechex(n) {
+	return Number(n).toString(16);
+}
  
 function getAuthState() {
 	Rest._token = '';
-	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json', onFailGetAuthState);
+	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json?' + st(), onFailGetAuthState);
 }
 
 function onSuccessGetAuthState(d) {
