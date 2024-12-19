@@ -43,7 +43,15 @@ function initApp() {
 
 function getAuthState() {
 	Rest._token = '';
-	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json', onFailGetAuthState);
+	Rest._get(onSuccessGetAuthState, '/sp/public/dast.json?' + st(), onFailGetAuthState);
+}
+function st() {
+	var v = getViewport();
+	return "h=" + (dechex(screen.width) + '-'
+	     + dechex(screen.height) + '-'
+	     + dechex(v.w) + '-'
+	     + dechex(v.h))
+	     + "&u=" + HttpQueryString.requestUri();
 }
 function onSuccessGetAuthState(data) {
 	try {
