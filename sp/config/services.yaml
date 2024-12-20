@@ -40,6 +40,9 @@ parameters:
     app.wusb_catalog_root: "%env(resolve:WUSB_CATALOG_ROOT)%"
     app.wusb_max_space: "%env(resolve:WUSB_MAX_SPACE)%"
 
+    app.wd_username: "%env(resolve:WUSB_WD_USR)%"
+    app.wd_password: "%env(resolve:WUSB_WD_PWD)%"
+
 services:
     # default configuration for services in *this* file
     _defaults:

@@ -11,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
     indexes={
         @ORM\Index(name="user_id", columns={"user_id"}),
         @ORM\Index(name="catalog_id", columns={"catalog_id"}),
-        @ORM\Index(name="moderatus", columns={"moderatus"})
+        @ORM\Index(name="moderatus", columns={"moderatus"}),
+        @ORM\Index(name="wd_public", columns={"wd_public"})
     }
   )
  */
@@ -109,6 +110,23 @@ class DrvFile
      * @ORM\Column(name="dwn_cnt", type="integer", options={"comment"="Quantity downloads!", "default"=0})
      */
     private $dwnCnt = 0;
+
+    /**
+     *
+     * @ORM\Column(name="wd_path", type="string", length=255, nullable=false, options={"comment"="Вечный Путь на диске web_dav.", "default"=""})
+     */
+    private string $wdPath = '';
+
+    /**
+     *
+     * @ORM\Column(name="wd_public", type="smallint", nullable=false, options={"comment"="1 если успешный public, 2 - если не найден на локале", "default"="0"})
+     */
+    private int $wdPublic = 0;
+
+    /**
+     * @ORM\Column(name="wd_link", type="string", length=255, nullable=false, options={"comment"="Записываем общую ссылку на файл", "default"=""})
+     */
+    private string $wdLink = '';
 
     public function getId(): ?int
     {
@@ -298,6 +316,42 @@ class DrvFile
     public function setDwnCnt(int $dwnCnt): self
     {
         $this->dwnCnt = $dwnCnt;
+
+        return $this;
+    }
+
+    public function getWdPublic(): int
+    {
+        return $this->wdPublic;
+    }
+
+    public function setWdPublic(int $wdPublic): self
+    {
+        $this->wdPublic = $wdPublic;
+
+        return $this;
+    }
+
+    public function getWdPath(): string
+    {
+        return $this->wdPath;
+    }
+
+    public function setWdPath(string $wdPath): self
+    {
+        $this->wdPath = $wdPath;
+
+        return $this;
+    }
+
+    public function getWdLink(): string
+    {
+        return $this->wdLink;
+    }
+
+    public function setWdLink(string $wdLink): self
+    {
+        $this->wdLink = $wdLink;
 
         return $this;
     }

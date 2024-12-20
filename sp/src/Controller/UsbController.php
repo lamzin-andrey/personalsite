@@ -250,9 +250,20 @@ class UsbController extends AppBaseController
     )
     {
         $data = [];
+        /**
+         * @var ?DrvFile $fileEntity
+        */
         $fileEntity = null;
         if (!$this->hasAccessToFile($request, $csrfTokenManager, $data, $t, $fileEntity, $filePermissionService)) {
             return $this->_json($data);
+        }
+
+        if ($fileEntity->getWdPublic() == 1) {
+            $fileEntity->setDwnCnt($fileEntity->getDwnCnt() + 1);
+            $appService->save($fileEntity);
+            return $this->_json([
+                'link' => $fileEntity->getWdLink()
+            ]);
         }
 
         $domain = 'wusb_filesystem';
