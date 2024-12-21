@@ -22,6 +22,7 @@ use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Landlib\SimpleMail;
+use Transliterator;
 
 class AppService
 {
@@ -727,7 +728,18 @@ class AppService
 
     public function getHash2(string $additionalParams = '', string $f = 'md5') : string
     {
-        return $f( uniqid(microtime(false) . $additionalParams, true) );
+        return $f( uniqid(microtime(false) . $additionalParams, true)  );
+    }
+
+
+    public function translite(string $s): string
+    {
+        $transliterator = Transliterator::create('Any-Latin');
+        $transliteratorToASCII = Transliterator::create('Latin-ASCII');
+        $safeFilename = $transliteratorToASCII->transliterate($transliterator->transliterate($s));
+        $safeFilename = preg_replace("#\s#", '_', $safeFilename);
+
+        return $safeFilename;
     }
 
 	public static function getHumanFilesize(int $n, int $percision = 3, int $maxOrder = 3, bool $pack = true) : string
