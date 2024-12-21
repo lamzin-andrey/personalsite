@@ -63,7 +63,7 @@ class MoveWDCommand extends Command
                             unlink($po->path);
                         }
                     }
-                } {
+                }else {
                     $ent->setWdPublic(2);
                     $this->appService->save($ent);
                 }
@@ -125,7 +125,6 @@ class MoveWDCommand extends Command
         if (file_exists($fileB)) {
             $s = file_get_contents($fileB);
             if ($s !== $ctrl) {
-                echo "No ctrl!";
                 return false;
             }
             $this->webDav->delete($wdPath);
@@ -135,6 +134,8 @@ class MoveWDCommand extends Command
         if (!$state) {
             return false;
         }
+
+        sleep(120);
 
         $dirname = pathinfo($wdPath)['dirname'];
         $xml = $this->webDav->listFolder($dirname, true);

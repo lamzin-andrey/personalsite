@@ -146,9 +146,11 @@ class Upload extends BaseApp {
 				$report[] = __('Не удалось переместить загруженный файл');
 				return false;
 			}
-			$this->_unzip($zip);
-			$path .= '/tmp';
+			return true;
+			/*$this->_unzip($zip);
+			$path .= '/tmp';*/
 		}
+		return false;
 		if (!file_exists($path . '/index.html')) {
 			$report[] = __('В корне архива не найден файл index.html');
 			return false;
