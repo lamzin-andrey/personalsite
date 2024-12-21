@@ -1,8 +1,9 @@
 <?php
-// php bin/console app::mwd_dwd
+// php bin/console app:mwd_dwd
 
 namespace App\Command;
 
+use App\Entity\Ausers;
 use App\Entity\DrvFile;
 use App\Entity\DrvFilePermissions;
 use App\Service\AppService;
@@ -21,6 +22,7 @@ class MoveWDCommand extends Command
     private AppService $appService;
     private YandexWebDav $webDav;
     private WusbUploadService $wusbUploadService;
+    private string $lastWdError = '';
 
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:mwd_dwd';
@@ -37,39 +39,65 @@ class MoveWDCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output):int
     {
+        $procFile = sys_get_temp_dir() . '/mvwdup.pid';
+        if (file_exists($procFile)) {
+            $processId = intval(file_get_contents($procFile));
+            if (posix_kill($processId, 0)) {
+                echo "Proc is run, exit\n";
+                return 0;
+            } else {
+                unlink($procFile);
+            }
+        }
+        $processId = posix_getpid();
+        file_put_contents($procFile, $processId);
+
+
         $this->webDav->setAuthParams(
             $this->appService->getParameter('app.wd_username'),
             $this->appService->getParameter('app.wd_password')
         );
-        while (true) {
+        //while (true) {
             $list = $this->getList();
             /**
              * @var DrvFile $ent
             */
             foreach ($list as $ent) {
+
+                if ($this->isAdminAppFile($ent)) {
+                    $ent->setWdPublic(5);
+                    $this->appService->save($ent);
+                    continue;
+                }
+
                 $po = $this->wusbUploadService->getFilePathObject($ent, $this->appService, null);
                 if (!$po->error && file_exists($po->path)) {
                     $wdPath = static::WD_APP_ROOT_DIR . '/' . $po->userPath;
                     if ($this->createFolder($wdPath)) {
                         $link = '';
+                        //echo "Start upload {$po->path} to '$wdPath' \n";
                         if ($this->upload($po->path, $wdPath)) {
-                            $link = $this->webDav->publish($wdPath);
-                        }
-                        if ($link) {
                             $ent->setWdPath($wdPath);
-                            $ent->setWdLink($link);
-                            $ent->setWdPublic(1);
+                            $ent->setWdPublic(3);
+                            $this->lastWdError = '';
                             $this->appService->save($ent);
-                            unlink($po->path);
+                        } else if ($this->lastWdError){
+                            $ent->setWdError(date('Y-m-d H:i:s') . ' ' . $this->lastWdError);
+                            $this->lastWdError = '';
+                            $this->appService->save($ent);
                         }
+                    } else if ($this->lastWdError) {
+                        $ent->setWdError(date('Y-m-d H:i:s') . ' ' . $this->lastWdError);
+                        $this->lastWdError = '';
+                        $this->appService->save($ent);
                     }
                 }else {
                     $ent->setWdPublic(2);
                     $this->appService->save($ent);
                 }
             }
-            sleep(5);
-        }
+            //sleep(5);
+        //}
 
         return 0;
     }
@@ -100,7 +128,11 @@ class MoveWDCommand extends Command
             $b[] = $s;
             $s = trim($this->webDav->createFolder($cs));
         }
-        return (strlen($s) === 0);
+        $sz  = strlen($s);
+        if ($sz > 0) {
+            $this->lastWdError = $s;
+        }
+        return ($sz === 0);
     }
 
     private function upload(string $path, string $wdPath): bool
@@ -125,6 +157,7 @@ class MoveWDCommand extends Command
         if (file_exists($fileB)) {
             $s = file_get_contents($fileB);
             if ($s !== $ctrl) {
+                $this->lastWdError = 'Local: downloaded file != uploaded file';
                 return false;
             }
             $this->webDav->delete($wdPath);
@@ -135,17 +168,36 @@ class MoveWDCommand extends Command
             return false;
         }
 
-        sleep(120);
-
-        $dirname = pathinfo($wdPath)['dirname'];
-        $xml = $this->webDav->listFolder($dirname, true);
-
-        return (strpos($xml, $wdPath) !== false);
+        return true;
     }
 
     private function uploadSimple(string $path, string $wdPath): bool
     {
         $s = $this->webDav->upload($path, $wdPath);
-        return (strlen($s) === 0);
+        $sz = strlen($s);
+        if ($sz > 0) {
+            $this->lastWdError = $s;
+        }
+        return ($sz === 0);
+    }
+
+    private function isAdminAppFile(DrvFile $ent):bool
+    {
+        $user = $this->appService->find(Ausers::class, $ent->getUserId());
+        if (!$user) {
+            return false;
+        }
+        if ($user->getRole() != Ausers::ROLE_ADMIN) {
+            return false;
+        }
+        $allCatalogFiles = $this->appService->findBy(DrvFile::class, [
+            'catalogId' => $ent->getCatalogEntity()->getId()
+        ]);
+        foreach ($allCatalogFiles as $ent) {
+            if ($ent->getName() == 'config.json') {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -430,9 +430,13 @@ window.fileListItemCmenu = {
 			function(data, responseText, info, xhr){o.onFailGetDLink(data, responseText, info, xhr)});
 	},
 	
-	onSuccessGetDLink:function(data){
-		if (this.onFailGetDLink(data)) {
-			window.location.href = data.link;
+	onSuccessGetDLink:function(d){
+		if (this.onFailGetDLink(d)) {
+			if (~d.link.indexOf("https://yadi.sk")) {
+				window.open(d.link, "_blank");
+				return;
+			}
+			window.location.href = d.link;
 		}
 	},
 	

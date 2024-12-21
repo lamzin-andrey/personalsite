@@ -374,9 +374,13 @@ Tab.prototype.onClickDownload = function() {
 	Rest2._get(o.onSuccessGetDLink, url, o.onFailGetDLink, o);
 }
 
-Tab.prototype.onSuccessGetDLink = function(data) {
-	if (this.onFailGetDLink(data)) {
-		window.location.href = data.link;
+Tab.prototype.onSuccessGetDLink = function(d) {
+	if (this.onFailGetDLink(d)) {
+		if (~d.link.indexOf("https://yadi.sk")) {
+			window.open(d.link, "_blank");
+			return;
+		}
+		window.location.href = d.link;
 	}
 }
 

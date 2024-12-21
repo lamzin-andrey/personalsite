@@ -1844,6 +1844,9 @@ class UsbController extends AppBaseController
                 continue;
             }
             if ($this->itIsLegalRm($fileEntity)) {
+                if ($fileEntity->getWdPublic() == 1) {
+                    $fileEntity->setIsNoErased(false);
+                }
                 $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
                 if (!$filePathObject->error) {
                     $success = false;

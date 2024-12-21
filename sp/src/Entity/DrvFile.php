@@ -119,9 +119,15 @@ class DrvFile
 
     /**
      *
-     * @ORM\Column(name="wd_public", type="smallint", nullable=false, options={"comment"="1 если успешный public, 2 - если не найден на локале", "default"="0"})
+     * @ORM\Column(name="wd_public", type="smallint", nullable=false, options={"comment"="1 если успешный public, 2 - если не найден на локале, 3 - загружен, но не опубликован, 4 - удален в webDav спустя пол-года, 5 - не надо двигать на диск, файл админский и является частью приложения", "default"="0"})
      */
     private int $wdPublic = 0;
+
+    /**
+     *
+     * @ORM\Column(name="wd_error", type="string", length=8192, nullable=false, options={"comment"="Сообщение об ошибка от webdav сервера", "default"=""})
+     */
+    private string $wdError = '';
 
     /**
      * @ORM\Column(name="wd_link", type="string", length=255, nullable=false, options={"comment"="Записываем общую ссылку на файл", "default"=""})
@@ -352,6 +358,18 @@ class DrvFile
     public function setWdLink(string $wdLink): self
     {
         $this->wdLink = $wdLink;
+
+        return $this;
+    }
+
+    public function getWdError(): string
+    {
+        return $this->wdError;
+    }
+
+    public function setWdError(string $wdError): self
+    {
+        $this->wdError = $wdError;
 
         return $this;
     }
