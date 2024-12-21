@@ -34,6 +34,8 @@ class Upload extends BaseApp {
 		if ($uid && $apid) {
 			$path = $_SERVER['DOCUMENT_ROOT'] . ROOT . 'u/ant/' . $apid;
 		}else {
+			/*var_dump($path);
+			die;*/
 			mkdir($path, 0777);
 		}
 		$this->_clearTmpDir($path);
@@ -146,12 +148,23 @@ class Upload extends BaseApp {
 				$report[] = __('Не удалось переместить загруженный файл');
 				return false;
 			}
+			
+			$h = fopen($zip, 'r');
+			$firstByte = fgetc($h);
+			$secondByte = fgetc($h);
+			fclose($h);
+			if (ord($firstByte) != 80 && ord($secondByte) != 75) {
+				$report[] = __('Файл не является zip архивом');
+				return false;
+			}
+			
 			return true;
 			/*$this->_unzip($zip);
 			$path .= '/tmp';*/
 		}
 		return false;
-		if (!file_exists($path . '/index.html')) {
+		
+		/*if (!file_exists($path . '/index.html')) {
 			$report[] = __('В корне архива не найден файл index.html');
 			return false;
 		}
@@ -190,7 +203,7 @@ class Upload extends BaseApp {
 		if (sz($report)) {
 			return false;
 		}
-		return true;
+		return true;*/
 	}
 	/**
 	 * @description Удалить все к чертям
