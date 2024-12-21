@@ -29,10 +29,6 @@ https://help.mail.ru/legal/terms/cloud/LA
          https://ads.vk.com/help/articles/moderation
        Ерир.
        
-      	
-     
-     Написать в соглашении max_upload_file_size
-     Написать, что Пользователь понимает, что файлы лежат на Фндекс дитске в открытом доступе.
      
      webdav - прокачать ссылку хешом.
       

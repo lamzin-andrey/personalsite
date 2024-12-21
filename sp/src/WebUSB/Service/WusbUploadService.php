@@ -100,7 +100,8 @@ class WusbUploadService {
         $result->ext = $ext = $this->getExtWithDot($fileEntity->getName());
         $root = __DIR__ . '/../../../..';
         $result->path = $root . $relativePath . '/' . $userPath . '/' . $catalogIdSubpath . $fileEntity->getId() .  $ext;
-        $result->userPath = $userPath . '/' . $catalogIdSubpath . $fileEntity->getName();
+        $randHash = $appService->getHash2(date('Y-m-d H:i:s'), 'sha1');
+        $result->userPath = $userPath . '/' . $catalogIdSubpath . $randHash . '/' . $fileEntity->getName();
         $relativePathForSymlink = str_replace('drive/d', 'drive/t', $relativePath);
         $symlink = $root . $relativePathForSymlink . '/' . $userPath . '/' . $catalogIdSubpath;
         $symlink = preg_replace("#/$#", '', $symlink);

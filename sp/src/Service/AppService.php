@@ -725,6 +725,11 @@ class AppService
 	    return $f($request->server->get('HTTP_USER_AGENT') . '-' . microtime(false) . $additionalParams);
 	}
 
+    public function getHash2(string $additionalParams = '', string $f = 'md5') : string
+    {
+        return $f( uniqid(microtime(false) . $additionalParams, true) );
+    }
+
 	public static function getHumanFilesize(int $n, int $percision = 3, int $maxOrder = 3, bool $pack = true) : string
     {
         return self::getHumanValue($n,
