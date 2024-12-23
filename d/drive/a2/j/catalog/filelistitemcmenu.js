@@ -35,7 +35,7 @@ window.fileListItemCmenu = {
 	buildAndShowMenu:function(id){
 		var isDir = id.indexOf('fi') != 0,
 			item,
-			menuItems = this.fileUnknownMenuItems;
+			menuItems = this.fileUnknownMenuItems, o = this;
 		this.cmMenuOpenItemId = id.replace('fi', '').replace('f', '');
 		this.cmMenuOpenItemType = 'c';
 		if (!isDir) {
@@ -61,7 +61,16 @@ window.fileListItemCmenu = {
 		this.clear();
 		this.render(menuItems, item);
 		
+		o = this;
+		e("bGotoCatFromDwnlScr").onclick = function(){
+			o.onClickCloseWdLinkScreen();
+		}
+		
 		showScreen('hCatItemMenu');
+	},
+	
+	onClickCloseWdLinkScreen:function() {
+		showScreen('hCatalogScreen');
 	},
 	
 	findItem:function() {
@@ -431,14 +440,18 @@ window.fileListItemCmenu = {
 	},
 	
 	onSuccessGetDLink:function(d){
-		var isA2;
+		var isA2, s;
 		if (this.onFailGetDLink(d)) {
 			isA2 = ~window.navigator.userAgent.indexOf("android 2.");
 			if (~d.link.indexOf("https://yadi.sk") && !isA2) {
 				window.open(d.link, "_blank");
 				return;
 			} else if (isA2) {
-				window.location.href = d.link.replace("https://", "http://");
+				s = d.link.replace("https://", "http://");
+				attr("wdlnk", "href", s);
+				v("wdlnk", s);
+				showScreen("hDwnldWDScreen");
+				//window.location.href = d.link.replace("https://", "http://");
 				return;
 			}
 			window.location.href = d.link;

@@ -124,5 +124,9 @@ window.langRu = {
 	'hAdvDocLink' : 'Согласие на получение рекламы',
 	'hAdvDocLinkRE' : 'Согласие на получение рекламы',
 	'hIAgreeAdvRE' : 'Я даю',
+	
+	'bGotoCatFromDwnlScr' : 'Закрыть',
+	'hWdInfo' : 'Ссылка на файл',
+	
 	'' : ''
 };

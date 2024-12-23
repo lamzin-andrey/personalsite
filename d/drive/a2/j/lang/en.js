@@ -82,5 +82,9 @@ window.langEn = {
 	'hAdvDocLink' : 'to Receive Advertising',
 	'hAdvDocLinkRE' : 'to Receive Advertising',
 	'hIAgreeAdvRE' : 'I agree',
+	
+	'bGotoCatFromDwnlScr' : 'Close',
+	'hWdInfo' : 'Download link',
+	
 	'' : ''
 };
