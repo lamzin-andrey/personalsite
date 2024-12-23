@@ -25,7 +25,7 @@ class DrvFileRepository extends ServiceEntityRepository
      * @param $
      * @return
     */
-    public function removeById(int $fileId, int $userId) : void
+    public function removeById(int $fileId, int $userId, ?int $wdPublic = null) : void
     {
         if (!$fileId || !$userId) {
 
@@ -33,6 +33,10 @@ class DrvFileRepository extends ServiceEntityRepository
         }
         $em = $this->getEntityManager();
         $sqlQuery = 'UPDATE `drv_file` SET is_deleted = 1 WHERE id  = ' . $fileId . ' AND user_id = ' . $userId;
+        if ($wdPublic !== null ) {
+            $sqlQuery = 'UPDATE `drv_file` SET is_deleted = 1, wd_public = ' . $wdPublic . ' 
+                        WHERE id  = ' . $fileId . ' AND user_id = ' . $userId;
+        }
         $statement = $em->getConnection()->prepare($sqlQuery);
         $statement->execute();
         return;
@@ -46,7 +50,8 @@ class DrvFileRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $sqlQuery = 'UPDATE `drv_file` 
                         SET is_deleted = 1,
-                            is_no_erased = 0
+                            is_no_erased = 0,
+                            wd_public = 6
                         WHERE id  = ' . $fileId . ' AND user_id = ' . $userId;
         $statement = $em->getConnection()->prepare($sqlQuery);
         $statement->execute();

@@ -47,7 +47,7 @@ use StdClass;
 class UsbController extends AppBaseController
 {
 
-    private const VERSION = '52';
+    private const VERSION = '53';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -535,6 +535,10 @@ class UsbController extends AppBaseController
                 ]);
             }
             if ($this->itIsLegalRm($fileEntity)) {
+                if ($fileEntity->getWdPublic() == 1) {
+                    $fileEntity->setIsDeleted(true);
+                    $fileEntity->setWdPublic(6);
+                }
                 $pathObject = $this->getFilePathObject($fileEntity, $this->getUser(), $request, $filesystem);
                 $this->removeSymlink($filesystem, $pathObject->symlink);
                 if (!empty($pathObject->path) && file_exists($pathObject->path)) {
@@ -542,7 +546,7 @@ class UsbController extends AppBaseController
                 }
                 $fileRepository->setIsDeletedById($fileId, intval($this->getUser()->getId()));
             } else {
-                $fileRepository->removeById($fileId, intval($this->getUser()->getId()));
+                $fileRepository->removeById($fileId, intval($this->getUser()->getId()), 6);
             }
         }
 
@@ -1498,6 +1502,7 @@ class UsbController extends AppBaseController
 
 
         $response = $this->removePhisFiles($fileEntities, $user, $request, $filesystem, $t);
+        $oAppService->save();
         if ($response) {
             return $this->_json($response);
         }
@@ -1845,7 +1850,9 @@ class UsbController extends AppBaseController
             }
             if ($this->itIsLegalRm($fileEntity)) {
                 if ($fileEntity->getWdPublic() == 1) {
+                    $fileEntity->setIsDeleted(true);
                     $fileEntity->setIsNoErased(false);
+                    $fileEntity->setWdPublic(6);
                 }
                 $filePathObject = $this->getFilePathObject($fileEntity, $user, $request, $filesystem);
                 if (!$filePathObject->error) {
@@ -1853,7 +1860,10 @@ class UsbController extends AppBaseController
                     $error = '';
 
                     try {
-                        $this->removeSymlink($filesystem, $filePathObject->symlink);
+                        if (file_exists($filePathObject->symlink)) {
+                            $this->removeSymlink($filesystem, $filePathObject->symlink);
+                        }
+
                         if (file_exists($filePathObject->path)) {
                             $filesystem->remove($filePathObject->path);
                         }

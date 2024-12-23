@@ -44,6 +44,7 @@ function onSuccessGetAuthState(data) {
 	// no auth
 	e('_csrf_token').value = data.token;
 	Rest._token = data.token;
+	Rest._post({}, DevNull, br + '/driveers.json', DevNull);
 	if (!data.auth) {
 		clearInterval(window.bootSe2d.mainInterval);
 		clearInterval(window.bootSe2d.app.logoRtIval);
