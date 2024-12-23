@@ -442,7 +442,7 @@ window.fileListItemCmenu = {
 	onSuccessGetDLink:function(d){
 		var isA2, s;
 		if (this.onFailGetDLink(d)) {
-			isA2 = ~window.navigator.userAgent.indexOf("android 2.");
+			isA2 = ~window.navigator.userAgent.toLowerCase().indexOf("android 2.");
 			if (~d.link.indexOf("https://yadi.sk") && !isA2) {
 				window.open(d.link, "_blank");
 				return;
