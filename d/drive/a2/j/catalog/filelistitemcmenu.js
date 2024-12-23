@@ -431,9 +431,14 @@ window.fileListItemCmenu = {
 	},
 	
 	onSuccessGetDLink:function(d){
+		var isA2;
 		if (this.onFailGetDLink(d)) {
-			if (~d.link.indexOf("https://yadi.sk") && !~window.navigator.userAgent.indexOf("android 2.")) {
+			isA2 = ~window.navigator.userAgent.indexOf("android 2.");
+			if (~d.link.indexOf("https://yadi.sk") && !isA2) {
 				window.open(d.link, "_blank");
+				return;
+			} else if (isA2) {
+				window.location.href = d.link.replace("https://", "http://");
 				return;
 			}
 			window.location.href = d.link;
