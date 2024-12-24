@@ -39,7 +39,6 @@ class UnpublicWDCommand extends Command
         if (file_exists($procFile)) {
             $processId = intval(file_get_contents($procFile));
             if (posix_kill($processId, 0)) {
-                echo "Proc is run, exit\n";
                 return 0;
             } else {
                 unlink($procFile);
@@ -59,6 +58,7 @@ class UnpublicWDCommand extends Command
              * @var DrvFile $ent
             */
             foreach ($list as $ent) {
+                // echo $ent->getName() . "\n";
                 $wdPath = trim($ent->getWdPath());
                 if (!$wdPath) {
                     $ent->setWdPublic(0);
@@ -66,8 +66,11 @@ class UnpublicWDCommand extends Command
                     continue;
                 }
                 $s = trim($this->webDav->unpublish($wdPath));
-                if (strlen($s) == 0) {
+                if ($this->isOk($s)) {
                     $ent->setWdPublic(1);
+                    if ($s) {
+                        $ent->setWdError($s);
+                    }
                     $this->appService->save($ent);
                 } else {
                     $ent->setWdError($s);
@@ -89,6 +92,11 @@ class UnpublicWDCommand extends Command
 
         // 851 - change to accessible local file
         //return [$this->appService->find(DrvFile::class, 851)];
+    }
+
+    private function isOk(string $s): bool
+    {
+        return strlen($s) == 0 || strpos($s, '200 OK') !== false;
     }
 
 }

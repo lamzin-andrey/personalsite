@@ -47,7 +47,7 @@ use StdClass;
 class UsbController extends AppBaseController
 {
 
-    private const VERSION = '56';
+    private const VERSION = '57';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -2318,6 +2318,7 @@ class UsbController extends AppBaseController
             $ent->setModeratus(3);
             $ent->setIsDeleted(true);
             $ent->setIsNoErased(true);
+            $ent->setWdPublic(6);
             $appService->save($ent);
 
             $userId = $ent->getUserId();
@@ -2330,6 +2331,10 @@ class UsbController extends AppBaseController
                 ++$cnt;
                 $user->setBanCount($cnt);
                 if ($cnt >= 3) {
+                    $nR = 0;
+                    $appService->query("UPDATE drv_file SET is_deleted = 1, wd_public = 6 WHERE user_id = :userId", $nR, [
+                        'userId' => $user->getId()
+                    ]);
                     $bannedUser = new BanUsers();
                     $methods = get_class_methods($user);
                     foreach($methods as $method) {

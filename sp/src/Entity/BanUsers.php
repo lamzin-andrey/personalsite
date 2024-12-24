@@ -695,4 +695,21 @@ class BanUsers implements UserInterface
 
         return $this;
     }
+
+    public function setAdvAgree(int $agreeFlag)
+    {
+        $n = intval($this->getBSettings());
+        $currentValue = BitReader::get($n, 3);
+        if ($currentValue != $agreeFlag) {
+            $n = $n ^ 4;
+            $this->setBSettings($n);
+        }
+    }
+
+    public function getAdvAgree(): int
+    {
+        $n = intval($this->getBSettings());
+        $r =  BitReader::get($n, 3);
+        return $r;
+    }
 }

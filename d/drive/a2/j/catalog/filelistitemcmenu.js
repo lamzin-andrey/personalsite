@@ -446,7 +446,7 @@ window.fileListItemCmenu = {
 			if (~d.link.indexOf("https://yadi.sk") && !isA2) {
 				window.open(d.link, "_blank");
 				return;
-			} else if (isA2) {
+			} else if (~d.link.indexOf("https://yadi.sk") && isA2) {
 				s = d.link.replace("https://", "http://");
 				attr("wdlnk", "href", s);
 				v("wdlnk", s);
