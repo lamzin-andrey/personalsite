@@ -47,7 +47,7 @@ use StdClass;
 class UsbController extends AppBaseController
 {
 
-    private const VERSION = '57';
+    private const VERSION = '58';
 
     /** @property string $backendRoot subdirectory with root symfony project */
     private  $backendRoot = '/sp/public';
@@ -809,6 +809,7 @@ class UsbController extends AppBaseController
                 'ut' => AppService::sqzDatetime($drvCatalog->getUpdatedTime())
             ];
         }
+        $this->_oAppService = $oAppService;
         return $this->mixResponse($request, [
             'status' => 'ok',
             'path' => $relativePath . '/' . $userPath . '/' . $drvCatalog->getId() . '/' . $targetName,

@@ -35,7 +35,7 @@ window.fileListItemCmenu = {
 	buildAndShowMenu:function(id){
 		var isDir = id.indexOf('fi') != 0,
 			item,
-			menuItems = this.fileUnknownMenuItems, o = this;
+			menuItems = this.fileUnknownMenuItems, o = this, b;
 		this.cmMenuOpenItemId = id.replace('fi', '').replace('f', '');
 		this.cmMenuOpenItemType = 'c';
 		if (!isDir) {
@@ -62,8 +62,11 @@ window.fileListItemCmenu = {
 		this.render(menuItems, item);
 		
 		o = this;
-		e("bGotoCatFromDwnlScr").onclick = function(){
-			o.onClickCloseWdLinkScreen();
+		b = e("bGotoCatFromDwnlScr");
+		if (b) {
+			b.onclick = function(){
+				o.onClickCloseWdLinkScreen();
+			}
 		}
 		
 		showScreen('hCatItemMenu');
@@ -446,7 +449,7 @@ window.fileListItemCmenu = {
 			if (~d.link.indexOf("https://yadi.sk") && !isA2) {
 				window.open(d.link, "_blank");
 				return;
-			} else if (~d.link.indexOf("https://yadi.sk") && isA2) {
+			} else if (isA2) {
 				s = d.link.replace("https://", "http://");
 				attr("wdlnk", "href", s);
 				v("wdlnk", s);
