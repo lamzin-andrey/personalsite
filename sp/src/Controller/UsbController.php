@@ -1281,7 +1281,9 @@ class UsbController extends AppBaseController
                 $success = false;
                 $error = '';
                 try {
-                    $filesystem->rename($filePathObject->path, $dirPathObject->path . '/' . $fileEntity->getId() . $filePathObject->ext, true);
+                    if ($fileEntity->getWdPublic() != 1) {
+                        $filesystem->rename($filePathObject->path, $dirPathObject->path . '/' . $fileEntity->getId() . $filePathObject->ext, true);
+                    }
                     $success = true;
                 } catch (\Exception $exception) {
                     $error = $exception->getMessage();
