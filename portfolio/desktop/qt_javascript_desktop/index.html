@@ -3,7 +3,7 @@
 <head>
     <title>QT5 WEB VIEW DESKTOP API Documentation</title>
     <meta charset="WINDOWS-1251">
-    <link rel="canonical" href="https://andryuxa.ru/portfolio/desktop/qt_javascript_desktop/downloads/">
+    <link rel="canonical" href="https://andryuxa.ru/portfolio/desktop/qt_javascript_desktop/">
     <meta name="yandex-verification" content="f1ea17f254909c36" />
     
     <meta name="description" content="Хотите сделать создание программ на javascript для Xubuntu и Windows проще? Попробуйте QT WebView Desktop API для linux xubuntu и windows. Это действительно не сложнее, чем создать web-страницу. Вам не понадобится разбираться с nodejs и npm если вы захотите записать данные в файл из вашей javascript программы.">
@@ -15,12 +15,6 @@
     <script src="./doc/j/src/search.js"></script>
     <script src="./doc/j/main.js"></script>
     
-    <!-- Simple Drawing App -->
-    <!-- script src="./doc/j/vendor/objects/recentdir.js"></script>
-    <script src="./doc/j/src/simpleDrawApp/se2d.js"></script>
-    <script src="./doc/j/src/simpleDrawApp/sdapp.js"></script>
-    <link href="./doc/j/src/simpleDrawApp/sda.css" type="text/css" rel="stylesheet"></link-->
-    <!-- / Simple Drawing App -->
     
     <link href="./doc/s/layout.css" type="text/css" rel="stylesheet"></link>
     <link href="./doc/s/table.css" type="text/css" rel="stylesheet"></link>
@@ -34,8 +28,9 @@
 <div class="tr">
     <div class="sidebar"  width="300">
 		<div id="sidebarWrapper">
-			<div>
+			<div class="fixed">
 				<input type="text" id="iFilter" placeholder="Search..." >
+				<a href="/portfolio/desktop/qt_javascript_desktop/en/"><b>En</b></a>
 			</div>
 			<ul class="sections" id="hResults">
 				<li><a href="#download">Скачать</a></li>
@@ -61,6 +56,7 @@
 						<li ><a href="#moveTo">MW.moveTo</a></li>
 						<li ><a href="#swi">MW.setIconImage</a></li>
 						<li ><a href="#setTitle">MW.setTitle</a></li>
+						<li ><a href="#renameMenuItem">MW.renameMenuItem</a></li>
 						<li ><a href="#quit">MW.close</a></li>
 					</ul>
 					<li><a href="#env">Взаимодействие с окружением</a></li>
@@ -75,6 +71,9 @@
 						<li><a href="#openFilesDialog">Env.openFilesDialog</a></li>
 						<li><a href="#saveFileDialog">Env.saveFileDialog</a></li>
 						<li><a href="#openDirectoryDialog">Env.openDirectoryDialog</a></li>
+						<li><a href="#newWnd">App.newWindow</a></li>
+						<li><a href="#getTempDir">Env.getTempDir</a></li>
+						<li><a href="#getHomeDir">Env.getHomeDir</a></li>
 					</ul>
 					<li><a href="#files">Файлы</a></li>
 					<ul class="subsections4">
@@ -82,11 +81,23 @@
 						<li><a href="#fpc">FS.writefile</a></li>
 						<li><a href="#fex">FS.fileExists</a></li>
 						<li><a href="#unlink">FS.unlink</a></li>
+						<li><a href="#pdir">FS.partDir</a></li>
+						<li><a href="#pdi">FS.partDirItem</a></li>
 						<li><a href="#idir">FS.isDir</a></li>
 						<li><a href="#scn">FS.scandir</a></li>
 						<li><a href="#fsz">FS.filesize</a></li>
 						<li><a href="#spng">FS.savePng</a></li>
 						<li><a href="#sjpg">FS.saveJpeg</a></li>
+						<li><a href="#mkdir">FS.mkdir</a></li>
+						<li><a href="#swd">FS.startWatchDir</a></li>
+						<li><a href="#inotls">FS.getModifyListInDir</a></li>
+						<li><a href="#stwd">FS.stopWatchDir</a></li>
+						<li><a href="#fopen">FS.open</a></li>
+						<li><a href="#fgets">FS.gets</a></li>
+						<li><a href="#feof">FS.eof</a></li>
+						<li><a href="#fclose">FS.close</a></li>
+						<li><a href="#md5f">FS.md5File</a></li>
+						<li><a href="#md5">FS.md5</a></li>
 					</ul>
 				</ul>
 				
@@ -755,6 +766,54 @@ window.onkeyup = onKeyUp;
         </table>
     </div>
     
+    <div id="renameMenuItem" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>MW.renameMenuItem</h5>
+                </td>
+                <td class="fd">
+                    <i>MW.renameMenuItem(<span class="dkw">Number</span> x, <span class="dkw">Number</span> y, <span class="dkw">String</span> text)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Позволяет изменить текст пункта главного меню программы</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>Набирайте текст в текстовом поле и он применится к пункту главного меню окна Помощь -> О программе :</div>
+                    <input disabled="disabled" type="text" value="О программе" onkeydown="Demo.onkeydown4()" id="inpKD4">
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    Пример кода:<br>
+                    <pre class="codebg">
+<pre class="codebg">
+<span class="kw">function</span> e(id) {
+    <span class="kw">return</span> document.getElementById(id);
+}
+<span class="kw">var</span> ChangeContextMenuTextExample = {
+    onkeydown: <span class="kw">function</span>(){
+        <span class="kw">var</span> trg = e(<span class="st">'inpKD4'</span>),
+             o = <span class="kw">this</span>;
+        setTimeout(<span class="kw">function</span>() {
+            MW.renameMenuItem(<span class="nm">2</span>, <span class="nm">0</span>, trg.value);
+                <span class="jcomm">// Здесь 2 - позиция пункта меню по горизонтали, начиная с 0</span>
+                <span class="jcomm">// Здесь 0 - позиция пункта меню по вертикали, начиная с 0.</span>
+        }, <span class="nm">10</span>);
+    }
+}
+</pre>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    
 <h4 id="env">Взаимодействие с окружением</h4>
     <div id="ejexec" class="function">
         <table cellpadding="0" cellspacing="0">
@@ -1365,6 +1424,125 @@ window.onkeyup = onKeyUp;
         </table>
     </div>
     
+    
+    <div id="newWnd" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>App.newWindow</h5>
+                </td>
+                <td class="fd">
+                    <i>App.newWindow(<span class="dkw">String</span> path, <span class="dkw">Array</span> args)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Открывает другое Qdjs приложение в новом окне.
+						Аргумент <b>path</b> путь к каталогу QDJS приложения.
+						Аргумент <b>args</b> список аргументов запускаемого приложения.
+                    </p>
+					<p>Примечание: Также доступна как Qt.newWindow(<span class="dkw">String</span> path, <span class="dkw">String</span> args).</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>
+						Введите путь к каталогу с приложением qdjs, и нажмите кнопку &laquo;Запуск&raquo;.<br>
+					</div>
+                    <div>
+                        <input type="text" value="/opt/qt-desktop-js/default/doc/examples/simpleTextEditor" id="newWndPath" disabled>
+                    </div>
+                    <div>
+						<input type="button" value="Выбрать каталог" onclick="Demo.newWndChooseDir();" disabled>
+						<input type="button" value="Запуск" onclick="Demo.newWndRun();" disabled>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <!-- START -->
+    <div id="getTempDir" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>Env.getTempDir</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">String</span> Env.getTempDir()</i>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Возвращает путь к временной папке. Особенно полезно в windows.</p>
+                    <p>Примечание: Доступна также как <i><span class="dkw">String</span> OS.getTempDir()</i> и <i><span class="dkw">String</span> OS.getTempFolderPath()</i>.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <input type="button" value="путь к временному каталогу" onclick="alert(OS.getTempDir())" disabled>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf arglist" colspan="2">
+                    Возвращаемое значение
+                </td>
+            </tr>
+            <tr>
+                <td class="fname">
+                    <h5 class="argname">String путь к каталогу</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">String</span> catalogPath</i>.
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    
+    <div id="getHomeDir" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>Env.getHomeDir</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">String</span> Env.getHomeDir()</i>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Возвращает путь к домашней папке пользователя. Особенно полезно в windows.</p>
+                    <p>Примечание: Доступна также как <i><span class="dkw">String</span> OS.getHomeDir()</i> и <i><span class="dkw">String</span> OS.getHomeFolderPath()</i>.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <input type="button" value="путь к домашнему каталогу" onclick="alert(OS.getHomeDir())" disabled>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf arglist" colspan="2">
+                    Возвращаемое значение
+                </td>
+            </tr>
+            <tr>
+                <td class="fname">
+                    <h5 class="argname">String путь к каталогу</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">String</span> path</i>. Возвращает путь к домашнему каталогу.
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--END  -->
+    
 <h4 id="files" class="stopHere">Файлы</h4>
     <div id="fgc" class="function">
         <table cellpadding="0" cellspacing="0">
@@ -1573,6 +1751,211 @@ window.onkeyup = onKeyUp;
         </table>
     </div>
     
+    
+    <div id="pdir" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.partDir</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">Array</span> FS.partDir(<span class="dkw">String</span> path, <span class="dkw">Number</span> partSize, <span class="dkw">Boolean</span> fromFirst = <span class="dkw">false</span>)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p> Метод предназначен для чтения больших каталогов частями.
+					   При каждом вызове считывает partSize наименований файлов из каталога path.
+					   Параметр fromFirst = true сбрасывает указатель на первый файл.
+					   Если передать при новом вызове другой путь, указатель также сбросится на первый файл.
+					   Если достигнут конец каталога вернет в последнем элементе спиcка строку "EOF".
+					</p>
+					<p> 
+						Возвращаемый массив состоит из строк вида
+						<pre class="codebg">size/mtime/owner/grp/TEname/path</pre>
+					</p>
+					<p> 
+						Декодировать такую строку в удобный объект можно методом FS.partDirItem();
+						Описание возвращаемого объекта смотрите в описании функции <a href="#pdi">FS.partDirItem</a>.
+						Ниже приведена расшифровка строки.
+					</p>
+					<p> 						
+						size - размер файла в байтах в шестнадцатеричной системе счисления.
+					</p>
+					<p> 						
+						mtime - Время последнего изменения файла в секундах с 01.01.1970. В шестнадцатеричной системе счисления.
+					</p>
+					<p> 						
+						owner - Имя владельца файла.
+					</p>
+					<p> 						
+						grp - Имя владельца файла. Может быть пустым, если группа равна имени владельца.
+					</p>
+					<p> 						
+						TEname. Здесь T - это тип, E - признак того, исполняемый файл или нет. Далее следует имя файла без пути.
+					</p>
+					<p> 						
+						T = 0. Признак каталога.
+					</p>
+					<p> 						
+						T = 1. Признак файла.
+					</p>
+					<p> 						
+						T = 2. Символьная ссылка на каталог.
+					</p>
+					<p> 						
+						T = 3. Символьная ссылка на файл.
+					</p>
+					<p> 						
+						Е = 0. Файл не исполняемый (Linux).
+					</p>
+					<p> 						
+						Е = 1. Файл исполняемый (Linux).
+					</p>
+					<p> 						
+						path - полное имя файла, от корня файловой системы, включая имя файла.
+					</p>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>Выберите каталог и считайте столько файлов, сколько укажете в поле ввода рядом.</div>
+                    <input type="button" value="Выбрать каталог" id="bBrowsePartDir" onclick="Demo.browseForPartDir()" disabled>
+                    <input type="text" value="2" id="inpPartDir" style="width:100px" disabled>
+                    <input type="checkbox"  id="chPartDirReset" disabled> <label for="chPartDirReset">С начала</label>
+                    <div>
+                        <div id="xtStdOut6">
+                            <div class="outheader">Catalogs and files:</div>
+                            <div id="xtStdOut6Content">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    Пример кода:<br>
+                    <pre class="codebg">
+<pre class="codebg">
+<span class="kw">var</span> ReadNFilesFromDirExample = {
+    onclick: <span class="kw">function</span>(){
+        <span class="kw">var</span> ls = FS.partDir(<span class="st">'C:/WINDOWS/system32'</span>, <span class="nm">10</span>, <span class="kw">true</span>), i, fileItem;
+        <span class="kw">for</span> (i = <span class="nm">0</span>; i < ls.length; i++) {
+			fileItem = FS.partDirItem(ls[i]);
+			if (fileItem == <span class="st">"EOF"</span>) {
+				<span class="kw">break</span>; <span class="jcomm">// all files was read</span>
+			}
+			alert(fileItem.size);      <span class="jcomm">// bytes, decimical</span>
+			alert(fileItem.mtime);     <span class="jcomm">// last modify file time, seconds from 01.01.1970, decimical</span>
+			alert(fileItem.owner);     <span class="jcomm">// owner of file</span>
+			alert(fileItem.group);     <span class="jcomm">// group of file</span>
+			alert(fileItem.type);      <span class="jcomm">// type code</span>
+			alert(fileItem.isDir);     <span class="jcomm">// true if is catalog</span>
+			alert(fileItem.isSymlink); <span class="jcomm">// true if is symlink</span>
+			alert(fileItem.isExec);    <span class="jcomm">// 1 if is executable file</span>
+			alert(fileItem.name);      <span class="jcomm">// short filename. For example, notepad.exe</span>
+			alert(fileItem.path);      <span class="jcomm">// Full filename. For example, C:\Windows\explorer.exe</span>
+			alert(fileItem.src);       <span class="jcomm">// Source string item of Array returned FS.partDir</span>
+	}
+	ls = FS.partDir(<span class="st">'C:/WINDOWS/system32'</span>, <span class="nm">10</span>);<span class="jcomm"> // And get next 10 files...</span>
+    }
+}</pre>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div id="pdi" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.partDirItem</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">Object</span> or <span class="dkw">String</span> FS.partDirItem(<span class="dkw">String</span> encodedFileInfo)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p> Метод предназначен для перекодирования строки из массива, который вернула FS.partDir() в удобный для работы объект.
+					</p>
+					<p> 
+						Может вернуть строку EOF. Это будет говорить о том, что все файлы из каталога считаны.
+						Обычно возвращает объект, состоящий их полей, описанных ниже.
+					</p>
+					<p> 						
+						size - размер файла в байтах в десятичной системе счисления.
+					</p>
+					<p> 						
+						mtime - Время последнего изменеия файла в секундах с 01.01.1970. В десятичной системе счисления.
+					</p>
+					<p> 						
+						owner - Имя владельца файла.
+					</p>
+					<p> 						
+						group - Имя владельца файла. Может быть пустым, если группа равна имени владельца.
+					</p>
+					<p> 						
+						type - это тип файла. Соответствует T в описании FS.partDir. Флаги isDir и isSymlink делают это поле фактически ненужным.
+					</p>
+					<p> 						
+						isDir - true если это каталог.
+					</p>
+					<p> 						
+						isSymlink - true если это символьная ссылка.
+					</p>
+					<p> 						
+						isExec - 1 если это исполняемый файл.
+					</p>
+					<p> 						
+						name короткое имя файла, например notepad.exe
+					</p>
+					<p> 						
+						path - полное имя файла, от корня файловой системы, включая имя файла. Например C:/WINDOWS/explorer.exe
+					</p>
+					<p> 						
+						src - исходная строка с закодированной информацией о файле.
+					</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    Пример кода:<br>
+                    <pre class="codebg">
+<pre class="codebg">
+<span class="kw">var</span> ReadNFilesFromDirExample = {
+    onclick: <span class="kw">function</span>(){
+        <span class="kw">var</span> ls = FS.partDir(<span class="st">'C:/WINDOWS/system32'</span>, <span class="nm">10</span>, <span class="kw">true</span>), i, fileItem;
+        <span class="kw">for</span> (i = <span class="nm">0</span>; i < ls.length; i++) {
+			fileItem = FS.partDirItem(ls[i]);
+			if (fileItem == <span class="st">"EOF"</span>) {
+				<span class="kw">break</span>; <span class="jcomm">// all files was read</span>
+			}
+			alert(fileItem.size);      <span class="jcomm">// bytes, decimical</span>
+			alert(fileItem.mtime);     <span class="jcomm">// last modify file time, seconds from 01.01.1970, decimical</span>
+			alert(fileItem.owner);     <span class="jcomm">// owner of file</span>
+			alert(fileItem.group);     <span class="jcomm">// group of file</span>
+			alert(fileItem.type);      <span class="jcomm">// type code</span>
+			alert(fileItem.isDir);     <span class="jcomm">// true if is catalog</span>
+			alert(fileItem.isSymlink); <span class="jcomm">// true if is symlink</span>
+			alert(fileItem.isExec);    <span class="jcomm">// 1 if is executable file</span>
+			alert(fileItem.name);      <span class="jcomm">// short filename. For example, notepad.exe</span>
+			alert(fileItem.path);      <span class="jcomm">// Full filename. For example, C:\Windows\explorer.exe</span>
+			alert(fileItem.src);       <span class="jcomm">// Source string item of Array returned FS.partDir</span>
+	}
+	ls = FS.partDir(<span class="st">'C:/WINDOWS/system32'</span>, <span class="nm">10</span>);<span class="jcomm"> // And get next 10 files...</span>
+    }
+}</pre>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--END  -->
     <div id="scn" class="function">
         <table cellpadding="0" cellspacing="0">
             <tr>
@@ -1776,6 +2159,372 @@ FS.saveJpeg(<span class="st">'/home/andrey/image.png'</span>, imageData, <span c
             
         </table>
     </div>
+    
+    <div id="mkdir" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.mkdir</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">Boolean</span> FS.mkdir(<span class="dkw">String</span> path)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Создаёт каталог.</p>
+                    <p>Примечание 1. Также доступна как <i>PHP.mkdir(<span class="dkw">String</span> path).</i></p>
+                    <p>Примечание 2. 
+                      В windows обнаружен баг этого метода. Вызов <i>FS.mkdir("/home/temp")</i> создаст каталог 
+                       в корне того диска,  на котором расположен qdjs.exe и метод вернет <b>true</b>. 
+                       Например, если qdjs.exe расположен в каталоге <i>F:\qdjs\release</i> вызов 
+                       <i>FS.mkdir("/home/temp")</i> создаст каталог <i>F:\home\temp</i>.
+                       Баг может проявляться при портировании программ с xubuntu в windows.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>Введите наименование директории. Если её удастся создать, вы увидите true:</div>
+                    <input type="text" value="/home/user/one/two/three" id="inpMkdir" disabled>
+                    <input type="button" value="Создать каталог" id="bMkdir" onclick="Demo.onClickCreateDir()" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    Пример кода:<br>
+                    <pre class="codebg">
+<pre class="codebg">
+<span class="kw">function</span> e(id) {
+    <span class="kw">return</span> document.getElementById(id);
+}
+<span class="kw">var</span> MkdirExample = {
+    onclick: <span class="kw">function</span>(){
+        <span class="kw">var</span> result = FS.mkdir(e(<span class="st">'inpMkdir'</span>).value);
+        alert(result);
+    }
+}
+</pre>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div id="swd" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.startWatchDir</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">Boolean</span> FS.startWatchDir(<span class="dkw">String</span> path)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Метод начинает наблюдение за каталогом на предмет изменения в нём файлов. В linux использует интерфейс ядра inotify.</p>
+                    <p>Метод вернет true если удалось установить каталог, как предмет наблюдения.</p>
+                    <p>Примечание 1. Мониторит только первый уровень файлов в каталоге.</p>
+                    <p>Примечание 2. Пока реализована только для Xubuntu.</p>
+                    <p>Примечание 3. Метод не проверяет входящий аргумент. Вы должны сами проверить существование каталога перед вызовом.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2" id="swddemo">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>Введите наименование директории, которую будем мониторить. Если её удастся установить, вы увидите true:</div>
+                    <input type="button" value="Select catalog" onclick="Demo.onClickStartWatchSelectDir();" disabled>
+                    <input type="text" value="" id="inpStartWatchDir" readonly disabled>
+                    <input type="button" value="Начать мониторинг" id="bStartWatchDir" onclick="Demo.onClickStartWatchDir()" disabled>
+                    <input type="button" value="Завершить мониторинг" id="bStopWatchDir" onclick="Demo.onClickStopWatchDir()" disabled>
+                    
+                    <div>
+                        <div id="xtStdOut7">
+                            <div class="outheader">Catalogs and files:</div>
+                            <div id="xtStdOut7Content">
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    
+                    
+                </td>
+            </tr>
+        </table>
+    </div><!-- end one function doc -->
+    
+    
+    <div id="stwd" class="function"><!-- start one function doc -->
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.stopWatchDir</h5>
+                </td>
+                <td class="fd">
+                    <i>FS.stopWatchDir()</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Метод прекращает наблюдение за каталогом на предмет изменения в нём файлов. В linux использует интерфейс ядра inotify.</p>
+                    <p>Примечание 2. Пока реализована только для Xubuntu.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>См. демо к <a href="#swddemo">FS.startWatchDir()</a></div>
+                    
+                </td>
+            </tr>
+        </table>
+    </div><!-- end one function doc -->
+
+<div id="inotls" class="function"><!-- start one function doc -->
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.getModifyListInDir</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">Array</span> FS.getModifyListInDir()</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Метод возвращает список файлов и каталогов, изменившихся в каталоге с момента начала наблюдения. В linux использует интерфейс ядра inotify.</p>
+                    <p>Примечание 1. Мониторит только первый уровень файлов в каталоге.</p>
+                    <p>Примечание 2. Пока реализована только для Xubuntu.</p>
+                    <p>Примечание 3. Каждое имя файла возвращается с префиксом из двух символов, определяющих создан, изменен или удален файл и файл это или каталог.</p>
+                    <p>Первый символ префикса - тип изменения: <i>'c'</i> - создание,  <i>'m'</i> - изменение,  <i>'d'</i> - удаление.</p>
+                    <p>Второй символ префикса - файл или каталог: <i>'d'</i> - каталог,  <i>'f'</i> - файл.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2" id="swddemo">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <div>См. демо к <a href="#swddemo">FS.startWatchDir()</a></div>
+                    
+                </td>
+            </tr>
+        </table>
+    </div><!-- end one function doc -->
+
+
+
+<div id="md5f" class="function"><!-- start one function doc -->
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.md5File</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">String</span> FS.md5File(<span class="dkw">String</span> path)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Метод возвращает сумму md5 для файла, путь к которому передан</p>
+                    <p>Примечание 1. Также доступна как PHP.md5_file().</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2" id="swddemo">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <input type="button" value="Select file" onclick="Demo.onClickSelectFileForMd5();" disabled>
+                    <input type="text" value="" id="inpFileForMd5" readonly disabled>
+                </td>
+            </tr>
+        </table>
+    </div><!-- end one function doc -->
+    
+    <div id="fopen" class="function">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+			  <td class="fname">
+				<h5>FS.open</h5> 
+			  </td>
+			  <td class="fd">
+				  <i>FS.open(<span class="dkw">String</span> filename, <span class="dkw">String</span> mode)</i>
+			  </td>
+			</tr>
+			  
+			<tr>
+				<td class="fdf" colspan="2">
+					<p>Открывает файл filename для чтения или записи.</p>
+					<p>mode определяет режим.</p>
+					<p><b>r</b> - файл открыт для чтения</p>
+					<p><b>w</b> - файл открыт для записи. Если открыть таким образом существующий файл, его содержимое будет полностью переписано при записи.</p>
+					<p><b>a</b> - файл будет открыт для добавления данных.</p>
+					<p><b>b</b> -  используется вместе с <b>r</b>, <b>w</b> или <b>a</b>. Открывает файл в двоичном режиме. В текстовом режиме возврат каретки и перевод строки транслируется в символ новой строки. При выводе справедливо обратное: символ новой строки транслируется в возврат каретки и перевод строки. В двоичных файлах такого перевода не происходит.</p>
+					<p><b>+</b> - используется вместе с <b>r</b>, <b>w</b> или <b>a</b>. В. случае с <b>r</b> файл открывается сразу для чтения и записи. <b>w+</b> равнозначно <b>r+</b>. <b>a+</b> открывает файл сразу для добавления и чтения. Допускается запись <b>X+b</b>, где <b>X</b> это <b>r</b>, <b>a</b> или <b>w</b>.</p>
+					<p>Примечание 1. Вывести в textarea текст, содержащий символы, отличные от латиницы получится только если текстовый файл в кодировке UTF-8. </p>
+					<p>Примечание 2. Доступен также как <i>PHP.open(<span class="dkw">String</span> filename, <span class="dkw">String</span> mode)</i> </p>
+					<p>Примечание 3. Планируется заменить <i>PHP.open</i> на <i>PHP.fopen</i> </p>
+				</td>
+			</tr>
+			  
+			<tr>
+				<td class="fe" colspan="2">
+					 <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+					 <div>Выберите многострочный текстовый файл в кодировке UTF-8 и считайте столько строк, сколько захотите.</div>
+					 <input type="button" value="Обзор" id="bBrowseTextFileFopen" onclick="Demo.onClickFopen()" disabled> 
+					 <input type="button" value="Get line" id="bGetLine" onclick="Demo.onClickFopenReadLine()" disabled> 
+					 <div>
+						<div id="xtStdOut8">
+							<div class="outheader">Lines:</div> 
+							<div id="xtStdOut8Content"> </div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				 </td> 
+			</tr>
+			<tr>
+				<td class="fe" colspan="2"> Пример кода:<br>
+					<pre class="codebg code2"><b>var</b> fd = FS.open(<span class="strcolor"> "/tmp/file.txt"</span>,<span class="strcolor"> "r"</span>),
+       s;
+<b>while</b> (!FS.eof(fd)) {
+  s += FS.gets(fd);
+}
+FS.close(fd);
+</pre>
+				</td>
+			</tr>
+		</table>
+    </div>
+    
+    <div id="fgets" class="function">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+			  <td class="fname">
+				<h5>FS.gets</h5> 
+			  </td>
+			  <td class="fd">
+				  <i><span class="dkw">String</span> FS.gets(<span class="dkw">Number</span> fileDescriptor)</i>
+			  </td>
+			</tr>
+			  
+			<tr>
+				<td class="fdf" colspan="2">
+					<p>Считывает из ранее открытого с помощью <i>FS.open</i> файла строку. Окончанием строки считается символ <i>\n</i>.</p>
+					<p>Примечание 1. Вывести в textarea текст, содержащий символы, отличные от латиницы получится только если текстовый файл в кодировке UTF-8. </p>
+					<p>Примечание 2. Также доступна как <i><span class="dkw">String</span> PHP.gets(<span class="dkw">Number</span> fileDescriptor)</i>. </p>
+					<p>Примечание 3. Планируется заменить <i>PHP.gets</i> на <i>PHP.fgets</i>.</p>
+				</td>
+			</tr>
+			  
+			<tr>
+				<td class="fe" colspan="2">
+					 <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+					 <div>Смотрите демо <a href="#fopen">FS.open</a></div>
+				 </td> 
+			</tr>
+			<tr>
+				<td class="fe" colspan="2"> Пример кода:<br>
+					<div>Смотрите пример <a href="#fopen">FS.open</a></div>
+				</td>
+			</tr>
+		</table>
+    </div>
+    
+    <div id="feof" class="function">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+			  <td class="fname">
+				<h5>FS.eof</h5> 
+			  </td>
+			  <td class="fd">
+				  <i><span class="dkw">Boolean</span> FS.eof(<span class="dkw">Number</span> fileDescriptor)</i>
+			  </td>
+			</tr>
+			  
+			<tr>
+				<td class="fdf" colspan="2">
+					<p>Вернет <b class="kw">true</b> если после очередного вызова FS.gets достигнут конец ранее открытого с помощью <i>FS.open</i> файла.</p>
+					<p>Примечание 1. Также доступна как <i><span class="dkw">Boolean</span> PHP.eof(<span class="dkw">Number</span> fileDescriptor)</i>. </p>
+					<p>Примечание 2. Планируется заменить <i>PHP.eof</i> на <i>PHP.feof</i>.</p>
+				</td>
+			</tr>
+			  
+			<tr>
+				<td class="fe" colspan="2">
+					 <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+					 <div>Смотрите демо <a href="#fopen">FS.open</a></div>
+				 </td> 
+			</tr>
+			<tr>
+				<td class="fe" colspan="2"> Пример кода:<br>
+					<div>Смотрите пример <a href="#fopen">FS.open</a></div>
+				</td>
+			</tr>
+		</table>
+    </div>
+    
+    <div id="fclose" class="function">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+			  <td class="fname">
+				<h5>FS.close</h5> 
+			  </td>
+			  <td class="fd">
+				  <i>FS.close(<span class="dkw">Number</span> fileDescriptor)</i>
+			  </td>
+			</tr>
+			  
+			<tr>
+				<td class="fdf" colspan="2">
+					<p>Закрывает ранее открытый с помощью <i>FS.open</i> файл.</p>
+					<p>Примечание 1. Также доступна как <i>PHP.close(<span class="dkw">Number</span> fileDescriptor)</i>.</p>
+					<p>Примечание 2. Планируется заменить <i>PHP.close</i> на <i>PHP.fclose</i>.</p>
+				</td>
+			</tr>
+			  
+			<tr>
+				<td class="fe" colspan="2">
+					 <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+					 <div>Смотрите демо <a href="#fopen">FS.open</a></div>
+				 </td> 
+			</tr>
+			<tr>
+				<td class="fe" colspan="2"> Пример кода:<br>
+					<div>Смотрите пример <a href="#fopen">FS.open</a></div>
+				</td>
+			</tr>
+		</table>
+    </div>
+
+
+<div id="md5" class="function">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="fname">
+                    <h5>FS.md5</h5>
+                </td>
+                <td class="fd">
+                    <i><span class="dkw">String</span> FS.md5(<span class="dkw">String</span> path)</h5>
+                </td>
+            </tr>
+            <tr>
+                <td class="fdf" colspan="2">
+                    <p>Метод возвращает сумму md5 от переданной строки</p>
+                    <p>Примечание 1. Также доступна как PHP.md5().</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="fe" colspan="2" id="swddemo">
+                    <div class="demo-disabld">Демо доступно в документации Qt WebView Desktop API после установки</div>
+                    <label for="inpMd5">Введите строку</label>
+                    <input type="text" value="" id="inpMd5" disabled>
+                    <input type="button" value="Get md5" onclick="Demo.onClickDemoMd5();" disabled>
+                </td>
+            </tr>
+        </table>
+    </div><!-- end one function doc -->
+
+    
+    
     
 <h4 id="sampleEditor">Пример десктопного приложения - редактор текстовых файлов</h4>
 Расмотрим простое приложение, редактор текстовых файлов.

@@ -4,6 +4,11 @@ body {
 	overflow-y:hidden;
 	font-family:Liberation Sans, Geneva, Arial;
 }
+
+.tr {
+	display:flex;
+}
+
 table.layout {
 	height:100%;
 	width:100%;
@@ -12,11 +17,11 @@ table.layout td {
 	vertical-align:top;
 }
 .sidebar {
-	width:300px;
-	background-color:#AABEF8;
+	width:320px;
+	background-color:#0B33A6;
 	overflow-y:scroll;
 	color:white;
-	font-weight:bold;
+	/*! font-weight:bold; */
 	border-right: 1px solid blue;
 	float:left;
 }

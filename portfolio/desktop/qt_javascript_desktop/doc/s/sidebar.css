@@ -1,6 +1,12 @@
 input[type=text] {
 	height:32px;
-	width:100%;
+	width: 263px;
+}
+
+.fixed {
+	position:fixed;
+	top:0px;
+	width: 320px;
 }
 
 ul {
@@ -19,8 +25,10 @@ ul {
 }
 
 .subsections li {
-	margin-top:auto;
+	margin-bottom:4px;
 }
 .sidebar {
-	font-family: Geneva, Arial!important;
+	font-family:  Arial !important;
+	min-height: 100vh;
+	padding-top: 40px;
 }

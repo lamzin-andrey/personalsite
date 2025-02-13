@@ -154,7 +154,7 @@ window.upload = {
 		e('dompb2').style['width'] = p + '%';
 		e('progressState2').innerHTML = HumanValue.getHumanFilesize(o.uploadedSize, 2, 3, false) + ' / ' + HumanValue.getHumanFilesize(o.totalSize, 2, 3, false) + ' (' + p + '%)';
 	},
-	onSuccessUpload:function(data) {
+	/*onSuccessUpload:function(data) {
 		removeClass('hFormUpWr', 'd-none');
 		if (!this.onFailUpload(data)) {
 			this.onClickCancel();
@@ -170,7 +170,7 @@ window.upload = {
 			}, 1500);
 		}
 		this.onClickCancel();
-	},
+	},*/
 	onFailUpload:function(data, responseText, info, xhr) {
 		var o = this;
 		removeClass('hFormUpWr', 'd-none');
