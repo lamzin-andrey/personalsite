@@ -16,19 +16,8 @@ table.layout {
 table.layout td {
 	vertical-align:top;
 }
-.sidebar {
-	width:320px;
-	background-color:#0B33A6;
-	overflow-y:scroll;
-	color:white;
-	/*! font-weight:bold; */
-	border-right: 1px solid blue;
-	float:left;
-}
-.sidebar a{
-	color:white;
-	
-}
+
+
 .content {
 	background-color:#FFFFFF;
 	overflow:scroll;

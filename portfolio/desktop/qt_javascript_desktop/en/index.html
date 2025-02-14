@@ -3,35 +3,40 @@
 <head>
     <title>QT5 WEB VIEW DESKTOP API Documentation</title>
     <meta charset="WINDOWS-1251">
+    <meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no">
     <link rel="canonical" href="https://andryuxa.ru/portfolio/desktop/qt_javascript_desktop/en/">
     <meta name="yandex-verification" content="f1ea17f254909c36" />
     
     <meta name="description" content="Хотите сделать создание программ на javascript для Xubuntu и Windows проще? Попробуйте QT WebView Desktop API для linux xubuntu и windows. Это действительно не сложнее, чем создать web-страницу. Вам не понадобится разбираться с nodejs и npm если вы захотите записать данные в файл из вашей javascript программы.">
     
     <meta name="windowButtons" content="1110" width="1020" height="600">
-    <script src="../doc/j/vendor/micron.js?v=1"></script>
+    <script src="../doc/j/vendor/micron.js?v=3"></script>
     
-    <script src="../doc/j/src/simpledemo.js?v=1"></script>
-    <script src="../doc/j/src/search.js?v=1"></script>
-    <script src="../doc/j/main.js?v=1"></script>
+    <script src="../doc/j/src/simpledemo.js?v=3"></script>
+    <script src="../doc/j/src/search.js?v=3"></script>
+    <script src="../doc/j/main.js?v=3"></script>
     
     
-    <link href="../doc/s/layout.css?v=1" type="text/css" rel="stylesheet"></link>
-    <link href="../doc/s/table.css?v=1" type="text/css" rel="stylesheet"></link>
-    <link href="../doc/s/sidebar.css?v=1" type="text/css" rel="stylesheet"></link>
-    <link href="../doc/s/content.css?v=1" type="text/css" rel="stylesheet"></link>
-    <link href="../doc/s/htmlcode.css?v=1" type="text/css" rel="stylesheet"></link>
-    <link href="../doc/s/jscode.css?v=1" type="text/css" rel="stylesheet"></link>
+    <link href="../doc/s/layout.css?v=3" type="text/css" rel="stylesheet"></link>
+    <link href="../doc/s/table.css?v=3" type="text/css" rel="stylesheet"></link>
+    <link href="../doc/s/sidebar.css?v=3" type="text/css" rel="stylesheet"></link>
+    <link href="../doc/s/content.css?v=3" type="text/css" rel="stylesheet"></link>
+    <link href="../doc/s/htmlcode.css?v=3" type="text/css" rel="stylesheet"></link>
+    <link href="../doc/s/jscode.css?v=3" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
 
 <div class="tr">
-    <div class="sidebar"  width="300">
+	<div id="mmenu">V</div>
+    <div class="sidebar"  width="300" id="sbar">
 		<div id="sidebarWrapper">
+			
 			<div class="fixed">
-				<input type="text" id="iFilter" placeholder="Search..." >
-				<a href="/portfolio/desktop/qt_javascript_desktop/"><b>Ru</b></a>
+				<div id="sidebarIsMobile">&nbsp;</div>
+				<input type="text" id="iFilter" placeholder="Search" >
+				<a href="/portfolio/desktop/qt_javascript_desktop/" class="lngLnk"><b>Ru</b></a>
 			</div>
+			
 			<ul class="sections" id="hResults">
 				<li><a href="#download">Download</a></li>
 				<li><a href="#about">About</a></li>
@@ -397,7 +402,7 @@ The tag's content attribute contains a string representation of a bit mask of ze
 		<p>Handlers for clicking on menu items must be available in the js file attached to the window.</p>
         
         <p class="codebg">
-            <span class="tag">&lt;script</span> <span class="tagattrn">src</span>=<span class="tagattrv">"./js/mainMenuListeners.js?v=1"</span>
+            <span class="tag">&lt;script</span> <span class="tagattrn">src</span>=<span class="tagattrv">"./js/mainMenuListeners.js?v=3"</span>
             <span class="tag">&gt;&lt;/script&gt;</span>
         </p>
         <p>And in the file we define event handlers for mouse clicks on menu items:</p>
@@ -1297,7 +1302,7 @@ window.onkeyup = onKeyUp;
                 <td class="fd">
                     <i><span class="dkw">String</span> filter</i>.
                      File extensions that will be displayed in the dialog.
-						For example, <span class="st">"*.txt *.js?v=1"</span> will tell the method to display only files with
+						For example, <span class="st">"*.txt *.js?v=3"</span> will tell the method to display only files with
 						 the txt and js extensions.
 						If you only need to display, for example, Windows executable files, the filter would look like
 						<span class="st">"*.exe"</span>.
@@ -2826,7 +2831,7 @@ and pass it as an argument the path to the directory in which the files of your 
 <span class="tag">&lt;DOCTYPE html&gt;</span>
 <span class="tag">&lt;html</span> <span class="tagattrn">lang</span>=<span class="tagattrv">"ru"</span><span class="tag">&gt;</span>
 	<span class="tag">&lt;head&gt;</span>
-		<span class="tag">&lt;link</span> <span class="tagattrn">rel</span>=<span class="tagattrv">"stylesheet"</span> <span class="tagattrn">type</span>=<span class="tagattrv">"text/css"</span> <span class="tagattrn">href</span>=<span class="tagattrv">"./css/editor.css?v=1"</span><span class="tag">&gt;</span>
+		<span class="tag">&lt;link</span> <span class="tagattrn">rel</span>=<span class="tagattrv">"stylesheet"</span> <span class="tagattrn">type</span>=<span class="tagattrv">"text/css"</span> <span class="tagattrn">href</span>=<span class="tagattrv">"./css/editor.css?v=3"</span><span class="tag">&gt;</span>
 		<span class="tag">&lt;meta</span> <span class="tagattrn">charset</span>=<span class="tagattrv">"UTF-8"</span><span class="tag">&gt;</span>
 		<span class="tag">&lt;meta</span> <span class="tagattrn">name</span>=<span class="tagattrv">"windowButtons"</span> <span class="tagattrn">content</span>=<span class="tagattrv">"1010"</span> <span class="tagattrn">width</span>=<span class="tagattrv">"800"</span> <span class="tagattrn">height</span>=<span class="tagattrv">"600"</span> <span class="tagattrn">fixed</span><span class="tag">&gt;</span>
 		<span class="tag">&lt;title&gt;</span>Simple text file editor<span class="tag">&lt;/title&gt;</span>
@@ -2836,7 +2841,7 @@ and pass it as an argument the path to the directory in which the files of your 
 			<span class="tag">&lt;textarea</span> <span class="tagattrn">id</span>=<span class="tagattrv">"edit1"</span> <span class="tagattrn">class</span>=<span class="tagattrv">"mainTextEdit"</span> <span class="tagattrn">rows</span>=<span class="tagattrv">"1"</span><span class="tag">&gt;</span><span class="tag">&lt;/textarea&gt;</span>
 		<span class="tag">&lt;/div&gt;</span>
 		<span class="tag">&lt;div</span> <span class="tagattrn">class</span>=<span class="tagattrv">"statusBar"</span>&gt;</span>&amp;nbsp;0:0<span class="tag">&lt;/div&gt;</span>
-		<span class="tag">&lt;script</span> <span class="tagattrn">src</span>=<span class="tagattrv">"./js/simpleTextEditor.js?v=1"</span><span class="tag">&gt;&lt;/script&gt;</span>
+		<span class="tag">&lt;script</span> <span class="tagattrn">src</span>=<span class="tagattrv">"./js/simpleTextEditor.js?v=3"</span><span class="tag">&gt;&lt;/script&gt;</span>
 	<span class="tag">&lt;/body&gt;</span>
 <span class="tag">&lt;/html&gt;</span>
 </pre>
@@ -3123,6 +3128,29 @@ The list of available API methods can be seen on the left, examples of using som
 </div><!-- /layout table-->
 
 <script>var rid = '54';</script>
-<script src="/j/d.js?v=1" async></script>
+<script src="/j/d.js?v=3" async></script>
+<script>
+	function e(i) {return document.getElementById(i);}
+	function setLinks(){
+		var sb = e('sbar'), m = e('mmenu'), i, ls = sb.getElementsByTagName('a');
+		for (i = 0; i < ls.length; i++) {
+			ls[i].onclick = function() {
+				if (e('sidebarIsMobile').offsetWidth > 0) {
+					sb.style.display = 'none';
+					m.style.display = 'block';
+				}
+				return true;
+			}
+		}
+		m.onclick = function() {
+			sb.style.display = 'block';
+			m.style.display = 'none';
+		}
+	}
+	if (!~location.href.indexOf("?v=4")) {
+		location.href = location.href.split("?")[0] += "?v=4";
+	}
+	setLinks();	
+</script>
 </body>
 </html>
