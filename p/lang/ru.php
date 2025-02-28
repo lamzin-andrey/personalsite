@@ -138,4 +138,7 @@ $aLang = [
 	'PortfolioVDT' => 'Портфолио (VDT)',
 	'inostr-email'       => 'Вы можете отправить только российский email адрес',
 	
+	
+	// Disk Home Store
+	'Disks base' => 'База дисков'
 ];

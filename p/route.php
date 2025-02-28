@@ -28,6 +28,7 @@ class Route {
 		$this->_stat();
 		$this->_phd();
 		$this->_apipdf();
+		$this->_hstor();
 		$this->_work_exp22122020();
 		$this->_work_exp18042022();
 		
@@ -544,6 +545,32 @@ class Route {
 			require_once $handler;
 			$this->app = new ArticlesMoveToPage();
 		}
+	}
+	
+	/**
+	 * @description Маршруты для страницы /p/hstor/
+	*/
+	protected function _hstor()
+	{
+		$baseUrl = $this->_baseUrl;
+		if ($baseUrl == '/p/hstor/') {
+			$this->master = __DIR__ . '/ctrl/hstor/view/master.tpl.php';
+			$handler = __DIR__ . '/ctrl/hstor/hstorpage.php';
+			$this->view    = __dir__ . '/ctrl/hstor/view/list.tpl.php';
+			require_once $handler;
+			$this->app = new HStorPage();
+		}
+		
+		/*$s = str_replace('_', '', __FUNCTION__);
+		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
+		
+		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/phd/email.jn/') {
+			$handler = $sCtrlDir . 'phdemail.php';
+			require_once $handler;
+			$this->app = new TrollKillerLogin();
+		}*/
 	}
 }
 $route = new Route();

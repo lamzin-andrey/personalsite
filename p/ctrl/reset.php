@@ -49,6 +49,7 @@ class Reset extends BaseApp {
 					json_ok('msg', l('send-reset-success'));
 				} else {
 					json_error('msg', l('send-reset-fail-try-again'));
+					//json_error('msg', l('send-reset-fail-try-again'), 'pw', $pwd);
 				}
 			}
 		}
