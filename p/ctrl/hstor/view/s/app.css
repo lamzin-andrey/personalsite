@@ -1,0 +1,28 @@
+label i {
+	color :#AA0000;
+}
+
+.selwrp label{
+	min-width:309px;
+}
+
+.selwrp span{
+	height: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+
+.selwrp span img{
+	height: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+
+.appform input[type=text] {
+	width:520px;
+}
+
+.btnall {
+	cursor:pointer;
+}
+
