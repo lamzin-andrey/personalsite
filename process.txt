@@ -48,6 +48,8 @@
  DROP TABLE IF EXISTS hstor_convert;
  CREATE TABLE hstor_convert (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	user_id INTEGER,
+	INDEX user_id (user_id),
 	name VARCHAR(255) NOT NULL COMMENT 'бумажный, цвет; пластиковый, цвет, фабричный, пластиковая коробка и т п',
 	color VARCHAR(32) DEFAULT 'белый' COMMENT 'цвет',
 	is_deleted TINYINT(1) DEFAULT(0) COMMENT '1 если удален',
@@ -57,6 +59,8 @@
  DROP TABLE IF EXISTS hstor_container;
  CREATE TABLE hstor_container (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	user_id INTEGER,
+	INDEX user_id (user_id),
 	name VARCHAR(255) NOT NULL COMMENT 'обувная, стакан, другое',
 	color VARCHAR(32) DEFAULT 'белый' COMMENT 'цвет',
 	is_deleted TINYINT(1) DEFAULT(0) COMMENT '1 если удален',

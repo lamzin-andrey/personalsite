@@ -1,4 +1,7 @@
 <?=__FILE__?>
+<div>
+	Latest TODO ты добавил user_id в справочники контейнеров и конвертов, но не в базу.
+</div>
 <div class="xp appform">
 	<input type="hidden" name="id" id="id">
 	<div>

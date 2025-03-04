@@ -44,16 +44,14 @@ window.langEn = {
 	'hPrivateCaseLabel' : 'Only for me',
 	'hPublicCaseLabel' : 'For all',
 	'hCustomCaseLabel' : 'For users:',
-	'hAddUserPerm' : 'Add user',
+	'hConvertColor': 'Envelope color',
 	'hExitPerm' : 'Close',
 	// 'hFileAddUserTitle' : 'Share file for user',
 	'srchuser' : 'Type user login and search it', // placeholder
 	'hExitAddUserLbl' : 'Close',
-	
 	'hAdditionalInfo' : 'Additional field 1',
 	'hAdditionalInfo2' : 'Additional field 2',
 	'hDoShare' : 'Show in search results, allowed other users',
-	
 	'bNLSOk' : 'It\'s clear',
 	'hPolicyNameRE' : 'User Agreement',
 	'hUALink' : 'User Agreement',
@@ -65,7 +63,11 @@ window.langEn = {
 	'hAdvDocLinkRE' : 'to Receive Advertising',
 	'hIAgreeAdvRE' : 'I agree',
 	
-	'bGotoCatFromDwnlScr' : 'Close',
+	'hConvertName': 'Envelope description',
+	
+	'hContainerName': 'Container description',
+	'hContainerColor': 'Container color',
+	
 	'hWdInfo' : 'Download link',
 	
 	'' : ''

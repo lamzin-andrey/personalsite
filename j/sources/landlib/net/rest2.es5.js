@@ -35,8 +35,11 @@ window.Rest2 = {
      * @param {Function} onFail 
      * @param {Object} context 
      */
-    _post(data, onSuccess, url, onFail, ctx) {
+    _post:function(data, onSuccess, url, onFail, ctx) {
         var t = Rest._getToken();
+        /*if (typeof(data) == 'string') {
+			data = this.grab(data);
+		}*/
         if (t) {
             data[Rest._token_name] = t;
             Rest._restreq('post', data,

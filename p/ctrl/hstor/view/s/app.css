@@ -26,3 +26,28 @@ label i {
 	cursor:pointer;
 }
 
+/** Friendship dlgManager & xplayout*/
+.landDlgMgr, .landDlgMgr div {
+	padding: 0;
+	margin-bottom: 0;
+}
+
+.landDlgMgr {
+	background-color: #EFE9D6;
+}
+.convertDlg {
+	padding: 10px 10px!important;
+}
+#hCnvLdr, #hContLdr {
+	line-height: 32px;
+	vertical-align:middle;
+	display:none;
+}
+.landDlgMgr div.title {
+	margin-right:20px;
+	font-family: Arial;
+}
+
+.mb10  {
+	margin-bottom:10px!important;
+}
