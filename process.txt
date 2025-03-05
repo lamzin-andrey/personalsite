@@ -51,7 +51,7 @@
 	user_id INTEGER,
 	INDEX user_id (user_id),
 	name VARCHAR(255) NOT NULL COMMENT 'бумажный, цвет; пластиковый, цвет, фабричный, пластиковая коробка и т п',
-	color VARCHAR(32) DEFAULT 'белый' COMMENT 'цвет',
+	color VARCHAR(64) DEFAULT 'белый' COMMENT 'цвет',
 	is_deleted TINYINT(1) DEFAULT(0) COMMENT '1 если удален',
 	delta INTEGER  COMMENT 'Порядковый номер'
  )engine=InnoDB, DEFAULT CHARSET  utf8 COLLATE=utf8_general_ci;
@@ -62,7 +62,7 @@
 	user_id INTEGER,
 	INDEX user_id (user_id),
 	name VARCHAR(255) NOT NULL COMMENT 'обувная, стакан, другое',
-	color VARCHAR(32) DEFAULT 'белый' COMMENT 'цвет',
+	color VARCHAR(64) DEFAULT 'белый' COMMENT 'цвет',
 	is_deleted TINYINT(1) DEFAULT(0) COMMENT '1 если удален',
 	delta INTEGER  COMMENT 'Порядковый номер'
  )engine=InnoDB, DEFAULT CHARSET  utf8 COLLATE=utf8_general_ci;

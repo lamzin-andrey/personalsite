@@ -38,7 +38,7 @@ label i {
 .convertDlg {
 	padding: 10px 10px!important;
 }
-#hCnvLdr, #hContLdr {
+#hCnvLdr, .hContLdr {
 	line-height: 32px;
 	vertical-align:middle;
 	display:none;

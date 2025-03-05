@@ -53,6 +53,7 @@ window.Rest2 = {
 			); // Rest_post END
         }
 	},
+	onFailCallback:function(status, responseText, info, xhr, readyState){},
 	/**
      * @description ajax post request (FormData)
      * @param {Object} data 
@@ -371,9 +372,6 @@ window.Rest2 = {
 				ctx.call(onFail, err);
 			}
 		}
-		
-		
-		
-		
     }
+    
 };

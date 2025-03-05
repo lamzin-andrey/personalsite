@@ -553,12 +553,21 @@ class Route {
 	protected function _hstor()
 	{
 		$baseUrl = $this->_baseUrl;
+		
 		if ($baseUrl == '/p/hstor/') {
 			$this->master = __DIR__ . '/ctrl/hstor/view/master.tpl.php';
 			$handler = __DIR__ . '/ctrl/hstor/hstorpage.php';
 			$this->view    = __dir__ . '/ctrl/hstor/view/list.tpl.php';
 			require_once $handler;
 			$this->app = new HStorPage();
+		}
+		
+		
+		if ($baseUrl == '/p/hstor/savecont.jn') {
+			
+			$handler = __DIR__ . '/ctrl/hstor/savecontainer.php';
+			require_once $handler;
+			$this->app = new ContainerPost();
 		}
 		
 		/*$s = str_replace('_', '', __FUNCTION__);

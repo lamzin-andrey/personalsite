@@ -16,6 +16,12 @@ function ee(p, c) {
 	p = e(p);
 	return p.getElementsByTagName(c);
 }
+function eee(p, c, f) {
+	var i, L = ee(p, c), z = sz(L);
+	for (i = 0; i < z; i++) {
+		f(L[i]);
+	}
+}
 W.micron$$ = ee;
 function cs(p, c) {
 	var a;

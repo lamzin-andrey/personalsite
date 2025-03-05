@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <link rel="stylesheet" type="text/css" href="/portfolio/web/calculators/swagger/s/xplayout/xplayout.css">
 <link rel="stylesheet" type="text/css" href="/p/ctrl/hstor/view/s/app.css">
+<meta name="keys" content="<?=sess('autoken')?>">
 <title><?=$app->pageHeading?></title>
 </head>
 
@@ -18,6 +19,9 @@
 <script src="/j/sources/landlib/dom/dlgmgr/dlgframe.js"></script>
 <script src="/j/sources/landlib/dom/dlgmgr/dlgmgr.js"></script>
 <script src="/j/sources/landlib/dom/dlgmgr/panelpatch.js"></script>
+
+<script src="/j/sources/landlib/net/rest.es5.js"></script>
+<script src="/j/sources/landlib/net/rest2.es5.js"></script>
 
 <script src="/p/ctrl/hstor/view/j/lang/en.js"></script>
 <script src="/p/ctrl/hstor/view/j/lang/ru.js"></script>
