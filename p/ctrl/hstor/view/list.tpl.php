@@ -1,8 +1,8 @@
 <?=__FILE__?>
 <div>
-	Latest Убедиться, что лоадер нормально показывается.
-	Надо добиться формирования выпадашек из JSON первый пункт при этом "Не выбрано" и должен быть обязательным.
+	Latest 
 	А далее - пусть в него добавляется после успешного сохранения.
+	 Надо доработать, конверт сохранился в контейнеры (кажется)
 </div>
 <div class="xp appform">
 	<input type="hidden" name="id" id="id">
@@ -63,3 +63,5 @@
 		<input type="button" id="bSave" value="">
 	</div>
 </div>
+
+<textarea id="jsond" style="display:none"><?=$app->jsonData?></textarea>

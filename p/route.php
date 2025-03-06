@@ -570,6 +570,13 @@ class Route {
 			$this->app = new ContainerPost();
 		}
 		
+		if ($baseUrl == '/p/hstor/saveconv.jn') {
+			
+			$handler = __DIR__ . '/ctrl/hstor/saveconvert.php';
+			require_once $handler;
+			$this->app = new ConvertPost();
+		}
+		
 		/*$s = str_replace('_', '', __FUNCTION__);
 		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
 		

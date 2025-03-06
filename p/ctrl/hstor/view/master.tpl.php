@@ -27,8 +27,9 @@
 <script src="/p/ctrl/hstor/view/j/lang/ru.js"></script>
 <script src="/p/ctrl/hstor/view/j/lang/l.js"></script>
 
-<script src="/p/ctrl/hstor/view/j/classes/convertdlg.js"></script>
 <script src="/p/ctrl/hstor/view/j/classes/containerdlg.js"></script>
+<script src="/p/ctrl/hstor/view/j/classes/convertdlg.js"></script>
+
 <script src="/p/ctrl/hstor/view/j/app.js"></script>
 </html>
 

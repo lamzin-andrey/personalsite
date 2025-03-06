@@ -3,7 +3,7 @@ label i {
 }
 
 .selwrp label{
-	min-width:309px;
+	min-width:324px;
 }
 
 .selwrp span{
@@ -38,7 +38,7 @@ label i {
 .convertDlg {
 	padding: 10px 10px!important;
 }
-#hCnvLdr, .hContLdr {
+.hCnvLdr, .hContLdr {
 	line-height: 32px;
 	vertical-align:middle;
 	display:none;

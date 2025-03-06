@@ -9,13 +9,13 @@ class CApplication {
 	}
 }
 
-class ContainerPost extends AdminAuthJson {	
+class ConvertPost extends AdminAuthJson {	
 	/** @property string */
 	//public $ = '';
 	
 	public function __construct() {
 		parent::__construct();
-		$this->table = 'hstor_container';
+		$this->table = 'hstor_convert';
 		$this->treq('name');
 		$this->treq('color');
 		
@@ -49,8 +49,8 @@ class ContainerPost extends AdminAuthJson {
 	private function _validate(array &$errors) : bool
 	{
 		//name
-		$this->_setRequiredError('name', 'Container name', $errors);
-		$this->_setRequiredError('color', 'Container color', $errors);
+		$this->_setRequiredError('name', 'Convert name', $errors);
+		$this->_setRequiredError('color', 'Convert color', $errors);
 		
 		
 		if (count($errors)) {

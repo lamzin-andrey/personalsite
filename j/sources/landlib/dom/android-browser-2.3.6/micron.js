@@ -363,6 +363,15 @@ function sz(o) {
   window.SZ = o && o.length ? o.length : 0;
   return window.SZ;
 }
+
+function slAo(s, t, i){
+	var o;
+	s = e(s);
+	i = i ? i : t;
+	o = new Option(t, i);
+	s.options[sz(s.options)] = o;
+}
+
 /**
  * @description Меняет два элемента в массиве (или объекте) местами
  * @param {Array|Object}  o

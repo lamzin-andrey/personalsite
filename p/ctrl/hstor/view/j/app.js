@@ -3,8 +3,30 @@ class DiskBaseApp {
 		w.oPanel = new PanelPatch();
 		w.dlgMgr = new DlgMgr(w.oPanel);
 		w.br = '/p/hstor';
+		this.initLists();
 		this.setListeners();
 		this.initRest();
+	}
+	initLists(){
+		let d, i, z, o;
+		try {
+			d = JSON.parse(v("jsond"));
+		}catch(err){
+			return;
+		};
+		//console.log(d);
+		this.zSetSel("container_id", d.containers);
+		this.zSetSel("convert_id", d.converts);
+	}
+	zSetSel(id, ls) {
+		let z, i;
+		slAo(id, l("Not select"), -1);
+		if(ls) {
+			z = sz(ls);
+			for (i = 0; i < z; i++) {
+				slAo(id, ls[i].name, ls[i].id);
+			}
+		}
 	}
 	initRest(){
 		let ls, t;
@@ -31,9 +53,32 @@ class DiskBaseApp {
 		w.dlgMgr.center(this.containerDlgId);
 	}
 	
-	defaultFail(status, responseText, info, xhr, readyState) {
-		//if (status)
-		return true;
+	defaultFail(d, responseText, info, xhr, readyState) {
+		if (d instanceof Object) {
+			if (d.status == "ok") {
+				return true;
+			}
+			
+			if (d.errors) {
+				let i, a;
+				a = []
+				for (i in d.errors) {
+					a.push(d.errors[i].replace('&laquo;', '"').replace('&raquo;', '"'));
+				}
+				this.showError(a.join("\n"));
+				return false
+			}
+			
+		}
+		
+		if (info) {
+			this.showError(info);
+		}
+		return false;
+	}
+	
+	showError(s){
+		alert(s);
 	}
 }
 
