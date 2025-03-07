@@ -140,6 +140,10 @@ $aLang = [
 	
 	'Container name'       => 'Описание коробки с дисками',
 	'Container color'       => 'Цвет коробки с дисками',
+	'File name'       => 'Имя файла',
+	'Disk name'       => 'Имя диска',
+	'You must select an envelope'       => 'Необходимо выбрать конверт',
+	'You must select a box with disks'       => 'Необходимо выбрать контейнер с дисками',
 	
 	
 	// Disk Home Store

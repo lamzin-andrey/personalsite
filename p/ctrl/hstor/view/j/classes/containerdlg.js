@@ -69,6 +69,7 @@ class ContainerDlg{
 	onSuccessSend(data) {
 		let o = this;
 		if(o.onFailSend(data)) {
+			
 			slAo(o.listId, v(o.iName), data.id);
 			w.dlgMgr.close(o.N);
 		}

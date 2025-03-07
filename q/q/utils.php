@@ -670,7 +670,7 @@ function utils_getSuffix($n, $root, $one, $less4, $more19, $dbg = false) {
         return $lex;
 }
 /**
- * @desc Перобразовывает дату и з ан8глийского формата в российский
+ * @desc Перобразовывает дату и з английского формата в российский
  * @param $date - Строка в  виде YYYY-mm-dd H:m:s (php Y-m-d H:i:s)
  * @param $deleteSeconds - удалять ли секунды
  * @return String

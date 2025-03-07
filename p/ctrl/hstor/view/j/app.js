@@ -40,6 +40,16 @@ class DiskBaseApp {
 	setListeners() {
 		e('bAddConvert').onclick = () => {this.onClickAddConvert()};
 		e('bAddContainer').onclick = () => {this.onClickAddContainer()};
+		e('bSave').onclick = () => {this.onClickSave()};
+	}
+	onClickSave(){
+		let data = {};
+		data["name"] = v("name");
+		data["file_name"] = v("file_name");
+		data["disk_name"] = v("disk_name");
+		data["disk_name"] = v("disk_name");
+		data["convert_id"] = v("convert_id");
+		Rest2._post();
 	}
 	onClickAddConvert() {
 		this.converDlg = new ConvertDlg(); // It Handler

@@ -6,7 +6,7 @@ class ConvertDlg extends ContainerDlg{
 		o.parentDiv = e(window.dlgMgr.getIdPref() + n);
 		o.bSave = o.e('bConvertSave');
 		o.iName = o.e('convert_name');
-		o.iColor = o.e('convert_name');
+		o.iColor = o.e('convert_color');
 		o.hLoader = o.e('hCnvLdr');
 		o.ctrl = "saveconv.jn";
 		o.listId = "convert_id";
