@@ -62,6 +62,8 @@ window.langEn = {
 	'hAdvDocLink' : 'to Receive Advertising',
 	'hAdvDocLinkRE' : 'to Receive Advertising',
 	'hIAgreeAdvRE' : 'I agree',
+	'hSearchWord' : 'File search',
+	'bSearch' : 'Search',
 	
 	'hConvertName': 'Envelope description',
 	

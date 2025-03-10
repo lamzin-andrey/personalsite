@@ -43,13 +43,31 @@ class DiskBaseApp {
 		e('bSave').onclick = () => {this.onClickSave()};
 	}
 	onClickSave(){
-		let data = {};
+		let data = {}, o = this;
 		data["name"] = v("name");
 		data["file_name"] = v("file_name");
 		data["disk_name"] = v("disk_name");
 		data["disk_name"] = v("disk_name");
 		data["convert_id"] = v("convert_id");
-		Rest2._post();
+		data["container_id"] = v("container_id");
+		data["artists"] = v("artists");
+		data["content_year"] = v("content_year");
+		data["save_date"] = v("save_date");
+		data["additional_info"] = v("additional_info");
+		data["additional_info_2"] = v("additional_info_2");
+		data["do_share"] = v("do_share");
+		df("fileData");
+		Rest2._post(data, o.onSuccessSave, `${br}/savefile.jn`, o.onFailSave, o);
+	}
+	onSuccessSave(d){
+		if (!this.onFailSave(d)){
+			return;
+		}
+		
+	}
+	onFailSave(d, rText, info){
+		ef("fileData");
+		return this.defaultFail(d, rText, info);
 	}
 	onClickAddConvert() {
 		this.converDlg = new ConvertDlg(); // It Handler

@@ -577,6 +577,13 @@ class Route {
 			$this->app = new ConvertPost();
 		}
 		
+		if ($baseUrl == '/p/hstor/savefile.jn') {
+			
+			$handler = __DIR__ . '/ctrl/hstor/savefiledata.php';
+			require_once $handler;
+			$this->app = new FileDataPost();
+		}
+		
 		/*$s = str_replace('_', '', __FUNCTION__);
 		$sCtrlDir = __dir__ . '/ctrl/' . $s . '/';
 		

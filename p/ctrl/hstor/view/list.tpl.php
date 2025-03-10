@@ -1,10 +1,9 @@
 <?=__FILE__?>
 <div>
 	Latest 
-	А далее - сохранение инфы о файле.
-	 Остановился на формировани данных в onClickSave
+	Добавить форму поиска файла по названию
 </div>
-<div class="xp appform">
+<div class="xp appform" id="fileData">
 	<input type="hidden" name="id" id="id">
 	<div>
 		<label for="name" id="hName">Must be name</label>
@@ -64,4 +63,37 @@
 	</div>
 </div>
 
+<div class="formSpacer" >&nbsp;</div>
+
+<div class="xp appform" id="fileSearch">
+	<div>
+			<label for="searchWord" id="hSearchWord"></label>
+			<textarea id="searchWord" rows="7"></textarea>
+		</div>	
+	<div class="buttons">
+		<input type="button" id="bSearch" value="">
+	</div>
+</div>
+
+<div class="formSpacer" >&nbsp;</div>
+
+<div class="xp appform" id="fileSearch">
+	
+<table>
+	<tr>
+		<th>Имя файла</th>
+		<th>Имя диска</th>
+		<th>Дата записи на диск</th>
+	</tr>
+	<tbody>
+		<tr>
+			<td>Имя файла</td>
+			<td>Имя диска</td>
+			<td>Дата записи на диск</td>
+		</tr>
+	</tbody>
+</table>
+	
+</div>
+	
 <textarea id="jsond" style="display:none"><?=$app->jsonData?></textarea>

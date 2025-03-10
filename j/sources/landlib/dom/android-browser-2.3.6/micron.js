@@ -337,6 +337,29 @@ function def(v, defV) {
     return v;
 }
 /**
+ * @description disable form
+*/
+function df(i){
+	eee(i, 'input', di);
+	eee(i, 'textarea', di);
+	eee(i, 'select', di);
+}
+function di(o){
+	let s = "disabled";
+	attr(o, s, s);
+}
+/**
+ * @description disable form
+*/
+function ef(i){
+	eee(i, 'input', ei);
+	eee(i, 'textarea', ei);
+	eee(i, 'select', ei);
+}
+function ei(o){
+	o.removeAttribute("disabled");
+}
+/**
  * @description Возвращает размер массива - 1
  * @param {Array} o
  * @return Number array length - 1

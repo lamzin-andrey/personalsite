@@ -17,10 +17,10 @@ class FileDataPost extends AdminAuthJson {
 		parent::__construct();
 		$this->table = 'hstor_file';
 		$this->tsreq('name');
-		$this->treq('file_name'); //*
-		$this->treq('disk_name'); //*
-		$this->ireq('convert_id'); //*
-		$this->ireq('container_id'); //*
+		$this->tsreq('file_name');
+		$this->tsreq('disk_name');
+		$this->tsreq('convert_id');
+		$this->tsreq('container_id');
 		$this->tsreq('artists');
 		$this->tsreq('content_year');
 		$this->tsreq('save_date');
@@ -42,7 +42,7 @@ class FileDataPost extends AdminAuthJson {
 				$sql = $this->insertQuery([
 					'user_id' => $this->uid,
 					'content_year' => $this->_postDate($this->content_year),
-					'save_date' => $this->_postDate($this->save_date)
+					'save_date' => $this->_postDate($this->save_date, true)
 				]);
 			}
 			
@@ -96,9 +96,11 @@ class FileDataPost extends AdminAuthJson {
 	/**
 	 * @description Перевод в дату
 	*/
-	private function _postDate(string $date) : bool
+	private function _postDate(string $date, bool $currentTime = false) : string
 	{
-		var_dump($date);
-		die;
+		if (!$currentTime) {
+			return "$date 00:00:00";
+		}
+		return $date . ' ' . date('H:i:s');
 	}
 }
