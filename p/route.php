@@ -578,10 +578,15 @@ class Route {
 		}
 		
 		if ($baseUrl == '/p/hstor/savefile.jn') {
-			
 			$handler = __DIR__ . '/ctrl/hstor/savefiledata.php';
 			require_once $handler;
 			$this->app = new FileDataPost();
+		}
+		
+		if ($baseUrl == '/p/hstor/searchfile.jn') {
+			$handler = __DIR__ . '/ctrl/hstor/searchfile.php';
+			require_once $handler;
+			$this->app = new SearchFile();
 		}
 		
 		/*$s = str_replace('_', '', __FUNCTION__);

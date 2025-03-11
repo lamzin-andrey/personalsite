@@ -81,17 +81,11 @@
 	
 <table>
 	<tr>
-		<th>Имя файла</th>
-		<th>Имя диска</th>
-		<th>Дата записи на диск</th>
+		<th>File name</th>
+		<th>Disk name</th>
+		<th>Date save</th>
 	</tr>
-	<tbody>
-		<tr>
-			<td>Имя файла</td>
-			<td>Имя диска</td>
-			<td>Дата записи на диск</td>
-		</tr>
-	</tbody>
+	<tbody id="searchResult"></tbody>
 </table>
 	
 </div>

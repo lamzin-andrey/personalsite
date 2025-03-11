@@ -7,6 +7,7 @@ class SlackAgencyStatus extends OpenApp {
 	public function __construct() {
 		parent::__construct();
 		
+		
 		$errors = [];
 		
 		

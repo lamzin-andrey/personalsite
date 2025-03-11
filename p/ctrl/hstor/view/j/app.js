@@ -38,9 +38,32 @@ class DiskBaseApp {
 		Rest2._setToken(t, "_token");
 	}
 	setListeners() {
-		e('bAddConvert').onclick = () => {this.onClickAddConvert()};
-		e('bAddContainer').onclick = () => {this.onClickAddContainer()};
-		e('bSave').onclick = () => {this.onClickSave()};
+		let o = this;
+		e('bAddConvert').onclick = () => {o.onClickAddConvert()};
+		e('bAddContainer').onclick = () => {o.onClickAddContainer()};
+		e('bSave').onclick = () => {o.onClickSave()};
+		e('bSearch').onclick = () => {o.onClickSearch()};
+	}
+	onClickSearch(){
+		let o = this;
+		df("fileSearch");
+		Rest2._get(o.onSuccessSearch, `${br}/searchfile.jn?s=${v("searchWord")}`, o.onFailSearch, o);
+	}
+	onSuccessSearch(d){
+		if (!this.onFailSearch(d)){
+			return;
+		}
+		let i, z = sz(d.ls), r, tr, id = "searchResult", s;
+		v(id, "");
+		for (i = 0; i < z; i++) {
+			r = d.ls[i];
+			s = date('d.m.Y H:i', strtotime(r.save_date));
+			tr = appendChild(id, 'tr', `<td>${r.file_name}</td><td>${r.disk_name}</td><td>${s}</td>`, {});
+		}
+	}
+	onFailSearch(d, rText, info){
+		ef("fileSearch");
+		return this.defaultFail(d, rText, info);
 	}
 	onClickSave(){
 		let data = {}, o = this;
