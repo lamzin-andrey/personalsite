@@ -16,28 +16,57 @@ class SearchFile extends AdminAuthJson {
 	public function __construct() {
 		parent::__construct();
 		$this->table = 'hstor_file';
-		$this->tsreq('s');
-		
+		$s = $_GET['s'] ?? '';
+		$s = strip_tags($s);
+		$s = trim($s);
+		$this->s = $s;
+		$this->ireq('dn');
 		$errors = [];
 		
 		if ($this->_validate($errors)) {
 			
-			$sql = "SELECT * FROM {$this->table} WHERE user_id = {$this->uid} AND ({cond})";
-			$aCond = [];
-			$aCond[] = $this->buildFieldCond('name');
-			$aCond[] = $this->buildFieldCond('file_name');
-			$aCond[] = $this->buildFieldCond('disk_name');
-			$aCond[] = $this->buildFieldCond('artists');
-			$aCond[] = $this->buildFieldCond('additional_info');
-			$aCond[] = $this->buildFieldCond('additional_info_2');
-			$sCond = implode(' OR ', $aCond);
-			$sql  = str_replace('{cond}', $sCond, $sql);
-			$rows = query($sql, $nR);
+			if ($this->s) {
+				$rows = $this->_loadBySearchString();
+			} else {
+				$rows = $this->_loadByDiskName();
+			}
 			
 			global $dberror;
 			json_ok('ls', $rows, 'dberror', $dberror);
 		}
 		json_error_arr(['errors' => $errors]);
+	}
+	
+	
+	private function _loadByDiskName(): array
+	{
+		$id = $this->dn;
+		$sql = "SELECT disk_name FROM {$this->table} WHERE id = {$id} LIMIT 1";
+		$diskName = dbvalue($sql);
+		if (!$diskName) {
+			return [];
+		}
+		
+		$sql = "SELECT * FROM {$this->table} WHERE user_id = {$this->uid} AND is_deleted != 1 AND disk_name = '{$diskName}';";
+		return query($sql, $nR);
+	}
+	
+	
+	private function _loadBySearchString(): array
+	{
+		$fName = $this->s;
+		$sql = "SELECT * FROM {$this->table} WHERE user_id = {$this->uid} AND is_deleted != 1 AND ({cond})";
+		$aCond = [];
+		$aCond[] = $this->buildFieldCond('name');
+		$aCond[] = $this->buildFieldCond('file_name');
+		$aCond[] = $this->buildFieldCond('disk_name');
+		$aCond[] = $this->buildFieldCond('artists');
+		$aCond[] = $this->buildFieldCond('additional_info');
+		$aCond[] = $this->buildFieldCond('additional_info_2');
+		$sCond = implode(' OR ', $aCond);
+		$sql  = str_replace('{cond}', $sCond, $sql);
+		//die($sql);
+		return query($sql, $nR);
 	}
 	
 	private function buildFieldCond(string $fName): string

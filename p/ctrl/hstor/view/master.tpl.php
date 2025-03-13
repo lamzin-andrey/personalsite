@@ -29,6 +29,7 @@
 
 <script src="/p/ctrl/hstor/view/j/classes/containerdlg.js"></script>
 <script src="/p/ctrl/hstor/view/j/classes/convertdlg.js"></script>
+<script src="/p/ctrl/hstor/view/j/classes/filefullinfodlg.js"></script>
 
 <script src="/p/ctrl/hstor/view/j/app.js"></script>
 </html>

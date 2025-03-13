@@ -46,6 +46,7 @@ class DiskBaseApp {
 	}
 	onClickSearch(){
 		let o = this;
+		o.mode = 1;
 		df("fileSearch");
 		Rest2._get(o.onSuccessSearch, `${br}/searchfile.jn?s=${v("searchWord")}`, o.onFailSearch, o);
 	}
@@ -53,13 +54,66 @@ class DiskBaseApp {
 		if (!this.onFailSearch(d)){
 			return;
 		}
-		let i, z = sz(d.ls), r, tr, id = "searchResult", s;
+		let i, z = sz(d.ls), r, tr, id = "searchResult", s, fileNameLnk, diskNameLnk, o;
+		o = this;
+		o.currentData = d;
+		if (o.mode == 2) {
+			show("hBackBtn", "inline-block");
+			o.mode = 3;
+		} else if (o.mode == 1){
+			hide("hBackBtn");
+		}
 		v(id, "");
 		for (i = 0; i < z; i++) {
 			r = d.ls[i];
 			s = date('d.m.Y H:i', strtotime(r.save_date));
-			tr = appendChild(id, 'tr', `<td>${r.file_name}</td><td>${r.disk_name}</td><td>${s}</td>`, {});
+			diskNameLnk = o.getDiskNameLnk(r);
+			fileNameLnk = o.getFileNameLnk(r);
+			tr = appendChild(id, 'tr', `<td>${fileNameLnk}</td><td>${diskNameLnk}</td><td>${s}</td>`, {});
 		}
+	}
+	getDiskNameLnk(r) {
+		let s = `<a href="#" onclick="return w.diskBaseApp.onClickDiskName('${r.id}')">${r.disk_name}</a>`;
+		return s;
+	}
+	getFileNameLnk(r) {
+		let s = `<a href="#" onclick="return w.diskBaseApp.onClickFileName('${r.id}')">${r.file_name}</a>`;
+		return s;
+	}
+	onClickFileName(id) {
+		alert("Will show " + id);
+		// TODO data = select from o.currentData by id
+		
+		this.fileFullInfoDlg = new FileFullInfoDlg(); // It Handler
+		this.fileFullInfoDlgId =  w.dlgMgr.create(this.fileFullInfoDlg.html(), this.fileFullInfoDlg);
+		// TODO o.fileFullInfoDlg.setData(data);
+		dlgMgr.center(this.fileFullInfoDlgId);
+		/*let o = this;
+		df("fileSearch");
+		
+		if (o.mode != 3) {
+			o.mode = 2;
+			o.previousData = o.currentData;
+		}
+		Rest2._get(o.onSuccessSearch, `${br}/searchfile.jn?dn=${id}`, o.onFailSearch, o);
+		return false;*/
+	}
+	onClickDiskName(id) {
+		//alert("Will load! " + id);
+		let o = this;
+		df("fileSearch");
+		
+		if (o.mode != 3) {
+			o.mode = 2;
+			o.previousData = o.currentData;
+		}
+		Rest2._get(o.onSuccessSearch, `${br}/searchfile.jn?dn=${id}`, o.onFailSearch, o);
+		return false;
+	}
+	onClickBackBtn() {
+		let o = this;
+		o.mode = 1;
+		o.onSuccessSearch(o.previousData);
 	}
 	onFailSearch(d, rText, info){
 		ef("fileSearch");

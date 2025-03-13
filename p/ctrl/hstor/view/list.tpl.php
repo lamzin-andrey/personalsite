@@ -1,9 +1,8 @@
 <?=__FILE__?>
 <div>
 	Latest 
-	Добавить форму поиска файла по названию
 </div>
-<div class="xp appform" id="fileData">
+<div class="xp appform" id="fileData" style="display:none">
 	<input type="hidden" name="id" id="id">
 	<div>
 		<label for="name" id="hName">Must be name</label>
@@ -75,7 +74,7 @@
 	</div>
 </div>
 
-<div class="formSpacer" >&nbsp;</div>
+<div class="formSpacer" >&nbsp;<img id="hBackBtn" src="/i/apps/hstor/leftArrow32.png" onclick="w.diskBaseApp.onClickBackBtn()" style="display:none;cursor:pointer;"></div>
 
 <div class="xp appform" id="fileSearch">
 	
