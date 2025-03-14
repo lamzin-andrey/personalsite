@@ -9,14 +9,17 @@ class DiskBaseApp {
 	}
 	initLists(){
 		let d, i, z, o;
+		o = this;
 		try {
 			d = JSON.parse(v("jsond"));
 		}catch(err){
 			return;
 		};
 		//console.log(d);
-		this.zSetSel("container_id", d.containers);
-		this.zSetSel("convert_id", d.converts);
+		o.containers = d.containers;
+		o.converts = d.converts;
+		o.zSetSel("container_id", d.containers);
+		o.zSetSel("convert_id", d.converts);
 	}
 	zSetSel(id, ls) {
 		let z, i;
@@ -54,7 +57,9 @@ class DiskBaseApp {
 		if (!this.onFailSearch(d)){
 			return;
 		}
-		let i, z = sz(d.ls), r, tr, id = "searchResult", s, fileNameLnk, diskNameLnk, o;
+		let i, z, r, tr, id, s, fileNameLnk, diskNameLnk, o;
+		z = sz(d.ls);
+		id = "searchResult";
 		o = this;
 		o.currentData = d;
 		if (o.mode == 2) {
@@ -80,13 +85,35 @@ class DiskBaseApp {
 		let s = `<a href="#" onclick="return w.diskBaseApp.onClickFileName('${r.id}')">${r.file_name}</a>`;
 		return s;
 	}
+	findById(id, ls){
+		let z, i, trg, c;
+		z = sz(ls);
+		for (i = 0; i < z; i++) {
+			c = ls[i];
+			if (c.id == id) {
+				trg = c;
+				break;
+			}
+		}
+		return trg;
+	}
 	onClickFileName(id) {
-		alert("Will show " + id);
-		// TODO data = select from o.currentData by id
+		let i, z, trg, c, o;
+		o = this;
+		
+		trg = o.findById(id, o.currentData.ls);
+		
+		if (!trg) {
+			o.showError(l("File Not Found"));
+			return;
+		}
+		console.log(trg);
+		trg.container = o.findById(trg.container_id, o.containers);
+		trg.convert = o.findById(trg.convert_id, o.converts);
 		
 		this.fileFullInfoDlg = new FileFullInfoDlg(); // It Handler
 		this.fileFullInfoDlgId =  w.dlgMgr.create(this.fileFullInfoDlg.html(), this.fileFullInfoDlg);
-		// TODO o.fileFullInfoDlg.setData(data);
+		o.fileFullInfoDlg.setData(trg);
 		dlgMgr.center(this.fileFullInfoDlgId);
 		/*let o = this;
 		df("fileSearch");

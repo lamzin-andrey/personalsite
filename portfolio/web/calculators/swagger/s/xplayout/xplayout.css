@@ -98,3 +98,8 @@ input[type=text].long {
   vertical-align: top;
   text-align: center;	
 }
+
+
+section div {
+	display:inline-block;
+}

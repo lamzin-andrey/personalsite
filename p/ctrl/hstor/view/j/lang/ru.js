@@ -49,8 +49,10 @@ window.langRu = {
 	'hDoShare' : 'Показывать в результатах поиска, доступных другим пользователям',
 	'Add envelope description': 'Добавить описание конверта',
 	'Envelope editor': 'Описание конвертов',
+	'Envelope': 'Конверт',
 	'hIUnderstood': 'Я понял',
 	'boChangeLang': 'Change language',
+	'Full File Data': 'Данные файла',
 	
 	'hConvertName': 'Описание конверта',
 	'hConvertColor': 'Цвет конверта',
@@ -108,9 +110,17 @@ window.langRu = {
 	'hAdvDocLink' : 'Согласие на получение рекламы',
 	'hAdvDocLinkRE' : 'Согласие на получение рекламы',
 	'hIAgreeAdvRE' : 'Я даю',
-	
 	'bGotoCatFromDwnlScr' : 'Закрыть',
 	'hWdInfo' : 'Ссылка на файл',
-	
-	'' : ''
+	'hFileName' : 'Имя файла',
+	'hAddInfo' : 'Дополнительно',
+	'hDisName' : 'Название',
+	'hAddInfo2' : 'Больше информации',
+	'hArtists' : 'Артисты',
+	'hSaveDate' : 'Дата сохранения',
+	'hShare' : 'Общий',
+	'hContentYear':'Дата (год) создания',
+	'Yes':'Да',
+	'No':'Нет',
+	'bClose':'Закрыть',
 };

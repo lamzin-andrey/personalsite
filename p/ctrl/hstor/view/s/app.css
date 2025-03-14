@@ -55,3 +55,11 @@ label i {
 .mb10  {
 	margin-bottom:10px!important;
 }
+
+
+.FFIDlg {
+	padding: 0px 10px !important;
+}
+.FFIDlg .do_share{
+	width:24px;
+}

@@ -1,7 +1,4 @@
 <?=__FILE__?>
-<div>
-	Latest 
-</div>
 <div class="xp appform" id="fileData" style="display:none">
 	<input type="hidden" name="id" id="id">
 	<div>

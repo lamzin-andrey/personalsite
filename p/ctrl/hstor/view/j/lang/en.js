@@ -64,13 +64,18 @@ window.langEn = {
 	'hIAgreeAdvRE' : 'I agree',
 	'hSearchWord' : 'File search',
 	'bSearch' : 'Search',
-	
 	'hConvertName': 'Envelope description',
-	
 	'hContainerName': 'Container description',
 	'hContainerColor': 'Container color',
-	
 	'hWdInfo' : 'Download link',
-	
-	'' : ''
+	'hFileName' : 'File name',
+	'hAddInfo' : 'Additional info',
+	'hDisName' : 'Name',
+	'hAddInfo2' : 'More info',
+	'hArtists' : 'Artists',
+	'hSaveDate' : 'Save date',
+	'hShare' : 'Share',
+	'hContentYear': 'Date (Year) publication',
+	'bClose':'Close',
+	'':''
 };
