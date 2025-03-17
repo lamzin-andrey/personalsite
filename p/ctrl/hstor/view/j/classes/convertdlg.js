@@ -10,6 +10,8 @@ class ConvertDlg extends ContainerDlg{
 		o.hLoader = o.e('hCnvLdr');
 		o.ctrl = "saveconv.jn";
 		o.listId = "convert_id";
+		o.listName = "converts";
+		o.iId = o.e(o.listId);
 
 		o.bSave.onclick = (ev) => {o.onClickSave(ev)};
 	}
@@ -40,6 +42,7 @@ class ConvertDlg extends ContainerDlg{
 			<div>
 				<label for="convert_color${n}" id="hConvertColor"><i>*</i> ${l('hConvertColor')}</label>
 				<input type="text"  c="convert_color" id="convert_color${n}">
+				<input type="hidden"  c="convert_id" id="convert_id_${n}">
 			</div>
 			<div class="buttons mb10">
 				<img src="/i/apps/hstor/ld/s.gif" c="hCnvLdr">
@@ -48,5 +51,18 @@ class ConvertDlg extends ContainerDlg{
 		</div>`;
 		
 		return str_replace(' c="', ' class="', s);
+	}
+	setData(){
+		let id, o, d;
+		o = this;
+		id = v(o.listId);
+		v(o.iId, id);
+		d = w.diskBaseApp.findById(id, w.diskBaseApp[o.listName]);
+		if (!d) {
+			v(o.iId, 0);
+			return;
+		}
+		v(o.iName, d.name);
+		v(o.iColor, d.color);
 	}
 }

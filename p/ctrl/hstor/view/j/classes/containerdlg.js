@@ -10,6 +10,9 @@ class ContainerDlg{
 		o.hLoader = o.e('hContLdr');
 		o.ctrl = "savecont.jn";
 		o.listId = "container_id";
+		o.listName = "containers";
+		o.iId = o.e(o.listId);
+		
 
 		o.bSave.onclick = (ev) => {o.onClickSave(ev)};
 	}
@@ -45,6 +48,7 @@ class ContainerDlg{
 			<div>
 				<label for="container_color${n}" id="hContainerColor"><i>*</i> ${l('hContainerColor')}</label>
 				<input type="text"  c="container_color" id="container_color${n}">
+				<input type="hidden"  c="container_id" id="container_id_${n}">
 			</div>
 			<div class="buttons mb10">
 				<img src="/i/apps/hstor/ld/s.gif" c="hContLdr">
@@ -63,19 +67,61 @@ class ContainerDlg{
 		data = {};
 		data.name = v(o.iName);
 		data.color = v(o.iColor);
+		if (v(o.iId)) {
+			data.id = v(o.iId);
+		}
 		show(o.hLoader, 'inline-block');
 		Rest2._post(data, o.onSuccessSend, `${br}/${o.ctrl}`, o.onFailSend, o);
 	}
 	onSuccessSend(data) {
-		let o = this;
+		let o = this, k;
 		if(o.onFailSend(data)) {
-			
-			slAo(o.listId, v(o.iName), data.id);
+			if (o.iId) {
+				k = w.diskBaseApp.findById(v(o.iId), w.diskBaseApp[o.listName]);
+				if (k) {
+					k.name = v(o.iName);
+					k.color = v(o.iColor);
+					slUo(o.listId, v(o.iName), data.id);
+				}
+			} else {
+				slAo(o.listId, v(o.iName), data.id);
+				w.diskBaseApp[o.listName].push({
+					id: data.id,
+					name: o.iName,
+					color: o.iColor
+				});
+			}
 			w.dlgMgr.close(o.N);
 		}
 	}
 	onFailSend(status, responseText, info, xhr, readyState) {
 		hide(this.hLoader);
 		return w.diskBaseApp.defaultFail(status, responseText, info, xhr, readyState);
+	}
+	/*setData(){
+		let id, o, d;
+		o = this;
+		id = v(o.listId);
+		v(o.iId, id);
+		d = w.diskBaseApp.findById(id, w.diskBaseApp.converts);
+		if (!d) {
+			v(o.iId, 0);
+			return;
+		}
+		v(o.iName, d.name);
+		v(o.iColor, d.color);
+	}*/
+	setData(){
+		let id, o, d;
+		o = this;
+		id = v(o.listId);
+		v(o.iId, id);
+		d = w.diskBaseApp.findById(id, w.diskBaseApp[o.listName]);
+		if (!d) {
+			v(o.iId, 0);
+			return;
+		}
+		v(o.iName, d.name);
+		v(o.iColor, d.color);
 	}
 }

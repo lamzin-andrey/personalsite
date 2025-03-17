@@ -5,7 +5,8 @@ class FileFullInfoDlg{
 		o.N = n;
 		o.parentDiv = e(window.dlgMgr.getIdPref() + n);
 		o.bClose = o.e('bContainerSave');
-		o.iName = o.e('name');
+		o.bEdit  = o.e('bContainerEdit');
+		o.iName  = o.e('name');
 		o.iColor = o.e('container_color');
 		o.iContainer = o.e('container_name');
 		o.iShare = o.e("do_share");
@@ -17,6 +18,7 @@ class FileFullInfoDlg{
 		o.iContentYear = o.e("content_year");
 
 		o.bClose.onclick = (ev) => {o.onClickClose(ev)};
+		o.bEdit.onclick = (ev) => {o.onClickEdit(ev)};
 	}
 	getDlgBtns() {
 		return "001";
@@ -96,7 +98,7 @@ class FileFullInfoDlg{
 				</div>
 			</section>
 			<div class="buttons mb10">
-				<img src="/i/apps/hstor/ld/s.gif" c="hContLdr">
+				<input type="button" c="bContainerEdit" value="${l('bEdit')}">
 				<input type="button" c="bContainerSave" value="${l('bClose')}">
 			</div>
 		</div>`;
@@ -105,6 +107,7 @@ class FileFullInfoDlg{
 	}
 	setData(d){
 		let o = this;
+		o.d = d;
 		v(o.iName, d.name);
 		v(o.iFileName, d.file_name);
 		v(o.iContainer, d.container.name + "\n\n" + l("Envelope") + ": " + d.convert.name + "; " +  l("hConvertColor") + ": " + d.convert.color);
@@ -120,6 +123,29 @@ class FileFullInfoDlg{
 	}
 	onClickClose(ev){
 		w.dlgMgr.close(this.N);
+	}
+	onClickEdit(ev){
+		let o, d;
+		o = this;
+		d = o.d;
+		v("id", d.id);
+		v("name", d.name);
+		v("file_name", d.file_name);
+		v("disk_name", d.disk_name);
+		v("convert_id", d.convert_id);
+		v("container_id", d.container_id); // TODO support?
+		v("artists", d.artists);
+		v("content_year", o.e2r(d.content_year));
+		v("save_date", o.e2r(d.save_date));
+		v("additional_info", d.additional_info);
+		v("additional_info_2", d.additional_info_2);
+		v("do_share", d.do_share);
+		w.dlgMgr.close(this.N);
+	}
+	e2r(s) {
+		let a, b;
+		a = s.split(' ');
+		return a[0];
 	}
 	
 }

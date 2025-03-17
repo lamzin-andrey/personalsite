@@ -395,6 +395,17 @@ function slAo(s, t, i){
 	s.options[sz(s.options)] = o;
 }
 
+function slUo(s, t, i){
+	var o, j, z;
+	s = e(s);
+	z = sz(s.options);
+	for (j = 0; j < z; j++) {
+		if (s.options[j].value == i) {
+			s.options[j].text = t;
+		}
+	}
+}
+
 /**
  * @description Меняет два элемента в массиве (или объекте) местами
  * @param {Array|Object}  o

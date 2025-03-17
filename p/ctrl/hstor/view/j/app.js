@@ -46,6 +46,9 @@ class DiskBaseApp {
 		e('bAddContainer').onclick = () => {o.onClickAddContainer()};
 		e('bSave').onclick = () => {o.onClickSave()};
 		e('bSearch').onclick = () => {o.onClickSearch()};
+		
+		e('bEditConvert').onclick = () => {o.onClickEditConvert()};
+		e('bEditContainer').onclick = () => {o.onClickEditContainer()};
 	}
 	onClickSearch(){
 		let o = this;
@@ -148,6 +151,7 @@ class DiskBaseApp {
 	}
 	onClickSave(){
 		let data = {}, o = this;
+		data["id"] = v("id");
 		data["name"] = v("name");
 		data["file_name"] = v("file_name");
 		data["disk_name"] = v("disk_name");
@@ -178,13 +182,23 @@ class DiskBaseApp {
 		this.convertDlgId =  w.dlgMgr.create(this.converDlg.html(), this.converDlg);
 		w.dlgMgr.center(this.convertDlgId);
 	}
-	
+	onClickEditConvert() {
+		this.converDlg = new ConvertDlg(); // It Handler
+		this.convertDlgId =  w.dlgMgr.create(this.converDlg.html(), this.converDlg);
+		w.dlgMgr.center(this.convertDlgId);
+		this.converDlg.setData();
+	}
 	onClickAddContainer() {
 		this.containerDlg = new ContainerDlg(); // It Handler
 		this.containerDlgId =  w.dlgMgr.create(this.containerDlg.html(), this.containerDlg);
 		w.dlgMgr.center(this.containerDlgId);
 	}
-	
+	onClickEditContainer() {
+		this.containerDlg = new ContainerDlg(); // It Handler
+		this.containerDlgId =  w.dlgMgr.create(this.containerDlg.html(), this.containerDlg);
+		w.dlgMgr.center(this.containerDlgId);
+		this.containerDlg.setData();
+	}
 	defaultFail(d, responseText, info, xhr, readyState) {
 		if (d instanceof Object) {
 			if (d.status == "ok") {

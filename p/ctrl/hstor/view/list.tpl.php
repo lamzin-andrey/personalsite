@@ -1,5 +1,4 @@
-<?=__FILE__?>
-<div class="xp appform" id="fileData" style="display:none">
+<div class="xp appform" id="fileData" style="display:non">
 	<input type="hidden" name="id" id="id">
 	<div>
 		<label for="name" id="hName">Must be name</label>
@@ -18,6 +17,7 @@
 			<label for="convert_id" id="hConvertId"></label>
 			<select id="convert_id"></select>
 			<img src="/i/apps/hstor/+.png" id="bAddConvert" class="btnall">
+			<img src="/i/apps/hstor/e.png" id="bEditConvert" class="btnall">
 		</span>
 	</div>
 	<div class="selwrp">
@@ -25,6 +25,7 @@
 			<label for="container_id" id="hContainerId"></label>
 			<select id="container_id"></select>
 			<img src="/i/apps/hstor/+.png" id="bAddContainer" class="btnall">
+			<img src="/i/apps/hstor/e.png" id="bEditContainer" class="btnall">
 		</span>
 	</div>
 	<div>
