@@ -38,10 +38,12 @@ class TaskIntervalExportController extends AppBaseController
 		}
 		$sDate = $oRequest->get('pc-calindar-date', date('Y-m-d'));
     	$sDate = trim($sDate) ?? date('Y-m-d');
-    	//TODO validate date!
-		if (!preg_match("#^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$#", $sDate)) {
-			$this->addFlash('notice', $t->trans('Invalid date'));
-			return $this->render('task_interval_export/articles.html.twig', $aData);
+
+        $sEndDate = $oRequest->get('pc-calindar-end-date', date('Y-m-d'));
+        $sEndDate = trim($sDate) ?? date('Y-m-d');
+    	// validate date!
+		if (!preg_match("#^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$#", $sEndDate)) {
+            $sEndDate = $sDate;
 		}
 
 
@@ -84,7 +86,7 @@ class TaskIntervalExportController extends AppBaseController
     	$oQueryBuilder->where( $e->in('t.taskId', $aTaskIdList) );
     	$oQueryBuilder->select('t.startDatetime, t.endDatetime, t.taskId');
     	$oQueryBuilder->andWhere( 't.startDatetime >= \'' . $sDate . ' 00:00:00\'' );
-    	$oQueryBuilder->andWhere( 't.endDatetime <= \'' . $sDate . ' 23:59:59\'' );
+    	$oQueryBuilder->andWhere( 't.endDatetime <= \'' . $sEndDate . ' 23:59:59\'' );
     	$aData['aIntervals'] = $oQueryBuilder->getQuery()->getResult();
 		$aData['sDate'] = $sDate;
 		$aData['oTree'] = $oBranch;
