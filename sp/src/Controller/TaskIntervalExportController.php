@@ -89,6 +89,7 @@ class TaskIntervalExportController extends AppBaseController
     	$oQueryBuilder->andWhere( 't.endDatetime <= \'' . $sEndDate . ' 23:59:59\'' );
     	$aData['aIntervals'] = $oQueryBuilder->getQuery()->getResult();
 		$aData['sDate'] = $sDate;
+		$aData['sEndDate'] = $sEndDate;
 		$aData['oTree'] = $oBranch;
 
         return $this->render('task_interval_export/index.html.twig', $aData);

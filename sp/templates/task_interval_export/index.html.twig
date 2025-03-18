@@ -20,6 +20,7 @@
 	<form mathod="GET" action="{{ path('task_interval_export') }}">
 		<label for="date" class="d-block">{{ 'Select a Date'|trans }}:</label>
 		<input class="pjs-calendar" value="{{ sDate }}" id="date" name="date">
+		<input class="pjs-calendar" value="{{ sDate }}" id="end-date" name="end-date">
 		{% if (oTask is defined) %}
 		<div class="alert alert-warning alert-dismissible fade show">
 			<strong>{{ 'Show times for task'|trans }}:</strong>
