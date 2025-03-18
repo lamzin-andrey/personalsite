@@ -76,7 +76,7 @@ class ContainerDlg{
 	onSuccessSend(data) {
 		let o = this, k;
 		if(o.onFailSend(data)) {
-			if (o.iId) {
+			if (o.iId.value) {
 				k = w.diskBaseApp.findById(v(o.iId), w.diskBaseApp[o.listName]);
 				if (k) {
 					k.name = v(o.iName);
@@ -87,8 +87,8 @@ class ContainerDlg{
 				slAo(o.listId, v(o.iName), data.id);
 				w.diskBaseApp[o.listName].push({
 					id: data.id,
-					name: o.iName,
-					color: o.iColor
+					name: v(o.iName),
+					color: v(o.iColor)
 				});
 			}
 			w.dlgMgr.close(o.N);
