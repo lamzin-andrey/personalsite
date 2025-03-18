@@ -12,6 +12,11 @@
 	<?php include $route->view ?>
 </body>
 
+<!-- после переезда выпили как страшный сон -->
+<script src="/j/vendor/jquery-3.3.1.slim.min.js?v=23"></script>
+<script src="/j/sources/landcache/sources/js/land_cache_client.es5.js?v=23"></script>
+<script src="/d/drive/fd/j/cachesw.es5.js?v=23"></script>
+
 <script src="/j/sources/landlib/dom/android-browser-2.3.6/micron.js"></script>
 <script src="/portfolio/web/calculators/swagger/j/v/php.js"></script>
 
