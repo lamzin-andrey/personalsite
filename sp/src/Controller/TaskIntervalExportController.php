@@ -40,7 +40,7 @@ class TaskIntervalExportController extends AppBaseController
     	$sDate = trim($sDate) ?? date('Y-m-d');
 
         $sEndDate = $oRequest->get('pc-calindar-end-date', date('Y-m-d'));
-        $sEndDate = trim($sDate) ?? date('Y-m-d');
+        $sEndDate = trim($sEndDate) ?? date('Y-m-d');
     	// validate date!
 		if (!preg_match("#^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$#", $sEndDate)) {
             $sEndDate = $sDate;
