@@ -17,6 +17,17 @@
 			<div class="mt-3 text-center">
 				<a class="button" href="/blog/">В блог</a>
 			</div>
+			
+			<div class="mt-3 text-center">
+				<form method="POST" action="/ip/">
+					<div class="mt-3">
+						<input type="text" name="ip" class="w88" value="<?=($_SERVER['REMOTE_ADDR'] ?? '')?>">
+					</div>
+					<div class="mt-3">
+						<input type="submit" class="button" href="/blog/" value="Проверить">
+					</div>
+				</form>
+			</div>
 		</div>
 	</body>
 </html>

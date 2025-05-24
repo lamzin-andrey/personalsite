@@ -6,6 +6,11 @@ html, body {
 .h100 {
 	min-height:100%;
 }
+
+.w88 {
+	width:88%;
+}
+
 .text-center {
 	text-align:center;
 }
@@ -47,4 +52,5 @@ html, body {
 	min-height: 20px;
 	line-height: 28px;
 	border-radius:4px;
+	cursor:pointer;
 }
