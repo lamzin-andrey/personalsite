@@ -1,0 +1,65 @@
+body {
+	background-color: #a4ccff;
+	color: white;
+}
+label i {
+	color :#AA0000;
+}
+
+.selwrp label{
+	min-width:324px;
+}
+
+.selwrp span{
+	height: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+
+.selwrp span img{
+	height: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+
+.appform input[type=text] {
+	width:520px;
+}
+
+.btnall {
+	cursor:pointer;
+}
+
+/** Friendship dlgManager & xplayout*/
+.landDlgMgr, .landDlgMgr div {
+	padding: 0;
+	margin-bottom: 0;
+}
+
+.landDlgMgr {
+	background-color: #EFE9D6;
+}
+.convertDlg {
+	padding: 10px 10px!important;
+}
+.hCnvLdr, .hContLdr {
+	line-height: 32px;
+	vertical-align:middle;
+	display:none;
+}
+.landDlgMgr div.title {
+	margin-right:20px;
+	font-family: Arial;
+}
+
+.mb10  {
+	margin-bottom:10px!important;
+}
+
+
+.FFIDlg {
+	padding: 0px 10px !important;
+}
+.FFIDlg .do_share{
+	width:24px;
+}

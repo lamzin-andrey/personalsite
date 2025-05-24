@@ -29,6 +29,7 @@ class Route {
 		$this->_phd();
 		$this->_apipdf();
 		$this->_hstor();
+		$this->_qland();
 		$this->_work_exp22122020();
 		$this->_work_exp18042022();
 		
@@ -599,6 +600,50 @@ class Route {
 			require_once $handler;
 			$this->app = new TrollKillerLogin();
 		}*/
+	}
+	
+	/**
+	 * @description Маршруты для страницы /p/hstor/
+	*/
+	protected function _qland()
+	{
+		$baseUrl = $this->_baseUrl;
+		
+		if ($baseUrl == '/p/quotesland/') {
+			$this->master = __DIR__ . '/ctrl/quotesland/view/master.tpl.php';
+			$handler = __DIR__ . '/ctrl/quotesland/qlandpage.php';
+			$this->view    = __dir__ . '/ctrl/quotesland/view/list.tpl.php';
+			require_once $handler;
+			$this->app = new QLandPage();
+		}
+		
+		
+		/*if ($baseUrl == '/p/quotesland/savecont.jn') {
+			$handler = __DIR__ . '/ctrl/quotesland/savecontainer.php';
+			require_once $handler;
+			$this->app = new ContainerPost();
+		}
+		
+		if ($baseUrl == '/p/hstor/saveconv.jn') {
+			
+			$handler = __DIR__ . '/ctrl/hstor/saveconvert.php';
+			require_once $handler;
+			$this->app = new ConvertPost();
+		}*/
+		
+		if ($baseUrl == '/p/quotesland/savefile.jn') {
+			$handler = __DIR__ . '/ctrl/hstor/qlandsavequote.php';
+			require_once $handler;
+			$this->app = new QLandPost();
+		}
+		
+		/*if ($baseUrl == '/p/hstor/searchfile.jn') {
+			$handler = __DIR__ . '/ctrl/hstor/searchfile.php';
+			require_once $handler;
+			$this->app = new SearchFile();
+		}*/
+		
+
 	}
 }
 $route = new Route();

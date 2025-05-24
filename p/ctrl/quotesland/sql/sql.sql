@@ -1,0 +1,37 @@
+DROP TABLE IF EXISTS qland_list;
+CREATE TABLE IF NOT EXISTS qland_list (
+	id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	_text VARCHAR(8192) COMMENT 'Текст цитаты',
+	text_hash VARCHAR(32) COMMENT 'Хэш текста цитаты',
+	INDEX text_hash (text_hash),  
+	_rate INTEGER DEFAULT 1 COMMENT 'Рейтинг',
+	INDEX _rate (_rate),  
+	is_banned TINYINT(1) DEFAULT 0  COMMENT '1 - забанено',
+	INDEX is_banned (is_banned),
+	is_moderate TINYINT(1) DEFAULT 0  COMMENT '1 - проверено',
+	-- delta INTEGER DEFAULT 10 COMMENT 'Позиция',
+	user_id INTEGER COMMENT 'ausers.id',
+	created_time DATETIME,
+	updated_time DATETIME
+)Engine=InnoDB, CHARSET utf8;
+
+DROP TABLE IF EXISTS qland_source;
+
+	CREATE TABLE IF NOT EXISTS qland_source (
+		id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+		qland_list_id INTEGER COMMENT 'qland_list.id',
+		INDEX qland_list_id (qland_list_id),
+		authors  VARCHAR(1024) DEFAULT NULL COMMENT 'Авторы цитаты',
+		source_title VARCHAR(1024) DEFAULT NULL COMMENT 'Имя источника цитаты',
+		text_hash VARCHAR(32) COMMENT 'Хэш Имя источника цитаты',
+		INDEX text_hash (text_hash),  
+		source_type VARCHAR(255) DEFAULT NULL COMMENT 'Фильм, книга, песня и т п',
+		is_banned TINYINT(1) DEFAULT 0  COMMENT '1 - забанено',
+		INDEX is_banned (is_banned),
+		is_moderate TINYINT(1) DEFAULT 0  COMMENT '1 - проверено',
+		delta INTEGER DEFAULT 10 COMMENT 'Позиция',
+		INDEX is_moderate (is_moderate),
+		INDEX delta (delta),
+		created_time DATETIME,
+		updated_time DATETIME
+	)Engine=InnoDB, CHARSET utf8;
