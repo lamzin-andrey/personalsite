@@ -118,6 +118,10 @@ class Route {
 			$this->app = new SetTs2();
 		}
 		
+		if ($baseUrl == '/p/chat/state/v/') {
+			json_ok("url", "https://pchat.com.ru");
+		}
+		
 	}
 	
 	/**

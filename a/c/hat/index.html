@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>Чат</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="viewport" content="	initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width,height=device-height,shrink-to-fit=no">
+	<style>
+		.t {
+			color:#FFF;
+			font-weight:bold;
+			font-size:48;
+			text-align:center;
+		}
+		.hello {
+			margin-top:30%
+		}
+		.state {
+			margin-top:5%
+		}
+	</style>
+</head>
+
+<body style="background-color:#000;color:#FFF;">
+	<div class="t hello">Привет! Сейчас вы будете перемещены в чат.</div>
+	<div id="status"  class="t state">0</div>
+</body>
+<script src="/j/sources/landlib/net/rest.es5.js"></script>
+<script>
+	window.w = window;
+	function e(i){return document.getElementById(i)}
+	function main() {
+		w.c = 0;
+		state("Получаем версию");
+		Rest._get(onGetVers, "/p/chat/state/v/", DevNull);
+	}
+	function onGetVers(d) {
+		if (w.c == 0) {
+			w.c++;
+			state("Проверяем версию");
+			startAnim();
+			return;
+		}
+		if (w.c == 1) {
+			state("Переходим");
+			location.href = d.url;
+		}
+	}
+	
+	function onTick() {
+		if (w.n >= 5) {
+			clearInterval(w.iv);
+			state("Уже скоро...");
+			Rest._get(onGetVers, "/p/chat/state/v/", DevNull);
+		}
+		w.n++;
+		state(w.n);
+	}
+	
+	function startAnim() {
+		w.n = 0;
+		w.iv = setInterval(onTick, 1000);
+	}
+	
+	function state(s){
+		e("status").innerHTML = s;
+	}
+	
+	function DevNull(){}
+	w.onload = main;
+</script>
+</html>
