@@ -102,7 +102,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 							<?= $or?>
 							<a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/" target="_blank"><?=$other_linux ?></a>.
 						</div>
-						<a title="Download and extract the archive, and run Setup" href="https://disk.yandex.ru/d/KJ9L554llJdgyQ" target="blank" class="text-success" style="display:inline-block;margin-left:22px;"><?=$linktext?>.</a>
+						<a title="Download and extract the archive, and run Setup" href="https://wkard.ru/d/drive/?action=share&i=417" target="blank" class="text-success" style="display:inline-block;margin-left:22px;"><?=$linktext?>.</a>
 						
 						<div style="text-align:right;margin-bottom:0px;" class="addinfo">
 							<span class="py-1">
