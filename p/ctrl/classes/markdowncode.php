@@ -37,7 +37,9 @@ class MarkdownCode
                     $currentLang = self::LANG_MAP[$currentLang] ?? $currentLang;
                     // Добавляем открывающий тег HTML блока
                     $result[] = "[html]";
-                    $result[] = "<pre><code class=\"language-{$currentLang}\">";
+                    if (!$this->isSpecialPseudoLang($currentLang)) {
+						$result[] = "<pre><code class=\"language-{$currentLang}\">";
+					}
                 } else {
                     $result[] = $line;
                 }
@@ -55,8 +57,17 @@ class MarkdownCode
                         $blockContent = htmlspecialchars($blockContent, ENT_QUOTES, 'UTF-8');
                     }
                     
+                    if ($currentLang === 'info' || $currentLang === 'infohead') {
+                        $blockContent = $this->createInfoBlock($blockContent, ($currentLang === 'infohead'));
+                    }
+                    if ($currentLang === 'warning' || $currentLang === 'warninghead') {
+                        $blockContent = $this->createWarningBlock($blockContent, ($currentLang === 'warninghead'));
+                    }
+                    
                     $result[] = $blockContent;
-                    $result[] = "</code></pre>";
+                    if (!$this->isSpecialPseudoLang($currentLang)) {
+						$result[] = "</code></pre>";
+					}
                     $result[] = "[/html]";
                     
                     $currentBlock = [];
@@ -74,6 +85,78 @@ class MarkdownCode
         
         return implode("\n", $result);
     }
+    
+    private function createInfoBlock(string $blockContent, bool $withHead = false): string
+    {
+		return $this->createPseudoLangBlock($blockContent, $withHead);
+	}
+	
+	private function isSpecialPseudoLang(string $currentLang):bool
+	{
+		$list = [
+			'info',
+			'infohead',
+			'warning',
+			'warninghead',
+		];
+		return in_array($currentLang, $list);
+	}
+	
+	private function getInfoTplWithHead(): string
+	{
+		return '<div role="alert" class="alert alert-info">
+<div class=" border u-warning-icon-border rounded-circle p-1 d-inline-block float-left mr-2" style="min-width: 49px; padding-left: 15px !important; height: 53px !important; border-color: rgb(132, 132, 181) !important;">
+<i class="fa fa-info" style="font-size: 2rem;"></i></div> 
+<h4 class="alert-heading">{head}</h4>
+{text}
+<hr> <p class="mb-0">&nbsp;</p></div>';
+	}
+	
+	private function getInfoTpl(): string
+	{
+		return '<div role="alert" class="alert alert-info">
+<div class=" border u-warning-icon-border rounded-circle p-1 d-inline-block float-left mr-2" style="min-width: 49px; padding-left: 15px !important; height: 53px !important; border-color: rgb(132, 132, 181) !important;">
+<i class="fa fa-info" style="font-size: 2rem;"></i></div> 
+{text}
+<hr> <p class="mb-0">&nbsp;</p></div>';
+	}
+	
+	private function createWarningBlock(string $blockContent, bool $withHead = false): string
+    {
+		return $this->createPseudoLangBlock($blockContent, $withHead, 'getWarnTplWithHead', 'getWarnTpl');
+	}
+	
+	private function getWarnTplWithHead(): string
+	{
+		return '<div class="alert alert-warning"><div class=" border u-warning-icon-border rounded-circle p-1 d-inline-block float-left mr-2"><i class="fa fa-radiation" style="font-size: 2rem;"></i></div>
+<h4 class="alert-heading">{head}</h4>
+{text}
+</div>';
+	}
+	
+	private function getWarnTpl(): string
+	{
+		return '<div class="alert alert-warning"><div class=" border u-warning-icon-border rounded-circle p-1 d-inline-block float-left mr-2"><i class="fa fa-radiation" style="font-size: 2rem;"></i></div>
+{text}
+</div>';
+	}
+	
+	private function createPseudoLangBlock(string $blockContent, bool $withHead = false, string $withHeadTpl = 'getInfoTplWithHead', string $noHeadTpl = 'getInfoTpl'): string
+    {
+		$a = explode("\n", $blockContent);
+		$head = '';
+		if ($withHead) {
+			$head = $a[0];
+			unset($a[0]);
+			$tpl = $this->$withHeadTpl();
+		} else {
+			$tpl = $this->$noHeadTpl();
+		}
+		$text = '<p>' . implode("</p>\n<p>", $a) . '</p>' . "\n";
+		$s = str_replace('{text}', $text, $tpl);
+		$s = str_replace('{head}', $head, $s);
+		return $s;
+	}
 
     private function detectBlockStart(string $line, string &$detectedLangName): bool
     {
