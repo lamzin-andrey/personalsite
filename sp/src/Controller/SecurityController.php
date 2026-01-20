@@ -270,6 +270,7 @@ class SecurityController extends AppBaseController
                     $bSuccess = $oMessage->send();
                     $ajaxData['success'] = false;
                     $ajaxData['token'] = $csrfResetToken;
+                    // $ajaxData['pwd'] = $sPasswordRaw; // TODO remove me!
                     if ($bSuccess) {
                         $aData['isEmailWasFound'] = 1;
                         $a = explode('@', $sEmail);

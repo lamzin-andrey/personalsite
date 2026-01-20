@@ -2,6 +2,7 @@
 include __DIR__ . '/adminauthjson.php';
 include __DIR__ . '/articles/classes/articleslistcompiler.php';
 include_once DOC_ROOT . '/p/ctrl/classes/cstaticpagescompiler.php';
+include_once DOC_ROOT . '/p/ctrl/classes/markdowncode.php';
 
 class ArticlePost extends AdminAuthJson {	
 	/** @property string */
@@ -50,6 +51,10 @@ class ArticlePost extends AdminAuthJson {
 					$sDate = now();
 				}
 			}
+			
+			$mCode = new MarkdownCode();
+			$this->content_block = $mCode->processText($this->content_block);
+			
 			$oCompiler = new CStaticPagesCompiler(1, $this->url, $this->title, $this->heading, $this->content_block,
 													$this->description,
 													$this->keywords,
