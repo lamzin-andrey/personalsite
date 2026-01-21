@@ -253,6 +253,13 @@ class Pages
     private $hiddenInList = '0';
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="force", type="integer", nullable=false, options={"default"="0", "comment"="Стартовый форсаж, чтобы вытаскивать нужные статьи наверх"})
+     */
+    private $force = 0;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="force_recompiled", type="boolean", nullable=false, options={"default"="0", "comment"="1 когда надо всегода перекомипилировать страницу (например, для главной страницы это очень важно)"})
@@ -672,5 +679,16 @@ class Pages
         return $this;
     }
 
+    public function getForce(): ?int
+    {
+        return $this->force;
+    }
+
+    public function setForce(int $force): self
+    {
+        $this->force = $force;
+
+        return $this;
+    }
 
 }

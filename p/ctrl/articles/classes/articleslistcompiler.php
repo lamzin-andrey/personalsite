@@ -182,7 +182,11 @@ class ArticlesListCompiler extends CPageCompiler {
 		$this->_compilePagesAction = $bCompilePages;
 		$this->_setRightMenu();
 		$_REQUEST['noxhr'] = true;
-		$this->aData = query('SELECT * FROM pages WHERE is_deleted != 1 AND ((is_hidden != 1 AND hidden_in_list != 1) OR force_recompiled = 1) ORDER BY rating DESC, delta ASC');
+		$this->aData = query('SELECT * FROM pages
+			WHERE is_deleted != 1 AND ((is_hidden != 1 AND hidden_in_list != 1) 
+			OR force_recompiled = 1) 
+			ORDER BY (rating + `force`) DESC, delta ASC'
+		);
 		$this->title = l('Andrey\'blog', true);
 		$url = '/blog/';
 		$this->outputFile = DOC_ROOT . '/blog/index.html';
@@ -221,7 +225,10 @@ class ArticlesListCompiler extends CPageCompiler {
 		$oCallback->context = $this;
 		while (true) {
 			$_REQUEST['noxhr'] = true;
-			$this->aData = query('SELECT * FROM portfolio WHERE category_id IN(' . $sCategoryIdList . ') AND is_deleted != 1 AND hide_from_productlist != 1 ORDER BY delta');
+			$this->aData = query('SELECT * FROM portfolio
+			 WHERE category_id IN(' . $sCategoryIdList . ') 
+				AND is_deleted != 1 
+				AND hide_from_productlist != 1 ORDER BY delta');
 			$this->title = l('Andrey\'s portfolio', true) . (isset($aCategoryData['cname']) ? (' ' . $aCategoryData['cname'] . ' ') : '');
 			$aUrl = explode('/', $sCompilerUrl);
 			unset($aUrl[ count($aUrl) - 1 ]);
