@@ -115,15 +115,20 @@ class RightMenuCompilerBase extends CPageCompiler {
 	public function loadData()
 	{
 		$_REQUEST['noxhr'] = 1;
-		$sql = 'SELECT * FROM pages WHERE is_deleted != 1 AND is_hidden != 1 AND hidden_in_list != 1 ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
+		$sql = 'SELECT * FROM pages
+				WHERE is_deleted != 1 AND is_hidden != 1 AND hidden_in_list != 1 
+				ORDER BY (rating + `force`) DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
 		if ($this->nArticleId > 0) {
-			$sql = 'SELECT * FROM pages WHERE is_deleted != 1 AND hidden_in_list != 1 AND is_hidden != 1 AND id != ' . $this->nArticleId . ' ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
+			$sql = 'SELECT * FROM pages WHERE is_deleted != 1 AND hidden_in_list != 1 AND is_hidden != 1 AND id != ' . $this->nArticleId
+			 . ' ORDER BY (rating + `force`) DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
 		}
 		$this->articlesData = query($sql);
 		
-		$sql = 'SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1 ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
+		$sql = 'SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1
+					ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
 		if ($this->nProductId > 0) {
-			$sql = 'SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1 AND id != ' . $this->nProductId . ' ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
+			$sql = 'SELECT * FROM portfolio WHERE is_deleted != 1 AND hide_from_productlist != 1 AND id != ' . $this->nProductId
+			 . ' ORDER BY rating DESC, delta ASC LIMIT ' . static::LIMIT_ITEMS;
 		}
 		$this->aPortfolioData = query($sql);
 		unset($_REQUEST['noxhr']);
