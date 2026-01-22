@@ -58,6 +58,9 @@ class ArticlesListCompiler extends CPageCompiler {
 			$this->url = $aRow['url'];
 			$s = str_replace('{heading}', $this->_parseHeading($aRow['heading'], $this->url), $sItemTpl);
 			
+			$mCode = new MarkdownCode();
+			$aRow['content_block'] = $mCode->processText($aRow['content_block']);
+			
 			$this->content = $aRow['content_block'];
 			$this->bPreprocesContent = true;
 			$this->_preprocessContent();

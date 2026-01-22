@@ -1,5 +1,5 @@
 <?php
-
+include_once DOC_ROOT . '/p/ctrl/classes/markdowncode.php';
 class CPageCompiler {
 	
 	public $tpl = '';
