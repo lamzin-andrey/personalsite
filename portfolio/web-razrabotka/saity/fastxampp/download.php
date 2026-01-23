@@ -19,6 +19,7 @@ $other_linux = ' установщик другой версии xampp для linux amd 64';
 $imagiktext = 'Вы также можете скачать imagick.so для этой версии xampp';
 $extensionstext = 'Вы также можете скачать расширения imagick.so, xdebug.so, memcached.so для PHP версии ';
 $extensionsOnlyText = 'Вы можете скачать расширения imagick.so, xdebug.so, memcached.so, amqp.so, redis.so для PHP версии ';
+$fastSSl = "Удобная работа с SSL на localhost";
 
 if ( @$_SESSION["lang"] == "en/" ) {
 	$linktext = 'Extract this archive, and run the Setup.';
@@ -35,9 +36,54 @@ if ( @$_SESSION["lang"] == "en/" ) {
 	$extensionstext = 'Also you can download extensions imagick.so, xdebug.so, memcached.so for PHP version ';
 	$extensionsOnlyText = 'You can download extensions imagick.so, xdebug.so, memcached.so, amqp.so, redis.so for PHP version ';
 	$lang = 'en/';
+	$fastSSl = "Convenient work with SSL on localhost";
 }
 ?>
 
+<div>&nbsp;</div>
+<div class="couter tou2">
+	<div class="mx-auto tin2 pt12">
+		<p>
+			<table><tbody>
+				<tr>
+					<td colspan="2" align="right" class="text-success b">
+						<img title="<?=$fastSSl?>" src="/portfolio/web-razrabotka/saity/fastxampp/img/result100.png" style="width:64px; ">FastXAMPP+SSL for XAMPP 7.4.28 ((x)ubuntu 22.04 - 24.04 64 bit) ~ 4 <?=$unit?>
+					</td>
+				</tr>
+				<tr>
+					<td style="border:solid 1px #d0d7fb;">
+						<img src="<?=img('d.png')?>">
+					</td>
+					<td style="padding-bottom:5px;border:solid 1px #d0d7fb;">
+						<div class="alert alert-warning">
+							<img src="<?=img('warning-32.png')?>" title="<?=$warning; ?>" class="mr-2"><?=$req_run ?> 
+							<a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/7.4.28/xampp-linux-x64-7.4.28-1-installer.run/download" target="_blank">xampp-linux-x64-7.4.28-1-installer.run</a>
+							<?= $or?>
+							<a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/" target="_blank"><?=$other_linux ?></a>.
+						</div>
+						<a title="Download and extract the archive, and run Setup" href="https://wkard.ru/d/drive/?action=share&i=593" target="blank" class="text-success" style="display:inline-block;margin-left:22px;"><?=$linktext?>.</a>
+						
+						<div style="text-align:right;margin-bottom:0px;" class="addinfo">
+							<span class="py-1">
+								<!--img src="<?=img('kubuntu48.png')?>" style="width:auto;height:24px;"title="For kubuntu 22.04"--> 
+								<!--img src="<?=img('ubuntu48.png')?>" style="width:auto;height:24px;"title="For ubuntu 22.04"--> 
+								<img src="<?=img('xubuntu48.png')?>" style="width:auto;height:28px;"title="For xubuntu 22.04, 24.04"> 
+								<!--img src="<?=img('mint48.png')?>" style="width:auto;height:24px;" class="bg-secondary" title="For mint ??.?"--> 
+							</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align:center">
+						<a class="text-success" href="<?=WEBROOT ?>/extensions_for_php_7.4.28_linux/<?php echo $lang ?>"><?php echo $extensionstext ?> 7.4.28-1</a>
+					</td>
+				</tr>
+			</tbody></table>
+		</p>
+	</div>
+</div>
+
+<!-- OLD CODE -->
 <div>&nbsp;</div>
 <div class="couter tou2">
 	<div class="mx-auto tin2 pt12">

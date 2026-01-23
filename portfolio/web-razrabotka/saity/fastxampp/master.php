@@ -44,7 +44,7 @@
     <?php if (!isset($ignoreCordovaBanner )) {?>
         <!-- banner  -->
         <div class="row">
-            <div class="col bg-white py-3">
+            <!--div class="col bg-white py-3">
                 <div class="d-flex justify-content-center align-items-center">
                     <div class="d-flex align-items-center justify-content-center border border-danger u-acord-banner-w py-3">
                         <div class="mr-2 u-acord-logo">
@@ -58,7 +58,7 @@
                             </strong></a>
                     </div>
                 </div>
-            </div>
+            </div-->
         <!-- /banner  -->
         </div>
     <?php } ?>
