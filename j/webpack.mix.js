@@ -45,6 +45,7 @@ mix.js('sources/site/app.js', 'd.js');//no vue version
 mix.styles([
 		'./../s/vendor/bootstrap4.2.1.min.css',
 		'./../s/vendor/fontawesome5/all.css',
+		'./../j/vendor/prism/0.css',
 		'./../s/sources/site/app.css'
 	], './../s/app.css');
 

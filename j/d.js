@@ -972,7 +972,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.i, "/* PrismJS 1.19.0\nhttps://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+actionscript+bash+batch+c+cpp+docker+haxe+ini+java+javadoc+javadoclike+jsdoc+json+jsonp+json5+markup-templating+pascal+perl+php+phpdoc+php-extras+sql+twig+wiki+yaml */\n/**\n * prism.js default theme for JavaScript, CSS and HTML\n * Based on dabblet (http://dabblet.com)\n * @author Lea Verou\n */\n\ncode[class*=\"language-\"],\npre[class*=\"language-\"] {\n\tcolor: black;\n\tbackground: none;\n\ttext-shadow: 0 1px white;\n\tfont-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;\n\tfont-size: 1em;\n\ttext-align: left;\n\twhite-space: pre;\n\tword-spacing: normal;\n\tword-break: normal;\n\tword-wrap: normal;\n\tline-height: 1.5;\n\n\t-moz-tab-size: 4;\n\t-o-tab-size: 4;\n\ttab-size: 4;\n\n\t-webkit-hyphens: none;\n\t-moz-hyphens: none;\n\t-ms-hyphens: none;\n\thyphens: none;\n}\n\npre[class*=\"language-\"]::-moz-selection, pre[class*=\"language-\"] ::-moz-selection,\ncode[class*=\"language-\"]::-moz-selection, code[class*=\"language-\"] ::-moz-selection {\n\ttext-shadow: none;\n\tbackground: #b3d4fc;\n}\n\npre[class*=\"language-\"]::selection, pre[class*=\"language-\"] ::selection,\ncode[class*=\"language-\"]::selection, code[class*=\"language-\"] ::selection {\n\ttext-shadow: none;\n\tbackground: #b3d4fc;\n}\n\n@media print {\n\tcode[class*=\"language-\"],\n\tpre[class*=\"language-\"] {\n\t\ttext-shadow: none;\n\t}\n}\n\n/* Code blocks */\npre[class*=\"language-\"] {\n\tpadding: 1em;\n\tmargin: .5em 0;\n\toverflow: auto;\n}\n\n:not(pre) > code[class*=\"language-\"],\npre[class*=\"language-\"] {\n\tbackground: #f5f2f0;\n}\n\n/* Inline code */\n:not(pre) > code[class*=\"language-\"] {\n\tpadding: .1em;\n\tborder-radius: .3em;\n\twhite-space: normal;\n}\n\n.token.comment,\n.token.prolog,\n.token.doctype,\n.token.cdata {\n\tcolor: slategray;\n}\n\n.token.punctuation {\n\tcolor: #999;\n}\n\n.token.namespace {\n\topacity: .7;\n}\n\n.token.property,\n.token.tag,\n.token.boolean,\n.token.number,\n.token.constant,\n.token.symbol,\n.token.deleted {\n\tcolor: #905;\n}\n\n.token.selector,\n.token.attr-name,\n.token.string,\n.token.char,\n.token.builtin,\n.token.inserted {\n\tcolor: #690;\n}\n\n.token.operator,\n.token.entity,\n.token.url,\n.language-css .token.string,\n.style .token.string {\n\tcolor: #9a6e3a;\n\tbackground: hsla(0, 0%, 100%, .5);\n}\n\n.token.atrule,\n.token.attr-value,\n.token.keyword {\n\tcolor: #07a;\n}\n\n.token.function,\n.token.class-name {\n\tcolor: #DD4A68;\n}\n\n.token.regex,\n.token.important,\n.token.variable {\n\tcolor: #e90;\n}\n\n.token.important,\n.token.bold {\n\tfont-weight: bold;\n}\n.token.italic {\n\tfont-style: italic;\n}\n\n.token.entity {\n\tcursor: help;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.i, "/* PrismJS 1.30.0\nhttps://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+actionscript+bash+batch+c+cpp+docker+haxe+ini+java+javadoc+javadoclike+jsdoc+json+json5+jsonp+markup-templating+pascal+perl+php+phpdoc+php-extras+python+sql+twig+typescript+wiki+yaml */\ncode[class*=language-],pre[class*=language-]{color:#000;background:0 0;text-shadow:0 1px #fff;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-] ::-moz-selection,code[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection{text-shadow:none;background:#b3d4fc}code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=language-] ::selection,pre[class*=language-]::selection{text-shadow:none;background:#b3d4fc}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#f5f2f0}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.token.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#9a6e3a;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.class-name,.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}\n", ""]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
@@ -32876,301 +32876,395 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {/* PrismJS 1.19.0
-https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+actionscript+bash+batch+c+cpp+docker+haxe+ini+java+javadoc+javadoclike+jsdoc+json+jsonp+json5+markup-templating+pascal+perl+php+phpdoc+php-extras+sql+twig+wiki+yaml */
+/* WEBPACK VAR INJECTION */(function(global) {/* PrismJS 1.30.0
+https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+actionscript+bash+batch+c+cpp+docker+haxe+ini+java+javadoc+javadoclike+jsdoc+json+json5+jsonp+markup-templating+pascal+perl+php+phpdoc+php-extras+python+sql+twig+typescript+wiki+yaml */
 var _self = "undefined" != typeof window ? window : "undefined" != typeof WorkerGlobalScope && self instanceof WorkerGlobalScope ? self : {},
-  Prism = function (u) {
-    var c = /\blang(?:uage)?-([\w-]+)\b/i,
-      r = 0,
-      C = {
-        manual: u.Prism && u.Prism.manual,
-        disableWorkerMessageHandler: u.Prism && u.Prism.disableWorkerMessageHandler,
+  Prism = function (e) {
+    var n = /(?:^|\s)lang(?:uage)?-([\w-]+)(?=\s|$)/i,
+      t = 0,
+      r = {},
+      a = {
+        manual: e.Prism && e.Prism.manual,
+        disableWorkerMessageHandler: e.Prism && e.Prism.disableWorkerMessageHandler,
         util: {
-          encode: function e(r) {
-            return r instanceof _ ? new _(r.type, e(r.content), r.alias) : Array.isArray(r) ? r.map(e) : r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\u00a0/g, " ");
+          encode: function e(n) {
+            return n instanceof i ? new i(n.type, e(n.content), n.alias) : Array.isArray(n) ? n.map(e) : n.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\u00a0/g, " ");
           },
           type: function type(e) {
             return Object.prototype.toString.call(e).slice(8, -1);
           },
           objId: function objId(e) {
             return e.__id || Object.defineProperty(e, "__id", {
-              value: ++r
+              value: ++t
             }), e.__id;
           },
-          clone: function n(e, t) {
-            var a,
-              r,
-              i = C.util.type(e);
-            switch (t = t || {}, i) {
+          clone: function e(n, t) {
+            var r, i;
+            switch (t = t || {}, a.util.type(n)) {
               case "Object":
-                if (r = C.util.objId(e), t[r]) return t[r];
-                for (var o in a = {}, t[r] = a, e) {
-                  e.hasOwnProperty(o) && (a[o] = n(e[o], t));
+                if (i = a.util.objId(n), t[i]) return t[i];
+                for (var l in r = {}, t[i] = r, n) {
+                  n.hasOwnProperty(l) && (r[l] = e(n[l], t));
                 }
-                return a;
+                return r;
               case "Array":
-                return r = C.util.objId(e), t[r] ? t[r] : (a = [], t[r] = a, e.forEach(function (e, r) {
-                  a[r] = n(e, t);
-                }), a);
+                return i = a.util.objId(n), t[i] ? t[i] : (r = [], t[i] = r, n.forEach(function (n, a) {
+                  r[a] = e(n, t);
+                }), r);
               default:
-                return e;
+                return n;
             }
           },
           getLanguage: function getLanguage(e) {
-            for (; e && !c.test(e.className);) {
+            for (; e;) {
+              var t = n.exec(e.className);
+              if (t) return t[1].toLowerCase();
               e = e.parentElement;
             }
-            return e ? (e.className.match(c) || [, "none"])[1].toLowerCase() : "none";
+            return "none";
+          },
+          setLanguage: function setLanguage(e, t) {
+            e.className = e.className.replace(RegExp(n, "gi"), ""), e.classList.add("language-" + t);
           },
           currentScript: function currentScript() {
             if ("undefined" == typeof document) return null;
-            if ("currentScript" in document) return document.currentScript;
+            if (document.currentScript && "SCRIPT" === document.currentScript.tagName) return document.currentScript;
             try {
               throw new Error();
-            } catch (e) {
-              var r = (/at [^(\r\n]*\((.*):.+:.+\)$/i.exec(e.stack) || [])[1];
-              if (r) {
+            } catch (r) {
+              var e = (/at [^(\r\n]*\((.*):[^:]+:[^:]+\)$/i.exec(r.stack) || [])[1];
+              if (e) {
                 var n = document.getElementsByTagName("script");
                 for (var t in n) {
-                  if (n[t].src == r) return n[t];
+                  if (n[t].src == e) return n[t];
                 }
               }
               return null;
             }
+          },
+          isActive: function isActive(e, n, t) {
+            for (var r = "no-" + n; e;) {
+              var a = e.classList;
+              if (a.contains(n)) return !0;
+              if (a.contains(r)) return !1;
+              e = e.parentElement;
+            }
+            return !!t;
           }
         },
         languages: {
-          extend: function extend(e, r) {
-            var n = C.util.clone(C.languages[e]);
-            for (var t in r) {
-              n[t] = r[t];
+          plain: r,
+          plaintext: r,
+          text: r,
+          txt: r,
+          extend: function extend(e, n) {
+            var t = a.util.clone(a.languages[e]);
+            for (var r in n) {
+              t[r] = n[r];
             }
-            return n;
+            return t;
           },
-          insertBefore: function insertBefore(n, e, r, t) {
-            var a = (t = t || C.languages)[n],
-              i = {};
-            for (var o in a) {
-              if (a.hasOwnProperty(o)) {
-                if (o == e) for (var l in r) {
-                  r.hasOwnProperty(l) && (i[l] = r[l]);
+          insertBefore: function insertBefore(e, n, t, r) {
+            var i = (r = r || a.languages)[e],
+              l = {};
+            for (var o in i) {
+              if (i.hasOwnProperty(o)) {
+                if (o == n) for (var s in t) {
+                  t.hasOwnProperty(s) && (l[s] = t[s]);
                 }
-                r.hasOwnProperty(o) || (i[o] = a[o]);
+                t.hasOwnProperty(o) || (l[o] = i[o]);
               }
             }
-            var s = t[n];
-            return t[n] = i, C.languages.DFS(C.languages, function (e, r) {
-              r === s && e != n && (this[e] = i);
-            }), i;
+            var u = r[e];
+            return r[e] = l, a.languages.DFS(a.languages, function (n, t) {
+              t === u && n != e && (this[n] = l);
+            }), l;
           },
-          DFS: function e(r, n, t, a) {
-            a = a || {};
-            var i = C.util.objId;
-            for (var o in r) {
-              if (r.hasOwnProperty(o)) {
-                n.call(r, o, r[o], t || o);
-                var l = r[o],
-                  s = C.util.type(l);
-                "Object" !== s || a[i(l)] ? "Array" !== s || a[i(l)] || (a[i(l)] = !0, e(l, n, o, a)) : (a[i(l)] = !0, e(l, n, null, a));
+          DFS: function e(n, t, r, i) {
+            i = i || {};
+            var l = a.util.objId;
+            for (var o in n) {
+              if (n.hasOwnProperty(o)) {
+                t.call(n, o, n[o], r || o);
+                var s = n[o],
+                  u = a.util.type(s);
+                "Object" !== u || i[l(s)] ? "Array" !== u || i[l(s)] || (i[l(s)] = !0, e(s, t, o, i)) : (i[l(s)] = !0, e(s, t, null, i));
               }
             }
           }
         },
         plugins: {},
-        highlightAll: function highlightAll(e, r) {
-          C.highlightAllUnder(document, e, r);
+        highlightAll: function highlightAll(e, n) {
+          a.highlightAllUnder(document, e, n);
         },
-        highlightAllUnder: function highlightAllUnder(e, r, n) {
-          var t = {
-            callback: n,
+        highlightAllUnder: function highlightAllUnder(e, n, t) {
+          var r = {
+            callback: t,
             container: e,
             selector: 'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'
           };
-          C.hooks.run("before-highlightall", t), t.elements = Array.prototype.slice.apply(t.container.querySelectorAll(t.selector)), C.hooks.run("before-all-elements-highlight", t);
-          for (var a, i = 0; a = t.elements[i++];) {
-            C.highlightElement(a, !0 === r, t.callback);
+          a.hooks.run("before-highlightall", r), r.elements = Array.prototype.slice.apply(r.container.querySelectorAll(r.selector)), a.hooks.run("before-all-elements-highlight", r);
+          for (var i, l = 0; i = r.elements[l++];) {
+            a.highlightElement(i, !0 === n, r.callback);
           }
         },
-        highlightElement: function highlightElement(e, r, n) {
-          var t = C.util.getLanguage(e),
-            a = C.languages[t];
-          e.className = e.className.replace(c, "").replace(/\s+/g, " ") + " language-" + t;
-          var i = e.parentNode;
-          i && "pre" === i.nodeName.toLowerCase() && (i.className = i.className.replace(c, "").replace(/\s+/g, " ") + " language-" + t);
-          var o = {
-            element: e,
-            language: t,
-            grammar: a,
-            code: e.textContent
+        highlightElement: function highlightElement(n, t, r) {
+          var i = a.util.getLanguage(n),
+            l = a.languages[i];
+          a.util.setLanguage(n, i);
+          var o = n.parentElement;
+          o && "pre" === o.nodeName.toLowerCase() && a.util.setLanguage(o, i);
+          var s = {
+            element: n,
+            language: i,
+            grammar: l,
+            code: n.textContent
           };
-          function l(e) {
-            o.highlightedCode = e, C.hooks.run("before-insert", o), o.element.innerHTML = o.highlightedCode, C.hooks.run("after-highlight", o), C.hooks.run("complete", o), n && n.call(o.element);
+          function u(e) {
+            s.highlightedCode = e, a.hooks.run("before-insert", s), s.element.innerHTML = s.highlightedCode, a.hooks.run("after-highlight", s), a.hooks.run("complete", s), r && r.call(s.element);
           }
-          if (C.hooks.run("before-sanity-check", o), !o.code) return C.hooks.run("complete", o), void (n && n.call(o.element));
-          if (C.hooks.run("before-highlight", o), o.grammar) {
-            if (r && u.Worker) {
-              var s = new Worker(C.filename);
-              s.onmessage = function (e) {
-                l(e.data);
-              }, s.postMessage(JSON.stringify({
-                language: o.language,
-                code: o.code,
+          if (a.hooks.run("before-sanity-check", s), (o = s.element.parentElement) && "pre" === o.nodeName.toLowerCase() && !o.hasAttribute("tabindex") && o.setAttribute("tabindex", "0"), !s.code) return a.hooks.run("complete", s), void (r && r.call(s.element));
+          if (a.hooks.run("before-highlight", s), s.grammar) {
+            if (t && e.Worker) {
+              var c = new Worker(a.filename);
+              c.onmessage = function (e) {
+                u(e.data);
+              }, c.postMessage(JSON.stringify({
+                language: s.language,
+                code: s.code,
                 immediateClose: !0
               }));
-            } else l(C.highlight(o.code, o.grammar, o.language));
-          } else l(C.util.encode(o.code));
+            } else u(a.highlight(s.code, s.grammar, s.language));
+          } else u(a.util.encode(s.code));
         },
-        highlight: function highlight(e, r, n) {
-          var t = {
+        highlight: function highlight(e, n, t) {
+          var r = {
             code: e,
-            grammar: r,
-            language: n
+            grammar: n,
+            language: t
           };
-          return C.hooks.run("before-tokenize", t), t.tokens = C.tokenize(t.code, t.grammar), C.hooks.run("after-tokenize", t), _.stringify(C.util.encode(t.tokens), t.language);
+          if (a.hooks.run("before-tokenize", r), !r.grammar) throw new Error('The language "' + r.language + '" has no grammar.');
+          return r.tokens = a.tokenize(r.code, r.grammar), a.hooks.run("after-tokenize", r), i.stringify(a.util.encode(r.tokens), r.language);
         },
-        matchGrammar: function matchGrammar(e, r, n, t, a, i, o) {
-          for (var l in n) {
-            if (n.hasOwnProperty(l) && n[l]) {
-              var s = n[l];
-              s = Array.isArray(s) ? s : [s];
-              for (var u = 0; u < s.length; ++u) {
-                if (o && o == l + "," + u) return;
-                var c = s[u],
-                  g = c.inside,
-                  f = !!c.lookbehind,
-                  h = !!c.greedy,
-                  d = 0,
-                  m = c.alias;
-                if (h && !c.pattern.global) {
-                  var p = c.pattern.toString().match(/[imsuy]*$/)[0];
-                  c.pattern = RegExp(c.pattern.source, p + "g");
-                }
-                c = c.pattern || c;
-                for (var y = t, v = a; y < r.length; v += r[y].length, ++y) {
-                  var k = r[y];
-                  if (r.length > e.length) return;
-                  if (!(k instanceof _)) {
-                    if (h && y != r.length - 1) {
-                      if (c.lastIndex = v, !(S = c.exec(e))) break;
-                      for (var b = S.index + (f && S[1] ? S[1].length : 0), w = S.index + S[0].length, A = y, P = v, x = r.length; A < x && (P < w || !r[A].type && !r[A - 1].greedy); ++A) {
-                        (P += r[A].length) <= b && (++y, v = P);
-                      }
-                      if (r[y] instanceof _) continue;
-                      O = A - y, k = e.slice(v, P), S.index -= v;
-                    } else {
-                      c.lastIndex = 0;
-                      var S = c.exec(k),
-                        O = 1;
-                    }
-                    if (S) {
-                      f && (d = S[1] ? S[1].length : 0);
-                      w = (b = S.index + d) + (S = S[0].slice(d)).length;
-                      var E = k.slice(0, b),
-                        N = k.slice(w),
-                        j = [y, O];
-                      E && (++y, v += E.length, j.push(E));
-                      var L = new _(l, g ? C.tokenize(S, g) : S, m, S, h);
-                      if (j.push(L), N && j.push(N), Array.prototype.splice.apply(r, j), 1 != O && C.matchGrammar(e, r, n, y, v, !0, l + "," + u), i) break;
-                    } else if (i) break;
+        tokenize: function tokenize(e, n) {
+          var t = n.rest;
+          if (t) {
+            for (var r in t) {
+              n[r] = t[r];
+            }
+            delete n.rest;
+          }
+          var a = new s();
+          return u(a, a.head, e), o(e, a, n, a.head, 0), function (e) {
+            for (var n = [], t = e.head.next; t !== e.tail;) {
+              n.push(t.value), t = t.next;
+            }
+            return n;
+          }(a);
+        },
+        hooks: {
+          all: {},
+          add: function add(e, n) {
+            var t = a.hooks.all;
+            t[e] = t[e] || [], t[e].push(n);
+          },
+          run: function run(e, n) {
+            var t = a.hooks.all[e];
+            if (t && t.length) for (var r, i = 0; r = t[i++];) {
+              r(n);
+            }
+          }
+        },
+        Token: i
+      };
+    function i(e, n, t, r) {
+      this.type = e, this.content = n, this.alias = t, this.length = 0 | (r || "").length;
+    }
+    function l(e, n, t, r) {
+      e.lastIndex = n;
+      var a = e.exec(t);
+      if (a && r && a[1]) {
+        var i = a[1].length;
+        a.index += i, a[0] = a[0].slice(i);
+      }
+      return a;
+    }
+    function o(e, n, t, r, s, g) {
+      for (var f in t) {
+        if (t.hasOwnProperty(f) && t[f]) {
+          var h = t[f];
+          h = Array.isArray(h) ? h : [h];
+          for (var d = 0; d < h.length; ++d) {
+            if (g && g.cause == f + "," + d) return;
+            var v = h[d],
+              p = v.inside,
+              m = !!v.lookbehind,
+              y = !!v.greedy,
+              k = v.alias;
+            if (y && !v.pattern.global) {
+              var x = v.pattern.toString().match(/[imsuy]*$/)[0];
+              v.pattern = RegExp(v.pattern.source, x + "g");
+            }
+            for (var b = v.pattern || v, w = r.next, A = s; w !== n.tail && !(g && A >= g.reach); A += w.value.length, w = w.next) {
+              var P = w.value;
+              if (n.length > e.length) return;
+              if (!(P instanceof i)) {
+                var E,
+                  S = 1;
+                if (y) {
+                  if (!(E = l(b, A, e, m)) || E.index >= e.length) break;
+                  var L = E.index,
+                    O = E.index + E[0].length,
+                    C = A;
+                  for (C += w.value.length; L >= C;) {
+                    C += (w = w.next).value.length;
                   }
+                  if (A = C -= w.value.length, w.value instanceof i) continue;
+                  for (var j = w; j !== n.tail && (C < O || "string" == typeof j.value); j = j.next) {
+                    S++, C += j.value.length;
+                  }
+                  S--, P = e.slice(A, C), E.index -= A;
+                } else if (!(E = l(b, 0, P, m))) continue;
+                L = E.index;
+                var N = E[0],
+                  _ = P.slice(0, L),
+                  M = P.slice(L + N.length),
+                  W = A + P.length;
+                g && W > g.reach && (g.reach = W);
+                var I = w.prev;
+                if (_ && (I = u(n, I, _), A += _.length), c(n, I, S), w = u(n, I, new i(f, p ? a.tokenize(N, p) : N, k, N)), M && u(n, w, M), S > 1) {
+                  var T = {
+                    cause: f + "," + d,
+                    reach: W
+                  };
+                  o(e, n, t, w.prev, A, T), g && T.reach > g.reach && (g.reach = T.reach);
                 }
               }
             }
           }
-        },
-        tokenize: function tokenize(e, r) {
-          var n = [e],
-            t = r.rest;
-          if (t) {
-            for (var a in t) {
-              r[a] = t[a];
-            }
-            delete r.rest;
-          }
-          return C.matchGrammar(e, n, r, 0, 0, !1), n;
-        },
-        hooks: {
-          all: {},
-          add: function add(e, r) {
-            var n = C.hooks.all;
-            n[e] = n[e] || [], n[e].push(r);
-          },
-          run: function run(e, r) {
-            var n = C.hooks.all[e];
-            if (n && n.length) for (var t, a = 0; t = n[a++];) {
-              t(r);
-            }
-          }
-        },
-        Token: _
-      };
-    function _(e, r, n, t, a) {
-      this.type = e, this.content = r, this.alias = n, this.length = 0 | (t || "").length, this.greedy = !!a;
-    }
-    if (u.Prism = C, _.stringify = function r(e, n) {
-      if ("string" == typeof e) return e;
-      if (Array.isArray(e)) {
-        var t = "";
-        return e.forEach(function (e) {
-          t += r(e, n);
-        }), t;
+        }
       }
-      var a = {
-          type: e.type,
-          content: r(e.content, n),
+    }
+    function s() {
+      var e = {
+          value: null,
+          prev: null,
+          next: null
+        },
+        n = {
+          value: null,
+          prev: e,
+          next: null
+        };
+      e.next = n, this.head = e, this.tail = n, this.length = 0;
+    }
+    function u(e, n, t) {
+      var r = n.next,
+        a = {
+          value: t,
+          prev: n,
+          next: r
+        };
+      return n.next = a, r.prev = a, e.length++, a;
+    }
+    function c(e, n, t) {
+      for (var r = n.next, a = 0; a < t && r !== e.tail; a++) {
+        r = r.next;
+      }
+      n.next = r, r.prev = n, e.length -= a;
+    }
+    if (e.Prism = a, i.stringify = function e(n, t) {
+      if ("string" == typeof n) return n;
+      if (Array.isArray(n)) {
+        var r = "";
+        return n.forEach(function (n) {
+          r += e(n, t);
+        }), r;
+      }
+      var i = {
+          type: n.type,
+          content: e(n.content, t),
           tag: "span",
-          classes: ["token", e.type],
+          classes: ["token", n.type],
           attributes: {},
-          language: n
+          language: t
         },
-        i = e.alias;
-      i && (Array.isArray(i) ? Array.prototype.push.apply(a.classes, i) : a.classes.push(i)), C.hooks.run("wrap", a);
+        l = n.alias;
+      l && (Array.isArray(l) ? Array.prototype.push.apply(i.classes, l) : i.classes.push(l)), a.hooks.run("wrap", i);
       var o = "";
-      for (var l in a.attributes) {
-        o += " " + l + '="' + (a.attributes[l] || "").replace(/"/g, "&quot;") + '"';
+      for (var s in i.attributes) {
+        o += " " + s + '="' + (i.attributes[s] || "").replace(/"/g, "&quot;") + '"';
       }
-      return "<" + a.tag + ' class="' + a.classes.join(" ") + '"' + o + ">" + a.content + "</" + a.tag + ">";
-    }, !u.document) return u.addEventListener && (C.disableWorkerMessageHandler || u.addEventListener("message", function (e) {
-      var r = JSON.parse(e.data),
-        n = r.language,
-        t = r.code,
-        a = r.immediateClose;
-      u.postMessage(C.highlight(t, C.languages[n], n)), a && u.close();
-    }, !1)), C;
-    var e = C.util.currentScript();
-    function n() {
-      C.manual || C.highlightAll();
+      return "<" + i.tag + ' class="' + i.classes.join(" ") + '"' + o + ">" + i.content + "</" + i.tag + ">";
+    }, !e.document) return e.addEventListener ? (a.disableWorkerMessageHandler || e.addEventListener("message", function (n) {
+      var t = JSON.parse(n.data),
+        r = t.language,
+        i = t.code,
+        l = t.immediateClose;
+      e.postMessage(a.highlight(i, a.languages[r], r)), l && e.close();
+    }, !1), a) : a;
+    var g = a.util.currentScript();
+    function f() {
+      a.manual || a.highlightAll();
     }
-    if (e && (C.filename = e.src, e.hasAttribute("data-manual") && (C.manual = !0)), !C.manual) {
-      var t = document.readyState;
-      "loading" === t || "interactive" === t && e && e.defer ? document.addEventListener("DOMContentLoaded", n) : window.requestAnimationFrame ? window.requestAnimationFrame(n) : window.setTimeout(n, 16);
+    if (g && (a.filename = g.src, g.hasAttribute("data-manual") && (a.manual = !0)), !a.manual) {
+      var h = document.readyState;
+      "loading" === h || "interactive" === h && g && g.defer ? document.addEventListener("DOMContentLoaded", f) : window.requestAnimationFrame ? window.requestAnimationFrame(f) : window.setTimeout(f, 16);
     }
-    return C;
+    return a;
   }(_self);
  true && module.exports && (module.exports = Prism), "undefined" != typeof global && (global.Prism = Prism);
 Prism.languages.markup = {
-  comment: /<!--[\s\S]*?-->/,
-  prolog: /<\?[\s\S]+?\?>/,
-  doctype: {
-    pattern: /<!DOCTYPE(?:[^>"'[\]]|"[^"]*"|'[^']*')+(?:\[(?:(?!<!--)[^"'\]]|"[^"]*"|'[^']*'|<!--[\s\S]*?-->)*\]\s*)?>/i,
+  comment: {
+    pattern: /<!--(?:(?!<!--)[\s\S])*?-->/,
     greedy: !0
   },
-  cdata: /<!\[CDATA\[[\s\S]*?]]>/i,
+  prolog: {
+    pattern: /<\?[\s\S]+?\?>/,
+    greedy: !0
+  },
+  doctype: {
+    pattern: /<!DOCTYPE(?:[^>"'[\]]|"[^"]*"|'[^']*')+(?:\[(?:[^<"'\]]|"[^"]*"|'[^']*'|<(?!!--)|<!--(?:[^-]|-(?!->))*-->)*\]\s*)?>/i,
+    greedy: !0,
+    inside: {
+      "internal-subset": {
+        pattern: /(^[^\[]*\[)[\s\S]+(?=\]>$)/,
+        lookbehind: !0,
+        greedy: !0,
+        inside: null
+      },
+      string: {
+        pattern: /"[^"]*"|'[^']*'/,
+        greedy: !0
+      },
+      punctuation: /^<!|>$|[[\]]/,
+      "doctype-tag": /^DOCTYPE/i,
+      name: /[^\s<>'"]+/
+    }
+  },
+  cdata: {
+    pattern: /<!\[CDATA\[[\s\S]*?\]\]>/i,
+    greedy: !0
+  },
   tag: {
-    pattern: /<\/?(?!\d)[^\s>\/=$<%]+(?:\s(?:\s*[^\s>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+(?=[\s>]))|(?=[\s/>])))+)?\s*\/?>/i,
+    pattern: /<\/?(?!\d)[^\s>\/=$<%]+(?:\s(?:\s*[^\s>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+(?=[\s>]))|(?=[\s/>])))+)?\s*\/?>/,
     greedy: !0,
     inside: {
       tag: {
-        pattern: /^<\/?[^\s>\/]+/i,
+        pattern: /^<\/?[^\s>\/]+/,
         inside: {
           punctuation: /^<\/?/,
           namespace: /^[^\s>\/:]+:/
         }
       },
+      "special-attr": [],
       "attr-value": {
-        pattern: /=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+)/i,
+        pattern: /=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+)/,
         inside: {
-          punctuation: [/^=/, {
+          punctuation: [{
+            pattern: /^=/,
+            alias: "attr-equals"
+          }, {
             pattern: /^(\s*)["']|["']$/,
             lookbehind: !0
           }]
@@ -33185,8 +33279,11 @@ Prism.languages.markup = {
       }
     }
   },
-  entity: /&#?[\da-z]{1,8};/i
-}, Prism.languages.markup.tag.inside["attr-value"].inside.entity = Prism.languages.markup.entity, Prism.hooks.add("wrap", function (a) {
+  entity: [{
+    pattern: /&[\da-z]{1,8};/i,
+    alias: "named-entity"
+  }, /&#x?[\da-f]{1,8};/i]
+}, Prism.languages.markup.tag.inside["attr-value"].inside.entity = Prism.languages.markup.entity, Prism.languages.markup.doctype.inside["internal-subset"].inside = Prism.languages.markup, Prism.hooks.add("wrap", function (a) {
   "entity" === a.type && (a.attributes.title = a.content.replace(/&amp;/, "&"));
 }), Object.defineProperty(Prism.languages.markup.tag, "addInlined", {
   value: function value(a, e) {
@@ -33196,80 +33293,110 @@ Prism.languages.markup = {
       lookbehind: !0,
       inside: Prism.languages[e]
     }, s.cdata = /^<!\[CDATA\[|\]\]>$/i;
-    var n = {
+    var t = {
       "included-cdata": {
         pattern: /<!\[CDATA\[[\s\S]*?\]\]>/i,
         inside: s
       }
     };
-    n["language-" + e] = {
+    t["language-" + e] = {
       pattern: /[\s\S]+/,
       inside: Prism.languages[e]
     };
-    var t = {};
-    t[a] = {
-      pattern: RegExp("(<__[\\s\\S]*?>)(?:<!\\[CDATA\\[[\\s\\S]*?\\]\\]>\\s*|[\\s\\S])*?(?=<\\/__>)".replace(/__/g, a), "i"),
+    var n = {};
+    n[a] = {
+      pattern: RegExp("(<__[^>]*>)(?:<!\\[CDATA\\[(?:[^\\]]|\\](?!\\]>))*\\]\\]>|(?!<!\\[CDATA\\[)[^])*?(?=</__>)".replace(/__/g, function () {
+        return a;
+      }), "i"),
       lookbehind: !0,
       greedy: !0,
-      inside: n
-    }, Prism.languages.insertBefore("markup", "cdata", t);
+      inside: t
+    }, Prism.languages.insertBefore("markup", "cdata", n);
   }
-}), Prism.languages.xml = Prism.languages.extend("markup", {}), Prism.languages.html = Prism.languages.markup, Prism.languages.mathml = Prism.languages.markup, Prism.languages.svg = Prism.languages.markup;
+}), Object.defineProperty(Prism.languages.markup.tag, "addAttribute", {
+  value: function value(a, e) {
+    Prism.languages.markup.tag.inside["special-attr"].push({
+      pattern: RegExp("(^|[\"'\\s])(?:" + a + ")\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^\\s'\">=]+(?=[\\s>]))", "i"),
+      lookbehind: !0,
+      inside: {
+        "attr-name": /^[^\s=]+/,
+        "attr-value": {
+          pattern: /=[\s\S]+/,
+          inside: {
+            value: {
+              pattern: /(^=\s*(["']|(?!["'])))\S[\s\S]*(?=\2$)/,
+              lookbehind: !0,
+              alias: [e, "language-" + e],
+              inside: Prism.languages[e]
+            },
+            punctuation: [{
+              pattern: /^=/,
+              alias: "attr-equals"
+            }, /"|'/]
+          }
+        }
+      }
+    });
+  }
+}), Prism.languages.html = Prism.languages.markup, Prism.languages.mathml = Prism.languages.markup, Prism.languages.svg = Prism.languages.markup, Prism.languages.xml = Prism.languages.extend("markup", {}), Prism.languages.ssml = Prism.languages.xml, Prism.languages.atom = Prism.languages.xml, Prism.languages.rss = Prism.languages.xml;
 !function (s) {
-  var e = /("|')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/;
+  var e = /(?:"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"|'(?:\\(?:\r\n|[\s\S])|[^'\\\r\n])*')/;
   s.languages.css = {
     comment: /\/\*[\s\S]*?\*\//,
     atrule: {
-      pattern: /@[\w-]+[\s\S]*?(?:;|(?=\s*\{))/,
+      pattern: RegExp("@[\\w-](?:[^;{\\s\"']|\\s+(?!\\s)|" + e.source + ")*?(?:;|(?=\\s*\\{))"),
       inside: {
         rule: /^@[\w-]+/,
         "selector-function-argument": {
-          pattern: /(\bselector\s*\((?!\s*\))\s*)(?:[^()]|\((?:[^()]|\([^()]*\))*\))+?(?=\s*\))/,
+          pattern: /(\bselector\s*\(\s*(?![\s)]))(?:[^()\s]|\s+(?![\s)])|\((?:[^()]|\([^()]*\))*\))+(?=\s*\))/,
           lookbehind: !0,
           alias: "selector"
+        },
+        keyword: {
+          pattern: /(^|[^\w-])(?:and|not|only|or)(?![\w-])/,
+          lookbehind: !0
         }
       }
     },
     url: {
-      pattern: RegExp("url\\((?:" + e.source + "|[^\n\r()]*)\\)", "i"),
+      pattern: RegExp("\\burl\\((?:" + e.source + "|(?:[^\\\\\r\n()\"']|\\\\[^])*)\\)", "i"),
+      greedy: !0,
       inside: {
         "function": /^url/i,
-        punctuation: /^\(|\)$/
+        punctuation: /^\(|\)$/,
+        string: {
+          pattern: RegExp("^" + e.source + "$"),
+          alias: "url"
+        }
       }
     },
-    selector: RegExp("[^{}\\s](?:[^{};\"']|" + e.source + ")*?(?=\\s*\\{)"),
+    selector: {
+      pattern: RegExp("(^|[{}\\s])[^{}\\s](?:[^{};\"'\\s]|\\s+(?![\\s{])|" + e.source + ")*(?=\\s*\\{)"),
+      lookbehind: !0
+    },
     string: {
       pattern: e,
       greedy: !0
     },
-    property: /[-_a-z\xA0-\uFFFF][-\w\xA0-\uFFFF]*(?=\s*:)/i,
+    property: {
+      pattern: /(^|[^-\w\xA0-\uFFFF])(?!\s)[-_a-z\xA0-\uFFFF](?:(?!\s)[-\w\xA0-\uFFFF])*(?=\s*:)/i,
+      lookbehind: !0
+    },
     important: /!important\b/i,
-    "function": /[-a-z0-9]+(?=\()/i,
+    "function": {
+      pattern: /(^|[^-a-z0-9])[-a-z0-9]+(?=\()/i,
+      lookbehind: !0
+    },
     punctuation: /[(){};:,]/
   }, s.languages.css.atrule.inside.rest = s.languages.css;
   var t = s.languages.markup;
-  t && (t.tag.addInlined("style", "css"), s.languages.insertBefore("inside", "attr-value", {
-    "style-attr": {
-      pattern: /\s*style=("|')(?:\\[\s\S]|(?!\1)[^\\])*\1/i,
-      inside: {
-        "attr-name": {
-          pattern: /^\s*style/i,
-          inside: t.tag.inside
-        },
-        punctuation: /^\s*=\s*['"]|['"]\s*$/,
-        "attr-value": {
-          pattern: /.+/i,
-          inside: s.languages.css
-        }
-      },
-      alias: "language-css"
-    }
-  }, t.tag));
+  t && (t.tag.addInlined("style", "css"), t.tag.addAttribute("style", "css"));
 }(Prism);
 Prism.languages.clike = {
   comment: [{
     pattern: /(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)/,
-    lookbehind: !0
+    lookbehind: !0,
+    greedy: !0
   }, {
     pattern: /(^|[^\\:])\/\/.*/,
     lookbehind: !0,
@@ -33280,64 +33407,83 @@ Prism.languages.clike = {
     greedy: !0
   },
   "class-name": {
-    pattern: /(\b(?:class|interface|extends|implements|trait|instanceof|new)\s+|\bcatch\s+\()[\w.\\]+/i,
+    pattern: /(\b(?:class|extends|implements|instanceof|interface|new|trait)\s+|\bcatch\s+\()[\w.\\]+/i,
     lookbehind: !0,
     inside: {
       punctuation: /[.\\]/
     }
   },
-  keyword: /\b(?:if|else|while|do|for|return|in|instanceof|function|new|try|throw|catch|finally|null|break|continue)\b/,
-  "boolean": /\b(?:true|false)\b/,
-  "function": /\w+(?=\()/,
-  number: /\b0x[\da-f]+\b|(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?/i,
+  keyword: /\b(?:break|catch|continue|do|else|finally|for|function|if|in|instanceof|new|null|return|throw|try|while)\b/,
+  "boolean": /\b(?:false|true)\b/,
+  "function": /\b\w+(?=\()/,
+  number: /\b0x[\da-f]+\b|(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:e[+-]?\d+)?/i,
   operator: /[<>]=?|[!=]=?=?|--?|\+\+?|&&?|\|\|?|[?*/~^%]/,
   punctuation: /[{}[\];(),.:]/
 };
 Prism.languages.javascript = Prism.languages.extend("clike", {
   "class-name": [Prism.languages.clike["class-name"], {
-    pattern: /(^|[^$\w\xA0-\uFFFF])[_$A-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\.(?:prototype|constructor))/,
+    pattern: /(^|[^$\w\xA0-\uFFFF])(?!\s)[_$A-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\.(?:constructor|prototype))/,
     lookbehind: !0
   }],
   keyword: [{
-    pattern: /((?:^|})\s*)(?:catch|finally)\b/,
+    pattern: /((?:^|\})\s*)catch\b/,
     lookbehind: !0
   }, {
-    pattern: /(^|[^.]|\.\.\.\s*)\b(?:as|async(?=\s*(?:function\b|\(|[$\w\xA0-\uFFFF]|$))|await|break|case|class|const|continue|debugger|default|delete|do|else|enum|export|extends|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|undefined|var|void|while|with|yield)\b/,
+    pattern: /(^|[^.]|\.\.\.\s*)\b(?:as|assert(?=\s*\{)|async(?=\s*(?:function\b|\(|[$\w\xA0-\uFFFF]|$))|await|break|case|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally(?=\s*(?:\{|$))|for|from(?=\s*(?:['"]|$))|function|(?:get|set)(?=\s*(?:[#\[$\w\xA0-\uFFFF]|$))|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|static|super|switch|this|throw|try|typeof|undefined|var|void|while|with|yield)\b/,
     lookbehind: !0
   }],
-  number: /\b(?:(?:0[xX](?:[\dA-Fa-f](?:_[\dA-Fa-f])?)+|0[bB](?:[01](?:_[01])?)+|0[oO](?:[0-7](?:_[0-7])?)+)n?|(?:\d(?:_\d)?)+n|NaN|Infinity)\b|(?:\b(?:\d(?:_\d)?)+\.?(?:\d(?:_\d)?)*|\B\.(?:\d(?:_\d)?)+)(?:[Ee][+-]?(?:\d(?:_\d)?)+)?/,
-  "function": /#?[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*(?:\.\s*(?:apply|bind|call)\s*)?\()/,
-  operator: /--|\+\+|\*\*=?|=>|&&|\|\||[!=]==|<<=?|>>>?=?|[-+*/%&|^!=<>]=?|\.{3}|\?[.?]?|[~:]/
-}), Prism.languages.javascript["class-name"][0].pattern = /(\b(?:class|interface|extends|implements|instanceof|new)\s+)[\w.\\]+/, Prism.languages.insertBefore("javascript", "keyword", {
+  "function": /#?(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*(?:\.\s*(?:apply|bind|call)\s*)?\()/,
+  number: {
+    pattern: RegExp("(^|[^\\w$])(?:NaN|Infinity|0[bB][01]+(?:_[01]+)*n?|0[oO][0-7]+(?:_[0-7]+)*n?|0[xX][\\dA-Fa-f]+(?:_[\\dA-Fa-f]+)*n?|\\d+(?:_\\d+)*n|(?:\\d+(?:_\\d+)*(?:\\.(?:\\d+(?:_\\d+)*)?)?|\\.\\d+(?:_\\d+)*)(?:[Ee][+-]?\\d+(?:_\\d+)*)?)(?![\\w$])"),
+    lookbehind: !0
+  },
+  operator: /--|\+\+|\*\*=?|=>|&&=?|\|\|=?|[!=]==|<<=?|>>>?=?|[-+*/%&|^!=<>]=?|\.{3}|\?\?=?|\?\.?|[~:]/
+}), Prism.languages.javascript["class-name"][0].pattern = /(\b(?:class|extends|implements|instanceof|interface|new)\s+)[\w.\\]+/, Prism.languages.insertBefore("javascript", "keyword", {
   regex: {
-    pattern: /((?:^|[^$\w\xA0-\uFFFF."'\])\s])\s*)\/(?:\[(?:[^\]\\\r\n]|\\.)*]|\\.|[^/\\\[\r\n])+\/[gimyus]{0,6}(?=(?:\s|\/\*[\s\S]*?\*\/)*(?:$|[\r\n,.;:})\]]|\/\/))/,
+    pattern: RegExp("((?:^|[^$\\w\\xA0-\\uFFFF.\"'\\])\\s]|\\b(?:return|yield))\\s*)/(?:(?:\\[(?:[^\\]\\\\\r\n]|\\\\.)*\\]|\\\\.|[^/\\\\\\[\r\n])+/[dgimyus]{0,7}|(?:\\[(?:[^[\\]\\\\\r\n]|\\\\.|\\[(?:[^[\\]\\\\\r\n]|\\\\.|\\[(?:[^[\\]\\\\\r\n]|\\\\.)*\\])*\\])*\\]|\\\\.|[^/\\\\\\[\r\n])+/[dgimyus]{0,7}v[dgimyus]{0,7})(?=(?:\\s|/\\*(?:[^*]|\\*(?!/))*\\*/)*(?:$|[\r\n,.;:})\\]]|//))"),
     lookbehind: !0,
-    greedy: !0
+    greedy: !0,
+    inside: {
+      "regex-source": {
+        pattern: /^(\/)[\s\S]+(?=\/[a-z]*$)/,
+        lookbehind: !0,
+        alias: "language-regex",
+        inside: Prism.languages.regex
+      },
+      "regex-delimiter": /^\/|\/$/,
+      "regex-flags": /^[a-z]+$/
+    }
   },
   "function-variable": {
-    pattern: /#?[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*[=:]\s*(?:async\s*)?(?:\bfunction\b|(?:\((?:[^()]|\([^()]*\))*\)|[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*=>))/,
+    pattern: /#?(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*[=:]\s*(?:async\s*)?(?:\bfunction\b|(?:\((?:[^()]|\([^()]*\))*\)|(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*)\s*=>))/,
     alias: "function"
   },
   parameter: [{
-    pattern: /(function(?:\s+[_$A-Za-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)?\s*\(\s*)(?!\s)(?:[^()]|\([^()]*\))+?(?=\s*\))/,
+    pattern: /(function(?:\s+(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*)?\s*\(\s*)(?!\s)(?:[^()\s]|\s+(?![\s)])|\([^()]*\))+(?=\s*\))/,
     lookbehind: !0,
     inside: Prism.languages.javascript
   }, {
-    pattern: /[_$a-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*=>)/i,
-    inside: Prism.languages.javascript
-  }, {
-    pattern: /(\(\s*)(?!\s)(?:[^()]|\([^()]*\))+?(?=\s*\)\s*=>)/,
+    pattern: /(^|[^$\w\xA0-\uFFFF])(?!\s)[_$a-z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*=>)/i,
     lookbehind: !0,
     inside: Prism.languages.javascript
   }, {
-    pattern: /((?:\b|\s|^)(?!(?:as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|undefined|var|void|while|with|yield)(?![$\w\xA0-\uFFFF]))(?:[_$A-Za-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*\s*)\(\s*)(?!\s)(?:[^()]|\([^()]*\))+?(?=\s*\)\s*\{)/,
+    pattern: /(\(\s*)(?!\s)(?:[^()\s]|\s+(?![\s)])|\([^()]*\))+(?=\s*\)\s*=>)/,
+    lookbehind: !0,
+    inside: Prism.languages.javascript
+  }, {
+    pattern: /((?:\b|\s|^)(?!(?:as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|undefined|var|void|while|with|yield)(?![$\w\xA0-\uFFFF]))(?:(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*\s*)\(\s*|\]\s*\(\s*)(?!\s)(?:[^()\s]|\s+(?![\s)])|\([^()]*\))+(?=\s*\)\s*\{)/,
     lookbehind: !0,
     inside: Prism.languages.javascript
   }],
   constant: /\b[A-Z](?:[A-Z_]|\dx?)*\b/
 }), Prism.languages.insertBefore("javascript", "string", {
+  hashbang: {
+    pattern: /^#!.*/,
+    greedy: !0,
+    alias: "comment"
+  },
   "template-string": {
-    pattern: /`(?:\\[\s\S]|\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})+}|(?!\${)[^\\`])*`/,
+    pattern: /`(?:\\[\s\S]|\$\{(?:[^{}]|\{(?:[^{}]|\{[^}]*\})*\})+\}|(?!\$\{)[^\\`])*`/,
     greedy: !0,
     inside: {
       "template-punctuation": {
@@ -33345,11 +33491,11 @@ Prism.languages.javascript = Prism.languages.extend("clike", {
         alias: "string"
       },
       interpolation: {
-        pattern: /((?:^|[^\\])(?:\\{2})*)\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})+}/,
+        pattern: /((?:^|[^\\])(?:\\{2})*)\$\{(?:[^{}]|\{(?:[^{}]|\{[^}]*\})*\})+\}/,
         lookbehind: !0,
         inside: {
           "interpolation-punctuation": {
-            pattern: /^\${|}$/,
+            pattern: /^\$\{|\}$/,
             alias: "punctuation"
           },
           rest: Prism.languages.javascript
@@ -33357,12 +33503,24 @@ Prism.languages.javascript = Prism.languages.extend("clike", {
       },
       string: /[\s\S]+/
     }
+  },
+  "string-property": {
+    pattern: /((?:^|[,{])[ \t]*)(["'])(?:\\(?:\r\n|[\s\S])|(?!\2)[^\\\r\n])*\2(?=\s*:)/m,
+    lookbehind: !0,
+    greedy: !0,
+    alias: "property"
   }
-}), Prism.languages.markup && Prism.languages.markup.tag.addInlined("script", "javascript"), Prism.languages.js = Prism.languages.javascript;
+}), Prism.languages.insertBefore("javascript", "operator", {
+  "literal-property": {
+    pattern: /((?:^|[,{])[ \t]*)(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*:)/m,
+    lookbehind: !0,
+    alias: "property"
+  }
+}), Prism.languages.markup && (Prism.languages.markup.tag.addInlined("script", "javascript"), Prism.languages.markup.tag.addAttribute("on(?:abort|blur|change|click|composition(?:end|start|update)|dblclick|error|focus(?:in|out)?|key(?:down|up)|load|mouse(?:down|enter|leave|move|out|over|up)|reset|resize|scroll|select|slotchange|submit|unload|wheel)", "javascript")), Prism.languages.js = Prism.languages.javascript;
 Prism.languages.actionscript = Prism.languages.extend("javascript", {
-  keyword: /\b(?:as|break|case|catch|class|const|default|delete|do|else|extends|finally|for|function|if|implements|import|in|instanceof|interface|internal|is|native|new|null|package|private|protected|public|return|super|switch|this|throw|try|typeof|use|var|void|while|with|dynamic|each|final|get|include|namespace|native|override|set|static)\b/,
+  keyword: /\b(?:as|break|case|catch|class|const|default|delete|do|dynamic|each|else|extends|final|finally|for|function|get|if|implements|import|in|include|instanceof|interface|internal|is|namespace|native|new|null|override|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|use|var|void|while|with)\b/,
   operator: /\+\+|--|(?:[+\-*\/%^]|&&?|\|\|?|<<?|>>?>?|[!=]=?)=?|[~?@]/
-}), Prism.languages.actionscript["class-name"].alias = "function", Prism.languages.markup && Prism.languages.insertBefore("actionscript", "string", {
+}), Prism.languages.actionscript["class-name"].alias = "function", delete Prism.languages.actionscript.parameter, delete Prism.languages.actionscript["literal-property"], Prism.languages.markup && Prism.languages.insertBefore("actionscript", "string", {
   xml: {
     pattern: /(^|[^.])<\/?\w+(?:\s+[^\s>\/=]+=("|')(?:\\[\s\S]|(?!\2)[^\\])*\2)*\s*\/?>/,
     lookbehind: !0,
@@ -33371,7 +33529,14 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
 });
 !function (e) {
   var t = "\\b(?:BASH|BASHOPTS|BASH_ALIASES|BASH_ARGC|BASH_ARGV|BASH_CMDS|BASH_COMPLETION_COMPAT_DIR|BASH_LINENO|BASH_REMATCH|BASH_SOURCE|BASH_VERSINFO|BASH_VERSION|COLORTERM|COLUMNS|COMP_WORDBREAKS|DBUS_SESSION_BUS_ADDRESS|DEFAULTS_PATH|DESKTOP_SESSION|DIRSTACK|DISPLAY|EUID|GDMSESSION|GDM_LANG|GNOME_KEYRING_CONTROL|GNOME_KEYRING_PID|GPG_AGENT_INFO|GROUPS|HISTCONTROL|HISTFILE|HISTFILESIZE|HISTSIZE|HOME|HOSTNAME|HOSTTYPE|IFS|INSTANCE|JOB|LANG|LANGUAGE|LC_ADDRESS|LC_ALL|LC_IDENTIFICATION|LC_MEASUREMENT|LC_MONETARY|LC_NAME|LC_NUMERIC|LC_PAPER|LC_TELEPHONE|LC_TIME|LESSCLOSE|LESSOPEN|LINES|LOGNAME|LS_COLORS|MACHTYPE|MAILCHECK|MANDATORY_PATH|NO_AT_BRIDGE|OLDPWD|OPTERR|OPTIND|ORBIT_SOCKETDIR|OSTYPE|PAPERSIZE|PATH|PIPESTATUS|PPID|PS1|PS2|PS3|PS4|PWD|RANDOM|REPLY|SECONDS|SELINUX_INIT|SESSION|SESSIONTYPE|SESSION_MANAGER|SHELL|SHELLOPTS|SHLVL|SSH_AUTH_SOCK|TERM|UID|UPSTART_EVENTS|UPSTART_INSTANCE|UPSTART_JOB|UPSTART_SESSION|USER|WINDOWID|XAUTHORITY|XDG_CONFIG_DIRS|XDG_CURRENT_DESKTOP|XDG_DATA_DIRS|XDG_GREETER_DATA_DIR|XDG_MENU_PREFIX|XDG_RUNTIME_DIR|XDG_SEAT|XDG_SEAT_PATH|XDG_SESSION_DESKTOP|XDG_SESSION_ID|XDG_SESSION_PATH|XDG_SESSION_TYPE|XDG_VTNR|XMODIFIERS)\\b",
+    a = {
+      pattern: /(^(["']?)\w+\2)[ \t]+\S.*/,
+      lookbehind: !0,
+      alias: "punctuation",
+      inside: null
+    },
     n = {
+      bash: a,
       environment: {
         pattern: RegExp("\\$" + t),
         alias: "constant"
@@ -33384,8 +33549,8 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
             pattern: /(^\$\(\([\s\S]+)\)\)/,
             lookbehind: !0
           }, /^\$\(\(/],
-          number: /\b0x[\dA-Fa-f]+\b|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee]-?\d+)?/,
-          operator: /--?|-=|\+\+?|\+=|!=?|~|\*\*?|\*=|\/=?|%=?|<<=?|>>=?|<=?|>=?|==?|&&?|&=|\^=?|\|\|?|\|=|\?|:/,
+          number: /\b0x[\dA-Fa-f]+\b|(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:[Ee]-?\d+)?/,
+          operator: /--|\+\+|\*\*=?|<<=?|>>=?|&&|\|\||[=!+\-*/%<>^&|]=?|[?~:]/,
           punctuation: /\(\(?|\)\)?|,|;/
         }
       }, {
@@ -33407,7 +33572,7 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
           }
         }
       }, /\$(?:\w+|[#?*!@$])/],
-      entity: /\\(?:[abceEfnrtv\\"]|O?[0-7]{1,3}|x[0-9a-fA-F]{1,2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})/
+      entity: /\\(?:[abceEfnrtv\\"]|O?[0-7]{1,3}|U[0-9a-fA-F]{8}|u[0-9a-fA-F]{4}|x[0-9a-fA-F]{1,2})/
     };
   e.languages.bash = {
     shebang: {
@@ -33419,11 +33584,11 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
       lookbehind: !0
     },
     "function-name": [{
-      pattern: /(\bfunction\s+)\w+(?=(?:\s*\(?:\s*\))?\s*\{)/,
+      pattern: /(\bfunction\s+)[\w-]+(?=(?:\s*\(?:\s*\))?\s*\{)/,
       lookbehind: !0,
       alias: "function"
     }, {
-      pattern: /\b\w+(?=\s*\(\s*\)\s*\{)/,
+      pattern: /\b[\w-]+(?=\s*\(\s*\)\s*\{)/,
       alias: "function"
     }],
     "for-or-select": {
@@ -33432,7 +33597,7 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
       lookbehind: !0
     },
     "assign-left": {
-      pattern: /(^|[\s;|&]|[<>]\()\w+(?=\+?=)/,
+      pattern: /(^|[\s;|&]|[<>]\()\w+(?:\.\w+)*(?=\+?=)/,
       inside: {
         environment: {
           pattern: RegExp("(^|[\\s;|&]|[<>]\\()" + t),
@@ -33443,19 +33608,38 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
       alias: "variable",
       lookbehind: !0
     },
+    parameter: {
+      pattern: /(^|\s)-{1,2}(?:\w+:[+-]?)?\w+(?:\.\w+)*(?=[=\s]|$)/,
+      alias: "variable",
+      lookbehind: !0
+    },
     string: [{
-      pattern: /((?:^|[^<])<<-?\s*)(\w+?)\s*(?:\r?\n|\r)[\s\S]*?(?:\r?\n|\r)\2/,
+      pattern: /((?:^|[^<])<<-?\s*)(\w+)\s[\s\S]*?(?:\r?\n|\r)\2/,
       lookbehind: !0,
       greedy: !0,
       inside: n
     }, {
-      pattern: /((?:^|[^<])<<-?\s*)(["'])(\w+)\2\s*(?:\r?\n|\r)[\s\S]*?(?:\r?\n|\r)\3/,
+      pattern: /((?:^|[^<])<<-?\s*)(["'])(\w+)\2\s[\s\S]*?(?:\r?\n|\r)\3/,
+      lookbehind: !0,
+      greedy: !0,
+      inside: {
+        bash: a
+      }
+    }, {
+      pattern: /(^|[^\\](?:\\\\)*)"(?:\\[\s\S]|\$\([^)]+\)|\$(?!\()|`[^`]+`|[^"\\`$])*"/,
+      lookbehind: !0,
+      greedy: !0,
+      inside: n
+    }, {
+      pattern: /(^|[^$\\])'[^']*'/,
       lookbehind: !0,
       greedy: !0
     }, {
-      pattern: /(["'])(?:\\[\s\S]|\$\([^)]+\)|`[^`]+`|(?!\1)[^\\])*\1/,
+      pattern: /\$'(?:[^'\\]|\\[\s\S])*'/,
       greedy: !0,
-      inside: n
+      inside: {
+        entity: n.entity
+      }
     }],
     environment: {
       pattern: RegExp("\\$?" + t),
@@ -33463,20 +33647,20 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
     },
     variable: n.variable,
     "function": {
-      pattern: /(^|[\s;|&]|[<>]\()(?:add|apropos|apt|aptitude|apt-cache|apt-get|aspell|automysqlbackup|awk|basename|bash|bc|bconsole|bg|bzip2|cal|cat|cfdisk|chgrp|chkconfig|chmod|chown|chroot|cksum|clear|cmp|column|comm|cp|cron|crontab|csplit|curl|cut|date|dc|dd|ddrescue|debootstrap|df|diff|diff3|dig|dir|dircolors|dirname|dirs|dmesg|du|egrep|eject|env|ethtool|expand|expect|expr|fdformat|fdisk|fg|fgrep|file|find|fmt|fold|format|free|fsck|ftp|fuser|gawk|git|gparted|grep|groupadd|groupdel|groupmod|groups|grub-mkconfig|gzip|halt|head|hg|history|host|hostname|htop|iconv|id|ifconfig|ifdown|ifup|import|install|ip|jobs|join|kill|killall|less|link|ln|locate|logname|logrotate|look|lpc|lpr|lprint|lprintd|lprintq|lprm|ls|lsof|lynx|make|man|mc|mdadm|mkconfig|mkdir|mke2fs|mkfifo|mkfs|mkisofs|mknod|mkswap|mmv|more|most|mount|mtools|mtr|mutt|mv|nano|nc|netstat|nice|nl|nohup|notify-send|npm|nslookup|op|open|parted|passwd|paste|pathchk|ping|pkill|pnpm|popd|pr|printcap|printenv|ps|pushd|pv|quota|quotacheck|quotactl|ram|rar|rcp|reboot|remsync|rename|renice|rev|rm|rmdir|rpm|rsync|scp|screen|sdiff|sed|sendmail|seq|service|sftp|sh|shellcheck|shuf|shutdown|sleep|slocate|sort|split|ssh|stat|strace|su|sudo|sum|suspend|swapon|sync|tac|tail|tar|tee|time|timeout|top|touch|tr|traceroute|tsort|tty|umount|uname|unexpand|uniq|units|unrar|unshar|unzip|update-grub|uptime|useradd|userdel|usermod|users|uudecode|uuencode|v|vdir|vi|vim|virsh|vmstat|wait|watch|wc|wget|whereis|which|who|whoami|write|xargs|xdg-open|yarn|yes|zenity|zip|zsh|zypper)(?=$|[)\s;|&])/,
+      pattern: /(^|[\s;|&]|[<>]\()(?:add|apropos|apt|apt-cache|apt-get|aptitude|aspell|automysqlbackup|awk|basename|bash|bc|bconsole|bg|bzip2|cal|cargo|cat|cfdisk|chgrp|chkconfig|chmod|chown|chroot|cksum|clear|cmp|column|comm|composer|cp|cron|crontab|csplit|curl|cut|date|dc|dd|ddrescue|debootstrap|df|diff|diff3|dig|dir|dircolors|dirname|dirs|dmesg|docker|docker-compose|du|egrep|eject|env|ethtool|expand|expect|expr|fdformat|fdisk|fg|fgrep|file|find|fmt|fold|format|free|fsck|ftp|fuser|gawk|git|gparted|grep|groupadd|groupdel|groupmod|groups|grub-mkconfig|gzip|halt|head|hg|history|host|hostname|htop|iconv|id|ifconfig|ifdown|ifup|import|install|ip|java|jobs|join|kill|killall|less|link|ln|locate|logname|logrotate|look|lpc|lpr|lprint|lprintd|lprintq|lprm|ls|lsof|lynx|make|man|mc|mdadm|mkconfig|mkdir|mke2fs|mkfifo|mkfs|mkisofs|mknod|mkswap|mmv|more|most|mount|mtools|mtr|mutt|mv|nano|nc|netstat|nice|nl|node|nohup|notify-send|npm|nslookup|op|open|parted|passwd|paste|pathchk|ping|pkill|pnpm|podman|podman-compose|popd|pr|printcap|printenv|ps|pushd|pv|quota|quotacheck|quotactl|ram|rar|rcp|reboot|remsync|rename|renice|rev|rm|rmdir|rpm|rsync|scp|screen|sdiff|sed|sendmail|seq|service|sftp|sh|shellcheck|shuf|shutdown|sleep|slocate|sort|split|ssh|stat|strace|su|sudo|sum|suspend|swapon|sync|sysctl|tac|tail|tar|tee|time|timeout|top|touch|tr|traceroute|tsort|tty|umount|uname|unexpand|uniq|units|unrar|unshar|unzip|update-grub|uptime|useradd|userdel|usermod|users|uudecode|uuencode|v|vcpkg|vdir|vi|vim|virsh|vmstat|wait|watch|wc|wget|whereis|which|who|whoami|write|xargs|xdg-open|yarn|yes|zenity|zip|zsh|zypper)(?=$|[)\s;|&])/,
       lookbehind: !0
     },
     keyword: {
-      pattern: /(^|[\s;|&]|[<>]\()(?:if|then|else|elif|fi|for|while|in|case|esac|function|select|do|done|until)(?=$|[)\s;|&])/,
+      pattern: /(^|[\s;|&]|[<>]\()(?:case|do|done|elif|else|esac|fi|for|function|if|in|select|then|until|while)(?=$|[)\s;|&])/,
       lookbehind: !0
     },
     builtin: {
-      pattern: /(^|[\s;|&]|[<>]\()(?:\.|:|break|cd|continue|eval|exec|exit|export|getopts|hash|pwd|readonly|return|shift|test|times|trap|umask|unset|alias|bind|builtin|caller|command|declare|echo|enable|help|let|local|logout|mapfile|printf|read|readarray|source|type|typeset|ulimit|unalias|set|shopt)(?=$|[)\s;|&])/,
+      pattern: /(^|[\s;|&]|[<>]\()(?:\.|:|alias|bind|break|builtin|caller|cd|command|continue|declare|echo|enable|eval|exec|exit|export|getopts|hash|help|let|local|logout|mapfile|printf|pwd|read|readarray|readonly|return|set|shift|shopt|source|test|times|trap|type|typeset|ulimit|umask|unalias|unset)(?=$|[)\s;|&])/,
       lookbehind: !0,
       alias: "class-name"
     },
     "boolean": {
-      pattern: /(^|[\s;|&]|[<>]\()(?:true|false)(?=$|[)\s;|&])/,
+      pattern: /(^|[\s;|&]|[<>]\()(?:false|true)(?=$|[)\s;|&])/,
       lookbehind: !0
     },
     "file-descriptor": {
@@ -33484,7 +33668,7 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
       alias: "important"
     },
     operator: {
-      pattern: /\d?<>|>\||\+=|==?|!=?|=~|<<[<-]?|[&\d]?>>|\d?[<>]&?|&[>&]?|\|[&|]?|<=?|>=?/,
+      pattern: /\d?<>|>\||\+=|=[=~]?|!=?|<<[<-]?|[&\d]?>>|\d[<>]&?|[<>][&=]?|&[>&]?|\|[&|]?/,
       inside: {
         "file-descriptor": {
           pattern: /^\d/,
@@ -33497,11 +33681,11 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
       pattern: /(^|\s)(?:[1-9]\d*|0)(?:[.,]\d+)?\b/,
       lookbehind: !0
     }
-  };
-  for (var a = ["comment", "function-name", "for-or-select", "assign-left", "string", "environment", "function", "keyword", "builtin", "boolean", "file-descriptor", "operator", "punctuation", "number"], r = n.variable[1].inside, s = 0; s < a.length; s++) {
-    r[a[s]] = e.languages.bash[a[s]];
+  }, a.inside = e.languages.bash;
+  for (var s = ["comment", "function-name", "for-or-select", "assign-left", "parameter", "string", "environment", "function", "keyword", "builtin", "boolean", "file-descriptor", "operator", "punctuation", "number"], o = n.variable[1].inside, i = 0; i < s.length; i++) {
+    o[s[i]] = e.languages.bash[s[i]];
   }
-  e.languages.shell = e.languages.bash;
+  e.languages.sh = e.languages.bash, e.languages.shell = e.languages.bash;
 }(Prism);
 !function (e) {
   var r = /%%?[~:\w]+%?|!\S+!/,
@@ -33512,9 +33696,9 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
         punctuation: /:/
       }
     },
-    n = /"[^"]*"/,
+    n = /"(?:[\\"]"|[^"])*"(?!")/,
     i = /(?:\b|-)\d+\b/;
-  Prism.languages.batch = {
+  e.languages.batch = {
     comment: [/^::.*/m, {
       pattern: /((?:^|[&(])[ \t]*)rem\b(?:[^^&)\r\n]|\^(?:\r\n|[\s\S]))*/im,
       lookbehind: !0
@@ -33524,10 +33708,10 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
       alias: "property"
     },
     command: [{
-      pattern: /((?:^|[&(])[ \t]*)for(?: ?\/[a-z?](?:[ :](?:"[^"]*"|\S+))?)* \S+ in \([^)]+\) do/im,
+      pattern: /((?:^|[&(])[ \t]*)for(?: \/[a-z?](?:[ :](?:"[^"]*"|[^\s"/]\S*))?)* \S+ in \([^)]+\) do/im,
       lookbehind: !0,
       inside: {
-        keyword: /^for\b|\b(?:in|do)\b/i,
+        keyword: /\b(?:do|in)\b|^for\b/i,
         string: n,
         parameter: t,
         variable: r,
@@ -33535,15 +33719,15 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
         punctuation: /[()',]/
       }
     }, {
-      pattern: /((?:^|[&(])[ \t]*)if(?: ?\/[a-z?](?:[ :](?:"[^"]*"|\S+))?)* (?:not )?(?:cmdextversion \d+|defined \w+|errorlevel \d+|exist \S+|(?:"[^"]*"|\S+)?(?:==| (?:equ|neq|lss|leq|gtr|geq) )(?:"[^"]*"|\S+))/im,
+      pattern: /((?:^|[&(])[ \t]*)if(?: \/[a-z?](?:[ :](?:"[^"]*"|[^\s"/]\S*))?)* (?:not )?(?:cmdextversion \d+|defined \w+|errorlevel \d+|exist \S+|(?:"[^"]*"|(?!")(?:(?!==)\S)+)?(?:==| (?:equ|geq|gtr|leq|lss|neq) )(?:"[^"]*"|[^\s"]\S*))/im,
       lookbehind: !0,
       inside: {
-        keyword: /^if\b|\b(?:not|cmdextversion|defined|errorlevel|exist)\b/i,
+        keyword: /\b(?:cmdextversion|defined|errorlevel|exist|not)\b|^if\b/i,
         string: n,
         parameter: t,
         variable: r,
         number: i,
-        operator: /\^|==|\b(?:equ|neq|lss|leq|gtr|geq)\b/i
+        operator: /\^|==|\b(?:equ|geq|gtr|leq|lss|neq)\b/i
       }
     }, {
       pattern: /((?:^|[&()])[ \t]*)else\b/im,
@@ -33552,7 +33736,7 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
         keyword: /^else\b/i
       }
     }, {
-      pattern: /((?:^|[&(])[ \t]*)set(?: ?\/[a-z](?:[ :](?:"[^"]*"|\S+))?)* (?:[^^&)\r\n]|\^(?:\r\n|[\s\S]))*/im,
+      pattern: /((?:^|[&(])[ \t]*)set(?: \/[a-z](?:[ :](?:"[^"]*"|[^\s"/]\S*))?)* (?:[^^&)\r\n]|\^(?:\r\n|[\s\S]))*/im,
       lookbehind: !0,
       inside: {
         keyword: /^set\b/i,
@@ -33564,10 +33748,10 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
         punctuation: /[()',]/
       }
     }, {
-      pattern: /((?:^|[&(])[ \t]*@?)\w+\b(?:[^^&)\r\n]|\^(?:\r\n|[\s\S]))*/im,
+      pattern: /((?:^|[&(])[ \t]*@?)\w+\b(?:"(?:[\\"]"|[^"])*"(?!")|[^"^&)\r\n]|\^(?:\r\n|[\s\S]))*/m,
       lookbehind: !0,
       inside: {
-        keyword: /^\w+\b/i,
+        keyword: /^\w+\b/,
         string: n,
         parameter: t,
         label: {
@@ -33583,260 +33767,642 @@ Prism.languages.actionscript = Prism.languages.extend("javascript", {
     operator: /[&@]/,
     punctuation: /[()']/
   };
-}();
+}(Prism);
 Prism.languages.c = Prism.languages.extend("clike", {
   comment: {
     pattern: /\/\/(?:[^\r\n\\]|\\(?:\r\n?|\n|(?![\r\n])))*|\/\*[\s\S]*?(?:\*\/|$)/,
     greedy: !0
   },
-  "class-name": {
-    pattern: /(\b(?:enum|struct)\s+(?:__attribute__\s*\(\([\s\S]*?\)\)\s*)?)\w+/,
-    lookbehind: !0
-  },
-  keyword: /\b(?:__attribute__|_Alignas|_Alignof|_Atomic|_Bool|_Complex|_Generic|_Imaginary|_Noreturn|_Static_assert|_Thread_local|asm|typeof|inline|auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\b/,
-  "function": /[a-z_]\w*(?=\s*\()/i,
-  operator: />>=?|<<=?|->|([-+&|:])\1|[?:~]|[-+*/%&|^!=<>]=?/,
-  number: /(?:\b0x(?:[\da-f]+\.?[\da-f]*|\.[\da-f]+)(?:p[+-]?\d+)?|(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?)[ful]*/i
-}), Prism.languages.insertBefore("c", "string", {
-  macro: {
-    pattern: /(^\s*)#\s*[a-z]+(?:[^\r\n\\]|\\(?:\r\n|[\s\S]))*/im,
-    lookbehind: !0,
-    alias: "property",
-    inside: {
-      string: {
-        pattern: /(#\s*include\s*)(?:<.+?>|("|')(?:\\?.)+?\2)/,
-        lookbehind: !0
-      },
-      directive: {
-        pattern: /(#\s*)\b(?:define|defined|elif|else|endif|error|ifdef|ifndef|if|import|include|line|pragma|undef|using)\b/,
-        lookbehind: !0,
-        alias: "keyword"
-      }
-    }
-  },
-  constant: /\b(?:__FILE__|__LINE__|__DATE__|__TIME__|__TIMESTAMP__|__func__|EOF|NULL|SEEK_CUR|SEEK_END|SEEK_SET|stdin|stdout|stderr)\b/
-}), delete Prism.languages.c["boolean"];
-Prism.languages.cpp = Prism.languages.extend("c", {
-  "class-name": {
-    pattern: /(\b(?:class|enum|struct)\s+)\w+/,
-    lookbehind: !0
-  },
-  keyword: /\b(?:alignas|alignof|asm|auto|bool|break|case|catch|char|char8_t|char16_t|char32_t|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|float|for|friend|goto|if|inline|int|int8_t|int16_t|int32_t|int64_t|uint8_t|uint16_t|uint32_t|uint64_t|long|mutable|namespace|new|noexcept|nullptr|operator|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while)\b/,
-  number: {
-    pattern: /(?:\b0b[01']+|\b0x(?:[\da-f']+\.?[\da-f']*|\.[\da-f']+)(?:p[+-]?[\d']+)?|(?:\b[\d']+\.?[\d']*|\B\.[\d']+)(?:e[+-]?[\d']+)?)[ful]*/i,
+  string: {
+    pattern: /"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"/,
     greedy: !0
   },
-  operator: />>=?|<<=?|->|([-+&|:])\1|[?:~]|[-+*/%&|^!=<>]=?|\b(?:and|and_eq|bitand|bitor|not|not_eq|or|or_eq|xor|xor_eq)\b/,
-  "boolean": /\b(?:true|false)\b/
-}), Prism.languages.insertBefore("cpp", "string", {
-  "raw-string": {
-    pattern: /R"([^()\\ ]{0,16})\([\s\S]*?\)\1"/,
-    alias: "string",
+  "class-name": {
+    pattern: /(\b(?:enum|struct)\s+(?:__attribute__\s*\(\([\s\S]*?\)\)\s*)?)\w+|\b[a-z]\w*_t\b/,
+    lookbehind: !0
+  },
+  keyword: /\b(?:_Alignas|_Alignof|_Atomic|_Bool|_Complex|_Generic|_Imaginary|_Noreturn|_Static_assert|_Thread_local|__attribute__|asm|auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|inline|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|typeof|union|unsigned|void|volatile|while)\b/,
+  "function": /\b[a-z_]\w*(?=\s*\()/i,
+  number: /(?:\b0x(?:[\da-f]+(?:\.[\da-f]*)?|\.[\da-f]+)(?:p[+-]?\d+)?|(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:e[+-]?\d+)?)[ful]{0,4}/i,
+  operator: />>=?|<<=?|->|([-+&|:])\1|[?:~]|[-+*/%&|^!=<>]=?/
+}), Prism.languages.insertBefore("c", "string", {
+  "char": {
+    pattern: /'(?:\\(?:\r\n|[\s\S])|[^'\\\r\n]){0,32}'/,
     greedy: !0
   }
-});
-Prism.languages.docker = {
-  keyword: {
-    pattern: /(^\s*)(?:ADD|ARG|CMD|COPY|ENTRYPOINT|ENV|EXPOSE|FROM|HEALTHCHECK|LABEL|MAINTAINER|ONBUILD|RUN|SHELL|STOPSIGNAL|USER|VOLUME|WORKDIR)(?=\s)/im,
-    lookbehind: !0
-  },
-  string: /("|')(?:(?!\1)[^\\\r\n]|\\(?:\r\n|[\s\S]))*\1/,
-  comment: /#.*/,
-  punctuation: /---|\.\.\.|[:[\]{}\-,|>?]/
-}, Prism.languages.dockerfile = Prism.languages.docker;
-Prism.languages.haxe = Prism.languages.extend("clike", {
-  string: {
-    pattern: /(["'])(?:(?!\1)[^\\]|\\[\s\S])*\1/,
+}), Prism.languages.insertBefore("c", "string", {
+  macro: {
+    pattern: /(^[\t ]*)#\s*[a-z](?:[^\r\n\\/]|\/(?!\*)|\/\*(?:[^*]|\*(?!\/))*\*\/|\\(?:\r\n|[\s\S]))*/im,
+    lookbehind: !0,
     greedy: !0,
+    alias: "property",
     inside: {
-      interpolation: {
-        pattern: /(^|[^\\])\$(?:\w+|\{[^}]+\})/,
+      string: [{
+        pattern: /^(#\s*include\s*)<[^>]+>/,
+        lookbehind: !0
+      }, Prism.languages.c.string],
+      "char": Prism.languages.c["char"],
+      comment: Prism.languages.c.comment,
+      "macro-name": [{
+        pattern: /(^#\s*define\s+)\w+\b(?!\()/i,
+        lookbehind: !0
+      }, {
+        pattern: /(^#\s*define\s+)\w+\b(?=\()/i,
         lookbehind: !0,
-        inside: {
-          interpolation: {
-            pattern: /^\$\w*/,
-            alias: "variable"
-          }
+        alias: "function"
+      }],
+      directive: {
+        pattern: /^(#\s*)[a-z]+/,
+        lookbehind: !0,
+        alias: "keyword"
+      },
+      "directive-hash": /^#/,
+      punctuation: /##|\\(?=[\r\n])/,
+      expression: {
+        pattern: /\S[\s\S]*/,
+        inside: Prism.languages.c
+      }
+    }
+  }
+}), Prism.languages.insertBefore("c", "function", {
+  constant: /\b(?:EOF|NULL|SEEK_CUR|SEEK_END|SEEK_SET|__DATE__|__FILE__|__LINE__|__TIMESTAMP__|__TIME__|__func__|stderr|stdin|stdout)\b/
+}), delete Prism.languages.c["boolean"];
+!function (e) {
+  var t = /\b(?:alignas|alignof|asm|auto|bool|break|case|catch|char|char16_t|char32_t|char8_t|class|co_await|co_return|co_yield|compl|concept|const|const_cast|consteval|constexpr|constinit|continue|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|final|float|for|friend|goto|if|import|inline|int|int16_t|int32_t|int64_t|int8_t|long|module|mutable|namespace|new|noexcept|nullptr|operator|override|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|try|typedef|typeid|typename|uint16_t|uint32_t|uint64_t|uint8_t|union|unsigned|using|virtual|void|volatile|wchar_t|while)\b/,
+    n = "\\b(?!<keyword>)\\w+(?:\\s*\\.\\s*\\w+)*\\b".replace(/<keyword>/g, function () {
+      return t.source;
+    });
+  e.languages.cpp = e.languages.extend("c", {
+    "class-name": [{
+      pattern: RegExp("(\\b(?:class|concept|enum|struct|typename)\\s+)(?!<keyword>)\\w+".replace(/<keyword>/g, function () {
+        return t.source;
+      })),
+      lookbehind: !0
+    }, /\b[A-Z]\w*(?=\s*::\s*\w+\s*\()/, /\b[A-Z_]\w*(?=\s*::\s*~\w+\s*\()/i, /\b\w+(?=\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>\s*::\s*\w+\s*\()/],
+    keyword: t,
+    number: {
+      pattern: /(?:\b0b[01']+|\b0x(?:[\da-f']+(?:\.[\da-f']*)?|\.[\da-f']+)(?:p[+-]?[\d']+)?|(?:\b[\d']+(?:\.[\d']*)?|\B\.[\d']+)(?:e[+-]?[\d']+)?)[ful]{0,4}/i,
+      greedy: !0
+    },
+    operator: />>=?|<<=?|->|--|\+\+|&&|\|\||[?:~]|<=>|[-+*/%&|^!=<>]=?|\b(?:and|and_eq|bitand|bitor|not|not_eq|or|or_eq|xor|xor_eq)\b/,
+    "boolean": /\b(?:false|true)\b/
+  }), e.languages.insertBefore("cpp", "string", {
+    module: {
+      pattern: RegExp('(\\b(?:import|module)\\s+)(?:"(?:\\\\(?:\r\n|[^])|[^"\\\\\r\n])*"|<[^<>\r\n]*>|' + "<mod-name>(?:\\s*:\\s*<mod-name>)?|:\\s*<mod-name>".replace(/<mod-name>/g, function () {
+        return n;
+      }) + ")"),
+      lookbehind: !0,
+      greedy: !0,
+      inside: {
+        string: /^[<"][\s\S]+/,
+        operator: /:/,
+        punctuation: /\./
+      }
+    },
+    "raw-string": {
+      pattern: /R"([^()\\ ]{0,16})\([\s\S]*?\)\1"/,
+      alias: "string",
+      greedy: !0
+    }
+  }), e.languages.insertBefore("cpp", "keyword", {
+    "generic-function": {
+      pattern: /\b(?!operator\b)[a-z_]\w*\s*<(?:[^<>]|<[^<>]*>)*>(?=\s*\()/i,
+      inside: {
+        "function": /^\w+/,
+        generic: {
+          pattern: /<[\s\S]+/,
+          alias: "class-name",
+          inside: e.languages.cpp
         }
       }
     }
+  }), e.languages.insertBefore("cpp", "operator", {
+    "double-colon": {
+      pattern: /::/,
+      alias: "punctuation"
+    }
+  }), e.languages.insertBefore("cpp", "class-name", {
+    "base-clause": {
+      pattern: /(\b(?:class|struct)\s+\w+\s*:\s*)[^;{}"'\s]+(?:\s+[^;{}"'\s]+)*(?=\s*[;{])/,
+      lookbehind: !0,
+      greedy: !0,
+      inside: e.languages.extend("cpp", {})
+    }
+  }), e.languages.insertBefore("inside", "double-colon", {
+    "class-name": /\b[a-z_]\w*\b(?!\s*::)/i
+  }, e.languages.cpp["base-clause"]);
+}(Prism);
+!function (e) {
+  var n = "(?:[ \t]+(?![ \t])(?:<SP_BS>)?|<SP_BS>)".replace(/<SP_BS>/g, function () {
+      return "\\\\[\r\n](?:\\s|\\\\[\r\n]|#.*(?!.))*(?![\\s#]|\\\\[\r\n])";
+    }),
+    r = "\"(?:[^\"\\\\\r\n]|\\\\(?:\r\n|[^]))*\"|'(?:[^'\\\\\r\n]|\\\\(?:\r\n|[^]))*'",
+    t = "--[\\w-]+=(?:<STR>|(?![\"'])(?:[^\\s\\\\]|\\\\.)+)".replace(/<STR>/g, function () {
+      return r;
+    }),
+    o = {
+      pattern: RegExp(r),
+      greedy: !0
+    },
+    i = {
+      pattern: /(^[ \t]*)#.*/m,
+      lookbehind: !0,
+      greedy: !0
+    };
+  function a(e, r) {
+    return e = e.replace(/<OPT>/g, function () {
+      return t;
+    }).replace(/<SP>/g, function () {
+      return n;
+    }), RegExp(e, r);
+  }
+  e.languages.docker = {
+    instruction: {
+      pattern: /(^[ \t]*)(?:ADD|ARG|CMD|COPY|ENTRYPOINT|ENV|EXPOSE|FROM|HEALTHCHECK|LABEL|MAINTAINER|ONBUILD|RUN|SHELL|STOPSIGNAL|USER|VOLUME|WORKDIR)(?=\s)(?:\\.|[^\r\n\\])*(?:\\$(?:\s|#.*$)*(?![\s#])(?:\\.|[^\r\n\\])*)*/im,
+      lookbehind: !0,
+      greedy: !0,
+      inside: {
+        options: {
+          pattern: a("(^(?:ONBUILD<SP>)?\\w+<SP>)<OPT>(?:<SP><OPT>)*", "i"),
+          lookbehind: !0,
+          greedy: !0,
+          inside: {
+            property: {
+              pattern: /(^|\s)--[\w-]+/,
+              lookbehind: !0
+            },
+            string: [o, {
+              pattern: /(=)(?!["'])(?:[^\s\\]|\\.)+/,
+              lookbehind: !0
+            }],
+            operator: /\\$/m,
+            punctuation: /=/
+          }
+        },
+        keyword: [{
+          pattern: a("(^(?:ONBUILD<SP>)?HEALTHCHECK<SP>(?:<OPT><SP>)*)(?:CMD|NONE)\\b", "i"),
+          lookbehind: !0,
+          greedy: !0
+        }, {
+          pattern: a("(^(?:ONBUILD<SP>)?FROM<SP>(?:<OPT><SP>)*(?!--)[^ \t\\\\]+<SP>)AS", "i"),
+          lookbehind: !0,
+          greedy: !0
+        }, {
+          pattern: a("(^ONBUILD<SP>)\\w+", "i"),
+          lookbehind: !0,
+          greedy: !0
+        }, {
+          pattern: /^\w+/,
+          greedy: !0
+        }],
+        comment: i,
+        string: o,
+        variable: /\$(?:\w+|\{[^{}"'\\]*\})/,
+        operator: /\\$/m
+      }
+    },
+    comment: i
+  }, e.languages.dockerfile = e.languages.docker;
+}(Prism);
+Prism.languages.haxe = Prism.languages.extend("clike", {
+  string: {
+    pattern: /"(?:[^"\\]|\\[\s\S])*"/,
+    greedy: !0
   },
-  keyword: /\bthis\b|\b(?:abstract|as|break|case|cast|catch|class|continue|default|do|dynamic|else|enum|extends|extern|from|for|function|if|implements|import|in|inline|interface|macro|new|null|override|public|private|return|static|super|switch|throw|to|try|typedef|using|var|while)(?!\.)\b/,
-  operator: /\.{3}|\+\+?|-[->]?|[=!]=?|&&?|\|\|?|<[<=]?|>[>=]?|[*\/%~^]/
+  "class-name": [{
+    pattern: /(\b(?:abstract|class|enum|extends|implements|interface|new|typedef)\s+)[A-Z_]\w*/,
+    lookbehind: !0
+  }, /\b[A-Z]\w*/],
+  keyword: /\bthis\b|\b(?:abstract|as|break|case|cast|catch|class|continue|default|do|dynamic|else|enum|extends|extern|final|for|from|function|if|implements|import|in|inline|interface|macro|new|null|operator|overload|override|package|private|public|return|static|super|switch|throw|to|try|typedef|untyped|using|var|while)(?!\.)\b/,
+  "function": {
+    pattern: /\b[a-z_]\w*(?=\s*(?:<[^<>]*>\s*)?\()/i,
+    greedy: !0
+  },
+  operator: /\.{3}|\+\+|--|&&|\|\||->|=>|(?:<<?|>{1,3}|[-+*/%!=&|^])=?|[?:~]/
+}), Prism.languages.insertBefore("haxe", "string", {
+  "string-interpolation": {
+    pattern: /'(?:[^'\\]|\\[\s\S])*'/,
+    greedy: !0,
+    inside: {
+      interpolation: {
+        pattern: /(^|[^\\])\$(?:\w+|\{[^{}]+\})/,
+        lookbehind: !0,
+        inside: {
+          "interpolation-punctuation": {
+            pattern: /^\$\{?|\}$/,
+            alias: "punctuation"
+          },
+          expression: {
+            pattern: /[\s\S]+/,
+            inside: Prism.languages.haxe
+          }
+        }
+      },
+      string: /[\s\S]+/
+    }
+  }
 }), Prism.languages.insertBefore("haxe", "class-name", {
   regex: {
-    pattern: /~\/(?:[^\/\\\r\n]|\\.)+\/[igmsu]*/,
-    greedy: !0
+    pattern: /~\/(?:[^\/\\\r\n]|\\.)+\/[a-z]*/,
+    greedy: !0,
+    inside: {
+      "regex-flags": /\b[a-z]+$/,
+      "regex-source": {
+        pattern: /^(~\/)[\s\S]+(?=\/$)/,
+        lookbehind: !0,
+        alias: "language-regex",
+        inside: Prism.languages.regex
+      },
+      "regex-delimiter": /^~\/|\/$/
+    }
   }
 }), Prism.languages.insertBefore("haxe", "keyword", {
   preprocessor: {
-    pattern: /#\w+/,
-    alias: "builtin"
+    pattern: /#(?:else|elseif|end|if)\b.*/,
+    alias: "property"
   },
   metadata: {
-    pattern: /@:?\w+/,
+    pattern: /@:?[\w.]+/,
     alias: "symbol"
   },
   reification: {
     pattern: /\$(?:\w+|(?=\{))/,
-    alias: "variable"
+    alias: "important"
   }
-}), Prism.languages.haxe.string.inside.interpolation.inside.rest = Prism.languages.haxe, delete Prism.languages.haxe["class-name"];
+});
 Prism.languages.ini = {
-  comment: /^[ \t]*[;#].*$/m,
-  selector: /^[ \t]*\[.*?\]/m,
-  constant: /^[ \t]*[^\s=]+?(?=[ \t]*=)/m,
-  "attr-value": {
-    pattern: /=.*/,
+  comment: {
+    pattern: /(^[ \f\t\v]*)[#;][^\n\r]*/m,
+    lookbehind: !0
+  },
+  section: {
+    pattern: /(^[ \f\t\v]*)\[[^\n\r\]]*\]?/m,
+    lookbehind: !0,
     inside: {
-      punctuation: /^[=]/
+      "section-name": {
+        pattern: /(^\[[ \f\t\v]*)[^ \f\t\v\]]+(?:[ \f\t\v]+[^ \f\t\v\]]+)*/,
+        lookbehind: !0,
+        alias: "selector"
+      },
+      punctuation: /\[|\]/
     }
-  }
+  },
+  key: {
+    pattern: /(^[ \f\t\v]*)[^ \f\n\r\t\v=]+(?:[ \f\t\v]+[^ \f\n\r\t\v=]+)*(?=[ \f\t\v]*=)/m,
+    lookbehind: !0,
+    alias: "attr-name"
+  },
+  value: {
+    pattern: /(=[ \f\t\v]*)[^ \f\n\r\t\v]+(?:[ \f\t\v]+[^ \f\n\r\t\v]+)*/,
+    lookbehind: !0,
+    alias: "attr-value",
+    inside: {
+      "inner-value": {
+        pattern: /^("|').+(?=\1$)/,
+        lookbehind: !0
+      }
+    }
+  },
+  punctuation: /=/
 };
 !function (e) {
-  var t = /\b(?:abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|null|open|opens|package|private|protected|provides|public|record|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|to|transient|transitive|try|uses|var|void|volatile|while|with|yield)\b/,
-    a = /\b[A-Z](?:\w*[a-z]\w*)?\b/;
+  var n = /\b(?:abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|non-sealed|null|open|opens|package|permits|private|protected|provides|public|record(?!\s*[(){}[\]<>=%~.:,;?+\-*/&|^])|requires|return|sealed|short|static|strictfp|super|switch|synchronized|this|throw|throws|to|transient|transitive|try|uses|var|void|volatile|while|with|yield)\b/,
+    t = "(?:[a-z]\\w*\\s*\\.\\s*)*(?:[A-Z]\\w*\\s*\\.\\s*)*",
+    s = {
+      pattern: RegExp("(^|[^\\w.])" + t + "[A-Z](?:[\\d_A-Z]*[a-z]\\w*)?\\b"),
+      lookbehind: !0,
+      inside: {
+        namespace: {
+          pattern: /^[a-z]\w*(?:\s*\.\s*[a-z]\w*)*(?:\s*\.)?/,
+          inside: {
+            punctuation: /\./
+          }
+        },
+        punctuation: /\./
+      }
+    };
   e.languages.java = e.languages.extend("clike", {
-    "class-name": [a, /\b[A-Z]\w*(?=\s+\w+\s*[;,=())])/],
-    keyword: t,
+    string: {
+      pattern: /(^|[^\\])"(?:\\.|[^"\\\r\n])*"/,
+      lookbehind: !0,
+      greedy: !0
+    },
+    "class-name": [s, {
+      pattern: RegExp("(^|[^\\w.])" + t + "[A-Z]\\w*(?=\\s+\\w+\\s*[;,=()]|\\s*(?:\\[[\\s,]*\\]\\s*)?::\\s*new\\b)"),
+      lookbehind: !0,
+      inside: s.inside
+    }, {
+      pattern: RegExp("(\\b(?:class|enum|extends|implements|instanceof|interface|new|record|throws)\\s+)" + t + "[A-Z]\\w*\\b"),
+      lookbehind: !0,
+      inside: s.inside
+    }],
+    keyword: n,
     "function": [e.languages.clike["function"], {
-      pattern: /(\:\:)[a-z_]\w*/,
+      pattern: /(::\s*)[a-z_]\w*/,
       lookbehind: !0
     }],
-    number: /\b0b[01][01_]*L?\b|\b0x[\da-f_]*\.?[\da-f_p+-]+\b|(?:\b\d[\d_]*\.?[\d_]*|\B\.\d[\d_]*)(?:e[+-]?\d[\d_]*)?[dfl]?/i,
+    number: /\b0b[01][01_]*L?\b|\b0x(?:\.[\da-f_p+-]+|[\da-f_]+(?:\.[\da-f_p+-]+)?)\b|(?:\b\d[\d_]*(?:\.[\d_]*)?|\B\.\d[\d_]*)(?:e[+-]?\d[\d_]*)?[dfl]?/i,
     operator: {
       pattern: /(^|[^.])(?:<<=?|>>>?=?|->|--|\+\+|&&|\|\||::|[?:~]|[-+*/%&|^!=<>]=?)/m,
       lookbehind: !0
-    }
+    },
+    constant: /\b[A-Z][A-Z_\d]+\b/
   }), e.languages.insertBefore("java", "string", {
     "triple-quoted-string": {
       pattern: /"""[ \t]*[\r\n](?:(?:"|"")?(?:\\.|[^"\\]))*"""/,
       greedy: !0,
       alias: "string"
+    },
+    "char": {
+      pattern: /'(?:\\.|[^'\\\r\n]){1,6}'/,
+      greedy: !0
     }
   }), e.languages.insertBefore("java", "class-name", {
     annotation: {
-      alias: "punctuation",
-      pattern: /(^|[^.])@\w+/,
-      lookbehind: !0
+      pattern: /(^|[^.])@\w+(?:\s*\.\s*\w+)*/,
+      lookbehind: !0,
+      alias: "punctuation"
     },
+    generics: {
+      pattern: /<(?:[\w\s,.?]|&(?!&)|<(?:[\w\s,.?]|&(?!&)|<(?:[\w\s,.?]|&(?!&)|<(?:[\w\s,.?]|&(?!&))*>)*>)*>)*>/,
+      inside: {
+        "class-name": s,
+        keyword: n,
+        punctuation: /[<>(),.:]/,
+        operator: /[?&|]/
+      }
+    },
+    "import": [{
+      pattern: RegExp("(\\bimport\\s+)" + t + "(?:[A-Z]\\w*|\\*)(?=\\s*;)"),
+      lookbehind: !0,
+      inside: {
+        namespace: s.inside.namespace,
+        punctuation: /\./,
+        operator: /\*/,
+        "class-name": /\w+/
+      }
+    }, {
+      pattern: RegExp("(\\bimport\\s+static\\s+)" + t + "(?:\\w+|\\*)(?=\\s*;)"),
+      lookbehind: !0,
+      alias: "static",
+      inside: {
+        namespace: s.inside.namespace,
+        "static": /\b\w+$/,
+        punctuation: /\./,
+        operator: /\*/,
+        "class-name": /\w+/
+      }
+    }],
     namespace: {
-      pattern: /(\b(?:exports|import(?:\s+static)?|module|open|opens|package|provides|requires|to|transitive|uses|with)\s+)[a-z]\w*(?:\.[a-z]\w*)+/,
+      pattern: RegExp("(\\b(?:exports|import(?:\\s+static)?|module|open|opens|package|provides|requires|to|transitive|uses|with)\\s+)(?!<keyword>)[a-z]\\w*(?:\\.[a-z]\\w*)*\\.?".replace(/<keyword>/g, function () {
+        return n.source;
+      })),
       lookbehind: !0,
       inside: {
         punctuation: /\./
       }
-    },
-    generics: {
-      pattern: /<(?:[\w\s,.&?]|<(?:[\w\s,.&?]|<(?:[\w\s,.&?]|<[\w\s,.&?]*>)*>)*>)*>/,
-      inside: {
-        "class-name": a,
-        keyword: t,
-        punctuation: /[<>(),.:]/,
-        operator: /[?&|]/
-      }
     }
   });
 }(Prism);
-!function (h) {
-  function v(e, n) {
+!function (e) {
+  function n(e, n) {
     return "___" + e.toUpperCase() + n + "___";
   }
-  Object.defineProperties(h.languages["markup-templating"] = {}, {
+  Object.defineProperties(e.languages["markup-templating"] = {}, {
     buildPlaceholders: {
-      value: function value(a, r, e, o) {
-        if (a.language === r) {
-          var c = a.tokenStack = [];
-          a.code = a.code.replace(e, function (e) {
+      value: function value(t, a, r, o) {
+        if (t.language === a) {
+          var c = t.tokenStack = [];
+          t.code = t.code.replace(r, function (e) {
             if ("function" == typeof o && !o(e)) return e;
-            for (var n, t = c.length; -1 !== a.code.indexOf(n = v(r, t));) {
-              ++t;
+            for (var r, i = c.length; -1 !== t.code.indexOf(r = n(a, i));) {
+              ++i;
             }
-            return c[t] = e, n;
-          }), a.grammar = h.languages.markup;
+            return c[i] = e, r;
+          }), t.grammar = e.languages.markup;
         }
       }
     },
     tokenizePlaceholders: {
-      value: function value(p, k) {
-        if (p.language === k && p.tokenStack) {
-          p.grammar = h.languages[k];
-          var m = 0,
-            d = Object.keys(p.tokenStack);
-          !function e(n) {
-            for (var t = 0; t < n.length && !(m >= d.length); t++) {
-              var a = n[t];
-              if ("string" == typeof a || a.content && "string" == typeof a.content) {
-                var r = d[m],
-                  o = p.tokenStack[r],
-                  c = "string" == typeof a ? a : a.content,
-                  i = v(k, r),
-                  u = c.indexOf(i);
-                if (-1 < u) {
-                  ++m;
-                  var g = c.substring(0, u),
-                    l = new h.Token(k, h.tokenize(o, p.grammar), "language-" + k, o),
-                    s = c.substring(u + i.length),
-                    f = [];
-                  g && f.push.apply(f, e([g])), f.push(l), s && f.push.apply(f, e([s])), "string" == typeof a ? n.splice.apply(n, [t, 1].concat(f)) : a.content = f;
+      value: function value(t, a) {
+        if (t.language === a && t.tokenStack) {
+          t.grammar = e.languages[a];
+          var r = 0,
+            o = Object.keys(t.tokenStack);
+          !function c(i) {
+            for (var u = 0; u < i.length && !(r >= o.length); u++) {
+              var g = i[u];
+              if ("string" == typeof g || g.content && "string" == typeof g.content) {
+                var l = o[r],
+                  s = t.tokenStack[l],
+                  f = "string" == typeof g ? g : g.content,
+                  p = n(a, l),
+                  k = f.indexOf(p);
+                if (k > -1) {
+                  ++r;
+                  var m = f.substring(0, k),
+                    d = new e.Token(a, e.tokenize(s, t.grammar), "language-" + a, s),
+                    h = f.substring(k + p.length),
+                    v = [];
+                  m && v.push.apply(v, c([m])), v.push(d), h && v.push.apply(v, c([h])), "string" == typeof g ? i.splice.apply(i, [u, 1].concat(v)) : g.content = v;
                 }
-              } else a.content && e(a.content);
+              } else g.content && c(g.content);
             }
-            return n;
-          }(p.tokens);
+            return i;
+          }(t.tokens);
         }
       }
     }
   });
 }(Prism);
-!function (n) {
-  n.languages.php = n.languages.extend("clike", {
-    keyword: /\b(?:__halt_compiler|abstract|and|array|as|break|callable|case|catch|class|clone|const|continue|declare|default|die|do|echo|else|elseif|empty|enddeclare|endfor|endforeach|endif|endswitch|endwhile|eval|exit|extends|final|finally|for|foreach|function|global|goto|if|implements|include|include_once|instanceof|insteadof|interface|isset|list|namespace|new|or|parent|print|private|protected|public|require|require_once|return|static|switch|throw|trait|try|unset|use|var|while|xor|yield)\b/i,
-    "boolean": {
+!function (e) {
+  var a = /\/\*[\s\S]*?\*\/|\/\/.*|#(?!\[).*/,
+    t = [{
       pattern: /\b(?:false|true)\b/i,
-      alias: "constant"
-    },
-    constant: [/\b[A-Z_][A-Z0-9_]*\b/, /\b(?:null)\b/i],
-    comment: {
-      pattern: /(^|[^\\])(?:\/\*[\s\S]*?\*\/|\/\/.*)/,
+      alias: "boolean"
+    }, {
+      pattern: /(::\s*)\b[a-z_]\w*\b(?!\s*\()/i,
+      greedy: !0,
       lookbehind: !0
-    }
-  }), n.languages.insertBefore("php", "string", {
-    "shell-comment": {
-      pattern: /(^|[^\\])#.*/,
-      lookbehind: !0,
-      alias: "comment"
-    }
-  }), n.languages.insertBefore("php", "comment", {
+    }, {
+      pattern: /(\b(?:case|const)\s+)\b[a-z_]\w*(?=\s*[;=])/i,
+      greedy: !0,
+      lookbehind: !0
+    }, /\b(?:null)\b/i, /\b[A-Z_][A-Z0-9_]*\b(?!\s*\()/],
+    i = /\b0b[01]+(?:_[01]+)*\b|\b0o[0-7]+(?:_[0-7]+)*\b|\b0x[\da-f]+(?:_[\da-f]+)*\b|(?:\b\d+(?:_\d+)*\.?(?:\d+(?:_\d+)*)?|\B\.\d+)(?:e[+-]?\d+)?/i,
+    n = /<?=>|\?\?=?|\.{3}|\??->|[!=]=?=?|::|\*\*=?|--|\+\+|&&|\|\||<<|>>|[?~]|[/^|%*&<>.+-]=?/,
+    s = /[{}\[\](),:;]/;
+  e.languages.php = {
     delimiter: {
       pattern: /\?>$|^<\?(?:php(?=\s)|=)?/i,
       alias: "important"
-    }
-  }), n.languages.insertBefore("php", "keyword", {
-    variable: /\$+(?:\w+\b|(?={))/i,
+    },
+    comment: a,
+    variable: /\$+(?:\w+\b|(?=\{))/,
     "package": {
-      pattern: /(\\|namespace\s+|use\s+)[\w\\]+/,
+      pattern: /(namespace\s+|use\s+(?:function\s+)?)(?:\\?\b[a-z_]\w*)+\b(?!\\)/i,
       lookbehind: !0,
       inside: {
         punctuation: /\\/
       }
-    }
-  }), n.languages.insertBefore("php", "operator", {
-    property: {
-      pattern: /(->)[\w]+/,
-      lookbehind: !0
-    }
-  });
-  var e = {
-    pattern: /{\$(?:{(?:{[^{}]+}|[^{}]+)}|[^{}])+}|(^|[^\\{])\$+(?:\w+(?:\[.+?]|->\w+)*)/,
-    lookbehind: !0,
-    inside: n.languages.php
-  };
-  n.languages.insertBefore("php", "string", {
-    "nowdoc-string": {
-      pattern: /<<<'([^']+)'(?:\r\n?|\n)(?:.*(?:\r\n?|\n))*?\1;/,
+    },
+    "class-name-definition": {
+      pattern: /(\b(?:class|enum|interface|trait)\s+)\b[a-z_]\w*(?!\\)\b/i,
+      lookbehind: !0,
+      alias: "class-name"
+    },
+    "function-definition": {
+      pattern: /(\bfunction\s+)[a-z_]\w*(?=\s*\()/i,
+      lookbehind: !0,
+      alias: "function"
+    },
+    keyword: [{
+      pattern: /(\(\s*)\b(?:array|bool|boolean|float|int|integer|object|string)\b(?=\s*\))/i,
+      alias: "type-casting",
       greedy: !0,
-      alias: "string",
+      lookbehind: !0
+    }, {
+      pattern: /([(,?]\s*)\b(?:array(?!\s*\()|bool|callable|(?:false|null)(?=\s*\|)|float|int|iterable|mixed|object|self|static|string)\b(?=\s*\$)/i,
+      alias: "type-hint",
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /(\)\s*:\s*(?:\?\s*)?)\b(?:array(?!\s*\()|bool|callable|(?:false|null)(?=\s*\|)|float|int|iterable|mixed|never|object|self|static|string|void)\b/i,
+      alias: "return-type",
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /\b(?:array(?!\s*\()|bool|float|int|iterable|mixed|object|string|void)\b/i,
+      alias: "type-declaration",
+      greedy: !0
+    }, {
+      pattern: /(\|\s*)(?:false|null)\b|\b(?:false|null)(?=\s*\|)/i,
+      alias: "type-declaration",
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /\b(?:parent|self|static)(?=\s*::)/i,
+      alias: "static-context",
+      greedy: !0
+    }, {
+      pattern: /(\byield\s+)from\b/i,
+      lookbehind: !0
+    }, /\bclass\b/i, {
+      pattern: /((?:^|[^\s>:]|(?:^|[^-])>|(?:^|[^:]):)\s*)\b(?:abstract|and|array|as|break|callable|case|catch|clone|const|continue|declare|default|die|do|echo|else|elseif|empty|enddeclare|endfor|endforeach|endif|endswitch|endwhile|enum|eval|exit|extends|final|finally|fn|for|foreach|function|global|goto|if|implements|include|include_once|instanceof|insteadof|interface|isset|list|match|namespace|never|new|or|parent|print|private|protected|public|readonly|require|require_once|return|self|static|switch|throw|trait|try|unset|use|var|while|xor|yield|__halt_compiler)\b/i,
+      lookbehind: !0
+    }],
+    "argument-name": {
+      pattern: /([(,]\s*)\b[a-z_]\w*(?=\s*:(?!:))/i,
+      lookbehind: !0
+    },
+    "class-name": [{
+      pattern: /(\b(?:extends|implements|instanceof|new(?!\s+self|\s+static))\s+|\bcatch\s*\()\b[a-z_]\w*(?!\\)\b/i,
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /(\|\s*)\b[a-z_]\w*(?!\\)\b/i,
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /\b[a-z_]\w*(?!\\)\b(?=\s*\|)/i,
+      greedy: !0
+    }, {
+      pattern: /(\|\s*)(?:\\?\b[a-z_]\w*)+\b/i,
+      alias: "class-name-fully-qualified",
+      greedy: !0,
+      lookbehind: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }, {
+      pattern: /(?:\\?\b[a-z_]\w*)+\b(?=\s*\|)/i,
+      alias: "class-name-fully-qualified",
+      greedy: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }, {
+      pattern: /(\b(?:extends|implements|instanceof|new(?!\s+self\b|\s+static\b))\s+|\bcatch\s*\()(?:\\?\b[a-z_]\w*)+\b(?!\\)/i,
+      alias: "class-name-fully-qualified",
+      greedy: !0,
+      lookbehind: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }, {
+      pattern: /\b[a-z_]\w*(?=\s*\$)/i,
+      alias: "type-declaration",
+      greedy: !0
+    }, {
+      pattern: /(?:\\?\b[a-z_]\w*)+(?=\s*\$)/i,
+      alias: ["class-name-fully-qualified", "type-declaration"],
+      greedy: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }, {
+      pattern: /\b[a-z_]\w*(?=\s*::)/i,
+      alias: "static-context",
+      greedy: !0
+    }, {
+      pattern: /(?:\\?\b[a-z_]\w*)+(?=\s*::)/i,
+      alias: ["class-name-fully-qualified", "static-context"],
+      greedy: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }, {
+      pattern: /([(,?]\s*)[a-z_]\w*(?=\s*\$)/i,
+      alias: "type-hint",
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /([(,?]\s*)(?:\\?\b[a-z_]\w*)+(?=\s*\$)/i,
+      alias: ["class-name-fully-qualified", "type-hint"],
+      greedy: !0,
+      lookbehind: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }, {
+      pattern: /(\)\s*:\s*(?:\?\s*)?)\b[a-z_]\w*(?!\\)\b/i,
+      alias: "return-type",
+      greedy: !0,
+      lookbehind: !0
+    }, {
+      pattern: /(\)\s*:\s*(?:\?\s*)?)(?:\\?\b[a-z_]\w*)+\b(?!\\)/i,
+      alias: ["class-name-fully-qualified", "return-type"],
+      greedy: !0,
+      lookbehind: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    }],
+    constant: t,
+    "function": {
+      pattern: /(^|[^\\\w])\\?[a-z_](?:[\w\\]*\w)?(?=\s*\()/i,
+      lookbehind: !0,
+      inside: {
+        punctuation: /\\/
+      }
+    },
+    property: {
+      pattern: /(->\s*)\w+/,
+      lookbehind: !0
+    },
+    number: i,
+    operator: n,
+    punctuation: s
+  };
+  var l = {
+      pattern: /\{\$(?:\{(?:\{[^{}]+\}|[^{}]+)\}|[^{}])+\}|(^|[^\\{])\$+(?:\w+(?:\[[^\r\n\[\]]+\]|->\w+)?)/,
+      lookbehind: !0,
+      inside: e.languages.php
+    },
+    r = [{
+      pattern: /<<<'([^']+)'[\r\n](?:.*[\r\n])*?\1;/,
+      alias: "nowdoc-string",
+      greedy: !0,
       inside: {
         delimiter: {
           pattern: /^<<<'[^']+'|[a-z_]\w*;$/i,
@@ -33846,11 +34412,10 @@ Prism.languages.ini = {
           }
         }
       }
-    },
-    "heredoc-string": {
-      pattern: /<<<(?:"([^"]+)"(?:\r\n?|\n)(?:.*(?:\r\n?|\n))*?\1;|([a-z_]\w*)(?:\r\n?|\n)(?:.*(?:\r\n?|\n))*?\2;)/i,
+    }, {
+      pattern: /<<<(?:"([^"]+)"[\r\n](?:.*[\r\n])*?\1;|([a-z_]\w*)[\r\n](?:.*[\r\n])*?\2;)/i,
+      alias: "heredoc-string",
       greedy: !0,
-      alias: "string",
       inside: {
         delimiter: {
           pattern: /^<<<(?:"[^"]+"|[a-z_]\w*)|[a-z_]\w*;$/i,
@@ -33859,132 +34424,230 @@ Prism.languages.ini = {
             punctuation: /^<<<"?|[";]$/
           }
         },
-        interpolation: e
+        interpolation: l
       }
-    },
-    "single-quoted-string": {
+    }, {
+      pattern: /`(?:\\[\s\S]|[^\\`])*`/,
+      alias: "backtick-quoted-string",
+      greedy: !0
+    }, {
       pattern: /'(?:\\[\s\S]|[^\\'])*'/,
-      greedy: !0,
-      alias: "string"
-    },
-    "double-quoted-string": {
+      alias: "single-quoted-string",
+      greedy: !0
+    }, {
       pattern: /"(?:\\[\s\S]|[^\\"])*"/,
+      alias: "double-quoted-string",
       greedy: !0,
-      alias: "string",
       inside: {
-        interpolation: e
+        interpolation: l
+      }
+    }];
+  e.languages.insertBefore("php", "variable", {
+    string: r,
+    attribute: {
+      pattern: /#\[(?:[^"'\/#]|\/(?![*/])|\/\/.*$|#(?!\[).*$|\/\*(?:[^*]|\*(?!\/))*\*\/|"(?:\\[\s\S]|[^\\"])*"|'(?:\\[\s\S]|[^\\'])*')+\](?=\s*[a-z$#])/im,
+      greedy: !0,
+      inside: {
+        "attribute-content": {
+          pattern: /^(#\[)[\s\S]+(?=\]$)/,
+          lookbehind: !0,
+          inside: {
+            comment: a,
+            string: r,
+            "attribute-class-name": [{
+              pattern: /([^:]|^)\b[a-z_]\w*(?!\\)\b/i,
+              alias: "class-name",
+              greedy: !0,
+              lookbehind: !0
+            }, {
+              pattern: /([^:]|^)(?:\\?\b[a-z_]\w*)+/i,
+              alias: ["class-name", "class-name-fully-qualified"],
+              greedy: !0,
+              lookbehind: !0,
+              inside: {
+                punctuation: /\\/
+              }
+            }],
+            constant: t,
+            number: i,
+            operator: n,
+            punctuation: s
+          }
+        },
+        delimiter: {
+          pattern: /^#\[|\]$/,
+          alias: "punctuation"
+        }
       }
     }
-  }), delete n.languages.php.string, n.hooks.add("before-tokenize", function (e) {
-    if (/<\?/.test(e.code)) {
-      n.languages["markup-templating"].buildPlaceholders(e, "php", /<\?(?:[^"'/#]|\/(?![*/])|("|')(?:\\[\s\S]|(?!\1)[^\\])*\1|(?:\/\/|#)(?:[^?\n\r]|\?(?!>))*(?=$|\?>|[\r\n])|\/\*[\s\S]*?(?:\*\/|$))*?(?:\?>|$)/gi);
-    }
-  }), n.hooks.add("after-tokenize", function (e) {
-    n.languages["markup-templating"].tokenizePlaceholders(e, "php");
+  }), e.hooks.add("before-tokenize", function (a) {
+    /<\?/.test(a.code) && e.languages["markup-templating"].buildPlaceholders(a, "php", /<\?(?:[^"'/#]|\/(?![*/])|("|')(?:\\[\s\S]|(?!\1)[^\\])*\1|(?:\/\/|#(?!\[))(?:[^?\n\r]|\?(?!>))*(?=$|\?>|[\r\n])|#\[|\/\*(?:[^*]|\*(?!\/))*(?:\*\/|$))*?(?:\?>|$)/g);
+  }), e.hooks.add("after-tokenize", function (a) {
+    e.languages["markup-templating"].tokenizePlaceholders(a, "php");
   });
 }(Prism);
-!function (p) {
-  var a = p.languages.javadoclike = {
+!function (a) {
+  var e = a.languages.javadoclike = {
     parameter: {
-      pattern: /(^\s*(?:\/{3}|\*|\/\*\*)\s*@(?:param|arg|arguments)\s+)\w+/m,
+      pattern: /(^[\t ]*(?:\/{3}|\*|\/\*\*)\s*@(?:arg|arguments|param)\s+)\w+/m,
       lookbehind: !0
     },
     keyword: {
-      pattern: /(^\s*(?:\/{3}|\*|\/\*\*)\s*|\{)@[a-z][a-zA-Z-]+\b/m,
+      pattern: /(^[\t ]*(?:\/{3}|\*|\/\*\*)\s*|\{)@[a-z][a-zA-Z-]+\b/m,
       lookbehind: !0
     },
     punctuation: /[{}]/
   };
-  Object.defineProperty(a, "addSupport", {
-    value: function value(a, e) {
-      "string" == typeof a && (a = [a]), a.forEach(function (a) {
-        !function (a, e) {
-          var n = "doc-comment",
-            t = p.languages[a];
-          if (t) {
-            var r = t[n];
-            if (!r) {
-              var o = {
-                "doc-comment": {
-                  pattern: /(^|[^\\])\/\*\*[^/][\s\S]*?(?:\*\/|$)/,
-                  lookbehind: !0,
-                  alias: "comment"
-                }
-              };
-              r = (t = p.languages.insertBefore(a, "comment", o))[n];
-            }
-            if (r instanceof RegExp && (r = t[n] = {
-              pattern: r
-            }), Array.isArray(r)) for (var i = 0, s = r.length; i < s; i++) {
-              r[i] instanceof RegExp && (r[i] = {
-                pattern: r[i]
-              }), e(r[i]);
-            } else e(r);
+  Object.defineProperty(e, "addSupport", {
+    value: function value(e, n) {
+      "string" == typeof e && (e = [e]), e.forEach(function (e) {
+        !function (e, n) {
+          var t = "doc-comment",
+            r = a.languages[e];
+          if (r) {
+            var o = r[t];
+            if (o || (o = (r = a.languages.insertBefore(e, "comment", {
+              "doc-comment": {
+                pattern: /(^|[^\\])\/\*\*[^/][\s\S]*?(?:\*\/|$)/,
+                lookbehind: !0,
+                alias: "comment"
+              }
+            }))[t]), o instanceof RegExp && (o = r[t] = {
+              pattern: o
+            }), Array.isArray(o)) for (var i = 0, s = o.length; i < s; i++) {
+              o[i] instanceof RegExp && (o[i] = {
+                pattern: o[i]
+              }), n(o[i]);
+            } else n(o);
           }
-        }(a, function (a) {
-          a.inside || (a.inside = {}), a.inside.rest = e;
+        }(e, function (a) {
+          a.inside || (a.inside = {}), a.inside.rest = n;
         });
       });
     }
-  }), a.addSupport(["java", "javascript", "php"], a);
+  }), e.addSupport(["java", "javascript", "php"], e);
 }(Prism);
 !function (a) {
-  var e = {
-    code: {
-      pattern: /(^(?:\s*(?:\*\s*)*)).*[^*\s].+$/m,
-      lookbehind: !0,
-      inside: a.languages.java,
-      alias: "language-java"
-    }
-  };
+  var e = /(^(?:[\t ]*(?:\*\s*)*))[^*\s].*$/m,
+    n = "(?:\\b[a-zA-Z]\\w+\\s*\\.\\s*)*\\b[A-Z]\\w*(?:\\s*<mem>)?|<mem>".replace(/<mem>/g, function () {
+      return "#\\s*\\w+(?:\\s*\\([^()]*\\))?";
+    });
   a.languages.javadoc = a.languages.extend("javadoclike", {}), a.languages.insertBefore("javadoc", "keyword", {
-    "class-name": [{
-      pattern: /(@(?:exception|throws|see|link|linkplain|value)\s+(?:[a-z\d]+\.)*)[A-Z](?:\w*[a-z]\w*)?(?:\.[A-Z](?:\w*[a-z]\w*)?)*/,
+    reference: {
+      pattern: RegExp("(@(?:exception|link|linkplain|see|throws|value)\\s+(?:\\*\\s*)?)(?:" + n + ")"),
       lookbehind: !0,
       inside: {
-        punctuation: /\./
+        "function": {
+          pattern: /(#\s*)\w+(?=\s*\()/,
+          lookbehind: !0
+        },
+        field: {
+          pattern: /(#\s*)\w+/,
+          lookbehind: !0
+        },
+        namespace: {
+          pattern: /\b(?:[a-z]\w*\s*\.\s*)+/,
+          inside: {
+            punctuation: /\./
+          }
+        },
+        "class-name": /\b[A-Z]\w*/,
+        keyword: a.languages.java.keyword,
+        punctuation: /[#()[\],.]/
       }
-    }, {
+    },
+    "class-name": {
       pattern: /(@param\s+)<[A-Z]\w*>/,
       lookbehind: !0,
       inside: {
         punctuation: /[.<>]/
       }
-    }],
-    namespace: {
-      pattern: /(@(?:exception|throws|see|link|linkplain)\s+)(?:[a-z\d]+\.)+/,
-      lookbehind: !0,
-      inside: {
-        punctuation: /\./
-      }
     },
     "code-section": [{
-      pattern: /(\{@code\s+)(?:[^{}]|\{[^{}]*\})+?(?=\s*\})/,
+      pattern: /(\{@code\s+(?!\s))(?:[^\s{}]|\s+(?![\s}])|\{(?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*\})+(?=\s*\})/,
       lookbehind: !0,
-      inside: e
+      inside: {
+        code: {
+          pattern: e,
+          lookbehind: !0,
+          inside: a.languages.java,
+          alias: "language-java"
+        }
+      }
     }, {
-      pattern: /(<(code|tt)>\s*)[\s\S]+?(?=\s*<\/\2>)/,
+      pattern: /(<(code|pre|tt)>(?!<code>)\s*)\S(?:\S|\s+\S)*?(?=\s*<\/\2>)/,
       lookbehind: !0,
-      inside: e
+      inside: {
+        line: {
+          pattern: e,
+          lookbehind: !0,
+          inside: {
+            tag: a.languages.markup.tag,
+            entity: a.languages.markup.entity,
+            code: {
+              pattern: /.+/,
+              inside: a.languages.java,
+              alias: "language-java"
+            }
+          }
+        }
+      }
     }],
-    tag: a.languages.markup.tag
+    tag: a.languages.markup.tag,
+    entity: a.languages.markup.entity
   }), a.languages.javadoclike.addSupport("java", a.languages.javadoc);
 }(Prism);
-!function (a) {
-  var e = a.languages.javascript,
-    n = "{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})+}",
-    s = "(@(?:param|arg|argument|property)\\s+(?:" + n + "\\s+)?)";
-  a.languages.jsdoc = a.languages.extend("javadoclike", {
+!function (e) {
+  e.languages.typescript = e.languages.extend("javascript", {
+    "class-name": {
+      pattern: /(\b(?:class|extends|implements|instanceof|interface|new|type)\s+)(?!keyof\b)(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?:\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>)?/,
+      lookbehind: !0,
+      greedy: !0,
+      inside: null
+    },
+    builtin: /\b(?:Array|Function|Promise|any|boolean|console|never|number|string|symbol|unknown)\b/
+  }), e.languages.typescript.keyword.push(/\b(?:abstract|declare|is|keyof|readonly|require)\b/, /\b(?:asserts|infer|interface|module|namespace|type)\b(?=\s*(?:[{_$a-zA-Z\xA0-\uFFFF]|$))/, /\btype\b(?=\s*(?:[\{*]|$))/), delete e.languages.typescript.parameter, delete e.languages.typescript["literal-property"];
+  var s = e.languages.extend("typescript", {});
+  delete s["class-name"], e.languages.typescript["class-name"].inside = s, e.languages.insertBefore("typescript", "function", {
+    decorator: {
+      pattern: /@[$\w\xA0-\uFFFF]+/,
+      inside: {
+        at: {
+          pattern: /^@/,
+          alias: "operator"
+        },
+        "function": /^[\s\S]+/
+      }
+    },
+    "generic-function": {
+      pattern: /#?(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*\s*<(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>(?=\s*\()/,
+      greedy: !0,
+      inside: {
+        "function": /^#?(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*/,
+        generic: {
+          pattern: /<[\s\S]+/,
+          alias: "class-name",
+          inside: s
+        }
+      }
+    }
+  }), e.languages.ts = e.languages.typescript;
+}(Prism);
+!function (e) {
+  var a = e.languages.javascript,
+    n = "\\{(?:[^{}]|\\{(?:[^{}]|\\{[^{}]*\\})*\\})+\\}",
+    t = "(@(?:arg|argument|param|property)\\s+(?:" + n + "\\s+)?)";
+  e.languages.jsdoc = e.languages.extend("javadoclike", {
     parameter: {
-      pattern: RegExp(s + "[$\\w\\xA0-\\uFFFF.]+(?=\\s|$)"),
+      pattern: RegExp(t + "(?:(?!\\s)[$\\w\\xA0-\\uFFFF.])+(?=\\s|$)"),
       lookbehind: !0,
       inside: {
         punctuation: /\./
       }
     }
-  }), a.languages.insertBefore("jsdoc", "keyword", {
+  }), e.languages.insertBefore("jsdoc", "keyword", {
     "optional-parameter": {
-      pattern: RegExp(s + "\\[[$\\w\\xA0-\\uFFFF.]+(?:=[^[\\]]+)?\\](?=\\s|$)"),
+      pattern: RegExp(t + "\\[(?:(?!\\s)[$\\w\\xA0-\\uFFFF.])+(?:=[^[\\]]+)?\\](?=\\s|$)"),
       lookbehind: !0,
       inside: {
         parameter: {
@@ -33997,63 +34660,70 @@ Prism.languages.ini = {
         code: {
           pattern: /(=)[\s\S]*(?=\]$)/,
           lookbehind: !0,
-          inside: e,
+          inside: a,
           alias: "language-javascript"
         },
         punctuation: /[=[\]]/
       }
     },
     "class-name": [{
-      pattern: RegExp("(@[a-z]+\\s+)" + n),
-      lookbehind: !0,
-      inside: {
-        punctuation: /[.,:?=<>|{}()[\]]/
-      }
-    }, {
-      pattern: /(@(?:augments|extends|class|interface|memberof!?|this)\s+)[A-Z]\w*(?:\.[A-Z]\w*)*/,
+      pattern: RegExp("(@(?:augments|class|extends|interface|memberof!?|template|this|typedef)\\s+(?:<TYPE>\\s+)?)[A-Z]\\w*(?:\\.[A-Z]\\w*)*".replace(/<TYPE>/g, function () {
+        return n;
+      })),
       lookbehind: !0,
       inside: {
         punctuation: /\./
       }
+    }, {
+      pattern: RegExp("(@[a-z]+\\s+)" + n),
+      lookbehind: !0,
+      inside: {
+        string: a.string,
+        number: a.number,
+        "boolean": a["boolean"],
+        keyword: e.languages.typescript.keyword,
+        operator: /=>|\.\.\.|[&|?:*]/,
+        punctuation: /[.,;=<>{}()[\]]/
+      }
     }],
     example: {
-      pattern: /(@example\s+)[^@]+?(?=\s*(?:\*\s*)?(?:@\w|\*\/))/,
+      pattern: /(@example\s+(?!\s))(?:[^@\s]|\s+(?!\s))+?(?=\s*(?:\*\s*)?(?:@\w|\*\/))/,
       lookbehind: !0,
       inside: {
         code: {
-          pattern: /^(\s*(?:\*\s*)?).+$/m,
+          pattern: /^([\t ]*(?:\*\s*)?)\S.*$/m,
           lookbehind: !0,
-          inside: e,
+          inside: a,
           alias: "language-javascript"
         }
       }
     }
-  }), a.languages.javadoclike.addSupport("javascript", a.languages.jsdoc);
+  }), e.languages.javadoclike.addSupport("javascript", e.languages.jsdoc);
 }(Prism);
 Prism.languages.json = {
   property: {
-    pattern: /"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,
+    pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,
+    lookbehind: !0,
     greedy: !0
   },
   string: {
-    pattern: /"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+    pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+    lookbehind: !0,
     greedy: !0
   },
-  comment: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,
-  number: /-?\d+\.?\d*(?:e[+-]?\d+)?/i,
+  comment: {
+    pattern: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,
+    greedy: !0
+  },
+  number: /-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/i,
   punctuation: /[{}[\],]/,
   operator: /:/,
-  "boolean": /\b(?:true|false)\b/,
+  "boolean": /\b(?:false|true)\b/,
   "null": {
     pattern: /\bnull\b/,
     alias: "keyword"
   }
-};
-Prism.languages.jsonp = Prism.languages.extend("json", {
-  punctuation: /[{}[\]();,.]/
-}), Prism.languages.insertBefore("jsonp", "punctuation", {
-  "function": /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*\()/
-});
+}, Prism.languages.webmanifest = Prism.languages.json;
 !function (n) {
   var e = /("|')(?:\\(?:\r\n?|\n|.)|(?!\1)[^\\\r\n])*\1/;
   n.languages.json5 = n.languages.extend("json", {
@@ -34061,21 +34731,40 @@ Prism.languages.jsonp = Prism.languages.extend("json", {
       pattern: RegExp(e.source + "(?=\\s*:)"),
       greedy: !0
     }, {
-      pattern: /[_$a-zA-Z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*:)/,
+      pattern: /(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*:)/,
       alias: "unquoted"
     }],
     string: {
       pattern: e,
       greedy: !0
     },
-    number: /[+-]?(?:NaN|Infinity|0x[a-fA-F\d]+|(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/
+    number: /[+-]?\b(?:NaN|Infinity|0x[a-fA-F\d]+)\b|[+-]?(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:[eE][+-]?\d+\b)?/
   });
 }(Prism);
+Prism.languages.jsonp = Prism.languages.extend("json", {
+  punctuation: /[{}[\]();,.]/
+}), Prism.languages.insertBefore("jsonp", "punctuation", {
+  "function": /(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*\()/
+});
 Prism.languages.pascal = {
-  comment: [/\(\*[\s\S]+?\*\)/, /\{[\s\S]+?\}/, /\/\/.*/],
-  string: {
-    pattern: /(?:'(?:''|[^'\r\n])*'|#[&$%]?[a-f\d]+)+|\^[a-z]/i,
+  directive: {
+    pattern: /\{\$[\s\S]*?\}/,
+    greedy: !0,
+    alias: ["marco", "property"]
+  },
+  comment: {
+    pattern: /\(\*[\s\S]*?\*\)|\{[\s\S]*?\}|\/\/.*/,
     greedy: !0
+  },
+  string: {
+    pattern: /(?:'(?:''|[^'\r\n])*'(?!')|#[&$%]?[a-f\d]+)+|\^[a-z]/i,
+    greedy: !0
+  },
+  asm: {
+    pattern: /(\basm\b)[\s\S]+?(?=\bend\s*[;[])/i,
+    lookbehind: !0,
+    greedy: !0,
+    inside: null
   },
   keyword: [{
     pattern: /(^|[^&])\b(?:absolute|array|asm|begin|case|const|constructor|destructor|do|downto|else|end|file|for|function|goto|if|implementation|inherited|inline|interface|label|nil|object|of|operator|packed|procedure|program|record|reintroduce|repeat|self|set|string|then|to|type|unit|until|uses|var|while|with)\b/i,
@@ -34091,111 +34780,68 @@ Prism.languages.pascal = {
     lookbehind: !0
   }],
   number: [/(?:[&%]\d+|\$[a-f\d]+)/i, /\b\d+(?:\.\d+)?(?:e[+-]?\d+)?/i],
-  operator: [/\.\.|\*\*|:=|<[<=>]?|>[>=]?|[+\-*\/]=?|[@^=]/i, {
+  operator: [/\.\.|\*\*|:=|<[<=>]?|>[>=]?|[+\-*\/]=?|[@^=]/, {
     pattern: /(^|[^&])\b(?:and|as|div|exclude|in|include|is|mod|not|or|shl|shr|xor)\b/,
     lookbehind: !0
   }],
   punctuation: /\(\.|\.\)|[()\[\]:;,.]/
-}, Prism.languages.objectpascal = Prism.languages.pascal;
-Prism.languages.perl = {
-  comment: [{
-    pattern: /(^\s*)=\w+[\s\S]*?=cut.*/m,
-    lookbehind: !0
-  }, {
-    pattern: /(^|[^\\$])#.*/,
-    lookbehind: !0
-  }],
-  string: [{
-    pattern: /\b(?:q|qq|qx|qw)\s*([^a-zA-Z0-9\s{(\[<])(?:(?!\1)[^\\]|\\[\s\S])*\1/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:q|qq|qx|qw)\s+([a-zA-Z0-9])(?:(?!\1)[^\\]|\\[\s\S])*\1/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:q|qq|qx|qw)\s*\((?:[^()\\]|\\[\s\S])*\)/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:q|qq|qx|qw)\s*\{(?:[^{}\\]|\\[\s\S])*\}/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:q|qq|qx|qw)\s*\[(?:[^[\]\\]|\\[\s\S])*\]/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:q|qq|qx|qw)\s*<(?:[^<>\\]|\\[\s\S])*>/,
-    greedy: !0
-  }, {
-    pattern: /("|`)(?:(?!\1)[^\\]|\\[\s\S])*\1/,
-    greedy: !0
-  }, {
-    pattern: /'(?:[^'\\\r\n]|\\.)*'/,
-    greedy: !0
-  }],
-  regex: [{
-    pattern: /\b(?:m|qr)\s*([^a-zA-Z0-9\s{(\[<])(?:(?!\1)[^\\]|\\[\s\S])*\1[msixpodualngc]*/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:m|qr)\s+([a-zA-Z0-9])(?:(?!\1)[^\\]|\\[\s\S])*\1[msixpodualngc]*/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:m|qr)\s*\((?:[^()\\]|\\[\s\S])*\)[msixpodualngc]*/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:m|qr)\s*\{(?:[^{}\\]|\\[\s\S])*\}[msixpodualngc]*/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:m|qr)\s*\[(?:[^[\]\\]|\\[\s\S])*\][msixpodualngc]*/,
-    greedy: !0
-  }, {
-    pattern: /\b(?:m|qr)\s*<(?:[^<>\\]|\\[\s\S])*>[msixpodualngc]*/,
-    greedy: !0
-  }, {
-    pattern: /(^|[^-]\b)(?:s|tr|y)\s*([^a-zA-Z0-9\s{(\[<])(?:(?!\2)[^\\]|\\[\s\S])*\2(?:(?!\2)[^\\]|\\[\s\S])*\2[msixpodualngcer]*/,
-    lookbehind: !0,
-    greedy: !0
-  }, {
-    pattern: /(^|[^-]\b)(?:s|tr|y)\s+([a-zA-Z0-9])(?:(?!\2)[^\\]|\\[\s\S])*\2(?:(?!\2)[^\\]|\\[\s\S])*\2[msixpodualngcer]*/,
-    lookbehind: !0,
-    greedy: !0
-  }, {
-    pattern: /(^|[^-]\b)(?:s|tr|y)\s*\((?:[^()\\]|\\[\s\S])*\)\s*\((?:[^()\\]|\\[\s\S])*\)[msixpodualngcer]*/,
-    lookbehind: !0,
-    greedy: !0
-  }, {
-    pattern: /(^|[^-]\b)(?:s|tr|y)\s*\{(?:[^{}\\]|\\[\s\S])*\}\s*\{(?:[^{}\\]|\\[\s\S])*\}[msixpodualngcer]*/,
-    lookbehind: !0,
-    greedy: !0
-  }, {
-    pattern: /(^|[^-]\b)(?:s|tr|y)\s*\[(?:[^[\]\\]|\\[\s\S])*\]\s*\[(?:[^[\]\\]|\\[\s\S])*\][msixpodualngcer]*/,
-    lookbehind: !0,
-    greedy: !0
-  }, {
-    pattern: /(^|[^-]\b)(?:s|tr|y)\s*<(?:[^<>\\]|\\[\s\S])*>\s*<(?:[^<>\\]|\\[\s\S])*>[msixpodualngcer]*/,
-    lookbehind: !0,
-    greedy: !0
-  }, {
-    pattern: /\/(?:[^\/\\\r\n]|\\.)*\/[msixpodualngc]*(?=\s*(?:$|[\r\n,.;})&|\-+*~<>!?^]|(?:lt|gt|le|ge|eq|ne|cmp|not|and|or|xor|x)\b))/,
-    greedy: !0
-  }],
-  variable: [/[&*$@%]\{\^[A-Z]+\}/, /[&*$@%]\^[A-Z_]/, /[&*$@%]#?(?=\{)/, /[&*$@%]#?(?:(?:::)*'?(?!\d)[\w$]+)+(?:::)*/i, /[&*$@%]\d+/, /(?!%=)[$@%][!"#$%&'()*+,\-.\/:;<=>?@[\\\]^_`{|}~]/],
-  filehandle: {
-    pattern: /<(?![<=])\S*>|\b_\b/,
-    alias: "symbol"
-  },
-  vstring: {
-    pattern: /v\d+(?:\.\d+)*|\d+(?:\.\d+){2,}/,
-    alias: "string"
-  },
-  "function": {
-    pattern: /sub [a-z0-9_]+/i,
-    inside: {
-      keyword: /sub/
-    }
-  },
-  keyword: /\b(?:any|break|continue|default|delete|die|do|else|elsif|eval|for|foreach|given|goto|if|last|local|my|next|our|package|print|redo|require|return|say|state|sub|switch|undef|unless|until|use|when|while)\b/,
-  number: /\b(?:0x[\dA-Fa-f](?:_?[\dA-Fa-f])*|0b[01](?:_?[01])*|(?:\d(?:_?\d)*)?\.?\d(?:_?\d)*(?:[Ee][+-]?\d+)?)\b/,
-  operator: /-[rwxoRWXOezsfdlpSbctugkTBMAC]\b|\+[+=]?|-[-=>]?|\*\*?=?|\/\/?=?|=[=~>]?|~[~=]?|\|\|?=?|&&?=?|<(?:=>?|<=?)?|>>?=?|![~=]?|[%^]=?|\.(?:=|\.\.?)?|[\\?]|\bx(?:=|\b)|\b(?:lt|gt|le|ge|eq|ne|cmp|not|and|or|xor)\b/,
-  punctuation: /[{}[\];(),:]/
-};
+}, Prism.languages.pascal.asm.inside = Prism.languages.extend("pascal", {
+  asm: void 0,
+  keyword: void 0,
+  operator: void 0
+}), Prism.languages.objectpascal = Prism.languages.pascal;
+!function (e) {
+  var n = "(?:\\((?:[^()\\\\]|\\\\[^])*\\)|\\{(?:[^{}\\\\]|\\\\[^])*\\}|\\[(?:[^[\\]\\\\]|\\\\[^])*\\]|<(?:[^<>\\\\]|\\\\[^])*>)";
+  e.languages.perl = {
+    comment: [{
+      pattern: /(^\s*)=\w[\s\S]*?=cut.*/m,
+      lookbehind: !0,
+      greedy: !0
+    }, {
+      pattern: /(^|[^\\$])#.*/,
+      lookbehind: !0,
+      greedy: !0
+    }],
+    string: [{
+      pattern: RegExp("\\b(?:q|qq|qw|qx)(?![a-zA-Z0-9])\\s*(?:" + ["([^a-zA-Z0-9\\s{(\\[<])(?:(?!\\1)[^\\\\]|\\\\[^])*\\1", "([a-zA-Z0-9])(?:(?!\\2)[^\\\\]|\\\\[^])*\\2", n].join("|") + ")"),
+      greedy: !0
+    }, {
+      pattern: /("|`)(?:(?!\1)[^\\]|\\[\s\S])*\1/,
+      greedy: !0
+    }, {
+      pattern: /'(?:[^'\\\r\n]|\\.)*'/,
+      greedy: !0
+    }],
+    regex: [{
+      pattern: RegExp("\\b(?:m|qr)(?![a-zA-Z0-9])\\s*(?:" + ["([^a-zA-Z0-9\\s{(\\[<])(?:(?!\\1)[^\\\\]|\\\\[^])*\\1", "([a-zA-Z0-9])(?:(?!\\2)[^\\\\]|\\\\[^])*\\2", n].join("|") + ")[msixpodualngc]*"),
+      greedy: !0
+    }, {
+      pattern: RegExp("(^|[^-])\\b(?:s|tr|y)(?![a-zA-Z0-9])\\s*(?:" + ["([^a-zA-Z0-9\\s{(\\[<])(?:(?!\\2)[^\\\\]|\\\\[^])*\\2(?:(?!\\2)[^\\\\]|\\\\[^])*\\2", "([a-zA-Z0-9])(?:(?!\\3)[^\\\\]|\\\\[^])*\\3(?:(?!\\3)[^\\\\]|\\\\[^])*\\3", n + "\\s*" + n].join("|") + ")[msixpodualngcer]*"),
+      lookbehind: !0,
+      greedy: !0
+    }, {
+      pattern: /\/(?:[^\/\\\r\n]|\\.)*\/[msixpodualngc]*(?=\s*(?:$|[\r\n,.;})&|\-+*~<>!?^]|(?:and|cmp|eq|ge|gt|le|lt|ne|not|or|x|xor)\b))/,
+      greedy: !0
+    }],
+    variable: [/[&*$@%]\{\^[A-Z]+\}/, /[&*$@%]\^[A-Z_]/, /[&*$@%]#?(?=\{)/, /[&*$@%]#?(?:(?:::)*'?(?!\d)[\w$]+(?![\w$]))+(?:::)*/, /[&*$@%]\d+/, /(?!%=)[$@%][!"#$%&'()*+,\-.\/:;<=>?@[\\\]^_`{|}~]/],
+    filehandle: {
+      pattern: /<(?![<=])\S*?>|\b_\b/,
+      alias: "symbol"
+    },
+    "v-string": {
+      pattern: /v\d+(?:\.\d+)*|\d+(?:\.\d+){2,}/,
+      alias: "string"
+    },
+    "function": {
+      pattern: /(\bsub[ \t]+)\w+/,
+      lookbehind: !0
+    },
+    keyword: /\b(?:any|break|continue|default|delete|die|do|else|elsif|eval|for|foreach|given|goto|if|last|local|my|next|our|package|print|redo|require|return|say|state|sub|switch|undef|unless|until|use|when|while)\b/,
+    number: /\b(?:0x[\dA-Fa-f](?:_?[\dA-Fa-f])*|0b[01](?:_?[01])*|(?:(?:\d(?:_?\d)*)?\.)?\d(?:_?\d)*(?:[Ee][+-]?\d+)?)\b/,
+    operator: /-[rwxoRWXOezsfdlpSbctugkTBMAC]\b|\+[+=]?|-[-=>]?|\*\*?=?|\/\/?=?|=[=~>]?|~[~=]?|\|\|?=?|&&?=?|<(?:=>?|<=?)?|>>?=?|![~=]?|[%^]=?|\.(?:=|\.\.?)?|[\\?]|\bx(?:=|\b)|\b(?:and|cmp|eq|ge|gt|le|lt|ne|not|or|xor)\b/,
+    punctuation: /[{}[\];(),:]/
+  };
+}(Prism);
 !function (a) {
   var e = "(?:\\b[a-zA-Z]\\w*|[|\\\\[\\]])+";
   a.languages.phpdoc = a.languages.extend("javadoclike", {
@@ -34208,23 +34854,86 @@ Prism.languages.perl = {
       pattern: RegExp("(@(?:global|package|param|property(?:-read|-write)?|return|subpackage|throws|var)\\s+)" + e),
       lookbehind: !0,
       inside: {
-        keyword: /\b(?:callback|resource|boolean|integer|double|object|string|array|false|float|mixed|bool|null|self|true|void|int)\b/,
+        keyword: /\b(?:array|bool|boolean|callback|double|false|float|int|integer|mixed|null|object|resource|self|string|true|void)\b/,
         punctuation: /[|\\[\]()]/
       }
     }]
   }), a.languages.javadoclike.addSupport("php", a.languages.phpdoc);
 }(Prism);
 Prism.languages.insertBefore("php", "variable", {
-  "this": /\$this\b/,
-  global: /\$(?:_(?:SERVER|GET|POST|FILES|REQUEST|SESSION|ENV|COOKIE)|GLOBALS|HTTP_RAW_POST_DATA|argc|argv|php_errormsg|http_response_header)\b/,
+  "this": {
+    pattern: /\$this\b/,
+    alias: "keyword"
+  },
+  global: /\$(?:GLOBALS|HTTP_RAW_POST_DATA|_(?:COOKIE|ENV|FILES|GET|POST|REQUEST|SERVER|SESSION)|argc|argv|http_response_header|php_errormsg)\b/,
   scope: {
     pattern: /\b[\w\\]+::/,
     inside: {
-      keyword: /static|self|parent/,
+      keyword: /\b(?:parent|self|static)\b/,
       punctuation: /::|\\/
     }
   }
 });
+Prism.languages.python = {
+  comment: {
+    pattern: /(^|[^\\])#.*/,
+    lookbehind: !0,
+    greedy: !0
+  },
+  "string-interpolation": {
+    pattern: /(?:f|fr|rf)(?:("""|''')[\s\S]*?\1|("|')(?:\\.|(?!\2)[^\\\r\n])*\2)/i,
+    greedy: !0,
+    inside: {
+      interpolation: {
+        pattern: /((?:^|[^{])(?:\{\{)*)\{(?!\{)(?:[^{}]|\{(?!\{)(?:[^{}]|\{(?!\{)(?:[^{}])+\})+\})+\}/,
+        lookbehind: !0,
+        inside: {
+          "format-spec": {
+            pattern: /(:)[^:(){}]+(?=\}$)/,
+            lookbehind: !0
+          },
+          "conversion-option": {
+            pattern: /![sra](?=[:}]$)/,
+            alias: "punctuation"
+          },
+          rest: null
+        }
+      },
+      string: /[\s\S]+/
+    }
+  },
+  "triple-quoted-string": {
+    pattern: /(?:[rub]|br|rb)?("""|''')[\s\S]*?\1/i,
+    greedy: !0,
+    alias: "string"
+  },
+  string: {
+    pattern: /(?:[rub]|br|rb)?("|')(?:\\.|(?!\1)[^\\\r\n])*\1/i,
+    greedy: !0
+  },
+  "function": {
+    pattern: /((?:^|\s)def[ \t]+)[a-zA-Z_]\w*(?=\s*\()/g,
+    lookbehind: !0
+  },
+  "class-name": {
+    pattern: /(\bclass\s+)\w+/i,
+    lookbehind: !0
+  },
+  decorator: {
+    pattern: /(^[\t ]*)@\w+(?:\.\w+)*/m,
+    lookbehind: !0,
+    alias: ["annotation", "punctuation"],
+    inside: {
+      punctuation: /\./
+    }
+  },
+  keyword: /\b(?:_(?=\s*:)|and|as|assert|async|await|break|case|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|match|nonlocal|not|or|pass|print|raise|return|try|while|with|yield)\b/,
+  builtin: /\b(?:__import__|abs|all|any|apply|ascii|basestring|bin|bool|buffer|bytearray|bytes|callable|chr|classmethod|cmp|coerce|compile|complex|delattr|dict|dir|divmod|enumerate|eval|execfile|file|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|intern|isinstance|issubclass|iter|len|list|locals|long|map|max|memoryview|min|next|object|oct|open|ord|pow|property|range|raw_input|reduce|reload|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|unichr|unicode|vars|xrange|zip)\b/,
+  "boolean": /\b(?:False|None|True)\b/,
+  number: /\b0(?:b(?:_?[01])+|o(?:_?[0-7])+|x(?:_?[a-f0-9])+)\b|(?:\b\d+(?:_\d+)*(?:\.(?:\d+(?:_\d+)*)?)?|\B\.\d+(?:_\d+)*)(?:e[+-]?\d+(?:_\d+)*)?j?(?!\w)/i,
+  operator: /[-+%=]=?|!=|:=|\*\*?=?|\/\/?=?|<[<=>]?|>[=>]?|[&|^~]/,
+  punctuation: /[{}[\];(),.:]/
+}, Prism.languages.python["string-interpolation"].inside.interpolation.inside.rest = Prism.languages.python, Prism.languages.py = Prism.languages.python;
 Prism.languages.sql = {
   comment: {
     pattern: /(^|[^\\])(?:\/\*[\s\S]*?\*\/|(?:--|\/\/|#).*)/,
@@ -34239,53 +34948,51 @@ Prism.languages.sql = {
     greedy: !0,
     lookbehind: !0
   },
+  identifier: {
+    pattern: /(^|[^@\\])`(?:\\[\s\S]|[^`\\]|``)*`/,
+    greedy: !0,
+    lookbehind: !0,
+    inside: {
+      punctuation: /^`|`$/
+    }
+  },
   "function": /\b(?:AVG|COUNT|FIRST|FORMAT|LAST|LCASE|LEN|MAX|MID|MIN|MOD|NOW|ROUND|SUM|UCASE)(?=\s*\()/i,
-  keyword: /\b(?:ACTION|ADD|AFTER|ALGORITHM|ALL|ALTER|ANALYZE|ANY|APPLY|AS|ASC|AUTHORIZATION|AUTO_INCREMENT|BACKUP|BDB|BEGIN|BERKELEYDB|BIGINT|BINARY|BIT|BLOB|BOOL|BOOLEAN|BREAK|BROWSE|BTREE|BULK|BY|CALL|CASCADED?|CASE|CHAIN|CHAR(?:ACTER|SET)?|CHECK(?:POINT)?|CLOSE|CLUSTERED|COALESCE|COLLATE|COLUMNS?|COMMENT|COMMIT(?:TED)?|COMPUTE|CONNECT|CONSISTENT|CONSTRAINT|CONTAINS(?:TABLE)?|CONTINUE|CONVERT|CREATE|CROSS|CURRENT(?:_DATE|_TIME|_TIMESTAMP|_USER)?|CURSOR|CYCLE|DATA(?:BASES?)?|DATE(?:TIME)?|DAY|DBCC|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFINER|DELAYED|DELETE|DELIMITERS?|DENY|DESC|DESCRIBE|DETERMINISTIC|DISABLE|DISCARD|DISK|DISTINCT|DISTINCTROW|DISTRIBUTED|DO|DOUBLE|DROP|DUMMY|DUMP(?:FILE)?|DUPLICATE|ELSE(?:IF)?|ENABLE|ENCLOSED|END|ENGINE|ENUM|ERRLVL|ERRORS|ESCAPED?|EXCEPT|EXEC(?:UTE)?|EXISTS|EXIT|EXPLAIN|EXTENDED|FETCH|FIELDS|FILE|FILLFACTOR|FIRST|FIXED|FLOAT|FOLLOWING|FOR(?: EACH ROW)?|FORCE|FOREIGN|FREETEXT(?:TABLE)?|FROM|FULL|FUNCTION|GEOMETRY(?:COLLECTION)?|GLOBAL|GOTO|GRANT|GROUP|HANDLER|HASH|HAVING|HOLDLOCK|HOUR|IDENTITY(?:_INSERT|COL)?|IF|IGNORE|IMPORT|INDEX|INFILE|INNER|INNODB|INOUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|INVOKER|ISOLATION|ITERATE|JOIN|KEYS?|KILL|LANGUAGE|LAST|LEAVE|LEFT|LEVEL|LIMIT|LINENO|LINES|LINESTRING|LOAD|LOCAL|LOCK|LONG(?:BLOB|TEXT)|LOOP|MATCH(?:ED)?|MEDIUM(?:BLOB|INT|TEXT)|MERGE|MIDDLEINT|MINUTE|MODE|MODIFIES|MODIFY|MONTH|MULTI(?:LINESTRING|POINT|POLYGON)|NATIONAL|NATURAL|NCHAR|NEXT|NO|NONCLUSTERED|NULLIF|NUMERIC|OFF?|OFFSETS?|ON|OPEN(?:DATASOURCE|QUERY|ROWSET)?|OPTIMIZE|OPTION(?:ALLY)?|ORDER|OUT(?:ER|FILE)?|OVER|PARTIAL|PARTITION|PERCENT|PIVOT|PLAN|POINT|POLYGON|PRECEDING|PRECISION|PREPARE|PREV|PRIMARY|PRINT|PRIVILEGES|PROC(?:EDURE)?|PUBLIC|PURGE|QUICK|RAISERROR|READS?|REAL|RECONFIGURE|REFERENCES|RELEASE|RENAME|REPEAT(?:ABLE)?|REPLACE|REPLICATION|REQUIRE|RESIGNAL|RESTORE|RESTRICT|RETURNS?|REVOKE|RIGHT|ROLLBACK|ROUTINE|ROW(?:COUNT|GUIDCOL|S)?|RTREE|RULE|SAVE(?:POINT)?|SCHEMA|SECOND|SELECT|SERIAL(?:IZABLE)?|SESSION(?:_USER)?|SET(?:USER)?|SHARE|SHOW|SHUTDOWN|SIMPLE|SMALLINT|SNAPSHOT|SOME|SONAME|SQL|START(?:ING)?|STATISTICS|STATUS|STRIPED|SYSTEM_USER|TABLES?|TABLESPACE|TEMP(?:ORARY|TABLE)?|TERMINATED|TEXT(?:SIZE)?|THEN|TIME(?:STAMP)?|TINY(?:BLOB|INT|TEXT)|TOP?|TRAN(?:SACTIONS?)?|TRIGGER|TRUNCATE|TSEQUAL|TYPES?|UNBOUNDED|UNCOMMITTED|UNDEFINED|UNION|UNIQUE|UNLOCK|UNPIVOT|UNSIGNED|UPDATE(?:TEXT)?|USAGE|USE|USER|USING|VALUES?|VAR(?:BINARY|CHAR|CHARACTER|YING)|VIEW|WAITFOR|WARNINGS|WHEN|WHERE|WHILE|WITH(?: ROLLUP|IN)?|WORK|WRITE(?:TEXT)?|YEAR)\b/i,
-  "boolean": /\b(?:TRUE|FALSE|NULL)\b/i,
-  number: /\b0x[\da-f]+\b|\b\d+\.?\d*|\B\.\d+\b/i,
-  operator: /[-+*\/=%^~]|&&?|\|\|?|!=?|<(?:=>?|<|>)?|>[>=]?|\b(?:AND|BETWEEN|IN|LIKE|NOT|OR|IS|DIV|REGEXP|RLIKE|SOUNDS LIKE|XOR)\b/i,
+  keyword: /\b(?:ACTION|ADD|AFTER|ALGORITHM|ALL|ALTER|ANALYZE|ANY|APPLY|AS|ASC|AUTHORIZATION|AUTO_INCREMENT|BACKUP|BDB|BEGIN|BERKELEYDB|BIGINT|BINARY|BIT|BLOB|BOOL|BOOLEAN|BREAK|BROWSE|BTREE|BULK|BY|CALL|CASCADED?|CASE|CHAIN|CHAR(?:ACTER|SET)?|CHECK(?:POINT)?|CLOSE|CLUSTERED|COALESCE|COLLATE|COLUMNS?|COMMENT|COMMIT(?:TED)?|COMPUTE|CONNECT|CONSISTENT|CONSTRAINT|CONTAINS(?:TABLE)?|CONTINUE|CONVERT|CREATE|CROSS|CURRENT(?:_DATE|_TIME|_TIMESTAMP|_USER)?|CURSOR|CYCLE|DATA(?:BASES?)?|DATE(?:TIME)?|DAY|DBCC|DEALLOCATE|DEC|DECIMAL|DECLARE|DEFAULT|DEFINER|DELAYED|DELETE|DELIMITERS?|DENY|DESC|DESCRIBE|DETERMINISTIC|DISABLE|DISCARD|DISK|DISTINCT|DISTINCTROW|DISTRIBUTED|DO|DOUBLE|DROP|DUMMY|DUMP(?:FILE)?|DUPLICATE|ELSE(?:IF)?|ENABLE|ENCLOSED|END|ENGINE|ENUM|ERRLVL|ERRORS|ESCAPED?|EXCEPT|EXEC(?:UTE)?|EXISTS|EXIT|EXPLAIN|EXTENDED|FETCH|FIELDS|FILE|FILLFACTOR|FIRST|FIXED|FLOAT|FOLLOWING|FOR(?: EACH ROW)?|FORCE|FOREIGN|FREETEXT(?:TABLE)?|FROM|FULL|FUNCTION|GEOMETRY(?:COLLECTION)?|GLOBAL|GOTO|GRANT|GROUP|HANDLER|HASH|HAVING|HOLDLOCK|HOUR|IDENTITY(?:COL|_INSERT)?|IF|IGNORE|IMPORT|INDEX|INFILE|INNER|INNODB|INOUT|INSERT|INT|INTEGER|INTERSECT|INTERVAL|INTO|INVOKER|ISOLATION|ITERATE|JOIN|KEYS?|KILL|LANGUAGE|LAST|LEAVE|LEFT|LEVEL|LIMIT|LINENO|LINES|LINESTRING|LOAD|LOCAL|LOCK|LONG(?:BLOB|TEXT)|LOOP|MATCH(?:ED)?|MEDIUM(?:BLOB|INT|TEXT)|MERGE|MIDDLEINT|MINUTE|MODE|MODIFIES|MODIFY|MONTH|MULTI(?:LINESTRING|POINT|POLYGON)|NATIONAL|NATURAL|NCHAR|NEXT|NO|NONCLUSTERED|NULLIF|NUMERIC|OFF?|OFFSETS?|ON|OPEN(?:DATASOURCE|QUERY|ROWSET)?|OPTIMIZE|OPTION(?:ALLY)?|ORDER|OUT(?:ER|FILE)?|OVER|PARTIAL|PARTITION|PERCENT|PIVOT|PLAN|POINT|POLYGON|PRECEDING|PRECISION|PREPARE|PREV|PRIMARY|PRINT|PRIVILEGES|PROC(?:EDURE)?|PUBLIC|PURGE|QUICK|RAISERROR|READS?|REAL|RECONFIGURE|REFERENCES|RELEASE|RENAME|REPEAT(?:ABLE)?|REPLACE|REPLICATION|REQUIRE|RESIGNAL|RESTORE|RESTRICT|RETURN(?:ING|S)?|REVOKE|RIGHT|ROLLBACK|ROUTINE|ROW(?:COUNT|GUIDCOL|S)?|RTREE|RULE|SAVE(?:POINT)?|SCHEMA|SECOND|SELECT|SERIAL(?:IZABLE)?|SESSION(?:_USER)?|SET(?:USER)?|SHARE|SHOW|SHUTDOWN|SIMPLE|SMALLINT|SNAPSHOT|SOME|SONAME|SQL|START(?:ING)?|STATISTICS|STATUS|STRIPED|SYSTEM_USER|TABLES?|TABLESPACE|TEMP(?:ORARY|TABLE)?|TERMINATED|TEXT(?:SIZE)?|THEN|TIME(?:STAMP)?|TINY(?:BLOB|INT|TEXT)|TOP?|TRAN(?:SACTIONS?)?|TRIGGER|TRUNCATE|TSEQUAL|TYPES?|UNBOUNDED|UNCOMMITTED|UNDEFINED|UNION|UNIQUE|UNLOCK|UNPIVOT|UNSIGNED|UPDATE(?:TEXT)?|USAGE|USE|USER|USING|VALUES?|VAR(?:BINARY|CHAR|CHARACTER|YING)|VIEW|WAITFOR|WARNINGS|WHEN|WHERE|WHILE|WITH(?: ROLLUP|IN)?|WORK|WRITE(?:TEXT)?|YEAR)\b/i,
+  "boolean": /\b(?:FALSE|NULL|TRUE)\b/i,
+  number: /\b0x[\da-f]+\b|\b\d+(?:\.\d*)?|\B\.\d+\b/i,
+  operator: /[-+*\/=%^~]|&&?|\|\|?|!=?|<(?:=>?|<|>)?|>[>=]?|\b(?:AND|BETWEEN|DIV|ILIKE|IN|IS|LIKE|NOT|OR|REGEXP|RLIKE|SOUNDS LIKE|XOR)\b/i,
   punctuation: /[;[\]()`,.]/
 };
 Prism.languages.twig = {
-  comment: /\{#[\s\S]*?#\}/,
-  tag: {
-    pattern: /\{\{[\s\S]*?\}\}|\{%[\s\S]*?%\}/,
+  comment: /^\{#[\s\S]*?#\}$/,
+  "tag-name": {
+    pattern: /(^\{%-?\s*)\w+/,
+    lookbehind: !0,
+    alias: "keyword"
+  },
+  delimiter: {
+    pattern: /^\{[{%]-?|-?[%}]\}$/,
+    alias: "punctuation"
+  },
+  string: {
+    pattern: /("|')(?:\\.|(?!\1)[^\\\r\n])*\1/,
     inside: {
-      ld: {
-        pattern: /^(?:\{\{-?|\{%-?\s*\w+)/,
-        inside: {
-          punctuation: /^(?:\{\{|\{%)-?/,
-          keyword: /\w+/
-        }
-      },
-      rd: {
-        pattern: /-?(?:%\}|\}\})$/,
-        inside: {
-          punctuation: /.+/
-        }
-      },
-      string: {
-        pattern: /("|')(?:\\.|(?!\1)[^\\\r\n])*\1/,
-        inside: {
-          punctuation: /^['"]|['"]$/
-        }
-      },
-      keyword: /\b(?:even|if|odd)\b/,
-      "boolean": /\b(?:true|false|null)\b/,
-      number: /\b0x[\dA-Fa-f]+|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee][-+]?\d+)?/,
-      operator: [{
-        pattern: /(\s)(?:and|b-and|b-xor|b-or|ends with|in|is|matches|not|or|same as|starts with)(?=\s)/,
-        lookbehind: !0
-      }, /[=<>]=?|!=|\*\*?|\/\/?|\?:?|[-+~%|]/],
-      property: /\b[a-zA-Z_]\w*\b/,
-      punctuation: /[()\[\]{}:.,]/
+      punctuation: /^['"]|['"]$/
     }
   },
-  other: {
-    pattern: /\S(?:[\s\S]*\S)?/,
-    inside: Prism.languages.markup
-  }
-};
+  keyword: /\b(?:even|if|odd)\b/,
+  "boolean": /\b(?:false|null|true)\b/,
+  number: /\b0x[\dA-Fa-f]+|(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:[Ee][-+]?\d+)?/,
+  operator: [{
+    pattern: /(\s)(?:and|b-and|b-or|b-xor|ends with|in|is|matches|not|or|same as|starts with)(?=\s)/,
+    lookbehind: !0
+  }, /[=<>]=?|!=|\*\*?|\/\/?|\?:?|[-+~%|]/],
+  punctuation: /[()\[\]{}:.,]/
+}, Prism.hooks.add("before-tokenize", function (e) {
+  "twig" === e.language && Prism.languages["markup-templating"].buildPlaceholders(e, "twig", /\{(?:#[\s\S]*?#|%[\s\S]*?%|\{[\s\S]*?\})\}/g);
+}), Prism.hooks.add("after-tokenize", function (e) {
+  Prism.languages["markup-templating"].tokenizePlaceholders(e, "twig");
+});
 Prism.languages.wiki = Prism.languages.extend("markup", {
   "block-comment": {
     pattern: /(^|[^\\])\/\*[\s\S]*?\*\//,
@@ -34293,7 +35000,7 @@ Prism.languages.wiki = Prism.languages.extend("markup", {
     alias: "comment"
   },
   heading: {
-    pattern: /^(=+).+?\1/m,
+    pattern: /^(=+)[^=\r\n].*?\1/m,
     inside: {
       punctuation: /^=+|=+$/,
       important: /.+/
@@ -34322,7 +35029,7 @@ Prism.languages.wiki = Prism.languages.extend("markup", {
     pattern: /^-{4,}/m,
     alias: "punctuation"
   },
-  url: [/ISBN +(?:97[89][ -]?)?(?:\d[ -]?){9}[\dx]\b|(?:RFC|PMID) +\d+/i, /\[\[.+?\]\]|\[.+?\]/],
+  url: [/ISBN +(?:97[89][ -]?)?(?:\d[ -]?){9}[\dx]\b|(?:PMID|RFC) +\d+/i, /\[\[.+?\]\]|\[.+?\]/],
   variable: [/__[A-Z]+__/, /\{{3}.+?\}{3}/, /\{\{.+?\}\}/],
   symbol: [/^#redirect/im, /~{3,5}/],
   "table-tag": {
@@ -34339,34 +35046,49 @@ Prism.languages.wiki = Prism.languages.extend("markup", {
   punctuation: /^(?:\{\||\|\}|\|-|[*#:;!|])|\|\||!!/m
 }), Prism.languages.insertBefore("wiki", "tag", {
   nowiki: {
-    pattern: /<(nowiki|pre|source)\b[\s\S]*?>[\s\S]*?<\/\1>/i,
+    pattern: /<(nowiki|pre|source)\b[^>]*>[\s\S]*?<\/\1>/i,
     inside: {
       tag: {
-        pattern: /<(?:nowiki|pre|source)\b[\s\S]*?>|<\/(?:nowiki|pre|source)>/i,
+        pattern: /<(?:nowiki|pre|source)\b[^>]*>|<\/(?:nowiki|pre|source)>/i,
         inside: Prism.languages.markup.tag.inside
       }
     }
   }
 });
 !function (e) {
-  var a = /[*&][^\s[\]{},]+/,
-    t = /!(?:<[\w\-%#;/?:@&=+$,.!~*'()[\]]+>|(?:[a-zA-Z\d-]*!)?[\w\-%#;/?:@&=+$.~*'()]+)?/,
-    r = "(?:" + t.source + "(?:[ \t]+" + a.source + ")?|" + a.source + "(?:[ \t]+" + t.source + ")?)";
-  function n(e, a) {
-    a = (a || "").replace(/m/g, "") + "m";
-    var t = "([:\\-,[{]\\s*(?:\\s<<prop>>[ \t]+)?)(?:<<value>>)(?=[ \t]*(?:$|,|]|}|\\s*#))".replace(/<<prop>>/g, r).replace(/<<value>>/g, e);
-    return RegExp(t, a);
+  var n = /[*&][^\s[\]{},]+/,
+    r = /!(?:<[\w\-%#;/?:@&=+$,.!~*'()[\]]+>|(?:[a-zA-Z\d-]*!)?[\w\-%#;/?:@&=+$.~*'()]+)?/,
+    t = "(?:" + r.source + "(?:[ \t]+" + n.source + ")?|" + n.source + "(?:[ \t]+" + r.source + ")?)",
+    a = "(?:[^\\s\\x00-\\x08\\x0e-\\x1f!\"#%&'*,\\-:>?@[\\]`{|}\\x7f-\\x84\\x86-\\x9f\\ud800-\\udfff\\ufffe\\uffff]|[?:-]<PLAIN>)(?:[ \t]*(?:(?![#:])<PLAIN>|:<PLAIN>))*".replace(/<PLAIN>/g, function () {
+      return "[^\\s\\x00-\\x08\\x0e-\\x1f,[\\]{}\\x7f-\\x84\\x86-\\x9f\\ud800-\\udfff\\ufffe\\uffff]";
+    }),
+    d = "\"(?:[^\"\\\\\r\n]|\\\\.)*\"|'(?:[^'\\\\\r\n]|\\\\.)*'";
+  function o(e, n) {
+    n = (n || "").replace(/m/g, "") + "m";
+    var r = "([:\\-,[{]\\s*(?:\\s<<prop>>[ \t]+)?)(?:<<value>>)(?=[ \t]*(?:$|,|\\]|\\}|(?:[\r\n]\\s*)?#))".replace(/<<prop>>/g, function () {
+      return t;
+    }).replace(/<<value>>/g, function () {
+      return e;
+    });
+    return RegExp(r, n);
   }
   e.languages.yaml = {
     scalar: {
-      pattern: RegExp("([\\-:]\\s*(?:\\s<<prop>>[ \t]+)?[|>])[ \t]*(?:((?:\r?\n|\r)[ \t]+)[^\r\\n]+(?:\\2[^\r\\n]+)*)".replace(/<<prop>>/g, r)),
+      pattern: RegExp("([\\-:]\\s*(?:\\s<<prop>>[ \t]+)?[|>])[ \t]*(?:((?:\r?\n|\r)[ \t]+)\\S[^\r\n]*(?:\\2[^\r\n]+)*)".replace(/<<prop>>/g, function () {
+        return t;
+      })),
       lookbehind: !0,
       alias: "string"
     },
     comment: /#.*/,
     key: {
-      pattern: RegExp("((?:^|[:\\-,[{\r\\n?])[ \t]*(?:<<prop>>[ \t]+)?)[^\r\\n{[\\]},#\\s]+?(?=\\s*:\\s)".replace(/<<prop>>/g, r)),
+      pattern: RegExp("((?:^|[:\\-,[{\r\n?])[ \t]*(?:<<prop>>[ \t]+)?)<<key>>(?=\\s*:\\s)".replace(/<<prop>>/g, function () {
+        return t;
+      }).replace(/<<key>>/g, function () {
+        return "(?:" + a + "|" + d + ")";
+      })),
       lookbehind: !0,
+      greedy: !0,
       alias: "atrule"
     },
     directive: {
@@ -34375,31 +35097,31 @@ Prism.languages.wiki = Prism.languages.extend("markup", {
       alias: "important"
     },
     datetime: {
-      pattern: n("\\d{4}-\\d\\d?-\\d\\d?(?:[tT]|[ \t]+)\\d\\d?:\\d{2}:\\d{2}(?:\\.\\d*)?[ \t]*(?:Z|[-+]\\d\\d?(?::\\d{2})?)?|\\d{4}-\\d{2}-\\d{2}|\\d\\d?:\\d{2}(?::\\d{2}(?:\\.\\d*)?)?"),
+      pattern: o("\\d{4}-\\d\\d?-\\d\\d?(?:[tT]|[ \t]+)\\d\\d?:\\d{2}:\\d{2}(?:\\.\\d*)?(?:[ \t]*(?:Z|[-+]\\d\\d?(?::\\d{2})?))?|\\d{4}-\\d{2}-\\d{2}|\\d\\d?:\\d{2}(?::\\d{2}(?:\\.\\d*)?)?"),
       lookbehind: !0,
       alias: "number"
     },
     "boolean": {
-      pattern: n("true|false", "i"),
+      pattern: o("false|true", "i"),
       lookbehind: !0,
       alias: "important"
     },
     "null": {
-      pattern: n("null|~", "i"),
+      pattern: o("null|~", "i"),
       lookbehind: !0,
       alias: "important"
     },
     string: {
-      pattern: n("(\"|')(?:(?!\\2)[^\\\\\\r\n]|\\\\.)*\\2"),
+      pattern: o(d),
       lookbehind: !0,
       greedy: !0
     },
     number: {
-      pattern: n("[+-]?(?:0x[\\da-f]+|0o[0-7]+|(?:\\d+\\.?\\d*|\\.?\\d+)(?:e[+-]?\\d+)?|\\.inf|\\.nan)", "i"),
+      pattern: o("[+-]?(?:0x[\\da-f]+|0o[0-7]+|(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?|\\.inf|\\.nan)", "i"),
       lookbehind: !0
     },
-    tag: t,
-    important: a,
+    tag: r,
+    important: n,
     punctuation: /---|[:[\]{}\-,|>?]|\.\.\./
   }, e.languages.yml = e.languages.yaml;
 }(Prism);

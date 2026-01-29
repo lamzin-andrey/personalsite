@@ -3,7 +3,6 @@
 class MarkdownCode
 {
     const LANG_MAP = [
-        'python' => 'perl',
         'conf'    => 'ini',
         'sh'      => 'bash',
         'htm'     => 'html',
