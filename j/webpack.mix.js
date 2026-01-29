@@ -24,7 +24,7 @@ let mix = require('laravel-mix');
 
 //Страницы сайта
 //c.js is free
-//mix.js('sources/site/app.js', 'd.js');//no vue version
+mix.js('sources/site/app.js', 'd.js');//no vue version
 
 //Учёт времени - админка
 //mix.js('sources/cronfrnd/app.js', 'h.js'); //crn

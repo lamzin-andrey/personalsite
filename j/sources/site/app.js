@@ -17,6 +17,8 @@ import './../../../s/vendor/bootstrap4_sticky_footer.css';
 import './../../../j/vendor/prism/0.css';
 
 Vue.component('youtube', require('../landlib/vue/2/youtube/youtube.vue').default);
+Vue.component('rutube', require('../landlib/vue/2/rutube/rutube.vue').default);
+Vue.component('yourube', require('../landlib/vue/2/yourube/yourube.vue').default);
 
 //Интернациализация
 import VueI18n  from 'vue-i18n';

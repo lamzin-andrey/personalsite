@@ -61,7 +61,7 @@ if ( @$_SESSION["lang"] == "en/" ) {
 							<?= $or?>
 							<a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/" target="_blank"><?=$other_linux ?></a>.
 						</div>
-						<a title="Download and extract the archive, and run Setup" href="https://wkard.ru/d/drive/?action=share&i=593" target="blank" class="text-success" style="display:inline-block;margin-left:22px;"><?=$linktext?>.</a>
+						<a title="Download and extract the archive, and run Setup" href="https://wkard.ru/d/drive/?action=share&i=597" target="blank" class="text-success" style="display:inline-block;margin-left:22px;"><?=$linktext?>.</a>
 						
 						<div style="text-align:right;margin-bottom:0px;" class="addinfo">
 							<span class="py-1">
@@ -83,7 +83,6 @@ if ( @$_SESSION["lang"] == "en/" ) {
 	</div>
 </div>
 
-<!-- OLD CODE -->
 <div>&nbsp;</div>
 <div class="couter tou2">
 	<div class="mx-auto tin2 pt12">
