@@ -1084,11 +1084,20 @@ function utils_isXhr()
 }
 /**
  *  @description Слушать запросы с любого домена
+ *   example $siteList = 'https://dd.lan'
 */
-function utils_crossOrigin()
+function utils_crossOrigin( string $siteList = '*')
 {
 	//header('Access-Control-Allow-Origin: *');
-	header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Origin: ' . $siteList);
+	header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Methods: GET, POST');
+    header('Access-Control-Allow-Headers: Content-Type, X-Requested-With, Cookie');
+    header('Access-Control-Max-Age: 86400');
+    
+    // Для сессионной cookie
+	ini_set('session.cookie_samesite', 'None'); // Для современных браузеров
+	ini_set('session.cookie_secure', 'true');   // Требуется для SameSite=None
 }
 function utils_createDir($sDir)
 {
@@ -1173,4 +1182,100 @@ function b(): StdClass
 	}
 	
 	return $r;
+}
+
+
+/**
+*  Работает с Europe/Moscow
+*/
+function utils_cjs(string $name, string $value = "", int $secondsFromNowToRight = 1800):string
+{
+	if ($value) {
+		$n = time() + 3*3600 + $secondsFromNowToRight;
+		$secure = false;
+		$httpOnly = false;
+		setcookie($name, $value, $n, '/', '', $secure, $httpOnly);
+	}
+	
+	return $_COOKIE[$name] ?? "";
+}
+
+/**
+*  Работает с Europe/Moscow
+*/
+function utils_cc(string $name, string $value = "", int $secondsFromNowToRight = 1800):string
+{
+	if ($value) {
+		$n = time() + 3*3600 + $secondsFromNowToRight;
+		$secure = true;
+		$httpOnly = true;
+		setcookie($name, $value, $n, '/', '', $secure, $httpOnly);
+	}
+	
+	return $_COOKIE[$name] ?? "";
+}
+
+function utils_generateToken(string $add = ''):string
+{
+	$token = md5(time() . a($_SERVER, 'HTTP_USER_AGENT') . uniqid(strval(time()), true) . $add);
+	$token .= md5(time() . a($_SERVER, 'HTTP_USER_AGENT') . uniqid(strval(time()), true) . $add);
+	$token .= '/==';
+	return $token;
+}
+
+function utils_isCrossRequest():bool
+{
+	// Получаем заголовок Origin
+	$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
+
+	// Ваш текущий домен
+	$currentDomain = $_SERVER['HTTP_HOST'];
+
+	if ($origin && parse_url($origin, PHP_URL_HOST) !== $currentDomain) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function utils_night():string
+{
+	$h = date('H');
+	$M = intval(date('m'));
+	$d = intval(date('d'));
+	
+	$true = ' class="night" ';
+	$false = '';
+	
+	if ($M == 2 && $d >= 12 && ($h >= 18 || $h < 7)) {
+		return $true;
+	}
+	
+	if ($M == 3 && $d < 22 && ($h >= 18 || $h < 7)) {
+		return $true;
+	}
+	
+	if ($M == 3 && $d >= 22 && ($h >= 19 || $h < 6)) {
+		return $true;
+	}
+	
+	if ($h >= 21 || $h < 6) {
+		return $true;
+	}
+	
+	return $false;
+}
+
+function ua():string
+{
+	return a($_SERVER, 'HTTP_USER_AGENT');
+}
+
+function ip(string $typeEqGuestOrSelf = 'guest'):string
+{
+	$type = $typeEqGuestOrSelf;
+	if ($type == 'guest|self' || $type == 'guest') {
+		return $_SERVER['REMOTE_ADDR'];
+	}
+	return $_SERVER['SERVER_ADDR'];
 }
