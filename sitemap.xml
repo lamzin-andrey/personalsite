@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url><loc>https://andryuxa.ru/portfolio/</loc></url>
    <url><loc>https://andryuxa.ru/blog/</loc></url>
-   
+   <url><loc>https://andryuxa.ru/blog/kak_podpisat_uvedomlenie_ob_obrabotke_personalnyh_dlannyh_v_rkn_iz_xubuntu/</loc></url>
    <url><loc>https://andryuxa.ru/blog/dobivaus_chetkogo_zaversheniya_chata_ai-agentov_pri_dostijenii_celi/</loc></url>
    <url><loc>https://andryuxa.ru/blog/moi_put_pri_osvoenii_llm_ot_pervyh_promptov_do_ai_agentov_i_dalee/</loc></url>
    <url><loc>https://andryuxa.ru/blog/kak_ustanovit_na_svoi_komputer_s_linux_xubuntu_deepseek-r1_gpt-oss_mihstral/</loc></url>
@@ -51,4 +51,5 @@
    <url><loc>https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/xubuntu/</loc></url>
    <url><loc>https://andryuxa.ru/portfolio/web-razrabotka/saity/fastxampp/compile_android_online_apache_cordova/</loc></url>
    <url><loc>https://andryuxa.ru/blog/symfony_3_hranenie_rezultatov_sql_zaprosov_doctrine_2_v_memcache/</loc></url>
+   <url><loc>https://andryuxa.ru/blog/zapuskaem_xubutnu_live_usb_na_noutbuke_2011_goda/</loc></url>
 </urlset>
