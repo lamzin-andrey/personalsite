@@ -98,7 +98,7 @@
                     cursor: pointer;
                     transition: background 0.3s;
                     font-weight: bold;
-                ">ОК</button>
+                ">Принять</button>
             </div>
         </div>
     `;
