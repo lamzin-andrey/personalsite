@@ -10,7 +10,7 @@
 		"test": "echo 'none'"
 	},
 	"devDependencies": {
-		"jquery": "^3.4.1",
+		"jquery": "^3.5.0",
 		"cross-env": "^5.2.0",
 		"laravel-mix": "^2.1.11",
 		"vue": "^2.5.17",
