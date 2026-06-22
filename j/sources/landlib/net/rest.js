@@ -131,7 +131,12 @@ window.Rest = {
         var sData = arr.join('&');
         //установить метод  и адрес
         //console.log("'" + url + "'");
+        xhr.withCredentials = true; // КЛЮЧЕВОЙ ПАРАМЕТР для передачи cookie
         xhr.open(method, url);
+        
+        
+
+        
         //console.log('Open...');
         //установить заголовок
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

@@ -38,6 +38,14 @@ window.HttpQueryString = {
 		return a[2];
 	},
 	/**
+	 * @description parse http query string, return http host name with protocol
+	 * @param {String} s 
+	 * @return http host name
+	*/
+	phost:function(s) {
+		return this.SSLP + this.host(s);
+	},
+	/**
 	 * @description parse http query string, return php $_SERVER['REQUEST_URI'] analogy
 	 * @param {String} s 
 	 * @return a-la php $_SERVER['REQUEST_URI']

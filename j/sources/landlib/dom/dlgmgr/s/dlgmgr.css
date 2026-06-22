@@ -8,6 +8,7 @@
 	padding: 0px 5px;
 	border-radius: 4px 4px 0px 0px;
 	border: #4588DA solid 2px;
+	cursor:default;
 }
 .landDlgMgr .bod {
 	border: #4588DA 3px solid;

@@ -16,17 +16,11 @@ function ee(p, c) {
 	p = e(p);
 	return p.getElementsByTagName(c);
 }
-function eee(p, c, f) {
-	var i, L = ee(p, c), z = sz(L);
-	for (i = 0; i < z; i++) {
-		f(L[i]);
-	}
-}
 W.micron$$ = ee;
 function cs(p, c) {
 	var a;
 	p = e(p);
-	if (p.getElementsByClassName) {
+	if (p && p.getElementsByClassName) {
 		a = p.getElementsByClassName(c);
 		sz(a);
 		return a;
@@ -106,8 +100,14 @@ function ce(parent, tag, id, obj, dataObj) {
 	obj.id = id;
 	return appendChild(parent, tag, '', obj, dataObj);
 }
-function rm(DOMNode) {
+function rm(DOMNode, a) {
 	var o = e(DOMNode);
+	if (o && a) {
+		if (o.hasAttribute(a)) {
+			o.removeAttribute(a);
+		}
+		return;
+	}
 	o ? o.parentNode.removeChild(o) : 0;
 }
 function attr(o, name, val) {
@@ -136,7 +136,8 @@ function show(o, v) {
 	stl(o, 'display', v);
 }
 function hide(o) {
-	stl(o, 'display', 'none');
+	o = e(o);
+	o ? stl(o, 'display', 'none') : 0;
 }
 /**
  * @description Каюсь, я был уверен что в IE 6 её нет у клласса String
@@ -337,29 +338,6 @@ function def(v, defV) {
     return v;
 }
 /**
- * @description disable form
-*/
-function df(i){
-	eee(i, 'input', di);
-	eee(i, 'textarea', di);
-	eee(i, 'select', di);
-}
-function di(o){
-	let s = "disabled";
-	attr(o, s, s);
-}
-/**
- * @description disable form
-*/
-function ef(i){
-	eee(i, 'input', ei);
-	eee(i, 'textarea', ei);
-	eee(i, 'select', ei);
-}
-function ei(o){
-	o.removeAttribute("disabled");
-}
-/**
  * @description Возвращает размер массива - 1
  * @param {Array} o
  * @return Number array length - 1
@@ -386,26 +364,6 @@ function sz(o) {
   window.SZ = o && o.length ? o.length : 0;
   return window.SZ;
 }
-
-function slAo(s, t, i){
-	var o;
-	s = e(s);
-	i = i ? i : t;
-	o = new Option(t, i);
-	s.options[sz(s.options)] = o;
-}
-
-function slUo(s, t, i){
-	var o, j, z;
-	s = e(s);
-	z = sz(s.options);
-	for (j = 0; j < z; j++) {
-		if (s.options[j].value == i) {
-			s.options[j].text = t;
-		}
-	}
-}
-
 /**
  * @description Меняет два элемента в массиве (или объекте) местами
  * @param {Array|Object}  o
@@ -471,7 +429,10 @@ function v(o, s) {
 	return r;
 }
 
-function loc() {
+function loc(n) {
+	if (n) {
+		gto(s);
+	}
 	return location;
 }
 
@@ -479,7 +440,10 @@ function foc(i){
 	e(i) ? e(i).focus() : 0;
 }
 
-function gto(s) {
+function gto(s, b) {
+	if (b) {
+		return W.open(s, '_blank');
+	}
 	loc().href = s;
 }
 
@@ -499,6 +463,11 @@ function ctrg(ev) {
 	return ev.currentTarget;
 }
 
+function insertBefore(existsEl, newEl) {
+	var p = existsEl.parentNode;
+	return p.insertBefore(newEl, existsEl);
+}
+
 function nv() {
 	return navigator;
 }
@@ -506,4 +475,24 @@ function nv() {
 function isSmart() {
 	var s = nv().userAgent.toLowerCase();
 	return !!(~s.indexOf("iphone") || ~s.indexOf("android"));
+}
+function di(o) {
+	var k = 'disabled';
+	o = e(o);
+	o ? attr(o, k, k) : 0;
+}
+function ei(o) {
+	rm(o, 'disabled');
+}
+function selectByVal(sl, n) {
+	sl = e(sl);
+	for (var i = 0; i < sz(sl.options); i++) {
+		if (sl.options[i].value == n ) {
+			sl.options.selectedIndex = i;
+			if (sl.onchange) {
+				sl.onchange();
+			}
+			break;
+		}
+	}
 }

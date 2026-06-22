@@ -23,7 +23,7 @@ window.TextFormat = {
 	*/
 	nums:function(s){
 		var o = this;
-		s = s.replace(/[\D]/mig, '');
+		s = String(s).replace(/[\D]/mig, '');
 		return s;
 	},
 	/**

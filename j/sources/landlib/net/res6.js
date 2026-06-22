@@ -1,78 +1,63 @@
-window.Rest = {
+window.Res6 = {
 	/**
-	 * @property {String} csrf token, set it from app
+	 * @description Set _token and _token_name in Res6
 	*/
-	_token : '',
-	
-	/**
-	 * @property {String} csrf token name, set it from app
-	*/
-	_token_name : '_token',
-	/**
-	 * @property {Number} For multiupload uploading input.files[_fileIndex]
-	*/
-	_fileIndex: 0,
-	
-	/**
-	 * @property {String} _lang
-	*/
-	_lang : '',
-	root : '',
-	/**
-     * @description ajax post request (FormData)
-     * @param {Object} data 
-     * @param {Function} onSuccess
-     * @param {String} url 
-     * @param {Function} onFail 
-     */
-    _post:function(data, onSuccess, url, onFail) {
-        var t = this._getToken();
-        if (t) {
-            data[this._token_name] = t;
-            this._restreq('post', data, onSuccess, url, onFail)
-        }
+	_setToken(sT, sN){
+		Res6._token = sT;
+		Res6._token_name = sN;
 	},
 	/**
-     * @description ajax post request (FormData)
-     * @param {Object} data 
-     * @param {Function} onSuccess
-     * @param {String} url 
-     * @param {Function} onFail 
-     */
-    _put:function(data, onSuccess, url, onFail) {
-        var t = this._getToken();
-        if (t) {
-            data._token = t;
-            this._restreq('put', data, onSuccess, url, onFail)
-        }
+	 * @description Set Res6._fileIndex
+	 * @property {Number} nFor multiupload uploading input.files[_fileIndex]
+	*/
+	_setFileIndex(n){
+		Res6._fileIndex = n;
 	},
 	/**
-     * @description ajax patch request (FormData)
-     * @param {Object} data 
-     * @param {Function} onSuccess
-     * @param {String} url 
-     * @param {Function} onFail 
-     */
-    _patch:function(data, onSuccess, url, onFail) {
-        var t = this._getToken();
-        if (t) {
-            data._token = t;
-            this._restreq('patch', data, onSuccess, url, onFail)
-        }
+	 * @description Set Res6._fileIndex
+	 * @property {String} sLng
+	*/
+	_setLang(sLng){
+		Res6._lang = sLng;
 	},
 	/**
-     * @description ajax delte request (FormData)
+	 * @description Set Res6.root
+	 * @property {String} sRoot
+	*/
+	_setRoot(sRoot){
+		Res6.root = sRoot;
+	},
+	/**
+     * @description ajax post request (JSON)
      * @param {Object} data 
-     * @param {Function} onSuccess
      * @param {String} url 
-     * @param {Function} onFail 
      */
-    _delete:function(data, onSuccess, url, onFail) {
-        var t = this._getToken();
-        if (t) {
-            data._token = t;
-            this._restreq('delete', data, onSuccess, url, onFail)
-        }
+    async _post(data, url) {
+        return await this._stdReq(data, url, 'POST');
+	},
+	/**
+     * @description ajax put request (JSON)
+     * @param {Object} data 
+     * @param {String} url 
+     */
+    async _put(data, url) {
+        return await this._stdReq(data, url, 'PUT');
+	},
+	/**
+     * @description ajax patch request (JSON)
+     * @param {Object} data 
+     * @param {String} url 
+     */
+    async _patch(data, url) {
+        return await this._stdReq(data, url, 'PATCH');
+	},
+	/**
+     * @description ajax delete request (JSON)
+     * @param {Object} data 
+     * @param {String} url 
+     */
+    async _delete(data, url) {
+        return await this._stdReq(data, url, 'DELETE');
 	},
 	/**
      * @description ajax get request (FormData)
@@ -80,25 +65,31 @@ window.Rest = {
      * @param {String} url 
      * @param {Function} onFail 
      */
-    _get:function(onSuccess, url, onFail) {
-        this._restreq('get', {}, onSuccess, url, onFail)
+    _get:function(url) {
+        return await this._stdReq({}, url, 'GET')
+	},
+	async _stdReq(data, url, m) {
+        let t;
+        t = this._getToken();
+        if (t) {
+            data[this._token_name] = t;
+            return await this._restreq(m, data, onSuccess, url, onFail)
+        }
 	},
 	/**
      * @description get asrf token
 	 * @return String
      */
-    _getToken:function() {
+    _getToken() {
         return this[this._token_name];
 	},
 	/**
      * @description ajax request (FormData).
 	 * @param {String} method 
-     * @param {Function} onSuccess
      * @param {String} url 
-     * @param {Function} onFail 
      */
-    _restreq:function(method, data, onSuccess, url, onFail) {
-		var sendData = data;
+    async _restreq(method, data, url) {
+		let sendData = data;
         if (!url) {
             url = window.location.href;
         } else {
@@ -107,71 +98,47 @@ window.Rest = {
         if (!onFail && window.defaultFail) {
             onFail = defaultFail;
         }
-        /*switch (method) {
-            case 'put':
-            case 'patch':
-            case 'delete':
-                break;
-		}*/
 		if (this._lang && !sendData.lang) {
 			sendData.lang = this._lang;
 		}
-        /*$.ajax({
-            method: method,
-            data:sendData,
-            url:url,
-            dataType:'json',
-            success:onSuccess,
-            error:onFail
-        });*/
-        this.pureAjax(url, data, onSuccess, onFail, method);
+        return await this.pureAjax(url, data, onSuccess, onFail, method);
 	},
 	/**
-     * @desc Аякс запрос к серверу, использует JSON
+     * @desc Ajax (fetch) запрос к серверу, использует JSON
     */
-    pureAjax:function(url, data, onSuccess, onFail, method) {
-        var xhr = new XMLHttpRequest();
-        //подготовить данные для отправки
-        var arr = []
-        for (var i in data) {
-            arr.push(i + '=' + encodeURIComponent(data[i]));
-        }
-        var sData = arr.join('&');
-        //установить метод  и адрес
-        //console.log("'" + url + "'");
-        xhr.open(method, url);
-        //console.log('Open...');
-        //установить заголовок
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        // xhr.setRequestHeader('Content-Type', 'application/json');
-        //обработать ответ
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                var error = {};
-                if (xhr.status == 200) {
-                    try {
-                        var response = JSON.parse(String(xhr.responseText));
-                        onSuccess(response, xhr);
-                        return;
-                    } catch(err) {
-                        error.state = 1;
-                        error.info = 'Fail parse JSON ' + err;
-                    }
-                }else {
-                    error.state = 1;
-                }
-                if (error.state) {
-                    onFail(xhr.status, xhr.responseText, error.info, xhr);
-                }
-            } else if (xhr.readyState > 3) {
-                onFail(xhr.status, xhr.responseText, 'No ok', xhr, xhr.readyState);
-            }
-        }
-        //отправить
-        //console.log('bef send');
-        xhr.send(sData, true);
-        //console.log('aft send');
+    async pureAjax(url, data, method) {
+		let c, r, txt;
+		c = {
+			method: method,
+			headers: {
+				"Content-Type": "application/json; charset=UTF-8;"
+			}
+		};
+		if (method != 'GET') {
+			c.body = JSON.stringify(data);
+		}
+        r = await fetch(url, c);
+		
+		if (r.ok) {
+			try {
+				txt = await r.text();
+				try {
+					return JSON.parse(txt);
+				} catch (pErr) {
+					console.log('TXT', txt, pErr);
+					pErr.responseText = txt;
+					return pErr;
+				}
+			} catch(err) {
+				console.log(err, r);
+				err.response = r;
+				return err;
+			}
+		}
+		c = {};
+		c.info = 'R is not ok';
+		c.r = r;
+		return c;
     },
 	/**
      * @description Отправка файла методом POST
@@ -184,23 +151,23 @@ window.Rest = {
      * @param {String} tokenName Кастомное имя для токена
      * @param {String} token     Кастомное значение для токена, если почему-то не устраивает this._getToken
      * @param {Number} timeout   = 60 Сколько секунд ждать завершения аплоада (для старых браузеров)
+     * @param {Object} context
     */
-    _postSendFile: function(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout) {
-		
-		var xhr = new XMLHttpRequest(), form, t, i;
+    _postSendFile(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout, ctx) {
+		let xhr = new XMLHttpRequest(), form, t, i;
 		
 		try {
 			form = new FormData();
 		} catch(e) {
-			this._postSendFileAndroid2(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout);
+			this._postSendFileAndroid2(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout, ctx);
 			return;
 		}
         
         tokenName = tokenName ? tokenName : '_token';
         
-        form.append(iFile.id, iFile.files[this._fileIndex]);
+        form.append(iFile.id, iFile.files[Res6._fileIndex]);
         form.append("path", url);
-        form.append("mt", iFile.files[this._fileIndex].lastModified);
+        form.append("mt", iFile.files[Res6._fileIndex].lastModified);
         for (i in data) {
             form.append(i, data[i]);
         }
@@ -218,7 +185,7 @@ window.Rest = {
             if (pEvt && pEvt.lengthComputable) {
                 loadedPercents = Math.round((pEvt.loaded * 100) / pEvt.total);
             }
-            onProgress(loadedPercents, pEvt.loaded, pEvt.total);
+            onProgress.call(ctx, loadedPercents, pEvt.loaded, pEvt.total);
         });
         xhr.upload.addEventListener("error", onFail);
         xhr.onreadystatechange = function () {
@@ -231,9 +198,9 @@ window.Rest = {
                     } catch(e)  {
                         //;
                     }
-                    onSuccess(s);
+                    onSuccess.call(ctx, s);
                 } else {
-                    onFail(t.status, arguments);
+                    onFail.call(ctx, t.status, arguments);
                 }
             }
         };
@@ -253,8 +220,9 @@ window.Rest = {
      * @param {String} tokenName Кастомное имя для токена
      * @param {String} token     Кастомное значение для токена, если почему-то не устраивает this._getToken
      * @param {Number} timeout   = 60 Сколько секунд ждать завершения аплоада (для старых браузеров)
+     * @param {Object} context
     */
-    _postSendFileAndroid2: function(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout) {
+    _postSendFileAndroid2: function(iFile, url, data, onSuccess, onFail, onProgress, tokenName, token, timeout, ctx) {
 		timeout = def(timeout, 60);
         var t, i, iFrameName = iFile.id + 'A2UpIframe',
 			form = iFile.parentNode,
@@ -300,9 +268,9 @@ window.Rest = {
 		
 		// form.append("mt", iFile.files[this._fileIndex].lastModified);
 		if (!e('mt')) {
-			ce(form, 'input', 'mt', {value: intval(iFile.files[this._fileIndex].lastModified), type:'hidden', name: 'mt'});
+			ce(form, 'input', 'mt', {value: intval(iFile.files[Res6._fileIndex].lastModified), type:'hidden', name: 'mt'});
 		} else {
-			e('mt').value = intval(iFile.files[this._fileIndex].lastModified);
+			e('mt').value = intval(iFile.files[Res6._fileIndex].lastModified);
 		}
         for (i in data) {
             // form.append(i, data[i]); 
@@ -346,13 +314,13 @@ window.Rest = {
 		window.up = 0;
         
         if (iFrame) {
-			iFrame.onload = function() {
+			iFrame.onload = function zOnLoadIframeA2Upload() {
 				if (window.up == 0) {
 					window.up++;
 					form.submit();
 					localStorage.removeItem('iframeUpload');
 					i = 0;
-					ival = setInterval(function() {
+					ival = setInterval(function zA2UploadInt() {
 						response = localStorage.getItem('iframeUpload');
 						var r = response;
 						if (r) {
@@ -360,20 +328,20 @@ window.Rest = {
 								response = JSON.parse(response);
 								if (response) {
 									clearInterval(ival);
-									onSuccess(response);
+									ctx.call(onSuccess, response);
 								}
 								
 							} catch(e) {
 								clearInterval(ival);
 								showError(e);
 								showError(r);
-								onFail(e);
+								ctx.call(onFail, e);
 							}
 						}
 						
 						if (i > timeout) {
 							clearInterval(ival);
-							onFail({status: 'error', errors: {p: l('Превышен интервал ожидания запроса')}});
+							ctx.call(onFail, {status: 'error', errors: {p: l('Превышен интервал ожидания запроса')}});
 						}
 						
 						i++;
@@ -384,7 +352,7 @@ window.Rest = {
 			attr(iFrame, 'src', '/0.html?r=' + Math.random());
 			iFrame.onerror = function(err) {
 				clearInterval(ival);
-				onFail(err);
+				ctx.call(onFail, err);
 			}
 		}
 		
