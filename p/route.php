@@ -119,7 +119,7 @@ class Route {
 		}
 		
 		if ($baseUrl == '/p/chat/state/v/') {
-			json_ok("url", "https://pchat.com.ru");
+			json_ok("url", "https://pchat.tech");
 		}
 		
 	}
