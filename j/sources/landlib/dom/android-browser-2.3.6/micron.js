@@ -17,6 +17,12 @@ function ee(p, c) {
 	return p.getElementsByTagName(c);
 }
 W.micron$$ = ee;
+function eee(p, c, f) {
+	var i, L = ee(p, c), z = sz(L);
+	for (i = 0; i < z; i++) {
+		f(L[i]);
+	}
+}
 function cs(p, c) {
 	var a;
 	p = e(p);
@@ -476,10 +482,29 @@ function isSmart() {
 	var s = nv().userAgent.toLowerCase();
 	return !!(~s.indexOf("iphone") || ~s.indexOf("android"));
 }
+/**
+ * @description disable form
+*/
+function df(i){
+	eee(i, 'input', di);
+	eee(i, 'textarea', di);
+	eee(i, 'select', di);
+}
 function di(o) {
 	var k = 'disabled';
 	o = e(o);
 	o ? attr(o, k, k) : 0;
+}
+/**
+ * @description disable form
+*/
+function ef(i){
+	eee(i, 'input', ei);
+	eee(i, 'textarea', ei);
+	eee(i, 'select', ei);
+}
+function ei(o){
+	o.removeAttribute("disabled");
 }
 function ei(o) {
 	rm(o, 'disabled');
