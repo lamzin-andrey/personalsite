@@ -12,7 +12,7 @@ window.HttpQueryString = {
 		if (!s && window && window.location &&  window.location.href) {
 			s = window.location.href;
 		}
-		var a, i, GET = {}, aB;
+		var a, i,  aB, GET = {};
 		a = s.split('#');
 		a = a[0].split('?');
 		if (a.length > 1) {
@@ -113,12 +113,13 @@ window.HttpQueryString = {
 		unsetValue = decodeURIComponent(unsetValue);
 		link = decodeURIComponent(link);
 		
-		var sep = '&', arr = link.split('?'), base = arr[0], tail = arr[1], cmdUnset = 'CMD_UNSET', searchStr;
+		var varName2, searchStr, sep = '&', arr = link.split('?'), base = arr[0], tail = arr[1], hash = tail.split("#")[1], cmdUnset = 'CMD_UNSET';
+		tail = tail.split("#")[0];
 		if (!tail) {
 			sep = '';
 			tail = '';
 		}
-		searchStr = checkByValue ? (varName + '=' + (value != cmdUnset ? value : unsetValue)  ) : (varName + '=');
+		searchStr = checkByValue ? (varName + '=' + unsetValue  ) : (varName + '=');
 		if (!~tail.indexOf(searchStr)) {
 			if (value != cmdUnset) {
 				tail += sep + varName + '=' + value;
@@ -126,7 +127,11 @@ window.HttpQueryString = {
 		} else {
 			if (value != cmdUnset) {
 				if (!checkByValue) {
-					tail = tail.replace(new RegExp(varName + '=[^&]*'), varName + '=' + value);
+					varName2 = varName.replace('[', '\\[');
+					varName2 = varName2.replace(']', '\\]');
+					tail = tail.replace(new RegExp(varName2 + '=[^&]*', 'g'), varName + '=' + value);
+				} else {
+					tail = tail.replace(varName + '=' + unsetValue, varName + '=' + value);
 				}
 			} else {
 				if (!checkByValue) {
@@ -142,6 +147,9 @@ window.HttpQueryString = {
 			}
 		}
 		link = tail ? (base + '?' + tail) : base;
+		if (hash) {
+			link += '#' + hash;
+		}
 		return link;
 	},
 	/**

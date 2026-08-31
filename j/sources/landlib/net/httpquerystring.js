@@ -56,7 +56,7 @@ window.HttpQueryString = {
 	 * @param {String} querystring
 	 * @return String;
 	*/
-	_GET: function(key, _default, querystring) {
+	_GET(key, _default, querystring) {
 		let def = _default,
 			v = key,
 			search = querystring;
@@ -94,19 +94,18 @@ window.HttpQueryString = {
 	 * @param {String} unsetValue  = '' if  checkByValue = true && value == 'CMD_UNSET' must contains value, which need unset (will remove string varName=$unsetValue, for example in "?arr[]=1&arr[]=2" will unseted second element if unsetValue equal 2). It use for unset array element
 	 * @return String (modified link)
 	*/
-	setVariable(link, varName, value, checkByValue = false, unsetValue = '') {
+	setVariable:function(link, varName, value, checkByValue = false, unsetValue = '') {
 		value = decodeURIComponent(value);
-		checkByValue = String(checkByValue) == 'undefined' ? false : checkByValue;
-		unsetValue = String(unsetValue) == 'undefined' ? '' : unsetValue;
 		unsetValue = decodeURIComponent(unsetValue);
 		link = decodeURIComponent(link);
 		
-		var sep = '&', arr = link.split('?'), base = arr[0], tail = arr[1], cmdUnset = 'CMD_UNSET', searchStr;
+		let varName2, searchStr, sep = '&', arr = link.split('?'), base = arr[0], tail = arr[1], hash = tail.split("#")[1], cmdUnset = 'CMD_UNSET';
+		tail = tail.split("#")[0];
 		if (!tail) {
 			sep = '';
 			tail = '';
 		}
-		searchStr = checkByValue ? (varName + '=' + (value != cmdUnset ? value : unsetValue)  ) : (varName + '=');
+		searchStr = checkByValue ? (varName + '=' + unsetValue  ) : (varName + '=');
 		if (!~tail.indexOf(searchStr)) {
 			if (value != cmdUnset) {
 				tail += sep + varName + '=' + value;
@@ -114,7 +113,11 @@ window.HttpQueryString = {
 		} else {
 			if (value != cmdUnset) {
 				if (!checkByValue) {
-					tail = tail.replace(new RegExp(varName + '=[^&]*'), varName + '=' + value);
+					varName2 = varName.replace('[', '\\[');
+					varName2 = varName2.replace(']', '\\]');
+					tail = tail.replace(new RegExp(varName2 + '=[^&]*', 'g'), varName + '=' + value);
+				} else {
+					tail = tail.replace(varName + '=' + unsetValue, varName + '=' + value);
 				}
 			} else {
 				if (!checkByValue) {
@@ -130,6 +133,9 @@ window.HttpQueryString = {
 			}
 		}
 		link = tail ? (base + '?' + tail) : base;
+		if (hash) {
+			link += '#' + hash;
+		}
 		return link;
 	}
 }
@@ -141,4 +147,4 @@ window.addEventListener('load', () => {
 });
 
 
-export default window.HttpQueryString;
+//export default window.HttpQueryString;

@@ -74,18 +74,8 @@ function restorField(i, def, dbg) {
 	}	
 }
 
-function selectByValue(select, n) {
-	var i;
-	select = e(select);
-	for (i = 0; i < sz(select.options); i++) {
-		if ( select.options[i].value == n ) {
-			select.options.selectedIndex = i;
-			if (select.onchange) {
-				select.onchange();
-			}
-			break;
-		}
-	}
+function selectByValue(sl, n) {
+	selectByVal(sl, n);
 }
 
 function cc(k, v) {

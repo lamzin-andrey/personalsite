@@ -20,7 +20,7 @@ window.oncontextmenu = function(event) {
 		cmWrapper = e(id);
 		if (!cmWrapper) {
 			cmWrapper = appendChild(bod(), 'div', s, {'id': id}, {});
-			cmWrapper.style.position = 'absolute';
+			cmWrapper.style.position = 'fixed';
 			cmWrapper.style.left = '0px';
 			cmWrapper.style.top = '0px';
 			cmWrapper.style.zIndex = 5004;

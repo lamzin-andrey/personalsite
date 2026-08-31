@@ -496,3 +496,8 @@ function selectByVal(sl, n) {
 		}
 	}
 }
+function slAo(id, s, val) {
+	var z, op = new Option(s, val);
+	z = sz(e(id).options);
+	e(id).options[z] = op;
+}

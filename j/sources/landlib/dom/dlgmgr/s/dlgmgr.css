@@ -1,5 +1,5 @@
 .landDlgMgr {
-	position: absolute;
+	position: fixed;
 	box-shadow: 4px 7px 10px 2px #a4abc4;
 }
 
