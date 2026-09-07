@@ -113,8 +113,8 @@ window.HttpQueryString = {
 		unsetValue = decodeURIComponent(unsetValue);
 		link = decodeURIComponent(link);
 		
-		var varName2, searchStr, sep = '&', arr = link.split('?'), base = arr[0], tail = arr[1], hash = tail.split("#")[1], cmdUnset = 'CMD_UNSET';
-		tail = tail.split("#")[0];
+		var varName2, searchStr, sep = '&', arr = link.split('?'), base = arr[0], tail = arr[1], hash = String(tail).split("#")[1], cmdUnset = 'CMD_UNSET';
+		tail = String(tail).split("#")[0];
 		if (!tail) {
 			sep = '';
 			tail = '';

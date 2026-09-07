@@ -56,7 +56,8 @@ class StatCount extends OpenApp {
 			global $dberror;
 			$dberror = '';
 			query($sqlUpdate);
-			json_ok('sql', $sqlUpdate, 'dberror', $dberror);
+			//json_ok('sql', $sqlUpdate, 'dberror', $dberror);
+			json_ok();
 		}
 		json_ok();
 	}
